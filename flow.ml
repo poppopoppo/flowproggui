@@ -32,23 +32,32 @@ module St = struct
     | Z of int
     | Rcd of t list
 end
-let rec rcd_val v s =
+let rec rcd_val (v:int list) (s:St.t) : int =
   match (v,s) with
   | ([],St.Z z) ->  z
   | (h::t,St.Rcd l) -> rcd_val t (List.nth l h)
   | _ -> raise @@ Failure "error:rcd_val:"
-let rec calc_poly s p =
+let rec calc_poly (s:St.t) (p:Exp.poly) : int =
   match p with
   | Exp.Val v -> rcd_val v s
   | Exp.Z z -> z
   | Exp.Plus (x,y) -> (calc_poly s x)+(calc_poly s y)
   | Exp.Mult (x,y) -> (calc_poly s x)*(calc_poly s y)
+let rec calc_gl (s:St.t) (g:Exp.gl_call) : St.t =
+  match g with
+  | Poly p -> St.Z (calc_poly s p)
+  | Ax a ->
+    if a="id"
+    then s
+    else raise @@ Failure ("error:calc_gl:global entry "^a^" is not defined")
+  | Rcd l -> St.Rcd (List.map (calc_gl s) l)
 let rec calc (s:St.t) (a:Exp.arr) : St.t =
   match (s,a) with
   | (St.Z _,Exp.Canon _) -> raise @@ Failure "error:calc:type is unmatched"
   | (St.Rcd l,Exp.Canon o) ->
     St.Rcd (List.map (fun (s,a) -> calc s a) (List.combine l o))
   | (s,Exp.Exp (Exp.Poly p)) -> St.Z (calc_poly s p)
+  | (s,Exp.Exp (Exp.Rcd l)) -> St.Rcd (List.map (calc_gl s) l)
   | _ -> raise @@ Failure "error:calc:not defined"
 
 let debug_flg = ref true
@@ -62,12 +71,14 @@ let rec string_of_list f p l =
   | x::tl -> match f with
     |Comma -> (p x)^","^(string_of_list f p tl)
     | Plane -> (p x)^" "^(string_of_list f p tl)
-let rec string_of_st s =
+let rec string_of_st d s =
   match s with
   | St.Z z -> string_of_int z
-  | St.Rcd l -> "{ "^(string_of_list Plane string_of_st l)^"}"
+  | St.Rcd l ->
+    let m = (string_of_list Plane (string_of_st (d+1)) l) in
+    if d=0 then m else ("{ "^m^" }")
 let print_st st =
-  print_string ("state # "^(string_of_st st)^"\n");flush stdout
+  print_string ("state # "^(string_of_st 0 st)^"\n");flush stdout
 
 let load (s:string) =
   try

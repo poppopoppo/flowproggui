@@ -50,19 +50,19 @@ nam:
   ;
 lc_cod:
   | { Flow.Exp.End }
-  | arr_base lc_cod  {Flow.Exp.Seq ($1,$2) }
+  | arr_base ARR lc_cod  {Flow.Exp.Seq ($1,$3) }
   | cprd  { Flow.Exp.CoPrd $1 }
   | prd  { Flow.Exp.Prd $1 }
   ;
 arr_base:
-  | ARR CNN canon_base  { $3 }
-  | ARR exp_base { $2 }
+  | CNN canon_base  { $2 }
+  | exp_base { $1 }
   ;
 canon_base:
   | arr_lst { Exp.Canon $1 }
   ;
 exp_base:
-  | gl_cll  { Exp.Exp $1 }
+  | gl_cll_lst  { Exp.Exp (Exp.Rcd $1) }
   ;
 arr:
   | canon  { $1 }
