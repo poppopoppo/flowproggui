@@ -23,6 +23,7 @@ type token =
   | END_PRD
   | END_CO_PRD
   | END
+  | DOT_VAL of (int)
   | DEF
   | CO_PRD_STT
   | CO_PRD
@@ -38,4 +39,4 @@ exception Error
 
 val text: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (unit)
 
-val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (unit)
+val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Flow.Exp.arr)
