@@ -24,7 +24,7 @@ let _ =
 
   let (gl_src,gl_dst) = (!gl_src,!gl_dst) in
   let gl_st = match gl_src with
-    | None -> ref Flow.St.Unit
+    | None -> ref (Flow.St.Rcd [])
     | Some s -> ref (Flow.load s) in
 
   let _ = Sys.signal Sys.sigint

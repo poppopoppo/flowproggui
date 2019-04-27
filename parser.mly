@@ -2,10 +2,10 @@
 open Flow
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD STT
+%token SRC ARR DEF CLN L_RCD R_RCD STT CNN L_CNN R_CNN ARR_CNN
 %token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD
-%token L_PRN R_PRN  END PRD_STT CO_PRD_STT
-%token <string> NAM GL_NAM
+%token L_PRN R_PRN  END PRD_STT CO_PRD_STT D_EXP
+%token <string> NAM GL_NAM EXP_GL_NAM
 %token <int> INT VAL DOT_VAL
 %token PLS MLT
 %token EOF
@@ -18,7 +18,7 @@ open Flow
 %type <Flow.Exp.arr> buffer
 %%
 buffer:
-  | arr EOF { $1 }
+  | arr_base EOF { $1 }
   ;
 text:
   | EOF {}
@@ -50,32 +50,43 @@ nam:
   ;
 lc_cod:
   | { Flow.Exp.End }
-  | ARR arr lc_cod  {Flow.Exp.Seq ($2,$3) }
+  | arr_base lc_cod  {Flow.Exp.Seq ($1,$2) }
   | cprd  { Flow.Exp.CoPrd $1 }
   | prd  { Flow.Exp.Prd $1 }
   ;
+arr_base:
+  | ARR CNN canon_base  { $3 }
+  | ARR exp_base { $2 }
+  ;
+canon_base:
+  | arr_lst { Exp.Canon $1 }
+  ;
+exp_base:
+  | gl_cll  { Exp.Exp $1 }
+  ;
 arr:
   | canon  { $1 }
-  | matr  { $1 }
-  | dmatr  { $1 }
+  | exp  { $1 }
   ;
 canon:
-  | gl_cll_lst  { Flow.Exp.Canon $1 }
+  | L_CNN R_RCD   { Flow.Exp.Canon [] }
+  | L_CNN arr_lst R_RCD { Flow.Exp.Canon $2 }
+  ;
+arr_lst:
+  | arr { [$1] }
+  | arr_lst arr { $1@[$2] }
   ;
 gl_cll_lst:
   |  { [] }
-  | gl_cll_lst gl_cll { $1@[(Exp.Gl_call $2)] }
-  | gl_cll_lst L_RCD arr R_RCD { $1@[$3] }
+  | gl_cll_lst gl_cll { $1@[$2] }
   ;
 gl_cll:
   | GL_NAM { (Exp.Ax $1) }
   | poly { (Flow.Exp.Poly $1) }
+  | L_RCD gl_cll_lst R_RCD  { Exp.Rcd $2 }
   ;
-matr:
-  | EXP gl_cll_lst  { Exp.Matr $2 }
-  ;
-dmatr:
-  | EXP EXP gl_cll  { Exp.DMatr $3 }
+exp:
+  | gl_cll { Exp.Exp $1 }
   ;
 poly:
   | val_  { $1 }

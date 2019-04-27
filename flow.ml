@@ -1,5 +1,6 @@
 let pnt s =
   print_string (s^"\n");flush stdout
+let _ = pnt "test"
 module Typ = struct
   type 'k t =
     | Z
@@ -13,10 +14,8 @@ module Exp = struct
     | Prd of t list
     | CoPrd of t list
   and arr =
-    | Gl_call of gl_call
     | Canon of arr list
-    | Matr of gl_call list
-    | DMatr of gl_call
+    | Exp of gl_call
   and gl_call =
     | Poly of poly
     | Ax of string
@@ -46,13 +45,10 @@ let rec calc_poly s p =
   | Exp.Mult (x,y) -> (calc_poly s x)*(calc_poly s y)
 let rec calc (s:St.t) (a:Exp.arr) : St.t =
   match (s,a) with
-  | (s,Exp.Gl_call (Exp.Poly p)) -> St.Z (calc_poly s p)
-  | (_,Exp.Gl_call (Exp.Ax x)) ->  raise @@ Failure ("error:calc:global entry "^x^" is not found")
   | (St.Z _,Exp.Canon _) -> raise @@ Failure "error:calc:type is unmatched"
   | (St.Rcd l,Exp.Canon o) ->
-    pnt "TEST0";
     St.Rcd (List.map (fun (s,a) -> calc s a) (List.combine l o))
-  | (s,Exp.DMatr (Exp.Poly p)) -> St.Z (calc_poly s p)
+  | (s,Exp.Exp (Exp.Poly p)) -> St.Z (calc_poly s p)
   | _ -> raise @@ Failure "error:calc:not defined"
 
 let debug_flg = ref true

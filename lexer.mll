@@ -22,9 +22,13 @@ rule token = parse
     | "\226\137\146" { DEF }
     | "{" { L_RCD }
     | "}" { R_RCD }
+    | "{~"  { L_CNN }
+    | "~" { CNN }
+    | "\194\187" "~"  { ARR_CNN }
     | '(' { L_PRN }
     | ')' { R_PRN }
     | "!" { EXP }
+    | "!!"  { D_EXP }
     |  "\226\136\142" (* ∎ *) { GL_NAM ("id") }
     | "+" { PLS }
     | '*' { MLT }
