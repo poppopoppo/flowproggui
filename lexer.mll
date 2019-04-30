@@ -15,6 +15,7 @@ rule token = parse
     | "\194\167"  (* § *) { LCE }
     | "\194\187" (* » *)  { ARR       }
     | "\226\138\162" (* ⊢ *) { SRC             }
+    | "|"   { CO_PRD }
     | "|<"  { CO_PRD_STT }
     | ">|"  { END_CO_PRD }
     | "&<"  { PRD_STT }
@@ -22,22 +23,24 @@ rule token = parse
     | "\226\137\146" { DEF }
     | "{" { L_RCD }
     | "}" { R_RCD }
-    | "{~"  { L_CNN }
     | "~" { CNN }
-    | "\194\187" "~"  { ARR_CNN }
     | '(' { L_PRN }
     | ')' { R_PRN }
     | "!" { EXP }
-    | "!!"  { D_EXP }
+    | "\226\128\163"  { R_APP }
+    | "\226\151\130" { L_APP }
+    | "\226\128\161"  { APP }
     |  "\226\136\142" (* ∎ *) { GL_NAM ("id") }
+    | "#" ((alpha+ alnum*)as lxm) { GL_NAM(lxm) }
     | "+" { PLS }
     | '*' { MLT }
-    | "$" (z as lxm) { VAL(int_of_string lxm) }
+    | "$" { ROT }
+    | "\226\136\160"  { AGL }
     | z as lxm  { INT (int_of_string lxm) }
     | alpha+ as lxm { NAM (lxm) }
-    | "." (z as lxm) { DOT_VAL (int_of_string lxm) }
+
     | space+        { token lexbuf                         }
-    | eof           { EOF                                  }
+    | eof           { EOF               }
     | _             { raise (Error (Printf.sprintf
                       "At offset %d: unexpected character.\n"
                       (Lexing.lexeme_start lexbuf))) }

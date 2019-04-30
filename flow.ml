@@ -1,64 +1,131 @@
 let pnt s =
   print_string (s^"\n");flush stdout
 let _ = pnt "test"
-module Typ = struct
-  type 'k t =
-    | Z
-    | Rcd of ('k t) list
-    | Ax of 'k
-end
 module Exp = struct
   type t =
     | End
-    | Seq of arr * t
     | Prd of t list
-    | CoPrd of t list
-  and arr =
-    | Canon of arr list
-    | Exp of gl_call
-  and gl_call =
-    | Poly of poly
-    | Ax of string
-    | Rcd of gl_call list
-  and poly =
-    | Val of int list
+  and exp =
+    | Seq of exp * exp
+    | Canon of exp list
     | Z of int
-    | Plus of poly * poly
-    | Mult of poly * poly
+    | Plus of exp * exp
+    | Mult of exp * exp
+    | Gl_call of string
+    | Rcd of exp list
+    | Root
+    | App of exp * exp
+    | L_App of exp * exp
+    | Agl of exp
+    | CoPrd of exp * exp
   type gl_cod = string
+  type glb_etr = string * exp
+  type buf = Evo of exp | Glb of glb_etr
+end
+module Glb_St = struct
+  type t = Exp.glb_etr list
+end
+module Typ = struct
+  type t =
+    | Z
+    | Rcd of t list
+    | Exn
+    | CoPrd of t list
 end
 module St = struct
   type t =
     | Z of int
     | Rcd of t list
+    | Exn of exn
+    | CoPrd of (int * t)
+  and exn =
+    | Typing_Error of string
+    | Error of string
 end
-let rec rcd_val (v:int list) (s:St.t) : int =
-  match (v,s) with
-  | ([],St.Z z) ->  z
-  | (h::t,St.Rcd l) -> rcd_val t (List.nth l h)
-  | _ -> raise @@ Failure "error:rcd_val:"
-let rec calc_poly (s:St.t) (p:Exp.poly) : int =
-  match p with
-  | Exp.Val v -> rcd_val v s
-  | Exp.Z z -> z
-  | Exp.Plus (x,y) -> (calc_poly s x)+(calc_poly s y)
-  | Exp.Mult (x,y) -> (calc_poly s x)*(calc_poly s y)
-let rec calc_gl (s:St.t) (g:Exp.gl_call) : St.t =
-  match g with
-  | Poly p -> St.Z (calc_poly s p)
-  | Ax a ->
-    if a="id"
-    then s
-    else raise @@ Failure ("error:calc_gl:global entry "^a^" is not defined")
-  | Rcd l -> St.Rcd (List.map (calc_gl s) l)
-let rec calc (s:St.t) (a:Exp.arr) : St.t =
-  match (s,a) with
-  | (St.Z _,Exp.Canon _) -> raise @@ Failure "error:calc:type is unmatched"
-  | (St.Rcd l,Exp.Canon o) ->
-    St.Rcd (List.map (fun (s,a) -> calc s a) (List.combine l o))
-  | (s,Exp.Exp (Exp.Poly p)) -> St.Z (calc_poly s p)
-  | (s,Exp.Exp (Exp.Rcd l)) -> St.Rcd (List.map (calc_gl s) l)
-  | _ -> raise @@ Failure "error:calc:not defined"
+
+let evo (g:Glb_St.t)(s:St.t) (a:Exp.exp) : St.t =
+  let agl_flg = ref None in
+  let rec evo_r g s a =
+    match a with
+    | Exp.Seq (e1,e2) ->
+      let s' = evo_r g s e1 in
+      let s'' = evo_r g s' e2 in
+      s''
+    | Exp.Canon l ->
+      (match s with
+       | St.Rcd r -> St.Rcd (List.map (fun (s,a) -> evo_r g s a) (List.combine r l))
+       | St.Exn x -> St.Exn x
+       | _ -> raise @@ Failure "error:evo:type is unmatched"
+      )
+    | Exp.Z z -> St.Z z
+    | Exp.Plus (x,y) ->
+      let (x,y) = (evo_r g s x,evo_r g s y) in
+      (match (x,y) with
+       | (St.Z x,St.Z y) -> St.Z (x+y)
+       | _ -> raise @@ Failure "error:evo:type is unmatched" )
+    | Exp.Mult (x,y) ->
+      let (x,y) = (evo_r g s x,evo_r g s y) in
+      (match (x,y) with
+       | (St.Z x,St.Z y) -> St.Z (x*y)
+       | _ -> raise @@ Failure "error:evo:type is unmatched" )
+
+    | Exp.Gl_call g -> raise @@ Failure ("error:evo:Gl_call "^g)
+    | Exp.Rcd r -> St.Rcd (List.map (fun a -> evo_r g s a) r)
+    | Exp.Root -> s
+    | Exp.App (Exp.Gl_call a,x) ->
+      let (f,x) = (List.assoc a g,evo_r g s x) in
+      evo_r g x f
+    | Exp.App (f,x) ->
+      (match (evo_r g s f,evo_r g s x) with
+       | (St.Rcd l,St.Z z) -> List.nth l z
+       | _ -> raise @@ Failure "error:evo:App"
+      )
+    | Exp.L_App (Exp.Gl_call a,x) ->
+      (
+        try
+          let (f,x) = (List.assoc a g,evo_r g s x) in
+          evo_r g x f
+        with Not_found -> raise @@  Failure ("error:evo:L_App:Not_found:"^a)
+      )
+    | Exp.L_App (f,x) ->
+      (match (evo_r g s f,evo_r g s x) with
+       | (St.Rcd l,St.Z z) -> List.nth l z
+       | _ -> raise @@ Failure "error:evo:L_App"
+      )
+    | Exp.Agl e ->
+      (
+        match !agl_flg with
+        | None -> (
+            match evo_r g s e with
+            | St.Z z ->
+              if (z=0)
+              then (agl_flg:=(Some 0);(St.Rcd []))
+              else (agl_flg:=(Some 1);(St.Rcd []))
+            | St.Rcd _ -> St.Exn (St.Typing_Error "error:∠ can not apply to record type")
+            | St.Exn x -> St.Exn x
+            | St.CoPrd (i,x) -> (agl_flg:=(Some i);x)
+          )
+        | Some _ -> raise @@ Failure "error:evo:Exp.Agl:syntax error. can't exist double angle operator"
+      )
+    | Exp.CoPrd (e0,e1) ->
+      (
+        match s with
+        | St.CoPrd (i,x) ->
+          if i=0 then (evo_r g x e0)
+          else if i=1 then (evo_r g x e1)
+          else (St.Exn (St.Error "error:Coprd:St.CoPrd"))
+        | St.Exn x -> St.Exn x
+        | St.Z z ->
+          (if (z=0)
+           then (evo_r g (St.Rcd []) e0)
+           else (evo_r g (St.Rcd []) e1)
+          )
+        | _ -> St.Exn (St.Error "error:Coprd:St.Exn")
+      ) in
+  let s' = evo_r g s a in
+  match !agl_flg with
+  | None -> s'
+  | Some i -> St.CoPrd (i,s')
 
 let debug_flg = ref true
 let pnt s = if !debug_flg=true then print_string s;flush stdout
@@ -77,6 +144,15 @@ let rec string_of_st d s =
   | St.Rcd l ->
     let m = (string_of_list Plane (string_of_st (d+1)) l) in
     if d=0 then m else ("{ "^m^" }")
+  | St.Exn x ->
+    (match x with
+     | St.Typing_Error e -> "exn("^e^")"
+     | St.Error e -> "exn("^e^")"
+    )
+  | St.CoPrd (i,x) ->
+    ("["^(string_of_int i)^"]|"^(string_of_st (d+1) x))
+let string_of_gl_st s = "gl_state # "^(string_of_list Comma (fun (n,_) -> (n^"≒ ? ")) s)
+
 let print_st st =
   print_string ("state # "^(string_of_st 0 st)^"\n");flush stdout
 

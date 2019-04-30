@@ -26,22 +26,37 @@ let _ =
   let gl_st = match gl_src with
     | None -> ref (Flow.St.Rcd [])
     | Some s -> ref (Flow.load s) in
-
+  let glb_st = ref [] in
   let _ = Sys.signal Sys.sigint
       (Signal_handle (fun _ -> exit_calc (Some gl_st) gl_dst None)) in
-
+  let rec buf () =
+    let s = input_line stdin in
+    let reg = Str.regexp "\\(.*\\)\\(;\\)\\(.*\\)" in
+    if (Str.string_match reg s 0)
+    then
+      let m = (Str.matched_group 1 s) in
+      let _ = print_string "> ";flush stdout in
+      m^" "^(buf ())
+    else s in
   while true do
     try
-      let _ = pnt_line ();Flow.print_st !gl_st in
-      let _ = print_string "command # ";flush stdout in
-      let s = input_line stdin in
+      pnt_line ();
+      print_string ((Flow.string_of_gl_st !glb_st)^"\n");
+      Flow.print_st !gl_st;
+      print_string "command #\n> ";flush stdout;
+
+      let s = buf () in
       let lexbuf = Lexing.from_string s in
       let result = string_to_command lexbuf in
-      let _  = gl_st := Flow.calc (!gl_st) result in
-      ()
+      match result with
+      | Glb g -> glb_st := (g:: !glb_st)
+      | Evo e ->
+        let _  = gl_st := Flow.evo !glb_st (!gl_st) e in
+        ()
     with
     | Parser.Error -> pnt "error: parsing error"
     | Failure s -> pnt @@ "error:"^s
     | Invalid_argument s -> pnt @@ "error:Invalid_argument "^s
+    | Lexer.Error _ -> pnt "error:Lexer.Error"
     | err -> exit_calc (Some gl_st) gl_dst (Some err)
   done
