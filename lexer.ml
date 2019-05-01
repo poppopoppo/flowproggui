@@ -288,7 +288,7 @@ and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
 
   | 18 ->
 # 33 "lexer.mll"
-                                ( GL_NAM ("id") )
+                                ( EOP  )
 # 293 "lexer.ml"
 
   | 19 ->

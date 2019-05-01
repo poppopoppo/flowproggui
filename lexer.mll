@@ -30,7 +30,7 @@ rule token = parse
     | "\226\128\163"  { R_APP }
     | "\226\151\130" { L_APP }
     | "\226\128\161"  { APP }
-    |  "\226\136\142" (* ∎ *) { GL_NAM ("id") }
+    |  "\226\136\142" (* ∎ *) { EOP  }
     | "#" ((alpha+ alnum*)as lxm) { GL_NAM(lxm) }
     | "+" { PLS }
     | '*' { MLT }

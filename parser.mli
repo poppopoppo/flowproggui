@@ -2,6 +2,7 @@
 (* The type of tokens. *)
 
 type token = 
+  | Z
   | TEST
   | STT
   | SRC
@@ -22,6 +23,7 @@ type token =
   | INT of (int)
   | GL_NAM of (string)
   | EXP
+  | EOP
   | EOF
   | END_PRD
   | END_CO_PRD
@@ -42,4 +44,4 @@ exception Error
 
 (* The monolithic API. *)
 
-val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Flow.Exp.buf)
+val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Flow.buf)

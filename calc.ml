@@ -1,7 +1,14 @@
+type mode =
+    Calc
+  | Glb_mode of {
+      name:string;
+      code:Flow.Exp.vh;
+      st:Flow.evo_rtn
+    }
 let pnt s =
-  print_string (s^"\n");flush stdout
-let pnt_line () =
-  pnt "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  print_string s;flush stdout
+let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+let pnt_line () = pnt line
 let gl_src:(string option ref) = ref None
 let gl_dst:(string option ref) = ref None
 let string_to_command l = Parser.buffer Lexer.token l
@@ -38,21 +45,47 @@ let _ =
       let _ = print_string "> ";flush stdout in
       m^" "^(buf ())
     else s in
+
+  let mode = ref Calc in
+
   while true do
     try
-      pnt_line ();
-      print_string ((Flow.string_of_gl_st !glb_st)^"\n");
-      Flow.print_st !gl_st;
-      print_string "command #\n> ";flush stdout;
+      let pmpt =
+        line^
+        ((Flow.string_of_gl_st !glb_st)^"\n")^
+        (Flow.string_of_st 0 !gl_st)^
+        "command #\n> " in
+      pnt pmpt;
 
       let s = buf () in
       let lexbuf = Lexing.from_string s in
       let result = string_to_command lexbuf in
+
       match result with
-      | Glb g -> glb_st := (g:: !glb_st)
-      | Evo e ->
-        let _  = gl_st := Flow.evo !glb_st (!gl_st) e in
-        ()
+      | Flow.Glb g ->
+        ( match !mode with
+        | Calc -> glb_st := (g:: !glb_st)
+        | Glb_mode _ -> raise @@ Failure "error:current mode is glb_mode"
+        )
+      | Flow.Evo e ->
+        let st' = Flow.evo_vh !glb_st (!gl_st) e in
+        ( match !mode with
+          | Calc ->
+            ( match st' with
+              | Nml e -> gl_st := e
+              | _ -> raise @@ Failure "error:calc:Agl returned"
+            )
+          | Glb_mode g ->
+            ( match st' with
+              | Nml st' ->
+                mode := Glb_mode {
+                name=g.name; code=Flow.Exp.Seq (g.code,e);
+                st=(Nml st') }
+              | _ -> raise @@ Failure "error:calc:glb_mode:Agl returned"
+            )
+        )
+      | Flow.Glb_mode (n,s) ->
+        mode := Glb_mode { name=n;code=(Flow.Exp.Exp Flow.Exp.Root);st=(Nml s) }
     with
     | Parser.Error -> pnt "error: parsing error"
     | Failure s -> pnt @@ "error:"^s

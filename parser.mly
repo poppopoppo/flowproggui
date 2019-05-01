@@ -2,9 +2,9 @@
 open Flow
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN
+%token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z
 %token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD R_APP AGL
-%token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT
+%token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT EOP
 %token <string> NAM GL_NAM
 %token <int> INT
 %token PLS MLT
@@ -17,21 +17,28 @@ open Flow
 
 %start buffer
 
-%type <Flow.Exp.buf> buffer
+%type <Flow.buf> buffer
 %%
 buffer:
-  | arr_base EOF { Evo $1 }
-  | glb_etr EOF { Glb $1 }
+  | vh_frm_top EOF { Flow.Evo $1 }
+  | glb_etr EOF { Flow.Glb $1 }
+  | glb_mode EOF {
+      let (x,y) = $1 in
+      (Flow.Glb_mode (x,y)) }
   ;
+glb_mode:
+  | LCE LCE NAM CLN typs SRC typs { ($3,Flow.St.Rcd $5) }
+  ;
+
 glb_etr:
-  | LCE NAM typ DEF lc_code { ($2,$5) }
+  | LCE NAM typ_def DEF lc_code { ($2,$5) }
   ;
 lc_code:
-  | arr_base { $1 }
+  | vh_frm_top { $1 }
   ;
-typ:
-  | {}
-  | CLN typs SRC typs {}
+typ_def:
+  | { Flow.St.Rcd [] }
+  | CLN typs SRC typs { Flow.St.Rcd $2 }
   ;
 (*
 text:
@@ -59,12 +66,19 @@ clq_lst:
   ;
 *)
 typs:
+  | typ { [$1] }
+  | typs typ { $1@[$2] }
+  ;
+typ:
+  | Z { Flow.St.Z None }
+  | rcd { $1 }
+  ;
+rcd:
+  | L_RCD rcd_lst R_RCD { Flow.St.Rcd $2 }
+  ;
+rcd_lst:
   | { [] }
-  | typs nam { $1@[$2] }
-  ;
-nam:
-  | NAM { $1 }
-  ;
+  | rcd_lst typ { $1@[$2] }
 (*
 lc_cod:
   | { Flow.Exp.End }
@@ -73,31 +87,50 @@ lc_cod:
   | prd  { Flow.Exp.Prd $1 }
   ;
   *)
-arr_base:
-  | arr { $1 }
-  | arr ARR arr_base  { $1 }
+vh_frm_code:
+  | vh_frm_top tail_code
+    {
+      match $2 with
+      | None -> $1
+      | Some t -> Exp.Seq ($1,t)
+    }
   ;
-cprd:
-  | CO_PRD_STT arr_base CO_PRD arr_base END_CO_PRD{ Exp.CoPrd ($2,$4) }
+tail_code:
+  | { None }
+  | ARR vh_frm_code { Some $2 }
+  | CO_PRD_STT vh_frm_code CO_PRD vh_frm_code END_CO_PRD  { Exp.CoPrd [$2;$4] }
   ;
-arr:
-  | CNN cnn_lst { Exp.Canon $2 }
-  | exp_lst { Exp.Rcd $1 }
-  | EXP exp { $2 }
+vh_frm_top:
+  | CNN vh_frm_lst  { Exp.Canon $2 }
+  | exp_lst { Exp.Exp (Exp.Rcd $1) }
+  | EXP exp { Exp.Exp $2 }
   ;
-cnn_lst:
-  | exp_str { [$1] }
-  | cnn_lst exp_str { $1}
+vh_frm_lst:
+  | vh_frm  { [$1] }
+  | vh_frm_lst M_CNN vh_frm { $1@[$3] }
+  ;
+vh_frm:
+  | h_frm tail
+    {
+      match $2 with
+      | None -> $1
+      | Some t -> Exp.Seq ($1,t)
+    }
+  ;
+h_frm:
+  | exp { Exp.Exp $1 }
+  | L_RCD CNN vh_frm_lst R_RCD  { Exp.Canon $3 }
+  ;
+tail:
+  | { None }
+  | ARR vh_frm { Some $2 }
+  | CO_PRD_STT vh_frm CO_PRD vh_frm END_CO_PRD  { Some (Exp.CoPrd [$2;$4]) }
   ;
 exp_lst:
   | { [] }
-  | exp_lst exp_str  { $1@[$2] }
+  | exp_lst exp  { $1@[$2] }
   ;
-exp_str:
-  | cprd { $1 }
-  | L_RCD arr_base R_RCD  { $2 }
-  | exp { $1 }
-  | AGL exp { Exp.Agl $2 }
+
 exp:
   | const { $1 }
   | APP exp DOT exp { Exp.App ($2,$4) }
@@ -105,6 +138,7 @@ exp:
   | exp MLT exp { Exp.Mult ($1,$3) }
   | L_PRN exp R_PRN { $2 }
   | exp L_APP exp { Exp.L_App ($1,$3) }
+  | L_RCD exp_lst R_RCD { Exp.Rcd $2 }
   ;
 const:
   | INT { Exp.Z $1 }

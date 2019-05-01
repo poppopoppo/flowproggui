@@ -2,29 +2,30 @@ let pnt s =
   print_string (s^"\n");flush stdout
 let _ = pnt "test"
 module Exp = struct
-  type t =
-    | End
-    | Prd of t list
-  and exp =
-    | Seq of exp * exp
-    | Canon of exp list
+  type vh =
+    | Seq of vh * vh
+    | Canon of vh list
+    | Exp of t
+    | CoPrd of vh list
+  and t =
     | Z of int
-    | Plus of exp * exp
-    | Mult of exp * exp
+    | Plus of t * t
+    | Mult of t * t
     | Gl_call of string
-    | Rcd of exp list
+    | Rcd of t list
     | Root
-    | App of exp * exp
-    | L_App of exp * exp
-    | Agl of exp
-    | CoPrd of exp * exp
+    | App of t * t
+    | L_App of t * t
+    | Agl of t
+    | Exn of string
   type gl_cod = string
-  type glb_etr = string * exp
-  type buf = Evo of exp | Glb of glb_etr
+  type glb_etr = string * vh
 end
+
 module Glb_St = struct
   type t = Exp.glb_etr list
 end
+
 module Typ = struct
   type t =
     | Z
@@ -34,99 +35,123 @@ module Typ = struct
 end
 module St = struct
   type t =
-    | Z of int
+    | Z of (int option)
     | Rcd of t list
     | Exn of exn
     | CoPrd of (int * t)
+    | CoPrdMix of {
+        mix:t list;
+        agl_flg : bool
+      }
+    | Unknown
   and exn =
     | Typing_Error of string
     | Error of string
 end
+type buf = Evo of Exp.vh | Glb of Exp.glb_etr | Glb_mode of string * St.t
 
-let evo (g:Glb_St.t)(s:St.t) (a:Exp.exp) : St.t =
-  let agl_flg = ref None in
-  let rec evo_r g s a =
-    match a with
-    | Exp.Seq (e1,e2) ->
-      let s' = evo_r g s e1 in
-      let s'' = evo_r g s' e2 in
+type evo_mode = Calc | Glb
+type evo_rtn =
+  | Nml of St.t
+  | AglMix of St.t list
+  | Agl of int * St.t
+type rcd_rtn =
+  | RcdNml of St.t list
+  | RcdAglMix of St.t list list
+  | RcdAgl of int * St.t list
+let rec evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : evo_rtn =
+  match a with
+  | Exp.Z z -> Nml (St.Z (Some z))
+  | Exp.Plus (x,y) ->
+    ( match (evo g s x,evo g s y) with
+      | (Nml (St.Z x),Nml (St.Z y)) ->
+        ( match (x,y) with
+          | (Some x,Some y) -> Nml (St.Z (Some (x+y)))
+          | _ -> Nml (St.Z None)
+        )
+      | _ -> raise @@ Failure "error:evo:type is unmatched"
+    )
+  | Exp.Mult (x,y) ->
+    ( match (evo g s x,evo g s y) with
+      | (Nml (St.Z x),Nml (St.Z y)) ->
+        ( match (x,y) with
+          | (Some x,Some y) -> Nml (St.Z (Some (x*y)))
+          | _ -> Nml (St.Z None)
+        )
+      | _ -> raise @@ Failure "error:evo:type is unmatched"
+    )
+  | Exp.Gl_call g -> raise @@ Failure ("error:evo:Gl_call "^g)
+  | Exp.Rcd r ->
+    let r' = List.map (evo g s) r in
+    let r'' =
+      (List.fold_left
+         (fun l x ->
+            match (l,x) with
+            | (RcdNml l,Nml x) -> RcdNml (l@[x])
+            | (RcdNml l,AglMix x) -> RcdAglMix (List.map (fun a -> l@[a]) x)
+            | (RcdAglMix ll,Nml x) -> RcdAglMix (List.map (fun l -> l@[x]) ll)
+            | (RcdAglMix _,AglMix _) ->
+              raise @@ Failure "error:evo:type is unmatched"
+            | _ -> raise @@ Failure "error:evo:Rcd:test"
+         ) (RcdNml []) r') in
+    ( match r'' with
+      | RcdNml l -> Nml (St.Rcd l)
+      | RcdAglMix ll -> AglMix (List.map (fun l -> St.Rcd l) ll)
+      | RcdAgl (i,l) -> Agl (i,St.Rcd l)
+    )
+  | Exp.Root -> Nml s
+  | Exp.App (Exp.Gl_call a,x) ->
+    let (_,x) = (List.assoc a g,evo g s x) in
+    ( match x with
+      | Nml _ -> (* evo_vh g x f *) raise @@ Failure "error:App"
+      | AglMix _ -> raise @@ Failure "error:evo:invalid angle position"
+      | Agl (_,_) -> raise @@ Failure "error:evo:App Agl test"
+    )
+  | Exp.App (f,x) ->
+    (match (evo g s f,evo g s x) with
+     | (Nml (St.Rcd l),Nml (St.Z (Some z))) -> Nml (List.nth l z)
+     | _ -> raise @@ Failure "error:evo:App"
+    )
+  | Exp.L_App (Exp.Gl_call a,x) ->
+    (
+      try
+        let (_,_) = (List.assoc a g,evo g s x) in
+        raise @@ Failure "error:evo:L_App:test" (* evo g x f *)
+      with Not_found -> raise @@  Failure ("error:evo:L_App:Not_found:"^a)
+    )
+  | Exp.L_App (f,x) ->
+    (match (evo g s f,evo g s x) with
+     | (Nml (St.Rcd l),Nml (St.Z (Some z))) -> Nml (List.nth l z)
+     | _ -> raise @@ Failure "error:evo:App"
+    )
+  | Exp.Agl e ->
+    ( match evo g s e with
+      | Nml (St.Z (Some z)) ->
+            if (z=0)
+            then Agl (0,(St.Rcd []))
+            else Agl (1,(St.Rcd []))
+      | Nml (St.Z None) -> AglMix [St.Rcd [];St.Rcd []]
+      | Nml (St.Rcd _) ->
+          raise @@ Failure "error:∠ can not apply to record type"
+      | Nml (St.Exn x) -> Nml (St.Exn x)
+      | Nml (St.CoPrd (i,x)) -> Agl (i,x)
+      | Nml (St.CoPrdMix l) -> AglMix l.mix
+      | Nml St.Unknown -> Nml St.Unknown
+      | _ -> raise @@ Failure "error:evo:Exp.Agl:double angle"
+    )
+  | Exp.Exn s -> Nml (St.Exn (St.Error s))
+and evo_vh (g:Glb_St.t) (s:St.t) (a:Exp.vh) : evo_rtn =
+  match a with
+  | Seq (f0,f1) ->
+    let s' = evo_vh g s f0 in
+    ( match s' with
+    | Nml s' ->
+      let s'' = evo_vh g s' f1 in
       s''
-    | Exp.Canon l ->
-      (match s with
-       | St.Rcd r -> St.Rcd (List.map (fun (s,a) -> evo_r g s a) (List.combine r l))
-       | St.Exn x -> St.Exn x
-       | _ -> raise @@ Failure "error:evo:type is unmatched"
-      )
-    | Exp.Z z -> St.Z z
-    | Exp.Plus (x,y) ->
-      let (x,y) = (evo_r g s x,evo_r g s y) in
-      (match (x,y) with
-       | (St.Z x,St.Z y) -> St.Z (x+y)
-       | _ -> raise @@ Failure "error:evo:type is unmatched" )
-    | Exp.Mult (x,y) ->
-      let (x,y) = (evo_r g s x,evo_r g s y) in
-      (match (x,y) with
-       | (St.Z x,St.Z y) -> St.Z (x*y)
-       | _ -> raise @@ Failure "error:evo:type is unmatched" )
-
-    | Exp.Gl_call g -> raise @@ Failure ("error:evo:Gl_call "^g)
-    | Exp.Rcd r -> St.Rcd (List.map (fun a -> evo_r g s a) r)
-    | Exp.Root -> s
-    | Exp.App (Exp.Gl_call a,x) ->
-      let (f,x) = (List.assoc a g,evo_r g s x) in
-      evo_r g x f
-    | Exp.App (f,x) ->
-      (match (evo_r g s f,evo_r g s x) with
-       | (St.Rcd l,St.Z z) -> List.nth l z
-       | _ -> raise @@ Failure "error:evo:App"
-      )
-    | Exp.L_App (Exp.Gl_call a,x) ->
-      (
-        try
-          let (f,x) = (List.assoc a g,evo_r g s x) in
-          evo_r g x f
-        with Not_found -> raise @@  Failure ("error:evo:L_App:Not_found:"^a)
-      )
-    | Exp.L_App (f,x) ->
-      (match (evo_r g s f,evo_r g s x) with
-       | (St.Rcd l,St.Z z) -> List.nth l z
-       | _ -> raise @@ Failure "error:evo:L_App"
-      )
-    | Exp.Agl e ->
-      (
-        match !agl_flg with
-        | None -> (
-            match evo_r g s e with
-            | St.Z z ->
-              if (z=0)
-              then (agl_flg:=(Some 0);(St.Rcd []))
-              else (agl_flg:=(Some 1);(St.Rcd []))
-            | St.Rcd _ -> St.Exn (St.Typing_Error "error:∠ can not apply to record type")
-            | St.Exn x -> St.Exn x
-            | St.CoPrd (i,x) -> (agl_flg:=(Some i);x)
-          )
-        | Some _ -> raise @@ Failure "error:evo:Exp.Agl:syntax error. can't exist double angle operator"
-      )
-    | Exp.CoPrd (e0,e1) ->
-      (
-        match s with
-        | St.CoPrd (i,x) ->
-          if i=0 then (evo_r g x e0)
-          else if i=1 then (evo_r g x e1)
-          else (St.Exn (St.Error "error:Coprd:St.CoPrd"))
-        | St.Exn x -> St.Exn x
-        | St.Z z ->
-          (if (z=0)
-           then (evo_r g (St.Rcd []) e0)
-           else (evo_r g (St.Rcd []) e1)
-          )
-        | _ -> St.Exn (St.Error "error:Coprd:St.Exn")
-      ) in
-  let s' = evo_r g s a in
-  match !agl_flg with
-  | None -> s'
-  | Some i -> St.CoPrd (i,s')
-
+    | _ -> raise @@ Failure "error:evo_vh:Seq" )
+  | Canon _ -> raise @@ Failure "error:evo_vh:Canon"
+  | Exp _ -> raise @@ Failure "error:evo_vh:Exp"
+  | CoPrd _ -> raise @@ Failure "error:evo_vh:CoPrd"
 let debug_flg = ref true
 let pnt s = if !debug_flg=true then print_string s;flush stdout
 
@@ -135,14 +160,16 @@ let rec string_of_list f p l =
   match l with
   | [] -> ""
   | x::[] -> p x
-  | x::tl -> match f with
-    |Comma -> (p x)^","^(string_of_list f p tl)
-    | Plane -> (p x)^" "^(string_of_list f p tl)
+  | x::tl -> (p x)^f^(string_of_list f p tl)
 let rec string_of_st d s =
   match s with
-  | St.Z z -> string_of_int z
+  | St.Z z ->
+    ( match z with
+      | Some z -> ("ℤ:"^(string_of_int z))
+      | None -> ("ℤ:?")
+    )
   | St.Rcd l ->
-    let m = (string_of_list Plane (string_of_st (d+1)) l) in
+    let m = (string_of_list " " (string_of_st (d+1)) l) in
     if d=0 then m else ("{ "^m^" }")
   | St.Exn x ->
     (match x with
@@ -151,7 +178,9 @@ let rec string_of_st d s =
     )
   | St.CoPrd (i,x) ->
     ("["^(string_of_int i)^"]|"^(string_of_st (d+1) x))
-let string_of_gl_st s = "gl_state # "^(string_of_list Comma (fun (n,_) -> (n^"≒ ? ")) s)
+  | St.CoPrdMix l -> "[ "^(string_of_list "|" (string_of_st (d+1)) l.mix)^" ]"
+  | St.Unknown -> "??:?"
+let string_of_gl_st s = "gl_state # "^(string_of_list "," (fun (n,_) -> (n^"≒ ? ")) s)
 
 let print_st st =
   print_string ("state # "^(string_of_st 0 st)^"\n");flush stdout
