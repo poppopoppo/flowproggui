@@ -2,7 +2,7 @@
 open Flow
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z
+%token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z ARR_END
 %token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD R_APP AGL
 %token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT EOP
 %token <string> NAM GL_NAM
@@ -34,7 +34,7 @@ glb_etr:
   | LCE NAM typ_def DEF lc_code { ($2,$5) }
   ;
 lc_code:
-  | vh_frm_top { $1 }
+  | vh_frm_code { $1 }
   ;
 typ_def:
   | { Flow.St.Rcd [] }
@@ -96,9 +96,17 @@ vh_frm_code:
     }
   ;
 tail_code:
-  | { None }
+  | ARR_END { None }
   | ARR vh_frm_code { Some $2 }
-  | CO_PRD_STT vh_frm_code CO_PRD vh_frm_code END_CO_PRD  { Exp.CoPrd [$2;$4] }
+  | coprd { $1 }
+  ;
+coprd:
+  | CO_PRD_STT vh_frm_code coprd_tail END_CO_PRD vh_frm_code
+    { Some (Exp.CoPrd ([$2]@$3@[$5])) }
+  ;
+coprd_tail:
+  | { [] }
+  | coprd_tail CO_PRD vh_frm_code { $1@[$3] }
   ;
 vh_frm_top:
   | CNN vh_frm_lst  { Exp.Canon $2 }
@@ -122,7 +130,7 @@ h_frm:
   | L_RCD CNN vh_frm_lst R_RCD  { Exp.Canon $3 }
   ;
 tail:
-  | { None }
+  | ARR_END { None }
   | ARR vh_frm { Some $2 }
   | CO_PRD_STT vh_frm CO_PRD vh_frm END_CO_PRD  { Some (Exp.CoPrd [$2;$4]) }
   ;

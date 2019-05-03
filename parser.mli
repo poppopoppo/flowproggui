@@ -34,6 +34,7 @@ type token =
   | CNN
   | CLQ
   | CLN
+  | ARR_END
   | ARR
   | APP
   | AGL
