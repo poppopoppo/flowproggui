@@ -11,25 +11,30 @@ and mode =
   | Glb_mode of {
       name:string;
       code:Flow.Exp.vh;
-      st:Flow.evo_rtn
+      st:Flow.St.t
     }
 
 let evo (v:t) (b:Flow.buf) : t =
   match b with
   | Evo e ->
-    let st = Flow.evo_vh v.gl_st (Flow.Nml v.st) e in
+    let st = Flow.evo_vh v.gl_st v.st e in
     ( match st with
-      | Flow.Nml st -> { v with st=st }
-      | Flow.Agl (_,a) -> { v with st=a }
-      | Flow.AglMix _ -> raise @@ Failure "error:Repl.evo:AglMix"
+      | Flow.St.CoPrd c ->
+        if c.agl_flg
+        then ( match c.st with
+            | Pure (_,x) -> { v with st=x }
+            | Mix _ -> raise @@ Failure "error:Repl.evo:Mix"
+          )
+        else { v with st=st }
+      | x -> { v with st=x }
     )
   | Glb g -> { v with gl_st=(g::v.gl_st) }
   | Glb_mode (s,e) ->
     { v with
       mode=Glb_mode {
           name=s;
-          code=(Flow.Exp.Exp Flow.Exp.Root);
-          st=(Flow.Nml e) } }
+          code=(Flow.Exp.Exp (Flow.Exp.Nml Flow.Exp.Root));
+          st=e } }
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 let string_to_buf l = Parser.buffer Lexer.token l
 let exit v dst =

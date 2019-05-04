@@ -104,6 +104,7 @@ coprd:
   | CO_PRD_STT vh_frm_code coprd_tail END_CO_PRD vh_frm_code
     { Some (Exp.CoPrd ([$2]@$3@[$5])) }
   ;
+
 coprd_tail:
   | { [] }
   | coprd_tail CO_PRD vh_frm_code { $1@[$3] }
@@ -138,7 +139,9 @@ exp_lst:
   | { [] }
   | exp_lst exp  { $1@[$2] }
   ;
-
+exp_top:
+  | exp { $1 }
+  ;
 exp:
   | const { $1 }
   | APP exp DOT exp { Exp.App ($2,$4) }
