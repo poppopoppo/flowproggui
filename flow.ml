@@ -5,13 +5,10 @@ module Exp = struct
   type vh =
     | Seq of vh * vh
     | Canon of vh list
-    | Exp of t_top
+    | Exp of t
     | CoPrd of vh list
-  and t_top =
-    | Agl of t
-    | RcdTop of t_top list
-    | Nml of t
   and t =
+    | Agl of t
     | Z of int
     | Plus of t * t
     | Mult of t * t
@@ -66,10 +63,48 @@ type rcd_rtn =
   | RcdAglMix of St.t list list
   | RcdAgl of int * St.t list
 
-let rec evo_top (g:Glb_St.t) (s:St.t) (a:Exp.t_top) : St.t =
+let rec evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : St.t =
   match a with
-  | Exp.RcdTop r ->
-    let r' = List.map (evo_top g s) r in
+  | Exp.Z z -> St.Z (Some z)
+  | Exp.App (f,x) ->
+    ( match (evo g s f,evo g s x) with
+      | (St.IO f,x) -> evo_vh g x f
+      | (St.Rcd l,St.Z (Some z)) -> (List.nth l z)
+      | _ -> raise @@ Failure "error:evo:App:type unmatched"
+    )
+  | Exp.L_App (f,x) ->
+    ( match (evo g s f,evo g s x) with
+      | ((St.IO f),x) -> evo_vh g x f
+      | ((St.Rcd l),(St.Z (Some z))) -> (List.nth l z)
+      | _ -> raise @@ Failure "error:evo:L_App:type unmatched"
+    )
+  | Exp.Plus (x,y) ->
+    ( match (evo g s x,evo g s y) with
+      | (St.Z x,St.Z y) ->
+        ( match (x,y) with
+          | (Some x,Some y) -> (St.Z (Some (x+y)))
+          | _ -> (St.Z None)
+        )
+      | _ -> raise @@ Failure "error:evo:type is unmatched"
+    )
+  | Exp.Mult (x,y) ->
+    ( match (evo g s x,evo g s y) with
+      | (St.Z x,St.Z y) ->
+        ( match (x,y) with
+          | (Some x,Some y) -> (St.Z (Some (x*y)))
+          | _ -> (St.Z None)
+        )
+      | _ -> raise @@ Failure "error:evo:type is unmatched"
+    )
+  | Exp.Gl_call n ->
+    ( try
+      let f = List.assoc n g in
+      (St.IO f)
+    with
+    | Not_found -> raise @@ Failure ("error:evo:global name "^n^" is not found")
+    )
+  | Exp.Rcd r ->
+    let r' = List.map (evo g s) r in
     let r'' =
       (List.fold_left
          (fun l x ->
@@ -121,46 +156,14 @@ let rec evo_top (g:Glb_St.t) (s:St.t) (a:Exp.t_top) : St.t =
         if c.agl_flg
         then raise @@ Failure "error:evo_top:Agl"
         else St.CoPrd { c with agl_flg=true }
+      | St.Z None ->
+        St.CoPrd { st=St.Mix [St.Rcd [];St.Rcd []]; agl_flg=true }
+      | St.Z (Some z) ->
+        if z=0
+        then St.CoPrd { st=St.Pure (0,St.Rcd []); agl_flg=true }
+        else St.CoPrd { st=St.Pure (1,St.Rcd []); agl_flg=true }
       | _ -> raise @@ Failure "error:evo_top:Agl:CoPrd"
     )
-  | Exp.Nml e -> evo g s e
-and evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : St.t =
-  match a with
-  | Exp.Z z -> St.Z (Some z)
-  | Exp.App (f,x) ->
-    ( match (evo g s f,evo g s x) with
-      | (St.IO f,x) -> evo_vh g x f
-      | (St.Rcd l,St.Z (Some z)) -> (List.nth l z)
-      | _ -> raise @@ Failure "error:evo_vh:App:type unmatched"
-    )
-  | Exp.L_App (f,x) ->
-    ( match (evo g s f,evo g s x) with
-      | ((St.IO f),x) -> evo_vh g x f
-      | ((St.Rcd l),(St.Z (Some z))) -> (List.nth l z)
-      | _ -> raise @@ Failure "error:evo_vh:App:type unmatched"
-    )
-  | Exp.Plus (x,y) ->
-    ( match (evo g s x,evo g s y) with
-      | (St.Z x,St.Z y) ->
-        ( match (x,y) with
-          | (Some x,Some y) -> (St.Z (Some (x+y)))
-          | _ -> (St.Z None)
-        )
-      | _ -> raise @@ Failure "error:evo:type is unmatched"
-    )
-  | Exp.Mult (x,y) ->
-    ( match (evo g s x,evo g s y) with
-      | (St.Z x,St.Z y) ->
-        ( match (x,y) with
-          | (Some x,Some y) -> (St.Z (Some (x*y)))
-          | _ -> (St.Z None)
-        )
-      | _ -> raise @@ Failure "error:evo:type is unmatched"
-    )
-  | Exp.Gl_call n ->
-    let f = List.assoc n g in
-    (St.IO f)
-  | Exp.Rcd r -> St.Rcd (List.map (evo g s) r)
   | Exp.Root -> s
   | Exp.Exn s -> St.Exn (St.Error s)
 and evo_vh (g:Glb_St.t) (s:St.t) (a:Exp.vh) : St.t =
@@ -170,7 +173,7 @@ and evo_vh (g:Glb_St.t) (s:St.t) (a:Exp.vh) : St.t =
     let s'' = evo_vh g s' f1 in
     s''
   | Exp.Canon _ -> raise @@ Failure "error:evo_vh:Canon"
-  | Exp.Exp e -> evo_top g s e
+  | Exp.Exp e -> evo g s e
   | Exp.CoPrd l ->
     ( match s with
       | St.CoPrd c ->
@@ -221,24 +224,3 @@ let string_of_gl_st s = "gl_state # "^(string_of_list "," (fun (n,_) -> (n^"≒ 
 
 let print_st st =
   print_string ("state # "^(string_of_st 0 st)^"\n");flush stdout
-
-let load (s:string) =
-  try
-    let reg = Str.regexp ".+\\.st" in
-    if (Str.string_match reg s 0)
-    then
-      let f = open_in s in
-      let s0 = Marshal.from_channel f  in
-      let _ = close_in f in
-      let _ = Sys.remove s in
-      s0
-    else raise @@ Failure ("error:load: can't load "^s^". file prefix need to be st")
-  with | Failure err -> raise @@ Failure err
-       | err -> pnt "error:load\n"; raise err
-let save (st:St.t) s =
-  let reg = Str.regexp ".+\\.st" in
-  if (Str.string_match reg s 0)
-  then let f = open_out s in
-    let _ = Marshal.to_channel f st [] in
-    ()
-  else raise @@ Failure "error:load: can't save to s. file prefix need to be st"

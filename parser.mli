@@ -37,6 +37,7 @@ type token =
   | ARR_END
   | ARR
   | APP
+  | AGL_END
   | AGL
 
 (* This exception is raised by the monolithic API functions. *)

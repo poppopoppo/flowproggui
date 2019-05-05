@@ -33,15 +33,10 @@ let evo (v:t) (b:Flow.buf) : t =
     { v with
       mode=Glb_mode {
           name=s;
-          code=(Flow.Exp.Exp (Flow.Exp.Nml Flow.Exp.Root));
+          code=(Flow.Exp.Exp Flow.Exp.Root);
           st=e } }
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 let string_to_buf l = Parser.buffer Lexer.token l
-let exit v dst =
-  ( match (v.st,dst) with
-    | (_,None) -> exit 0
-    | (st,Some dst) ->
-      Flow.save st dst; exit 0 )
 
 let rec buf () =
   let s = input_line stdin in
@@ -57,29 +52,58 @@ let init_st = {
   st=Flow.St.Rcd [];
   mode=Calc
 }
-let rec repl (v:t) : unit =
+
+
+let load (s:string) : t =
+  try
+    let reg = Str.regexp ".+\\.st" in
+    if (Str.string_match reg s 0)
+    then
+      let f = open_in s in
+      let s0 = Marshal.from_channel f  in
+      let _ = close_in f in
+      let _ = Sys.remove s in
+      pnt (s^" is loaded");s0
+    else raise @@ Failure ("error:load: can't load "^s^". file prefix need to be st")
+  with | Failure err -> raise @@ Failure err
+       | err -> pnt "error:load\n"; raise err
+let save (st:t ref) s =
+  let reg = Str.regexp ".+\\.st" in
+  if (Str.string_match reg s 0)
+  then let f = open_out s in
+    let _ = Marshal.to_channel f !st [] in
+    pnt (s^" is saved")
+  else raise @@ Failure "error:load: can't save to s. file prefix need to be st"
+
+let exit v dst =
+  ( match dst with
+    | None -> exit 0
+    | Some dst ->
+      save v dst; exit 0 )
+
+let rec repl (v:t ref) : unit =
   let v' =
     try
     let pmpt =
       line^
-      ((Flow.string_of_gl_st v.gl_st)^"\n")^
-      (Flow.string_of_st 0 v.st)^
+      ((Flow.string_of_gl_st !v.gl_st)^"\n")^
+      (Flow.string_of_st 0 !v.st)^
       "\ncommand #\n> " in
     pnt pmpt;
 
     let s = buf () in
     let lexbuf = Lexing.from_string s in
     let result = string_to_buf lexbuf in
-    let v' = evo v result in
+    let v' = evo !v result in
     v'
   with
-  | Parser.Error -> (pnt "error: parsing error");v
-  | Failure s -> (pnt @@ "error:"^s); v
-  | Invalid_argument s -> (pnt @@ "error:Invalid_argument "^s); v
-  | Lexer.Error _ -> (pnt "error:Lexer.Error"); v
+  | Parser.Error -> (pnt "error: parsing error");!v
+  | Failure s -> (pnt @@ "error:"^s); !v
+  | Invalid_argument s -> (pnt @@ "error:Invalid_argument "^s); !v
+  | Lexer.Error _ -> (pnt "error:Lexer.Error"); !v
   | err -> raise err in
-
-  repl v'
+  v:=v';
+  repl v
 let run () =
   let (src_ref,dst_ref) = (ref None,ref None) in
   Arg.parse
@@ -89,10 +113,10 @@ let run () =
     (fun _ -> ()) "-s src_filename -d dst_filename";
 
 
-  let v =
+  let v = ref
     ( match !src_ref with
       | None -> init_st
-      | Some s -> { init_st with st=(Flow.load s) }
+      | Some s -> load s
     ) in
 
   let _ = Sys.signal Sys.sigint (Signal_handle (fun _ -> exit v !dst_ref)) in
@@ -102,5 +126,5 @@ let run () =
   with
   | err ->
   ( match !dst_ref with
-    | Some f -> (Flow.save v.st f); raise err
+    | Some f -> (save v f); raise err
     | None -> raise err )

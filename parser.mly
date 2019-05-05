@@ -3,7 +3,7 @@ open Flow
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z ARR_END
-%token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD R_APP AGL
+%token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD R_APP AGL AGL_END
 %token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT EOP
 %token <string> NAM GL_NAM
 %token <int> INT
@@ -139,10 +139,9 @@ exp_lst:
   | { [] }
   | exp_lst exp  { $1@[$2] }
   ;
-exp_top:
-  | exp { $1 }
-  ;
+
 exp:
+  | AGL exp AGL_END { Exp.Agl $2 }
   | const { $1 }
   | APP exp DOT exp { Exp.App ($2,$4) }
   | exp PLS exp { Exp.Plus ($1,$3) }
