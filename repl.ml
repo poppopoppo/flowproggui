@@ -4,7 +4,8 @@ let pnt s =
 type t = {
   gl_st : Flow.Glb_St.t;
   st : Flow.St.t;
-  mode : mode
+  mode : mode;
+  log : string list
 }
 and mode =
     Calc
@@ -58,13 +59,8 @@ let evo (v:t) (b:Flow.Buffer.t) : t =
   | Flow.Buffer.Glb_mode g ->
     ( match v.mode with
       | Calc -> { v with
-                  mode=Glb_mode {
-                      name=g.name;
-                      code=(Flow.Exp.Exp (g.src,Flow.Exp.Root));
-                      src=g.src;
-                      dst=g.dst;
-                      st=Flow.St.plc_to g.src
-                    }
+                  mode=Glb_mode { name=g.name; code=(Flow.Exp.Exp (g.src,Flow.Exp.Root));
+                      src=g.src; dst=g.dst; st=Flow.St.plc_to g.src }
                 }
       | Glb_mode _ -> raise @@ Failure "error:Repl.evo: allready global edit mode"
     )
@@ -72,8 +68,11 @@ let evo (v:t) (b:Flow.Buffer.t) : t =
     ( match v.mode with
       | Calc -> raise Flow.Buffer.End
       | Glb_mode g ->
-        let ge = Flow.Glb_St.Gl_Etr { name=g.name; src=g.src; dst=g.dst; code=g.code } in
-        { v with mode=Calc; gl_st=(ge::v.gl_st) }
+        if (Flow.tkn_in_plc g.dst g.st)
+        then
+          let ge = Flow.Glb_St.Gl_Etr { name=g.name; src=g.src; dst=g.dst; code=g.code } in
+          { v with mode=Calc; gl_st=(ge::v.gl_st) }
+        else raise @@ Failure "error:Repl.evo: unmatched to dst place"
     )
   | Def g -> { v with gl_st=((Flow.Glb_St.Dta_Def g)::v.gl_st) }
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
@@ -91,7 +90,8 @@ let rec buf () =
 let init_st = {
   gl_st=[];
   st=Flow.St.Rcd [];
-  mode=Calc
+  mode=Calc;
+  log=[]
 }
 
 
@@ -109,11 +109,17 @@ let load (s:string) : t =
   with | Failure err -> raise @@ Failure err
        | err -> pnt "error:load\n"; raise err
 let save (st:t ref) s =
+  let l = open_out "default.lg" in
+  let rec f v =
+    match v with
+    | [] -> ()
+    | h::t -> output_string l (h^"\n");f t in
+  f !st.log; close_out l;
   let reg = Str.regexp ".+\\.st" in
   if (Str.string_match reg s 0)
   then let f = open_out s in
     let _ = Marshal.to_channel f !st [] in
-    pnt (s^" is saved")
+    pnt (s^" is saved");close_out f
   else raise @@ Failure "error:load: can't save to s. file prefix need to be st"
 
 let exit v dst =
@@ -144,8 +150,13 @@ let rec repl (v:t ref) : unit =
       let s = buf () in
       let lexbuf = Lexing.from_string s in
       let result = string_to_buf lexbuf in
+      let s' = if !v.mode=Calc
+        then s
+        else if result=Flow.Buffer.End
+        then (" ». ")
+        else (" » "^s) in
       let v' = evo !v result in
-      v'
+      { v' with log=(v'.log@[s']) }
     with
     | Flow.Buffer.End -> raise Flow.Buffer.End
     | Parser.Error -> (pnt "error: parsing error");!v

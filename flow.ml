@@ -11,7 +11,6 @@ module Plc = struct
   type t =
     | Z
     | Rcd of t list
-    | Exn
     | Name of string
     | PM
     | Mt
@@ -22,7 +21,6 @@ module Plc = struct
       if d=0
       then (string_of_list " " (string_of (d+1)) r)
       else "{ "^(string_of_list " " (string_of (d+1)) r)^" }"
-    | Exn -> "¿=(Exn)"
     | Name n -> n
     | PM -> "?+"
     | Mt -> "?"
@@ -46,6 +44,25 @@ module Exp = struct
     | L_App of t * t
     | L_Prj of t * t
     | Exn of string
+  let rec string_of_vh x =
+    match x with
+    | Seq (a,b) -> (string_of_vh a)^"\n» "^(string_of_vh b)
+    | Canon l -> "{~ "^(string_of_list " ¦ " string_of_vh l)^" }"
+    | Exp (p,x) -> (Plc.string_of 0 p)^" : "^(string_of x)
+    | CoPrd l -> string_of_list " ∐ " string_of_vh l
+  and string_of x =
+    match x with
+    | Agl e -> "∠["^(string_of e)^"]"
+    | Z z -> string_of_int z
+    | Plus (e1,e2) -> "("^(string_of e1)^"+"^(string_of e2)^")"
+    | Mult (e1,e2) -> "("^(string_of e1)^"*"^(string_of e2)^")"
+    | Gl_call n -> "#"^n
+    | Rcd l -> "{"^(string_of_list " " string_of l)^"}"
+    | Root -> "$"
+    | App (f,x) -> "‡"^(string_of f)^"."^(string_of x)
+    | L_App (f,x) -> "("^(string_of f)^"◂"^(string_of x)
+    | L_Prj (f,x) -> "("^(string_of f)^"◃"^(string_of x)
+    | Exn s -> "¡"^s
 
 end
 
@@ -99,16 +116,20 @@ end
 
 module St = struct
   type t =
+    | Exn of exn
     | Z of (int option)
     | Rcd of t list
-    | Exn of exn
     | CoPrd of {
         name : string;
         st : coprd;
         agl_flg : bool
       }
     | Unknown
-    | IO of Exp.vh
+    | IO of {
+        src : Plc.t;
+        dst : Plc.t;
+        code : Exp.vh
+      }
     | Inj of (int * Data.t)
   and coprd =
     | Pure of (int * t)
@@ -120,7 +141,6 @@ module St = struct
     match p with
     | Plc.Z -> Z None
     | Rcd r -> Rcd (List.map plc_to r)
-    | Exn -> Exn (Error "plc_of")
     | Name _ -> Unknown
     | PM -> Unknown
     | Mt -> Unknown
@@ -157,9 +177,9 @@ let rec tkn_in_plc (p:Plc.t) (t:St.t) =
   match p with
   | Z ->
     ( match t with
-      | Z _ -> true
-      | Rcd _ -> false of t list
       | Exn _ -> true
+      | Z _ -> true
+      | Rcd _ -> false
       | CoPrd c -> if c.name="Z" then true else false
       | Unknown -> true
       | IO _ -> false
@@ -167,22 +187,20 @@ let rec tkn_in_plc (p:Plc.t) (t:St.t) =
     )
   | Rcd r ->
     ( match t with
+      | Exn _ -> true
       | Z _ -> false
       | Rcd v ->
-        List.forall (fun (x,y) -> tkn_in_plc x y) (List.combine r v)
-      | Exn _ -> true
+        ( try
+          List.for_all (fun (x,y) -> tkn_in_plc x y) (List.combine r v)
+          with | Invalid_argument _ -> false )
       | CoPrd _ -> false
       | Unknown -> true
       | IO _ -> false
       | Inj _ -> false
     )
-  | Exn ->
-    ( match t with
-      | Exn _ -> true
-      | _ -> false
-    )
   | Name n ->
     ( match t with
+      | Exn _ -> true
       | CoPrd c -> if c.name=n then true else false
       | Unknown -> true
       | _ -> false
@@ -214,7 +232,10 @@ let rec evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : St.t =
   | Exp.Z z -> St.Z (Some z)
   | Exp.App (f,x) ->
     ( match (evo g s f,evo g s x) with
-      | (St.IO f,x) -> evo_vh g x f
+      | (St.IO f,x) ->
+        if (tkn_in_plc f.src x)
+        then evo_vh g x f.code
+        else raise @@ Failure "error:evo:L_App:type unmatched"
       | (St.Rcd l,St.Z (Some z)) -> (List.nth l z)
       | (St.Inj (i,c),x) ->
         ( match c with
@@ -229,7 +250,10 @@ let rec evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : St.t =
     )
   | Exp.L_App (f,x) ->
     ( match (evo g s f,evo g s x) with
-      | ((St.IO f),x) -> evo_vh g x f
+      | ((St.IO f),x) ->
+        if (tkn_in_plc f.src x)
+        then evo_vh g x f.code
+        else raise @@ Failure "error:evo:L_App:type unmatched"
       | (St.Inj (i,c),x) ->
         ( match c with
           | Data.CoPrd c ->
@@ -274,7 +298,7 @@ let rec evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : St.t =
     ( try
         let (i,f) = Glb_St.assoc g n in
         match (i,f) with
-        | (_,Gl_Etr f) -> (St.IO f.code)
+        | (_,Gl_Etr f) -> St.IO { src=f.src; dst=f.dst; code=f.code }
         | (Some i,Dta_Def f) -> St.Inj (i,f)
         | _ -> raise @@ Failure "error:evo:Gl_call:option"
       with

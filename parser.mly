@@ -19,6 +19,7 @@ open Flow
 %start buffer
 
 %type <Flow.Buffer.t> buffer
+%type <Flow.Plc.t> plc plc_top
 %type <Flow.Plc.t list> plcs
 %%
 buffer:
@@ -35,8 +36,12 @@ def_plc:
   | DTA name EQV def_coprd  { Flow.Buffer.Def (Data.CoPrd { name=$2; cns=$4 }) }
   ;
 def_coprd:
-  | CO_PRD plcs CLN name  { [($4,Flow.Plc.Rcd $2)] }
-  | CO_PRD plcs CLN name def_coprd  { ($4,Flow.Plc.Rcd $2)::$5 }
+  | CO_PRD plc_top CLN name  { [($4,$2)] }
+  | CO_PRD plc_top CLN name def_coprd  { ($4,$2)::$5 }
+  ;
+plc_top:
+  | plcs { Flow.Plc.Rcd $1 }
+  | EXP plc { $2 }
   ;
 plcs:
   | { [] }
@@ -45,11 +50,12 @@ plcs:
 plc:
   | Z { Flow.Plc.Z }
   | name { Flow.Plc.Name $1 }
+  | L_RCD plc_top R_RCD { $2 }
   ;
 name:
   | NAM { $1 }
 glb_mode:
-  | LCE LCE NAM CLN plcs SRC plcs { ($3,Flow.Plc.Rcd $5,Flow.Plc.Rcd $7) }
+  | LCE LCE NAM CLN plc_top SRC plc_top { ($3,$5,$7) }
   ;
 
 glb_etr:
@@ -68,7 +74,7 @@ lc_code:
   ;
 typ_def:
   | { (Flow.Plc.Mt,Flow.Plc.Mt) }
-  | CLN plcs SRC plcs { (Flow.Plc.Rcd $2,Flow.Plc.Rcd $4) }
+  | CLN plc_top SRC plc_top { ($2,$4) }
   ;
 (*
 text:
