@@ -15,10 +15,13 @@ module Plc = struct
     | Name of string
     | PM
     | Mt
-  let rec string_of x =
+  let rec string_of d x =
     match x with
     | Z -> "ℤ"
-    | Rcd r -> "{ "^(string_of_list " " string_of r)^" }"
+    | Rcd r ->
+      if d=0
+      then (string_of_list " " (string_of (d+1)) r)
+      else "{ "^(string_of_list " " (string_of (d+1)) r)^" }"
     | Exn -> "¿=(Exn)"
     | Name n -> n
     | PM -> "?+"
@@ -298,8 +301,8 @@ let rec string_of_st d s =
 let string_of_gl_st (s:Glb_St.t) =
   let f gs =
     ( match gs with
-    | Glb_St.Gl_Etr g -> 
-    ("§ "^g.name^" : "^(Plc.string_of g.src)^" ⊢ "^(Plc.string_of g.dst)^" ≒ ? ")
+    | Glb_St.Gl_Etr g ->
+    ("§ "^g.name^" : "^(Plc.string_of 0 g.src)^" ⊢ "^(Plc.string_of 0 g.dst)^" ≒ ? ")
     | Glb_St.Dta_Def (Data.CoPrd g) ->
       "¶ "^g.name^" = "^(string_of_list "|" (fun (n,_) -> n) g.cns)^" ≒ ?"
     )  in
