@@ -2,7 +2,7 @@
 open Flow
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z ARR_END
+%token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z ARR_END EQV DTA
 %token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD R_APP AGL AGL_END
 %token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT EOP
 %token <string> NAM GL_NAM
@@ -25,13 +25,38 @@ buffer:
   | glb_mode EOF {
       let (x,y) = $1 in
       (Flow.Glb_mode (x,y)) }
+  | def_plc EOF { $1 }
   ;
+def_plc:
+  | DTA name EQV def_coprd  { Flow.Def (Data.CoPrd { name=$2; cns=$4 }) }
+  ;
+def_coprd:
+  | CO_PRD plcs CLN name  { [($4,Flow.Plc.Rcd $2)] }
+  | CO_PRD plcs CLN name def_coprd  { ($4,Flow.Plc.Rcd $2)::$5 }
+  ;
+plcs:
+  | { [] }
+  | plcs plc { $1@[$2] }
+  ;
+plc:
+  | Z { Flow.Plc.Z }
+  | name { Flow.Plc.Name $1 }
+  ;
+name:
+  | NAM { $1 }
 glb_mode:
   | LCE LCE NAM CLN typs SRC typs { ($3,Flow.St.Rcd $5) }
   ;
 
 glb_etr:
-  | LCE NAM typ_def DEF lc_code { ($2,$5) }
+  | LCE NAM typ_def DEF lc_code {
+    Glb_St.Gl_Etr {
+      name=$2;
+      src=Plc.Rcd [];
+      dst=Plc.Rcd [];
+      code=$5
+      }
+    }
   ;
 lc_code:
   | vh_frm_code { $1 }
@@ -66,15 +91,15 @@ clq_lst:
   ;
 *)
 typs:
-  | typ { [$1] }
+  | { [] }
   | typs typ { $1@[$2] }
   ;
 typ:
   | Z { Flow.St.Z None }
-  | rcd { $1 }
+  | rcd { Flow.St.Rcd $1 }
   ;
 rcd:
-  | L_RCD rcd_lst R_RCD { Flow.St.Rcd $2 }
+  | L_RCD rcd_lst R_RCD {  $2 }
   ;
 rcd_lst:
   | { [] }

@@ -23,10 +23,12 @@ type token =
   | INT of (int)
   | GL_NAM of (string)
   | EXP
+  | EQV
   | EOP
   | EOF
   | END_PRD
   | END_CO_PRD
+  | DTA
   | DOT
   | DEF
   | CO_PRD_STT

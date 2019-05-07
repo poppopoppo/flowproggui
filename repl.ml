@@ -35,6 +35,7 @@ let evo (v:t) (b:Flow.buf) : t =
           name=s;
           code=(Flow.Exp.Exp Flow.Exp.Root);
           st=e } }
+  | Def g -> { v with gl_st=((Flow.Glb_St.Dta_Def g)::v.gl_st) }
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 let string_to_buf l = Parser.buffer Lexer.token l
 
@@ -87,8 +88,8 @@ let rec repl (v:t ref) : unit =
     let pmpt =
       line^
       ((Flow.string_of_gl_st !v.gl_st)^"\n")^
-      (Flow.string_of_st 0 !v.st)^
-      "\ncommand #\n> " in
+      "state # "^(Flow.string_of_st 0 !v.st)^
+      "\ncommand #\n» " in
     pnt pmpt;
 
     let s = buf () in

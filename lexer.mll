@@ -13,6 +13,8 @@ let alnum = digit | alpha
 let z = (('-' digit+)|digit+)
 rule token = parse
     | "\194\167"  (* § *) { LCE }
+    | "\194\182" "" (* ¶ *) { DTA }
+    | "=" { EQV }
     | "\194\187" (* » *)  { ARR       }
     | "\194\187" "."  (* ». *) { ARR_END }
     | "\226\138\162" (* ⊢ *) { SRC             }
@@ -43,7 +45,7 @@ rule token = parse
     | "$" { ROT }
     | "\226\136\160"  { AGL }
     | z as lxm  { INT (int_of_string lxm) }
-    | alpha+ as lxm { NAM (lxm) }
+    | (alpha+ alnum*) as lxm { NAM (lxm) }
 
     | space+        { token lexbuf                         }
     | eof           { EOF               }
