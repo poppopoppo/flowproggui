@@ -298,8 +298,8 @@ let rec string_of_st d s =
 let string_of_gl_st (s:Glb_St.t) =
   let f gs =
     ( match gs with
-    | Glb_St.Gl_Etr _ -> "test0"
-      (* )"§ "^g.name^" : "^(Plc.string_of g.src)^" ⊢ "^(Plc.string_of g.dst)^" ≒ ? " *)
+    | Glb_St.Gl_Etr g -> 
+    ("§ "^g.name^" : "^(Plc.string_of g.src)^" ⊢ "^(Plc.string_of g.dst)^" ≒ ? ")
     | Glb_St.Dta_Def (Data.CoPrd g) ->
       "¶ "^g.name^" = "^(string_of_list "|" (fun (n,_) -> n) g.cns)^" ≒ ?"
     )  in
