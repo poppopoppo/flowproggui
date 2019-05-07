@@ -18,6 +18,7 @@ type token =
   | MLT
   | L_RCD
   | L_PRN
+  | L_PRJ
   | L_APP
   | LCE
   | INT of (int)
@@ -48,4 +49,4 @@ exception Error
 
 (* The monolithic API. *)
 
-val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Flow.buf)
+val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Flow.Buffer.t)

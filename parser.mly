@@ -4,7 +4,7 @@ open Flow
 
 %token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z ARR_END EQV DTA
 %token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD R_APP AGL AGL_END
-%token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT EOP
+%token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT EOP L_PRJ
 %token <string> NAM GL_NAM
 %token <int> INT
 %token PLS MLT
@@ -14,21 +14,25 @@ open Flow
 %left PLS
 %left MLT
 %left L_APP
+%left L_PRJ
 
 %start buffer
 
-%type <Flow.buf> buffer
+%type <Flow.Buffer.t> buffer
+%type <Flow.Plc.t list> plcs
 %%
 buffer:
-  | vh_frm_top EOF { Flow.Evo $1 }
-  | glb_etr EOF { Flow.Glb $1 }
+  | vh_frm_top EOF { Flow.Buffer.Evo $1 }
+  | glb_etr EOF { Flow.Buffer.Glb $1 }
   | glb_mode EOF {
-      let (x,y) = $1 in
-      (Flow.Glb_mode (x,y)) }
+      let (n,s,d) = $1 in
+      (Flow.Buffer.Glb_mode { name=n; src=s; dst=d })
+         }
   | def_plc EOF { $1 }
+  | ARR_END EOF { Flow.Buffer.End }
   ;
 def_plc:
-  | DTA name EQV def_coprd  { Flow.Def (Data.CoPrd { name=$2; cns=$4 }) }
+  | DTA name EQV def_coprd  { Flow.Buffer.Def (Data.CoPrd { name=$2; cns=$4 }) }
   ;
 def_coprd:
   | CO_PRD plcs CLN name  { [($4,Flow.Plc.Rcd $2)] }
@@ -45,15 +49,16 @@ plc:
 name:
   | NAM { $1 }
 glb_mode:
-  | LCE LCE NAM CLN typs SRC typs { ($3,Flow.St.Rcd $5) }
+  | LCE LCE NAM CLN plcs SRC plcs { ($3,Flow.Plc.Rcd $5,Flow.Plc.Rcd $7) }
   ;
 
 glb_etr:
   | LCE NAM typ_def DEF lc_code {
+    let (src,dst) = $3 in
     Glb_St.Gl_Etr {
       name=$2;
-      src=Plc.Rcd [];
-      dst=Plc.Rcd [];
+      src=src;
+      dst=dst;
       code=$5
       }
     }
@@ -62,8 +67,8 @@ lc_code:
   | vh_frm_code { $1 }
   ;
 typ_def:
-  | { Flow.St.Rcd [] }
-  | CLN typs SRC typs { Flow.St.Rcd $2 }
+  | { (Flow.Plc.Mt,Flow.Plc.Mt) }
+  | CLN plcs SRC plcs { (Flow.Plc.Rcd $2,Flow.Plc.Rcd $4) }
   ;
 (*
 text:
@@ -136,8 +141,8 @@ coprd_tail:
   ;
 vh_frm_top:
   | CNN vh_frm_lst  { Exp.Canon $2 }
-  | exp_lst { Exp.Exp (Exp.Rcd $1) }
-  | EXP exp { Exp.Exp $2 }
+  | exp_lst { Exp.Exp (Flow.Plc.Mt,Exp.Rcd $1) }
+  | EXP exp { Exp.Exp (Flow.Plc.Mt,$2) }
   ;
 vh_frm_lst:
   | vh_frm  { [$1] }
@@ -152,7 +157,7 @@ vh_frm:
     }
   ;
 h_frm:
-  | exp { Exp.Exp $1 }
+  | exp { Exp.Exp (Flow.Plc.Mt,$1) }
   | L_RCD CNN vh_frm_lst R_RCD  { Exp.Canon $3 }
   ;
 tail:
@@ -173,6 +178,7 @@ exp:
   | exp MLT exp { Exp.Mult ($1,$3) }
   | L_PRN exp R_PRN { $2 }
   | exp L_APP exp { Exp.L_App ($1,$3) }
+  | exp L_PRJ exp { Exp.L_Prj ($1,$3) }
   | L_RCD exp_lst R_RCD { Exp.Rcd $2 }
   ;
 const:

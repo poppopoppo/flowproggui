@@ -10,31 +10,71 @@ and mode =
     Calc
   | Glb_mode of {
       name:string;
+      src:Flow.Plc.t;
+      dst:Flow.Plc.t;
       code:Flow.Exp.vh;
       st:Flow.St.t
     }
 
-let evo (v:t) (b:Flow.buf) : t =
+let evo (v:t) (b:Flow.Buffer.t) : t =
   match b with
-  | Evo e ->
-    let st = Flow.evo_vh v.gl_st v.st e in
-    ( match st with
-      | Flow.St.CoPrd c ->
-        if c.agl_flg
-        then ( match c.st with
-            | Pure (_,x) -> { v with st=x }
-            | Mix _ -> raise @@ Failure "error:Repl.evo:Mix"
-          )
-        else { v with st=st }
-      | x -> { v with st=x }
+  | Flow.Buffer.Evo e ->
+    ( match v.mode with
+      | Calc ->
+        let st = Flow.evo_vh v.gl_st v.st e in
+        ( match st with
+          | Flow.St.CoPrd c ->
+            if c.agl_flg
+            then ( match c.st with
+                | Pure (_,x) -> { v with st=x }
+                | Mix _ -> raise @@ Failure "error:Repl.evo:Mix"
+              )
+            else { v with st=st }
+          | x -> { v with st=x }
+        )
+      | Glb_mode g ->
+        let st = Flow.evo_vh v.gl_st g.st e in
+        ( match st with
+          | Flow.St.CoPrd c ->
+            if c.agl_flg
+            then ( match c.st with
+                | Pure (_,x) ->
+                  let g' = Glb_mode { name=g.name; src=g.src; dst=g.dst;
+                                      code=(Flow.Exp.Seq (g.code,e)); st=x } in
+                  { v with mode=g' }
+                | Mix _ -> raise @@ Failure "error:Repl.evo:Mix"
+              )
+            else
+              let g' = Glb_mode { name=g.name; src=g.src; dst=g.dst;
+                  code=(Flow.Exp.Seq (g.code,e)); st=st } in
+              { v with mode=g' }
+          | x ->
+            let g' = Glb_mode { name=g.name; src=g.src; dst=g.dst;
+                                code=(Flow.Exp.Seq (g.code,e)); st=x } in
+            { v with mode=g' }
+        )
     )
-  | Glb g -> { v with gl_st=(g::v.gl_st) }
-  | Glb_mode (s,e) ->
-    { v with
-      mode=Glb_mode {
-          name=s;
-          code=(Flow.Exp.Exp Flow.Exp.Root);
-          st=e } }
+  | Flow.Buffer.Glb g -> { v with gl_st=(g::v.gl_st) }
+  | Flow.Buffer.Glb_mode g ->
+    ( match v.mode with
+      | Calc -> { v with
+                  mode=Glb_mode {
+                      name=g.name;
+                      code=(Flow.Exp.Exp (g.src,Flow.Exp.Root));
+                      src=g.src;
+                      dst=g.dst;
+                      st=Flow.St.plc_to g.src
+                    }
+                }
+      | Glb_mode _ -> raise @@ Failure "error:Repl.evo: allready global edit mode"
+    )
+  | Flow.Buffer.End ->
+    ( match v.mode with
+      | Calc -> raise Flow.Buffer.End
+      | Glb_mode g ->
+        let ge = Flow.Glb_St.Gl_Etr { name=g.name; src=g.src; dst=g.dst; code=g.code } in
+        { v with mode=Calc; gl_st=(ge::v.gl_st) }
+    )
   | Def g -> { v with gl_st=((Flow.Glb_St.Dta_Def g)::v.gl_st) }
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 let string_to_buf l = Parser.buffer Lexer.token l
@@ -83,26 +123,36 @@ let exit v dst =
       save v dst; exit 0 )
 
 let rec repl (v:t ref) : unit =
+  ( match !v.mode with
+    | Calc ->
+      let pmpt =
+        line^
+        ((Flow.Glb_St.string_of !v.gl_st)^"\n")^
+        "state # "^(Flow.St.string_of 0 !v.st)^
+        "\ncommand #\n» " in
+      pnt pmpt
+    | Glb_mode g ->
+      let pmpt =
+        line^
+        "~ global edit mode ~\n"^
+        "§§ "^g.name^" "^(Flow.Plc.string_of 0 g.src)^" ⊢ "^(Flow.Plc.string_of 0 g.dst)^"\n"^
+        "state # "^(Flow.St.string_of 0 g.st)^
+        "\ncommand #\n» " in
+      pnt pmpt );
   let v' =
     try
-    let pmpt =
-      line^
-      ((Flow.string_of_gl_st !v.gl_st)^"\n")^
-      "state # "^(Flow.string_of_st 0 !v.st)^
-      "\ncommand #\n» " in
-    pnt pmpt;
-
-    let s = buf () in
-    let lexbuf = Lexing.from_string s in
-    let result = string_to_buf lexbuf in
-    let v' = evo !v result in
-    v'
-  with
-  | Parser.Error -> (pnt "error: parsing error");!v
-  | Failure s -> (pnt @@ "error:"^s); !v
-  | Invalid_argument s -> (pnt @@ "error:Invalid_argument "^s); !v
-  | Lexer.Error _ -> (pnt "error:Lexer.Error"); !v
-  | err -> raise err in
+      let s = buf () in
+      let lexbuf = Lexing.from_string s in
+      let result = string_to_buf lexbuf in
+      let v' = evo !v result in
+      v'
+    with
+    | Flow.Buffer.End -> raise Flow.Buffer.End
+    | Parser.Error -> (pnt "error: parsing error");!v
+    | Failure s -> (pnt @@ "error:"^s); !v
+    | Invalid_argument s -> (pnt @@ "error:Invalid_argument "^s); !v
+    | Lexer.Error _ -> (pnt "error:Lexer.Error"); !v
+    | err -> raise err in
   v:=v';
   repl v
 let run () =
@@ -115,10 +165,10 @@ let run () =
 
 
   let v = ref
-    ( match !src_ref with
-      | None -> init_st
-      | Some s -> load s
-    ) in
+      ( match !src_ref with
+        | None -> init_st
+        | Some s -> load s
+      ) in
 
   let _ = Sys.signal Sys.sigint (Signal_handle (fun _ -> exit v !dst_ref)) in
 
@@ -126,6 +176,6 @@ let run () =
     repl v
   with
   | err ->
-  ( match !dst_ref with
-    | Some f -> (save v f); raise err
-    | None -> raise err )
+    ( match !dst_ref with
+      | Some f -> (save v f); raise err
+      | None -> raise err )

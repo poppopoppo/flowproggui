@@ -32,7 +32,7 @@ module Exp = struct
   type vh =
     | Seq of vh * vh
     | Canon of vh list
-    | Exp of t
+    | Exp of Plc.t * t
     | CoPrd of vh list
   and t =
     | Agl of t
@@ -44,6 +44,7 @@ module Exp = struct
     | Root
     | App of t * t
     | L_App of t * t
+    | L_Prj of t * t
     | Exn of string
 
 end
@@ -66,6 +67,17 @@ module Glb_St = struct
       }
     | Dta_Def of Data.t
   type t = glb_etr list
+
+  let string_of (s:t) =
+    let f gs =
+      ( match gs with
+        | Gl_Etr g ->
+          ("§ "^g.name^" : "^(Plc.string_of 0 g.src)^" ⊢ "^(Plc.string_of 0 g.dst)^" ≒ ? ")
+        | Dta_Def (Data.CoPrd g) ->
+          "¶ "^g.name^" = "^(string_of_list "|" (fun (n,_) -> n) g.cns)^" ≒ ?"
+      )  in
+    "gl_state # "^(string_of_list "," f s)
+
   let rec assoc (g:t) (n:string) : (int option * glb_etr) =
     ( match g with
       | [] -> raise @@ Failure ("error:Glb_St:assoc:not found global entry "^n)
@@ -104,12 +116,92 @@ module St = struct
   and exn =
     | Typing_Error of string
     | Error of string
+  let rec plc_to (p:Plc.t) : t =
+    match p with
+    | Plc.Z -> Z None
+    | Rcd r -> Rcd (List.map plc_to r)
+    | Exn -> Exn (Error "plc_of")
+    | Name _ -> Unknown
+    | PM -> Unknown
+    | Mt -> Unknown
+  let rec string_of d s =
+    match s with
+    | Z z ->
+      ( match z with
+        | Some z -> ("ℤ:"^(string_of_int z))
+        | None -> ("ℤ:?")
+      )
+    | Rcd l ->
+      let m = (string_of_list " " (string_of (d+1)) l) in
+      if d=0 then ("{ "^m^" }") else ("{ "^m^" }")
+    | Exn x ->
+      (match x with
+       | Typing_Error e -> "exn("^e^")"
+       | Error e -> "exn("^e^")"
+      )
+    | CoPrd c -> c.name^":?"
+        (*
+        ( match c.st with
+          | St.Pure (i,x) -> ("["^(string_of_int i)^"]|"^(string_of_st (d+1) x))
+          | St.Mix m -> string_of_list "∐" (string_of_st (d+1)) m
+        )
+        *)
+    | Unknown -> "??:?"
+    | IO _ -> "IO:?"
+    | Inj (_,c) ->
+      ( match c with
+        | Data.CoPrd c -> ("??→"^c.name^":?")
+      )
 end
-type buf =
-  | Evo of Exp.vh
-  | Glb of Glb_St.glb_etr
-  | Glb_mode of string * St.t
-  | Def of Data.t
+let rec tkn_in_plc (p:Plc.t) (t:St.t) =
+  match p with
+  | Z ->
+    ( match t with
+      | Z _ -> true
+      | Rcd _ -> false of t list
+      | Exn _ -> true
+      | CoPrd c -> if c.name="Z" then true else false
+      | Unknown -> true
+      | IO _ -> false
+      | Inj _ -> false
+    )
+  | Rcd r ->
+    ( match t with
+      | Z _ -> false
+      | Rcd v ->
+        List.forall (fun (x,y) -> tkn_in_plc x y) (List.combine r v)
+      | Exn _ -> true
+      | CoPrd _ -> false
+      | Unknown -> true
+      | IO _ -> false
+      | Inj _ -> false
+    )
+  | Exn ->
+    ( match t with
+      | Exn _ -> true
+      | _ -> false
+    )
+  | Name n ->
+    ( match t with
+      | CoPrd c -> if c.name=n then true else false
+      | Unknown -> true
+      | _ -> false
+    )
+  | PM -> true
+  | Mt -> true
+module Buffer = struct
+  type t =
+    | Evo of Exp.vh
+    | Glb of Glb_St.glb_etr
+    | Glb_mode of {
+        name : string;
+        src : Plc.t;
+        dst : Plc.t
+      }
+    | Def of Data.t
+    | End
+  exception End
+end
 type evo_mode = Calc | Glb
 
 type rcd_rtn =
@@ -150,6 +242,11 @@ let rec evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : St.t =
       | ((St.Rcd l),(St.Z (Some z))) -> (List.nth l z)
       | _ -> raise @@ Failure "error:evo:L_App:type unmatched"
     )
+  | Exp.L_Prj (f,x) ->
+    ( match (evo g s f,evo g s x) with
+      | ((St.Rcd l),(St.Z (Some z))) -> (List.nth l z)
+      | _ -> raise @@ Failure "error:evo:L_App:type unmatched"
+    )
   | Exp.Plus (x,y) ->
     ( match (evo g s x,evo g s y) with
       | (St.Z x,St.Z y) ->
@@ -157,7 +254,12 @@ let rec evo (g:Glb_St.t) (s:St.t) (a:Exp.t) : St.t =
           | (Some x,Some y) -> (St.Z (Some (x+y)))
           | _ -> (St.Z None)
         )
-      | _ -> raise @@ Failure "error:evo:type is unmatched"
+      | (x,y) ->
+        let (px,py) = (St.string_of 0 x,St.string_of 0 y) in
+        let msg =
+          "error:evo:type is unmatched\n"^
+          px^" + "^py^"\n" in
+        raise @@ Failure msg
     )
   | Exp.Mult (x,y) ->
     ( match (evo g s x,evo g s y) with
@@ -250,7 +352,7 @@ and evo_vh (g:Glb_St.t) (s:St.t) (a:Exp.vh) : St.t =
     let s'' = evo_vh g s' f1 in
     s''
   | Exp.Canon _ -> raise @@ Failure "error:evo_vh:Canon"
-  | Exp.Exp e -> evo g s e
+  | Exp.Exp (_,e) -> evo g s e
   | Exp.CoPrd l ->
     ( match s with
       | St.CoPrd c ->
@@ -270,43 +372,5 @@ and evo_vh (g:Glb_St.t) (s:St.t) (a:Exp.vh) : St.t =
 let debug_flg = ref true
 let pnt s = if !debug_flg=true then print_string s;flush stdout
 
-let rec string_of_st d s =
-  match s with
-  | St.Z z ->
-    ( match z with
-      | Some z -> ("ℤ:"^(string_of_int z))
-      | None -> ("ℤ:?")
-    )
-  | St.Rcd l ->
-    let m = (string_of_list " " (string_of_st (d+1)) l) in
-    if d=0 then ("{ "^m^" }") else ("{ "^m^" }")
-  | St.Exn x ->
-    (match x with
-     | St.Typing_Error e -> "exn("^e^")"
-     | St.Error e -> "exn("^e^")"
-    )
-  | St.CoPrd c -> c.name^":?"
-    (*
-    ( match c.st with
-      | St.Pure (i,x) -> ("["^(string_of_int i)^"]|"^(string_of_st (d+1) x))
-      | St.Mix m -> string_of_list "∐" (string_of_st (d+1)) m
-    )
-    *)
-  | St.Unknown -> "??:?"
-  | St.IO _ -> "IO:?"
-  | St.Inj (_,c) ->
-    ( match c with
-      | Data.CoPrd c -> ("??→"^c.name^":?")
-    )
-let string_of_gl_st (s:Glb_St.t) =
-  let f gs =
-    ( match gs with
-    | Glb_St.Gl_Etr g ->
-    ("§ "^g.name^" : "^(Plc.string_of 0 g.src)^" ⊢ "^(Plc.string_of 0 g.dst)^" ≒ ? ")
-    | Glb_St.Dta_Def (Data.CoPrd g) ->
-      "¶ "^g.name^" = "^(string_of_list "|" (fun (n,_) -> n) g.cns)^" ≒ ?"
-    )  in
-  "gl_state # "^(string_of_list "," f s)
-
 let print_st st =
-  print_string ("state # "^(string_of_st 0 st)^"\n");flush stdout
+  print_string ("state # "^(St.string_of 0 st)^"\n");flush stdout
