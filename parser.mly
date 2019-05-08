@@ -2,11 +2,14 @@
 open Flow
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD STT CNN M_CNN Z ARR_END EQV DTA
-%token TEST CLQ LCE EXP PRD CO_PRD END_PRD END_CO_PRD R_APP AGL AGL_END
-%token L_PRN R_PRN PRD_STT CO_PRD_STT  APP L_APP DOT ROT EOP L_PRJ
+%token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV DTA
+%token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT
+%token L_PRN R_PRN  CO_PRD_STT  APP L_APP DOT L_PRJ
+(*
+%token EOP PRD TEST PRD_STT R_APP STT END_PRD CLQ STT
+*)
 %token <string> NAM GL_NAM
-%token <int> INT
+%token <int> INT ROT
 %token PLS MLT
 %token EOF
 
@@ -17,6 +20,7 @@ open Flow
 %left L_PRJ
 
 %start buffer
+
 
 %type <Flow.Buffer.t> buffer
 %type <Flow.Plc.t> plc plc_top
@@ -101,20 +105,7 @@ clq_lst:
   | clq_lst CLQ lc_man { }
   ;
 *)
-typs:
-  | { [] }
-  | typs typ { $1@[$2] }
-  ;
-typ:
-  | Z { Flow.St.Z None }
-  | rcd { Flow.St.Rcd $1 }
-  ;
-rcd:
-  | L_RCD rcd_lst R_RCD {  $2 }
-  ;
-rcd_lst:
-  | { [] }
-  | rcd_lst typ { $1@[$2] }
+
 (*
 lc_cod:
   | { Flow.Exp.End }
@@ -186,10 +177,11 @@ exp:
   | exp L_APP exp { Exp.L_App ($1,$3) }
   | exp L_PRJ exp { Exp.L_Prj ($1,$3) }
   | L_RCD exp_lst R_RCD { Exp.Rcd $2 }
+  | ARR_STT lc_code { Exp.IO $2 }
   ;
 const:
   | INT { Exp.Z $1 }
-  | ROT { Exp.Root }
+  | ROT { Exp.Root $1 }
   | GL_NAM  { Exp.Gl_call $1 }
   ;
 (*

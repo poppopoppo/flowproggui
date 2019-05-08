@@ -3,15 +3,10 @@
 
 type token = 
   | Z
-  | TEST
-  | STT
   | SRC
   | R_RCD
   | R_PRN
-  | R_APP
-  | ROT
-  | PRD_STT
-  | PRD
+  | ROT of (int)
   | PLS
   | NAM of (string)
   | M_CNN
@@ -25,9 +20,7 @@ type token =
   | GL_NAM of (string)
   | EXP
   | EQV
-  | EOP
   | EOF
-  | END_PRD
   | END_CO_PRD
   | DTA
   | DOT
@@ -35,8 +28,8 @@ type token =
   | CO_PRD_STT
   | CO_PRD
   | CNN
-  | CLQ
   | CLN
+  | ARR_STT
   | ARR_END
   | ARR
   | APP

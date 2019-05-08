@@ -22,7 +22,7 @@ let evo (v:t) (b:Flow.Buffer.t) : t =
   | Flow.Buffer.Evo e ->
     ( match v.mode with
       | Calc ->
-        let st = Flow.evo_vh v.gl_st v.st e in
+        let st = Flow.evo_vh v.gl_st [] v.st e in
         ( match st with
           | Flow.St.CoPrd c ->
             if c.agl_flg
@@ -34,7 +34,7 @@ let evo (v:t) (b:Flow.Buffer.t) : t =
           | x -> { v with st=x }
         )
       | Glb_mode g ->
-        let st = Flow.evo_vh v.gl_st g.st e in
+        let st = Flow.evo_vh v.gl_st [] g.st e in
         ( match st with
           | Flow.St.CoPrd c ->
             if c.agl_flg
@@ -59,7 +59,7 @@ let evo (v:t) (b:Flow.Buffer.t) : t =
   | Flow.Buffer.Glb_mode g ->
     ( match v.mode with
       | Calc -> { v with
-                  mode=Glb_mode { name=g.name; code=(Flow.Exp.Exp (g.src,Flow.Exp.Root));
+                  mode=Glb_mode { name=g.name; code=(Flow.Exp.Exp (g.src,Flow.Exp.Root 0));
                       src=g.src; dst=g.dst; st=Flow.St.plc_to g.src }
                 }
       | Glb_mode _ -> raise @@ Failure "error:Repl.evo: allready global edit mode"

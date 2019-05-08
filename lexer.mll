@@ -17,6 +17,7 @@ rule token = parse
     | "=" { EQV }
     | "\194\187" (* » *)  { ARR       }
     | "\194\187" "."  (* ». *) { ARR_END }
+    | "." "\194\187"  (* .» *)  { ARR_STT }
     | "\226\138\162" (* ⊢ *) { SRC             }
     | ":" { CLN }
     | "\226\136\160" "["  (* ∠ *) { AGL }
@@ -25,8 +26,12 @@ rule token = parse
     | "|"   { CO_PRD }
     | ".|"  { CO_PRD_STT }
     | "|."  { END_CO_PRD }
+(*
     | ".&"  { PRD_STT }
     | "&."  { END_PRD }
+    | "\226\128\163"  { R_APP }
+    |  "\226\136\142" (* ∎ *) { EOP  }
+*)
     | "\226\137\146" { DEF }
     | "{" { L_RCD }
     | "}" { R_RCD }
@@ -34,16 +39,14 @@ rule token = parse
     | '(' { L_PRN }
     | ')' { R_PRN }
     | "!" { EXP }
-    | "\226\128\163"  { R_APP }
     | "\226\151\130" (* ◂ *) { L_APP }
     | "\226\128\161"  { APP }
     | "\226\151\131" (* ◃ *)  { L_PRJ }
-    |  "\226\136\142" (* ∎ *) { EOP  }
     | "\226\132\164" (* ℤ *)  { Z }
     | "#" ((alpha+ alnum*)as lxm) { GL_NAM(lxm) }
     | "+" { PLS }
     | '*' { MLT }
-    | "$" { ROT }
+    | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "\226\136\160"  { AGL }
     | z as lxm  { INT (int_of_string lxm) }
     | (alpha+ alnum*) as lxm { NAM (lxm) }
