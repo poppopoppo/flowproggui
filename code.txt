@@ -144,3 +144,177 @@
    » ! #cns◂$ ;
    ».
 § dbl : ! list ⊢ ! list ≒ ! ∠[$] .| ! #nil◂{} ». |. ~ $*2 ». ¦ #dbl◂$ ». » ! #cns◂$ ».
+
+¶ ∀a ▸ list ≃ ∐ : nil ∐ #a @ : cns
+¶ ∀a ▸ opt ≃ ∐ #a : some ∐ : none
+¶ ∀a b ▸ cprd ≃ ∐ #a : left ∐ #b : right
+¶ ∀a b ▸ tns ≃ #a #b : tns
+
+cprd ◂ ℤ ⊥ : left◂5
+∀a ▸ P
+∀a ▸ a→a : id
+
+list◂ℤ
+list◂{}
+
+A/B B B\C
+B/A A/B B B\C
+
+dick:
+  | "(" l_prn
+  | "(" dick_list l_prn
+l_prn:
+  | ")"
+dick_list:
+  | "(" l_prn
+  | "(" dick_list l_prn
+  | "(" l_prn dick_list
+  | "(" dick_list l_prn dick_list
+
+L_PRN ≒ "(" :
+  > c0 . r_prn → dick
+  > c1 . dick_list → r_prn → dick
+  > c2 . r_prn → dick_list
+  > c3 . dick_list → r_prn → dick_list
+  > c4 . r_prn → dick_list → dick_list
+  > c5 . dick_list → r_prn → dick_list → dick_list
+
+L_PRN ≒ "(" :
+  > c0 . dick/r_prn
+  > c1 . dick/r_prn/dick_list
+  > c2 . dick_list/r_prn
+  > c3 . dick_list/r_prn/dick_list
+  > c4 . dick_list/dick_list/r_prn
+  > c5 . dick_list/dick_list/r_prn/dick_list
+R_PRN ≒ ")" :
+  > r_prn
+
+dick:
+  | "(" l_prn
+  | l_dick l_prn
+  ;
+l_dick:
+  | "(" dick_list
+  ;
+l_prn:
+  | ")"
+prn:
+  | "(" l_prn
+  ;
+dick_list:
+  | "(" l_prn
+  | l_dick l_prn
+  | prn dick_list
+  | dick_list_prn dick_list
+  ;
+dick_list_prn:
+  | l_dick l_prn
+  ;
+  { c0 { { c1 c5 } { c3 c4 }}}
+
+Canon_Form =
+  | Atom of string
+  | App of { string Canon_Form }
+  |
+TKN
+  > plc0 : c0
+  > plc1 : c1
+  > plc2 : c2
+  ..
+  > plcN : cN
+
+0 1 2 3 4 .. n // dependent ℕ[n]
+
+
+L_PRN
+  > [ dick/r_prn ] : c0
+  > [ dick/r_prn/dick_list ] : c1
+  > [ dick_list/r_prn ] : c2
+  > [ dick_list/r_prn/dick_list ] : c3
+  > [ dick_list/dick_list/r_prn ] : c4
+  > [ dick_list/dick_list/r_prn/dick_list ] : c5
+
+L_PRN[X0] , R_PRN[X1] , ..
+
+R_PRN ≒ ")" :
+TREE ≒
+  ∐ tkn0 : atom0
+  ∐ tkn1 : atom1
+  ∐ tkn2 : atom2
+  ∐ TREE TREE : app
+
+L_PRN :
+  > r_prn → dick
+  > dick_list → r_prn → dick
+  >
+exp:
+  | "x"
+  | exp "+" exp
+  | exp "*" exp
+
+x * x + x
+x + x * x
+
+X + X + X + X + X
+
+
+X ^
+  > exp/pls : %x_pls
+  >.
++ ^
+  > pls/exp : %pls
+
+X ‡
+  > exp/mlt : x_mlt
+  > exp : x
+  > exp/pls : x_pls
+  >.
+PLS ‡
+  > pls : p0
+  >.
+MLT
+  > mlt : m0
+  >.
+X PLS X
+  ‡‡x_pls·p0·x_pls
+
+¶ ℬ ≅ ∐ ℬ ℬ : ‡ ∐ tkn : atom
+exp0:
+  | "x"
+  | "x" "+" exp
+
+S %  L_PRN < R_PRN < R_PRN < L_PRN < R_PRN
+
+S/B B B\S
+A/(B/C) (B/C) C
+A C ∐ A/(B/C) B
+
+A/B/C B/C C
+
+∀T ▸ list
+
+A→B:f
+list[A]→list[B]:∑f
+∀t ▸ ∀A→B:f ▸ t[A]→t[B] : ∑
+
+§ map : ∀A B ▸ (A→B) ⊢ (list[A]→list[B])
+
+λx.x / $
+
+λx0.λx1.λx2.F(x0,x1,x2) / F($'',$',$)
+.» ℤ { ℤ ℤ ℤ ℤ } {} (_→_) : 0 $◃3 {} %0 |
+  %0 ≒
+    .» $' $ %1 |
+      %1 ≒
+        .» $''◃2 $ $ $'
+        » $'' $
+        ».
+    ».
+» $ $
+».
+
+∑A B ▸
+
+∀a▸pred[a]
+
+S[X] ≒ P0[X] > P1[X] > .. Pn[X] >.

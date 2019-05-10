@@ -3,8 +3,8 @@ open Flow
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV DTA
-%token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT
-%token L_PRN R_PRN  CO_PRD_STT  APP L_APP DOT L_PRJ
+%token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT F_ALL PRD PRD_STT END_PRD
+%token L_PRN R_PRN  CO_PRD_STT  APP L_APP R_APP DOT L_PRJ D_EXP
 (*
 %token EOP PRD TEST PRD_STT R_APP STT END_PRD CLQ STT
 *)
@@ -37,11 +37,20 @@ buffer:
   | ARR_END EOF { Flow.Buffer.End }
   ;
 def_plc:
-  | DTA name EQV def_coprd  { Flow.Buffer.Def (Data.CoPrd { name=$2; cns=$4 }) }
+  | DTA def_name EQV def_coprd  { Flow.Buffer.Def (Data.CoPrd { name=$2; cns=$4 }) }
+  | DTA def_name EQV def_prd  { Flow.Buffer.Def (Data.Prd { name=$2; cns=$4 }) }
+  ;
+def_name:
+  | NAM  { $1 }
+  | NAM R_APP NAM { $1 }
   ;
 def_coprd:
   | CO_PRD plc_top CLN name  { [($4,$2)] }
   | CO_PRD plc_top CLN name def_coprd  { ($4,$2)::$5 }
+  ;
+def_prd:
+  | PRD plc_top CLN name  { [($4,$2)] }
+  | PRD plc_top CLN name def_prd  { ($4,$2)::$5 }
   ;
 plc_top:
   | plcs { Flow.Plc.Rcd $1 }
@@ -140,6 +149,7 @@ vh_frm_top:
   | CNN vh_frm_lst  { Exp.Canon $2 }
   | exp_lst { Exp.Exp (Flow.Plc.Mt,Exp.Rcd $1) }
   | EXP exp { Exp.Exp (Flow.Plc.Mt,$2) }
+  | EXP EXP exp { Exp.Exp (Flow.Plc.Mt,Flow.Exp.L_App ($3,Flow.Exp.Root 0)) }
   ;
 vh_frm_lst:
   | vh_frm  { [$1] }

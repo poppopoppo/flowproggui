@@ -55,7 +55,15 @@ let evo (v:t) (b:Flow.Buffer.t) : t =
             { v with mode=g' }
         )
     )
-  | Flow.Buffer.Glb g -> { v with gl_st=(g::v.gl_st) }
+  | Flow.Buffer.Glb g ->
+    ( match g with
+    | Flow.Glb_St.Gl_Etr l ->
+      let b = Flow.check_io v.gl_st [] l.code l.src l.dst in
+      if b
+      then { v with gl_st=(g::v.gl_st) }
+      else raise @@ Failure "error:Repl.evo: type unmatced"
+    | _ -> { v with gl_st=(g::v.gl_st) }
+    )
   | Flow.Buffer.Glb_mode g ->
     ( match v.mode with
       | Calc -> { v with

@@ -6,7 +6,10 @@ type token =
   | SRC
   | R_RCD
   | R_PRN
+  | R_APP
   | ROT of (int)
+  | PRD_STT
+  | PRD
   | PLS
   | NAM of (string)
   | M_CNN
@@ -18,10 +21,13 @@ type token =
   | LCE
   | INT of (int)
   | GL_NAM of (string)
+  | F_ALL
   | EXP
   | EQV
   | EOF
+  | END_PRD
   | END_CO_PRD
+  | D_EXP
   | DTA
   | DOT
   | DEF
