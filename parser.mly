@@ -2,13 +2,14 @@
 open Flow
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV DTA
+%token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV DTA STT_CLN
 %token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT F_ALL PRD PRD_STT END_PRD
 %token L_PRN R_PRN  CO_PRD_STT  APP L_APP R_APP DOT L_PRJ D_EXP
+%token TEST ACT SPL
 (*
 %token EOP PRD TEST PRD_STT R_APP STT END_PRD CLQ STT
 *)
-%token <string> NAM GL_NAM
+%token <string> NAM GL_NAM MCR
 %token <int> INT ROT
 %token PLS MLT
 %token EOF
@@ -147,9 +148,24 @@ coprd_tail:
   ;
 vh_frm_top:
   | CNN vh_frm_lst  { Exp.Canon $2 }
-  | exp_lst { Exp.Exp (Flow.Plc.Mt,Exp.Rcd $1) }
-  | EXP exp { Exp.Exp (Flow.Plc.Mt,$2) }
-  | EXP EXP exp { Exp.Exp (Flow.Plc.Mt,Flow.Exp.L_App ($3,Flow.Exp.Root 0)) }
+  | plc_ept exp_top { Exp.Exp ($1,$2) }
+  ;
+exp_top:
+  | exp_lst macro { Exp.Rcd $1 }
+  | EXP exp macro { $2 }
+  | D_EXP exp macro { Flow.Exp.L_App ($2,Flow.Exp.Root 0) }
+  ;
+macro:
+  | { }
+  | SPL macros  { }
+  ;
+macros:
+  | MCR DEF exp  { }
+  | MCR DEF exp macros { }
+  ;
+plc_ept:
+  |  { Flow.Plc.Mt }
+  | ACT plc_top CLN { $2 }
   ;
 vh_frm_lst:
   | vh_frm  { [$1] }
@@ -188,6 +204,7 @@ exp:
   | exp L_PRJ exp { Exp.L_Prj ($1,$3) }
   | L_RCD exp_lst R_RCD { Exp.Rcd $2 }
   | ARR_STT lc_code { Exp.IO $2 }
+  | MCR { Exp.Gl_call ("%"^$1) }
   ;
 const:
   | INT { Exp.Z $1 }

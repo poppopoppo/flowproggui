@@ -1,0 +1,15 @@
+` : 
+` ℤ : 0
+` ℤ { ℤ ℤ } : 1 { 2 3 } 
+¶ nat ≃ ∐ : zero ∐ nat : succ
+#zero◂{}
+¶ a ▸ list ≃ ∐ : nil ∐ a list : cns 
+#cns
+#cns
+#cns
+#nil◂{}
+
+!! #nil
+#cns { 3 $ }
+#cns
+! #cns

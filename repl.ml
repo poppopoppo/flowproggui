@@ -142,7 +142,7 @@ let rec repl (v:t ref) : unit =
       let pmpt =
         line^
         ((Flow.Glb_St.string_of !v.gl_st)^"\n")^
-        "state # "^(Flow.St.string_of 0 !v.st)^
+        "state # "^(Flow.St.string_of  0 !v.st)^
         "\ncommand #\n» " in
       pnt pmpt
     | Glb_mode g ->

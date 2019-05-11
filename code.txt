@@ -302,6 +302,7 @@ list[A]→list[B]:∑f
 λx.x / $
 
 λx0.λx1.λx2.F(x0,x1,x2) / F($'',$',$)
+
 .» ℤ { ℤ ℤ ℤ ℤ } {} (_→_) : 0 $◃3 {} %0 |
   %0 ≒
     .» $' $ %1 |
@@ -318,3 +319,9 @@ list[A]→list[B]:∑f
 ∀a▸pred[a]
 
 S[X] ≒ P0[X] > P1[X] > .. Pn[X] >.
+
+
+parsing = code
+parsing program
+
+$ (= entire string for parsing)

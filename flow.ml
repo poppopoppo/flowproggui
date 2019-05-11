@@ -31,7 +31,7 @@ module Plc = struct
     | Mt -> "?"
     | IO (src,dst) -> "("^(string_of (d+1) src)^"→"^(string_of (d+1) dst)^")"
     | Btm -> "⊥"
-    | FAll (s,p) -> "∀"^s^"▸"^(string_of 0 p)
+    | FAll (s,p) -> "∀"^(string_of_list " " (fun x -> x) s)^"."^(string_of 0 p)
 end
 
 module Exp = struct
@@ -215,7 +215,7 @@ let rec tkn_of_plc (t:Plc.t) : St.t =
     | Mt -> raise @@ Failure "error:tkn_of_plc:Mt"
     | FAll _ -> raise @@ Failure "error:tkn_of_plc:FAll"
   )
-let rec tkn_in_plc (p:Plc.t) (t:St.t) =
+let rec tkn_in_plc (p:Plc.t) (t:St.t) : bool =
   match p with
   | Z ->
     ( match t with
@@ -303,6 +303,12 @@ let rec exp_of_tkn (v:St.t) : Exp.t =
         | St.Cho j -> Exp.Gl_call (fst (List.nth j.cns j.i))
       )
   )
+let string_of_plc_tkn (b:bool) (p:Plc.t) (v:St.t) : string =
+  if b
+  then "` "^(Plc.string_of 0 p)^" : "^(St.string_of 0 v)
+  else "` "^(Plc.string_of 0 p)^" ¬: "^(St.string_of 0 v)
+
+
 module Buffer = struct
   type t =
     | Evo of Exp.vh
@@ -366,7 +372,9 @@ let rec evo (g:Glb_St.t) (rs:St.t list) (s:St.t) (a:Exp.t) : St.t =
                 | _ -> raise @@ Failure "error:Flow.evo:L_App:Cho:type unmatched"
               )
           )
-          else raise @@ Failure "error:Flow.evo:L_App:type unmatched"
+          else raise @@ Failure (
+              "error:Flow.evo:L_App:type unmatched\n"^
+              (string_of_plc_tkn false src x))
         | (St.Rcd l,St.Z (Some z)) -> (List.nth l z)
         | _ -> raise @@ Failure "error:Flow.evo:L_App:type unmatched"
       )
@@ -496,9 +504,12 @@ and evo_vh (g:Glb_St.t) (rs:St.t list)(s:St.t) (a:Exp.vh) : St.t =
         | _ -> raise @@ Failure "error:evo_vh:Canon"
       )
     | Exp.Exp (p,e) ->
-      if (tkn_in_plc p s)
-      then evo g rs s e
-      else raise @@ Failure "error:evo_vh:Exp:tkn unmatched to place"
+      let s' = evo g rs s e in
+      if (tkn_in_plc p s')
+      then s'
+      else raise @@ Failure
+          ("error:evo_vh:Exp:tkn unmatched to place\n"^
+           (Plc.string_of 0 p)^" ¬: "^(St.string_of 0 s'))
     | Exp.CoPrd l ->
       ( match s with
         | St.CoPrd c ->

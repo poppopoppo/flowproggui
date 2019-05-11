@@ -3,7 +3,10 @@
 
 type token = 
   | Z
+  | TEST
+  | STT_CLN
   | SRC
+  | SPL
   | R_RCD
   | R_PRN
   | R_APP
@@ -14,6 +17,7 @@ type token =
   | NAM of (string)
   | M_CNN
   | MLT
+  | MCR of (string)
   | L_RCD
   | L_PRN
   | L_PRJ
@@ -41,6 +45,7 @@ type token =
   | APP
   | AGL_END
   | AGL
+  | ACT
 
 (* This exception is raised by the monolithic API functions. *)
 
