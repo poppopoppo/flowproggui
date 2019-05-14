@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>お気楽 JavaScript プログラミング超入門</title>
+</head>
+
+<body>
+  <script>
+    console.log("hello, world");
+  </script>
+  <script src="tak.js"></script>
+
+  <button id="alert">alert() のサンプル</button>
+
+  <script>
+    document.getElementById('alert').addEventListener('click', () => {
+      alert("alert のサンプルです");
+    });
+  </script>
+
+
+  <button id="confirm">confirm() のサンプル</button>
+
+  <script>
+    document.getElementById('confirm').addEventListener('click', () => {
+      confirm("confirm のサンプルです");
+    });
+  </script>
+</body>
+
+</html>

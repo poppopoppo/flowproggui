@@ -314,6 +314,20 @@ list[A]→list[B]:∑f
 » $ $
 ».
 
+.» 1 4 $
+»
+  ~ ioj
+  » oief
+  » oife
+
+  ¦ uf
+  » ef
+
+  ¦ fei
+  ~.
+» sd e
+».
+
 ∑A B ▸
 
 ∀a▸pred[a]
@@ -325,3 +339,13 @@ parsing = code
 parsing program
 
 $ (= entire string for parsing)
+
+∀x.P◂x ⊣ ∀x.Q◂x ≒
+  fds
+  « sd
+  « fds
+  «.
+
+asyncronous communication
+queue is linear
+v0 , v1 , v2 , v3 = v0+v1+v2+v3v4 
