@@ -53,4 +53,4 @@ exception Error
 
 (* The monolithic API. *)
 
-val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Flow.Buffer.t)
+val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Imp.buffer)

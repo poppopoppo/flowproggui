@@ -1,88 +1,76 @@
-let pnt s =
-  print_string s;flush stdout
 
-type t = {
-  gl_st : Flow.Glb_St.t;
-  st : Flow.St.t;
-  mode : mode;
-  log : string list
-}
+type t = { gl_st:Imp.gl_st; st:Imp.st; mode:mode; log:string list }
 and mode =
     Calc
-  | Glb_mode of {
-      name:string;
-      src:Flow.Plc.t;
-      dst:Flow.Plc.t;
-      code:Flow.Exp.vh;
-      st:Flow.St.t
-    }
+  | Glb_mode of glb_mode
+and glb_mode = { name:string; src:Imp.plc; dst:Imp.plc; code:Imp.code; gm_st:Imp.st }
 
-let evo (v:t) (b:Flow.Buffer.t) : t =
+let evo (v:t) (b:Imp.buffer) : t =
   match b with
-  | Flow.Buffer.Evo e ->
+  | Imp.Evo e ->
     ( match v.mode with
       | Calc ->
-        let st = Flow.evo_vh v.gl_st [] v.st e in
-        ( match st with
-          | Flow.St.CoPrd c ->
+        let st = Imp.evo_code v.gl_st [] v.st e in
+        ( match st.tkn with
+          | Imp.Tkn_CoPrd c ->
             if c.agl_flg
-            then ( match c.st with
-                | Pure (_,x) -> { v with st=x }
-                | Mix _ -> raise @@ Failure "error:Repl.evo:Mix"
-              )
+            then
+              let s = BatList.find_map (fun x -> x) c.st in
+              { v with st={ plc=Imp.Top; tkn=s } }
             else { v with st=st }
-          | x -> { v with st=x }
+          | _ -> { v with st=st }
         )
       | Glb_mode g ->
-        let st = Flow.evo_vh v.gl_st [] g.st e in
-        ( match st with
-          | Flow.St.CoPrd c ->
+        let st = Imp.evo_code v.gl_st [] g.gm_st e in
+        ( match st.tkn with
+          | Imp.Tkn_CoPrd c ->
             if c.agl_flg
-            then ( match c.st with
-                | Pure (_,x) ->
-                  let g' = Glb_mode { name=g.name; src=g.src; dst=g.dst;
-                                      code=(Flow.Exp.Seq (g.code,e)); st=x } in
-                  { v with mode=g' }
-                | Mix _ -> raise @@ Failure "error:Repl.evo:Mix"
-              )
-            else
-              let g' = Glb_mode { name=g.name; src=g.src; dst=g.dst;
-                  code=(Flow.Exp.Seq (g.code,e)); st=st } in
+            then
+              let s = BatList.find_map (fun x -> x) c.st in
+              let g' = Glb_mode
+                  { g with code=(Imp.Seq (g.code,e));
+                           gm_st={ plc=Imp.Top; tkn=s } } in
               { v with mode=g' }
-          | x ->
-            let g' = Glb_mode { name=g.name; src=g.src; dst=g.dst;
-                                code=(Flow.Exp.Seq (g.code,e)); st=x } in
+            else
+              let g' = Glb_mode {
+                  g with code=(Imp.Seq (g.code,e)); gm_st=st } in
+              { v with mode=g' }
+          | _ ->
+            let g' = Glb_mode
+                { g with code=(Imp.Seq (g.code,e)); gm_st=st } in
             { v with mode=g' }
         )
     )
-  | Flow.Buffer.Glb g ->
+  | Imp.Glb_Etr g ->
     ( match g with
-    | Flow.Glb_St.Gl_Etr l ->
-      let b = Flow.check_io v.gl_st [] l.code l.src l.dst in
-      if b
-      then { v with gl_st=(g::v.gl_st) }
-      else raise @@ Failure "error:Repl.evo: type unmatced"
-    | _ -> { v with gl_st=(g::v.gl_st) }
+      | Imp.Etr l ->
+        let b = Imp.check_io v.gl_st [] !l.code !l.src !l.dst in
+        if b
+        then { v with gl_st=(g::v.gl_st) }
+        else raise @@ Failure "error:Repl.evo: type unmatced"
+      | _ -> { v with gl_st=(g::v.gl_st) }
     )
-  | Flow.Buffer.Glb_mode g ->
+  | Imp.Glb_mode_Stt g ->
     ( match v.mode with
-      | Calc -> { v with
-                  mode=Glb_mode { name=g.name; code=(Flow.Exp.Exp (g.src,Flow.Exp.Root 0));
-                      src=g.src; dst=g.dst; st=Flow.St.plc_to g.src }
-                }
+      | Calc ->
+        { v with
+          mode=Glb_mode { name=g.name; src=g.src; dst=g.dst; code=(Imp.Opr { src=g.src;dst=g.dst;opr=Imp.Root 0});
+                                 gm_st={ plc=g.src;tkn=Imp.tkn_of_plc g.src} }
+        }
       | Glb_mode _ -> raise @@ Failure "error:Repl.evo: allready global edit mode"
     )
-  | Flow.Buffer.End ->
+  | Imp.End ->
     ( match v.mode with
-      | Calc -> raise Flow.Buffer.End
+      | Calc -> raise Imp.End
       | Glb_mode g ->
-        if (Flow.tkn_in_plc g.dst g.st)
+        if (Imp.tkn_in_plc v.gl_st g.dst g.gm_st.tkn)
         then
-          let ge = Flow.Glb_St.Gl_Etr { name=g.name; src=g.src; dst=g.dst; code=g.code } in
+          let e:Imp.etr = { gl_name=g.name; src=g.src; dst=g.dst; code=g.code } in
+
+          let ge = Imp.Etr (ref e) in
           { v with mode=Calc; gl_st=(ge::v.gl_st) }
         else raise @@ Failure "error:Repl.evo: unmatched to dst place"
     )
-  | Def g -> { v with gl_st=((Flow.Glb_St.Dta_Def g)::v.gl_st) }
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 let string_to_buf l = Parser.buffer Lexer.token l
 
@@ -97,7 +85,7 @@ let rec buf () =
   else s
 let init_st = {
   gl_st=[];
-  st=Flow.St.Rcd [];
+  st={ plc=Imp.Plc_Rcd []; tkn=Imp.Tkn_Rcd []};
   mode=Calc;
   log=[]
 }
@@ -112,10 +100,10 @@ let load (s:string) : t =
       let s0 = Marshal.from_channel f  in
       let _ = close_in f in
       let _ = Sys.remove s in
-      pnt (s^" is loaded");s0
+      Util.pnt true (s^" is loaded");s0
     else raise @@ Failure ("error:load: can't load "^s^". file prefix need to be st")
   with | Failure err -> raise @@ Failure err
-       | err -> pnt "error:load\n"; raise err
+       | err -> Util.pnt true "error:load\n"; raise err
 let save (st:t ref) s =
   let l = open_out "default.lg" in
   let rec f v =
@@ -127,7 +115,7 @@ let save (st:t ref) s =
   if (Str.string_match reg s 0)
   then let f = open_out s in
     let _ = Marshal.to_channel f !st [] in
-    pnt (s^" is saved");close_out f
+    Util.pnt true (s^" is saved");close_out f
   else raise @@ Failure "error:load: can't save to s. file prefix need to be st"
 
 let exit v dst =
@@ -141,18 +129,18 @@ let rec repl (v:t ref) : unit =
     | Calc ->
       let pmpt =
         line^
-        ((Flow.Glb_St.string_of !v.gl_st)^"\n")^
-        "state # "^(Flow.St.string_of  0 !v.st)^
+        ((Imp.string_of_gl_st !v.gl_st)^"\n")^
+        "state # "^(Imp.string_of_st !v.st)^
         "\ncommand #\n» " in
-      pnt pmpt
+      Util.pnt true pmpt
     | Glb_mode g ->
       let pmpt =
         line^
         "~ global edit mode ~\n"^
-        "§§ "^g.name^" "^(Flow.Plc.string_of 0 g.src)^" ⊢ "^(Flow.Plc.string_of 0 g.dst)^"\n"^
-        "state # "^(Flow.St.string_of 0 g.st)^
+        "§§ "^g.name^" "^(Imp.string_of_plc 0 g.src)^" ⊢ "^(Imp.string_of_plc 0 g.dst)^"\n"^
+        "state # "^(Imp.string_of_st g.gm_st)^
         "\ncommand #\n» " in
-      pnt pmpt );
+      Util.pnt true pmpt );
   let v' =
     try
       let s = buf () in
@@ -160,17 +148,17 @@ let rec repl (v:t ref) : unit =
       let result = string_to_buf lexbuf in
       let s' = if !v.mode=Calc
         then s
-        else if result=Flow.Buffer.End
+        else if result=Imp.End
         then (" ». ")
         else (" » "^s) in
       let v' = evo !v result in
       { v' with log=(v'.log@[s']) }
     with
-    | Flow.Buffer.End -> raise Flow.Buffer.End
-    | Parser.Error -> (pnt "error: parsing error");!v
-    | Failure s -> (pnt @@ "error:"^s); !v
-    | Invalid_argument s -> (pnt @@ "error:Invalid_argument "^s); !v
-    | Lexer.Error _ -> (pnt "error:Lexer.Error"); !v
+    | Imp.End -> raise Imp.End
+    | Parser.Error -> (Util.pnt true "error: parsing error");!v
+    | Failure s -> (Util.pnt true @@ "error:"^s); !v
+    | Invalid_argument s -> (Util.pnt true @@ "error:Invalid_argument "^s); !v
+    | Lexer.Error _ -> (Util.pnt true "error:Lexer.Error"); !v
     | err -> raise err in
   v:=v';
   repl v

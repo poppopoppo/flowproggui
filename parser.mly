@@ -1,5 +1,5 @@
 %{
-open Flow
+  open Imp
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV DTA STT_CLN
@@ -23,27 +23,35 @@ open Flow
 %start buffer
 
 
-%type <Flow.Buffer.t> buffer
-%type <Flow.Plc.t> plc plc_top
-%type <Flow.Plc.t list> plcs
+%type <Imp.buffer> buffer
+%type <Imp.plc> plc plc_top
+%type <Imp.plc list> plcs
 %%
 buffer:
-  | vh_frm_top EOF { Flow.Buffer.Evo $1 }
-  | glb_etr EOF { Flow.Buffer.Glb $1 }
+  | vh_frm_top EOF { Imp.Evo $1 }
+  | glb_etr EOF { Imp.Glb_Etr $1 }
   | glb_mode EOF {
       let (n,s,d) = $1 in
-      (Flow.Buffer.Glb_mode { name=n; src=s; dst=d })
+      (Imp.Glb_mode_Stt { name=n; src=s; dst=d })
          }
   | def_plc EOF { $1 }
-  | ARR_END EOF { Flow.Buffer.End }
+  | ARR_END EOF { Imp.End }
   ;
 def_plc:
-  | DTA def_name EQV def_coprd  { Flow.Buffer.Def (Data.CoPrd { name=$2; cns=$4 }) }
-  | DTA def_name EQV def_prd  { Flow.Buffer.Def (Data.Prd { name=$2; cns=$4 }) }
+  | DTA def_name EQV def_coprd  {
+      Imp.Glb_Etr
+      (Def_CoPrd (ref
+        { coprd_xs=(fst $2); coprd_name=(snd $2); coprd_cns=$4 }))
+      }
+  | DTA def_name EQV def_prd  {
+      Imp.Glb_Etr
+        (Def_Prd (ref
+        { prd_xs=(fst $2); prd_name=(snd $2); prd_cns=$4 }))
+      }
   ;
 def_name:
-  | NAM  { $1 }
-  | NAM R_APP NAM { $1 }
+  | NAM  { ([],$1) }
+  | NAM R_APP NAM { ([$1],$3) }
   ;
 def_coprd:
   | CO_PRD plc_top CLN name  { [($4,$2)] }
@@ -54,7 +62,7 @@ def_prd:
   | PRD plc_top CLN name def_prd  { ($4,$2)::$5 }
   ;
 plc_top:
-  | plcs { Flow.Plc.Rcd $1 }
+  | plcs { Imp.Plc_Rcd $1 }
   | EXP plc { $2 }
   ;
 plcs:
@@ -62,8 +70,8 @@ plcs:
   | plcs plc { $1@[$2] }
   ;
 plc:
-  | Z { Flow.Plc.Z }
-  | name { Flow.Plc.Name $1 }
+  | Z { Imp.Plc_Z }
+  | name { Imp.Val $1 }
   | L_RCD plc_top R_RCD { $2 }
   ;
 name:
@@ -75,19 +83,14 @@ glb_mode:
 glb_etr:
   | LCE NAM typ_def DEF lc_code {
     let (src,dst) = $3 in
-    Glb_St.Gl_Etr {
-      name=$2;
-      src=src;
-      dst=dst;
-      code=$5
-      }
+    Imp.Etr (ref { gl_name=$2; src=src; dst=dst; code=$5 })
     }
   ;
 lc_code:
   | vh_frm_code { $1 }
   ;
 typ_def:
-  | { (Flow.Plc.Mt,Flow.Plc.Mt) }
+  | { (Imp.Top,Imp.Top) }
   | CLN plc_top SRC plc_top { ($2,$4) }
   ;
 (*
@@ -118,28 +121,29 @@ clq_lst:
 
 (*
 lc_cod:
-  | { Flow.Exp.End }
-  | arr_base ARR lc_cod  {Flow.Exp.Seq ($1,$3) }
-  | cprd  { Flow.Exp.CoPrd $1 }
-  | prd  { Flow.Exp.Prd $1 }
+  | { Imp.Imp.End }
+  | arr_base ARR lc_cod  {Imp.Imp.Seq ($1,$3) }
+  | cprd  { Imp.Imp.CoPrd $1 }
+  | prd  { Imp.Imp.Prd $1 }
   ;
   *)
 vh_frm_code:
   | vh_frm_top tail_code
     {
       match $2 with
-      | None -> $1
-      | Some t -> Exp.Seq ($1,t)
+      | `None -> $1
+      | `Some t -> Imp.Seq ($1,t)
+      | `CoPrd c -> Code_CoPrd { pre=$1; post=c }
     }
   ;
 tail_code:
-  | ARR_END { None }
-  | ARR vh_frm_code { Some $2 }
+  | ARR_END { `None }
+  | ARR vh_frm_code { `Some $2 }
   | coprd { $1 }
   ;
 coprd:
   | CO_PRD_STT vh_frm_code coprd_tail END_CO_PRD vh_frm_code
-    { Some (Exp.CoPrd ([$2]@$3@[$5])) }
+    {  `CoPrd ([$2]@$3@[$5]) }
   ;
 
 coprd_tail:
@@ -147,13 +151,13 @@ coprd_tail:
   | coprd_tail CO_PRD vh_frm_code { $1@[$3] }
   ;
 vh_frm_top:
-  | CNN vh_frm_lst  { Exp.Canon $2 }
-  | plc_ept exp_top { Exp.Exp ($1,$2) }
+  | CNN vh_frm_lst  { Imp.Canon $2 }
+  | plc_ept exp_top { Imp.Opr { src=Top; dst=$1; opr=$2 } }
   ;
 exp_top:
-  | exp_lst macro { Exp.Rcd $1 }
+  | exp_lst macro { Imp.Opr_Rcd $1 }
   | EXP exp macro { $2 }
-  | D_EXP exp macro { Flow.Exp.L_App ($2,Flow.Exp.Root 0) }
+  | D_EXP exp macro { Imp.App ($2,Imp.Root 0) }
   ;
 macro:
   | { }
@@ -164,7 +168,7 @@ macros:
   | MCR DEF exp macros { }
   ;
 plc_ept:
-  |  { Flow.Plc.Mt }
+  |  { Imp.Top }
   | ACT plc_top CLN { $2 }
   ;
 vh_frm_lst:
@@ -175,18 +179,19 @@ vh_frm:
   | h_frm tail
     {
       match $2 with
-      | None -> $1
-      | Some t -> Exp.Seq ($1,t)
+      | `None -> $1
+      | `Some t -> Imp.Seq ($1,t)
+      | `CoPrd c -> Code_CoPrd { pre=$1; post=c }
     }
   ;
 h_frm:
-  | exp { Exp.Exp (Flow.Plc.Mt,$1) }
-  | L_RCD CNN vh_frm_lst R_RCD  { Exp.Canon $3 }
+  | exp { Imp.Opr { src=Imp.Top; dst=Imp.Top; opr=$1} }
+  | L_RCD CNN vh_frm_lst R_RCD  { Imp.Canon $3 }
   ;
 tail:
-  | ARR_END { None }
-  | ARR vh_frm { Some $2 }
-  | CO_PRD_STT vh_frm CO_PRD vh_frm END_CO_PRD  { Some (Exp.CoPrd [$2;$4]) }
+  | ARR_END { `None }
+  | ARR vh_frm { `Some $2 }
+  | CO_PRD_STT vh_frm CO_PRD vh_frm END_CO_PRD  { `CoPrd [$2;$4] }
   ;
 exp_lst:
   | { [] }
@@ -194,22 +199,22 @@ exp_lst:
   ;
 
 exp:
-  | AGL exp AGL_END { Exp.Agl $2 }
+  | AGL exp AGL_END { Imp.Agl $2 }
   | const { $1 }
-  | APP exp DOT exp { Exp.App ($2,$4) }
-  | exp PLS exp { Exp.Plus ($1,$3) }
-  | exp MLT exp { Exp.Mult ($1,$3) }
+  | APP exp DOT exp { Imp.App ($2,$4) }
+  | exp PLS exp { Imp.Plus ($1,$3) }
+  | exp MLT exp { Imp.Mult ($1,$3) }
   | L_PRN exp R_PRN { $2 }
-  | exp L_APP exp { Exp.L_App ($1,$3) }
-  | exp L_PRJ exp { Exp.L_Prj ($1,$3) }
-  | L_RCD exp_lst R_RCD { Exp.Rcd $2 }
-  | ARR_STT lc_code { Exp.IO $2 }
-  | MCR { Exp.Gl_call ("%"^$1) }
+  | exp L_APP exp { Imp.App ($1,$3) }
+  | exp L_PRJ exp { Imp.Prj ($1,$3) }
+  | L_RCD exp_lst R_RCD { Imp.Opr_Rcd $2 }
+  | ARR_STT lc_code { Imp.Opr_IO $2 }
+  | MCR { Imp.Gl_call ("%"^$1) }
   ;
 const:
-  | INT { Exp.Z $1 }
-  | ROT { Exp.Root $1 }
-  | GL_NAM  { Exp.Gl_call $1 }
+  | INT { Imp.Opr_Z $1 }
+  | ROT { Imp.Root $1 }
+  | GL_NAM  { Imp.Gl_call $1 }
   ;
 (*
 cprd:

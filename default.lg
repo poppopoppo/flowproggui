@@ -1,15 +1,12 @@
-` : 
-` ℤ : 0
-` ℤ { ℤ ℤ } : 1 { 2 3 } 
+1 2 3
+3 4 5
+{ 2 } 
+$
+$◃0 
+1 2 3 
+$◃0 
+! $◃0
 ¶ nat ≃ ∐ : zero ∐ nat : succ
-#zero◂{}
-¶ a ▸ list ≃ ∐ : nil ∐ a list : cns 
-#cns
-#cns
-#cns
-#nil◂{}
-
-!! #nil
-#cns { 3 $ }
-#cns
-! #cns
+§ test ≒ 0 ». 
+§ test : !ℤ ⊢ !ℤ ≒ ! 32 ». 
+§ f : ℤ ⊢ ℤ ≒ 3 ». 
