@@ -13,6 +13,7 @@ and plc =
   | Plc_IO of plc * plc
   | Btm
   | Top
+  | Null
   | For_All of { xs:(string list); co_p:plc; p:plc }
   | Plc_CoPrd of (coprd ref)
   | Plc_Prd of (prd ref)
@@ -38,11 +39,12 @@ and opr =
 and st = { plc:plc; tkn:tkn }
 and tkn =
   | Tkn_Exn of string
-  | Tkn_Z of { z:(int option); agl_flg:bool }
+  | Tkn_Z of int
   | Tkn_Rcd of tkn list
-  | Tkn_CoPrd of { st:(tkn option) list; agl_flg : bool }
+  | Tkn_CoPrd of tkn list
   | Tkn_Prd of { st:st; gl_st:gl_st; roots:st list; codes:code list }
-  | Unknown
+  | Tkn_Null
+  | Tkn_Top
   | Tkn_IO of io
 and io =
   | IO_Code of { gl_st:gl_st; roots:st list; code : code }
@@ -58,51 +60,46 @@ and glb_mode_stt = { name : string; src : plc; dst : plc }
 exception End
 type evo_mode = Calc | Glb
 
+type evo_rtn =
+  | Nml of tkn
+  | Mix of tkn list
+  | MixTop
 type rcd_rtn =
   | RcdNml of tkn list
-  | RcdAglMix of (((tkn list) option) list)
+  | RcdMix of (((tkn list) option) list)
+  | RcdMixTop of tkn list
 
 let rec string_of_plc d x =
-  let ex= if d=0 then "! " else "" in
-  let v =
-    (match x with
-     | Plc_Z -> "ℤ"
-     | Plc_Rcd r ->
-       if d=0
-       then (Util.string_of_list " " (string_of_plc (d+1)) r)
-       else "{ "^(Util.string_of_list " " (string_of_plc (d+1)) r)^" }"
-     | Top -> "Top"
-     | Plc_IO (src,dst) -> "("^(string_of_plc (d+1) src)^"→"^(string_of_plc (d+1) dst)^")"
-     | Btm -> "⊥"
-     | Val x -> "¿"^x
-     | For_All f ->
-       "∀"^(Util.string_of_list " " (fun x -> x) f.xs)^
-       "."^(string_of_plc 0 f.co_p)^"→"^(string_of_plc 0 f.p)
-     | _ -> raise @@ Failure "error:string_of_plc"
-    ) in ex^v
+  match x with
+  | Plc_Z -> "ℤ"
+  | Plc_Rcd r ->
+    if d=0
+    then (Util.string_of_list " " (string_of_plc (d+1)) r)
+    else "{ "^(Util.string_of_list " " (string_of_plc (d+1)) r)^" }"
+  | Top -> "Top"
+  | Null -> "Null"
+  | Plc_IO (src,dst) -> "("^(string_of_plc (d+1) src)^"→"^(string_of_plc (d+1) dst)^")"
+  | Btm -> "⊥"
+  | Val x -> "¿"^x
+  | For_All f ->
+    "∀"^(Util.string_of_list " " (fun x -> x) f.xs)^
+    "."^(string_of_plc 0 f.co_p)^"→"^(string_of_plc 0 f.p)
+  | _ -> raise @@ Failure "error:string_of_plc"
 
 let rec string_of_tkn d s =
-  let ex= if d=0 then "! " else "" in
+  let ex= if d=0 then "!" else "" in
   let v =
     ( match s with
-      | Tkn_Z z ->
-        ( match z.z with
-          | Some z -> (string_of_int z)
-          | None -> "?"
-        )
+      | Tkn_Z z -> (string_of_int z)
       | Tkn_Rcd l ->
         let m = (Util.string_of_list " " (string_of_tkn (d+1)) l) in
         if d=0 then ("{ "^m^" }") else ("{ "^m^" }")
       | Tkn_Exn x -> "exn("^x^")"
       | Tkn_CoPrd c ->
-        "∐[ "^(Util.string_of_list ","
-                   (fun x ->
-                      match x with
-                      | None -> "⊥"
-                      | Some x -> string_of_tkn 1 x)
-                   c.st)^" ]"
+        "∐[ "^(Util.string_of_list "," (string_of_tkn 1) c)^" ]"
       | Tkn_Prd _ -> "?Tkn_Prd"
-      | Unknown -> "?Unknown"
+      | Tkn_Null -> "∅"
+      | Tkn_Top -> "?Tkn_Top"
       | Tkn_IO _ -> "io"
     ) in
   ex^v
@@ -151,7 +148,7 @@ let string_of_plc_tkn (b:bool) (p:plc) (v:tkn) : string =
 
 let pure (l:int) (i:int) (x:tkn) =
   BatList.init l
-    (fun j -> if j=i then (Some x) else None)
+    (fun j -> if j=i then x else Tkn_Null)
 
 let gl_call (g:gl_st) (n:string) : io =
   BatList.find_map
@@ -186,28 +183,32 @@ let rec dst_of_code (c:code) : plc =
 
 let rec tkn_of_plc (p:plc) : tkn =
   ( match p with
-    | Plc_Z -> Tkn_Z { z=None; agl_flg=false }
+    | Plc_Z -> Tkn_Top
     | Plc_Rcd r -> Tkn_Rcd (List.map tkn_of_plc r)
-    | Plc_IO (_,_) -> Unknown
-    | Btm -> Unknown
-    | For_All _ -> Unknown
-    | _ -> Unknown
+    | Plc_IO (_,_) -> Tkn_Top
+    | Btm -> Tkn_Top
+    | For_All _ -> Tkn_Top
+    | _ -> Tkn_Top
   )
 
 let rec tkn_in_plc (g:gl_st) (p:plc) (t:tkn) : bool =
   match p with
+  | Null ->
+    ( match t with
+      | Tkn_Null -> true
+      | _ -> false )
   | Top -> true
   | Plc_Z ->
     ( match t with
       | Tkn_Exn _ -> true
       | Tkn_Z _ -> true
-      | Unknown -> true
+      | Tkn_Top  -> true
       | _ -> false
     )
   | Plc_Rcd r ->
     ( match t with
       | Tkn_Exn _ -> true
-      | Unknown -> true
+      | Tkn_Top  -> true
       | Tkn_Rcd v ->
         ( try
             List.for_all (fun (x,y) -> tkn_in_plc g x y) (List.combine r v)
@@ -216,21 +217,18 @@ let rec tkn_in_plc (g:gl_st) (p:plc) (t:tkn) : bool =
     )
   | Plc_CoPrd j ->
     ( match t with
-      | Unknown -> true
       | Tkn_Exn _ -> true
+      | Tkn_Top  -> true
       | Tkn_CoPrd c ->
-        let l = List.combine !j.coprd_cns c.st in
-        let f ((_,p),t) =
-          ( match t with
-            | None -> true
-            | Some t -> tkn_in_plc g p t ) in
+        let l = List.combine !j.coprd_cns c in
+        let f ((_,p),t) = tkn_in_plc g p t in
         List.for_all f l
       | _ -> false
     )
   | Plc_IO (src,dst) ->
     ( match t with
       | Tkn_Exn _ -> true
-      | Unknown -> true
+      | Tkn_Top  -> true
       | Tkn_IO io ->
         ( match io with
           | IO_Code c ->
@@ -255,84 +253,54 @@ let rec tkn_in_plc (g:gl_st) (p:plc) (t:tkn) : bool =
   | For_All _ -> false
   | _ -> false
 
-let rec evo (g:gl_st) (rs:st list) (s:st) (a:opr) : bool * st =
+let rec evo (g:gl_st) (rs:st list) (s:tkn) (a:opr) : evo_rtn =
   ( match a with
-    | Opr_Z z -> (false,{ plc=Plc_Z; tkn=Tkn_Z { z=(Some z)}})
+    | Opr_Z z -> Nml (Tkn_Z z)
     | App (f,x) ->
-      let (f',x') = (evo g rs s f,evo g rs s x) in
-      ( match (f'.plc,f'.tkn,x'.plc,x'.tkn) with
-        | (_,Tkn_IO f,_,x) ->
-          ( match f with
-            | IO_Code f -> (false,evo_code g f.roots x' f.code)
-            | IO_Inj j ->
-              let t = Tkn_CoPrd {
-                  st=(pure (List.length !(j.inj_name).coprd_cns) j.i x)} in
-              (false,{ plc=(Plc_CoPrd j.inj_name); tkn=t })
-            | IO_Cho j ->
-              ( match x with
-                | Tkn_Prd p ->
-                  (false,evo_code p.gl_st p.roots (p.st:st) (List.nth p.codes j.i))
-                | _ -> raise @@ Failure "error:Flow.evo:L_App:Cho:type unmatched"
-              ) )
-        | (Plc_Rcd w,Tkn_Rcd l,_,Tkn_Z z) ->
-          ( match z.z with
-            | Some z -> (false,{plc=(List.nth w z); tkn=(List.nth l z) })
-            | _ -> raise @@ Failure "error:Imp.evo:L_App:projection unmatched"
+      ( match (evo g rs s f,evo g rs s x) with
+        | (Nml nf',Nml nx') ->
+          ( match (nf',nx') with
+            | (Tkn_IO f,x) ->
+              ( match f with
+                | IO_Code f -> Nml (evo_code g f.roots x f.code).tkn
+                | IO_Inj j ->
+                  Nml (Tkn_CoPrd (pure (List.length !(j.inj_name).coprd_cns) j.i x))
+                | IO_Cho j ->
+                  ( match x with
+                    | Tkn_Prd p ->
+                      Nml (evo_code p.gl_st p.roots p.st.tkn (List.nth p.codes j.i)).tkn
+                    | _ -> raise @@ Failure "error:Flow.evo:L_App:Cho:type unmatched"
+                  )
+              )
+            | _ -> raise @@ Failure "error:Flow.evo:L_App:type unmatched"
           )
         | _ -> raise @@ Failure "error:Flow.evo:L_App:type unmatched"
       )
     | Prj (f,x) ->
-      let (f',x') = (evo g rs s f,evo g rs s x) in
-      ( match (f'.plc , f'.tkn , x'.plc , x'.tkn) with
-        | (p,(Tkn_Rcd l),_,(Tkn_Z z)) ->
-          ( match p with
-            | Plc_Rcd w ->
-              ( match z.z with
-                | Some z ->
-                  (false,{ plc=(List.nth w z); tkn=(List.nth l z) })
-                | _ -> raise @@ Failure
-                    "error:Imp.evo:Prj:projection unmatched"
-              )
-            | _ ->
-              ( match z.z with
-                | Some z -> (false,{ plc=Top; tkn=(List.nth l z) })
-                | _ -> raise @@ Failure
-                    "error:Imp.evo:Prj:projection unmatched"
-              )
-          )
-        | (_,f',_,x') -> raise @@ Failure
+      ( match (evo g rs s f,evo g rs s x) with
+        | (Nml (Tkn_Rcd l),Nml (Tkn_Z z)) -> Nml (List.nth l z)
+        | (Nml f',Nml x') -> raise @@ Failure
             ("error:Imp.evo:Prj:type unmatched\n"^
              (string_of_tkn 0 f')^" ◃ "^(string_of_tkn 0 x'))
+        | _ -> raise @@ Failure "error:Imp.evo:Prj:type unmatched agl"
       )
     | Plus (x,y) ->
-      let (f',x') = (evo g rs s x,evo g rs s y) in
-      ( match (f'.plc , f'.tkn , x'.plc , x'.tkn) with
-        | (_,Tkn_Z x,_,Tkn_Z y) ->
-          ( match (x.z,y.z) with
-            | (Some x,Some y) ->
-              (false,{ plc=Plc_Z; tkn=(Tkn_Z { z=(Some (x+y)) }) })
-            | _ ->
-              (false,{ plc=Plc_Z; tkn=(Tkn_Z { z=None; agl_flg=false }) })
-          )
-        | (_,x,_,y) ->
+      ( match (evo g rs s x,evo g rs s y) with
+        | (Nml Tkn_Z x,Nml Tkn_Z y) -> Nml (Tkn_Z (x+y))
+        | (Nml x,Nml y) ->
           let (px,py) = (string_of_tkn 0 x,string_of_tkn 0 y) in
           let msg = "error:evo:type is unmatched\n"^px^" + "^py^"\n" in
           raise @@ Failure msg
+        | _ -> raise @@ Failure "error:evo:Plus:type unmatched"
       )
     | Mult (x,y) ->
-      let (f',x') = (evo g rs s x,evo g rs s y) in
-      ( match (f'.plc , f'.tkn , x'.plc , x'.tkn) with
-        | (_,Tkn_Z x,_,Tkn_Z y) ->
-          ( match (x.z,y.z) with
-            | (Some x,Some y) ->
-              (false,{ plc=Plc_Z; tkn=(Tkn_Z { z=(Some (x*y)) }) })
-            | _ ->
-              (false,{ plc=Plc_Z; tkn=(Tkn_Z { z=None }) })
-          )
-        | (_,x,_,y) ->
+      ( match (evo g rs s x,evo g rs s y) with
+        | (Nml Tkn_Z x,Nml Tkn_Z y) -> Nml (Tkn_Z (x*y))
+        | (Nml x,Nml y) ->
           let (px,py) = (string_of_tkn 0 x,string_of_tkn 0 y) in
           let msg = "error:evo:type is unmatched\n"^px^" + "^py^"\n" in
           raise @@ Failure msg
+        | _ -> raise @@ Failure "error:evo:Plus:type unmatched"
       )
     | Gl_call n ->
       ( try
@@ -347,91 +315,93 @@ let rec evo (g:gl_st) (rs:st list) (s:st) (a:opr) : bool * st =
                 (Plc_Prd x.cho_name,
                  snd (List.nth !(x.cho_name).prd_cns x.i))
             ) in
-          (false,{ plc=Plc_IO (s,d); tkn=Tkn_IO f })
+          Nml (Tkn_IO f)
         with
         | Not_found -> raise @@ Failure ("error:evo:global name "^n^" is not found")
       )
     | Opr_Rcd r ->
-      let r' = List.map (evo g rs s) r in
-      let r'' =
+      let r' =
         (List.fold_left
            (fun l x ->
-              match l with
-              | RcdNml l ->
-                ( match x with
-                  | Tkn_CoPrd c ->
-                    if c.agl_flg
-                    then RcdAglMix
+              ( match l with
+                | RcdNml l ->
+                  ( match evo g rs s x with
+                    | Nml Tkn_Null -> RcdMix []
+                    | Nml x -> RcdNml (l@[x])
+                    | Mix m ->
+                      RcdMix
                         (List.map
                            (fun a ->
                               match a with
-                              | Some a -> Some (l@[a])
-                              | None -> None ) c.st)
+                              | Tkn_Null -> None
+                              | a -> Some (l@[a])) m)
+                    | MixTop -> RcdMixTop l
+                  )
+                | RcdMix m ->
+                  ( match evo g rs s x with
+                    | Nml Tkn_Null -> RcdMix (List.map (fun _ -> None) m)
+                    | Nml x ->
+                      RcdMix (List.map
+                                (fun l ->
+                                   match l with
+                                   | None -> None
+                                   | Some l -> Some (l@[x]))
+                                m)
+                    | Mix m ->
+                      raise @@ Failure "error:evo_top:RcdAglMix"
 
-                    else RcdNml (l@[Tkn_CoPrd c])
-                  | x -> RcdNml (l@[x])
-                )
-              | RcdAglMix m ->
-                ( match x with
-                  | Tkn_CoPrd c ->
-                    if c.agl_flg
-                    then raise @@ Failure "error:evo_top:RcdAglMix"
-                    else RcdAglMix
-                        (List.map
-                           (fun w ->
-                              match w with
-                              | Some w -> Some (w@[Tkn_CoPrd c])
-                              | None -> None ) m)
-                  | x ->
-                    RcdAglMix
-                      (List.map
-                         (fun w ->
-                            match w with
-                            | Some v -> Some (v@[x])
-                            | None -> None) m)
-                )
-           ) (RcdNml []) (List.map (fun x -> x.tkn) r')) in
-      ( match r'' with
-        | RcdNml l ->
-          (false,{ plc=Plc_Rcd (List.map (fun x -> x.plc) r'); tkn=(Tkn_Rcd l) })
-        | RcdAglMix ll ->
-          (true,{ plc=Plc_Rcd (List.map (fun x -> x.plc) r');
-                  tkn=Tkn_CoPrd
-                      { st=(List.map
-                              (fun l ->
-                                 match l with
-                                 | Some l -> Some (Tkn_Rcd l)
-                                 | None -> None) ll)} }
-          )
-        | Agl e ->
-          let s' = evo g rs s e in
-          ( match s'.tkn with
-            | Tkn_CoPrd c ->
-              if c.agl_flg
-              then raise @@ Failure "error:evo_top:Agl"
-              else (true,{ s' with tkn = Tkn_CoPrd c })
-            | Tkn_Z z ->
-              (false,{ s' with tkn=Tkn_Z { z=z.z; agl_flg=true }})
-            | v -> raise @@ Failure
-                ("error:evo_top:Agl:CoPrd:\n"^
-                 (string_of_tkn 0 v))
-          )
-        | Root i ->
-          ( try
-              (false,List.nth (s::rs) i)
-            with
-            | _ -> raise @@ Failure
-                ("error:evo:Code.Root "^(string_of_int i)^"\n"^
-                 "[ "^(Util.string_of_list " ; " string_of_st (s::rs))^"]")
-          )
-        | Opr_IO f ->
-          (false,{ plc=Plc_IO (src_of_code f,dst_of_code f);
-                   tkn=(Tkn_IO
-                          (IO_Code
-                             { gl_st=g; roots=(s::rs); code=f })) })
-        | Opr_Exn e ->
-          (false,{ plc=Top; tkn=Tkn_Exn e })
-      ) )
+                    | MixTop  ->
+                      raise @@ Failure "error:evo_top:RcdAglMix"
+                  )
+                | RcdMixTop m ->
+                  ( match evo g rs s x with
+                    | Nml Tkn_Null -> RcdMix []
+                    | Nml x -> RcdMixTop (m@[x])
+
+                    | Mix m ->
+                      raise @@ Failure "error:evo_top:RcdAglMix"
+
+                    | MixTop  ->
+                      raise @@ Failure "error:evo_top:RcdAglMix"
+                  )
+              )
+           )
+           (RcdNml []) r
+        ) in
+      ( match r' with
+        | RcdNml l -> Nml (Tkn_Rcd l)
+        | RcdMix ll ->
+          Mix (List.map
+                 (fun l ->
+                    match l with
+                    | Some l -> (Tkn_Rcd l)
+                    | None -> Tkn_Null) ll)
+        | RcdMixTop l -> Nml Tkn_Top
+      )
+    | Agl e ->
+      let s' = evo g rs s e in
+      ( match s' with
+        | Nml (Tkn_CoPrd c) -> Mix c
+        | Nml (Tkn_Z z) -> Mix [ (Tkn_Rcd []);(Tkn_Rcd [])]
+        | Nml Tkn_Top -> MixTop
+        | Nml _ -> raise @@ Failure "error:evo:Agl"
+        | Mix _ -> raise @@ Failure "error:evo_top:Agl"
+        | MixTop -> raise @@ Failure "error:evo_top:AglTop"
+      )
+    | Root i ->
+      ( try
+          Nml (List.nth (s::rs) i).tkn
+        with
+        | _ -> raise @@ Failure
+            ("error:evo:Code.Root "^(string_of_int i)^"\n"^
+             "[ "^(Util.string_of_list " ; " string_of_st (s::rs))^"]")
+      )
+    | Opr_IO f ->
+      Nml (Tkn_IO
+         (IO_Code
+            { gl_st=g; roots=(s::rs); code=f }))
+    | Opr_Exn e -> Nml (Tkn_Exn e)
+  )
 and evo_code (g:gl_st) (rs:st list) (s:st) (a:code) : st =
   ( match a with
     | Seq (f0,f1) ->
@@ -455,8 +425,8 @@ and evo_code (g:gl_st) (rs:st list) (s:st) (a:code) : st =
       if (tkn_in_plc g o.src s.tkn)
       then
         let s' = evo g rs s o.opr in
-        if (tkn_in_plc g o.dst s'.tkn)
-        then { plc=o.dst; tkn=s'.tkn }
+        if (tkn_in_plc g o.dst s')
+        then { plc=o.dst; tkn=s' }
         else raise @@ Failure "error:evo_code:Opr:place theck error"
       else raise @@ Failure
           ("error:evo_code:Exp:tkn unmatched to place\n"^
@@ -479,8 +449,24 @@ and evo_code (g:gl_st) (rs:st list) (s:st) (a:code) : st =
                 agl_flg=false
               } in
             { plc=Top; tkn=tkn }
-          else raise @@ Failure "error:evo_code:CoPrd:c.agl_flg=false"
-        | _ -> raise @@ Failure "error:evo_code:CoPrd"
+          else raise @@ Failure "error:Imp.evo_code:CoPrd:c.agl_flg=false"
+        | Tkn_Top u ->
+          if u.agl_flg
+          then
+            let u_st = BatList.make (List.length l.post) (Tkn_Top { agl_flg=false }) in
+            let tkn = Tkn_CoPrd {
+                st=(List.map
+                      (fun (x,f) ->
+                         match x with
+                         | Some x ->
+                           let x' = (evo_code g rs {plc=Top;tkn=x} f) in
+                           Some x'.tkn
+                         | None -> None)
+                      (List.combine u_st l.post));
+                agl_flg=false
+              } in
+            { plc=Top; tkn=tkn }
+        | _ -> raise @@ Failure "error:Imp.evo_code:CoPrd"
       )
     | Code_Prd _ -> raise @@ Failure "Imp:error:evo_code:Prd"
 

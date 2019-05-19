@@ -3,6 +3,9 @@ let pnt (b:bool) s =
   then (print_string s;flush stdout)
   else ()
 let _ = pnt true ""
+let string_of_array f p l =
+  BatArray.fold_left
+    ( fun a b -> a^p^(f b)) l
 let rec string_of_list f p l =
   match l with
   | [] -> ""

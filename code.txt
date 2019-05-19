@@ -225,7 +225,50 @@ TKN
 
 0 1 2 3 4 .. n // dependent ℕ[n]
 
+¶ @ ord_list ≃
+  > : ord_nil
+  > tkn ord_list : ord_cns
 
+¶§ @ dick[L_PRN ¿X] ≃
+  > r_prn[¿X]
+  > r_prn*dick_list[¿X]
+  @ dick_list[L_RPN ¿X] :-
+  > r_prn*dick_list[¿X]
+  > dick_list*r_prn[¿X]
+  > dick_list*r_prn*dick_list[¿X]
+  @ r_prn[¿X] :-
+  > R_PRN
+|
+¶ a b ▸ parse ≃ ∐ : fail ∐ b : rtn
+
+¶ prn_tkn ≃
+  > : L_PRN
+  > : R_PRN
+  >.
+
+¶ dick ∠[prn_tkn] ≃
+  ∐ > r_prn : p0
+    > r_prn dick_list : p1
+    >.
+  ∐ >.
+¶+ @ dick[L_PRN] ≃
+  > r_prn : p0
+  > r_prn dick_list : p1
+  >.
+  @ dick_list[L_RPN] ≃
+  > r_prn dick_list : p2
+  > dick_list r_prn : p3
+  > dick_list r_prn dick_list : p4
+  >.
+  @ r_prn[R_PRN]
+  > : p5
+  >.
+¶§ @ dick[¿X] ≃
+  ∐ fail
+  ∐ > r_prn[#0◂¿X]
+    > r_prn*dick_list[#0◂¿X]
+
+» & , .. ¦ ..
 L_PRN
   > [ dick/r_prn ] : c0
   > [ dick/r_prn/dick_list ] : c1
@@ -351,4 +394,40 @@ queue is linear
 v0 , v1 , v2 , v3 = v0+v1+v2+v3v4
 
 
-nested moudule is nonsense
+nested module is nonsense
+
+Node Edge Node
+N E N
+N (E N E) N
+E -> E N E
+N -> N E N
+  N
+» N E N
+» N (E N E) N
+
+btree =
+  | : Leaf
+  | ¬btree ¬btree : BTree
+
+  node ¬node
+`¿a ¿b
+
+module
+§§ <module-parameter> ▸ <module-name> ≒
+  ¶ <flow-def>
+  ..
+  ¶.
+  § <global-entry>
+  ..
+  §.
+§§.
+module concatenation
+§§ <pre-module> > <post-module> ≒
+..
+§§.
+glueing module
+§§ #0 .. #n , ▸ <module-name> |
+  #0 ≒ §§ ..
+    §§.
+  ≒
+§§.
