@@ -1,5 +1,5 @@
 {
-    open Parser
+    open Imp_parser
     exception Error of string
 }
 
@@ -10,11 +10,15 @@ let ascii = ['a'-'z' 'A'-'Z' '0'-'9' '(' ')' '!' '"' '#'
   '$' '%' '&' '\'' '=' '~' '~' '|' '{' '}' '`' '@' '[' ']'
   '*' '+' ';' ':' '<' '>' ',' '.' '?' '/' '\\' '_' ]
 let alnum = digit | alpha
+let name = (alpha | "_")+ digit* (alpha|"_")*
 let z = (('-' digit+)|digit+)
 rule token = parse
+    | ";" (_)* "\n"  { token lexbuf }
     | "\194\167"  (* § *) { LCE }
     | "\194\182" "" (* ¶ *) { DTA }
-    | "\226\136\128" (* ∀ *) { F_ALL }
+    | "\\"  { SLH }
+    | "∀" ("type" | "z") { FOR_ALL }
+    | "?" (name as lxm) { VAL(lxm) }
     | "\226\137\131" (* ≃ *) { EQV }
     | "\194\187" (* » *)  { ARR       }
     | "\194\187" "."  (* ». *) { ARR_END }
@@ -47,10 +51,10 @@ rule token = parse
     | "!!"  { D_EXP }
     | ".:"  { STT_CLN }
     | "\226\150\184" (* ▸ *)  { R_APP }
-    | "\226\151\130" (* ◂ *) { L_APP }
-    | "\226\128\161"  { APP }
-    | "\226\151\131" (* ◃ *)  { L_PRJ }
+    | "◂" (* ◂ *) { APP }
+    | "\226\151\131" (* ◃ *)  { PRJ }
     | "\226\132\164" (* ℤ *)  { Z }
+    | "ℕ" { N }
     | "#" ((alpha+ alnum*)as lxm) { GL_NAM(lxm) }
     | "+" { PLS }
     | '*' { MLT }

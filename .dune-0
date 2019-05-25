@@ -1,0 +1,44 @@
+(executable
+  (name calc)
+  (libraries batteries str)
+  (modules calc)
+)
+
+(library
+  (name util)
+  (libraries batteries str)
+  (modules util)
+  )
+
+(library
+  (name imp)
+  (libraries batteries str util)
+  (modules imp)
+  )
+
+(library
+  (name imp_parser)
+  (libraries batteries str imp)
+  (modules imp_parser)
+  )
+
+
+(library
+  (name imp_lexer)
+  (libraries imp_parser)
+  (modules imp_lexer)
+  )
+
+(library
+  (name implib)
+  (libraries batteries str util imp_lexer imp_parser)
+  (modules implib)
+  )
+
+(executable
+ (name  mytoplevel)
+ (libraries  compiler-libs.toplevel implib)
+ (link_flags (-linkall))
+ (modes      byte)
+ (modules mytoplevel)
+ )

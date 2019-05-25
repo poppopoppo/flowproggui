@@ -3,7 +3,7 @@ type t = { gl_st:Imp.gl_st; st:Imp.st; mode:mode; log:string list }
 and mode =
     Calc
   | Glb_mode of glb_mode
-and glb_mode = { name:string; src:Imp.plc; dst:Imp.plc; code:Imp.code; gm_st:Imp.st }
+and glb_mode = { name:string; src:Imp.typ; dst:Imp.typ; code:Imp.code; gm_st:Imp.st }
 
 let evo (v:t) (b:Imp.buffer) : t =
   match b with
@@ -11,35 +11,13 @@ let evo (v:t) (b:Imp.buffer) : t =
     ( match v.mode with
       | Calc ->
         let st = Imp.evo_code v.gl_st [] v.st e in
-        ( match st.tkn with
-          | Imp.Tkn_CoPrd c ->
-            if c.agl_flg
-            then
-              let s = BatList.find_map (fun x -> x) c.st in
-              { v with st={ plc=Imp.Top; tkn=s } }
-            else { v with st=st }
-          | _ -> { v with st=st }
-        )
+        { v with st=st }
+
       | Glb_mode g ->
         let st = Imp.evo_code v.gl_st [] g.gm_st e in
-        ( match st.tkn with
-          | Imp.Tkn_CoPrd c ->
-            if c.agl_flg
-            then
-              let s = BatList.find_map (fun x -> x) c.st in
-              let g' = Glb_mode
-                  { g with code=(Imp.Seq (g.code,e));
-                           gm_st={ plc=Imp.Top; tkn=s } } in
-              { v with mode=g' }
-            else
-              let g' = Glb_mode {
-                  g with code=(Imp.Seq (g.code,e)); gm_st=st } in
-              { v with mode=g' }
-          | _ ->
-            let g' = Glb_mode
-                { g with code=(Imp.Seq (g.code,e)); gm_st=st } in
-            { v with mode=g' }
-        )
+        let g' = Glb_mode {
+            g with code=(Imp.Seq (g.code,e)); gm_st=st } in
+        { v with mode=g' }
     )
   | Imp.Glb_Etr g ->
     ( match g with
@@ -54,8 +32,10 @@ let evo (v:t) (b:Imp.buffer) : t =
     ( match v.mode with
       | Calc ->
         { v with
-          mode=Glb_mode { name=g.name; src=g.src; dst=g.dst; code=(Imp.Opr { src=g.src;dst=g.dst;opr=Imp.Root 0});
-                                 gm_st={ plc=g.src;tkn=Imp.tkn_of_plc g.src} }
+          mode=Glb_mode { name=g.name; src=g.src; dst=g.dst;
+                          code=(Imp.Opr { src=(Imp.plc_of_typ g.src);dst=(Imp.plc_of_typ g.dst);
+                                          opr=Imp.Root 0});
+                          gm_st=(g.src,Imp.tkn_of_typ g.src) }
         }
       | Glb_mode _ -> raise @@ Failure "error:Repl.evo: allready global edit mode"
     )
@@ -63,7 +43,7 @@ let evo (v:t) (b:Imp.buffer) : t =
     ( match v.mode with
       | Calc -> raise Imp.End
       | Glb_mode g ->
-        if (Imp.tkn_in_plc v.gl_st g.dst g.gm_st.tkn)
+        if (Imp.tkn_in_typ v.gl_st g.dst (snd g.gm_st))
         then
           let e:Imp.etr = { gl_name=g.name; src=g.src; dst=g.dst; code=g.code } in
 
@@ -72,7 +52,7 @@ let evo (v:t) (b:Imp.buffer) : t =
         else raise @@ Failure "error:Repl.evo: unmatched to dst place"
     )
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-let string_to_buf l = Parser.buffer Lexer.token l
+let string_to_buf l = Imp_parser.buffer Imp_lexer.token l
 
 let rec buf () =
   let s = input_line stdin in
@@ -85,7 +65,7 @@ let rec buf () =
   else s
 let init_st = {
   gl_st=[];
-  st={ plc=Imp.Plc_Rcd []; tkn=Imp.Tkn_Rcd []};
+  st=(Imp.Typ_Rcd [],Imp.Tkn_Rcd []);
   mode=Calc;
   log=[]
 }
@@ -137,7 +117,7 @@ let rec repl (v:t ref) : unit =
       let pmpt =
         line^
         "~ global edit mode ~\n"^
-        "§§ "^g.name^" "^(Imp.string_of_plc 0 g.src)^" ⊢ "^(Imp.string_of_plc 0 g.dst)^"\n"^
+        "§§ "^g.name^" "^(Imp.string_of_typ 0 g.src)^" ⊢ "^(Imp.string_of_typ 0 g.dst)^"\n"^
         "state # "^(Imp.string_of_st g.gm_st)^
         "\ncommand #\n» " in
       Util.pnt true pmpt );
@@ -155,10 +135,10 @@ let rec repl (v:t ref) : unit =
       { v' with log=(v'.log@[s']) }
     with
     | Imp.End -> raise Imp.End
-    | Parser.Error -> (Util.pnt true "error: parsing error");!v
+    | Imp_parser.Error -> (Util.pnt true "error: parsing error");!v
     | Failure s -> (Util.pnt true @@ "error:"^s); !v
     | Invalid_argument s -> (Util.pnt true @@ "error:Invalid_argument "^s); !v
-    | Lexer.Error _ -> (Util.pnt true "error:Lexer.Error"); !v
+    | Imp_lexer.Error _ -> (Util.pnt true "error:Lexer.Error"); !v
     | err -> raise err in
   v:=v';
   repl v

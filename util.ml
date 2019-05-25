@@ -11,3 +11,7 @@ let rec string_of_list f p l =
   | [] -> ""
   | x::[] -> p x
   | x::tl -> (p x)^f^(string_of_list f p tl)
+let open_io (s:string) (p:Pervasives.in_channel -> 'a) : 'a =
+  let f = open_in s in
+  let v = p f in
+  close_in f;v

@@ -246,11 +246,50 @@ TKN
   > : R_PRN
   >.
 
-¶ dick ∠[prn_tkn] ≃
-  ∐ > r_prn : p0
-    > r_prn dick_list : p1
-    >.
-  ∐ >.
+∠[ <typ> \ <typ> ]  dependent type
+  #[ <exp> \ <exp> ] dependent call
+
+¶ ∠[ prn_tkn \ dick] ≃
+  \∐ > r_prn : p0
+     > r_prn dick_list : p1
+     >.
+  \∐ >.
+
+¶ exp_tkn ≃ ∐ : MLT ∐ : PLS ∐ ! ℤ : INT
+¶ ∠[exp_tkn \ exp]
+  ∐ ≃ > exp exp : e0
+      >. 0
+  ∐ ≃ > exp exp : e1
+      >.
+  ∐ ≃ > : e2
+      >.
+ℤ ; integer
+ⅅ ; finite number
+ℤ[252] ; finite number
+ℤ^[10]
+ℤ^[0]
+¶ d2 ≃ {^ ℤ:x , ℤ:y }
+
+» ! {^ x≒10 , y≒20 }
+» ` ℤ^d2  &x &y &x◃$ &y◃$
+{< 1 2 3 4 [323] 4 5 6 }
+    $◃(-1123)
+ℍ ; infinite vector
+a ^ [b] ; b indexed array
+  a^[10]
+  ℍ[¡252z]◂ⅅ[¡2z]
+  ℍ[¡0n]◂ℤ
+ℍ◂a ≒ a ^ N ;
+  ℍ◂(ⅅ[¡2z])
+  ℍ◂(ℍ◂(ⅅ[¡2z]))
+    ¡0f ¡937248f ¡98324 ¡0f ¡1f ¡0x987324
+    ¡234z ¡234n ¡34234r ¡-123c ¡23FG0E34234x
+    ¡2342f
+∠[ ℤ \ ⅅ ]
+` ⅅ[4] ℤ : (32 / 4)
+
+∀[ {} \ r_prn → dick] : p0
+  #p0[{}] : r_prn→dick[{}]
 ¶+ @ dick[L_PRN] ≃
   > r_prn : p0
   > r_prn dick_list : p1
@@ -431,3 +470,201 @@ glueing module
     §§.
   ≒
 §§.
+¶ bin ≃ .% y n %.
+  %y %n (%y+%n)
+¶ f5 ≃ .% a0 a1 a2 a3 a4 %.
+¶ f7 ≃ .% a7_0 a7_1 a7_2 a7_3 a7_4 a7_5 a7_6 %.
+
+¶ abc ≃ ∐ : a ∐ : b ∐ : c
+¶ ∠[abc \ dep_abc] ≒
+  \∐ ≃ ∐ ℤ : a_c0 ∐ ℤ ℤ : a_c1
+  \∐ ≃ opn◂ℤ : b_c0
+  \∐ ≃ lst◂ℤ : c_c0
+  dep_abc[a◂{}]
+¶ ∠[ !ℤ \ dep0_Z ] ≒
+  « dep1_Z[$+$*2] dep2_Z[$+10] : q0
+linked data , dependent type
+¶  ∠[?v \ node]
+  ∐ ≃
+  ∐ ≃
+¶ ∠[ ! ℕ \ a▸dep_lst ] ≒
+  \∐ ≃ ∐ : dep_nil
+  \∐ ≃ ∐ a dep_lst[$]◂a : dep_cns
+∇∇∆∆⏫⏬⇋⇋⇒⇒⇓⇓
+⸢⸢⸖⸖⸖><
+
+∀class_name ?val \ type-exp
+
+∀Z ?t \ { ?t ?t } → ?t : (+)
+∀Type ?t \ ?t → ?t : #id
+∀Type ?a \ ∀Type ?b \ list◂?a → list◂?b : #map
+
+naming is used just for subtyping
+
+{^ ℤ:&x , ℤ:&y, ℤ:&z }‹›⁅⁆⁅ f t ⁆
+  &x◃$
+
+  {^ {^ $ +> &a≒hoge , &b≒foo } +>
+¶ ∀type ?a \ ⁅?a⁆ ≃ ∐ : #none ∐ ?a : #some
+%% #none ⁅⁆
+%% #some◂x ⁅x⁆
+
+¶　p0 ≃ ∐^Code : ℤ
+¶ p0 +> p1 ≃ ∐^Text : p0 ℤ
+¶ p0 +> p2 ≃ ∐^Foo : ℤ ℤ ℤ
+¶ r0 ≃ {^ ℤ:&x , ℤ:&y }
+¶ r0 +> r1 ≃ {^ ℤ:&z }
+¶ r1 +> r2 ≃ {^ ℤ:&t }
+
+¶ f5 ≃ .% k0 k1 k2 k3 k4
+¶ bin ≃ .% y n
+  %y %n
+{^ {^ {^ +> &x≒4 , &y≒9 } +> &z≒-32 } +> &t≒192 }
+&x◃$
+&x^$ &y^$
+{^ {^ +> &x≒4 , &y≒"z" } +> &x≒5 }
+∐^Code
+∐^Text
++>
+∐^Exp
++>
+
+map
+∠[ map \ net]
+?v◃(net[?m])
+
+¶ ∀Type ?t \ val ≃ {^ ?t:&val }
+¶ flag◂?f ≃ {^ val◂?t +> ?f:&flag }
+
+⁅|v|⁆ {^ &val≒v }
+
+hidden parameter
+ℕ ; type
+ℕ |+> ℤ:?f ; type plus hidden parameter≤
+$^10 $^1^3^4  $^2 $^3 $^x $^y  $^(-34)
+{' { 4 "test" $ { $ $ }} <+ $^1≒10 , $^2≒3 }
+
+
+{^0^2 { $ 3 "ted" } ≒ $+$ }
+{ $ 3 2 } ≒^0^2 $*$+1
+! ($ ≒^0^3 { $ $ })
+
+option product  $◃3 $◃2
+  ?a→{ ?b0 ?b1 ?b2 .. ?bn } → ?a
+  {(?a→‹?b0›) (?a→‹?b1›)} → (?a→‹{?b0 ?b1}›) : ‹*›
+  {‹?b0› ‹?b1›} → ‹{?b0 ?b1}› : ‹*›
+
+(∀^Z?a\?a→?a)
+
+‹› ‹*› ⊥ = ‹›
+⊥ ‹*› ‹› = ‹›
+‹a› ‹*› ‹b› = ‹{a b}›
+
+{ ‹?a0› ‹?a1› .. ‹?an› } → ‹{ ?a0 ?a1 ?a2 .. ?an }› : ‹**›
+⁅⁆
+¶ nat ≃ ∐ ‹nat› : S
+f0 ≒ ∐^#zero◂{} ‹›
+     ∐^#succ◂x ‹#succ◂(f1◂x)›
+f1 ≒ ∐^#zero◂{}
+#S◂‹› #S◂‹#S◂‹››
+
+» ` Hoe : O ioe ¡$ $ eif >| ` Nnie : ¡$◃3 $◃1 oije3 984
+» $ $ <|
+parser◂?a ≃
+  ∐ token→parser : ctn
+  ∐ : fail
+  ∐ ?a : rtn
+
+nd_parser◂?a ≃
+  ∐ token→⟦nd_parser⟧ : nd_ctn
+  ∐ ?a : nd_rtn
+
+¶ tkn ≃ ∐ : PLS ∐ : MLT ∐ ℤ : INT
+§ exp : ⊢ nd_parser◂tkn ≒
+  #0 |
+  #0 ≒
+    .» ∠[$]
+      .∐ #0◂$
+       ∐
+    ∇ $ $
+    ».
+
+∠[tkn \ entry0] ≃
+  \∐
+land→(map→address)→(value→?a)→?a :
+land (map→{address address}) ⊢ land : subst
+
+#∐[3]◂"test" `: ∐[ ∅ ∅ ∅ srg ]
+.» ∠[$]
+  ∐ $◃0 $◃1
+  ∐ $+4 $
+∇.
+`: ∐[ {ℤ \ℤ[?z]} \ℤ[?z] ] → {ℤ \ℤ[?z]}
+    %y + %n//
+    23 + %n//
+    456// * %y
+    345n +n 234n *n 3n
+∀^ℤ ?z \ {?z ?z}→?z
+
+base◂?a ; types of base object
+base◂{} ;
+base◂⟦q⟧
+a∀ base◂a'→string : method0
+base◂?a → t1 : method1
+
+base◂{?a ?b} ; type of sub object
+base◂{?a ?b} → t2 : method2
+
+$'  a'  a. a'
+state |> hyper state  ; open hyper state
+state <| ; close hyper state
+  x ‹»› f
+  f‹◂›x
+‹^ `t0:x0 , `t1:x1 ›
+  ∐[> `tx:x0 , `ty:y ]
+  #∐^x◂{}
+
+.» fe
+» oijef
+  ⁅ hoiewf » oijef » oief
+
+  ¦ oie » joief » oief
+
+  ¦ oiejf oi » ef
+⁆ ioef
+» oijef
+».
+
+oif » oij oij ∠[ief] .∇
+  ∐ oijef
+  ∐ oijef
+∇.
+
+» oiewfoie i oi oef ∠[ef] ef .∆
+  ∏
+  ∏
+∆.
+
+`t0:`t1:v ; subtyping
+.» f » ewr ».
+.« oiefj « eif «.
+
+binary type tree
+obj◂{a' b'}
+obj◂{win◂{a' b'} c'}
+win◂(vbox◂{hbox◂{scroll◂text null} image})
+< x y .. > < x y 'z >
+
+
+#macro def_word word
+#macro stack list
+== word0 word1 word2 word3 word4
+
+» iojf ioj ∠[fe] fe .∇
+  ∐
+  ∐
+∇.
+== string 文字列 text buffer binary file ==.
+
+channel space > window space
+root window 
