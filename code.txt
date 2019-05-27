@@ -667,4 +667,16 @@ win◂(vbox◂{hbox◂{scroll◂text null} image})
 == string 文字列 text buffer binary file ==.
 
 channel space > window space
-root window 
+root window
+
+sgn ; signature type
+`{}→sgn:sgn ; create signature
+sgn◂{}
+
+= ; eq
+a' ^ ℤ ; vector
+a' ^ bin
+
+a' ‹^› b' ; option vector type
+a' ‹^› sgn ;
+== a' | (ref[a']) (a' ‹^› sgn) ==.
