@@ -4,9 +4,9 @@
 
 %token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV DTA STT_CLN
 %token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT PRD PRD_STT END_PRD
-%token L_PRN R_PRN  CO_PRD_STT  APP R_APP DOT D_EXP COPRD_END PRD_END
-%token TEST ACT SPL END_FLW_LST FOR_ALL MDL CLS_NAM MDL_END L_BLK R_BLK  COPRD SEQ
-%token IO END_GL_ETR_LST CLS PRJ  N  SLH CMT L_HLZ R_HLZ M_HLZ R_HLZ_TAIL COPRD_TAIL PRD_TAIL
+%token L_PRN R_PRN  CO_PRD_STT  APP R_APP DOT D_EXP
+%token TEST ACT SPL END_FLW_LST FOR_ALL MDL CLS_NAM MDL_END L_BLK R_BLK
+%token IO END_GL_ETR_LST CLS PRJ  N  SLH CMT
 (*
 %token EOP PRD TEST PRD_STT R_APP STT END_PRD CLQ STT
 *)
@@ -124,74 +124,83 @@ glb_mode:
   ;
 
 glb_etr:
-  | LCE NAM typ_def DEF vh_frm_code {
+  | LCE NAM typ_def DEF lc_code {
     let (src,dst) = $3 in
     Imp.Etr (ref { gl_name=$2; src=src; dst=dst; code=$5 })
     }
+  ;
+lc_code:
+  | vh_frm_code { $1 }
   ;
 typ_def:
   | { (Imp.Typ_Top,Imp.Typ_Top) }
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
+(*
+text:
+  | EOF {}
+  | gl_cod EOF  {  }
+  ;
+gl_cod:
 
+  | gl_etr {  }
+  | gl_cod gl_etr {  }
+  | gl_code def_flow
+  ;
+gl_etr:
+  | LCE lc_man {   }
+  | LCE clq_lst {  }
+  ;
+
+lc_man:
+  | NAM CLN typs SRC typs DEF lc_cod { }
+  ;
+
+clq_lst:
+  | CLQ lc_man {  }
+  | clq_lst CLQ lc_man { }
+  ;
+*)
+
+(*
+lc_cod:
+  | { Imp.Imp.End }
+  | arr_base ARR lc_cod  {Imp.Imp.Seq ($1,$3) }
+  | cprd  { Imp.Imp.CoPrd $1 }
+  | prd  { Imp.Imp.Prd $1 }
+  ;
+  *)
 vh_frm_code:
   | vh_frm_top tail_code
     {
       match $2 with
       | `None -> $1
       | `Some t -> Imp.Seq ($1,t)
-      | `CoPrd (x,y,_) -> Imp.Seq ($1,Code_CoPrd { pre=x; post=y })
+      | `CoPrd c -> Code_CoPrd { pre=$1; post=c }
     }
   ;
 tail_code:
   | ARR_END { `None }
   | ARR vh_frm_code { `Some $2 }
   | coprd { $1 }
-  | prd { `None }
-  | h_frm { `None }
   ;
 coprd:
-  | CO_PRD_STT vh_frm_top coprd_list COPRD_END vh_frm_code coprd_tail
-    {  `CoPrd ($2,$3,$4) }
+  | CO_PRD_STT vh_frm_code coprd_tail END_CO_PRD vh_frm_code
+    {  `CoPrd ([$2]@$3@[$5]) }
   ;
-coprd_list:
-  | { [] }
-  | coprd_list COPRD vh_frm_code  { [] }
-  ;
+
 coprd_tail:
-  | COPRD_TAIL ARR vh_frm_code { }
-  | COPRD_TAIL prd {}
-  | COPRD_TAIL coprd {}
-  | COPRD_TAIL h_frm {}
-  ;
-prd:
-  | PRD_STT vh_frm_top prd_list PRD_END vh_frm_code prd_tail
-    {  `CoPrd ($2,$3,$4) }
-  ;
-prd_list:
-  |  {}
-  | prd_list PRD vh_frm_code  {}
-  ;
-prd_tail:
-  | PRD_TAIL vh_frm_code {  }
-  | PRD_TAIL SEQ prd {}
-  | PRD_TAIL SEQ coprd {}
-  | PRD_TAIL SEQ h_frm {}
-  ;
-h_frm:
-  | L_HLZ h_frm_list R_HLZ  {}
-  | L_HLZ h_frm_list R_HLZ_TAIL vh_frm_code {}
-  ;
-h_frm_list:
-  | vh_frm_code {}
-  | vh_frm_code M_HLZ h_frm_list {}
+  | { [] }
+  | coprd_tail CO_PRD vh_frm_code { $1@[$3] }
   ;
 vh_frm_top:
+  | CNN vh_frm_lst  { Imp.Canon $2 }
   | plc_ept exp_top { Imp.Opr { src=Plc_Top; dst=$1; opr=$2 } }
   ;
 exp_top:
   | exp_lst macro { Imp.Opr_Rcd $1 }
   | EXP exp macro { $2 }
+  | D_EXP exp macro { Imp.App ($2,Imp.Root 0) }
   ;
 macro:
   | { }
@@ -205,7 +214,28 @@ plc_ept:
   |  { Imp.Plc_Top }
   | ACT plc_top CLN { $2 }
   ;
-
+vh_frm_lst:
+  | vh_frm  { [$1] }
+  | vh_frm_lst M_CNN vh_frm { $1@[$3] }
+  ;
+vh_frm:
+  | h_frm tail
+    {
+      match $2 with
+      | `None -> $1
+      | `Some t -> Imp.Seq ($1,t)
+      | `CoPrd c -> Code_CoPrd { pre=$1; post=c }
+    }
+  ;
+h_frm:
+  | exp { Imp.Opr { src=Imp.Plc_Top; dst=Imp.Plc_Top; opr=$1} }
+  | L_RCD CNN vh_frm_lst R_RCD  { Imp.Canon $3 }
+  ;
+tail:
+  | ARR_END { `None }
+  | ARR vh_frm { `Some $2 }
+  | CO_PRD_STT vh_frm CO_PRD vh_frm END_CO_PRD  { `CoPrd [$2;$4] }
+  ;
 exp_lst:
   | { [] }
   | exp_lst exp  { $1@[$2] }
@@ -220,7 +250,7 @@ exp:
   | exp APP exp { Imp.App ($1,$3) }
   | exp PRJ exp { Imp.Prj ($1,$3) }
   | L_RCD exp_lst R_RCD { Imp.Opr_Rcd $2 }
-(*  | ARR_STT lc_code { Imp.Opr_IO $2 } *)
+  | ARR_STT lc_code { Imp.Opr_IO $2 }
   | MCR { Imp.Gl_call ("%"^$1) }
   ;
 const:

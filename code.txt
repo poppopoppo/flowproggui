@@ -699,3 +699,33 @@ a b c ~+ {^ t0:?a,t1:?b } ⊢ hoefe ~+ {^ .. } ; alternate place , object
 » !< a b c ~+ {^ ?a≒?x,?b≒?y } > proc
 
 » +&[2] ?c w
+
+.» oiefo
+» opk
+∇ oiejf ∠[fd] fef
+  ∐ oief j
+  » ijf
+  » ij
+  ».
+  ∐ iojf
+  » i i ie oj
+    ⁅ oijds » oije » jio ».
+    ¦ i » ij ».
+    ¦ ».
+    ¦ $ $ ».
+  ⁆^∇ ioj ∠[oij] ij
+    ∐ ij ».
+    ∐. ief » ij ».
+    ∇^» 
+  ∐
+  »
+  ».
+∇< oijef
+».
+
+» foiefj
+.∆ feoi f
+  ∏
+  ∏
+  ∏
+∆.

@@ -9,17 +9,23 @@ type token =
   | SRC
   | SPL
   | SLH
+  | SEQ
   | R_RCD
   | R_PRN
+  | R_HLZ_TAIL
+  | R_HLZ
   | R_BLK
   | R_APP
   | ROT of (int)
   | PRJ
+  | PRD_TAIL
   | PRD_STT
+  | PRD_END
   | PRD
   | PLS
   | NAM of (string)
   | N
+  | M_HLZ
   | M_CNN
   | MLT
   | MDL_END
@@ -27,6 +33,7 @@ type token =
   | MCR of (string)
   | L_RCD
   | L_PRN
+  | L_HLZ
   | L_BLK
   | LCE
   | IO
@@ -46,6 +53,9 @@ type token =
   | DEF
   | CO_PRD_STT
   | CO_PRD
+  | COPRD_TAIL
+  | COPRD_END
+  | COPRD
   | CNN
   | CMT
   | CLS_NAM

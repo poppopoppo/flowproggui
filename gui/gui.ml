@@ -97,7 +97,7 @@ let navi_signal = new GUtil.signal ()
 
 
 let main () =
-  let filename = Hashtbl.create 10 in
+  let code_view_list = Hashtbl.create 10 in
 
   let window = GWindow.window ~title:"Paned Windows"
       ~width:800 ~height:500 () in
@@ -124,7 +124,7 @@ let main () =
   let notebook = GPack.notebook ~packing:(hpaned#pack1 ~resize:true ~shrink:true) () in
   let current_view () =
     pnt ("current_view:"^(string_of_int notebook#current_page)^"\n");
-    let v = Hashtbl.find filename notebook#current_page in
+    let v = Hashtbl.find code_view_list notebook#current_page in
     v in
   let mgr =
     GSourceView2.source_style_scheme_manager ~default:true in
@@ -135,17 +135,17 @@ let main () =
     ) in
 
   let create_code_view f =
-    let text =
+    let (name,text) =
       ( match f with
         | Some name ->
           ( try
               let b = Buffer.create 1024 in
               with_file name ~f:(input_channel b);
               let s = Glib.Convert.locale_to_utf8 (Buffer.contents b) in
-              s
+              (Filename.basename name,s)
             with _ -> prerr_endline "Load failed"; raise @@ Failure "Load failed"
           )
-        | None -> "" ) in
+        | None -> ("*unsaved","")) in
     let buffer = GSourceView2.source_buffer ~style_scheme:theme ~text:text () in
 
     let source_view =
@@ -160,8 +160,9 @@ let main () =
 
     source_view#set_draw_spaces [`SPACE; `NEWLINE; `TAB];
     source_view#misc#modify_font_by_name font_name;
-    let i = notebook#append_page ~tab_label:(GMisc.label ~text:text ())#coerce (scrolled source_view#coerce)#coerce in
-    Hashtbl.add filename i (f,source_view);
+    let label = (GMisc.label ~text:name ()) in
+    let i = notebook#append_page ~tab_label:label#coerce (scrolled source_view#coerce)#coerce in
+    Hashtbl.add code_view_list i ((f,label),source_view);
     notebook#goto_page i;
     pnt ("new file(name="^(match f with |None -> "" | Some s -> s)^",page="^(string_of_int i)^") is created\n");
     () in
@@ -252,8 +253,9 @@ let main () =
       let oc = open_out file in
       output_string oc (Glib.Convert.locale_from_utf8 s);
       close_out oc;
-      Hashtbl.add filename notebook#current_page (Some file,snd cv);
-      notebook#set_page ~tab_label:(GMisc.label ~text:file ())#coerce (snd cv)#coerce;
+      (snd (fst cv))#set_label (Filename.basename file);
+      Hashtbl.add code_view_list notebook#current_page ((Some file,(snd (fst cv))),snd cv);
+      (snd cv)#source_buffer#set_modified false;
       print_string ("\'"^file^"\' is saved\n");flush stdout
     with _ -> prerr_endline "Save failed"
   in
@@ -262,7 +264,7 @@ let main () =
       ~callback:(fun file -> output ~file:file ()) None in
 
   let save_file () =
-    match fst (current_view ()) with
+    match fst (fst (current_view ())) with
       Some file -> output ~file ()
     | None -> save_dialog ()  in
 
@@ -270,7 +272,7 @@ let main () =
     pnt "quit\n";
     let flg =
       let b = ref [] in
-      Hashtbl.iter (fun _ v -> if (snd v)#source_buffer#modified then b:=((fst v)::!b)) filename;
+      Hashtbl.iter (fun _ v -> if (snd v)#source_buffer#modified then b:=((fst (fst v))::!b)) code_view_list;
       !b in
     match flg with
     | [] -> window#destroy ()
