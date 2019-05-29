@@ -1,3 +1,7 @@
+
+open GdkKeysyms
+open StdLabels
+
 let dbg = true
 let pnt s = if dbg then print_string s; flush stdout
 let font_name = "DejaVu Sans Mono 12"
@@ -5,7 +9,6 @@ let font_name = "DejaVu Sans Mono 12"
 let cols = new GTree.column_list
 let str_col = cols#add Gobject.Data.string
 
-open StdLabels
 let file_dialog ~title ~callback filename =
   let sel =
     GWindow.file_selection ~title ~modal:true ?filename:filename () in
@@ -28,8 +31,6 @@ let with_file name ~f =
   let ic = open_in name in
   try f ic; close_in ic with exn -> close_in ic; raise exn
 
-open GdkKeysyms
-
 (* Create the list of "messages" *)
 let create_list () =
   (* Create a new scrolled window, with scrollbars only if needed *)
@@ -49,10 +50,6 @@ let create_list () =
   ignore (treeview#append_column column);
   scrolled_window#coerce
 
-(* Add some text to our text widget - this is a callback that is invoked
- * when our window is realized. We could also force our window to be
- * realized with #misc#realize, but it would have to be part of
- * a hierarchy first *)
 let insert_text (buffer: GText.buffer) =
   let iter = buffer#get_iter `START in
   buffer#insert ~iter (
@@ -74,24 +71,6 @@ let create_text () =
   insert_text buffer;
   scrolled_window#coerce
 
-let create_navigate_view theme =
-  let buffer = GSourceView2.source_buffer ~text:"navigate view \n" ~style_scheme:theme () in
-  let source_view =
-    GSourceView2.source_view
-      ~source_buffer:buffer
-      ~tab_width:2
-      (* ~show_line_marks:true *)
-      ~indent_width:2
-      ~editable:false
-      ~cursor_visible:false
-
-      (* ~right_margin_position:80 ~show_right_margin:true  *)
-      (* ~smart_home_end:true *)
-      ~width:300
-      () in
-  source_view#misc#modify_font_by_name font_name;
-  source_view
-
 let scrolled v =
   let scrolled_window = GBin.scrolled_window
       ~hpolicy:`ALWAYS  ~vpolicy:`ALWAYS () in
@@ -101,10 +80,21 @@ let scrolled v =
 let radio_event toolbar style () =
   toolbar#set_style style
 
-(* just check given toggle button and enable/disable
- * tooltips *)
 let toggle_event toolbar button () =
   toolbar#set_tooltips button#active
+
+
+let shell_global = ref ""
+let shell_signal = new GUtil.signal ()
+let _ =
+  shell_signal#connect ~after:false
+    ~callback:(fun s -> shell_global:=s; pnt ("signal called:"^(!shell_global)^"\n"))
+let code_global = ref 0
+let code_signal = new GUtil.signal ()
+
+let navi_global = ref ""
+let navi_signal = new GUtil.signal ()
+
 
 let main () =
   let filename = Hashtbl.create 10 in
@@ -128,7 +118,6 @@ let main () =
   let accel_group = factory#accel_group in
   let file_menu = factory#add_submenu "File" in
   let edit_menu = factory#add_submenu "Edit" in
-
 
   let hpaned = GPack.paned `HORIZONTAL  ~packing:(vbox#pack ~expand:true) () in
 
@@ -165,20 +154,22 @@ let main () =
         ~insert_spaces_instead_of_tabs:false ~tab_width:2
         ~show_line_numbers:true ~highlight_current_line:true ~indent_width:2 ~width:300
         () in
+
     (* source_view#misc#set_size_request ~height:578 (); *)
+    source_view#event#connect#focus_in ~callback:(fun _ -> navi_signal#call `ENTER_CODE;false);
+
     source_view#set_draw_spaces [`SPACE; `NEWLINE; `TAB];
     source_view#misc#modify_font_by_name font_name;
-    let i = notebook#append_page (scrolled source_view#coerce)#coerce in
+    let i = notebook#append_page ~tab_label:(GMisc.label ~text:text ())#coerce (scrolled source_view#coerce)#coerce in
     Hashtbl.add filename i (f,source_view);
     notebook#goto_page i;
-    pnt ("new file(name="^(match f with |None -> "" | Some s -> s)^",page="^(string_of_int i)^" is created\n");
+    pnt ("new file(name="^(match f with |None -> "" | Some s -> s)^",page="^(string_of_int i)^") is created\n");
     () in
   let _ = create_code_view None in
 
   let vpaned = GPack.paned `VERTICAL ~width:220 ~packing:(hpaned#pack2 ~resize:true ~shrink:true) () in
 
-
-  let create_shell_view theme =
+  let  shell_view =
     let buffer = GSourceView2.source_buffer  ~style_scheme:theme () in
     let source_view =
       GSourceView2.source_view
@@ -194,7 +185,7 @@ let main () =
         () in
     let (b0,b1) = source_view#source_buffer#bounds in
     let iter = ref b1 in
-    let iter_start = ref b1 in
+    let mark_start = ref (source_view#source_buffer#create_mark !iter) in
     source_view#source_buffer#create_tag ~name:"not_editable" [`EDITABLE false];
     let key_press k =
       let (b0,b1) = source_view#source_buffer#bounds in
@@ -202,16 +193,16 @@ let main () =
       source_view#source_buffer#place_cursor ~where:!iter;
       if (GdkEvent.Key.keyval k)=GdkKeysyms._Return
       then
-        (print_string "escape pressed\n";flush stdout;
+        (pnt "enter pressed\n";
+         shell_signal#call
+           (source_view#source_buffer#get_text ~start:(source_view#source_buffer#get_iter_at_mark (`MARK !mark_start)) ~stop:!iter ());
          source_view#source_buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» ";
+         mark_start:=source_view#source_buffer#create_mark !iter;
          true)
-      else  (* let iter = source_view#source_buffer#start_iter in *)
-        (* if (!iter#compare !iter_start)>=0
-           then (source_view#source_buffer#insert ~iter:!iter "█!?";
-              false)
-           else false *) false
+      else false
     in
     source_view#event#connect#key_press ~callback:(fun k -> key_press k);
+    source_view#event#connect#focus_in ~callback:(fun _ -> navi_signal#call `ENTER_SHELL;false);
     source_view#event#connect#after#key_release
       ~callback:(fun _ ->
           (* let (b0,b1) = source_view#source_buffer#bounds in
@@ -220,9 +211,36 @@ let main () =
           false);
     source_view#misc#modify_font_by_name font_name;
     source_view in
+  let navi_view =
+    let buffer = GSourceView2.source_buffer ~text:"navigate view \n" ~style_scheme:theme () in
+    let source_view =
+      GSourceView2.source_view
+        ~source_buffer:buffer
+        ~tab_width:2
+        (* ~show_line_marks:true *)
+        ~indent_width:2
+        ~editable:false
+        ~cursor_visible:false
 
-  let navi_view = create_navigate_view theme in
-  let shell_view = create_shell_view theme in
+        (* ~right_margin_position:80 ~show_right_margin:true  *)
+        (* ~smart_home_end:true *)
+        ~width:300
+        () in
+    source_view#misc#modify_font_by_name font_name;
+    source_view in
+
+  let _ =
+    navi_signal#connect ~after:false
+      ~callback:(fun s ->
+          (match s with
+           | `ENTER_SHELL ->
+             pnt ("entering shell view\n");
+             navi_view#source_buffer#set_text "entering shell view\n"
+           | `ENTER_CODE ->
+             pnt ("entering code view\n");
+             navi_view#source_buffer#set_text "entering code view\n"
+          ))
+  in
 
   let open_file () = file_dialog ~title:"Open" ~callback:(fun s -> create_code_view (Some s)) None in
 
@@ -235,6 +253,7 @@ let main () =
       output_string oc (Glib.Convert.locale_from_utf8 s);
       close_out oc;
       Hashtbl.add filename notebook#current_page (Some file,snd cv);
+      notebook#set_page ~tab_label:(GMisc.label ~text:file ())#coerce (snd cv)#coerce;
       print_string ("\'"^file^"\' is saved\n");flush stdout
     with _ -> prerr_endline "Save failed"
   in
@@ -327,11 +346,11 @@ let main () =
   shell_view#source_buffer#insert ~iter:iter_shell ~tag_names:["not_editable"] "» ";
 
   let iter_navi = navi_view#source_buffer#get_iter_at_char 0 in
-  navi_view#source_buffer#insert ~iter:iter_navi "Theshowing the same buffer in two places.\n\n";
+  (* navi_view#source_buffer#insert ~iter:iter_navi "Theshowing the same buffer in two places.\n\n"; *)
 
   let new_button = toolbar#insert_button
       ~text:"New"
-      ~tooltip:"open new file"
+      ~tooltip:"create new file"
       ~tooltip_private:"Private"
       ~icon:(GMisc.image ~icon_size:`MENU ~stock:`NEW ())#coerce
       ~callback:(fun _ -> pnt "new button is pressed\n"; create_code_view None) () in
@@ -339,12 +358,11 @@ let main () =
 
   let open_button = toolbar#insert_button
       ~text:"Open"
-      ~tooltip:"open new file"
+      ~tooltip:"open file"
       ~tooltip_private:"Private"
       ~icon:(GMisc.image ~icon_size:`MENU ~stock:`OPEN ())#coerce
       ~callback:(open_file) () in
   toolbar#insert_space ();
-
 
   let save_button = toolbar#insert_button
       ~text:"Save"
@@ -352,6 +370,14 @@ let main () =
       ~tooltip_private:"Private"
       ~icon:(GMisc.image ~icon_size:`MENU ~stock:`SAVE ())#coerce
       ~callback:(save_file) () in
+  toolbar#insert_space ();
+
+  let save_button = toolbar#insert_button
+      ~text:"Import"
+      ~tooltip:"import file"
+      ~tooltip_private:"Private"
+      ~icon:(GMisc.image ~icon_size:`MENU ~stock:`MEDIA_FORWARD ())#coerce
+      ~callback:(fun _ -> pnt "import button pressed\n") () in
   toolbar#insert_space ();
 
   let close_button = toolbar#insert_button
@@ -362,7 +388,9 @@ let main () =
       ~callback:quit () in
   toolbar#insert_space ();
 
-  (* shell_view#misc#set_size_request ~height:250 (); *)
+  (*
+let engine () =
+  in *)
   window#show ();
   GMain.Main.main ()
 

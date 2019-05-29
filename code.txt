@@ -673,6 +673,16 @@ sgn ; signature type
 `{}→sgn:sgn ; create signature
 sgn◂{}
 
+¶ cpnt ≃
+  ∐ pt_cpnt charge pt_cpnt : CHARGE
+  ∐ pt_cpnt rgst pt_cpnt : WIRE
+  ∐ pt_cpnt pt_cpnt : NOT
+  ∐ {pt_cpnt pt_cpnt} pt_cpnt : AND
+  ∐ pt_cpnt {pt_cpnt pt_cpnt} : OR
+
+¶ pt_cpnt == sgn
+¶ cct == cpnt‹^›pt_cpnt
+
 = ; eq
 a' ^ ℤ ; vector
 a' ^ bin
@@ -680,3 +690,12 @@ a' ^ bin
 a' ‹^› b' ; option vector type
 a' ‹^› sgn ;
 == a' | (ref[a']) (a' ‹^› sgn) ==.
+
+
+a b c ~+ {^ t0:?a,t1:?b } ⊢ hoefe ~+ {^ .. } ; alternate place , object
+
+» &< ?a v
+» $ 2 3 (>&+1)
+» !< a b c ~+ {^ ?a≒?x,?b≒?y } > proc
+
+» +&[2] ?c w
