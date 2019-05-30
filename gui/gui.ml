@@ -6,19 +6,16 @@ let dbg = true
 let pnt s = if dbg then print_string s; flush stdout
 let font_name = "DejaVu Sans Mono 12"
 
-let cols = new GTree.column_list
-let str_col = cols#add Gobject.Data.string
-
 let file_dialog ~title ~callback filename =
   let sel =
     GWindow.file_selection ~title ~modal:true ?filename:filename () in
-  sel#cancel_button#connect#clicked ~callback:sel#destroy;
-  sel#ok_button#connect#clicked ~callback:
-    begin fun () ->
-      let name = sel#filename in
-      sel#destroy ();
-      callback name
-    end;
+  let _ = sel#cancel_button#connect#clicked ~callback:sel#destroy in
+  let _ = sel#ok_button#connect#clicked ~callback:
+      begin fun () ->
+        let name = sel#filename in
+        sel#destroy ();
+        callback name
+      end in
   sel#show ()
 
 let input_channel b ic =
@@ -32,23 +29,6 @@ let with_file name ~f =
   try f ic; close_in ic with exn -> close_in ic; raise exn
 
 (* Create the list of "messages" *)
-let create_list () =
-  (* Create a new scrolled window, with scrollbars only if needed *)
-  let scrolled_window = GBin.scrolled_window
-      ~hpolicy:`AUTOMATIC ~vpolicy:`ALWAYS () in
-
-  let model = GTree.list_store cols in
-  let treeview = GTree.view ~model ~packing:(scrolled_window#add_with_viewport) () in
-
-  for i = 0 to 10 do
-    let iter = model#append () in
-    model#set ~row:iter ~column:str_col (Printf.sprintf "Message #%d" i)
-  done;
-  let renderer = GTree.cell_renderer_text [] in
-  let column = GTree.view_column ~title:"Messages"
-      ~renderer:(renderer, ["text", str_col]) () in
-  ignore (treeview#append_column column);
-  scrolled_window#coerce
 
 let insert_text (buffer: GText.buffer) =
   let iter = buffer#get_iter `START in
@@ -88,25 +68,49 @@ let shell_global = ref ""
 let shell_signal = new GUtil.signal ()
 let _ =
   shell_signal#connect ~after:false
-    ~callback:(fun s -> shell_global:=s; pnt ("signal called:"^(!shell_global)^"\n"))
+    ~callback:(fun s ->
+        shell_global:=s;
+        pnt ("signal called:"^(!shell_global)^"\n"))
 let code_global = ref 0
-let code_signal = new GUtil.signal ()
+let code_signal:(unit GUtil.signal) = new GUtil.signal ()
 
 let navi_global = ref ""
-let navi_signal = new GUtil.signal ()
+type navi_signal = ENTER_SHELL | ENTER_CODE
+let navi_signal:(navi_signal GUtil.signal) = new GUtil.signal ()
 
+let st = ref Implib.init_st
+let mdl = ref ()
+let code_view_list = Hashtbl.create 10
+
+let init_ide = ([],Implib.init_st)
+let get_ide =
+  let st = !st in
+  let filenames = ref [] in
+  Hashtbl.iter (fun i ((n,l),v) -> filenames:=n::!filenames) code_view_list;
+  (!filenames,st)
 
 let main () =
-  let code_view_list = Hashtbl.create 10 in
+  pnt "gui main\n";
 
+  let ide = ref
+    (try
+       Implib.load_from_file "default.st"
+     with _ -> init_ide) in
+  st := (snd !ide);
+
+  let cols = new GTree.column_list in
+  let str_col = cols#add Gobject.Data.string in
+
+  let _ = GMain.Main.init () in
   let window = GWindow.window ~title:"Paned Windows"
       ~width:800 ~height:500 () in
 
-  ignore (window#connect#destroy ~callback:GMain.Main.quit);
-  window#maximize ();
+  let _ = window#connect#destroy ~callback:GMain.Main.quit in
+  let _ = window#maximize () in
 
   let vbox = GPack.vbox ~packing:window#add () in
   let menubar = GMenu.menu_bar ~packing:vbox#pack () in
+
 
   let toolbar = GButton.toolbar
       ~orientation:`HORIZONTAL
@@ -156,7 +160,8 @@ let main () =
         () in
 
     (* source_view#misc#set_size_request ~height:578 (); *)
-    source_view#event#connect#focus_in ~callback:(fun _ -> navi_signal#call `ENTER_CODE;false);
+    let _ = source_view#event#connect#focus_in
+        ~callback:(fun _ -> navi_signal#call ENTER_CODE;false) in
 
     source_view#set_draw_spaces [`SPACE; `NEWLINE; `TAB];
     source_view#misc#modify_font_by_name font_name;
@@ -166,7 +171,12 @@ let main () =
     notebook#goto_page i;
     pnt ("new file(name="^(match f with |None -> "" | Some s -> s)^",page="^(string_of_int i)^") is created\n");
     () in
-  let _ = create_code_view None in
+
+  let _ =
+    ( match (fst !ide) with
+      | [] -> create_code_view None
+      | x -> List.map (fun a -> create_code_view (Some a)) x; ()
+    ) in
 
   let vpaned = GPack.paned `VERTICAL ~width:220 ~packing:(hpaned#pack2 ~resize:true ~shrink:true) () in
 
@@ -184,32 +194,39 @@ let main () =
         (* ~smart_home_end:true *)
         ~width:300
         () in
-    let (b0,b1) = source_view#source_buffer#bounds in
+    let (_,b1) = buffer#bounds in
     let iter = ref b1 in
-    let mark_start = ref (source_view#source_buffer#create_mark !iter) in
-    source_view#source_buffer#create_tag ~name:"not_editable" [`EDITABLE false];
+    let mark_start = ref (buffer#create_mark !iter) in
+    let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let key_press k =
-      let (b0,b1) = source_view#source_buffer#bounds in
+      let (_,b1) = buffer#bounds in
       iter := b1;
-      source_view#source_buffer#place_cursor ~where:!iter;
+      buffer#place_cursor ~where:!iter;
       if (GdkEvent.Key.keyval k)=GdkKeysyms._Return
       then
+        let line = (buffer#get_text ~start:(buffer#get_iter_at_mark (`MARK !mark_start)) ~stop:!iter ())^"\n" in
+        st:=
+          (try
+             Implib.evo !st (Implib.ast_from_string line)
+           with | _ -> pnt "parsing error\n"; !st);
+        buffer#insert ~iter:!iter ("\n"^(Imp.string_of_st (snd !st)));
+        buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» ";
+        mark_start:=buffer#create_mark !iter;
+
         (pnt "enter pressed\n";
-         shell_signal#call
-           (source_view#source_buffer#get_text ~start:(source_view#source_buffer#get_iter_at_mark (`MARK !mark_start)) ~stop:!iter ());
-         source_view#source_buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» ";
-         mark_start:=source_view#source_buffer#create_mark !iter;
+         shell_signal#call line;
          true)
       else false
     in
-    source_view#event#connect#key_press ~callback:(fun k -> key_press k);
-    source_view#event#connect#focus_in ~callback:(fun _ -> navi_signal#call `ENTER_SHELL;false);
-    source_view#event#connect#after#key_release
-      ~callback:(fun _ ->
-          (* let (b0,b1) = source_view#source_buffer#bounds in
-             iter := b1;
-             source_view#source_buffer#insert ~iter:!iter "█"; *)
-          false);
+    let _ = source_view#event#connect#key_press ~callback:(fun k -> key_press k) in
+    let _ = source_view#event#connect#focus_in
+        ~callback:(fun _ -> navi_signal#call ENTER_SHELL;false) in
+    let _ = source_view#event#connect#after#key_release
+        ~callback:(fun _ ->
+            (* let (b0,b1) = source_view#source_buffer#bounds in
+               iter := b1;
+               source_view#source_buffer#insert ~iter:!iter "█"; *)
+            false) in
     source_view#misc#modify_font_by_name font_name;
     source_view in
   let navi_view =
@@ -234,10 +251,10 @@ let main () =
     navi_signal#connect ~after:false
       ~callback:(fun s ->
           (match s with
-           | `ENTER_SHELL ->
+           | ENTER_SHELL ->
              pnt ("entering shell view\n");
              navi_view#source_buffer#set_text "entering shell view\n"
-           | `ENTER_CODE ->
+           | ENTER_CODE ->
              pnt ("entering code view\n");
              navi_view#source_buffer#set_text "entering code view\n"
           ))
@@ -268,6 +285,35 @@ let main () =
       Some file -> output ~file ()
     | None -> save_dialog ()  in
 
+
+  let close_page _ =
+    pnt "close_page\n";
+    let (i,((name,label),cv)) = (notebook#current_page,current_view ()) in
+    let b = cv#source_buffer#modified in
+    if b
+    then notebook#remove_page i
+    else
+      let file_name =
+        match name with
+        | Some f -> Printf.sprintf "File %S" f
+        | None -> "Current buffer"
+      in
+      let dialog = GWindow.dialog ~title:"Close" () in
+      let txt =
+        let frame = GBin.frame ~border_width:40 ~shadow_type:`NONE () in
+        frame#add
+          (GMisc.label
+             ~markup:(file_name^" contains unsaved changes. What to do ?") ()
+           :> GObj.widget);
+        (frame :> GObj.widget)
+      in
+      dialog#vbox#add txt;
+      dialog#add_button_stock `CLOSE `CLOSE;
+      dialog#add_button_stock `CANCEL `CANCEL;
+      ignore @@ dialog#connect#response ~callback:(function
+          | `CLOSE -> dialog#destroy (); notebook#remove_page i
+          | `CANCEL | `DELETE_EVENT -> dialog#destroy ());
+      dialog#show () in
   let quit _ =
     pnt "quit\n";
     let flg =
@@ -276,7 +322,7 @@ let main () =
       !b in
     match flg with
     | [] -> window#destroy ()
-    | hd::tl ->
+    | hd::_ ->
       let file_name = match hd with
         | Some f -> Printf.sprintf "File %S" f
         | None -> "Current buffer"
@@ -294,7 +340,10 @@ let main () =
       dialog#add_button_stock `QUIT `QUIT;
       dialog#add_button_stock `CANCEL `CANCEL;
       ignore @@ dialog#connect#response ~callback:(function
-          | `QUIT -> dialog#destroy (); window#destroy ()
+          | `QUIT ->
+            dialog#destroy ();
+            Implib.save_to_file !ide;
+            window#destroy ()
           | `CANCEL | `DELETE_EVENT -> dialog#destroy ());
       dialog#show () in
 
@@ -305,39 +354,40 @@ let main () =
 
   let file_factory = new GMenu.factory ~accel_path:"<EDITOR2 File>/////" file_menu ~accel_group
   in
-  file_factory#add_item "Open" ~key:_O ~callback:(open_file);
-  file_factory#add_item "Save" ~key:_S ~callback:(save_file);
-  file_factory#add_item "Save as..." ~callback:(save_dialog);
-  file_factory#add_separator ();
-  file_factory#add_item "Quit" ~key:_Q ~callback:window#destroy;
+  let _ = file_factory#add_item "Open" ~key:_O ~callback:(open_file) in
+  let _ = file_factory#add_item "Save" ~key:_S ~callback:(save_file) in
+  let _ = file_factory#add_item "Save as..." ~callback:(save_dialog) in
+  let _ = file_factory#add_separator () in
+  let _ = file_factory#add_item "Quit" ~key:_Q ~callback:window#destroy in
 
   let edit_factory = new GMenu.factory ~accel_path:"<EDITOR2 File>///" edit_menu ~accel_group in
-  edit_factory#add_item "Copy" ~key:_C ~callback:
-    (fun () -> (snd @@ current_view ())#source_buffer#copy_clipboard GMain.clipboard);
-  edit_factory#add_item "Cut" ~key:_X ~callback:
-    (fun () -> GtkSignal.emit_unit
-        (snd @@ current_view ())#as_view GtkText.View.S.cut_clipboard);
-  edit_factory#add_item "Paste" ~key:_V ~callback:
-    (fun () -> GtkSignal.emit_unit
-        (snd @@ current_view ())#as_view GtkText.View.S.paste_clipboard);
-  edit_factory#add_separator ();
+  let _ = edit_factory#add_item "Copy" ~key:_C ~callback:
+      (fun () -> (snd @@ current_view ())#source_buffer#copy_clipboard GMain.clipboard) in
+  let _ = edit_factory#add_item "Cut" ~key:_X ~callback:
+      (fun () -> GtkSignal.emit_unit
+          (snd @@ current_view ())#as_view ~sgn:GtkText.View.S.cut_clipboard) in
+  let _ = edit_factory#add_item "Paste" ~key:_V ~callback:
+      (fun () -> GtkSignal.emit_unit
+          (snd @@ current_view ())#as_view ~sgn:GtkText.View.S.paste_clipboard) in
+  let _ = edit_factory#add_separator () in
 
-  edit_factory#add_check_item "Read only" ~active:false
-    ~callback:(fun b -> (snd @@ current_view ())#set_editable (not b));
-  edit_factory#add_item "Save accels"
-    ~callback:(fun () -> GtkData.AccelMap.save "test.accel");
+  let _ = edit_factory#add_check_item "Read only" ~active:false
+      ~callback:(fun b -> (snd @@ current_view ())#set_editable (not b)) in
+  let _ = edit_factory#add_item "Save accels"
+      ~callback:(fun () -> GtkData.AccelMap.save "test.accel") in
 
-  window#add_accel_group accel_group;
-  (snd @@ current_view ())#event#connect#button_press
-    ~callback:(fun ev ->
-        let button = GdkEvent.Button.button ev in
-        if button = 3 then begin
-          file_menu#popup ~button ~time:(GdkEvent.Button.time ev); true
-        end else false);
+  let _ = window#add_accel_group accel_group in
+  let _ = (snd @@ current_view ())#event#connect#button_press
+      ~callback:(fun ev ->
+          let button = GdkEvent.Button.button ev in
+          if button = 3 then begin
+            file_menu#popup ~button ~time:(GdkEvent.Button.time ev); true
+          end else false) in
 
   let () = GtkData.AccelMap.load "test.accel" in
   GtkData.AccelMap.foreach
     (fun ~path ~key ~modi ~changed ->
+       let _ = changed in
        if modi = [`CONTROL] then
          if GtkData.AccelMap.change_entry path ~key ~modi:[`MOD1]
          then prerr_endline ("Changed " ^ path)
@@ -345,12 +395,12 @@ let main () =
 
   let iter_shell = shell_view#source_buffer#get_iter_at_char 0 in
   (*  shell_view#source_buffer#insert ~iter:iter_shell "shell view\n"; *)
-  shell_view#source_buffer#insert ~iter:iter_shell ~tag_names:["not_editable"] "» ";
+  let _ = shell_view#source_buffer#insert ~iter:iter_shell ~tag_names:["not_editable"] "» " in
 
-  let iter_navi = navi_view#source_buffer#get_iter_at_char 0 in
+  let _ = navi_view#source_buffer#get_iter_at_char 0 in
   (* navi_view#source_buffer#insert ~iter:iter_navi "Theshowing the same buffer in two places.\n\n"; *)
 
-  let new_button = toolbar#insert_button
+  let _ = toolbar#insert_button
       ~text:"New"
       ~tooltip:"create new file"
       ~tooltip_private:"Private"
@@ -358,15 +408,15 @@ let main () =
       ~callback:(fun _ -> pnt "new button is pressed\n"; create_code_view None) () in
   toolbar#insert_space ();
 
-  let open_button = toolbar#insert_button
+  let _ = toolbar#insert_button
       ~text:"Open"
       ~tooltip:"open file"
       ~tooltip_private:"Private"
       ~icon:(GMisc.image ~icon_size:`MENU ~stock:`OPEN ())#coerce
       ~callback:(open_file) () in
-  toolbar#insert_space ();
+  let _ = toolbar#insert_space () in
 
-  let save_button = toolbar#insert_button
+  let _ = toolbar#insert_button
       ~text:"Save"
       ~tooltip:"save file"
       ~tooltip_private:"Private"
@@ -374,17 +424,31 @@ let main () =
       ~callback:(save_file) () in
   toolbar#insert_space ();
 
-  let save_button = toolbar#insert_button
+  let _ = toolbar#insert_button
       ~text:"Import"
       ~tooltip:"import file"
       ~tooltip_private:"Private"
-      ~icon:(GMisc.image ~icon_size:`MENU ~stock:`MEDIA_FORWARD ())#coerce
-      ~callback:(fun _ -> pnt "import button pressed\n") () in
+      ~icon:(GMisc.image ~icon_size:`MENU ~stock:`MEDIA_PLAY ())#coerce
+      ~callback:(fun _ ->
+          mdl :=
+            (try
+               Implib.mdl_from_string @@ (snd @@ current_view ())#source_buffer#get_text ();
+               pnt "module is imported\n"
+             with _ -> pnt "error:module import:parsing error\n"; !mdl);
+          pnt "import button pressed\n") () in
   toolbar#insert_space ();
 
-  let close_button = toolbar#insert_button
+  let _ = toolbar#insert_button
       ~text:"Close"
-      ~tooltip:"Close this app"
+      ~tooltip:"Close current view"
+      ~tooltip_private:"Private"
+      ~icon:(GMisc.image ~icon_size:`MENU ~stock:`CLOSE ())#coerce
+      ~callback:close_page () in
+  toolbar#insert_space ();
+
+  let _ = toolbar#insert_button
+      ~text:"Quit"
+      ~tooltip:"quit from app"
       ~tooltip_private:"Private"
       ~icon:(GMisc.image ~icon_size:`MENU ~stock:`QUIT ())#coerce
       ~callback:quit () in
@@ -393,7 +457,8 @@ let main () =
   (*
 let engine () =
   in *)
+
   window#show ();
   GMain.Main.main ()
 
-let _ = Printexc.print main ()
+let _ = main ()

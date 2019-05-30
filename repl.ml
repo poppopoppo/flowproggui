@@ -52,7 +52,9 @@ let evo (v:t) (b:Imp.buffer) : t =
         else raise @@ Failure "error:Repl.evo: unmatched to dst place"
     )
 let line = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-let string_to_buf l = Imp_parser.buffer Imp_lexer.token l
+let string_to_buf s = 
+  let lexbuf = Lexing.from_string s in
+  Imp_parser.buffer Imp_lexer.token lexbuf
 
 let rec buf () =
   let s = input_line stdin in
@@ -124,7 +126,6 @@ let rec repl (v:t ref) : unit =
   let v' =
     try
       let s = buf () in
-      let lexbuf = Lexing.from_string s in
       let result = string_to_buf lexbuf in
       let s' = if !v.mode=Calc
         then s
