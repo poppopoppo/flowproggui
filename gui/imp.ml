@@ -184,7 +184,7 @@ let string_of_gl_st (s:gl_st) =
       | Def_Prd g ->
         "¶ "^(!g.prd_name)^" ≃ "^(Util.string_of_list "∏" (fun (n,_) -> n) !g.prd_cns)^" ≒ ?"
     )  in
-  "gl_state # "^(Util.string_of_list "," f s)
+  (Util.string_of_list "\n" f s)
 
 
 let string_of_plc_tkn (b:bool) (p:plc) (v:tkn) : string =

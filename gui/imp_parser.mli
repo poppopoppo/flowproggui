@@ -25,6 +25,7 @@ type token =
   | PRD_END
   | PRD
   | PLS
+  | OUT
   | NAM of (string)
   | N
   | M_HLZ
@@ -40,8 +41,10 @@ type token =
   | L_HLZ
   | L_BLK
   | LCE
+  | ISO
   | IO
   | INT of (int)
+  | IN
   | FOR_ALL
   | EXP
   | EQV
@@ -50,12 +53,14 @@ type token =
   | EOF
   | END_PRD
   | END_CO_PRD
+  | EMT
   | DTA
   | DEF
   | CO_PRD_STT
   | CO_PRD
   | COPRD_END
   | COPRD
+  | CNT
   | CNN
   | CLS_NAM
   | CLS
@@ -63,6 +68,7 @@ type token =
   | ARR_STT
   | ARR_END
   | ARR
+  | ARG
   | APP
   | AGL_END
   | AGL

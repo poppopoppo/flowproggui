@@ -14,32 +14,35 @@ let name = alpha+  ("_" | digit | alpha)*
 let z = (('-' digit+)|digit+)
 rule token = parse
     | ";" (_)* "\n"  { (print_string "comment\n";flush stdout);token lexbuf }
+    | ".;" (_)* ";."  { token lexbuf }
     | "§"  { LCE }
     | "§§"  { MDL }
     | "§§." { MDL_END }
     | "¶" { DTA }
     | "\\"  { SLH }
-    | "∀" ("type" | "z") { FOR_ALL }
+    | "∀" { FOR_ALL }
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
-    | "≃" (* ≃ *) { EQV }
-    | "»" (* » *)  { ARR       }
-    | "»" "."  (* ». *) { ARR_END }
-    | "." "»"  (* .» *)  { ARR_STT }
-    | "⊢" (* ⊢ *) { SRC }
+    | "≃" { ISO }
+    | "=="  { EQV }
+    | "»" { ARR       }
+    | "»."  { ARR_END }
+    | ".»" { ARR_STT }
+    | "⊢" { SRC }
+    | "⋎" { EMT }
+    | "⋏" { CNT }
+    | "?" { ARG }
+    | "|»"  { IN }
+    | "»|"  { OUT }
     | ":" { CLN }
     | "|" { SPL }
     | "%" (digit+ as lxm) { MCR(lxm) }
-    | "∠" "["  (* ∠ *) { AGL }
+    | "∠" "["  { AGL }
     | "]" { AGL_END }
     | "^" { SEQ }
-    | "¦"  (* ¦ *) { M_CNN }
-    | "∐"   { CO_PRD }
-    | ".∐"  { CO_PRD_STT }
-    | "∐."  { END_CO_PRD }
+    | "¦"  { M_HLZ }
+    | "∐"   { COPRD }
     | "∏"   { PRD }
-    | ".∏"  { PRD_STT }
-    | "∏."  { END_PRD }
     | "∎" { EOP }
     | "∇" { COPRD_END }
     | "∆" { PRD_END }

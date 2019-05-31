@@ -2,14 +2,12 @@
   open Imp
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV DTA STT_CLN
+%token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV ISO DTA STT_CLN CNT EMT ARG IN OUT
 %token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT PRD PRD_STT END_PRD
 %token L_PRN R_PRN  CO_PRD_STT  APP R_APP COPRD_END PRD_END
 %token TEST ACT SPL  FOR_ALL MDL CLS_NAM MDL_END L_BLK R_BLK  COPRD SEQ EOP EQ
 %token IO CLS PRJ  N  SLH L_HLZ R_HLZ M_HLZ R_HLZ_TAIL L_OPN R_OPN L_LST R_LST SGN
-(*
-%token EOP PRD TEST PRD_STT R_APP STT END_PRD CLQ STT
-*)
+
 %token <string> NAM MCR VAL
 %token <int> INT ROT
 %token PLS MLT
@@ -49,11 +47,11 @@ mdl_etr:
   | def_plc { $1 }
   ;
 def_plc:
-  | DTA def_name EQV def_coprd  {
+  | DTA def_name ISO def_coprd  {
       (Def_CoPrd (ref
         { coprd_name=(snd $2); coprd_cns=$4 }))
       }
-  | DTA def_name EQV def_prd  {
+  | DTA def_name ISO def_prd  {
         (Def_Prd (ref
         { prd_name=(snd $2); prd_cns=$4 }))
       }
@@ -145,7 +143,7 @@ coprd:
   ;
 coprd_list:
   | { [] }
-  | coprd_list COPRD vh_frm_code  { [] }
+  | coprd_list COPRD vh_frm_code  { $1@[$3] }
   ;
 coprd_tail:
   | {}

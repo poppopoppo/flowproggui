@@ -3,7 +3,7 @@ open GdkKeysyms
 open StdLabels
 
 let font_name = "DejaVu Sans Mono 12"
-
+let theme_name = "cobalt"
 let file_dialog ~title ~callback filename =
   let sel =
     GWindow.file_selection ~title ~modal:true ?filename:filename () in
@@ -28,14 +28,14 @@ let with_file name ~f =
 
 let scrolled v =
   let scrolled_window = GBin.scrolled_window
-      ~hpolicy:`ALWAYS  ~vpolicy:`ALWAYS () in
+      ~hpolicy:`ALWAYS  ~vpolicy:`AUTOMATIC () in
   scrolled_window#add v;
   scrolled_window
 
 type log_signal = LOG of string
 let log_signal:(log_signal GUtil.signal) = new GUtil.signal ()
 
-let dbg = false
+let dbg = true
 let pnt s =
   if dbg
   then (print_string s; flush stdout)
@@ -54,6 +54,9 @@ let code_signal:(unit GUtil.signal) = new GUtil.signal ()
 let navi_global = ref ""
 type navi_signal = ENTER_SHELL | ENTER_CODE
 let navi_signal:(navi_signal GUtil.signal) = new GUtil.signal ()
+type engine_signal = MODULE_IMPORT
+let global_signal:([< `MODULE_IMPORT ] GUtil.signal) = new GUtil.signal ()
+let engine_signal:([< `MODULE_IMPORT ] GUtil.signal) = new GUtil.signal ()
 
 let st = ref Implib.init_st
 let mdl = ref []
@@ -70,7 +73,15 @@ let get_ide () =
   (!filenames,st)
 
 let main () =
-  pnt "gui main\n";
+
+  let lang_mime_type = "text/x-ocaml" in
+  let lang_mgr = GSourceView2.source_language_manager ~default:true in
+  lang_mgr#set_search_path [Sys.getcwd ()];
+  let lang = lang_mgr#language "test" in
+  ( match lang with
+    | None -> pnt "can't find language file\n"
+    | Some s -> pnt ("language ocaml.lang is loaded\n")
+  );
 
   let (fn,st0) =
     let fn =
@@ -91,7 +102,7 @@ let main () =
   let mgr =
     GSourceView2.source_style_scheme_manager ~default:true in
   let theme =
-    (match mgr#style_scheme "oblivion" with
+    (match mgr#style_scheme theme_name with
      | Some x -> x
      | None -> raise @@ Failure "not found style_scheme"
     ) in
@@ -135,6 +146,8 @@ let main () =
           )
         | None -> ("*unsaved","")) in
     let buffer = GSourceView2.source_buffer ~style_scheme:theme ~text:text () in
+    buffer#set_language lang;
+    buffer#set_highlight_syntax true;
 
     let source_view =
       GSourceView2.source_view
@@ -143,7 +156,6 @@ let main () =
         ~show_line_numbers:true ~highlight_current_line:true ~indent_width:2 ~width:300
         () in
 
-    (* source_view#misc#set_size_request ~height:578 (); *)
     let _ = source_view#event#connect#focus_in
         ~callback:(fun _ -> navi_signal#call ENTER_CODE;false) in
 
@@ -155,12 +167,6 @@ let main () =
     notebook#goto_page i;
     pnt ("new file(name="^(match f with |None -> "" | Some s -> s)^",page="^(string_of_int i)^") is created\n");
     () in
-
-  let _ =
-    ( match fn with
-      | [] -> create_code_view None
-      | x -> List.map (fun a -> create_code_view (Some a)) x; ()
-    ) in
 
   let vpaned = GPack.paned `VERTICAL ~width:220 ~packing:(hpaned#pack2 ~resize:true ~shrink:true) () in
   let notebook_shell = GPack.notebook ~packing:(vpaned#pack2 ~resize:true ~shrink:true) () in
@@ -200,12 +206,12 @@ let main () =
              Implib.evo !st (Implib.ast_from_string line)
            with
            | Failure s -> pnt ("error:"^s^"\n");
-             buffer#insert ~iter:!iter "error:parsing error\n";
+             buffer#insert ~iter:!iter ("error:parsing error:"^s^"\n");
              !st );
         insert ("~~~~~~~~~~~~~~~~~~~\n"^(Imp.string_of_st (snd !st)));
         insert_arr ();
         mark_start:=buffer#create_mark !iter;
-
+        source_view#scroll_mark_onscreen (`MARK !mark_start);
         (pnt "enter pressed\n";
          shell_signal#call line;
          true)
@@ -240,24 +246,37 @@ let main () =
         ~indent_width:2 ~editable:false ~cursor_visible:false
         () in
     source_view#misc#modify_font_by_name font_name;
+    let iter_global = source_view#source_buffer#get_iter_at_char 0 in
+    global_signal#connect ~after:false
+      ~callback:(fun s ->
+          match s with `MODULE_IMPORT -> buffer#insert ~iter:iter_global (Imp.string_of_gl_st (fst !st)));
+    source_view in
+
+  let log_view =
+    let buffer = GSourceView2.source_buffer ~style_scheme:theme () in
+    let source_view = GSourceView2.source_view
+        ~source_buffer:buffer ~tab_width:2
+        ~indent_width:2 ~editable:false ~cursor_visible:false
+        () in
+    source_view#misc#modify_font_by_name font_name;
     let iter_log = source_view#source_buffer#get_iter_at_char 0 in
     log_signal#connect ~after:false
       ~callback:(fun s ->
-          match s with LOG s -> source_view#source_buffer#insert ~iter:iter_log s);
+          match s with
+          | LOG s ->
+            let end_mark = source_view#source_buffer#create_mark source_view#source_buffer#end_iter in
+            source_view#source_buffer#insert ~iter:iter_log s;
+            source_view#source_buffer#move_mark (`MARK end_mark) ~where:iter_log;
+            source_view#scroll_mark_onscreen (`MARK end_mark);
+            ()
+        );
     source_view in
 
-    let log_view =
-      let buffer = GSourceView2.source_buffer ~style_scheme:theme () in
-      let source_view = GSourceView2.source_view
-          ~source_buffer:buffer ~tab_width:2
-          ~indent_width:2 ~editable:false ~cursor_visible:false
-          () in
-      source_view#misc#modify_font_by_name font_name;
-      let iter_log = source_view#source_buffer#get_iter_at_char 0 in
-      log_signal#connect ~after:false
-        ~callback:(fun s ->
-            match s with LOG s -> source_view#source_buffer#insert ~iter:iter_log s);
-      source_view in
+  let _ =
+    ( match fn with
+      | [] -> create_code_view None
+      | x -> List.map (fun a -> create_code_view (Some a)) x; ()
+    ) in
 
   let _ =
     navi_signal#connect ~after:false
@@ -367,8 +386,10 @@ let main () =
   ignore @@ window#event#connect#delete
     ~callback:(fun _ -> quit ();true);
   vpaned#pack1 ~resize:true ~shrink:true (scrolled navi_view#coerce)#coerce;
+
   notebook_shell#append_page ~tab_label:(GMisc.label ~text:"shell" ())#coerce (scrolled shell_view#coerce)#coerce;
   notebook_shell#append_page ~tab_label:(GMisc.label ~text:"log" ())#coerce (scrolled log_view#coerce)#coerce;
+  notebook_shell#append_page ~tab_label:(GMisc.label ~text:"global" ())#coerce (scrolled global_view#coerce)#coerce;
 
   let file_factory = new GMenu.factory ~accel_path:"<EDITOR2 File>/////" file_menu ~accel_group
   in
@@ -439,15 +460,20 @@ let main () =
       ~tooltip_private:"Private"
       ~icon:(GMisc.image ~icon_size:`MENU ~stock:`MEDIA_PLAY ())#coerce
       ~callback:(fun _ ->
-          mdl :=
-            (try
-               let mdl1 =
-                 Implib.mdl_from_string @@
-                 (snd @@ current_view ())#source_buffer#get_text () in
-               pnt "module is imported\n";
-               ((snd mdl1) @ !mdl)
-             with _ -> pnt "error:module import:parsing error\n"; !mdl);
-          pnt "import button pressed\n") () in
+          ( try
+              pnt "import button pressed\n";
+              let mdl0 =
+                Implib.mdl_from_string @@
+                (snd @@ current_view ())#source_buffer#get_text ()
+              in
+              mdl := (snd mdl0) @ !mdl;
+              pnt "module is imported\n";
+              engine_signal#call `MODULE_IMPORT;
+              ()
+            with | Failure s -> pnt ("error:module import:"^s^"\n")
+                 | err -> pnt "error:module import:parsing error\n";raise err
+          )
+        ) () in
   toolbar#insert_space ();
 
   let _ = toolbar#insert_button
@@ -464,6 +490,14 @@ let main () =
       ~callback:quit () in
   toolbar#insert_space ();
 
+  engine_signal#connect
+    ~after:false
+    ~callback:(fun s ->
+        match s with
+        | `MODULE_IMPORT ->
+          st := (!mdl@(fst !st),snd !st);
+          global_signal#call `MODULE_IMPORT
+        | _ -> ());
   (*
 let engine () =
   in *)

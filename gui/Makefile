@@ -1,4 +1,4 @@
-gui: imp_lexer.mll imp_parser.mly imp.ml implib.ml util.ml gui.ml
+gui: imp_lexer.mll imp_parser.mly imp.ml implib.ml util.ml gui.ml ocaml.lang ocaml.lang
 	rm -f imp_parser.cmi imp_parser.mli imp.cmi
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
