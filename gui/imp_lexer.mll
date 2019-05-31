@@ -10,7 +10,7 @@ let ascii = ['a'-'z' 'A'-'Z' '0'-'9' '(' ')' '!' '"' '#'
   '$' '%' '&' '\'' '=' '~' '~' '|' '{' '}' '`' '@' '[' ']'
   '*' '+' ';' ':' '<' '>' ',' '.' '?' '/' '\\' '_' ]
 let alnum = digit | alpha
-let name = (alpha | "_")+ digit* (alpha|"_")*
+let name = alpha+  ("_" | digit | alpha)*
 let z = (('-' digit+)|digit+)
 rule token = parse
     | ";" (_)* "\n"  { (print_string "comment\n";flush stdout);token lexbuf }
@@ -20,7 +20,8 @@ rule token = parse
     | "¶" { DTA }
     | "\\"  { SLH }
     | "∀" ("type" | "z") { FOR_ALL }
-    | "?" (name as lxm) { VAL(lxm) }
+    | (name as lxm) "\'" { VAL(lxm) }
+    | name as lxm { NAM(lxm) }
     | "≃" (* ≃ *) { EQV }
     | "»" (* » *)  { ARR       }
     | "»" "."  (* ». *) { ARR_END }
@@ -53,7 +54,7 @@ rule token = parse
     | "‹" { L_OPN }
     | "›" { R_OPN }
     | "~" { CNN }
-    | "⅋" { SGN }
+    | "&" { SGN }
     | "(" { L_PRN }
     | ")" { R_PRN }
     | "=" { EQ }
@@ -63,14 +64,11 @@ rule token = parse
     | "◃" { PRJ }
     | "ℤ" { Z }
     | "ℕ" { N }
-    | "#" ((alpha+ alnum*)as lxm) { GL_NAM(lxm) }
     | "+" { PLS }
     | "*" { MLT }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "∠"  { AGL }
     | z as lxm  { INT (int_of_string lxm) }
-    | (alpha+ alnum*) as lxm { NAM (lxm) }
-
     | space+        { token lexbuf                         }
     | eof           { EOF               }
     | _             { raise (Error (Printf.sprintf

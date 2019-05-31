@@ -2,7 +2,7 @@ gui: imp_lexer.mll imp_parser.mly imp.ml implib.ml util.ml gui.ml
 	rm -f imp_parser.cmi imp_parser.mli imp.cmi
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
-	ocamlfind ocamlc -c -package batteries imp.ml 
+	ocamlfind ocamlc -c -package batteries imp.ml
 	ocamlc -c imp_parser.mli
 	ocamlc -c imp_lexer.ml
 	ocamlc -c imp_parser.ml

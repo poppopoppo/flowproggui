@@ -716,7 +716,7 @@ a b c ~+ {^ t0:?a,t1:?b } ⊢ hoefe ~+ {^ .. } ; alternate place , object
   ⁆^∇ ioj ∠[oij] ij
     ∐ ij ».
     ∐. ief » ij ».
-    ∇^» 
+    ∇^»
   ∐
   »
   ».
@@ -729,3 +729,19 @@ a b c ~+ {^ t0:?a,t1:?b } ⊢ hoefe ~+ {^ .. } ; alternate place , object
   ∏
   ∏
 ∆.
+
+& `: {}→sgn
+&' `: a∀ {}→psg◂a'
+snd `: a∀ {(psg◂a') a'}→{}
+cnt `: s∀ a∀ {(psg◂a') s' ({a' s'}→‹s'›)}→{}
+rcv `: r∀ s∀ a∀ {(psg◂a') s' ({a' s'}→(co_prd◂{s' r'}))}→r'
+(++) `: [`a:r]∀
+== (ref◂n') , (n' ‹^› sgn)
+== yes , y , Y , Yes
+== no , No , N , n
+
+» $ oief ? { $ $+3 }
+  |»
+  »
+  »
+»| `(x→y) :

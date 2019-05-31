@@ -42,7 +42,6 @@ type token =
   | LCE
   | IO
   | INT of (int)
-  | GL_NAM of (string)
   | FOR_ALL
   | EXP
   | EQV
@@ -75,6 +74,6 @@ exception Error
 
 (* The monolithic API. *)
 
-val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (unit)
+val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Imp.mdl)
 
 val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Imp.buffer)

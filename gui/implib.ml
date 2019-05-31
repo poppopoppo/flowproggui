@@ -1,20 +1,14 @@
 type t = Imp.gl_st * Imp.st
+let string_of_t x =
+  "global state: "^(Imp.string_of_gl_st (fst x))^
+  "\nstate: "^(Imp.string_of_st (snd x))
 
 let evo ((g,st):t) (b:Imp.buffer) : t =
   match b with
   | Imp.Evo e ->
-        let st0 = Imp.evo_code g [] st e in
-        (g,st0)
-  | Imp.Glb_Etr ge ->
-    ( match ge with
-      | Imp.Etr l ->
-        let b = Imp.check_io g [] !l.code !l.src !l.dst in
-        if b
-        then ((ge::g),st)
-        else raise @@ Failure "error:Repl.evo: type unmatced"
-      | _ -> (ge::g,st)
-    )
-  | _ -> raise @@ Failure "Implib:evo"
+    let st0 = Imp.evo_code g [] st e in
+    (g,st0)
+  | _ -> raise @@ Failure ("Implib:evo:")
 let init_st = ([],(Imp.Typ_Rcd [],Imp.Tkn_Rcd []))
 
 let ast_from_string s =
@@ -35,19 +29,22 @@ type ide =
   string list * (* file names for loading *)
   t (* state *)
 
-
-let load_from_file (s:string) : ide =
+exception Load
+let load_from_file (s:string) : t =
   try
     if Filename.check_suffix s "st"
     then
-      let ide_st = Util.open_in_close s (fun c -> Marshal.from_channel c) in
-      Util.pnt true (s^" is loaded");ide_st
+      let st:t = Util.open_in_close s (fun c -> Marshal.from_channel c) in
+      Util.pnt true ((string_of_t st)^" is loaded from "^s^"\n");st
     else raise @@ Failure ("error:load: can't load "^s^". file prefix need to be st")
-  with | Failure err -> raise @@ Failure err
-       | err -> Util.pnt true "error:load\n"; raise err
-let save_to_file (st:ide) s =
+  with | Load -> Util.pnt true ("error:Load:load_from_file:"^"loading "^s^" is failed\n"); raise Load
+       | Failure err -> Util.pnt true (err^"\n"); raise @@ Failure err
+       | Util.OPEN_IN  -> Util.pnt true "open_in\n"; raise @@ Failure "open_in"
+       | err -> Util.pnt true ("error:load_from_file:"^"loading "^s^" is failed\n"); raise err
+let save_to_file (st:t) s =
   if Filename.check_suffix s "st"
   then
-    let _ = Util.open_out_close s (fun c -> Marshal.to_channel c st) in
-    Util.pnt true (s^" is saved")
+    let _ =
+      Util.open_out_close s (fun c -> Marshal.to_channel c st []) in
+    Util.pnt true ((string_of_t st)^" is saved to "^s^"\n")
   else raise @@ Failure "error:load: can't save to s. file prefix need to be st"

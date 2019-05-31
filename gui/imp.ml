@@ -74,11 +74,9 @@ and io =
   | IO_Code of { gl_st:gl_st; roots:st list; code : code }
   | IO_Inj of { inj_name:(coprd ref); i:int }
   | IO_Cho of { cho_name:(prd ref); i:int }
-
+type mdl = string * (glb_etr list)
 type buffer =
   | Evo of code
-  | Glb_Etr of glb_etr
-  | Glb_mode_Stt of glb_mode_stt
   | End
 and glb_mode_stt = { name : string; src : typ; dst : typ }
 exception End

@@ -10,7 +10,7 @@
 (*
 %token EOP PRD TEST PRD_STT R_APP STT END_PRD CLQ STT
 *)
-%token <string> NAM GL_NAM MCR VAL
+%token <string> NAM MCR VAL
 %token <int> INT ROT
 %token PLS MLT
 %token EOF
@@ -25,39 +25,35 @@
 %start buffer
 %start file
 
-%type <unit> file
+%type <Imp.mdl> file
 %type <Imp.buffer> buffer
 %type <Imp.plc> plc plc_top
 %type <Imp.plc list> plcs
 %%
 buffer:
   | vh_frm_top EOF { Imp.Evo $1 }
-  | glb_etr EOF { Imp.Glb_Etr $1 }
-  | def_plc EOF { $1 }
   | ARR_END EOF { Imp.End }
   ;
 file:
-  | def_mdl {}
+  | def_mdl { $1 }
   ;
 def_mdl:
-  | MDL NAM DEF gl_etr_lst MDL_END {}
+  | MDL NAM DEF gl_etr_lst MDL_END { ($2,$4) }
   ;
 gl_etr_lst:
-  |   {}
-  | mdl_etr gl_etr_lst  {}
+  |   { [] }
+  | mdl_etr gl_etr_lst  { $1::$2 }
   ;
 mdl_etr:
-  | glb_etr {}
-  | def_plc {}
+  | glb_etr { $1 }
+  | def_plc { $1 }
   ;
 def_plc:
   | DTA def_name EQV def_coprd  {
-      Imp.Glb_Etr
       (Def_CoPrd (ref
         { coprd_name=(snd $2); coprd_cns=$4 }))
       }
   | DTA def_name EQV def_prd  {
-      Imp.Glb_Etr
         (Def_Prd (ref
         { prd_name=(snd $2); prd_cns=$4 }))
       }
@@ -215,7 +211,7 @@ exp:
 const:
   | INT { Imp.Opr_Z $1 }
   | ROT { Imp.Root $1 }
-  | GL_NAM  { Imp.Gl_call $1 }
+  | NAM  { Imp.Gl_call $1 }
   ;
 (*
 cprd:
