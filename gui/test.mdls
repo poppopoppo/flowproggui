@@ -14,15 +14,18 @@ a ‹^› b ; optional vector
 a |^| b ; vector 
 {^ t:b , s:x , a':z }
 
-{^ ft:d , se:z <}  
+{^ ft:d , se:z <}   
 ∐[a' b' c'] 
-?∐[2]◂{} ; ∐[a0' a1' {}] 
+?∐[2]◂{} ; ∐[a0' a1' {}]  
+
+
+"test" + + + * a∀ 
 
 ¶ @ stack◂a' ≃ 
 	∏ ! ‹a' stack◂a'› : pop 
 	∏ ! a'→(stack◂a') : push
 
-§ @ stack : ! list◂a' ⊢ ! stack◂a' ≒ 
+§ stack : ! list◂a' ⊢ ! stack◂a' ≒ 
 	! $ .∆ 
 		∏ ! ∠[$] .∇ 
 			∐ ! ‹› 
@@ -34,8 +37,8 @@ a |^| b ; vector
 				».
 	∆.   
 	
-[`t:x']∀ \a[x']→\a[x']
-
+[`t:x]∀ \a[x]→\a[x]
+ 
 ºººº°°
 a + b// 
 

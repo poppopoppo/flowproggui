@@ -91,7 +91,7 @@ License along with this library; if not, write to the Free Software Foundation, 
           </include>
         </context>
 
-        <context id="string" style-ref="identifier">
+        <context id="string" style-ref="number">
           <start>"</start>
           <end>"</end>
           <include>
@@ -102,11 +102,11 @@ License along with this library; if not, write to the Free Software Foundation, 
           <match>('\%{char-esc}')|('[^\\']')</match>
         </context>
 
-        <context id="forall" style-ref="string">
+        <context id="forall" style-ref="type">
           <match>\%{word}&#x2200;</match>
         </context>
 
-        <context id="meta-word" style-ref="string">
+        <context id="meta-word" style-ref="type">
           <match>\%{word}'</match>
         </context>
 
@@ -114,7 +114,7 @@ License along with this library; if not, write to the Free Software Foundation, 
           <match>\%{word}</match>
         </context>
 
-        <context id="decimal" style-ref="identifier">
+        <context id="decimal">
           <match>[-]?[0-9][0-9_]*[lLn]?</match>
         </context>
 
@@ -134,35 +134,35 @@ License along with this library; if not, write to the Free Software Foundation, 
           <match>(\^|&#x00A6;|&#x00B6;|&#x00AB;|&#x2045;|&#x2046;|&#x2206;|&#x2207;|&#x220F;|&#x2210;|&#x22A2;)</match>
         </context>
 
-        <context id="angle" style-ref="operator">
+        <context id="angle" style-ref="type">
           <match>&#x2220;</match>
         </context>
 
-        <context id="projection" style-ref="operator">
+        <context id="projection" style-ref="type">
           <match>&#x25C3;</match>
         </context>
 
-        <context id="application" style-ref="operator">
+        <context id="application" style-ref="type">
           <match>&#x25C2;</match>
         </context>
 
-        <context id="exp-special" style-ref="operator">
-          <match>(\!|\:|\`|\{|\}|\[|\])</match>
+        <context id="exp-special" style-ref="type">
+          <match>(\!|\:|\`|\_|\?)</match>
         </context>
 
-        <context id="root-symbol" style-ref="function">
-          <match>(\$|\@|\?)</match>
+        <context id="root-symbol" style-ref="identifier">
+          <match>(\$|\@)</match>
         </context>
 
-        <context id="exp-cmp" style-ref="number">
+        <context id="exp-cmp">
           <match>(\=|\+|\*|\-|&#x22CE;|&#x22CF;)</match>
         </context>
 
-        <context id="type-cmp" style-ref="string">
+        <context id="type-cmp">
           <match>(&#x229E;|&#x27E6;|&#x27E7;|&#x2039;|&#x203A;|&#x2192;)</match>
         </context>
 
-        <context id="type-atom" style-ref="type">
+        <context id="type-atom">
           <match>(&#x2124;|&#x2115;|&#x0026;|&#x2299;)</match>
         </context>
 

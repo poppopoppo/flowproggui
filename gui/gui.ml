@@ -3,8 +3,8 @@ open GdkKeysyms
 open StdLabels
 
 let font_name = "DejaVu Sans Mono 12"
-let theme_name = "tomorrownightbright" (* "cobalt" *)
-let lang_file = "test"
+let theme_name = "test_style" (* "cobalt" *)
+let lang_file = "flow"
 let space_mark = false
 
 let file_dialog ~title ~callback filename =
@@ -178,6 +178,8 @@ let main () =
 
   let  shell_view =
     let buffer = GSourceView2.source_buffer  ~style_scheme:theme () in
+    buffer#set_language lang;
+    buffer#set_highlight_syntax true;
     let source_view =
       GSourceView2.source_view
         ~source_buffer:buffer
@@ -190,6 +192,8 @@ let main () =
         (* ~smart_home_end:true *)
         ~width:300
         () in
+
+
     let (_,b1) = buffer#bounds in
     let iter = ref b1 in
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
