@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
-<language id="test" _name="Objective Caml" version="1.0" _section="Sources" mimetypes="text/x-ocaml" line-comment-start=";">
+<language id="mylang" _name="Objective Caml" version="1.0" _section="Sources" mimetypes="text/x-ocaml" line-comment-start=";">
 
 	<escape-char>\</escape-char>
 
@@ -43,6 +43,14 @@
 		<end-regex>&quot;</end-regex>
 	</string>
 
+	<context id="arraylit">
+		<start>\[\|</start>
+		<end>\|\]</end>
+		<include>
+			<context ref="objective-caml"/>
+		</include>
+	</context>
+
 	<keyword-list _name="Boolean Constant" style="String" case-sensitive="FALSE">
 		<keyword>true</keyword>
 		<keyword>false</keyword>
@@ -57,7 +65,7 @@
 	</pattern-item>
 
 	<keyword-list _name="Test" style="Keyword" case-sensitive="TRUE">
-		<keyword>\§</keyword>
+		<keyword>&#x00B6;</keyword>
 		<keyword>hogehoge</keyword>
 	</keyword-list>
 
@@ -127,6 +135,38 @@
 
 	<pattern-item _name="Keywordsign" style="Keyword">
 		<regex>(\||-&gt;)</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign0" style="Keyword">
+		<regex>(&#x00B6;)</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign1" style="Data Type">
+		<regex>(&#x00A7;&#x00A7;)</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign2" style="Keyword">
+		<regex>(&#x00A7;|(\.&#x00BB;)|(&#x00BB;\.))</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign3" style="Keyword">
+		<regex>(&#x00A6;|&#x00AB;|&#x00BB;|&#x2039;|&#x203A;|&#x2045;)</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign4" style="Keyword">
+		<regex>(&#x2046;|&#x2192;|&#x0026;|&#x0040;|&#x220F;|&#x2210;)</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign5" style="Keyword">
+		<regex>(&#x2220;|&#x2243;|&#x2252;|&#x2200;|&#x2206;|&#x2207;|&#x22CE;|&#x22CF;)</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign6" style="Keyword">
+		<regex>(&#x22A2;|&#x25C2;|&#x25C3;|&#x27E6;|&#x27E7;|&#x2124;|\{|\}|\?|\^|\`|\!|\$|\=)</regex>
+	</pattern-item>
+
+	<pattern-item _name="Keywordsign7" style="Keyword">
+		<regex>(&#x00A7;)</regex>
 	</pattern-item>
 
 	<keyword-list _name="Types" style="Data Type" case-sensitive="TRUE">

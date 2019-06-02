@@ -3,7 +3,10 @@ open GdkKeysyms
 open StdLabels
 
 let font_name = "DejaVu Sans Mono 12"
-let theme_name = "cobalt"
+let theme_name = "tomorrownightbright" (* "cobalt" *)
+let lang_file = "test"
+let space_mark = false
+
 let file_dialog ~title ~callback filename =
   let sel =
     GWindow.file_selection ~title ~modal:true ?filename:filename () in
@@ -74,13 +77,22 @@ let get_ide () =
 
 let main () =
 
+  let mgr =
+    GSourceView2.source_style_scheme_manager ~default:true in
+  mgr#set_search_path ([Sys.getcwd ()]@mgr#search_path);
+  let theme =
+    (match mgr#style_scheme theme_name with
+     | Some x -> x
+     | None -> raise @@ Failure "not found style_scheme"
+    ) in
+
   let lang_mime_type = "text/x-ocaml" in
   let lang_mgr = GSourceView2.source_language_manager ~default:true in
-  lang_mgr#set_search_path [Sys.getcwd ()];
-  let lang = lang_mgr#language "test" in
+  lang_mgr#set_search_path ([Sys.getcwd ()]@lang_mgr#search_path);
+  let lang = lang_mgr#language lang_file in
   ( match lang with
     | None -> pnt "can't find language file\n"
-    | Some s -> pnt ("language ocaml.lang is loaded\n")
+    | Some s -> pnt ("language "^lang_file^" is loaded\n")
   );
 
   let (fn,st0) =
@@ -99,13 +111,6 @@ let main () =
 
   let _ = GMain.Main.init () in
 
-  let mgr =
-    GSourceView2.source_style_scheme_manager ~default:true in
-  let theme =
-    (match mgr#style_scheme theme_name with
-     | Some x -> x
-     | None -> raise @@ Failure "not found style_scheme"
-    ) in
 
   let window = GWindow.window ~title:"Paned Windows"
       ~width:800 ~height:500 () in
@@ -159,7 +164,7 @@ let main () =
     let _ = source_view#event#connect#focus_in
         ~callback:(fun _ -> navi_signal#call ENTER_CODE;false) in
 
-    source_view#set_draw_spaces [`SPACE; `NEWLINE; `TAB];
+    (if space_mark then source_view#set_draw_spaces [`SPACE; `NEWLINE; `TAB]);
     source_view#misc#modify_font_by_name font_name;
     let label = (GMisc.label ~text:name ()) in
     let i = notebook#append_page ~tab_label:label#coerce (scrolled source_view#coerce)#coerce in

@@ -4,7 +4,7 @@ let pnt (b:bool) s =
   else ()
 let _ = pnt true ""
 
-let rec string_of_list f p l =
+let rec string_of_list f p l = 
   match l with
   | [] -> ""
   | x::[] -> p x
