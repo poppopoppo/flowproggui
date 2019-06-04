@@ -27,8 +27,6 @@
 
 %type <Imp.mdl> file
 %type <Imp.buffer> buffer
-%type <Imp.plc> plc plc_top
-%type <Imp.plc list> plcs
 %%
 buffer:
   | vh_frm_top EOF { Imp.Evo $1 }
@@ -52,16 +50,14 @@ gl_etr_lst:
   ;
 mdl_etr:
   | glb_etr { $1 }
-  | def_plc { $1 }
+  | def_typ { $1 }
   ;
-def_plc:
+def_typ:
   | DTA def_name ISO def_coprd  {
-      (Def_CoPrd (ref
-        { coprd_name=(snd $2); coprd_cns=$4 }))
+      Def_CoPrd (snd $2,$4)
       }
   | DTA def_name ISO def_prd  {
-        (Def_Prd (ref
-        { prd_name=(snd $2); prd_cns=$4 }))
+        Def_Prd (snd $2,$4)
       }
   ;
 def_name:
@@ -69,32 +65,13 @@ def_name:
   | NAM APP VAL { ([$3],$1) }
   ;
 def_coprd:
-  | COPRD typ_top CLN name  { [($4,$2)] }
-  | COPRD typ_top CLN name def_coprd  { ($4,$2)::$5 }
+  | COPRD typ_top CLN NAM  { [($2,$4)] }
+  | COPRD typ_top CLN NAM def_coprd  { ($2,$4)::$5 }
   ;
 def_prd:
-  | PRD typ_top CLN name  { [($4,$2)] }
-  | PRD typ_top CLN name def_prd  { ($4,$2)::$5 }
+  | PRD typ_top CLN NAM  { [($2,$4)] }
+  | PRD typ_top CLN NAM def_prd  { ($2,$4)::$5 }
   ;
-plc_top:
-  | plcs { Imp.Plc_Rcd $1 }
-  | EXP plc { $2 }
-  ;
-plcs:
-  | { [] }
-  | plcs plc { $1@[$2] }
-  ;
-plc:
-  | plc APP plc { Imp.Plc_App ($1,$3) }
-  | SLH plc L_BLK exp R_BLK  { Imp.DepPlc ($4,$2) }
-  | Z { Imp.Plc_Z }
-  | N { Imp.Plc_Name "ℕ" }
-  | plc IO plc  { Imp.Plc_IO ($1,$3) }
-  | NAM FOR_ALL plc { Imp.Plc_For_All ($1,$3) }
-  | name { Imp.Plc_Val $1 }
-  | L_RCD plc_top R_RCD { $2 }
-  ;
-
 typ_top:
   | typs { Imp.Typ_Rcd $1 }
   | EXP typ { $2 }
@@ -105,7 +82,7 @@ typs:
   ;
 typ:
   | typ APP typ { Imp.Typ_App ($1,$3) }
-  | SLH typ L_BLK typ_const R_BLK { Imp.DepTyp ($4,$2) }
+  | SLH typ L_BLK exp R_BLK  { Imp.DepTyp ($4,$2) }
   | Z { Imp.Typ_Z }
   | N { Imp.Typ_Name "ℕ" }
   | typ IO typ  { Imp.Typ_IO ($1,$3) }
@@ -114,15 +91,11 @@ typ:
   | NAM { Imp.Typ_Name $1 }
   | L_RCD typ_top R_RCD { $2 }
   ;
-typ_const:
-  | INT { (Imp.Typ_Z,Imp.Tkn_Z $1) }
-name:
-  | NAM { $1 }
 
 glb_etr:
   | LCE NAM typ_def DEF ARR_STT vh_frm_code {
     let (src,dst) = $3 in
-    Imp.Etr (ref { gl_name=$2; src=src; dst=dst; code=$6 })
+    Imp.Etr ($2,src,dst,$6)
     }
   ;
 typ_def:
@@ -139,11 +112,11 @@ vh_frm_code:
         Util.pnt true ("parse:vh_frm_code"^(Imp.string_of_code $1));
         Imp.Seq ($1,t)
       | `CoPrd (x,_) ->
-        let c = Imp.Code_CoPrd{ pre=$1; post=x } in
+        let c = Imp.Code_CoPrd ($1,x) in
         Util.pnt true ("parser:vh_frm_code"^(Imp.string_of_code c));
         c
       | `Prd (x,_) ->
-        Imp.Seq ($1,Imp.Code_Prd { pre=x; post=(Id Plc_Top)})
+        Imp.Seq ($1,Imp.Code_Prd (x,(Id Typ_Top)))
       | `H_FRM c -> Imp.Seq ($1,c)
     }
   ;
@@ -191,7 +164,7 @@ h_frm_list:
   | vh_frm_code M_HLZ h_frm_list { [$1]@$3 }
   ;
 vh_frm_top:
-  | plc_ept exp_top { Imp.Opr { src=Plc_Top; dst=$1; opr=$2 } }
+  | typ_ept exp_top { Imp.Opr (Typ_Top,$1,$2) }
   ;
 exp_top:
   | exp_lst macro { Imp.Opr_Rcd $1 }
@@ -205,9 +178,9 @@ macros:
   | MCR DEF exp  { }
   | MCR DEF exp macros { }
   ;
-plc_ept:
-  |  { Imp.Plc_Top }
-  | ACT plc_top CLN { $2 }
+typ_ept:
+  |  { Imp.Typ_Top }
+  | ACT typ_top CLN { $2 }
   ;
 
 exp_lst:
@@ -230,7 +203,7 @@ exp:
   ;
 const:
   | INT { Imp.Opr_Z $1 }
-  | ROT { Imp.Root $1 }
+  | ROT { Imp.Root }
   | NAM  { Imp.Gl_call $1 }
-  | SGN { Imp.Opr_Sgn }
+  | SGN { Imp.Opr_Sgn_Ini }
   ;

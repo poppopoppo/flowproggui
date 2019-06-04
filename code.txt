@@ -750,3 +750,24 @@ rcv `: r∀ s∀ a∀ {(psg◂a') s' ({a' s'}→(co_prd◂{s' r'}))}→r'
 external input output
 コマンドとして実装
 rungui -f impl.mdls Impl
+
+
+§ fib ≒
+	.» r _ ⊵ $ ∠[$]
+		∐ !0 ».
+		∐ r _ ⊵ r ∠[$◃0 + -1]
+			∐ !1 ».
+			∐ ! (fib◂($◃0 + -1)) + (fib◂($◃0 + -2)) ».
+		∇
+	∇
+
+.» $ oije woi
+  |» $+3 $' $ $'+$
+  » $+$
+    |» $ hd◂$'
+    » ioj
+    ».
+  ∎^» oij
+  »
+  ».
+∎

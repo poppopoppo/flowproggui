@@ -8,7 +8,7 @@ let evo ((g,st):t) (b:Imp.buffer) : t =
      ( match b with
        | Imp.Evo e ->
          Util.pnt true (Imp.string_of_code e);
-         let st0 = Imp.evo_code g [] st e in
+         let st0 = Imp.evo_code g st e in
          (g,st0)
        | _ -> raise @@ Failure ("Implib:evo:")
      )
