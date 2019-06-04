@@ -13,7 +13,7 @@ let alnum = digit | alpha
 let name = alpha+  ("_" | digit | alpha)*
 let z = (('-' digit+)|digit+)
 rule token = parse
-    | ";" (_)* "\n"  { (print_string "comment\n";flush stdout);token lexbuf }
+    | ";" { Util.pnt true "start line comment\n"; line_comment lexbuf }
     | ".;" (_)* ";."  { token lexbuf }
     | "§"  { LCE }
     | "§§"  { MDL }
@@ -28,6 +28,7 @@ rule token = parse
     | "»" { ARR       }
     | "»."  { ARR_END }
     | ".»" { ARR_STT }
+    | "|»" { IO_STT }
     | "⊢" { SRC }
     | "⋎" { EMT }
     | "⋏" { CNT }
@@ -77,3 +78,6 @@ rule token = parse
     | _             { raise (Error (Printf.sprintf
                       "At offset %d: unexpected character.\n"
                       (Lexing.lexeme_start lexbuf))) }
+and line_comment = parse
+  | "\n"  { Util.pnt true "end line comment\n"; token lexbuf }
+  | _ { line_comment lexbuf }

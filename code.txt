@@ -745,3 +745,8 @@ rcv `: r∀ s∀ a∀ {(psg◂a') s' ({a' s'}→(co_prd◂{s' r'}))}→r'
   »
   »
 »| `(x→y) :
+
+
+external input output
+コマンドとして実装
+rungui -f impl.mdls Impl

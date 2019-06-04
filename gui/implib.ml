@@ -4,11 +4,18 @@ let string_of_t x =
   "\nstate: "^(Imp.string_of_st (snd x))
 
 let evo ((g,st):t) (b:Imp.buffer) : t =
-  match b with
-  | Imp.Evo e ->
-    let st0 = Imp.evo_code g [] st e in
-    (g,st0)
-  | _ -> raise @@ Failure ("Implib:evo:")
+  (try
+     ( match b with
+       | Imp.Evo e ->
+         Util.pnt true (Imp.string_of_code e);
+         let st0 = Imp.evo_code g [] st e in
+         (g,st0)
+       | _ -> raise @@ Failure ("Implib:evo:")
+     )
+   with Stack_overflow ->
+     (Util.pnt true "Implib.evo:Stack_overflow\n");
+     raise @@ Failure "Implib:evo:Stack_overflow" )
+
 let init_st = ([],(Imp.Typ_Rcd [],Imp.Tkn_Rcd []))
 
 let ast_from_string s =

@@ -42,9 +42,11 @@ type token =
   | L_BLK
   | LCE
   | ISO
+  | IO_STT
   | IO
   | INT of (int)
   | IN
+  | HOGE
   | FOR_ALL
   | EXP
   | EQV
@@ -56,7 +58,6 @@ type token =
   | EMT
   | DTA
   | DEF
-  | CO_PRD_STT
   | CO_PRD
   | COPRD_END
   | COPRD
