@@ -15,9 +15,10 @@
 		∇
 	∇ 
 
+
 ¶ bit ≃ ∐ : yes ∐ : no 
 § foo0 ≒ .» !290 ». 
-¶ m◂a' ≃ ∐ a' : m 
+¶ m◂a' ≃ ∐ ! a' : m 
 ¶ list◂a' ≃ ∐ : nil ∐ a' list◂a' : cns 
 ¶ option◂a' ≃ ∐ : none ∐ a' : some 
 

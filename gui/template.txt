@@ -1,0 +1,12 @@
+( match _ with
+| Tkn_Exn s0 ->
+| Tkn_Z z0 ->
+| Tkn_Rcd l0 ->
+| Tkn_CoPrd l0 ->
+| Tkn_Prd (st0,l0) ->
+| Tkn_Null ->
+| Tkn_Btm ->
+| Tkn_IO io0 ->
+| Tkn_Agl v0 ->
+| Tkn_Sgn i0 ->
+)

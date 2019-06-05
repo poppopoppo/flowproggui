@@ -1,22 +1,22 @@
 %{
-  open Imp
+  open Types
   open Imp_parser_header
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV ISO DTA STT_CLN CNT EMT ARG IN OUT
-%token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT PRD PRD_STT END_PRD IO_STT
-%token L_PRN R_PRN  APP R_APP COPRD_END PRD_END HOGE
-%token TEST ACT SPL  FOR_ALL MDL CLS_NAM MDL_END L_BLK R_BLK  COPRD SEQ EOP EQ
-%token IO CLS PRJ  N  SLH L_HLZ R_HLZ M_HLZ R_HLZ_TAIL L_OPN R_OPN L_LST R_LST SGN
+%token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT PRD END_PRD IO_STT
+%token L_PRN R_PRN  APP R_APP COPRD_END PRD_END MNS APP_EVL PLS_EVL MLT_EVL CST
+%token ACT SPL FOR_ALL MDL CLS_NAM MDL_END L_BLK R_BLK  COPRD SEQ EOP EQ
+%token IO CLS PRJ N SLH L_HLZ R_HLZ M_HLZ R_HLZ_TAIL L_OPN R_OPN L_LST R_LST SGN
 
-%token <string> NAM MCR VAL
-%token <int> INT ROT
+%token <string> NAM MCR VAL STG
+%token <int> INT ROT SLF
 %token PLS MLT
 %token EOF
 
 %left FOR_ALL
 %left EQ
-%left PLS
+%left PLS MNS
 %left MLT
 %left APP
 %left PRJ
@@ -25,12 +25,12 @@
 %start buffer
 %start file
 
-%type <Imp.mdl> file
-%type <Imp.buffer> buffer
+%type <Types.mdl> file
+%type <Types.buffer> buffer
 %%
 buffer:
-  | vh_frm_top EOF { Imp.Evo $1 }
-  | ARR_END EOF { Imp.End }
+  | vh_frm_top EOF { Evo $1 }
+  | ARR_END EOF { End }
   ;
 file:
   | def_mdl {
@@ -39,7 +39,7 @@ file:
   ;
 def_mdl:
   | MDL NAM DEF gl_etr_lst MDL_END {
-    Util.pnt flg ("parse:def_mdl:"^(Util.string_of_list "\n" Imp.string_of_glb_etr $4)^"_n");
+    Util.pnt flg ("parse:def_mdl:"^(Util.string_of_list "\n" Print.string_of_glb_etr $4)^"_n");
     ($2,$4) }
   ;
 gl_etr_lst:
@@ -73,7 +73,7 @@ def_prd:
   | PRD typ_top CLN NAM def_prd  { ($2,$4)::$5 }
   ;
 typ_top:
-  | typs { Imp.Typ_Rcd $1 }
+  | typs { Typ_Rcd $1 }
   | EXP typ { $2 }
   ;
 typs:
@@ -81,25 +81,25 @@ typs:
   | typs typ { $1@[$2] }
   ;
 typ:
-  | typ APP typ { Imp.Typ_App ($1,$3) }
-  | SLH typ L_BLK exp R_BLK  { Imp.DepTyp ($4,$2) }
-  | Z { Imp.Typ_Z }
-  | N { Imp.Typ_Name "ℕ" }
-  | typ IO typ  { Imp.Typ_IO ($1,$3) }
-  | NAM FOR_ALL typ { Imp.Typ_For_All ($1,$3) }
-  | VAL { Imp.Typ_Val $1 }
-  | NAM { Imp.Typ_Name $1 }
+  | typ APP typ { Typ_App ($1,$3) }
+  | SLH typ L_BLK exp R_BLK  { DepTyp ($4,$2) }
+  | Z { Typ_Z }
+  | N { Typ_Name "ℕ" }
+  | typ IO typ  { Typ_IO ($1,$3) }
+  | NAM FOR_ALL typ { Typ_For_All ($1,$3) }
+  | VAL { Typ_Val $1 }
+  | NAM { Typ_Name $1 }
   | L_RCD typ_top R_RCD { $2 }
   ;
 
 glb_etr:
   | LCE NAM typ_def DEF ARR_STT vh_frm_code {
     let (src,dst) = $3 in
-    Imp.Etr ($2,src,dst,$6)
+    Etr ($2,src,dst,$6)
     }
   ;
 typ_def:
-  | { (Imp.Typ_Top,Imp.Typ_Top) }
+  | { (Typ_Top,Typ_Top) }
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
 
@@ -109,15 +109,15 @@ vh_frm_code:
       match $2 with
       | `None -> $1
       | `Some t ->
-        Util.pnt true ("parse:vh_frm_code"^(Imp.string_of_code $1));
-        Imp.Seq ($1,t)
+        Util.pnt true ("parse:vh_frm_code"^(Print.string_of_code 0 $1));
+        Seq ($1,t)
       | `CoPrd (x,_) ->
-        let c = Imp.Code_CoPrd ($1,x) in
-        Util.pnt true ("parser:vh_frm_code"^(Imp.string_of_code c));
+        let c = Code_CoPrd ($1,x) in
+        Util.pnt true ("parser:vh_frm_code"^(Print.string_of_code 0 c));
         c
       | `Prd (x,_) ->
-        Imp.Seq ($1,Imp.Code_Prd (x,(Id Typ_Top)))
-      | `H_FRM c -> Imp.Seq ($1,c)
+        Seq ($1,Code_Prd (x,(Id Typ_Top)))
+      | `H_FRM c -> Seq ($1,c)
     }
   ;
 tail_code:
@@ -164,10 +164,10 @@ h_frm_list:
   | vh_frm_code M_HLZ h_frm_list { [$1]@$3 }
   ;
 vh_frm_top:
-  | typ_ept exp_top { Imp.Opr (Typ_Top,$1,$2) }
+  | typ_ept exp_top { Opr ($1,$2) }
   ;
 exp_top:
-  | exp_lst macro { Imp.Opr_Rcd $1 }
+  | exp_lst macro { Opr_Rcd $1 }
   | EXP exp macro { $2 }
   ;
 macro:
@@ -179,7 +179,7 @@ macros:
   | MCR DEF exp macros { }
   ;
 typ_ept:
-  |  { Imp.Typ_Top }
+  |  { Typ_Top }
   | ACT typ_top CLN { $2 }
   ;
 
@@ -189,21 +189,31 @@ exp_lst:
   ;
 
 exp:
-  | AGL exp AGL_END { Imp.Agl $2 }
+  | AGL exp AGL_END { Agl $2 }
   | const { $1 }
-  | exp PLS exp { Imp.Plus ($1,$3) }
-  | exp MLT exp { Imp.Mult ($1,$3) }
-  | exp EQ exp { Imp.Eq ($1,$3) }
+  | exp PLS exp { Plus ($1,$3) }
+  | exp MLT exp { Mult ($1,$3) }
+  | exp MNS exp { Plus ($1,Minus $3) }
+  | L_PRN MNS exp R_PRN { Minus $3 }
+  | exp EQ exp { Eq ($1,$3) }
   | L_PRN exp R_PRN { $2 }
-  | exp APP exp { Imp.App ($1,$3) }
-  | exp PRJ exp { Imp.Prj ($1,$3) }
-  | L_RCD exp_lst R_RCD { Imp.Opr_Rcd $2 }
-(*  | ARR_STT lc_code { Imp.Opr_IO $2 } *)
-  | MCR { Imp.Gl_call ("%"^$1) }
+  | exp APP exp { App ($1,$3) }
+  | exp PRJ exp { Prj ($1,$3) }
+  | L_RCD exp_lst R_RCD { Opr_Rcd $2 }
+  | L_OPN R_OPN { App (Opr_Name "none",Opr_Rcd []) }
+  | L_OPN exp R_OPN { App (Opr_Name "some",$2) }
+  | L_LST lst_list R_LST { $2 }
+(*  | ARR_STT lc_code { Opr_IO $2 } *)
+  | MCR { Opr_Name ("%"^$1) }
+  ;
+lst_list:
+  | { App(Opr_Name "nil",Opr_Rcd []) }
+  | exp lst_list { App(Opr_Name "cns",Opr_Rcd [$1;$2]) }
   ;
 const:
-  | INT { Imp.Opr_Z $1 }
-  | ROT { Imp.Root }
-  | NAM  { Imp.Gl_call $1 }
-  | SGN { Imp.Opr_Sgn_Ini }
+  | INT { Opr_Z $1 }
+  | ROT { Root }
+  | NAM  { Opr_Name $1 }
+  | SGN { Opr_Sgn_Ini }
+  | STG { Opr_Stg $1 }
   ;

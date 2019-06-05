@@ -4,11 +4,12 @@
 type token = 
   | Z
   | VAL of (string)
-  | TEST
   | STT_CLN
+  | STG of (string)
   | SRC
   | SPL
   | SLH
+  | SLF of (int)
   | SGN
   | SEQ
   | R_RCD
@@ -21,15 +22,17 @@ type token =
   | R_APP
   | ROT of (int)
   | PRJ
-  | PRD_STT
   | PRD_END
   | PRD
+  | PLS_EVL
   | PLS
   | OUT
   | NAM of (string)
   | N
   | M_HLZ
   | M_CNN
+  | MNS
+  | MLT_EVL
   | MLT
   | MDL_END
   | MDL
@@ -46,7 +49,6 @@ type token =
   | IO
   | INT of (int)
   | IN
-  | HOGE
   | FOR_ALL
   | EXP
   | EQV
@@ -58,6 +60,7 @@ type token =
   | EMT
   | DTA
   | DEF
+  | CST
   | CO_PRD
   | COPRD_END
   | COPRD
@@ -70,6 +73,7 @@ type token =
   | ARR_END
   | ARR
   | ARG
+  | APP_EVL
   | APP
   | AGL_END
   | AGL
@@ -81,6 +85,6 @@ exception Error
 
 (* The monolithic API. *)
 
-val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Imp.mdl)
+val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Types.mdl)
 
-val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Imp.buffer)
+val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Types.buffer)

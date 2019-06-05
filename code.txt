@@ -771,3 +771,5 @@ rungui -f impl.mdls Impl
   »
   ».
 ∎
+
+¶ t◂{a' b'} == {a' a' b' b'}

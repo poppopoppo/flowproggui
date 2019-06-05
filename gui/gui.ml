@@ -88,7 +88,7 @@ let mdl = ref []
 let init_ide = ([],Implib.init_st)
 let get_ide () =
   ([],st)
-
+let save_files = ref []
 let main () =
 
   let mgr =
@@ -100,13 +100,12 @@ let main () =
      | None -> raise @@ Failure "not found style_scheme"
     ) in
 
-  let lang_mime_type = "text/x-ocaml" in
   let lang_mgr = GSourceView2.source_language_manager ~default:true in
   lang_mgr#set_search_path ([Sys.getcwd ()]@lang_mgr#search_path);
   let lang = lang_mgr#language lang_file in
   ( match lang with
     | None -> pnt "can't find language file\n"
-    | Some s -> pnt ("language "^lang_file^" is loaded\n")
+    | Some _ -> pnt ("language "^lang_file^" is loaded\n")
   );
 
   let (src_ref,dst_ref) = (ref None,ref None) in
@@ -162,7 +161,7 @@ let main () =
   let edit_menu = factory#add_submenu "Edit" in
 
   let hpaned = GPack.paned `HORIZONTAL  ~packing:(vbox#pack ~expand:true) () in
-  let statusbar = GMisc.statusbar ~packing:vbox#pack () in
+  let _ = GMisc.statusbar ~packing:vbox#pack () in
 
   let notebook = GPack.notebook ~packing:(hpaned#pack1 ~resize:true ~shrink:true) () in
 
@@ -251,96 +250,93 @@ let main () =
         ~callback:(fun _ ->
             match !file_name with
             | None -> ()
-            | Some f ->
-              (Util.open_out_close
-                 "default.cfg" (fun c -> output_string c (","^f)));
-              ()
+            | Some f -> save_files:= f :: !save_files
           ) in
 
-    code_signal#connect ~after:false
-      ~callback:(fun s ->
-          match s with
-          | CODE_QUIT ->
-            pnt "close_page\n";
-            let b = buffer#modified in
-            if b
-            then
-              (source_view#destroy ();
-               notebook#remove_page notebook#current_page)
-            else
-              let file_name =
-                match !file_name with
-                | Some f -> Printf.sprintf "File %S" f
-                | None -> "Current buffer"
-              in
-              let dialog = GWindow.dialog ~title:"Close" () in
-              let txt =
-                let frame = GBin.frame ~border_width:40 ~shadow_type:`NONE () in
-                frame#add
-                  (GMisc.label
-                     ~markup:(file_name^" contains unsaved changes. What to do ?") ()
-                   :> GObj.widget);
-                (frame :> GObj.widget)
-              in
-              dialog#vbox#add txt;
-              dialog#add_button_stock `CLOSE `CLOSE;
-              dialog#add_button_stock `CANCEL `CANCEL;
-              ignore @@ dialog#connect#response ~callback:(function
-                  | `CLOSE ->
-                    dialog#destroy ();
-                    source_view#destroy ();
-                    notebook#remove_page (notebook#current_page)
-                  | `CANCEL | `DELETE_EVENT -> dialog#destroy ());
-              dialog#show ()
-          | CODE_SAVE ->
-            ( match !file_name with
-              | None ->
-                (get_file_dialog ~title:"Save" file_name);
-                ( match !file_name with
-                  | None -> ()
-                  | Some file ->
-                    output (buffer#get_text ()) file;
-                    label#set_label (Filename.basename file);
-                    buffer#set_modified false;
-                )
-              | Some file ->
-                output (buffer#get_text ()) file;
-                buffer#set_modified false;
-            )
-          | CODE_SAVE_AS ->
-            get_file_dialog ~title:"Save" file_name;
-            ( match !file_name with
-              | None -> ()
-              | Some file ->
-                output (buffer#get_text ()) file;
-                label#set_label (Filename.basename file);
-                buffer#set_modified false;
-            )
-          | CODE_IMPORT ->
-            ( try
-                pnt "import button pressed\n";
-                let text = buffer#get_text () in
-                let mdl0 = Implib.mdl_from_string text in
-                mdl := !mdl @ (snd mdl0);
-                Util.pnt dbg text;
-                Util.pnt dbg (Imp.string_of_mdl mdl0);
-                pnt "module is imported\n";
-                engine_signal#call `MODULE_IMPORT;
-                ()
-              with | Failure s -> pnt ("error:module import:"^s^"\n")
-                   | err -> pnt "error:module import:parsing error\n";raise err
-            )
-          | CODE_COPY ->
-            buffer#copy_clipboard GMain.clipboard
-          | CODE_CUT ->
-            GtkSignal.emit_unit
-              source_view#as_view ~sgn:GtkText.View.S.cut_clipboard
-          | CODE_PASTE ->
-            GtkSignal.emit_unit
-              source_view#as_view ~sgn:GtkText.View.S.paste_clipboard
-          | CODE_READ_ONLY b ->
-            source_view#set_editable (not b)
-        );
+    let _ = code_signal#connect ~after:false
+        ~callback:(fun s ->
+            match s with
+            | CODE_QUIT ->
+              pnt "close_page\n";
+              let b = buffer#modified in
+              if b
+              then
+                (source_view#destroy ();
+                 notebook#remove_page notebook#current_page)
+              else
+                let file_name =
+                  match !file_name with
+                  | Some f -> Printf.sprintf "File %S" f
+                  | None -> "Current buffer"
+                in
+                let dialog = GWindow.dialog ~title:"Close" () in
+                let txt =
+                  let frame = GBin.frame ~border_width:40 ~shadow_type:`NONE () in
+                  frame#add
+                    (GMisc.label
+                       ~markup:(file_name^" contains unsaved changes. What to do ?") ()
+                     :> GObj.widget);
+                  (frame :> GObj.widget)
+                in
+                dialog#vbox#add txt;
+                dialog#add_button_stock `CLOSE `CLOSE;
+                dialog#add_button_stock `CANCEL `CANCEL;
+                ignore @@ dialog#connect#response ~callback:(function
+                    | `CLOSE ->
+                      dialog#destroy ();
+                      source_view#destroy ();
+                      notebook#remove_page (notebook#current_page)
+                    | `CANCEL | `DELETE_EVENT -> dialog#destroy ());
+                dialog#show ()
+            | CODE_SAVE ->
+              ( match !file_name with
+                | None ->
+                  (get_file_dialog ~title:"Save" file_name);
+                  ( match !file_name with
+                    | None -> ()
+                    | Some file ->
+                      output (buffer#get_text ()) file;
+                      label#set_label (Filename.basename file);
+                      buffer#set_modified false;
+                  )
+                | Some file ->
+                  output (buffer#get_text ()) file;
+                  buffer#set_modified false;
+              )
+            | CODE_SAVE_AS ->
+              get_file_dialog ~title:"Save" file_name;
+              ( match !file_name with
+                | None -> ()
+                | Some file ->
+                  output (buffer#get_text ()) file;
+                  label#set_label (Filename.basename file);
+                  buffer#set_modified false;
+              )
+            | CODE_IMPORT ->
+              ( try
+                  pnt "import button pressed\n";
+                  let text = buffer#get_text () in
+                  let mdl0 = Implib.mdl_from_string text in
+                  mdl := !mdl @ (snd mdl0);
+                  Util.pnt dbg text;
+                  Util.pnt dbg (Print.string_of_mdl mdl0);
+                  pnt "module is imported\n";
+                  engine_signal#call `MODULE_IMPORT;
+                  ()
+                with | Failure s -> pnt ("error:module import:"^s^"\n")
+                     | err -> pnt "error:module import:parsing error\n";raise err
+              )
+            | CODE_COPY ->
+              buffer#copy_clipboard GMain.clipboard
+            | CODE_CUT ->
+              GtkSignal.emit_unit
+                source_view#as_view ~sgn:GtkText.View.S.cut_clipboard
+            | CODE_PASTE ->
+              GtkSignal.emit_unit
+                source_view#as_view ~sgn:GtkText.View.S.paste_clipboard
+            | CODE_READ_ONLY b ->
+              source_view#set_editable (not b)
+          ) in
 
     (if space_mark then source_view#set_draw_spaces [`SPACE; `NEWLINE; `TAB]);
     source_view#misc#modify_font_by_name font_name;
@@ -375,7 +371,7 @@ let main () =
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let insert s = buffer#insert ~iter:!iter s in
     let insert_arr () = buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» " in
-    insert (Imp.string_of_st (snd !st));
+    insert (Print.string_of_st (let (_,st,_) = !st in st));
     insert_arr ();
     let mark_start = ref (buffer#create_mark !iter) in
     let key_press k =
@@ -388,12 +384,11 @@ let main () =
         let line = (buffer#get_text ~start:(buffer#get_iter_at_mark (`MARK !mark_start)) ~stop:!iter ()) in
         st:=
           (try
-             let ast =
-               (try
-                  (Implib.ast_from_string line)
-                with
-                | Failure e -> raise @@ Failure ("error:ast_from_string:"^e)
-                | Imp_lexer.Error e -> raise @@ Failure ("error:asf_from_string:"^e)) in
+             let ast = (Implib.ast_from_string line) in
+             let ast = ( match ast with
+                 | Implib.Ast_Some ast -> ast
+                 | Implib.Ast_Fail e -> raise @@ Failure ("error:ast_from_string:"^e)
+               ) in
              (try
                 Implib.evo !st ast
               with Failure e -> raise @@ Failure ("error:Implib.evo:"^e))
@@ -401,7 +396,7 @@ let main () =
            | Failure s -> pnt ("error:"^s^"\n");
              buffer#insert ~iter:!iter ("error:parsing error:"^s^"\n");
              !st );
-        insert ("~~~~~~~~~~~~~~~~~~~\n"^(Imp.string_of_st (snd !st)));
+        insert ("~~~~~~~~~~~~~~~~~~~\n"^(Print.string_of_st (let (_,st,_) = !st in st)));
         insert_arr ();
         mark_start:=buffer#create_mark !iter;
         source_view#scroll_mark_onscreen (`MARK !mark_start);
@@ -430,7 +425,6 @@ let main () =
         () in
     source_view#misc#modify_font_by_name font_name;
     source_view in
-  let iter_shell = shell_view#source_buffer#get_iter_at_char 0 in
 
   let global_view =
     let buffer = GSourceView2.source_buffer ~style_scheme:theme () in
@@ -438,11 +432,16 @@ let main () =
         ~source_buffer:buffer ~tab_width:2
         ~indent_width:2 ~editable:false ~cursor_visible:false
         () in
+    buffer#set_language lang;
+    buffer#set_highlight_syntax true;
     source_view#misc#modify_font_by_name font_name;
     let iter_global = source_view#source_buffer#get_iter_at_char 0 in
-    global_signal#connect ~after:false
-      ~callback:(fun s ->
-          match s with `MODULE_IMPORT -> buffer#insert ~iter:iter_global (Imp.string_of_gl_st (fst !st)));
+    let _ = global_signal#connect ~after:false
+        ~callback:(fun s ->
+            match s with
+            | `MODULE_IMPORT ->
+              buffer#insert ~iter:iter_global (Print.string_of_gl_st (let (g,_,_) = !st in g))) in
+
     source_view in
 
   let log_view =
@@ -453,22 +452,24 @@ let main () =
         () in
     source_view#misc#modify_font_by_name font_name;
     let iter_log = source_view#source_buffer#get_iter_at_char 0 in
-    log_signal#connect ~after:false
-      ~callback:(fun s ->
-          match s with
-          | LOG s ->
-            let end_mark = source_view#source_buffer#create_mark source_view#source_buffer#end_iter in
-            source_view#source_buffer#insert ~iter:iter_log s;
-            source_view#source_buffer#move_mark (`MARK end_mark) ~where:iter_log;
-            source_view#scroll_mark_onscreen (`MARK end_mark);
-            ()
-        );
+    let _ = log_signal#connect ~after:false
+        ~callback:(fun s ->
+            match s with
+            | LOG s ->
+              let end_mark = source_view#source_buffer#create_mark source_view#source_buffer#end_iter in
+              source_view#source_buffer#insert ~iter:iter_log s;
+              source_view#source_buffer#move_mark (`MARK end_mark) ~where:iter_log;
+              source_view#scroll_mark_onscreen (`MARK end_mark);
+              ()
+          ) in
     source_view in
 
   let _ =
     ( match fn with
       | [] -> create_code_view None
-      | x -> List.map (fun a -> create_code_view (Some a)) x; ()
+      | x ->
+        let _ = List.map ~f:(fun a -> let _ = create_code_view (Some a) in ()) x in
+        ()
     ) in
 
   let _ =
@@ -489,7 +490,7 @@ let main () =
   let quit _ =
     pnt "quit\n";
     let flg = [] in
-    let (fn,st) = get_ide () in
+    let (_,st) = get_ide () in
 
     (try Sys.remove "default.cfg"
      with _ -> Util.pnt dbg "default.cfg is not exist\n"
@@ -528,9 +529,9 @@ let main () =
     ~callback:(fun _ -> quit ();true);
   vpaned#pack1 ~resize:true ~shrink:true (scrolled navi_view#coerce)#coerce;
 
-  notebook_shell#append_page ~tab_label:(GMisc.label ~text:"shell" ())#coerce (scrolled shell_view#coerce)#coerce;
-  notebook_shell#append_page ~tab_label:(GMisc.label ~text:"log" ())#coerce (scrolled log_view#coerce)#coerce;
-  notebook_shell#append_page ~tab_label:(GMisc.label ~text:"global" ())#coerce (scrolled global_view#coerce)#coerce;
+  let _ = notebook_shell#append_page ~tab_label:(GMisc.label ~text:"shell" ())#coerce (scrolled shell_view#coerce)#coerce; in
+  let _ = notebook_shell#append_page ~tab_label:(GMisc.label ~text:"log" ())#coerce (scrolled log_view#coerce)#coerce in
+  let _ = notebook_shell#append_page ~tab_label:(GMisc.label ~text:"global" ())#coerce (scrolled global_view#coerce)#coerce in
 
   let _ = toolbar#insert_button
       ~text:"New" ~tooltip:"create new file" ~tooltip_private:"Private"
@@ -577,20 +578,27 @@ let main () =
       ~callback:quit () in
   toolbar#insert_space ();
 
-  engine_signal#connect
-    ~after:false
-    ~callback:(fun s ->
-        match s with
-        | `MODULE_IMPORT ->
-          st := (!mdl@(fst !st),snd !st);
-          global_signal#call `MODULE_IMPORT
-        | `OPEN_FILE ->  open_file ()
-        | _ -> ());
+  let _ = engine_signal#connect
+      ~after:false
+      ~callback:(fun s ->
+          match s with
+          | `MODULE_IMPORT ->
+            let (g,v,ir) = !st in
+            st := (!mdl@g,v,ir);
+            global_signal#call `MODULE_IMPORT
+          | `OPEN_FILE ->  open_file ()
+        ) in
   (*
 let engine () =
   in *)
 
   window#show ();
-  GMain.Main.main ()
+  GMain.Main.main ();
+  let _ =
+    (Util.open_out_close
+       "default.cfg"
+       (fun c -> output_string c (Util.string_of_list "," (fun x->x) !save_files))
+    ) in
+  ()
 
 let _ = main ()

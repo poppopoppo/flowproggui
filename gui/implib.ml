@@ -1,28 +1,35 @@
-type t = Imp.gl_st * Imp.st
-let string_of_t x =
-  "global state: "^(Imp.string_of_gl_st (fst x))^
-  "\nstate: "^(Imp.string_of_st (snd x))
-
-let evo ((g,st):t) (b:Imp.buffer) : t =
+type t = Types.gl_st * Types.st * (int ref)
+let string_of_t (g,t,ir) =
+  "global state: "^(Print.string_of_gl_st g)^
+  "\nstate: "^(Print.string_of_st t)^
+  "\nsgn-count: "^(string_of_int !ir)^"\n"
+let evo ((g,st,i):t) (b:Types.buffer) : t =
   (try
      ( match b with
-       | Imp.Evo e ->
-         Util.pnt true (Imp.string_of_code e);
-         let st0 = Imp.evo_code g st e in
-         (g,st0)
+       | Types.Evo e ->
+         Util.pnt true (Print.string_of_code 0 e);
+         let st0 = Imp.evo_code g st i e in
+         (g,st0,i)
        | _ -> raise @@ Failure ("Implib:evo:")
      )
    with Stack_overflow ->
      (Util.pnt true "Implib.evo:Stack_overflow\n");
      raise @@ Failure "Implib:evo:Stack_overflow" )
 
-let init_st = ([],(Imp.Typ_Rcd [],Imp.Tkn_Rcd []))
+let init_st = ([],(Types.Typ_Rcd [],Types.Tkn_Rcd []),ref 0)
+
+
+type ast_return =
+  | Ast_Some of Types.buffer
+  | Ast_Fail of string
 
 let ast_from_string s =
-  let lexbuf = Lexing.from_string s in
-  Imp_parser.buffer Imp_lexer.token lexbuf
+  ( try
+      let lexbuf = Lexing.from_string s in
+      Ast_Some (Imp_parser.buffer Imp_lexer.token lexbuf)
+    with _ -> Ast_Fail "" )
 
-let ast_from_file f =
+let ast_from_file (f:string) : Types.mdl =
   Util.open_in_close f
     (fun c ->
        let lexbuf = Lexing.from_channel c in

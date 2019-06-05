@@ -13,7 +13,8 @@ let alnum = digit | alpha
 let name = alpha+  ("_" | digit | alpha)*
 let z = (('-' digit+)|digit+)
 rule token = parse
-    | ";" { Util.pnt true "start line comment\n"; line_comment lexbuf }
+    | '\"' (([^ '\"']|"\\\"")* as lxm) '\"' { STG(lxm) }
+    | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
     | ".;" (_)* ";."  { token lexbuf }
     | "§"  { LCE }
     | "§§"  { MDL }
@@ -49,6 +50,7 @@ rule token = parse
     | "∆" { PRD_END }
     | "≒" { DEF }
     | "`" { ACT }
+    | "//"  { CST }
     | "{" { L_RCD }
     | "}" { R_RCD }
     | "⁅" { L_HLZ }
@@ -70,9 +72,14 @@ rule token = parse
     | "ℕ" { N }
     | "+" { PLS }
     | "*" { MLT }
+    | "-" { MNS }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
+    | "@" (("\'")* as lxm) { SLF (String.length lxm) }
+    | "◂\'" { APP_EVL }
+    | "+\'" { PLS_EVL }
+    | "*\'" { MLT_EVL }  
     | "∠"  { AGL }
-    | z as lxm  { INT (int_of_string lxm) }
+    | digit+ as lxm  { INT (int_of_string lxm) }
     | space+        { token lexbuf                         }
     | eof           { EOF               }
     | _             { raise (Error (Printf.sprintf
