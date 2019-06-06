@@ -15,23 +15,20 @@ let rec tkn_of_typ (p:typ) : tkn =
 
 let rec src_of_code (c:code) : typ =
   match c with
-  | Id p -> p
-  | Seq (s,_) -> src_of_code s
-  | Canon l -> Typ_Rcd (List.map src_of_code l)
-  | Opr (_,_) -> Typ_Top
-  | Code_CoPrd (c,_) -> src_of_code c
-  | Code_Prd (l,_) -> (try src_of_code (List.hd l) with _ -> raise @@ Failure "error:Imp.src_of_code")
-
+  | Rtn -> Typ_Btm
+  | Seq (_,_,_) -> Typ_Btm
+  | Canon (l,_) -> Typ_Rcd (List.map src_of_code l)
+  | Code_CoPrd (_,_,_,_) -> Typ_Btm
+  | Code_Prd (_,_,_,_) -> Typ_Btm
+  | Code_IO (_,_,_,_) -> Typ_Btm
 and dst_of_code (c:code) : typ =
   match c with
-  | Id p -> p
-  | Seq (_,d) -> dst_of_code d
-  | Canon l -> Typ_Rcd (List.map dst_of_code l)
-  | Opr (d,_) -> d
-  | Code_CoPrd (c,l) ->
-    (try dst_of_code (List.hd l)
-     with Failure s -> raise @@ Failure ("error:Imp.dst_of_code:"^(string_of_code 0 c)^s))
-  | Code_Prd (_,c) -> dst_of_code c
+  | Rtn -> Typ_Top
+  | Seq (_,_,_) -> Typ_Top
+  | Canon (_,_) -> Typ_Top
+  | Code_CoPrd (_,_,_,_) -> Typ_Top
+  | Code_Prd (_,_,_,_) -> Typ_Top
+  | Code_IO (_,_,_,_) ->Typ_Top
 
 let rec tkn_in_typ (g:gl_st) (p:typ) (t:tkn) : bool =
   match p with
@@ -71,27 +68,20 @@ let rec tkn_in_typ (g:gl_st) (p:typ) (t:tkn) : bool =
     ( match t with
       | Tkn_Exn _ -> true
       | Tkn_Btm  -> true
-      | Tkn_IO io ->
-        ( match io with
-          | IO_Code (g,c) ->
-            if (tkn_in_typ g (src_of_code c) s)
-            && (tkn_in_typ g (dst_of_code c) d)
+      | Tkn_IO_Inj i ->
+        ( match dst with
+          | Typ_CoPrd f ->
+            if src=(List.nth f i)
             then true else false
-          | IO_Inj i ->
-            ( match dst with
-              | Typ_CoPrd f ->
-                if src=(List.nth f i)
-                then true else false
-              | _ -> false )
-          | IO_Cho i ->
-            ( match src with
-              | Typ_Prd f ->
-                if dst=(List.nth f i)
-                then true else false
-              | _ -> false )
-          | IO_Sgn ->
-            src=(Typ_Rcd []) && dst=Typ_Sgn
-        )
+          | _ -> false )
+      | Tkn_IO_Cho i ->
+        ( match src with
+          | Typ_Prd f ->
+            if dst=(List.nth f i)
+            then true else false
+          | _ -> false )
+      | Tkn_IO_Sgn -> src=(Typ_Rcd []) && dst=Typ_Sgn
+      | Tkn_IO_Code ((t,o),c) -> false
       | _ -> false
     )
   | Typ_Btm -> false
@@ -166,21 +156,21 @@ let rec evo (g:gl_st) (s:st) (ir:int ref) (a:opr) : st =
     | Opr_Z z -> (Typ_Z,(Tkn_Z z))
     | App (f,x) ->
       ( match (evo g s ir f,evo g s ir x) with
-        | ((_,Tkn_IO (IO_Code (g,c))),(tx,x)) ->
+        | ((_,Tkn_IO_Code(t,o,c)),(tx,x)) ->
           (evo_code g (tx,x) ir c)
-        | ((_,Tkn_IO (IO_Inj i)),(_,x)) ->
+        | ((_,Tkn_IO_Inj i),(_,x)) ->
           (Typ_Top,
            Tkn_CoPrd
              (BatList.init
                 (i+1)
                 (fun j -> if j=i then x else Tkn_Null)))
-        | ((_,Tkn_IO (IO_Cho i)),(_,x)) ->
+        | ((_,Tkn_IO_Cho i),(_,x)) ->
           ( match x with
             | Tkn_Prd (s,l) ->
               (evo_code g s ir (List.nth l i))
             | _ -> raise @@ Failure "error:Flow.evo:App:Cho:type unmatched"
           )
-        | ((_,Tkn_IO (IO_Sgn)),(_,_)) ->
+        | ((_,Tkn_IO_Sgn),(_,_)) ->
           let p = !ir in
           ir:=(!ir + 1);
           (Typ_Sgn,Tkn_Sgn p)
@@ -218,7 +208,7 @@ let rec evo (g:gl_st) (s:st) (ir:int ref) (a:opr) : st =
           )
         | ((t0,v0),(t1,v1)) ->
           let (px,py) = (string_of_st (t0,v0),string_of_st (t1,v1)) in
-        let msg = "error:evo:Plus:type is unmatched\n"^px^" + "^py^"\n" in
+          let msg = "error:evo:Plus:type is unmatched\n"^px^" + "^py^"\n" in
           raise @@ Failure msg
       )
     | Mult (x,y) ->
@@ -263,7 +253,7 @@ let rec evo (g:gl_st) (s:st) (ir:int ref) (a:opr) : st =
                  ( match f with
                    | Etr (name,src,dst,code) ->
                      if n=name
-                     then Some (Typ_IO (src,dst),Tkn_IO (IO_Code(g,code)))
+                     then Some (Typ_IO (src,dst),Tkn_IO_Code((Typ_Btm,Tkn_Btm),code))
                      else None
                    | Def_Prd (name,l) ->
                      ( try
@@ -271,7 +261,7 @@ let rec evo (g:gl_st) (s:st) (ir:int ref) (a:opr) : st =
                            BatList.findi
                              (fun _ (_,c) -> if c=n then true else false)
                              l in
-                         Some (Typ_IO (Typ_Name name,t),Tkn_IO(IO_Cho i))
+                         Some (Typ_IO (Typ_Name name,t),Tkn_IO_Cho i)
                        with _ -> None )
                    | Def_CoPrd (name,l) ->
                      ( try
@@ -279,7 +269,7 @@ let rec evo (g:gl_st) (s:st) (ir:int ref) (a:opr) : st =
                            BatList.findi
                              (fun _ (_,c) -> if c=n then true else false)
                              l in
-                         Some (Typ_IO (t,Typ_Name name),Tkn_IO(IO_Inj i))
+                         Some (Typ_IO (t,Typ_Name name),Tkn_IO_Inj i)
                        with _ -> None )
                  )
               )
@@ -307,15 +297,16 @@ let rec evo (g:gl_st) (s:st) (ir:int ref) (a:opr) : st =
     | Opr_Stg s -> (Typ_Stg,Tkn_Stg s)
 
   )
-and evo_code (g:gl_st) (s:st) (ir:int ref) (a:code) :  st =
-  let (t,v) = s in
+and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
+  let (_,_) = s in
   ( match a with
-    | Id _ -> s
-    | Seq (f0,f1) ->
-      let s' = evo_code g s ir f0 in
-      let s'' = evo_code g s' ir f1 in
-      s''
-    | Canon l ->
+    | Rtn -> s
+    | Seq ((t,o,_),c) ->
+      let s' = evo g s ir o in
+      if (tkn_in_typ g t s')
+      then evo_code g s' ir c
+      else raise @@ Failure ("type unmatched:"^(string_of_typ 0 t)^"¬:"^(string_of_tkn 0 s')^"\n")
+    | Canon (l,c) ->
       ( match s with
         | (Typ_Rcd q,Tkn_Rcd v) ->
           let o = List.map (fun (x,y) -> (x,y))
@@ -325,16 +316,12 @@ and evo_code (g:gl_st) (s:st) (ir:int ref) (a:code) :  st =
               (fun (t,x) -> evo_code g x ir t)
               (List.combine l o) in
           let (tl,vl) = List.split y in
-          (Typ_Rcd tl,Tkn_Rcd vl)
+          let s' = (Typ_Rcd tl,Tkn_Rcd vl) in
+          evo_code g s' ir c
         | _ -> raise @@ Failure "error:evo_code:Canon"
       )
-    | Opr (d,o) ->
-      let (t1,v1) = evo g (t,v) ir o in
-      if (tkn_in_typ g d v1)
-      then (t1,v1)
-      else raise @@ Failure "error:evo_code:Opr:place theck error"
-    | Code_CoPrd (c,l) ->
-      let (t1,v1) = evo_code g s ir c in
+    | Code_CoPrd (_,o,l,_) ->
+      let (t1,v1) = evo g s ir o in
       let _ = Util.pnt dbg ("s'=("^(string_of_st (t1,v1))^")\n") in
       let a = BatList.mapi
           (fun i x ->
@@ -366,8 +353,15 @@ and evo_code (g:gl_st) (s:st) (ir:int ref) (a:code) :  st =
          | None -> (Typ_Btm,Tkn_Btm)
          | Some x -> x ) in
       sum
-    | Code_Prd _ -> raise @@ Failure "Imp:error:evo_code:Prd"
-
+    | Code_Prd (t,o,l,c) ->
+      let s0 = evo g s ir o in
+      let s1 = Tkn_Prd (s0,l) in
+      let s2 = evo_code g s1 ir c in
+      s2
+    | Code_IO (t,o,c0,c1) ->
+      let s0 = Tkn_IO_Code (t,o,c0) in
+      let s1 = evo_code g s0 ir c in
+      s1
   )
 
 let check_io (g : gl_st) (c : code) (src:typ) (dst:typ) : bool =

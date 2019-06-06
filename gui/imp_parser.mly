@@ -3,14 +3,16 @@
   open Imp_parser_header
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD CNN M_CNN Z ARR_END EQV ISO DTA STT_CLN CNT EMT ARG IN OUT
-%token LCE EXP CO_PRD END_CO_PRD AGL AGL_END ARR_STT PRD END_PRD IO_STT
-%token L_PRN R_PRN  APP R_APP COPRD_END PRD_END MNS APP_EVL PLS_EVL MLT_EVL CST
-%token ACT SPL FOR_ALL MDL CLS_NAM MDL_END L_BLK R_BLK  COPRD SEQ EOP EQ
-%token IO CLS PRJ N SLH L_HLZ R_HLZ M_HLZ R_HLZ_TAIL L_OPN R_OPN L_LST R_LST SGN
+%token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT IN OUT
+%token LCE EXP AGL PRD EOP
+%token L_PRN R_PRN  APP COPRD_END PRD_END MNS APP_EVL PLS_EVL MLT_EVL CST
+%token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
+%token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
+%token MCR VAL STG INT ROT SLF PLS MLT EOF CMM LET TYP_STR TYP_SGN TYP_VCT TYP_OPN_VCT
+%token DEQ FNT EXN
 
-%token <string> NAM MCR VAL STG
-%token <int> INT ROT SLF
+%token <string> NAM VAL STG
+%token <int> INT IN OUT ROT SLF
 %token PLS MLT
 %token EOF
 
@@ -19,7 +21,9 @@
 %left PLS MNS
 %left MLT
 %left APP
+%left CST
 %left PRJ
+%left TYP_VCT TYP_OPN_VCT
 %right IO
 
 %start buffer
@@ -29,47 +33,59 @@
 %type <Types.buffer> buffer
 %%
 buffer:
-  | vh_frm_top EOF { Evo $1 }
+  | vh_frm_top EOF { let (t,o) = $1 in Evo (Seq (t,o,Rtn 0)) }
   | ARR_END EOF { End }
   ;
 file:
-  | def_mdl {
-    Util.pnt flg "parse:file\n";
-    $1 }
+  | def_mdl { $1 }
   ;
 def_mdl:
-  | MDL NAM DEF gl_etr_lst MDL_END {
-    Util.pnt flg ("parse:def_mdl:"^(Util.string_of_list "\n" Print.string_of_glb_etr $4)^"_n");
-    ($2,$4) }
+  | MDL NAM APP args DEF gl_etr_lst MDL_END { ($2,$4,$6) }
+  ;
+args:
+  | arg { [$1] }
+  | arg CMM args { [$1]@$3 }
+arg:
+  | VAL { Arg_Val $1 }
+  | L_RCD arg_list R_RCD  { $2 }
+  ;
+arg_list:
+  | arg { [$1] }
+  | arg_list arg  { $1@[$2] }
   ;
 gl_etr_lst:
   |   { [] }
-  | mdl_etr gl_etr_lst  {
-    $1::$2
-    }
+  | mdl_etr gl_etr_lst  { $1::$2 }
   ;
 mdl_etr:
   | glb_etr { $1 }
   | def_typ { $1 }
   ;
 def_typ:
-  | DTA def_name ISO def_coprd  {
-      Def_CoPrd (snd $2,$4)
-      }
-  | DTA def_name ISO def_prd  {
-        Def_Prd (snd $2,$4)
-      }
+  | DTA def_typ_clique { Etr_Clq $2 }
+  | DTA def_typ_body { Etr $2 }
   ;
-def_name:
-  | NAM  { ([],$1) }
-  | NAM APP VAL { ([$3],$1) }
+def_typ_clique:
+  | SLF def_typ_body { [$2] }
+  | SLF def_typ_body def_typ_clique { [$2]@$3 }
+  ;
+def_typ_body:
+  | DTA NAM APP args { Def_Abs ($2,$4) }
+  | DTA NAM APP args ISO def_coprd   { Def_CoPrd ($2,$4,$6) }
+  | DTA NAM APP args ISO def_prd  { Def_Prd ($2,$4,$6) }
+  | DTA NAM ISO FNT name_list { Def_Fnt ($2,$5) }
+  | DTA NAM APP args DEQ typ  { Def_Eqv $2,$4,$6) }
+  ;
+name_list:
+  | NAM { $1 }
+  | NAM name_list { $1::$2 }
   ;
 def_coprd:
-  | COPRD typ_top CLN NAM  { [($2,$4)] }
+  | COPRD typ_top CLN NAM  { ($2,$4) }
   | COPRD typ_top CLN NAM def_coprd  { ($2,$4)::$5 }
   ;
 def_prd:
-  | PRD typ_top CLN NAM  { [($2,$4)] }
+  | PRD typ_top CLN NAM  { ($2,$4) }
   | PRD typ_top CLN NAM def_prd  { ($2,$4)::$5 }
   ;
 typ_top:
@@ -78,105 +94,93 @@ typ_top:
   ;
 typs:
   | { [] }
-  | typs typ { $1@[$2] }
+  | typs typ { $1@$2 }
   ;
 typ:
-  | typ APP typ { Typ_App ($1,$3) }
+  | typ APP typ {Typ_App ($1,$3) }
   | SLH typ L_BLK exp R_BLK  { DepTyp ($4,$2) }
   | Z { Typ_Z }
-  | N { Typ_Name "ℕ" }
-  | typ IO typ  { Typ_IO ($1,$3) }
+  | N { Typ_Name "ℕ"}
+  | typ IO typ  { Typ_App ($1,$3) }
   | NAM FOR_ALL typ { Typ_For_All ($1,$3) }
   | VAL { Typ_Val $1 }
   | NAM { Typ_Name $1 }
-  | L_RCD typ_top R_RCD { $2 }
+  | L_OPN typ R_OPN { Typ_Opn $2 }
+  | L_LST typ R_LST { Typ_App (Typ_Name "list",$2) }
+  | typ TYP_OPN_VCT typ { Typ_Opn_Vct ($1,$3) }
+  | typ TYP_VCT typ { Typ_Vct ($1,$3) }
+  | TYP_SGN { Typ_Sgn }
+  | TYP_STR { Typ_Name "ℾ" }
+  | L_RCD typ_top R_RCD { Typ_Rcd #2 }
   ;
-
 glb_etr:
-  | LCE NAM typ_def DEF ARR_STT vh_frm_code {
-    let (src,dst) = $3 in
-    Etr ($2,src,dst,$6)
-    }
+  | LCE glb_etr_body { Etr $2 }
+  | LCE glb_etr_clique { Etr_Clq $2 }
+  ;
+glb_etr_clique:
+  | SLF glb_etr_body { [$2] }
+  | SLF glb_etr_body glb_etr_clique { [$2]@$3 }
+  ;
+glb_etr_body:
+  | NAM typ_def DEF code { let (src,dst) =$2 in ($1,src,dst,$4) }
   ;
 typ_def:
-  | { (Typ_Top,Typ_Top) }
+  | { (Typ_Btm,Typ_Top) }
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
+stt_code:
+  | vh_frm_top code { let (t,o) = $1 in Seq (t,o,$2) }
+  | L_HLZ h_frm_list R_HLZ tail { Canon ($2,$4) }
+  | vh_frm_top code_coprd_list COPRD_END tail {
+    let (t,o) = $1 in Code_CoPrd(t,o,$2,$4) }
+  | vh_frm_top code_prd_list PRD_END tail {
+    let (t,o) = $1 in Code_Prd(t,o,$2,$4) }
+  ;
+code:
+  | OUT tail { $2 }
+  | ARR vh_frm_top code { Seq ($2,$3) }
+  | ARR L_HLZ h_frm_list R_HLZ tail { Canon ($3,$5) }
+  | ARR vh_frm_top code_coprd_list COPRD_END tail {
+    Code_CoPrd($2,$3,$5) }
+  | ARR vh_frm_top code_prd_list PRD_END tail {
+    Code_Prd($2,$3,$5) }
+  | IN vh_frm_top code EOP tail { Code_IO($2,$3,$5) }
+  ;
 
-vh_frm_code:
-  | vh_frm_top tail_code
-    {
-      match $2 with
-      | `None -> $1
-      | `Some t ->
-        Util.pnt true ("parse:vh_frm_code"^(Print.string_of_code 0 $1));
-        Seq ($1,t)
-      | `CoPrd (x,_) ->
-        let c = Code_CoPrd ($1,x) in
-        Util.pnt true ("parser:vh_frm_code"^(Print.string_of_code 0 c));
-        c
-      | `Prd (x,_) ->
-        Seq ($1,Code_Prd (x,(Id Typ_Top)))
-      | `H_FRM c -> Seq ($1,c)
-    }
+tail:
+  | { Rtn 0 }
+  | SEQ code { $2 }
   ;
-tail_code:
-  | ARR_END { `None }
-  | ARR vh_frm_code { `Some $2 }
-  | coprd { $1 }
-  | prd { $1 }
-  | h_frm { $1 }
-  | io { `None }
-  ;
-io:
-  | IO_STT vh_frm_code EOP { }
-  ;
-coprd:
-  | coprd_list COPRD_END coprd_tail
-    {  `CoPrd ($1,$3) }
-  ;
-coprd_list:
+
+code_coprd_list:
   | { [] }
-  | coprd_list COPRD vh_frm_code  { $1@[$3] }
+  | code_coprd_list COPRD stt_code  { $1@[3] }
   ;
-coprd_tail:
-  | {}
-  | SEQ ARR vh_frm_code { }
+
+code_prd_list:
+  | { [] }
+  | code_prd_list PRD stt_code  { $1@[$3] }
   ;
-prd:
-  | prd_list PRD_END prd_tail
-    {  `Prd ($1,$3) }
-  ;
-prd_list:
-  |  {[] }
-  | prd_list PRD vh_frm_code  { $1@[$3] }
-  ;
-prd_tail:
-  |  { }
-  | SEQ ARR vh_frm_code {}
-  ;
-h_frm:
-  | L_HLZ h_frm_list R_HLZ  { `H_FRM (Canon $2) }
-  | L_HLZ h_frm_list R_HLZ_TAIL vh_frm_code { `H_FRM(Canon $2) }
-  ;
+
 h_frm_list:
-  | vh_frm_code { [$1] }
-  | vh_frm_code M_HLZ h_frm_list { [$1]@$3 }
+  | stt_code { [$1] }
+  | stt_code M_HLZ h_frm_list { $1::$3 }
   ;
+
 vh_frm_top:
-  | typ_ept exp_top { Opr ($1,$2) }
+  | typ_ept exp_top { let (e,m) = $2 in ($1,e,m) }
   ;
 exp_top:
-  | exp_lst macro { Opr_Rcd $1 }
-  | EXP exp macro { $2 }
+  | exp_lst macro { (Opr_Rcd $1,$2) }
+  | EXP exp macro { ($2,$3) }
   ;
 macro:
-  | { }
-  | SPL macros  { }
+  | { [] }
+  | SPL macro_list  { $2 }
   ;
-macros:
-  | MCR DEF exp  { }
-  | MCR DEF exp macros { }
+macro_list:
+  | { [] }
+  | macro_list CMM exp_lst LET exp_lst  { $1::($3,$5) }
   ;
 typ_ept:
   |  { Typ_Top }
@@ -185,35 +189,44 @@ typ_ept:
 
 exp_lst:
   | { [] }
-  | exp_lst exp  { $1@[$2] }
+  | exp_lst exp  { $1[2] }
   ;
 
 exp:
-  | AGL exp AGL_END { Agl $2 }
-  | const { $1 }
-  | exp PLS exp { Plus ($1,$3) }
-  | exp MLT exp { Mult ($1,$3) }
-  | exp MNS exp { Plus ($1,Minus $3) }
-  | L_PRN MNS exp R_PRN { Minus $3 }
-  | exp EQ exp { Eq ($1,$3) }
+  | AGL exp R_BLK { Opr_Agl $2 }
+  | INT { Opr_Z $1 }
+  | PLS_EVL { Opr_Name "+" }
+  | MLT_EVL { Opr_Name "*" }
+  | APP_EVL { Opr_Name "◂" }
+  | EMT { Opr_Name "⋎" }
+  | CNT { Opr_Name "⋏" }
+  | EXN { Opr_Exn }
+  | ROT { Root $1 }
+  | NAM  { Opr_Name $1 }
+  | SGN { Opr_Name "&" }
+  | STG { Opr_Stg $1 }
+  | SLF { Self $1 }
+  | exp PLS exp { App (Opr_Name "+", Opr_Rcd [$1;$3]) }
+  | exp MLT exp { App (Opr_Name "*",Opr_Rcd [$1;$3]) }
+  | exp MNS exp { App (Opr_Name "+",Opr_Rcd [$1;App (Opr_Name "-",$3)]) }
+  | exp CST { Cast $1 }
+  | L_PRN MNS exp R_PRN { App (Opr_Name "-",$3) }
+  | exp EQ exp { App(Opr_Name "=",Opr_Rcd [$1;$3]) }
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { App ($1,$3) }
   | exp PRJ exp { Prj ($1,$3) }
   | L_RCD exp_lst R_RCD { Opr_Rcd $2 }
-  | L_OPN R_OPN { App (Opr_Name "none",Opr_Rcd []) }
-  | L_OPN exp R_OPN { App (Opr_Name "some",$2) }
+  | L_OPN R_OPN { Opr_None }
+  | L_OPN exp R_OPN { Opr_Some $2 }
   | L_LST lst_list R_LST { $2 }
-(*  | ARR_STT lc_code { Opr_IO $2 } *)
-  | MCR { Opr_Name ("%"^$1) }
+  | L_OPN SEQ exp SPL subst_list R_OPN { raise @@ Failure "macro:0" }
+  | L_RCD SEQ exp SPL subst_list R_RCD { raise @@ Failure "macro:1" }
+  ;
+subst_list:
+  | {}
+  | subst_list CMM exp_lst LET exp_lst  {}
   ;
 lst_list:
-  | { App(Opr_Name "nil",Opr_Rcd []) }
-  | exp lst_list { App(Opr_Name "cns",Opr_Rcd [$1;$2]) }
-  ;
-const:
-  | INT { Opr_Z $1 }
-  | ROT { Root }
-  | NAM  { Opr_Name $1 }
-  | SGN { Opr_Sgn_Ini }
-  | STG { Opr_Stg $1 }
+  | { App (Opr_Name "nil",Opr_Rcd []) }
+  | exp lst_list { App (Opr_Name "cns",Opr_Rcd [$1,$2]) }
   ;

@@ -25,17 +25,17 @@ rule token = parse
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
     | "≃" { ISO }
-    | "=="  { EQV }
-    | "»" { ARR       }
+    | "=="  { DEQ }
+    | "<" { LET }
+    | "»" { ARR }
     | "»."  { ARR_END }
     | ".»" { ARR_STT }
-    | "|»" { IO_STT }
+    | (('|')+ as lxm) "»" { IN(String.length lxm) }
+    | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
     | "⋎" { EMT }
     | "⋏" { CNT }
-    | "?" { ARG }
-    | "|»"  { IN }
-    | "»|"  { OUT }
+    | "?" { EXN }
     | ":" { CLN }
     | "|" { SPL }
     | "%" (digit+ as lxm) { MCR(lxm) }
@@ -73,11 +73,12 @@ rule token = parse
     | "+" { PLS }
     | "*" { MLT }
     | "-" { MNS }
+    | "," { CMM }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "@" (("\'")* as lxm) { SLF (String.length lxm) }
     | "◂\'" { APP_EVL }
     | "+\'" { PLS_EVL }
-    | "*\'" { MLT_EVL }  
+    | "*\'" { MLT_EVL }
     | "∠"  { AGL }
     | digit+ as lxm  { INT (int_of_string lxm) }
     | space+        { token lexbuf                         }

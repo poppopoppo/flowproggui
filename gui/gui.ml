@@ -495,6 +495,7 @@ let main () =
     (try Sys.remove "default.cfg"
      with _ -> Util.pnt dbg "default.cfg is not exist\n"
     );
+    save_files:=[];
 
     match flg with
     | [] ->

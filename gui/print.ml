@@ -43,9 +43,12 @@ let rec string_of_tkn d s =
       | Tkn_Prd _ -> ex^"Tkn_Prd"
       | Tkn_Null -> ex^"∅"
       | Tkn_Btm -> ex^"⊥"
-      | Tkn_IO _ -> ex^"io"
+      | Tkn_IO_Inj i -> ex^"\\∐["^(string_of_int i)^"]"
+      | Tkn_IO_Cho i -> ex^"\\∏["^(string_of_int i)^"]"
+      | Tkn_IO_Sgn -> "&"
+      | Tkn_IO_Code (_,_) -> ex^"io"
       | Tkn_Agl c -> ex^"∠["^(string_of_tkn (d+1) c)^"]"
-      | Tkn_Sgn i -> ex^"¿p"^(string_of_int i)
+      | Tkn_Sgn i -> ex^"p"^(string_of_int i)^"\'"
       | Tkn_Stg s -> "\""^s^"\""
     ) in
   v
@@ -55,14 +58,41 @@ let string_of_st (x:st) : string =
 
 let rec string_of_code d x =
   match x with
-  | Id _ -> ""
-  | Seq (a,Opr (dst,o)) -> (string_of_code d a)^"\n"^(tabs d)^"» "^"` "^(string_of_typ 0 dst)^" : "^(string_of_opr o)^" »."
-  | Seq (a,b) -> (string_of_code d a)^"\n"^(tabs d)^"» "^(string_of_code d b)
-  | Canon l -> "\n"^(tabs (d+1))^"⁅ "^(Util.string_of_list ("\n"^(tabs (d+1))^"¦ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"⁆\n"
-  | Opr (dst,o) -> "` "^(string_of_typ 0 dst)^" : "^(string_of_opr o)
-  | Code_CoPrd (c,l) -> (string_of_code d c)^"\n"^(tabs (d+1))^"∐ "^(Util.string_of_list ("\n"^(tabs (d+1))^"∐ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"∇"
-  | Code_Prd (l,c) -> (Util.string_of_list "\n\t∏ " (string_of_code (d+1)) l)^(string_of_code (d+1) c)^"\n∆\n"
-
+  | Rtn -> "».\n"
+  | Seq (dst,o,c) ->
+    (tabs d)^"» ` "^(string_of_typ 0 dst)^" : "^(string_of_opr o)^"\n"^(string_of_code d c)
+  | Canon (l,c) ->
+    let pre = (tabs (d+1))^"⁅ "^(Util.string_of_list ("\n"^(tabs (d+1))^"¦ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"⁆" in
+    let post =
+      ( match c with
+        | Rtn -> "\n"
+        | _ -> "^"^(string_of_code d c)
+      ) in
+    pre^post
+  | Code_CoPrd (t,o,l,c) ->
+    let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
+    let mid = (tabs (d+1))^"∐ "^(Util.string_of_list ((tabs (d+1))^"∐ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
+    let post =
+      ( match c with
+        | Rtn -> "\n"
+        | _ -> "^"^(string_of_code d c) ) in
+    pre^mid^post
+  | Code_Prd (t,o,l,c) ->
+    let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
+    let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
+    let post =
+      ( match c with
+        | Rtn -> "\n"
+        | _ -> "^"^(string_of_code d c) ) in
+    pre^mid^post
+  | Code_IO (t,o,c0,c1) ->
+    let pre = (tabs (d+1))^"|» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
+    let mid = string_of_code (d+1) c0 in
+    let post =
+      (match c1 with
+       | Rtn -> "\n"
+       | _ -> "^"^(string_of_code d c1)) in
+    pre^mid^"∎"^post
 and string_of_opr x =
   match x with
   | Agl e -> "∠["^(string_of_opr e)^"]"
