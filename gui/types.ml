@@ -9,7 +9,7 @@ and flow =
   | Def_Abs of name * args
   | Def_Prd of name * args * ((typ * name) list)
   | Def_CoPrd of name * args * ((typ * name) list)
-  | Def_Fnt of name list
+  | Def_Fnt of name * (name list)
   | Def_Eqv of name * args * typ
 and args = arg list
 and arg =
@@ -63,22 +63,23 @@ and opr =
   | Opr_Exn
   | Opr_Stg of string
 and tkn =
-  | Tkn_Exn of string
-  | Tkn_Z of int
-  | Tkn_Rcd of tkn list
-  | Tkn_CoPrd of tkn list
-  | Tkn_Prd of st * (code list)
   | Tkn_Null
   | Tkn_Btm
+  | Tkn_Exn of string
+  | Tkn_IO_Exn
+  | Tkn_Rcd of tkn list
+  | Tkn_CoPrd of tkn list
   | Tkn_IO_Inj of int
+  | Tkn_Prd of tkn * (code list)
   | Tkn_IO_Cho of int
-  | Tkn_IO_Sgn
-  | Tkn_IO_Code of st *  code
+  | Tkn_IO_Code of (tkn list) * int * top_exp *  code
+  | Tkn_Z of int
   | Tkn_IO_Plus
   | Tkn_IO_Mult
-  | Tkn_Arg of int
-  | Tkn_Agl of tkn
+  | Tkn_IO_Minus
+  | Tkn_IO_Eq
   | Tkn_Sgn of int
+  | Tkn_IO_Sgn
   | Tkn_Stg of string
 type buffer =
   | Evo of code

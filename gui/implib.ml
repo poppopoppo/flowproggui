@@ -1,15 +1,16 @@
-type t = Types.gl_st * Types.st * (int ref)
+open Types
+type t = gl_st * st * (int ref)
 let string_of_t (g,t,ir) =
   "global state: "^(Print.string_of_gl_st g)^
   "\nstate: "^(Print.string_of_st t)^
   "\nsgn-count: "^(string_of_int !ir)^"\n"
-let evo ((g,st,i):t) (b:Types.buffer) : t =
+let evo ((g,(_,v),i):t) (b:Types.buffer) : t =
   (try
      ( match b with
        | Types.Evo e ->
          Util.pnt true (Print.string_of_code 0 e);
-         let st0 = Imp.evo_code g st i e in
-         (g,st0,i)
+         let v0 = Imp.evo_code g v i e in
+         (g,(Typ_Top,v0),i)
        | _ -> raise @@ Failure ("Implib:evo:")
      )
    with Stack_overflow ->
@@ -35,7 +36,7 @@ let ast_from_file (f:string) : Types.mdl =
        let lexbuf = Lexing.from_channel c in
        Imp_parser.file Imp_lexer.token lexbuf)
 
-let mdl_from_string s =
+let mdl_from_string (s:string) : mdl  =
   let lexbuf = Lexing.from_string s in
   Imp_parser.file Imp_lexer.token lexbuf
 

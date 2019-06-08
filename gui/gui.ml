@@ -83,7 +83,7 @@ let global_signal:([< `MODULE_IMPORT ] GUtil.signal) = new GUtil.signal ()
 let engine_signal:([< `MODULE_IMPORT | `OPEN_FILE ] GUtil.signal) = new GUtil.signal ()
 
 let st = ref Implib.init_st
-let mdl = ref []
+let mdl = ref ("",[],[])
 
 let init_ide = ([],Implib.init_st)
 let get_ide () =
@@ -317,7 +317,7 @@ let main () =
                   pnt "import button pressed\n";
                   let text = buffer#get_text () in
                   let mdl0 = Implib.mdl_from_string text in
-                  mdl := !mdl @ (snd mdl0);
+                  mdl := Mdls.concat !mdl mdl0;
                   Util.pnt dbg text;
                   Util.pnt dbg (Print.string_of_mdl mdl0);
                   pnt "module is imported\n";
@@ -584,8 +584,8 @@ let main () =
       ~callback:(fun s ->
           match s with
           | `MODULE_IMPORT ->
-            let (g,v,ir) = !st in
-            st := (!mdl@g,v,ir);
+            let ((g,v,ir),(_,_,g0)) = (!st,!mdl) in
+            st := (g0@g,v,ir);
             global_signal#call `MODULE_IMPORT
           | `OPEN_FILE ->  open_file ()
         ) in

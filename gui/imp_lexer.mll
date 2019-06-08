@@ -26,10 +26,14 @@ rule token = parse
     | name as lxm { NAM(lxm) }
     | "≃" { ISO }
     | "=="  { DEQ }
-    | "<" { LET }
+    | ""| "~" { LET }
     | "»" { ARR }
+    | "↑" { INJ }
+    | "↓" { CHO }
+(*
     | "»."  { ARR_END }
     | ".»" { ARR_STT }
+*)
     | (('|')+ as lxm) "»" { IN(String.length lxm) }
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
@@ -38,9 +42,9 @@ rule token = parse
     | "?" { EXN }
     | ":" { CLN }
     | "|" { SPL }
-    | "%" (digit+ as lxm) { MCR(lxm) }
     | "∠" "["  { AGL }
-    | "]" { AGL_END }
+    | "]" { R_BLK }
+    | "[" { L_BLK }
     | "^" { SEQ }
     | "¦"  { M_HLZ }
     | "∐"   { COPRD }
@@ -51,6 +55,7 @@ rule token = parse
     | "≒" { DEF }
     | "`" { ACT }
     | "//"  { CST }
+    | "_" { WC }
     | "{" { L_RCD }
     | "}" { R_RCD }
     | "⁅" { L_HLZ }
@@ -59,17 +64,17 @@ rule token = parse
     | "⟧" { R_LST }
     | "‹" { L_OPN }
     | "›" { R_OPN }
-    | "~" { CNN }
     | "&" { SGN }
+    | "#" { VCT }
     | "(" { L_PRN }
     | ")" { R_PRN }
     | "=" { EQ }
     | "!" { EXP }
-    | "‣" { R_APP }
     | "◂" { APP }
     | "◃" { PRJ }
     | "ℤ" { Z }
     | "ℕ" { N }
+    | "ℾ" { TYP_STG }
     | "+" { PLS }
     | "*" { MLT }
     | "-" { MNS }

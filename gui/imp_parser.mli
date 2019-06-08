@@ -3,8 +3,14 @@
 
 type token = 
   | Z
+  | WC
+  | VCT
   | VAL of (string)
-  | STT_CLN
+  | TYP_VCT
+  | TYP_STG
+  | TYP_SGN
+  | TYP_OPN_VCT
+  | TEST
   | STG of (string)
   | SRC
   | SPL
@@ -16,66 +22,59 @@ type token =
   | R_PRN
   | R_OPN
   | R_LST
-  | R_HLZ_TAIL
   | R_HLZ
   | R_BLK
-  | R_APP
   | ROT of (int)
   | PRJ
   | PRD_END
   | PRD
   | PLS_EVL
   | PLS
-  | OUT
+  | OUT of (int)
   | NAM of (string)
   | N
   | M_HLZ
-  | M_CNN
   | MNS
   | MLT_EVL
   | MLT
   | MDL_END
   | MDL
-  | MCR of (string)
+  | MCR
   | L_RCD
   | L_PRN
   | L_OPN
   | L_LST
   | L_HLZ
   | L_BLK
+  | LET
   | LCE
   | ISO
-  | IO_STT
   | IO
   | INT of (int)
-  | IN
+  | INJ
+  | IN of (int)
   | FOR_ALL
+  | FNT
   | EXP
-  | EQV
+  | EXN
   | EQ
   | EOP
   | EOF
-  | END_PRD
-  | END_CO_PRD
   | EMT
   | DTA
+  | DEQ
   | DEF
   | CST
-  | CO_PRD
   | COPRD_END
   | COPRD
   | CNT
-  | CNN
-  | CLS_NAM
-  | CLS
+  | CMM
   | CLN
-  | ARR_STT
+  | CHO
   | ARR_END
   | ARR
-  | ARG
   | APP_EVL
   | APP
-  | AGL_END
   | AGL
   | ACT
 

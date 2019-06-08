@@ -1,0 +1,70 @@
+'\"' (([^ '\"']|"\\\"")* as lxm) '\"' ; string
+";" [^ '\n']*  ; line comment
+".;" (_)* ";."  ; block comment
+§  ; global entry
+§§" ; module entry
+§§. ; module end
+¶ ; type entry
+\  ; dependent type
+∀ ; for all
+' ; meta symbol
+≃ ; type definition
+==  ; macro definitino
+~ ; let
+» ; arrow
+↑ ; coproduct injection
+↓ ; product choice
+(('|')+ as lxm) » ; code in
+» ; code out
+⊢ ; hom
+(*
+⋎
+⋏
+*)
+? ; exception
+: ; type annotation
+| ; separation
+∠  ; angle operator
+[ ; left bracket
+] ; right bracket
+^ ; code concatenation
+¦ ; horizontal bar
+∐ ; coproduct
+∏ ; product
+∎ ; eop
+∇ ; coproduct end
+∆ ; product end
+≒ ; global entry definitino
+` ; type annotation indicator
+// ; cast operator
+_ ; wild card symbol
+{ ; left record bracket
+} ; right record bracket
+⁅ ; left horizontal bracket
+⁆ ; right record bracket
+⟦ ; left list bracket
+⟧ ; right list bracket
+‹ ; left option bracket
+› ; right option bracket
+& ; signature initializer
+# ; vector initializer
+( ; left parenthesis
+) ; right parenthesis
+= ; equality operator
+! ; level operator
+◂ ; application
+◃ ; projection
+ℤ ; integer type
+pℤ  ; polymophic ℤ
+ℕ ; natural number type
+ℾ ; string type
++ ; plus
+* ; multiple
+- ; minus
+, ; comma
+$ (("\'")*   ; roots
+@ (("\'")*  ; selves
+◂'  ; eval operator
+  +' ; ℕ  plus
+*'  ; ℕ multiple
+-'  ; ℕ minus

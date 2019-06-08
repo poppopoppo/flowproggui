@@ -3,18 +3,16 @@
   open Imp_parser_header
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT IN OUT
-%token LCE EXP AGL PRD EOP
+%token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT
+%token LCE EXP AGL PRD EOP VCT
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS APP_EVL PLS_EVL MLT_EVL CST
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
-%token MCR VAL STG INT ROT SLF PLS MLT EOF CMM LET TYP_STR TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN
+%token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
+%token DEQ FNT EXN WC TEST INJ CHO
 
 %token <string> NAM VAL STG
 %token <int> INT IN OUT ROT SLF
-%token PLS MLT
-%token EOF
 
 %left FOR_ALL
 %left EQ
@@ -31,23 +29,28 @@
 
 %type <Types.mdl> file
 %type <Types.buffer> buffer
+%type <code list> code_coprd_list
+%type <opr> exp
 %%
 buffer:
-  | vh_frm_top EOF { let (t,o) = $1 in Evo (Seq (t,o,Rtn 0)) }
+  | vh_frm_top EOF { Evo (Seq ($1,Rtn 0)) }
   | ARR_END EOF { End }
   ;
 file:
-  | def_mdl { $1 }
+  | def_mdl { Util.pnt flg "parse:file\n"; $1 }
   ;
 def_mdl:
-  | MDL NAM APP args DEF gl_etr_lst MDL_END { ($2,$4,$6) }
+  | MDL NAM def_arg DEF gl_etr_lst MDL_END { ($2,$3,$5) }
   ;
+def_arg:
+  | { [] }
+  | APP args { $2 }
 args:
   | arg { [$1] }
   | arg CMM args { [$1]@$3 }
 arg:
   | VAL { Arg_Val $1 }
-  | L_RCD arg_list R_RCD  { $2 }
+  | L_RCD arg_list R_RCD  { Arg_Rcd $2 }
   ;
 arg_list:
   | arg { [$1] }
@@ -62,30 +65,30 @@ mdl_etr:
   | def_typ { $1 }
   ;
 def_typ:
-  | DTA def_typ_clique { Etr_Clq $2 }
-  | DTA def_typ_body { Etr $2 }
+  | DTA def_typ_clique { Flow_Clq $2 }
+  | DTA def_typ_body { Flow $2 }
   ;
 def_typ_clique:
   | SLF def_typ_body { [$2] }
   | SLF def_typ_body def_typ_clique { [$2]@$3 }
   ;
 def_typ_body:
-  | DTA NAM APP args { Def_Abs ($2,$4) }
-  | DTA NAM APP args ISO def_coprd   { Def_CoPrd ($2,$4,$6) }
-  | DTA NAM APP args ISO def_prd  { Def_Prd ($2,$4,$6) }
-  | DTA NAM ISO FNT name_list { Def_Fnt ($2,$5) }
-  | DTA NAM APP args DEQ typ  { Def_Eqv $2,$4,$6) }
+  | NAM def_arg  { Def_Abs ($1,$2) }
+  | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,$2,$4) }
+  | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
+  | FNT NAM ISO name_list { Def_Fnt ($2,$4) }
+  | NAM def_arg DEQ typ  { Def_Eqv ($1,$2,$4) }
   ;
 name_list:
-  | NAM { $1 }
+  | NAM { [$1] }
   | NAM name_list { $1::$2 }
   ;
 def_coprd:
-  | COPRD typ_top CLN NAM  { ($2,$4) }
+  | COPRD typ_top CLN NAM  { [($2,$4)] }
   | COPRD typ_top CLN NAM def_coprd  { ($2,$4)::$5 }
   ;
 def_prd:
-  | PRD typ_top CLN NAM  { ($2,$4) }
+  | PRD typ_top CLN NAM  { [($2,$4)] }
   | PRD typ_top CLN NAM def_prd  { ($2,$4)::$5 }
   ;
 typ_top:
@@ -94,24 +97,24 @@ typ_top:
   ;
 typs:
   | { [] }
-  | typs typ { $1@$2 }
+  | typs typ { $1@[$2] }
   ;
 typ:
+  | L_RCD typ_top R_RCD { $2 }
   | typ APP typ {Typ_App ($1,$3) }
-  | SLH typ L_BLK exp R_BLK  { DepTyp ($4,$2) }
+  | typ APP L_BLK exp R_BLK  { DepTyp ($4,$1) }
+  | typ PRJ typ { Typ_Vct ($1,$3) }
+  | L_OPN typ R_OPN { Typ_Opn $2 }
+  | L_LST typ R_LST { Typ_App (Typ_Name "list",$2) }
+  | typ TYP_OPN_VCT typ { Typ_Opn_Vct ($1,$3) }
+  | VAL { Typ_Val $1 }
+  | NAM { Typ_Name $1 }
   | Z { Typ_Z }
   | N { Typ_Name "ℕ"}
   | typ IO typ  { Typ_App ($1,$3) }
   | NAM FOR_ALL typ { Typ_For_All ($1,$3) }
-  | VAL { Typ_Val $1 }
-  | NAM { Typ_Name $1 }
-  | L_OPN typ R_OPN { Typ_Opn $2 }
-  | L_LST typ R_LST { Typ_App (Typ_Name "list",$2) }
-  | typ TYP_OPN_VCT typ { Typ_Opn_Vct ($1,$3) }
-  | typ TYP_VCT typ { Typ_Vct ($1,$3) }
-  | TYP_SGN { Typ_Sgn }
-  | TYP_STR { Typ_Name "ℾ" }
-  | L_RCD typ_top R_RCD { Typ_Rcd #2 }
+  | SGN { Typ_Sgn }
+  | TYP_STG { Typ_Name "ℾ" }
   ;
 glb_etr:
   | LCE glb_etr_body { Etr $2 }
@@ -122,31 +125,34 @@ glb_etr_clique:
   | SLF glb_etr_body glb_etr_clique { [$2]@$3 }
   ;
 glb_etr_body:
-  | NAM typ_def DEF code { let (src,dst) =$2 in ($1,src,dst,$4) }
+  | NAM typ_def DEF IN stt_code { let (src,dst) =$2 in ($1,src,dst,$5) }
   ;
 typ_def:
   | { (Typ_Btm,Typ_Top) }
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
 stt_code:
-  | vh_frm_top code { let (t,o) = $1 in Seq (t,o,$2) }
+  | vh_frm_top code { Seq ($1,$2) }
   | L_HLZ h_frm_list R_HLZ tail { Canon ($2,$4) }
   | vh_frm_top code_coprd_list COPRD_END tail {
-    let (t,o) = $1 in Code_CoPrd(t,o,$2,$4) }
+    Code_CoPrd($1,$2,$4) }
   | vh_frm_top code_prd_list PRD_END tail {
-    let (t,o) = $1 in Code_Prd(t,o,$2,$4) }
+    Code_Prd($1,$2,$4) }
   ;
 code:
-  | OUT tail { $2 }
+  | eop tail { $2 }
   | ARR vh_frm_top code { Seq ($2,$3) }
   | ARR L_HLZ h_frm_list R_HLZ tail { Canon ($3,$5) }
   | ARR vh_frm_top code_coprd_list COPRD_END tail {
     Code_CoPrd($2,$3,$5) }
   | ARR vh_frm_top code_prd_list PRD_END tail {
     Code_Prd($2,$3,$5) }
-  | IN vh_frm_top code EOP tail { Code_IO($2,$3,$5) }
+  | IN vh_frm_top code eop tail { Code_IO($1,$2,$3,$5) }
   ;
-
+eop:
+  | EOP {}
+  | OUT {}
+  ;
 tail:
   | { Rtn 0 }
   | SEQ code { $2 }
@@ -154,7 +160,7 @@ tail:
 
 code_coprd_list:
   | { [] }
-  | code_coprd_list COPRD stt_code  { $1@[3] }
+  | code_coprd_list COPRD stt_code  { $1@[$3] }
   ;
 
 code_prd_list:
@@ -180,7 +186,7 @@ macro:
   ;
 macro_list:
   | { [] }
-  | macro_list CMM exp_lst LET exp_lst  { $1::($3,$5) }
+  | macro_list CMM NAM LET exp  { $1@[($3,$5)] }
   ;
 typ_ept:
   |  { Typ_Top }
@@ -189,18 +195,18 @@ typ_ept:
 
 exp_lst:
   | { [] }
-  | exp_lst exp  { $1[2] }
+  | exp_lst exp  { $1@[$2] }
   ;
 
 exp:
-  | AGL exp R_BLK { Opr_Agl $2 }
+  | AGL exp R_BLK { Agl $2 }
   | INT { Opr_Z $1 }
   | PLS_EVL { Opr_Name "+" }
   | MLT_EVL { Opr_Name "*" }
   | APP_EVL { Opr_Name "◂" }
   | EMT { Opr_Name "⋎" }
   | CNT { Opr_Name "⋏" }
-  | EXN { Opr_Exn }
+  | EXN { Opr_Name "?" }
   | ROT { Root $1 }
   | NAM  { Opr_Name $1 }
   | SGN { Opr_Name "&" }
@@ -228,5 +234,5 @@ subst_list:
   ;
 lst_list:
   | { App (Opr_Name "nil",Opr_Rcd []) }
-  | exp lst_list { App (Opr_Name "cns",Opr_Rcd [$1,$2]) }
+  | exp lst_list { App (Opr_Name "cns",Opr_Rcd [$1;$2]) }
   ;
