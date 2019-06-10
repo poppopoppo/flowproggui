@@ -20,13 +20,17 @@ rule token = parse
     | "§§"  { MDL }
     | "§§." { MDL_END }
     | "¶" { DTA }
+    | "¶+ℾ" { DTA_GRM }
+    | ">" { ORD_COPRD }
+    | ">|"  { ORD_LEX_COPRD }
+    | "¬|"  { NOT_SPL }
     | "\\"  { SLH }
     | "∀" { FOR_ALL }
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
     | "≃" { ISO }
     | "=="  { DEQ }
-    | ""| "~" { LET }
+    | "~" { LET }
     | "»" { ARR }
     | "↑" { INJ }
     | "↓" { CHO }
@@ -64,6 +68,7 @@ rule token = parse
     | "⟧" { R_LST }
     | "‹" { L_OPN }
     | "›" { R_OPN }
+    | "{^"  { L_VCT }
     | "&" { SGN }
     | "#" { VCT }
     | "(" { L_PRN }
@@ -78,14 +83,20 @@ rule token = parse
     | "+" { PLS }
     | "*" { MLT }
     | "-" { MNS }
+    | "⅁" { GRM }
+    | "¬" { NOT }
+    | ">" { ORD_COPRD }
+    | ">|"  { ORD_LEX_COPRD }
     | "," { CMM }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "@" (("\'")* as lxm) { SLF (String.length lxm) }
     | "◂\'" { APP_EVL }
-    | "+\'" { PLS_EVL }
-    | "*\'" { MLT_EVL }
+    | "+<" { PLS_NAT }
+    | "*<" { MLT_NAT }
+    | "-<"  { MNS_NAT }
     | "∠"  { AGL }
     | digit+ as lxm  { INT (int_of_string lxm) }
+    | (digit+ as lxm) '<'  { NAT (int_of_string lxm) }
     | space+        { token lexbuf                         }
     | eof           { EOF               }
     | _             { raise (Error (Printf.sprintf

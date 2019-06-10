@@ -797,7 +797,96 @@ d∀ [\pℤ[d]:z']∀ ℤ |^| [z'] : #
 
 {^ $ | 1 2 3 . 4 5 2 }
 {^ $ | y n n y .[12] n y n }
-{^ d | . 0 2 3 4 5 6 }
+{^ d | [12].~ 0 2 3 4 5 6 }
 +' *' ◂'
-++  
+++
   ℤ|^|[252] : #◂252
+ℤ◃[252] ℤ◃ℤ
+{pℤ◂f' pℤ◂f'}→pℤ◂f' : (+)
+(#◂‹›)◃231
+
+¶ % brk◂[252] ≃ brk
+`brk:34//
+brk◂34 + brk◂(-1343)
+¶ sct == bol◃brk
+
+exw ; type of external world , can' create directly
+itr◂s' == {exw inw'}→{exw inw'} ; type of intraction of exw
+` itr◂inw'→inw' : exc ; execution
+` {exw ℾ}→{exw ℾ} : READ
+` {exw ℾ ℾ]→exw : WRITE
+  |» ! READ◂{$ "filename"} »|
+
+` exw◂ℾ→exw◂ℾ  : READ
+
+
+c´  ; one character
+"abc" ; string
+[a´ b´ c´]  ; character set
+_ ; any
+( ) ; grouping
+e? , ‹e› ; optional
+e* , ⟦e⟧ ;
+e+ , e ⟦e⟧
+&e , ?e
+!e , !e
+c ≃
+  > a | b
+  > b ¬| c
+  >| "test"
+
+  e1
+> e2
+¶+ℾ c◂a' ≃
+  > ¦ ¦
+  > ¦
+  > ¦ ¦  ¦
+
+C ≃
+  > d d ¦ sd ¦ ef
+    |» ! $◃0+$◃1 ∎
+  >
+  >
+L◂a' ≃
+  >
+  > a' L
+
+;
+
+¶+ℾ
+@ Exp ≃
+  > AddExp
+@ AddExp ≃
+  > AddExp "+" MulExp  -- plus
+  > AddExp "-" MulExp  -- minus
+  > MulExp
+@ MulExp ≃
+  > MulExp "*" ExpExp  -- times
+  > MulExp "/" ExpExp  -- divide
+  > ExpExp
+@ ExpExp ≃
+  > PriExp "^" ExpExp  -- power
+  > PriExp
+@ PriExp ≃
+  > "(" Exp ")"  -- paren
+  > "+" PriExp   -- pos
+  > "-" PriExp   -- neg
+  > ident
+  > number
+¶+ℾ @ ident ≃
+  > letter ⟦alnum⟧
+¶+ℾ @ number ≃
+  > ⟦digit⟧ "." digit ⟦digit⟧  -- fract
+  > digit ⟦digit⟧            -- whole
+¶+ℾ
+@ alnum =
+  > letter digit
+@ digit =
+  >| ["0".."9"]
+@ letter = lower
+  > upper
+  > unicodeLtmo
+@ space ≃
+  >| ["\u0000".." "]
+@ spaces ≃
+  > ⟦space⟧

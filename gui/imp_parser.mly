@@ -9,10 +9,10 @@
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN WC TEST INJ CHO
-
+%token DEQ FNT EXN WC TEST INJ CHO PLS_NAT MNS_NAT MLT_NAT L_VCT
+%token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT
 %token <string> NAM VAL STG
-%token <int> INT IN OUT ROT SLF
+%token <int> INT IN OUT ROT SLF NAT
 
 %left FOR_ALL
 %left EQ
@@ -29,6 +29,7 @@
 
 %type <Types.mdl> file
 %type <Types.buffer> buffer
+%type <Peg.grammar> dta_grm
 %type <code list> code_coprd_list
 %type <opr> exp
 %%
@@ -47,7 +48,7 @@ def_arg:
   | APP args { $2 }
 args:
   | arg { [$1] }
-  | arg CMM args { [$1]@$3 }
+  | arg args { [$1]@$2 }
 arg:
   | VAL { Arg_Val $1 }
   | L_RCD arg_list R_RCD  { Arg_Rcd $2 }
@@ -67,16 +68,62 @@ mdl_etr:
 def_typ:
   | DTA def_typ_clique { Flow_Clq $2 }
   | DTA def_typ_body { Flow $2 }
+  | dta_grm { Gram $1 }
+  ;
+dta_grm:
+  | DTA_GRM grm_clq { $2 }
+  ;
+grm_clq:
+  | SLF NAM ISO grm_ord   { ($2,[],$4)}
+  | SLF NAM ISO grm_ord grm_clq { ($2,[],$4)::$5 }
+  ;
+grm_ord:
+  | grm_rule { ($1,None) }
+  | grm_ord grm_rule  { $1@[($2,None)] }
+grm_rule:
+  | ord grm_ptns grm_prd { ($1,$2,$3) }
+  ;
+ord:
+  | ORD_COPRD { Peg.Synt }
+  | ORD_LEX_COPRD { Peg.Lex }
+  ;
+grm_ptns:
+  | { [] }
+  | grm_ptns grm_ptn  { $1@[$2] }
+  ;
+grm_ptn:
+  | grm_atom { $1 }
+  | L_LST grm_atom R_LST { Peg.List $2 }
+  | L_OPN grm_atom R_OPN { Peg.Option $2 }
+  ;
+grm_atom:
+  | STG { Peg.Text $1 }
+  | NAM { Peg.Name $1 }
+  ;
+grm_prd:
+  | { None }
+  | prd_flg grm_ptns { Some ($1,$2) }
+  ;
+prd_flg:
+  | SPL { Peg.And }
+  | NOT_SPL { Peg.Not }
   ;
 def_typ_clique:
-  | SLF def_typ_body { [$2] }
-  | SLF def_typ_body def_typ_clique { [$2]@$3 }
+  | SLF def_typ_body_clq { [$2] }
+  | SLF def_typ_body_clq def_typ_clique { [$2]@$3 }
   ;
 def_typ_body:
   | NAM def_arg  { Def_Abs ($1,$2) }
   | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,$2,$4) }
   | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
   | FNT NAM ISO name_list { Def_Fnt ($2,$4) }
+  | FNT NAM APP L_BLK INT R_BLK ISO NAM   { Def_Fnt_Dep ($2,$5,$8) }
+  | NAM def_arg DEQ typ  { Def_Eqv ($1,$2,$4) }
+  ;
+def_typ_body_clq:
+  | NAM def_arg  { Def_Abs ($1,$2) }
+  | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,$2,$4) }
+  | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
   | NAM def_arg DEQ typ  { Def_Eqv ($1,$2,$4) }
   ;
 name_list:
@@ -106,7 +153,6 @@ typ:
   | typ PRJ typ { Typ_Vct ($1,$3) }
   | L_OPN typ R_OPN { Typ_Opn $2 }
   | L_LST typ R_LST { Typ_App (Typ_Name "list",$2) }
-  | typ TYP_OPN_VCT typ { Typ_Opn_Vct ($1,$3) }
   | VAL { Typ_Val $1 }
   | NAM { Typ_Name $1 }
   | Z { Typ_Z }
@@ -208,6 +254,9 @@ exp:
   | CNT { Opr_Name "⋏" }
   | EXN { Opr_Name "?" }
   | ROT { Root $1 }
+  | VCT { Opr_Name "#" }
+  | INJ { Opr_Name "↑" }
+  | CHO { Opr_Name "↓"  }
   | NAM  { Opr_Name $1 }
   | SGN { Opr_Name "&" }
   | STG { Opr_Stg $1 }
@@ -225,12 +274,11 @@ exp:
   | L_OPN R_OPN { Opr_None }
   | L_OPN exp R_OPN { Opr_Some $2 }
   | L_LST lst_list R_LST { $2 }
-  | L_OPN SEQ exp SPL subst_list R_OPN { raise @@ Failure "macro:0" }
-  | L_RCD SEQ exp SPL subst_list R_RCD { raise @@ Failure "macro:1" }
+  | L_VCT exp SPL subst_list R_RCD { raise @@ Failure "macro:1" }
   ;
 subst_list:
-  | {}
-  | subst_list CMM exp_lst LET exp_lst  {}
+  | { [] }
+  | subst_list CMM exp LET exp { $1@[($3,$5)] }
   ;
 lst_list:
   | { App (Opr_Name "nil",Opr_Rcd []) }

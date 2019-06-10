@@ -1,0 +1,90 @@
+Def_Grm_Clq = ("@" Name "≃" Ord_coprd Def_grm_rule+)
+Ord_coprd =
+  |  ">"
+  |  ">|"
+Def_grm_rule =
+  | Def_grm_pattern* Def_grm_predictive
+Def_grm_pattern =
+  |  string
+  |  Name
+  | "⟦"  Name "⟧"	--list_peg
+  | "‹" Name  "›"	--opn_peg
+  | "⟦"  string  "⟧"	--list_peg_stg
+  | "‹" string "›"	--opn_peg_stg
+Def_grm_predictive =
+  | "|" Def_grm_pattern*
+  | "¬|"  Def_grm_pattern*
+
+¶+ℾ @ grm ≃
+    > "¶+ℾ" etr ⟦etr⟧
+  @ etr ≃
+    > "@" nam "≃" rul ⟦rul⟧
+  @ rul ≃
+    > lex seq
+  @ lex ≃
+    > ">"
+    > ">|"
+  @ seq ≃
+    > ⟦ptn⟧ prd
+  @ ptn ≃
+    > atm
+    > "⟦" atm "⟧"
+    > "‹" atm "›"
+  @ atm ≃
+    > stg
+    > nam
+  @ prd ≃
+    > "|" ⟦ptn⟧
+    > "¬|" ⟦ptn⟧
+  @ stg ≃
+    >| "\"" ⟦char⟧ "\""
+  @ char ≃
+    >| stg_end "\\\""
+    >| stg_end .
+  @ stg_end ≃
+    >| ¬| "\""
+  @ nam ≃
+    >| alp ⟦nam_til⟧
+  @ alnum ≃
+    >| alp
+    >| "_"
+    >| dgt
+let grm =
+[
+  ("grm",[],
+    [(Synt,[Text "¶+ℾ";Name "etr";List(Name "etr")],None)]
+    );
+  ("etr",[],
+    [(Synt,[Text "@";Name "nam"; Text "≃";Name "rul";List (Name "rul")],None)]
+    );
+  ("rul",[],
+    [(Synt,[Name "lex";Name "seq"],None)]
+    );
+  ("lex",[],
+    [
+      (Synt,[Text ">"],None);
+      (Synt,[Text ">|"],None)
+    ]
+  );
+  ("seq",[],
+    [(Synt,[List (Name "ptn");Name "prd"],None)]
+    );
+  ("ptn",[],
+    [
+      (Synt,[Name "atm"],None);
+      (Synt,[List(Name "atm")],None);
+      (Synt,[Option(Name "atm")],None)
+    ]
+  );
+  ("atm",[],
+    [
+      (Synt,[Name "stg"],None);
+      (Synt,[Name "nam"],None)
+    ]
+  );
+  ("prd",[],
+    [
+      (Synt,[Text "|";List (Name "ptn")],None);
+      (Synt,[Text "¬|";List (Name "ptn")],None)
+    ]
+  );

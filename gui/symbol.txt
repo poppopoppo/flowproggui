@@ -2,7 +2,7 @@
 ";" [^ '\n']*  ; line comment
 ".;" (_)* ";."  ; block comment
 §  ; global entry
-§§" ; module entry
+§§ ; module entry
 §§. ; module end
 ¶ ; type entry
 \  ; dependent type
@@ -17,10 +17,7 @@
 (('|')+ as lxm) » ; code in
 » ; code out
 ⊢ ; hom
-(*
-⋎
-⋏
-*)
+(* ⋎ ⋏ *)
 ? ; exception
 : ; type annotation
 | ; separation
@@ -48,6 +45,7 @@ _ ; wild card symbol
 › ; right option bracket
 & ; signature initializer
 # ; vector initializer
+% ; finite type definition
 ( ; left parenthesis
 ) ; right parenthesis
 = ; equality operator
@@ -58,13 +56,18 @@ _ ; wild card symbol
 pℤ  ; polymophic ℤ
 ℕ ; natural number type
 ℾ ; string type
+⅁ ; grammer type
+⇑ ; grammer type injection
+¬ ; not
 + ; plus
-* ; multiple
+* ; multiple  ⸢f⸥
 - ; minus
 , ; comma
 $ (("\'")*   ; roots
 @ (("\'")*  ; selves
 ◂'  ; eval operator
-  +' ; ℕ  plus
-*'  ; ℕ multiple
--'  ; ℕ minus
+  +< ; ℕ  plus
+*<  ; ℕ multiple
+-<  ; ℕ minus
+´ ; char
+° ; IO 

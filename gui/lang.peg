@@ -1,0 +1,133 @@
+Lang {
+Def_mdl =
+	| "§§"  Name Def_arg  "≒ "  mdl_etr* "§§."
+Def_arg =
+  |
+  | "◂" Arg+
+Arg =
+  | Val
+  |  "{" Arg+ "}"
+Mdl_etr =
+  | Glb_etr
+  | Def_Typ
+Def_Typ =
+  | "¶" ("§" Def_Typ_body_clq)+
+  |  "¶" Def_Typ_body
+  |	"¶+⅁"  ("@" Name "≃" Ord_coprd Def_grm_rule+)+
+Ord_coprd =
+  |  ">"
+  |  ">|"
+Def_grm_rule =
+  | Def_grm_pattern* Def_grm_predictive
+Def_grm_pattern =
+  |  string
+  |  Name
+  | "⟦"  Name "⟧"
+  | "‹" Name  "›"
+  | "⟦"  string  "⟧"
+  | "‹" string "›"
+Def_grm_predictive =
+  | "|" Def_grm_pattern
+  | "¬|"  Def_grm_pattern
+Def_Typ_body =
+  | Name Def_arg
+  | Name Def_arg "≃" Def_coprd
+  | Name Def_arg  "≃" Def_prd
+  |  "%" Name "≃" Name_list
+  | "%" Name "◂" "[" int "]" "≃" Name
+  | Name Def_arg "==" Typ
+Def_Typ_body_clq =
+  | Name Def_arg
+  | Name Def_arg "≃" Def_coprd
+  | Name Def_arg "≃" Def_prd
+  | Name Def_arg "==" Typ
+Name_list = Name+
+Def_coprd = ("∐" Typ_top ":" Name)+
+Def_prd = ("∏" Typ_top ":" Name)+
+Typ_top =
+  | Typ*
+  | "!" Typ
+Typ =
+  | "{" Typ_top "}"
+  | Typ "◂" Typ
+  | Typ "◂" "[" Exp "]"
+  | Typ "◃" Typ
+  | "‹" Typ "›"
+  | "⟦" Typ "⟧"
+  | val
+  | Name
+  | "ℤ"
+  | "ℕ"
+  | Typ "→" Typ
+  | Name "∀" Typ
+  | "&"
+Glb_etr =
+  | "§" Glb_etr_body
+  | "§" ("@" Glb_etr_body)+
+Glb_etr_body =
+  | Name Typ_def "≒" "|»" Stt_code
+Typ_def =
+  |
+  | ":" Typ_top "⊢" Typ_top
+Stt_code =
+  | Vh_frm_top Code
+  | "⁅" H_frm_list "⁆" Tail
+  | Vh_frm_top ("∐" stt_code)+ "∇" Tail
+  | Vh_frm_top ("∏" stt_code)+ "∆" Tail
+Code =
+  | Eop Tail
+  | "»" Vh_frm_top code
+  | "»" "⁅" H_frm_list "⁆" Tail
+  | "»" Vh_frm_top ("∐" stt_code)+ "∇" Tail
+  | "»" Vh_frm_top ("∏" stt_code)+ "∆" Tail
+  | ("|"+ "»") Vh_frm_top Code Eop Tail
+Eop =
+  | "∎"
+  | "»"  "|"+
+Tail = ("^" code)?
+H_frm_list =
+  | Stt_code
+  | Stt_code "¦" H_frm_list
+vVh_frm_top =
+  | Typ_ept Exp_top
+Exp_top =
+  | Exp_lst Macro
+  | "!" Exp Macro
+Macro =
+  |
+  | "|" (Name "~" Exp) ("," Name "~" Exp)*
+Typ_ept =
+  |
+  | "`" Typ_top ":"
+Exp_lst = Exp*
+Exp =
+  | "∠[" Exp "]"
+  | int
+  | "◂'"
+  | "?"
+  | "$"
+  | "#"
+  | "↑"
+  | "↓"
+  | Name
+  | "&"
+  | string
+  | "§"
+  | Exp "+" Exp
+  | Exp "*" Exp
+  | Exp "-" Exp
+  | Exp "//"
+  | "(" "-" Exp ")"
+  | Exp "=" Exp
+  | "(" Exp ")"
+  | Exp "◂" Exp
+  | Exp "◃" Exp
+  | "{" Exp_lst "}"
+  | "‹" "›"
+  | "‹" Exp "›"
+  | "⟦" Exp_list "⟧"
+  | "{^" Exp "|" Subst_list "}"
+Subst_list =
+  | Exp "~" Exp
+  | Subst_list "," Exp "~" Exp
+}

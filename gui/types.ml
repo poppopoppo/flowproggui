@@ -5,11 +5,13 @@ and glb_etr =
   | Flow of flow
   | Etr_Clq of etr list
   | Flow_Clq of flow list
+  | Gram of Peg.grammar
 and flow =
   | Def_Abs of name * args
   | Def_Prd of name * args * ((typ * name) list)
   | Def_CoPrd of name * args * ((typ * name) list)
   | Def_Fnt of name * (name list)
+  | Def_Fnt_Dep of name * int * name
   | Def_Eqv of name * args * typ
 and args = arg list
 and arg =
@@ -17,7 +19,6 @@ and arg =
   | Arg_Rcd of arg list
 and etr = string * typ * typ * code
 (* <name> : <src> ⊢ <dst> ≒ <code> *)
-
 and gl_st = glb_etr list
 and typ =
   | Typ_App of typ * typ
@@ -27,7 +28,6 @@ and typ =
   | Typ_Sgn
   | Typ_Stg
   | Typ_Opn of typ
-  | Typ_Opn_Vct of typ * typ
   | Typ_Vct of typ * typ
   | Typ_Rcd of typ list
   | Typ_IO of typ * typ
@@ -38,6 +38,7 @@ and typ =
   | Typ_CoPrd of typ list
   | Typ_Prd of typ list
   | Typ_Name of name
+        (* ℤ & ℾ *)
   | Typ_Val of string
 and st = typ * tkn
 and code =
@@ -53,6 +54,7 @@ and opr =
   | Opr_Z of int
   | Opr_Name of string
   | Opr_Rcd of opr list
+  | Opr_Vct of opr * ((opr * opr) list)
   | Root of int
   | Self of int
   | App of opr * opr
@@ -68,18 +70,23 @@ and tkn =
   | Tkn_Exn of string
   | Tkn_IO_Exn
   | Tkn_Rcd of tkn list
+  | Tkn_Vct_ini
+  | Tkn_Vct of tkn * ((tkn * tkn) list)
   | Tkn_CoPrd of tkn list
   | Tkn_IO_Inj of int
   | Tkn_Prd of tkn * (code list)
   | Tkn_IO_Cho of int
   | Tkn_IO_Code of (tkn list) * int * top_exp *  code
+  | Tkn_Sgn of int
+  | Tkn_IO_Sgn
   | Tkn_Z of int
+  | Tkn_Fin of int * int
+  | Tkn_None
+  | Tkn_Some of tkn
   | Tkn_IO_Plus
   | Tkn_IO_Mult
   | Tkn_IO_Minus
   | Tkn_IO_Eq
-  | Tkn_Sgn of int
-  | Tkn_IO_Sgn
   | Tkn_Stg of string
 type buffer =
   | Evo of code

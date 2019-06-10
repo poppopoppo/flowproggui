@@ -28,18 +28,27 @@ type token =
   | PRJ
   | PRD_END
   | PRD
+  | PLS_NAT
   | PLS_EVL
   | PLS
   | OUT of (int)
+  | ORD_LEX_COPRD
+  | ORD_COPRD
+  | NOT_SPL
+  | NOT
+  | NAT of (int)
   | NAM of (string)
   | N
   | M_HLZ
+  | MNS_NAT
   | MNS
+  | MLT_NAT
   | MLT_EVL
   | MLT
   | MDL_END
   | MDL
   | MCR
+  | L_VCT
   | L_RCD
   | L_PRN
   | L_OPN
@@ -53,6 +62,7 @@ type token =
   | INT of (int)
   | INJ
   | IN of (int)
+  | GRM
   | FOR_ALL
   | FNT
   | EXP
@@ -61,6 +71,7 @@ type token =
   | EOP
   | EOF
   | EMT
+  | DTA_GRM
   | DTA
   | DEQ
   | DEF
