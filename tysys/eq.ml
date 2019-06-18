@@ -30,7 +30,7 @@ let rec eq (v0:tkn) (v1:tkn) : bool =
         | Tkn_IO_Inj _ -> false
         | Tkn_IO_Cho _ -> false
         | Tkn_IO_Sgn -> false
-        | Tkn_IO_Code (_,_,_,_) -> falsess
+        | Tkn_IO_Code (_,_,_,_) -> false
         | Tkn_Sgn _ -> false
         | Tkn_Stg _ -> false
         | _ -> false

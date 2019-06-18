@@ -10,8 +10,9 @@ let evo ((g,(_,v),i):t) (b:Types.buffer) : t =
        | Types.Evo e ->
          Util.pnt true (Print.string_of_code 0 e);
          let v0 = Imp.evo_code g v i e in
-         let (_,d) = Typing.typing g 0 None e in
-         (g,(d,v0),i)
+         let d = Types.Typ_Null in
+         Util.pnt true "TEST0\n"; 
+           (g,(d,v0),i)
        | _ -> raise @@ Failure ("Implib:evo:")
      )
    with Stack_overflow ->

@@ -34,7 +34,7 @@
 %type <opr> exp
 %%
 buffer:
-  | vh_frm_top EOF { Evo (Seq ($1,Rtn)) }
+  | vh_frm_top EOF { Evo (Code_Exp $1) }
   | ARR_END EOF { End }
   ;
 file:
@@ -169,37 +169,70 @@ glb_etr_clique:
   | SLF glb_etr_body glb_etr_clique { [$2]@$3 }
   ;
 glb_etr_body:
-  | NAM typ_def DEF IN stt_code { let (src,dst) =$2 in ($1,src,dst,$5) }
+  | NAM typ_def DEF IN stt_code {
+    let (src,dst) = Ty.typing $5 in
+    ($1,src,dst,$5)
+  }
   ;
 typ_def:
   | { (Typ_Val (-1),Typ_Val (-1)) }
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
 stt_code:
-  | vh_frm_top code { Seq ($1,$2) }
-  | L_HLZ h_frm_list R_HLZ tail { Canon ($2,$4) }
+  | vh_frm_top code { Seq (Code_Exp $1,$2) }
+  | L_HLZ h_frm_list R_HLZ tail {
+    match $4 with
+    | None -> Canon $2
+    | Some x -> Seq(Canon $2,x)
+  }
   | vh_frm_top code_coprd_list COPRD_END tail {
-    Code_CoPrd($1,$2,$4) }
+    let c = Code_CoPrd($1,$2) in
+    match $4 with
+    | None -> c
+    | Some x -> Seq(c,x)
+   }
   | vh_frm_top code_prd_list PRD_END tail {
-    Code_Prd($1,$2,$4) }
+    let c = Code_Prd($1,$2) in
+    match $4 with
+    | None -> c
+    | Some x -> Seq(c,x)
+  }
   ;
 code:
-  | eop tail { $2 }
-  | ARR vh_frm_top code { Seq ($2,$3) }
-  | ARR L_HLZ h_frm_list R_HLZ tail { Canon ($3,$5) }
+  | eop tail {
+    match $2 with
+    | None -> Code_Exp (Typ_Val 0,(Root 0),[])
+    | Some x -> x }
+  | ARR vh_frm_top code { Seq (Code_Exp $2,$3) }
+  | ARR L_HLZ h_frm_list R_HLZ tail {
+    ( match $5 with
+      | None -> Canon $3
+      | Some x -> Seq(Canon $3,x)
+      )
+  }
   | ARR vh_frm_top code_coprd_list COPRD_END tail {
-    Code_CoPrd($2,$3,$5) }
+    let c = Code_CoPrd($2,$3) in
+    match $5 with
+    | None -> c
+    | Some x -> Seq(c,x) }
   | ARR vh_frm_top code_prd_list PRD_END tail {
-    Code_Prd($2,$3,$5) }
-  | IN vh_frm_top code eop tail { Code_IO($1,$2,$3,$5) }
+    let c = Code_Prd($2,$3) in
+    match $5 with
+    | None -> c
+    | Some x -> Seq(c,x)  }
+  | IN vh_frm_top code eop tail {
+    let c = Code_IO($1,$2,$3) in
+    match $5 with
+      | None -> c
+      | Some x -> Seq(c,x) }
   ;
 eop:
   | EOP {}
   | OUT {}
   ;
 tail:
-  | { Rtn  }
-  | SEQ code { $2 }
+  | { None  }
+  | SEQ code { Some $2 }
   ;
 
 code_coprd_list:
@@ -272,15 +305,6 @@ exp:
   | L_OPN R_OPN { Opr_None }
   | L_OPN exp R_OPN { Opr_Some $2 }
   | L_LST lst_list R_LST { $2 }
-  | L_VCT exp SPL subst_list R_RCD {
-      let vct_adds v0 l =
-        ( match l with
-        | [] -> v0
-        | (b,k)::tl ->
-            let v1 = App (Opr_Name "vct_add",Opr_Rcd [b;k]) in
-            vct_adds v1 tl ) in
-      vct_adds $2 $4
-        }
   ;
 subst_list:
   | { [] }

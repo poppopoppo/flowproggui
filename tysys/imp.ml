@@ -202,22 +202,21 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
   )
 and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
   ( match a with
-    | Rtn -> s
-    | Seq ((_,o,_),c) ->
-      let s' = evo g [s] ir None o in
-      evo_code g s' ir c
-    | Canon (l,c) ->
+    | Code_Exp (_,e,_) -> evo g [s] ir None e
+    | Seq (c1,c2) ->
+      let s' = evo_code g s ir c1 in
+      evo_code g s' ir c2
+    | Canon l ->
       ( match s with
         | Tkn_Rcd v ->
           let y =
             List.map
               (fun (t,x) -> evo_code g x ir t)
               (List.combine l v) in
-          let s' = Tkn_Rcd y in
-          evo_code g s' ir c
+          Tkn_Rcd y
         | _ -> raise @@ Failure "error:evo_code:Canon"
       )
-    | Code_CoPrd ((_,o,_),l,_) ->
+    | Code_CoPrd ((_,o,_),l) ->
       let vs =
         BatList.mapi
           (fun i x ->
@@ -227,15 +226,11 @@ and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
              with Null -> None) l in
       let v0 = BatList.find_map (fun x -> x) vs in
       v0
-    | Code_Prd ((_,o,_),l,c) ->
+    | Code_Prd ((_,o,_),l) ->
       let s0 = evo g [s] ir None o in
-      let s1 = Tkn_Prd (s0,l) in
-      let s2 = evo_code g s1 ir c in
-      s2
-    | Code_IO (i,(t,o,m),c0,c1) ->
-      let f = Tkn_IO_Code ([s],i,(t,o,m),c0) in
-      let s2 = evo_code g f ir c1 in
-      s2
+      Tkn_Prd (s0,l)
+    | Code_IO (i,(t,o,m),c0) ->
+      Tkn_IO_Code ([s],i,(t,o,m),c0)
   )
 (*
 let check_io (g : gl_st) (c : code) (src:typ) (dst:typ) : bool =

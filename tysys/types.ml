@@ -33,12 +33,12 @@ and typ =
   | Typ_Val of int
 and st = typ * tkn
 and code =
-  | Rtn
-  | Seq of exp * code
-  | Canon of (code list) * code
-  | Code_CoPrd of exp * (code list) * code
-  | Code_Prd of exp * (code list) * code
-  | Code_IO of int * exp * code * code
+  | Code_Exp of exp
+  | Seq of code * code
+  | Canon of (code list)
+  | Code_CoPrd of exp * (code list)
+  | Code_Prd of exp * (code list)
+  | Code_IO of int * exp * code
 and exp = typ * opr * ((name * opr) list)
 and opr =
   | Agl of opr
@@ -66,7 +66,7 @@ and tkn =
   | Tkn_IO_Inj of int
   | Tkn_Prd of tkn * (code list)
   | Tkn_IO_Cho of int
-  | Tkn_IO_Code of (tkn list) * int * top_exp *  code
+  | Tkn_IO_Code of (tkn list) * int * exp *  code
   | Tkn_Sgn of int
   | Tkn_IO_Sgn
   | Tkn_Z of int

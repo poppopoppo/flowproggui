@@ -16,6 +16,7 @@ let rec string_of_typ d x =
   | Typ_Name n -> ex^n
   | Typ_App (p1,p2) -> (string_of_typ 1 p1)^"◂"^(string_of_typ 1 p2)
   | Typ_CoPrd c -> "↑["^(Util.string_of_list "¦" (string_of_typ 1) c)^"<]"
+  | Typ_Null -> "∅"
   | _ -> raise @@ Failure ("error:string_of_typ:")
 
 let rec string_of_tkn d s =
@@ -50,41 +51,23 @@ let string_of_st (x:st) : string =
 
 let rec string_of_code d x =
   match x with
-  | Rtn -> "∎\n"
-  | Seq ((dst,o,_),c) ->
-    (tabs d)^"» ` "^(string_of_typ 0 dst)^" : "^(string_of_opr o)^"\n"^(string_of_code d c)
-  | Canon (l,c) ->
+  | Code_Exp (dst,o,_) -> (tabs d)^"» ` "^(string_of_typ 0 dst)^" : "^(string_of_opr o)^"\n"
+  | Seq (c1,c2) -> (string_of_code d c1)^(string_of_code d c2)
+  | Canon l ->
     let pre = (tabs (d+1))^"⁅ "^(Util.string_of_list ("\n"^(tabs (d+1))^"¦ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"⁆" in
-    let post =
-      ( match c with
-        | Rtn -> "\n"
-        | _ -> "^"^(string_of_code d c)
-      ) in
-    pre^post
-  | Code_CoPrd ((t,o,_),l,c) ->
+    pre
+  | Code_CoPrd ((t,o,_),l) ->
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∐ "^(Util.string_of_list ((tabs (d+1))^"∐ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
-    let post =
-      ( match c with
-        | Rtn -> "\n"
-        | _ -> "^"^(string_of_code d c) ) in
-    pre^mid^post
-  | Code_Prd ((t,o,_),l,c) ->
+    pre^mid
+  | Code_Prd ((t,o,_),l) ->
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
-    let post =
-      ( match c with
-        | Rtn -> "\n"
-        | _ -> "^"^(string_of_code d c) ) in
-    pre^mid^post
-  | Code_IO (_,(t,o,_),c0,c1) ->
+    pre^mid
+  | Code_IO (_,(t,o,_),c0) ->
     let pre = (tabs (d+1))^"|» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = string_of_code (d+1) c0 in
-    let post =
-      (match c1 with
-       | Rtn -> "\n"
-       | _ -> "^"^(string_of_code d c1)) in
-    pre^mid^"∎"^post
+    pre^mid
 and string_of_opr x =
   match x with
   | Agl e -> "∠["^(string_of_opr e)^"]"
