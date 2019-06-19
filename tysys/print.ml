@@ -20,8 +20,8 @@ let rec print_tm e =
   )
 let print_c c = List.fold_left (fun s (x,y) -> s^","^((print_tm x)^"~"^(print_tm y))) "" c
 let print_cxt c =
-  Hashtbl.fold
-    (fun i v r -> r^"X"^(Sgn.print i)^" -> "^(print_tm v)^"\n")
+  SgnMap.fold
+    (fun i v r -> r^(print_tm (Val i))^" -> "^(print_tm v)^"\n")
     c ""
 
 let rec string_of_typ d x =

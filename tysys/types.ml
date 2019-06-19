@@ -14,6 +14,7 @@ end
   let print x = (string_of_int x)
 end
 module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
+module SgnMap = Map.Make(struct type t = Sgn.t let compare = compare end)
 type tm =
   | Prm of Sgn.t
   | Val of Sgn.t
@@ -29,7 +30,7 @@ let z = Sgn.ini ()
 let stg = Sgn.ini ()
 let arg = Sgn.ini ()
 let root = Sgn.ini ()
-type cxt = (Sgn.t,tm) Hashtbl.t
+type cxt = tm SgnMap.t
 type c = (tm * tm) list
 let (<+) x y = App(x,y)
 let (-*) x y = (Prm imp)<+x<+y
