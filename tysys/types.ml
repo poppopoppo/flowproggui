@@ -1,3 +1,42 @@
+module Sgn :
+sig
+  type t
+  val ini : unit -> t
+  val print : t -> string
+end
+= struct
+  type t = int
+  let sgn_N = ref 0
+  let ini () =
+    let n = !sgn_N in
+    sgn_N := n+1;
+    n
+  let print x = (string_of_int x)
+end
+module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
+type tm =
+  | Prm of Sgn.t
+  | Val of Sgn.t
+  | App of tm * tm
+let imp = Sgn.ini ()
+let tpl = Sgn.ini ()
+let prd = Sgn.ini ()
+let coprd = Sgn.ini ()
+let rcd = Sgn.ini ()
+let rcd_end = Sgn.ini ()
+let rcd_edo = Sgn.ini ()
+let z = Sgn.ini ()
+let stg = Sgn.ini ()
+let arg = Sgn.ini ()
+let root = Sgn.ini ()
+type cxt = (Sgn.t,tm) Hashtbl.t
+type c = (tm * tm) list
+let (<+) x y = App(x,y)
+let (-*) x y = (Prm imp)<+x<+y
+let ( ** ) x y = (Prm tpl)<+x<+y
+let rcd_cl l = List.fold_right (fun x r -> x**r) l (Prm rcd_end)
+let rcd_op l = List.fold_right (fun x r -> x**r) l (Val (Sgn.ini()))
+
 type name = string
 type mdl = name * args * (glb_etr list)
 and glb_etr =
@@ -17,7 +56,7 @@ and args = arg list
 and arg =
   | Arg_Val of int
   | Arg_Rcd of arg list
-and etr = string * typ * typ * code
+and etr = string * tm * tm * code
 (* <name> : <src> ⊢ <dst> ≒ <code> *)
 and gl_st = glb_etr list
 and typ =
@@ -38,21 +77,15 @@ and code =
   | Canon of (code list)
   | Code_CoPrd of exp * (code list)
   | Code_Prd of exp * (code list)
-  | Code_IO of int * exp * code
+  | Code_IO of exp * code
 and exp = typ * opr * ((name * opr) list)
 and opr =
   | Agl of opr
   | Opr_Z of int
   | Opr_Name of string
   | Opr_Rcd of opr list
-  | Root of int
-  | Self of int
-  | App of opr * opr
-  | Prj of opr * opr
-  | Cast of opr
-  | Opr_None
-  | Opr_Some of opr
-  | Opr_Exn
+  | Opr_App of opr * opr
+  | Prj of opr * int
   | Opr_Stg of string
 and tkn =
   | Tkn_Null

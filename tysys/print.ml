@@ -3,6 +3,27 @@ let dbg = true
 
 let tabs d = String.make d '\t'
 
+let rec print_tm e =
+  ( match e with
+    | Prm p ->
+      if p=imp then "→"
+      else if p=rcd then "{"
+      else if p=z then "ℤ"
+      else if p=rcd_end then "}"
+      else "p"^(Sgn.print p)
+    | Val v -> "t"^(Sgn.print v)^"'"
+    | App(App(Prm p,e1),e2) ->
+      if p=imp then ("("^(print_tm e1)^"→"^(print_tm e2)^")")
+      else if p=tpl then ("("^(print_tm e1)^"**"^(print_tm e2)^")")
+      else ("("^(print_tm (Prm p))^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")")
+    | App (e1,e2) -> ("("^(print_tm e1)^"◂"^(print_tm e2)^")")
+  )
+let print_c c = List.fold_left (fun s (x,y) -> s^","^((print_tm x)^"~"^(print_tm y))) "" c
+let print_cxt c =
+  Hashtbl.fold
+    (fun i v r -> r^"X"^(Sgn.print i)^" -> "^(print_tm v)^"\n")
+    c ""
+
 let rec string_of_typ d x =
   let ex= if d=0 then "! " else "" in
   match x with
@@ -64,7 +85,7 @@ let rec string_of_code d x =
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
-  | Code_IO (_,(t,o,_),c0) ->
+  | Code_IO ((t,o,_),c0) ->
     let pre = (tabs (d+1))^"|» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = string_of_code (d+1) c0 in
     pre^mid
@@ -74,18 +95,15 @@ and string_of_opr x =
   | Opr_Z z -> string_of_int z
   | Opr_Name n -> n
   | Opr_Rcd l -> "{"^(Util.string_of_list " " string_of_opr l)^"}"
-  | Root _ -> "$"
-  | App (f,x) -> "("^(string_of_opr f)^"◂"^(string_of_opr x)^")"
-  | Prj (f,x) -> "("^(string_of_opr f)^"◃"^(string_of_opr x)^")"
-  | Opr_Exn -> "?"
+  | Opr_App (f,x) -> "("^(string_of_opr f)^"◂"^(string_of_opr x)^")"
+  | Prj (f,x) -> "("^(string_of_opr f)^"◃"^(string_of_int x)^")"
   | Opr_Stg s -> "\""^s^"\""
-  | _ -> "_"
 
 
 let string_of_glb_etr e =
   ( match e with
     | Etr (n,s,d,c) ->
-      ("§ "^n^" : "^(string_of_typ 0 s)^" ⊢ "^(string_of_typ 0 d)^" ≒ \n\t.» ")^
+      ("§ "^n^" : "^(print_tm s)^" ⊢ "^(print_tm d)^" ≒ \n\t.» ")^
       (string_of_code 1 c)^"\n"
     | Flow(Def_CoPrd (n,_,l)) ->
       "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (string_of_typ 0 t)^" : "^c) l)

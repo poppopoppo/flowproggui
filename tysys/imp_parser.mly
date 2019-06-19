@@ -179,7 +179,10 @@ typ_def:
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
 stt_code:
-  | vh_frm_top code { Seq (Code_Exp $1,$2) }
+  | vh_frm_top code {
+      match $2 with
+      | None -> Code_Exp $1
+      | Some x -> Seq (Code_Exp $1,x) }
   | L_HLZ h_frm_list R_HLZ tail {
     match $4 with
     | None -> Canon $2
@@ -197,34 +200,39 @@ stt_code:
     | None -> c
     | Some x -> Seq(c,x)
   }
+  | vh_frm_top IN stt_code eop tail {
+    let c = Code_IO($1,$3) in
+    match $5 with
+      | None -> c
+      | Some x -> (Seq(c,x)) }
   ;
 code:
-  | eop tail {
-    match $2 with
-    | None -> Code_Exp (Typ_Val 0,(Root 0),[])
-    | Some x -> x }
-  | ARR vh_frm_top code { Seq (Code_Exp $2,$3) }
+  | eop tail { $2 }
+  | ARR vh_frm_top code {
+    ( match $3 with
+      | None -> Some (Code_Exp $2)
+      | Some x -> Some (Seq (Code_Exp $2,x)) ) }
   | ARR L_HLZ h_frm_list R_HLZ tail {
     ( match $5 with
-      | None -> Canon $3
-      | Some x -> Seq(Canon $3,x)
+      | None -> Some (Canon $3)
+      | Some x -> Some (Seq(Canon $3,x))
       )
   }
   | ARR vh_frm_top code_coprd_list COPRD_END tail {
     let c = Code_CoPrd($2,$3) in
     match $5 with
-    | None -> c
-    | Some x -> Seq(c,x) }
+    | None -> Some c
+    | Some x -> Some (Seq(c,x)) }
   | ARR vh_frm_top code_prd_list PRD_END tail {
     let c = Code_Prd($2,$3) in
     match $5 with
-    | None -> c
-    | Some x -> Seq(c,x)  }
-  | IN vh_frm_top code eop tail {
-    let c = Code_IO($1,$2,$3) in
-    match $5 with
-      | None -> c
-      | Some x -> Seq(c,x) }
+    | None -> Some c
+    | Some x -> Some (Seq(c,x))  }
+  | ARR vh_frm_top IN stt_code eop tail {
+    let c = Code_IO($2,$4) in
+    match $6 with
+      | None -> Some c
+      | Some x -> Some (Seq(c,x)) }
   ;
 eop:
   | EOP {}
@@ -232,7 +240,7 @@ eop:
   ;
 tail:
   | { None  }
-  | SEQ code { Some $2 }
+  | SEQ code { $2 }
   ;
 
 code_coprd_list:
@@ -284,26 +292,26 @@ exp:
   | EMT { Opr_Name "⋎" }
   | CNT { Opr_Name "⋏" }
   | EXN { Opr_Name "?" }
-  | ROT { Root $1 }
+  | ROT { Opr_Name "$" }
   | VCT { Opr_Name "#" }
   | INJ { Opr_Name "↑" }
   | CHO { Opr_Name "↓"  }
   | NAM  { Opr_Name $1 }
   | SGN { Opr_Name "&" }
   | STG { Opr_Stg $1 }
-  | SLF { Self $1 }
-  | exp PLS exp { App (Opr_Name "+", Opr_Rcd [$1;$3]) }
-  | exp MLT exp { App (Opr_Name "*",Opr_Rcd [$1;$3]) }
-  | exp MNS exp { App (Opr_Name "+",Opr_Rcd [$1;App (Opr_Name "-",$3)]) }
-  | exp CST { Cast $1 }
-  | L_PRN MNS exp R_PRN { App (Opr_Name "-",$3) }
-  | exp EQ exp { App(Opr_Name "=",Opr_Rcd [$1;$3]) }
+  | SLF { Opr_Name ">@" }
+  | exp PLS exp { Opr_App (Opr_Name "+",Opr_Rcd [$1;$3]) }
+  | exp MLT exp { Opr_App (Opr_Name "*",Opr_Rcd [$1;$3]) }
+  | exp MNS exp { Opr_App (Opr_Name "+",Opr_Rcd [$1;Opr_App (Opr_Name "-",$3)]) }
+  | exp CST { Opr_App(Opr_Name "//",$1) }
+  | L_PRN MNS exp R_PRN { Opr_App (Opr_Name "-",$3) }
+  | exp EQ exp { Opr_App(Opr_Name "=",Opr_Rcd [$1;$3]) }
   | L_PRN exp R_PRN { $2 }
-  | exp APP exp { App ($1,$3) }
-  | exp PRJ exp { Prj ($1,$3) }
+  | exp APP exp { Opr_App ($1,$3) }
+  | exp PRJ INT { Prj ($1,$3) }
   | L_RCD exp_lst R_RCD { Opr_Rcd $2 }
-  | L_OPN R_OPN { Opr_None }
-  | L_OPN exp R_OPN { Opr_Some $2 }
+  | L_OPN R_OPN { Opr_Name "‹›" }
+  | L_OPN exp R_OPN { Opr_App(Opr_Name "‹",$2) }
   | L_LST lst_list R_LST { $2 }
   ;
 subst_list:
@@ -311,6 +319,6 @@ subst_list:
   | subst_list CMM exp LET exp { $1@[($3,$5)] }
   ;
 lst_list:
-  | { App (Opr_Name "nil",Opr_Rcd []) }
-  | exp lst_list { App (Opr_Name "cns",Opr_Rcd [$1;$2]) }
+  | { Opr_App (Opr_Name "nil",Opr_Rcd []) }
+  | exp lst_list { Opr_App (Opr_Name "cns",Opr_Rcd [$1;$2]) }
   ;

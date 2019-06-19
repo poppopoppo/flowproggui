@@ -215,7 +215,7 @@ let main () =
               with_file name ~f:(input_channel b);
               let s = Glib.Convert.locale_to_utf8 (Buffer.contents b) in
               (Filename.basename name,s)
-            with _ -> prerr_endline "Load failed"; raise @@ Failure "Load failed"
+            with _ -> prerr_endline (name^":Load failed"); raise @@ Failure "Load failed"
           )
         | None -> ("*unsaved","")) in
     let buffer = GSourceView2.source_buffer ~style_scheme:theme ~text:text () in
@@ -481,7 +481,7 @@ let main () =
              (* navi_view#source_buffer#set_text "entering shell view\n" *) ()
            | ENTER_CODE ->
              pnt ("entering code view\n");
-             (* navi_view#source_buffer#set_text "entering code view\n" *) () 
+             (* navi_view#source_buffer#set_text "entering code view\n" *) ()
            | MODIFIED s ->
               let mdl = Implib.mdl_from_string s in
               let s = Print.string_of_mdl mdl in

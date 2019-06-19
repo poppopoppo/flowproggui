@@ -52,7 +52,7 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
   let agl_flg = ref false in
   ( match a with
     | Opr_Z z -> Tkn_Z z
-    | App (f,x) ->
+    | Opr_App (f,x) ->
       ( match (evo g s ir ai f,evo g s ir ai x) with
         | (Tkn_IO_Code(vs,k,(t,o,m),c),x) ->
           let k0 = k-(List.length s) in
@@ -99,11 +99,11 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
                                      (string_of_tkn 1 f)^" ◂ "^(string_of_tkn 1 x))
       )
     | Prj (f,x) ->
-      ( match (evo g s ir ai f,evo g s ir ai x) with
-        | (Tkn_Rcd l,Tkn_Z z) -> (List.nth l z)
-        | (f',x') -> raise @@ Failure
+      ( match evo g s ir ai f with
+        | Tkn_Rcd l -> (List.nth l x)
+        | f' -> raise @@ Failure
             ("error:Imp.evo:Prj:type unmatched\n"^
-             (string_of_tkn 0 f')^" ◃ "^(string_of_tkn 0 x'))
+             (string_of_tkn 0 f')^" ◃ "^(string_of_int x))
       )
     | Opr_Name n ->
       ( try
@@ -122,9 +122,9 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
           then Tkn_IO_Exn
           else
             let find_etr n e =
-              let (name,src,_,code) = e in
+              let (name,_,_,code) = e in
               if n=name
-              then Some (Tkn_IO_Code([],1,(src,Root 0,[]),code))
+              then Some (Tkn_IO_Code([],1,(Typ_Null,Opr_Name "$",[]),code))
               else None in
             let find_flow n f =
               ( match f with
@@ -196,9 +196,7 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
           | Tkn_Null -> raise Null
           | _ -> raise @@ Failure "error:agl:type unmatched"
         )
-    | Root r -> List.nth s r
     | Opr_Stg s -> Tkn_Stg s
-    | _ -> raise @@ Failure "Imp.evo:not defined"
   )
 and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
   ( match a with
@@ -229,8 +227,8 @@ and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
     | Code_Prd ((_,o,_),l) ->
       let s0 = evo g [s] ir None o in
       Tkn_Prd (s0,l)
-    | Code_IO (i,(t,o,m),c0) ->
-      Tkn_IO_Code ([s],i,(t,o,m),c0)
+    | Code_IO ((t,o,m),c0) ->
+      Tkn_IO_Code ([s],1,(t,o,m),c0)
   )
 (*
 let check_io (g : gl_st) (c : code) (src:typ) (dst:typ) : bool =
