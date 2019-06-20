@@ -122,7 +122,7 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
           then Tkn_IO_Exn
           else
             let find_etr n e =
-              let (name,_,_,code) = e in
+              let (name,_,_,_,code) = e in
               if n=name
               then Some (Tkn_IO_Code([],1,(Typ_Null,Opr_Name "$",[]),code))
               else None in

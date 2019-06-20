@@ -1,4 +1,5 @@
 open Types
+open Util
 let dbg = true
 
 let tabs d = String.make d '\t'
@@ -9,21 +10,52 @@ let rec print_tm e =
       if p=imp then "→"
       else if p=rcd then "{"
       else if p=z then "ℤ"
-      else if p=rcd_end then "}"
+      else if p=rcd_end then "{}"
+      else if p=stg then "ℾ"
       else "p"^(Sgn.print p)
     | Val v -> "t"^(Sgn.print v)^"'"
     | App(App(Prm p,e1),e2) ->
       if p=imp then ("("^(print_tm e1)^"→"^(print_tm e2)^")")
-      else if p=tpl then ("("^(print_tm e1)^"**"^(print_tm e2)^")")
+      else if p=tpl then ("{ "^(print_rcd e))
       else ("("^(print_tm (Prm p))^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")")
     | App (e1,e2) -> ("("^(print_tm e1)^"◂"^(print_tm e2)^")")
   )
+and print_rcd e =
+  ( match e with
+    | App(App(Prm p,e1),e2) ->
+      if p=tpl then (print_tm e1)^" "^(print_rcd e2)
+      else raise @@ Failure "print_rcd:0"
+    | Prm p ->
+      if p=rcd_end then "}"
+      else raise @@ Failure "print_rcd:1"
+    | Val _ -> "<}"
+    | _ -> raise @@ Failure "print_rcd:2" )
 let print_c c = List.fold_left (fun s (x,y) -> s^","^((print_tm x)^"~"^(print_tm y))) "" c
 let print_cxt c =
   SgnMap.fold
     (fun i v r -> r^(print_tm (Val i))^" -> "^(print_tm v)^"\n")
     c ""
-
+let rec print_rec_scm (c,y) =
+  let p = print_scm_hd c in
+  "["^p^"]∀ "^(print_tm y)
+and print_scm_hd h =
+  let bs = SgnMap.bindings h in
+  let p = string_of_list ","
+      (fun (k,v) ->
+         let v0 =
+           ( match v with
+             | None -> ""
+             | Some x -> " ≃ "^(print_rec_scm_etr x)
+           ) in
+         "t"^(Sgn.print k)^"'"^v0)
+      bs in
+  p
+and print_rec_scm_etr e =
+  ( match e with
+    | Scm_Tm m -> print_tm m
+    | Scm_Prd p -> "↓["^(string_of_list " " print_tm p)^"]"
+    | Scm_CoPrd p -> "↑["^(string_of_list " " print_tm p)^"]"
+  )
 let rec string_of_typ d x =
   let ex= if d=0 then "! " else "" in
   match x with
@@ -72,10 +104,11 @@ let string_of_st (x:st) : string =
 
 let rec string_of_code d x =
   match x with
-  | Code_Exp (dst,o,_) -> (tabs d)^"» ` "^(string_of_typ 0 dst)^" : "^(string_of_opr o)^"\n"
+  | Seq (c1,Code_Exp(_,o,_)) -> (string_of_code d c1)^"» "^(string_of_opr o)
+  | Code_Exp (_,o,_) -> (tabs d)^"» "^(string_of_opr o)^"\n"
   | Seq (c1,c2) -> (string_of_code d c1)^(string_of_code d c2)
   | Canon l ->
-    let pre = (tabs (d+1))^"⁅ "^(Util.string_of_list ("\n"^(tabs (d+1))^"¦ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"⁆" in
+    let pre = (tabs (d+1))^"⁅ "^(Util.string_of_list ((tabs (d+1))^"¦ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"⁆" in
     pre
   | Code_CoPrd ((t,o,_),l) ->
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
@@ -99,11 +132,10 @@ and string_of_opr x =
   | Prj (f,x) -> "("^(string_of_opr f)^"◃"^(string_of_int x)^")"
   | Opr_Stg s -> "\""^s^"\""
 
-
 let string_of_glb_etr e =
   ( match e with
-    | Etr (n,s,d,c) ->
-      ("§ "^n^" : "^(print_tm s)^" ⊢ "^(print_tm d)^" ≒ \n\t.» ")^
+    | Etr (n,h,s,d,c) ->
+      ("§ "^n^" : ["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d)^" ≒ \n\t.» ")^
       (string_of_code 1 c)^"\n"
     | Flow(Def_CoPrd (n,_,l)) ->
       "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (string_of_typ 0 t)^" : "^c) l)

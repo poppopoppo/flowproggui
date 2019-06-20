@@ -15,6 +15,8 @@ end
 end
 module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
 module SgnMap = Map.Make(struct type t = Sgn.t let compare = compare end)
+let set_of_map m = SgnMap.fold (fun k _ r -> SgnSet.add k r) m SgnSet.empty
+let map_of_set s = SgnSet.fold (fun k r -> SgnMap.add k None r) s SgnMap.empty
 type tm =
   | Prm of Sgn.t
   | Val of Sgn.t
@@ -37,7 +39,13 @@ let (-*) x y = (Prm imp)<+x<+y
 let ( ** ) x y = (Prm tpl)<+x<+y
 let rcd_cl l = List.fold_right (fun x r -> x**r) l (Prm rcd_end)
 let rcd_op l = List.fold_right (fun x r -> x**r) l (Val (Sgn.ini()))
-
+type rec_scm = rec_scm_hd * tm
+and rec_scm_hd = (scm_etr option) SgnMap.t
+and scm_etr =
+  | Scm_Tm of tm
+  | Scm_Prd of tm list
+  | Scm_CoPrd of tm list
+type rec_gma = rec_scm SgnMap.t
 type name = string
 type mdl = name * args * (glb_etr list)
 and glb_etr =
@@ -57,8 +65,8 @@ and args = arg list
 and arg =
   | Arg_Val of int
   | Arg_Rcd of arg list
-and etr = string * tm * tm * code
-(* <name> : <src> ⊢ <dst> ≒ <code> *)
+and etr = string * rec_scm_hd * tm * tm * code
+(* <name> : [scm_hd]∀ <src> ⊢ <dst> ≒ <code> *)
 and gl_st = glb_etr list
 and typ =
   | Typ_App of typ * typ
@@ -69,7 +77,7 @@ and typ =
   | Typ_CoPrd of typ list
   | Typ_Prd of typ list
   | Typ_Name of name
-        (* ℤ & ℾ ◃ ‹› *)
+  (* ℤ & ℾ ◃ ‹› *)
   | Typ_Val of int
 and st = typ * tkn
 and code =
@@ -116,3 +124,33 @@ type buffer =
   | Evo of code
   | End
 exception End
+type path = int list
+let rec agl e : (int list) option =
+  ( match e with
+    | Agl _ -> Some []
+    | Opr_Z _ -> None
+    | Opr_Name _ -> None
+    | Opr_Rcd l ->
+      let (i,a) = BatList.findi (fun i x -> not(x=None)) (List.map agl l) in
+      ( match a with
+        | None -> raise @@ Failure ""
+        | Some a -> Some (i::a)
+      )
+    | Opr_App (_,_) -> None
+    | Prj _ -> None
+    | Opr_Stg _ -> None
+  )
+let rec path p e : tm option =
+  ( match p with
+    | [] -> Some e
+    | hd::tl ->
+      let e1 = rcd_nth hd e in
+      path tl e1
+  )
+let rec rcd_nth n e =
+  ( match e with
+    | App(App(Prm p,e1),e2) ->
+      if p=tpl then if n=0 then e1 else rcd_nth (n-1) e2
+      else raise @@ Failure "rcd_nth:1"
+    | _ -> raise @@ Failure "rcd_nth:2"
+  )

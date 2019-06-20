@@ -544,8 +544,8 @@ and _menhir_goto_stt_code : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_stt
         let _v : 'tv_glb_etr_body = 
 # 172 "imp_parser.mly"
                                 (
-    let (src,dst) = Ty.typing _5 in
-    (_1,src,dst,_5)
+    let (scm,(src,dst)) = Ty.typing _5 in
+    (_1,scm,src,dst,_5)
   )
 # 551 "imp_parser.ml"
          in

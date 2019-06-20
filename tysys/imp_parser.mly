@@ -170,8 +170,8 @@ glb_etr_clique:
   ;
 glb_etr_body:
   | NAM typ_def DEF IN stt_code {
-    let (src,dst) = Ty.typing $5 in
-    ($1,src,dst,$5)
+    let (scm,(src,dst)) = Ty.typing $5 in
+    ($1,scm,src,dst,$5)
   }
   ;
 typ_def:
