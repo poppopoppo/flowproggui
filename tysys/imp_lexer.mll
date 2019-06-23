@@ -33,10 +33,6 @@ rule token = parse
     | "~" { LET }
     | "»" { ARR }
     | "↓" { CHO }
-(*
-    | "»."  { ARR_END }
-    | ".»" { ARR_STT }
-*)
     | (('|')+ as lxm) "»" { IN(String.length lxm) }
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
