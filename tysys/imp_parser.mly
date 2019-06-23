@@ -178,7 +178,7 @@ glb_etr_body:
   ;
 typ_def:
   | { (Typ_Val (-1),Typ_Val (-1)) }
-  | CLN typ_top SRC typ_top { ($2,$4) }
+  | typ_top SRC typ_top CLN { ($1,$3) }
   ;
 stt_code:
   | vh_frm_top code {
@@ -208,7 +208,7 @@ stt_code:
     | Some x -> Seq(c,x)
   }
   | vh_frm_top IN stt_code eop tail {
-    let c = Code_IO($1,$3) in
+    let c = Code_IO($1,$2,$3) in
     match $5 with
       | None -> c
       | Some x -> (Seq(c,x)) }
@@ -241,7 +241,7 @@ code:
     | None -> Some c
     | Some x -> Some (Seq(c,x))  }
   | ARR vh_frm_top IN stt_code eop tail {
-    let c = Code_IO($2,$4) in
+    let c = Code_IO($2,$3,$4) in
     match $6 with
       | None -> Some c
       | Some x -> Some (Seq(c,x)) }
