@@ -135,7 +135,7 @@ type vh =
   | H of vh * vh
   | E of nd
   | CP of nd * nd * (vh list) (* ∠[exp] exp ∐ exp ∐ exp ∇ *)
-  | P of nd * vh * vh
+  | P of nd * (vh list)
   | F of nd * vh (* { exp ? } |» vh *)
 (* F of nd * int * vh { exp ? ?' ?'' .. } |» vh *)
 and nd =
