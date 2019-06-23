@@ -229,6 +229,7 @@ and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
       Tkn_Prd (s0,l)
     | Code_IO ((t,o,m),c0) ->
       Tkn_IO_Code ([s],1,(t,o,m),c0)
+    | _ -> raise @@ Failure "imp:10"
   )
 (*
 let check_io (g : gl_st) (c : code) (src:typ) (dst:typ) : bool =

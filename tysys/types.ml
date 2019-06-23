@@ -13,6 +13,7 @@ end
     n
   let print x = (string_of_int x)
 end
+let rec sgns n = if n=0 then [] else (Sgn.ini ())::(sgns (n-1))
 module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
 module SgnMap = Map.Make(struct type t = Sgn.t let compare = compare end)
 let set_of_map m = SgnMap.fold (fun k _ r -> SgnSet.add k r) m SgnSet.empty
@@ -25,6 +26,8 @@ let imp = Sgn.ini ()
 let tpl = Sgn.ini ()
 let prd = Sgn.ini ()
 let coprd = Sgn.ini ()
+let prd_end  = Sgn.ini ()
+let coprd_end = Sgn.ini ()
 let rcd = Sgn.ini ()
 let rcd_end = Sgn.ini ()
 let rcd_edo = Sgn.ini ()
@@ -32,6 +35,8 @@ let z = Sgn.ini ()
 let stg = Sgn.ini ()
 let arg = Sgn.ini ()
 let root = Sgn.ini ()
+let fld = Sgn.ini ()
+let unfld = Sgn.ini ()
 type cxt = tm SgnMap.t
 type c = (tm * tm) list
 let (<+) x y = App(x,y)
@@ -39,12 +44,15 @@ let (-*) x y = (Prm imp)<+x<+y
 let ( ** ) x y = (Prm tpl)<+x<+y
 let rcd_cl l = List.fold_right (fun x r -> x**r) l (Prm rcd_end)
 let rcd_op l = List.fold_right (fun x r -> x**r) l (Val (Sgn.ini()))
+let ( *| ) x y = (Prm coprd)<+x<+y
+let ( *& ) x y = (Prm prd)<+x<+y
+let coprd_cl l = List.fold_right (fun x r -> x*|r) l (Prm coprd_end)
+let coprd_op l = List.fold_right (fun x r -> x*|r) l (Val (Sgn.ini()))
+let prd_cl l = List.fold_right (fun x r -> x*&r) l (Prm prd_end)
+let prd_op l = List.fold_right (fun x r -> x*&r) l (Val (Sgn.ini()))
 type rec_scm = rec_scm_hd * tm
 and rec_scm_hd = (scm_etr option) SgnMap.t
-and scm_etr =
-  | Scm_Tm of tm
-  | Scm_Prd of tm list
-  | Scm_CoPrd of tm list
+and scm_etr = tm
 type rec_gma = rec_scm SgnMap.t
 type name = string
 type mdl = name * args * (glb_etr list)
@@ -85,6 +93,7 @@ and code =
   | Seq of code * code
   | Canon of (code list)
   | Code_CoPrd of exp * (code list)
+  | Code_Agl of opr * opr * (code list)
   | Code_Prd of exp * (code list)
   | Code_IO of exp * code
 and exp = typ * opr * ((name * opr) list)
@@ -120,6 +129,22 @@ and tkn =
   | Tkn_IO_Minus
   | Tkn_IO_Eq
   | Tkn_Stg of string
+type vh =
+  | V of vh * vh
+  | H of vh * vh
+  | E of nd
+  | CP of nd * nd * vh * vh (* ∠[exp] exp ∐ exp ∐ exp ∇ *)
+  | P of nd * vh * vh
+  | F of nd * vh (* { exp ? } |» vh *)
+(* F of nd * int * vh { exp ? ?' ?'' .. } |» vh *)
+and nd =
+  | Exp_Z of int
+  | Exp_Name of string
+  | Exp_App of nd * nd
+  | PrjL of nd
+  | PrjR of nd
+  | Exp_Stg of string
+let id = E (Exp_Name "$")
 type buffer =
   | Evo of code
   | End
@@ -131,7 +156,7 @@ let rec agl e : (int list) option =
     | Opr_Z _ -> None
     | Opr_Name _ -> None
     | Opr_Rcd l ->
-      let (i,a) = BatList.findi (fun i x -> not(x=None)) (List.map agl l) in
+      let (i,a) = BatList.findi (fun _ x -> not(x=None)) (List.map agl l) in
       ( match a with
         | None -> raise @@ Failure ""
         | Some a -> Some (i::a)
@@ -147,7 +172,7 @@ let rec path p e : tm option =
       let e1 = rcd_nth hd e in
       path tl e1
   )
-let rec rcd_nth n e =
+and rcd_nth n e =
   ( match e with
     | App(App(Prm p,e1),e2) ->
       if p=tpl then if n=0 then e1 else rcd_nth (n-1) e2

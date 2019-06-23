@@ -6,34 +6,34 @@
 # 7 "imp_lexer.ml"
 let __ocaml_lex_tables = {
   Lexing.lex_base =
-   "\000\000\173\255\174\255\005\000\079\000\000\000\021\000\185\255\
-    \077\000\078\000\080\000\198\255\200\255\201\255\202\255\203\255\
-    \211\255\047\000\213\255\095\000\215\255\223\255\224\255\225\255\
+   "\000\000\172\255\173\255\005\000\079\000\000\000\021\000\184\255\
+    \077\000\078\000\080\000\197\255\199\255\200\255\201\255\202\255\
+    \210\255\047\000\212\255\095\000\214\255\222\255\223\255\224\255\
     \228\255\229\255\019\000\238\255\083\000\192\000\017\000\244\255\
     \023\000\000\000\089\000\142\000\123\000\255\255\124\000\125\000\
-    \126\000\102\000\116\000\104\000\222\255\040\000\041\000\126\000\
+    \126\000\102\000\116\000\104\000\221\255\040\000\041\000\126\000\
     \001\000\003\000\125\000\250\255\001\000\041\000\000\000\248\255\
     \245\255\050\000\246\255\048\000\029\000\049\000\000\000\017\000\
-    \055\000\049\000\019\000\051\000\066\000\094\000\217\255\218\255\
-    \219\255\220\255\221\255\108\000\243\255\226\255\216\255\240\255\
-    \235\255\236\255\232\255\230\255\231\255\209\255\210\255\207\255\
-    \208\255\205\255\206\255\196\255\161\000\182\255\193\255\194\255\
-    \195\255\189\255\242\255\079\001\239\255\014\000\090\000\234\255\
-    \214\255\204\255\181\255\180\255\179\255\176\255\210\000\254\255\
+    \055\000\049\000\019\000\051\000\066\000\094\000\216\255\217\255\
+    \218\255\219\255\220\255\108\000\243\255\225\255\215\255\240\255\
+    \235\255\236\255\232\255\230\255\231\255\208\255\209\255\206\255\
+    \207\255\204\255\205\255\195\255\161\000\181\255\192\255\193\255\
+    \194\255\188\255\242\255\079\001\239\255\014\000\090\000\234\255\
+    \213\255\203\255\180\255\179\255\178\255\175\255\210\000\254\255\
     \255\255";
   Lexing.lex_backtrk =
-   "\255\255\255\255\255\255\080\000\078\000\072\000\071\000\255\255\
-    \065\000\064\000\063\000\255\255\255\255\255\255\255\255\255\255\
-    \255\255\043\000\255\255\082\000\255\255\255\255\255\255\255\255\
-    \255\255\255\255\028\000\255\255\056\000\014\000\082\000\255\255\
-    \008\000\082\000\082\000\001\000\082\000\255\255\255\255\255\255\
-    \000\000\255\255\255\255\002\000\255\255\018\000\067\000\006\000\
+   "\255\255\255\255\255\255\081\000\079\000\073\000\072\000\255\255\
+    \066\000\065\000\064\000\255\255\255\255\255\255\255\255\255\255\
+    \255\255\044\000\255\255\083\000\255\255\255\255\255\255\255\255\
+    \255\255\255\255\028\000\255\255\057\000\014\000\083\000\255\255\
+    \008\000\083\000\083\000\001\000\083\000\255\255\255\255\255\255\
+    \000\000\255\255\255\255\002\000\255\255\018\000\068\000\006\000\
     \003\000\255\255\004\000\255\255\255\255\255\255\255\255\255\255\
     \255\255\022\000\255\255\255\255\255\255\255\255\255\255\255\255\
     \255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\
-    \255\255\255\255\255\255\077\000\255\255\255\255\255\255\255\255\
+    \255\255\255\255\255\255\029\000\255\255\255\255\255\255\255\255\
     \255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\
-    \255\255\255\255\255\255\255\255\058\000\255\255\255\255\255\255\
+    \255\255\255\255\255\255\255\255\059\000\255\255\255\255\255\255\
     \255\255\255\255\255\255\014\000\255\255\255\255\255\255\255\255\
     \255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\
     \255\255";
@@ -395,295 +395,300 @@ let
 
   | 29 ->
 # 49 "imp_lexer.mll"
-                 ( AGL )
+            ( AGL_TOP )
 # 400 "imp_lexer.ml"
 
   | 30 ->
 # 50 "imp_lexer.mll"
-          ( R_BLK )
+                 ( AGL )
 # 405 "imp_lexer.ml"
 
   | 31 ->
 # 51 "imp_lexer.mll"
-          ( L_BLK )
+          ( R_BLK )
 # 410 "imp_lexer.ml"
 
   | 32 ->
 # 52 "imp_lexer.mll"
-          ( SEQ )
+          ( L_BLK )
 # 415 "imp_lexer.ml"
 
   | 33 ->
 # 53 "imp_lexer.mll"
-            ( M_HLZ )
+          ( SEQ )
 # 420 "imp_lexer.ml"
 
   | 34 ->
 # 54 "imp_lexer.mll"
-              ( COPRD )
+            ( M_HLZ )
 # 425 "imp_lexer.ml"
 
   | 35 ->
 # 55 "imp_lexer.mll"
-              ( PRD )
+              ( COPRD )
 # 430 "imp_lexer.ml"
 
   | 36 ->
 # 56 "imp_lexer.mll"
-            ( EOP )
+              ( PRD )
 # 435 "imp_lexer.ml"
 
   | 37 ->
 # 57 "imp_lexer.mll"
-            ( COPRD_END )
+            ( EOP )
 # 440 "imp_lexer.ml"
 
   | 38 ->
 # 58 "imp_lexer.mll"
-            ( PRD_END )
+            ( COPRD_END )
 # 445 "imp_lexer.ml"
 
   | 39 ->
 # 59 "imp_lexer.mll"
-            ( DEF )
+            ( PRD_END )
 # 450 "imp_lexer.ml"
 
   | 40 ->
 # 60 "imp_lexer.mll"
-          ( ACT )
+            ( DEF )
 # 455 "imp_lexer.ml"
 
   | 41 ->
 # 61 "imp_lexer.mll"
-            ( CST )
+          ( ACT )
 # 460 "imp_lexer.ml"
 
   | 42 ->
 # 62 "imp_lexer.mll"
-          ( WC )
+            ( CST )
 # 465 "imp_lexer.ml"
 
   | 43 ->
 # 63 "imp_lexer.mll"
-          ( L_RCD )
+          ( WC )
 # 470 "imp_lexer.ml"
 
   | 44 ->
 # 64 "imp_lexer.mll"
-          ( R_RCD )
+          ( L_RCD )
 # 475 "imp_lexer.ml"
 
   | 45 ->
 # 65 "imp_lexer.mll"
-            ( L_HLZ )
+          ( R_RCD )
 # 480 "imp_lexer.ml"
 
   | 46 ->
 # 66 "imp_lexer.mll"
-            ( R_HLZ  )
+            ( L_HLZ )
 # 485 "imp_lexer.ml"
 
   | 47 ->
 # 67 "imp_lexer.mll"
-            ( L_LST )
+            ( R_HLZ  )
 # 490 "imp_lexer.ml"
 
   | 48 ->
 # 68 "imp_lexer.mll"
-            ( R_LST )
+            ( L_LST )
 # 495 "imp_lexer.ml"
 
   | 49 ->
 # 69 "imp_lexer.mll"
-            ( L_OPN )
+            ( R_LST )
 # 500 "imp_lexer.ml"
 
   | 50 ->
 # 70 "imp_lexer.mll"
-            ( R_OPN )
+            ( L_OPN )
 # 505 "imp_lexer.ml"
 
   | 51 ->
 # 71 "imp_lexer.mll"
-            ( L_VCT )
+            ( R_OPN )
 # 510 "imp_lexer.ml"
 
   | 52 ->
 # 72 "imp_lexer.mll"
-          ( SGN )
+            ( L_VCT )
 # 515 "imp_lexer.ml"
 
   | 53 ->
 # 73 "imp_lexer.mll"
-          ( VCT )
+          ( SGN )
 # 520 "imp_lexer.ml"
 
   | 54 ->
 # 74 "imp_lexer.mll"
-          ( L_PRN )
+          ( VCT )
 # 525 "imp_lexer.ml"
 
   | 55 ->
 # 75 "imp_lexer.mll"
-          ( R_PRN )
+          ( L_PRN )
 # 530 "imp_lexer.ml"
 
   | 56 ->
 # 76 "imp_lexer.mll"
-          ( EQ )
+          ( R_PRN )
 # 535 "imp_lexer.ml"
 
   | 57 ->
 # 77 "imp_lexer.mll"
-          ( EXP )
+          ( EQ )
 # 540 "imp_lexer.ml"
 
   | 58 ->
 # 78 "imp_lexer.mll"
-            ( APP )
+          ( EXP )
 # 545 "imp_lexer.ml"
 
   | 59 ->
 # 79 "imp_lexer.mll"
-            ( PRJ )
+            ( APP )
 # 550 "imp_lexer.ml"
 
   | 60 ->
 # 80 "imp_lexer.mll"
-            ( Z )
+            ( PRJ )
 # 555 "imp_lexer.ml"
 
   | 61 ->
 # 81 "imp_lexer.mll"
-            ( N )
+            ( Z )
 # 560 "imp_lexer.ml"
 
   | 62 ->
 # 82 "imp_lexer.mll"
-            ( TYP_STG )
+            ( N )
 # 565 "imp_lexer.ml"
 
   | 63 ->
 # 83 "imp_lexer.mll"
-          ( PLS )
+            ( TYP_STG )
 # 570 "imp_lexer.ml"
 
   | 64 ->
 # 84 "imp_lexer.mll"
-          ( MLT )
+          ( PLS )
 # 575 "imp_lexer.ml"
 
   | 65 ->
 # 85 "imp_lexer.mll"
-          ( MNS )
+          ( MLT )
 # 580 "imp_lexer.ml"
 
   | 66 ->
 # 86 "imp_lexer.mll"
-            ( GRM )
+          ( MNS )
 # 585 "imp_lexer.ml"
 
   | 67 ->
 # 87 "imp_lexer.mll"
-           ( NOT )
+            ( GRM )
 # 590 "imp_lexer.ml"
 
   | 68 ->
 # 88 "imp_lexer.mll"
-          ( ORD_COPRD )
+           ( NOT )
 # 595 "imp_lexer.ml"
 
   | 69 ->
 # 89 "imp_lexer.mll"
-            ( ORD_LEX_COPRD )
+          ( ORD_COPRD )
 # 600 "imp_lexer.ml"
 
   | 70 ->
 # 90 "imp_lexer.mll"
-          ( CMM )
+            ( ORD_LEX_COPRD )
 # 605 "imp_lexer.ml"
 
   | 71 ->
-let
 # 91 "imp_lexer.mll"
-                      lxm
-# 611 "imp_lexer.ml"
-= Lexing.sub_lexeme lexbuf (lexbuf.Lexing.lex_start_pos + 1) lexbuf.Lexing.lex_curr_pos in
-# 91 "imp_lexer.mll"
-                           ( ROT (String.length lxm) )
-# 615 "imp_lexer.ml"
+          ( CMM )
+# 610 "imp_lexer.ml"
 
   | 72 ->
 let
 # 92 "imp_lexer.mll"
                       lxm
-# 621 "imp_lexer.ml"
+# 616 "imp_lexer.ml"
 = Lexing.sub_lexeme lexbuf (lexbuf.Lexing.lex_start_pos + 1) lexbuf.Lexing.lex_curr_pos in
 # 92 "imp_lexer.mll"
-                           ( SLF (String.length lxm) )
-# 625 "imp_lexer.ml"
+                           ( ROT (String.length lxm) )
+# 620 "imp_lexer.ml"
 
   | 73 ->
+let
 # 93 "imp_lexer.mll"
-              ( APP_EVL )
+                      lxm
+# 626 "imp_lexer.ml"
+= Lexing.sub_lexeme lexbuf (lexbuf.Lexing.lex_start_pos + 1) lexbuf.Lexing.lex_curr_pos in
+# 93 "imp_lexer.mll"
+                           ( SLF (String.length lxm) )
 # 630 "imp_lexer.ml"
 
   | 74 ->
 # 94 "imp_lexer.mll"
-           ( PLS_NAT )
+              ( APP_EVL )
 # 635 "imp_lexer.ml"
 
   | 75 ->
 # 95 "imp_lexer.mll"
-           ( MLT_NAT )
+           ( PLS_NAT )
 # 640 "imp_lexer.ml"
 
   | 76 ->
 # 96 "imp_lexer.mll"
-            ( MNS_NAT )
+           ( MLT_NAT )
 # 645 "imp_lexer.ml"
 
   | 77 ->
 # 97 "imp_lexer.mll"
-             ( AGL )
+            ( MNS_NAT )
 # 650 "imp_lexer.ml"
 
   | 78 ->
-let
 # 98 "imp_lexer.mll"
-                lxm
-# 656 "imp_lexer.ml"
-= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 98 "imp_lexer.mll"
-                     ( INT (int_of_string lxm) )
-# 660 "imp_lexer.ml"
+             ( AGL )
+# 655 "imp_lexer.ml"
 
   | 79 ->
 let
 # 99 "imp_lexer.mll"
-                 lxm
-# 666 "imp_lexer.ml"
-= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos (lexbuf.Lexing.lex_curr_pos + -1) in
+                lxm
+# 661 "imp_lexer.ml"
+= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
 # 99 "imp_lexer.mll"
-                           ( NAT (int_of_string lxm) )
-# 670 "imp_lexer.ml"
+                     ( INT (int_of_string lxm) )
+# 665 "imp_lexer.ml"
 
   | 80 ->
+let
 # 100 "imp_lexer.mll"
-                    ( token lexbuf                         )
+                 lxm
+# 671 "imp_lexer.ml"
+= Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos (lexbuf.Lexing.lex_curr_pos + -1) in
+# 100 "imp_lexer.mll"
+                           ( NAT (int_of_string lxm) )
 # 675 "imp_lexer.ml"
 
   | 81 ->
 # 101 "imp_lexer.mll"
-                    ( EOF               )
+                    ( token lexbuf                         )
 # 680 "imp_lexer.ml"
 
   | 82 ->
 # 102 "imp_lexer.mll"
+                    ( EOF               )
+# 685 "imp_lexer.ml"
+
+  | 83 ->
+# 103 "imp_lexer.mll"
                     ( raise (Error (Printf.sprintf
                       "At offset %d: unexpected character.\n"
                       (Lexing.lexeme_start lexbuf))) )
-# 687 "imp_lexer.ml"
+# 692 "imp_lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_token_rec lexbuf __ocaml_lex_state
@@ -693,14 +698,14 @@ and line_comment lexbuf =
 and __ocaml_lex_line_comment_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 106 "imp_lexer.mll"
+# 107 "imp_lexer.mll"
           ( Util.pnt true "end line comment\n"; token lexbuf )
-# 699 "imp_lexer.ml"
+# 704 "imp_lexer.ml"
 
   | 1 ->
-# 107 "imp_lexer.mll"
+# 108 "imp_lexer.mll"
       ( line_comment lexbuf )
-# 704 "imp_lexer.ml"
+# 709 "imp_lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_line_comment_rec lexbuf __ocaml_lex_state

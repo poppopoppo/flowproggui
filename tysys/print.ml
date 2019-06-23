@@ -17,6 +17,8 @@ let rec print_tm e =
     | App(App(Prm p,e1),e2) ->
       if p=imp then ("("^(print_tm e1)^"→"^(print_tm e2)^")")
       else if p=tpl then ("{ "^(print_rcd e))
+      else if p=prd then "↓[ "^(print_prd e)
+      else if p=coprd then "↑[ "^(print_coprd e)
       else ("("^(print_tm (Prm p))^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")")
     | App (e1,e2) -> ("("^(print_tm e1)^"◂"^(print_tm e2)^")")
   )
@@ -30,6 +32,26 @@ and print_rcd e =
       else raise @@ Failure "print_rcd:1"
     | Val _ -> "<}"
     | _ -> raise @@ Failure "print_rcd:2" )
+and print_prd e =
+  ( match e with
+    | App(App(Prm p,e1),e2) ->
+      if p=prd then (print_tm e1)^" "^(print_rcd e2)
+      else raise @@ Failure "print_prd:0"
+    | Prm p ->
+      if p=prd_end then "]"
+      else raise @@ Failure "print_prd:1"
+    | Val _ -> "<]"
+    | _ -> raise @@ Failure "print_prd:2" )
+and print_coprd e =
+  ( match e with
+    | App(App(Prm p,e1),e2) ->
+      if p=coprd then (print_tm e1)^" "^(print_coprd e2)
+      else raise @@ Failure "print_prd:0"
+    | Prm p ->
+      if p=coprd_end then "]"
+      else raise @@ Failure "print_coprd:1"
+    | Val _ -> "<]"
+    | _ -> raise @@ Failure "print_coprd:2" )
 let print_c c = List.fold_left (fun s (x,y) -> s^","^((print_tm x)^"~"^(print_tm y))) "" c
 let print_cxt c =
   SgnMap.fold
@@ -45,17 +67,11 @@ and print_scm_hd h =
          let v0 =
            ( match v with
              | None -> ""
-             | Some x -> " ≃ "^(print_rec_scm_etr x)
+             | Some x -> " ≃ "^(print_tm x)
            ) in
          "t"^(Sgn.print k)^"'"^v0)
       bs in
   p
-and print_rec_scm_etr e =
-  ( match e with
-    | Scm_Tm m -> print_tm m
-    | Scm_Prd p -> "↓["^(string_of_list " " print_tm p)^"]"
-    | Scm_CoPrd p -> "↑["^(string_of_list " " print_tm p)^"]"
-  )
 let rec string_of_typ d x =
   let ex= if d=0 then "! " else "" in
   match x with
@@ -114,6 +130,8 @@ let rec string_of_code d x =
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∐ "^(Util.string_of_list ((tabs (d+1))^"∐ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
+  | Code_Agl (e1,e2,_) ->
+    "» ∠ "^(string_of_opr e1)^" | "^(string_of_opr e2)^"∐ ..\n"
   | Code_Prd ((t,o,_),l) ->
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
@@ -150,3 +168,22 @@ let string_of_gl_st (s:gl_st) =
 let string_of_mdl (name,_,l) =
   ("§§ "^name^" ≒ \n"^
    (Util.string_of_list "\n" string_of_glb_etr l)^"\n§§.\n")
+let rec print_vh c =
+  ( match c with
+    | V (c1,c2) -> "V("^(print_vh c1)^","^(print_vh c2)^")"
+    | H (c1,c2) -> "H("^(print_vh c1)^","^(print_vh c2)^")"
+    | E n -> "E("^(print_nd n)^")"
+    | CP (e1,e2,c1,c2) ->
+      "CP("^(print_nd e1)^","^(print_nd e2)^","^(print_vh c1)^","^(print_vh c2)^")"
+    | P (n,c1,c2) -> "P("^(print_nd n)^","^(print_vh c1)^","^(print_vh c2)^")"
+    | F (n,c1) -> "F("^(print_nd n)^","^(print_vh c1)^")"
+  )
+and print_nd n =
+  ( match n with
+    | Exp_Z z -> "Exp_Z("^(string_of_int z)^")"
+    | Exp_Name s -> "Exp_Name("^s^")"
+    | Exp_App (n1,n2) -> "Exp_App("^(print_nd n1)^","^(print_nd n2)^")"
+    | PrjL n1 -> "PrjL("^(print_nd n1)^")"
+    | PrjR n1 -> "PrjR("^(print_nd n1)^")"
+    | Exp_Stg s -> "Exp_Stg("^s^")"
+  )

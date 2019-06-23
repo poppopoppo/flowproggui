@@ -86,6 +86,7 @@ type token =
   | ARR
   | APP_EVL
   | APP
+  | AGL_TOP
   | AGL
   | ACT
 
