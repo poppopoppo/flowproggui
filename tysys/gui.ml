@@ -312,7 +312,7 @@ let main () =
                   let mdl0 = Implib.mdl_from_string text in
                   mdl := Mdls.concat !mdl mdl0;
                   Util.pnt dbg text;
-                  Util.pnt dbg (Print.string_of_mdl mdl0);
+                  Util.pnt dbg (Print.string_of_mdl true mdl0);
                   pnt "module is imported\n";
                   engine_signal#call `MODULE_IMPORT;
                   ()
@@ -484,7 +484,7 @@ let main () =
              (* navi_view#source_buffer#set_text "entering code view\n" *) ()
            | MODIFIED s ->
               let mdl = Implib.mdl_from_string s in
-              let s = Print.string_of_mdl mdl in
+              let s = Print.string_of_mdl false mdl in
               navi_view#source_buffer#set_text s
           ))
   in

@@ -372,9 +372,12 @@ let rec typing_vh c s0 d0 =
       cmp_subst [b0;b1;b2;b3]
     | E e1 -> typing_nd e1 (SgnMap.empty,s0) d0
     | F (e1,c1) ->
-      let (v1,v2,v3,_) = (Sgn.ini(),Sgn.ini(),Sgn.ini (),Sgn.ini()) in
+      let (v1,v2,v3) = (Sgn.ini(),Sgn.ini (),Sgn.ini()) in
       let b0 = unify [(d0,(Val v1)-*(Val v2))] in
-      let b1 = typing_vh c1 (rcd_cl [(Val v3);(Val v1)]) (subst b0 (Val v2)) in
+      let b1 = typing_vh
+          c1
+          (rcd_cl [(Val v3);(subst b0 (Val v1))])
+          (subst b0 (Val v2)) in
       let bt = cmp_subst [b0;b1] in
       let b2 = typing_nd e1 (SgnMap.empty,subst bt s0) (subst bt (Val v3)) in
       cmp_subst [bt;b2]
@@ -462,21 +465,10 @@ let rec vh_of_code c =
       let (d1,d2) = (nd_of_opr e1,nd_of_opr e2) in
       let lh = List.map vh_of_code l in
       CP(d1,d2,lh)
-      (*
-      let rec g l =
-        ( match l with
-          | [] -> raise (Failure "vh_of_code:5")
-          | h::[] -> h
-          | h1::tl ->
-            CP(PrjL(Exp_Name "$"),PrjL(PrjR(Exp_Name "$")),h1,g tl)
-        ) in
-      ( match lh with
-        | [] -> raise (Failure "vh_of_code:3")
-        | h::tl ->
-          CP(d1,d2,h,g tl)
-      ) *)
+    | Code_Prd ((_,e1,_),l) ->
+      P(nd_of_opr e1,List.map vh_of_code l)
+    | Code_IO ((_,e1,_),c1) -> F(nd_of_opr e1,vh_of_code c1)
     | _ -> raise @@ Failure "vh_of_code:2"
-    (* | Code_CoPrd (e1,l) -> ) *)
   )
 and nd_of_opr o =
   match o with

@@ -154,7 +154,7 @@ and string_of_opr x =
 let string_of_glb_etr f e =
   ( match e with
     | Etr (n,h,s,d,c) ->
-      let p0 = "§ "^n^" : ["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d) in
+      let p0 = "§ `"^"["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d)^" : "^n in
       let p1 = " ≒ \n\t.» "^(string_of_code 1 c)^"\n" in
       if f then p0^p1 else p0
     | Flow(Def_CoPrd (n,_,l)) ->
@@ -165,7 +165,7 @@ let string_of_glb_etr f e =
   )
 
 let string_of_gl_st (s:gl_st) =
-  (Util.string_of_list "\n" string_of_glb_etr s)
+  (Util.string_of_list "\n" (string_of_glb_etr true) s)
 
 let string_of_mdl f (name,_,l) =
   ("§§ "^name^" ≒ \n"^
@@ -177,7 +177,7 @@ let rec print_vh c =
     | E n -> "E("^(print_nd n)^")"
     | CP (e1,e2,l) ->
       "CP("^(print_nd e1)^","^(print_nd e2)^",["^(string_of_list "," print_vh l)^"])"
-    | P (n,c1,c2) -> "P("^(print_nd n)^","^(print_vh c1)^","^(print_vh c2)^")"
+    | P (n,l) -> "P("^(print_nd n)^",["^(string_of_list "," print_vh l)^"])"
     | F (n,c1) -> "F("^(print_nd n)^","^(print_vh c1)^")"
   )
 and print_nd n =

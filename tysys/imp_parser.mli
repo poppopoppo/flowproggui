@@ -62,6 +62,7 @@ type token =
   | INT of (int)
   | INJ of (int)
   | IN of (int)
+  | IDX of (int)
   | GRM
   | FOR_ALL
   | FNT
