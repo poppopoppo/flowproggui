@@ -178,7 +178,7 @@ let rec typing (c:code) : (rec_scm_hd * (tm * tm)) =
            let v1 = unify (us dsts) in *)
       )
     | Code_Prd (_,_) -> raise (Failure "typing:2")
-    | Code_IO ((_,e1,_),c1) ->
+    | Code_IO ((_,e1,_),_,c1) ->
       let (_,(s1,d1)) = typing c1 in
       let r0 = Sgn.ini () in
       let r = (SgnMap.empty,Val r0) in
@@ -282,7 +282,7 @@ let rec typingM  (c:code) (src:tm) (dst:tm) : cxt =
           b0
       )
     | Code_Prd (_,_) -> raise (Failure "typing:2")
-    | Code_IO ((_,e1,_),c1) ->
+    | Code_IO ((_,e1,_),_,c1) ->
       let (v1,v2,v3) = (Sgn.ini(),Sgn.ini(),Sgn.ini ()) in
       let b0 = unify [(dst,(Val v1)-*(Val v2))] in
       let b1 = typingM c1 (Val v3) (subst b0 (Val v2)) in
@@ -371,15 +371,17 @@ let rec typing_vh c s0 d0 =
       let b3 = unify [(s0,(subst b1 y3)**(subst b2 y4))] in
       cmp_subst [b0;b1;b2;b3]
     | E e1 -> typing_nd e1 (SgnMap.empty,s0) d0
-    | F (e1,c1) ->
-      let (v1,v2,v3) = (Sgn.ini(),Sgn.ini (),Sgn.ini()) in
-      let b0 = unify [(d0,(Val v1)-*(Val v2))] in
+    | F (e1,i,c1) ->
+      let (v_dst,v_src) = (Sgn.ini (),Sgn.ini()) in
+      let vs_in = sgns i in
+      let y_rtn = List.fold_right (fun x r -> (Val x)-*r) vs_in (Val v_dst) in
+      let b0 = unify [(d0,y_rtn)] in
       let b1 = typing_vh
           c1
-          (rcd_cl [(Val v3);(subst b0 (Val v1))])
-          (subst b0 (Val v2)) in
+          (rcd_cl ((Val v_src)::(List.map (fun x -> (subst b0 (Val x))) vs_in)))
+          (subst b0 (Val v_dst)) in
       let bt = cmp_subst [b0;b1] in
-      let b2 = typing_nd e1 (SgnMap.empty,subst bt s0) (subst bt (Val v3)) in
+      let b2 = typing_nd e1 (SgnMap.empty,subst bt s0) (subst bt (Val v_src)) in
       cmp_subst [bt;b2]
     | CP (e1,e2,l) ->
       pnt true "CP:0\n";
@@ -467,7 +469,7 @@ let rec vh_of_code c =
       CP(d1,d2,lh)
     | Code_Prd ((_,e1,_),l) ->
       P(nd_of_opr e1,List.map vh_of_code l)
-    | Code_IO ((_,e1,_),c1) -> F(nd_of_opr e1,vh_of_code c1)
+    | Code_IO ((_,e1,_),i,c1) -> F(nd_of_opr e1,i,vh_of_code c1)
     | _ -> raise @@ Failure "vh_of_code:2"
   )
 and nd_of_opr o =

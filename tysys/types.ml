@@ -95,7 +95,7 @@ and code =
   | Code_CoPrd of exp * (code list)
   | Code_Agl of opr * opr * (code list)
   | Code_Prd of exp * (code list)
-  | Code_IO of exp * code
+  | Code_IO of exp * int * code
 and exp = typ * opr * ((name * opr) list)
 and opr =
   | Agl of opr
@@ -136,7 +136,7 @@ type vh =
   | E of nd
   | CP of nd * nd * (vh list) (* ∠[exp] exp ∐ exp ∐ exp ∇ *)
   | P of nd * (vh list)
-  | F of nd * vh (* { exp ? } |» vh *)
+  | F of nd * int * vh (* { exp ? } |» vh *)
 (* F of nd * int * vh { exp ? ?' ?'' .. } |» vh *)
 and nd =
   | Exp_Z of int

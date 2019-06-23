@@ -136,7 +136,7 @@ let rec string_of_code d x =
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
-  | Code_IO ((t,o,_),c0) ->
+  | Code_IO ((t,o,_),_,c0) ->
     let pre = (tabs (d+1))^"|» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = string_of_code (d+1) c0 in
     pre^mid
@@ -178,7 +178,7 @@ let rec print_vh c =
     | CP (e1,e2,l) ->
       "CP("^(print_nd e1)^","^(print_nd e2)^",["^(string_of_list "," print_vh l)^"])"
     | P (n,l) -> "P("^(print_nd n)^",["^(string_of_list "," print_vh l)^"])"
-    | F (n,c1) -> "F("^(print_nd n)^","^(print_vh c1)^")"
+    | F (n,i,c1) -> "F("^(print_nd n)^","^(string_of_int i)^","^(print_vh c1)^")"
   )
 and print_nd n =
   ( match n with

@@ -228,8 +228,8 @@ and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
     | Code_Prd ((_,o,_),l) ->
       let s0 = evo g [s] ir None o in
       Tkn_Prd (s0,l)
-    | Code_IO ((t,o,m),c0) ->
-      Tkn_IO_Code ([s],1,(t,o,m),c0)
+    | Code_IO ((t,o,m),i,c0) ->
+      Tkn_IO_Code ([s],i,(t,o,m),c0)
     | _ -> raise @@ Failure "imp:10"
   )
 (*
