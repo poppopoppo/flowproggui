@@ -197,6 +197,7 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
           | _ -> raise @@ Failure "error:agl:type unmatched"
         )
     | Opr_Stg s -> Tkn_Stg s
+    | _ -> raise (Failure "Imp.evo:10")
   )
 and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
   ( match a with

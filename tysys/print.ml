@@ -35,7 +35,7 @@ and print_rcd e =
 and print_prd e =
   ( match e with
     | App(App(Prm p,e1),e2) ->
-      if p=prd then (print_tm e1)^" "^(print_rcd e2)
+      if p=prd then (print_tm e1)^" "^(print_prd e2)
       else raise @@ Failure "print_prd:0"
     | Prm p ->
       if p=prd_end then "]"
@@ -148,13 +148,15 @@ and string_of_opr x =
   | Opr_Rcd l -> "{"^(Util.string_of_list " " string_of_opr l)^"}"
   | Opr_App (f,x) -> "("^(string_of_opr f)^"◂"^(string_of_opr x)^")"
   | Prj (f,x) -> "("^(string_of_opr f)^"◃"^(string_of_int x)^")"
+  | Opr_Inj i -> "↑["^(string_of_int i)^"]"
   | Opr_Stg s -> "\""^s^"\""
 
-let string_of_glb_etr e =
+let string_of_glb_etr f e =
   ( match e with
     | Etr (n,h,s,d,c) ->
-      ("§ "^n^" : ["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d)^" ≒ \n\t.» ")^
-      (string_of_code 1 c)^"\n"
+      let p0 = "§ "^n^" : ["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d) in
+      let p1 = " ≒ \n\t.» "^(string_of_code 1 c)^"\n" in
+      if f then p0^p1 else p0
     | Flow(Def_CoPrd (n,_,l)) ->
       "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (string_of_typ 0 t)^" : "^c) l)
     | Flow(Def_Prd (n,_,l)) ->
@@ -165,16 +167,16 @@ let string_of_glb_etr e =
 let string_of_gl_st (s:gl_st) =
   (Util.string_of_list "\n" string_of_glb_etr s)
 
-let string_of_mdl (name,_,l) =
+let string_of_mdl f (name,_,l) =
   ("§§ "^name^" ≒ \n"^
-   (Util.string_of_list "\n" string_of_glb_etr l)^"\n§§.\n")
+   (Util.string_of_list "\n" (string_of_glb_etr f) l)^"\n§§.\n")
 let rec print_vh c =
   ( match c with
     | V (c1,c2) -> "V("^(print_vh c1)^","^(print_vh c2)^")"
     | H (c1,c2) -> "H("^(print_vh c1)^","^(print_vh c2)^")"
     | E n -> "E("^(print_nd n)^")"
-    | CP (e1,e2,c1,c2) ->
-      "CP("^(print_nd e1)^","^(print_nd e2)^","^(print_vh c1)^","^(print_vh c2)^")"
+    | CP (e1,e2,l) ->
+      "CP("^(print_nd e1)^","^(print_nd e2)^",["^(string_of_list "," print_vh l)^"])"
     | P (n,c1,c2) -> "P("^(print_nd n)^","^(print_vh c1)^","^(print_vh c2)^")"
     | F (n,c1) -> "F("^(print_nd n)^","^(print_vh c1)^")"
   )
@@ -182,8 +184,9 @@ and print_nd n =
   ( match n with
     | Exp_Z z -> "Exp_Z("^(string_of_int z)^")"
     | Exp_Name s -> "Exp_Name("^s^")"
-    | Exp_App (n1,n2) -> "Exp_App("^(print_nd n1)^","^(print_nd n2)^")"
+    | Exp_App (n1,n2) -> "("^(print_nd n1)^"◂"^(print_nd n2)^")"
     | PrjL n1 -> "PrjL("^(print_nd n1)^")"
     | PrjR n1 -> "PrjR("^(print_nd n1)^")"
+    | Inj i -> "↑["^(string_of_int i)^"]"
     | Exp_Stg s -> "Exp_Stg("^s^")"
   )

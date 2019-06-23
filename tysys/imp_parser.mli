@@ -60,7 +60,7 @@ type token =
   | ISO
   | IO
   | INT of (int)
-  | INJ
+  | INJ of (int)
   | IN of (int)
   | GRM
   | FOR_ALL

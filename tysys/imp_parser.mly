@@ -9,10 +9,10 @@
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN WC TEST INJ CHO PLS_NAT MNS_NAT MLT_NAT L_VCT
+%token DEQ FNT EXN WC TEST CHO PLS_NAT MNS_NAT MLT_NAT L_VCT
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP
 %token <string> NAM STG VAL
-%token <int> INT IN OUT ROT SLF NAT
+%token <int> INT IN OUT ROT SLF NAT INJ
 
 %left FOR_ALL
 %left EQ
@@ -305,8 +305,9 @@ exp:
   | CNT { Opr_Name "⋏" }
   | EXN { Opr_Name "?" }
   | ROT { Opr_Name "$" }
+  | IDX { Prj(Opr_Name "$",$1) }
   | VCT { Opr_Name "#" }
-  | INJ { Opr_Name "↑" }
+  | INJ { Opr_Inj $1 }
   | CHO { Opr_Name "↓"  }
   | NAM  { Opr_Name $1 }
   | SGN { Opr_Name "&" }

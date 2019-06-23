@@ -104,6 +104,7 @@ and opr =
   | Opr_Rcd of opr list
   | Opr_App of opr * opr
   | Prj of opr * int
+  | Opr_Inj of int
   | Opr_Stg of string
 and tkn =
   | Tkn_Null
@@ -133,7 +134,7 @@ type vh =
   | V of vh * vh
   | H of vh * vh
   | E of nd
-  | CP of nd * nd * vh * vh (* ∠[exp] exp ∐ exp ∐ exp ∇ *)
+  | CP of nd * nd * (vh list) (* ∠[exp] exp ∐ exp ∐ exp ∇ *)
   | P of nd * vh * vh
   | F of nd * vh (* { exp ? } |» vh *)
 (* F of nd * int * vh { exp ? ?' ?'' .. } |» vh *)
@@ -143,6 +144,7 @@ and nd =
   | Exp_App of nd * nd
   | PrjL of nd
   | PrjR of nd
+  | Inj of int
   | Exp_Stg of string
 let id = E (Exp_Name "$")
 type buffer =
@@ -153,17 +155,13 @@ type path = int list
 let rec agl e : (int list) option =
   ( match e with
     | Agl _ -> Some []
-    | Opr_Z _ -> None
-    | Opr_Name _ -> None
     | Opr_Rcd l ->
       let (i,a) = BatList.findi (fun _ x -> not(x=None)) (List.map agl l) in
       ( match a with
         | None -> raise @@ Failure ""
         | Some a -> Some (i::a)
       )
-    | Opr_App (_,_) -> None
-    | Prj _ -> None
-    | Opr_Stg _ -> None
+    | _ -> None
   )
 let rec path p e : tm option =
   ( match p with

@@ -70,6 +70,13 @@ let rec unify (c:c) : cxt =
         ( match e0,e1 with
           | Prm p0,Prm p1 ->
             if p0=p1 then unify tl else raise @@ Failure "unify:0"
+          | Val v0,Val v1 ->
+            if v0=v1 then SgnMap.empty
+            else
+              let v2 = Sgn.ini () in
+              let s0 = cxt_add v0 (Val v2) (cxt_ini ()) in
+              let s1 = cxt_add v1 (Val v2) s0 in
+              cmp_subst [s1;(unify (subst_c s1 tl))]
           | Val v0,_ ->
             if (ftv v0 e1) then (raise @@ Failure "unify:1")
             else
@@ -86,6 +93,13 @@ let rec unify (c:c) : cxt =
     ) in
   (pnt true ("return unify:"^(print_cxt c)^"\n"));
   c
+let rec unifys_cxt l =
+  ( match l with
+    | [] -> []
+    | _::[] -> []
+    | h1::h2::tl -> (h1,h2)::(unifys_cxt (h2::tl))
+  )
+let unifys l = unify (unifys_cxt l)
 open Types
 type scm = SgnSet.t * tm
 type gma = scm SgnMap.t
@@ -221,6 +235,7 @@ and typing_opr (r:rec_scm) (a:rec_scm option) o : (cxt * rec_scm_hd * tm) =
         (cmp_subst [s1;v],h1,ri (subst v y1) i)
       | Opr_Stg _ ->
         (SgnMap.empty,SgnMap.empty,Prm stg)
+      | _ -> raise (Failure "ypin")
     ) in
   let (x,h,z) = q in
   pnt true ((Sgn.print lb)^" return typing_opr:("^(print_cxt x)^","^(print_scm_hd h)^","^(print_tm z)^")\n");
@@ -334,6 +349,7 @@ and typing_oprM (r:rec_scm) (a:rec_scm option) (agl:agl) o y : cxt =
         let s2 = unify [(ri (subst s1 rs) i,subst s1 y)] in
         cmp_subst [s1;s2]
       | Opr_Stg _ -> unify [(y,Prm stg)]
+      | _ -> raise (Failure "typing_oprM:20")
     ) in
   pnt true ((Sgn.print lb)^" return typing_opr:("^(print_cxt q)^"\n");
   q
@@ -362,31 +378,35 @@ let rec typing_vh c s0 d0 =
       let bt = cmp_subst [b0;b1] in
       let b2 = typing_nd e1 (SgnMap.empty,subst bt s0) (subst bt (Val v3)) in
       cmp_subst [bt;b2]
-    | CP (e1,e2,c1,c2) ->
+    | CP (e1,e2,l) ->
       pnt true "CP:0\n";
-      let (v1,_,v3,_,v5,v6) = (Sgn.ini(),Sgn.ini(),Sgn.ini (),Sgn.ini(),Sgn.ini (),Sgn.ini()) in
-      let (b1,b2) = (typing_vh c1 (rcd_cl [(Val v1);(Val v5)]) d0,typing_vh c2 (rcd_cl [(Val v3);(Val v6)]) d0) in
+      let (vs0,vs1) = (List.map (fun _ -> Sgn.ini()) l,List.map (fun _ -> Sgn.ini()) l) in
+      let bs = List.map
+          (fun ((v0,v1),c) -> typing_vh c (rcd_cl [(Val v0);(Val v1)]) d0)
+          (List.combine (List.combine vs0 vs1) l) in
       pnt true "CP:1\n";
-      let b3 = unify [(subst b1 d0,subst b2 d0);(subst b1 (Val v5),subst b2 (Val v6))] in
+      let bx = unify
+          ((unifys_cxt (List.map (fun b -> subst b d0) bs))@
+           (unifys_cxt
+              (List.map
+                 (fun (v,b) -> subst b (Val v))
+                 (List.combine vs1 bs)))) in
       pnt true "CP:2\n";
       let e3 = List.fold_right
           (fun x q -> Exp_App(Exp_App(Exp_Name "⊗",x),q))
           [e1;e2] (Exp_Name "}") in
+      let y0 = coprd_cl
+          (List.map
+             (fun (b,v) -> subst (cmp_subst [b;bx]) (Val v))
+             (List.combine bs vs0)) in
       let b4 = typing_nd e3
           (SgnMap.empty,s0)
           (rcd_cl
-             [
-               ((subst (cmp_subst [b1;b3]) (Val v1))*|
-                (subst (cmp_subst [b2;b3]) (Val v3)));
-               (* (coprd_op
-                  [(subst (cmp_subst [b1;b3]) (Val v1));
-                   (subst (cmp_subst [b2;b3]) (Val v3))
-                  ]
-                  ); *)
-               (subst (cmp_subst [b1;b3]) (Val v5))
+             [ y0;
+               (subst (cmp_subst [(List.hd bs);bx]) (Val (List.hd vs1)))
              ]
           ) in
-      cmp_subst [b1;b2;b3;b4]
+      cmp_subst (bs@[bx]@[b4])
     | _ -> raise (Failure "typing_vh:23")
   )
 and typing_nd (e:nd) r d =
@@ -425,6 +445,11 @@ and typing_nd (e:nd) r d =
         let v3 = v2 in
         let s2 = unify [(subst s1 (Val v3),subst s1 d)] in
         cmp_subst [s1;s2]
+      | Inj i1 ->
+        let v0 = Sgn.ini () in
+        let l = BatList.init
+            (i1+1) (fun j -> if j=i1 then (Val v0) else Val (Sgn.ini())) in
+        unify [(d,(Val v0)-*(coprd_op l))]
       | Exp_Stg _ -> unify [(d,Prm stg)]
     ) in
   q
@@ -436,6 +461,8 @@ let rec vh_of_code c =
     | Code_Agl (e1,e2,l) ->
       let (d1,d2) = (nd_of_opr e1,nd_of_opr e2) in
       let lh = List.map vh_of_code l in
+      CP(d1,d2,lh)
+      (*
       let rec g l =
         ( match l with
           | [] -> raise (Failure "vh_of_code:5")
@@ -447,7 +474,7 @@ let rec vh_of_code c =
         | [] -> raise (Failure "vh_of_code:3")
         | h::tl ->
           CP(d1,d2,h,g tl)
-      )
+      ) *)
     | _ -> raise @@ Failure "vh_of_code:2"
     (* | Code_CoPrd (e1,l) -> ) *)
   )
@@ -467,4 +494,5 @@ and nd_of_opr o =
       else prj (i-1) (PrjR x) in
     prj i (nd_of_opr e1)
   | Opr_Stg s -> Exp_Stg s
+  | Opr_Inj i -> Inj i
   | _ -> raise @@ Failure "nd_of_opr:1"
