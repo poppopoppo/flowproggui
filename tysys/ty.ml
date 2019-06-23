@@ -412,7 +412,20 @@ let rec typing_vh c s0 d0 =
              ]
           ) in
       cmp_subst (bs@[bx]@[b4])
-    | _ -> raise (Failure "typing_vh:23")
+    | P (e1,l) ->
+      let n = List.length l in
+      let (vs_dst,vs_src) = (sgns n,sgns n) in
+      let b0 = unify [(d0,prd_cl (List.map (fun x -> Val x) vs_dst))] in
+      let bs = List.map
+          (fun ((vs,vd),c) -> typing_vh c (subst b0 (Val vs)) (subst b0 (Val vd)))
+          (List.combine (List.combine vs_src vs_dst) l) in
+      let b1 = unifys
+          (List.map
+             (fun (b,v) -> subst (cmp_subst [b0;b]) (Val v))
+             (List.combine bs vs_src)) in
+      let b2 = typing_nd
+          e1 (SgnMap.empty,s0) (subst (cmp_subst [b0;(List.hd bs);b1]) (Val (List.hd vs_src))) in
+      cmp_subst ([b0]@bs@[b1]@[b2])
   )
 and typing_nd (e:nd) r d =
   let q =
