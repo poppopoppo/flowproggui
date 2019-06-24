@@ -149,6 +149,7 @@ and string_of_opr x =
   | Opr_App (f,x) -> "("^(string_of_opr f)^"◂"^(string_of_opr x)^")"
   | Prj (f,x) -> "("^(string_of_opr f)^"◃"^(string_of_int x)^")"
   | Opr_Inj i -> "↑["^(string_of_int i)^"]"
+  | Opr_Cho i -> "↓["^(string_of_int i)^"]"
   | Opr_Stg s -> "\""^s^"\""
 
 let string_of_glb_etr f e =
@@ -178,6 +179,8 @@ let rec print_vh c =
     | CP (e1,e2,l) ->
       "CP("^(print_nd e1)^","^(print_nd e2)^",["^(string_of_list "," print_vh l)^"])"
     | P (n,l) -> "P("^(print_nd n)^",["^(string_of_list "," print_vh l)^"])"
+    | A(n,p,l) -> "A("^(print_nd n)^",["^(string_of_list "," string_of_int p)^"],["^
+                  (string_of_list "," print_vh l)^"])"
     | F (n,i,c1) -> "F("^(print_nd n)^","^(string_of_int i)^","^(print_vh c1)^")"
   )
 and print_nd n =
@@ -188,5 +191,6 @@ and print_nd n =
     | PrjL n1 -> "PrjL("^(print_nd n1)^")"
     | PrjR n1 -> "PrjR("^(print_nd n1)^")"
     | Inj i -> "↑["^(string_of_int i)^"]"
+    | Cho i -> "↓["^(string_of_int i)^"]"
     | Exp_Stg s -> "Exp_Stg("^s^")"
   )

@@ -32,7 +32,6 @@ rule token = parse
     | "=="  { DEQ }
     | "~" { LET }
     | "»" { ARR }
-    | "↓" { CHO }
     | (('|')+ as lxm) "»" { IN(String.length lxm) }
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
@@ -57,6 +56,7 @@ rule token = parse
     | "//"  { CST }
     | "_" { WC }
     | "↑[" (digit+ as lxm) "]" { INJ(int_of_string lxm) }
+    | "↓[" (digit+ as lxm) "]" { CHO(int_of_string lxm) }
     | "{" { L_RCD }
     | "}" { R_RCD }
     | "⁅" { L_HLZ }
