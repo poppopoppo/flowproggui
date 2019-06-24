@@ -82,7 +82,7 @@ type token =
   | CNT
   | CMM
   | CLN
-  | CHO
+  | CHO of (int)
   | ARR_END
   | ARR
   | APP_EVL

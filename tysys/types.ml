@@ -105,6 +105,7 @@ and opr =
   | Opr_App of opr * opr
   | Prj of opr * int
   | Opr_Inj of int
+  | Opr_Cho of int
   | Opr_Stg of string
 and tkn =
   | Tkn_Null
@@ -136,8 +137,10 @@ type vh =
   | E of nd
   | CP of nd * nd * (vh list) (* ∠[exp] exp ∐ exp ∐ exp ∇ *)
   | P of nd * (vh list)
+  | A of nd * path * (vh list)
   | F of nd * int * vh (* { exp ? } |» vh *)
 (* F of nd * int * vh { exp ? ?' ?'' .. } |» vh *)
+and path = int list
 and nd =
   | Exp_Z of int
   | Exp_Name of string
@@ -145,14 +148,14 @@ and nd =
   | PrjL of nd
   | PrjR of nd
   | Inj of int
+  | Cho of int
   | Exp_Stg of string
 let id = E (Exp_Name "$")
 type buffer =
   | Evo of code
   | End
 exception End
-type path = int list
-let rec agl e : (int list) option =
+let rec agl (e:opr) : (int list) option =
   ( match e with
     | Agl _ -> Some []
     | Opr_Rcd l ->

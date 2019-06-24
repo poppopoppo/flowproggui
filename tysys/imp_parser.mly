@@ -9,10 +9,10 @@
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN WC TEST CHO PLS_NAT MNS_NAT MLT_NAT L_VCT
+%token DEQ FNT EXN WC TEST PLS_NAT MNS_NAT MLT_NAT L_VCT
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP
 %token <string> NAM STG VAL
-%token <int> INT IN OUT ROT SLF NAT INJ IDX
+%token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
 
 %left FOR_ALL
 %left EQ
@@ -41,7 +41,7 @@ file:
   | def_mdl { Util.pnt flg "parse:file\n"; $1 }
   ;
 def_mdl:
-  | MDL NAM def_arg DEF gl_etr_lst MDL_END { ($2,$3,$5) }
+  | MDL NAM def_arg DEF gl_etr_lst MDL_END { Ty.typing_mdl($2,$3,$5) }
   ;
 def_arg:
   | { [] }
@@ -171,9 +171,10 @@ glb_etr_clique:
 glb_etr_body:
   | NAM typ_def DEF IN stt_code {
     (* let (scm,(src,dst)) = Ty.typing $5 in *)
-    let (src,dst) = (Val (Sgn.ini()),Val (Sgn.ini())) in
-    let b = Ty.typing_vh (Ty.vh_of_code $5) src dst in
-    ($1,SgnMap.empty,Ty.subst b src,Ty.subst b dst,$5)
+  (*  let (src,dst) = (Val (Sgn.ini()),Val (Sgn.ini())) in
+    let b = Ty.typing_vh [] (Ty.vh_of_code $5) src dst in *
+    ($1,SgnMap.empty,Ty.subst b src,Ty.subst b dst,$5) *)
+    ($1,SgnMap.empty,Val (Sgn.ini()),Val(Sgn.ini()),$5)
   }
   ;
 typ_def:
@@ -308,11 +309,11 @@ exp:
   | IDX { Prj(Opr_Name "$",$1) }
   | VCT { Opr_Name "#" }
   | INJ { Opr_Inj $1 }
-  | CHO { Opr_Name "↓"  }
+  | CHO { Opr_Cho $1  }
   | NAM  { Opr_Name $1 }
   | SGN { Opr_Name "&" }
   | STG { Opr_Stg $1 }
-  | SLF { Opr_Name ">@" }
+  | SLF { Opr_Name "@" }
   | exp PLS exp { Opr_App (Opr_Name "+",Opr_Rcd [$1;$3]) }
   | exp MLT exp { Opr_App (Opr_Name "*",Opr_Rcd [$1;$3]) }
   | exp MNS exp { Opr_App (Opr_Name "+",Opr_Rcd [$1;Opr_App (Opr_Name "-",$3)]) }
