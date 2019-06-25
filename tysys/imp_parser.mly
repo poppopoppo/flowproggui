@@ -10,10 +10,11 @@
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
 %token DEQ FNT EXN WC TEST PLS_NAT MNS_NAT MLT_NAT L_VCT
-%token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP
+%token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token <string> NAM STG VAL
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
 
+%left AGL_PRE
 %left FOR_ALL
 %left EQ
 %left PLS MNS
@@ -161,8 +162,8 @@ typ:
   | TYP_STG { Typ_Name "ℾ" }
   ;
 glb_etr:
-  | LCE glb_etr_body { Etr $2 }
-  | LCE glb_etr_clique { Etr_Clq $2 }
+  | LCE glb_etr_body { Etr(SgnMap.empty,$2)  }
+  | LCE glb_etr_clique { Etr_Clq (SgnMap.empty,$2) }
   ;
 glb_etr_clique:
   | SLF glb_etr_body { [$2] }
@@ -174,7 +175,7 @@ glb_etr_body:
   (*  let (src,dst) = (Val (Sgn.ini()),Val (Sgn.ini())) in
     let b = Ty.typing_vh [] (Ty.vh_of_code $5) src dst in *
     ($1,SgnMap.empty,Ty.subst b src,Ty.subst b dst,$5) *)
-    ($1,SgnMap.empty,Val (Sgn.ini()),Val(Sgn.ini()),$5)
+    ($1,Val (Sgn.ini()),Val(Sgn.ini()),$5)
   }
   ;
 typ_def:
@@ -197,11 +198,6 @@ stt_code:
     | None -> c
     | Some x -> Seq(c,x)
    }
-  | AGL_TOP exp SPL exp code_coprd_list COPRD_END tail {
-     let c = Code_Agl($2,$4,$5) in
-     match $7 with
-     | None -> c
-     | Some x -> Seq(c,x) }
   | vh_frm_top code_prd_list PRD_END tail {
     let c = Code_Prd($1,$2) in
     match $4 with
@@ -231,11 +227,6 @@ code:
     match $5 with
     | None -> Some c
     | Some x -> Some (Seq(c,x)) }
-  | ARR AGL_TOP exp SPL exp code_coprd_list COPRD_END tail {
-    let c = Code_Agl($3,$5,$6) in
-    match $8 with
-    | None -> Some c
-    | Some x -> Some(Seq(c,x)) }
   | ARR vh_frm_top code_prd_list PRD_END tail {
     let c = Code_Prd($2,$3) in
     match $5 with
@@ -298,6 +289,7 @@ exp_lst:
 
 exp:
   | AGL exp R_BLK { Agl $2 }
+  | AGL_TOP exp %prec AGL_PRE { Agl $2 }
   | INT { Opr_Z $1 }
   | PLS_EVL { Opr_Name "+" }
   | MLT_EVL { Opr_Name "*" }

@@ -15,7 +15,7 @@ let z = (('-' digit+)|digit+)
 rule token = parse
     | '\"' (([^ '\"']|"\\\"")* as lxm) '\"' { STG(lxm) }
     | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
-    | ".;" (_)* ";."  { token lexbuf }
+    | ".;" [^ ';']* ";."  { token lexbuf }
     | "§"  { LCE }
     | "§§"  { MDL }
     | "§§." { MDL_END }
@@ -42,6 +42,7 @@ rule token = parse
     | "|" { SPL }
     | "∠" { AGL_TOP }
     | "∠" "["  { AGL }
+    | "∠|"  { AGL_COD }
     | "]" { R_BLK }
     | "[" { L_BLK }
     | "^" { SEQ }

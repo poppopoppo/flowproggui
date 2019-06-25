@@ -122,7 +122,7 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
           then Tkn_IO_Exn
           else
             let find_etr n e =
-              let (name,_,_,_,code) = e in
+              let (name,_,_,code) = e in
               if n=name
               then Some (Tkn_IO_Code([],1,(Typ_Null,Opr_Name "$",[]),code))
               else None in
@@ -149,10 +149,12 @@ let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
             let e = BatList.find_map
                 (fun e ->
                    ( match e with
-                     | Etr e -> find_etr n e
+                     | Etr (_,e) -> find_etr n e
 
                      | Flow f -> find_flow n f
-                     | Etr_Clq el -> (try Some (BatList.find_map (find_etr n) el) with _ -> None)
+                     | Etr_Clq (_,el) ->
+                       (try Some (BatList.find_map (find_etr n) el)
+                        with _ -> None)
                      | Flow_Clq fl -> (try Some (BatList.find_map (find_flow n) fl) with _ -> None)
                      | _ -> raise (Failure "err0")
                    ) )
@@ -230,7 +232,6 @@ and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
       Tkn_Prd (s0,l)
     | Code_IO ((t,o,m),i,c0) ->
       Tkn_IO_Code ([s],i,(t,o,m),c0)
-    | _ -> raise @@ Failure "imp:10"
   )
 (*
 let check_io (g : gl_st) (c : code) (src:typ) (dst:typ) : bool =
