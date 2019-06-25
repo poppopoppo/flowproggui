@@ -3,7 +3,6 @@ open Util
 let dbg = true
 
 let tabs d = String.make d '\t'
-
 let rec print_tm e =
   ( match e with
     | Prm p ->
@@ -72,6 +71,11 @@ and print_scm_hd h =
          "t"^(Sgn.print k)^"'"^v0)
       bs in
   p
+let print_mdl_gma (g:mdl_gma) : string =
+  StgMap.fold
+    (fun k (h,v) r ->
+       r^(print_scm_hd h)^" "^k^":"^(print_tm v)^"\n")
+    g ""
 let rec string_of_typ d x =
   let ex= if d=0 then "! " else "" in
   match x with
@@ -130,8 +134,6 @@ let rec string_of_code d x =
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∐ "^(Util.string_of_list ((tabs (d+1))^"∐ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
-  | Code_Agl (e1,e2,_) ->
-    "» ∠ "^(string_of_opr e1)^" | "^(string_of_opr e2)^"∐ ..\n"
   | Code_Prd ((t,o,_),l) ->
     let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
@@ -154,10 +156,18 @@ and string_of_opr x =
 
 let string_of_glb_etr f e =
   ( match e with
-    | Etr (n,h,s,d,c) ->
-      let p0 = "§ `"^"["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d)^" : "^n in
+    | Etr (h,(n,s,d,c)) ->
+      let p0 = "§ "^n^" : ["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d) in
       let p1 = " ≒ \n\t.» "^(string_of_code 1 c)^"\n" in
       if f then p0^p1 else p0
+    | Etr_Clq(h,l) ->
+      let p = List.fold_left
+          ( fun r (n,s,d,c) ->
+              let p0 = "@ "^n^" : "^(print_tm s)^" ⊢ "^(print_tm d) in
+              let p1 = " ≒ \n\t.» "^(string_of_code 1 c)^"\n\t" in
+              if f then r^p0^p1 else r^p0^"\n\t" )
+          "" l in
+      "§ ["^(print_scm_hd h)^"]∀ "^p
     | Flow(Def_CoPrd (n,_,l)) ->
       "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (string_of_typ 0 t)^" : "^c) l)
     | Flow(Def_Prd (n,_,l)) ->
@@ -176,8 +186,6 @@ let rec print_vh c =
     | V (c1,c2) -> "V("^(print_vh c1)^","^(print_vh c2)^")"
     | H (c1,c2) -> "H("^(print_vh c1)^","^(print_vh c2)^")"
     | E n -> "E("^(print_nd n)^")"
-    | CP (e1,e2,l) ->
-      "CP("^(print_nd e1)^","^(print_nd e2)^",["^(string_of_list "," print_vh l)^"])"
     | P (n,l) -> "P("^(print_nd n)^",["^(string_of_list "," print_vh l)^"])"
     | A(n,p,l) -> "A("^(print_nd n)^",["^(string_of_list "," string_of_int p)^"],["^
                   (string_of_list "," print_vh l)^"])"

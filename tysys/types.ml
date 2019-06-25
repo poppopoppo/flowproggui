@@ -15,9 +15,13 @@ end
 end
 let rec sgns n = if n=0 then [] else (Sgn.ini ())::(sgns (n-1))
 module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
+module StgSet = Set.Make(struct type t = string let compare = compare end)
 module SgnMap = Map.Make(struct type t = Sgn.t let compare = compare end)
+module StgMap = Map.Make(struct type t = string let compare = compare end)
 let set_of_map m = SgnMap.fold (fun k _ r -> SgnSet.add k r) m SgnSet.empty
 let map_of_set s = SgnSet.fold (fun k r -> SgnMap.add k None r) s SgnMap.empty
+let set_of m = StgMap.fold (fun k _ r -> StgSet.add k r) m StgSet.empty
+let map_of s = StgSet.fold (fun k r -> StgMap.add k None r) s StgMap.empty
 type tm =
   | Prm of Sgn.t
   | Val of Sgn.t
@@ -50,18 +54,18 @@ let coprd_cl l = List.fold_right (fun x r -> x*|r) l (Prm coprd_end)
 let coprd_op l = List.fold_right (fun x r -> x*|r) l (Val (Sgn.ini()))
 let prd_cl l = List.fold_right (fun x r -> x*&r) l (Prm prd_end)
 let prd_op l = List.fold_right (fun x r -> x*&r) l (Val (Sgn.ini()))
-type rec_scm = rec_scm_hd * tm
-and rec_scm_hd = (scm_etr option) SgnMap.t
-and scm_etr = tm
-type rec_gma = rec_scm SgnMap.t
 type name = string
 type mdl = name * args * (glb_etr list)
+and mdl_scm = mdl_scm_hd * tm
+and mdl_scm_hd = (tm option) SgnMap.t
+and mdl_gma = mdl_scm StgMap.t
 and glb_etr =
-  | Etr of etr
+  | Etr of mdl_scm_hd * etr_body
   | Flow of flow
-  | Etr_Clq of etr list
+  | Etr_Clq of mdl_scm_hd * (etr_body list)
   | Flow_Clq of flow list
   | Gram of Peg.grammar
+and etr_body = string * tm * tm * code
 and flow =
   | Def_Abs of name * args
   | Def_Prd of name * args * ((typ * name) list)
@@ -73,7 +77,7 @@ and args = arg list
 and arg =
   | Arg_Val of int
   | Arg_Rcd of arg list
-and etr = string * rec_scm_hd * tm * tm * code
+and etr = string * mdl_scm_hd * tm * tm * code
 (* <name> : [scm_hd]∀ <src> ⊢ <dst> ≒ <code> *)
 and gl_st = glb_etr list
 and typ =
@@ -93,7 +97,6 @@ and code =
   | Seq of code * code
   | Canon of (code list)
   | Code_CoPrd of exp * (code list)
-  | Code_Agl of opr * opr * (code list)
   | Code_Prd of exp * (code list)
   | Code_IO of exp * int * code
 and exp = typ * opr * ((name * opr) list)
@@ -135,7 +138,6 @@ type vh =
   | V of vh * vh
   | H of vh * vh
   | E of nd
-  | CP of nd * nd * (vh list) (* ∠[exp] exp ∐ exp ∐ exp ∇ *)
   | P of nd * (vh list)
   | A of nd * path * (vh list)
   | F of nd * int * vh (* { exp ? } |» vh *)
@@ -155,17 +157,6 @@ type buffer =
   | Evo of code
   | End
 exception End
-let rec agl (e:opr) : (int list) option =
-  ( match e with
-    | Agl _ -> Some []
-    | Opr_Rcd l ->
-      let (i,a) = BatList.findi (fun _ x -> not(x=None)) (List.map agl l) in
-      ( match a with
-        | None -> raise @@ Failure ""
-        | Some a -> Some (i::a)
-      )
-    | _ -> None
-  )
 let rec path p e : tm option =
   ( match p with
     | [] -> Some e
