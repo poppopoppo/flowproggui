@@ -58,7 +58,7 @@ let print_cxt c =
     c ""
 let rec print_rec_scm (c,y) =
   let p = print_scm_hd c in
-  "["^p^"]∀ "^(print_tm y)
+  "["^p^"] ∀ "^(print_tm y)
 and print_scm_hd h =
   let bs = SgnMap.bindings h in
   let p = string_of_list ","
@@ -66,7 +66,7 @@ and print_scm_hd h =
          let v0 =
            ( match v with
              | None -> ""
-             | Some x -> " ≃ "^(print_tm x)
+             | Some x -> "≃"^(print_tm x)
            ) in
          "t"^(Sgn.print k)^"'"^v0)
       bs in
@@ -157,7 +157,7 @@ and string_of_opr x =
 let string_of_glb_etr f e =
   ( match e with
     | Etr (h,(n,s,d,c)) ->
-      let p0 = "§ "^n^" : ["^(print_scm_hd h)^"]∀ "^(print_tm s)^" ⊢ "^(print_tm d) in
+      let p0 = "§ "^n^" : "^(print_scm_hd h)^" ∀ "^(print_tm s)^" ⊢ "^(print_tm d) in
       let p1 = " ≒ \n\t.» "^(string_of_code 1 c)^"\n" in
       if f then p0^p1 else p0
     | Etr_Clq(h,l) ->
@@ -167,7 +167,7 @@ let string_of_glb_etr f e =
               let p1 = " ≒ \n\t.» "^(string_of_code 1 c)^"\n\t" in
               if f then r^p0^p1 else r^p0^"\n\t" )
           "" l in
-      "§ ["^(print_scm_hd h)^"]∀ "^p
+      "§ "^(print_scm_hd h)^"∀ "^p
     | Flow(Def_CoPrd (n,_,l)) ->
       "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (string_of_typ 0 t)^" : "^c) l)
     | Flow(Def_Prd (n,_,l)) ->
