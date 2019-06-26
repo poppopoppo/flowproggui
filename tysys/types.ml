@@ -41,6 +41,7 @@ let arg = Sgn.ini ()
 let root = Sgn.ini ()
 let fld = Sgn.ini ()
 let unfld = Sgn.ini ()
+let pZ = Sgn.ini ()
 type cxt = tm SgnMap.t
 type c = (tm * tm) list
 let (<+) x y = App(x,y)
