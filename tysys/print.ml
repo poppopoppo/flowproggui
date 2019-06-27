@@ -11,6 +11,12 @@ let rec print_tm e =
       else if p=z then "ℤ"
       else if p=rcd_end then "{}"
       else if p=stg then "ℾ"
+      else if p=fld then "<>"
+      else if p=unfld then "><"
+      else if p=pZ then "pℤ"
+      else if p=inA then "+"
+      else if p=outA then "-"
+      else if p=sgn_sgn then "&"
       else "p"^(Sgn.print p)
     | Val v -> "t"^(Sgn.print v)^"'"
     | App(App(Prm p,e1),e2) ->

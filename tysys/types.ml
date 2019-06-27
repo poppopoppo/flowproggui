@@ -13,6 +13,7 @@ end
     n
   let print x = (string_of_int x)
 end
+let sgn = Sgn.ini
 let rec sgns n = if n=0 then [] else (Sgn.ini ())::(sgns (n-1))
 module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
 module StgSet = Set.Make(struct type t = string let compare = compare end)
@@ -26,10 +27,14 @@ type tm =
   | Prm of Sgn.t
   | Val of Sgn.t
   | App of tm * tm
-let imp = Sgn.ini ()
-let tpl = Sgn.ini ()
-let prd = Sgn.ini ()
+let imp = Sgn.ini ()  (* → *)
+let tpl = Sgn.ini () (* ** *)
+let prd = Sgn.ini ()  (* *& *)
+let unv_prd = Sgn.ini ()
+let pol_prd = sgn()
 let coprd = Sgn.ini ()
+let unv_coprd = sgn ()
+let pol_coprd = sgn ()
 let prd_end  = Sgn.ini ()
 let coprd_end = Sgn.ini ()
 let rcd = Sgn.ini ()
@@ -42,8 +47,13 @@ let root = Sgn.ini ()
 let fld = Sgn.ini ()
 let unfld = Sgn.ini ()
 let pZ = Sgn.ini ()
+let sgn_sgn = sgn ()
+let inA = sgn ()
+let outA = sgn ()
+let lst = sgn ()
 type cxt = tm SgnMap.t
 type c = (tm * tm) list
+
 let (<+) x y = App(x,y)
 let (-*) x y = (Prm imp)<+x<+y
 let ( ** ) x y = (Prm tpl)<+x<+y
@@ -55,6 +65,7 @@ let coprd_cl l = List.fold_right (fun x r -> x*|r) l (Prm coprd_end)
 let coprd_op l = List.fold_right (fun x r -> x*|r) l (Val (Sgn.ini()))
 let prd_cl l = List.fold_right (fun x r -> x*&r) l (Prm prd_end)
 let prd_op l = List.fold_right (fun x r -> x*&r) l (Val (Sgn.ini()))
+let pZ_ini y = (Prm unfld)<+(rcd_cl [y;(Prm pZ)])
 type name = string
 type mdl = name * args * (glb_etr list)
 and mdl_scm = mdl_scm_hd * tm
