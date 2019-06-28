@@ -57,7 +57,7 @@ let ftv j e = SgnSet.mem j (ftvs e)
 exception Fail
 type rnk = SgnSet.t
 let rec unify w (c:c) : cxt =
-  (pnt true ("enter unify:"^(print_c c)^"\n"));
+  (pnt false ("enter unify:"^(print_c c)^"\n"));
   let c =
     ( match c with
       | [] -> SgnMap.empty
@@ -94,7 +94,7 @@ let rec unify w (c:c) : cxt =
           | _ -> raise @@ Failure ("unify:3:"^(print_tm e0)^"~"^(print_tm e1))
         )
     ) in
-  (pnt true ("return unify:"^(print_cxt c)^"\n"));
+  (pnt false ("return unify:"^(print_cxt c)^"\n"));
   c
 let rec unifys_cxt l =
   ( match l with
@@ -132,9 +132,9 @@ type agl_gma = tm SgnMap.t
 type typ_gma = (tm * tm) SgnMap.t
 type typ_env = (tm * tm) list
 let typ_env = [
-  (Prm pZ,coprd_cl [Prm rcd_end;Prm rcd_end]);
+  (Prm pZ,coprd_cl_unv (Prm pZ) [Prm rcd_end;Prm rcd_end]);
   let v = vsgn () in
-  ((Prm lst)<+v,coprd_cl [Prm rcd_end;(rcd_cl [v;Prm lst])])
+  ((Prm lst)<+v,coprd_cl_unv (Prm lst) [Prm rcd_end;(rcd_cl [v;Prm lst])])
 ]
 let agl_gma_to g = SgnMap.map (fun y -> Some y) g
 let typ_gma_to g = SgnMap.map (fun (y1,y2) -> Some (y1-*y2)) g
@@ -211,7 +211,9 @@ let mrg_typ_gma ga0 ga1 =
   (ga2,b0)
 let rec typing_vh g (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt * typ_gma) =
   let lb0 = sgn() in
-  pnt true ("enter typing_vh:"^(Print.print_mdl_gma gv)^(Print.print_vh c)^","^(print_tm s0)^","^(print_tm d0)^"\n");
+  pnt true ("enter typing_vh:"^(Sgn.print lb0)^
+            (Print.print_mdl_gma gv)^(Print.print_vh c)^","^
+            (print_tm s0)^","^(print_tm d0)^"\n");
   let q =
     ( match c with
       | V (c1,c2) ->
@@ -274,7 +276,7 @@ let rec typing_vh g (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt * typ_gma) =
                     (fun (a,v) -> (((cxt_ini())+~(v,p0))*~bp)<*a)
                     (List.combine as0 vs0))) in
             pnt true "CP:2\n";
-            let y0 = coprd_cl
+            let y0 = coprd_cl_unv (vsgn())
                 (List.map
                    (fun v -> (bp*~bx)<*(Val v))
                    vs0) in
@@ -419,7 +421,7 @@ and typing_nd g tg gv (e:nd) r d : (cxt * typ_gma)=
         let (v0,v1) = (sgn(),sgn()) in
         let l = BatList.init
             (i1+1) (fun j -> if j=i1 then (Val v0) else vsgn()) in
-        let ga = SgnMap.add v1 (Val v1,(coprd_op l)) SgnMap.empty in
+        let ga = SgnMap.add v1 (Val v1,(coprd_op_inj l)) SgnMap.empty in
         (unify SgnSet.empty
            [(d,(Val v0)-*(Val v1))],ga)
       | Cho i1 ->
@@ -512,7 +514,7 @@ let typing_mdl m =
                  (fun (b,gat) ((vs,vd),(_,_,_,c)) ->
                     let (b0,ga) = typing_vh g typ_env
                         (b<**m) (vh_of_code c) (b<*(Val vs)) (b<*(Val vd)) in
-                    let (gax,b3) = mrg_typ_gma gat ga in
+                    let (gax,b3) = mrg_typ_gma (b0<*%gat) ga in
                     (b*~b0*~b3,gax))
                  (cxt_ini(),SgnMap.empty) vpl in
              let (ga1,_) =
