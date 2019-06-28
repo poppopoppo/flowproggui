@@ -27,6 +27,7 @@ type tm =
   | Prm of Sgn.t
   | Val of Sgn.t
   | App of tm * tm
+let vsgn () = Val (sgn ())
 let imp = Sgn.ini ()  (* → *)
 let tpl = Sgn.ini () (* ** *)
 let prd = Sgn.ini ()  (* *& *)
@@ -34,6 +35,8 @@ let unv_prd = Sgn.ini ()
 let pol_prd = sgn()
 let coprd = Sgn.ini ()
 let unv_coprd = sgn ()
+let typ_inj = sgn ()
+let typ_cho = sgn ()
 let pol_coprd = sgn ()
 let prd_end  = Sgn.ini ()
 let coprd_end = Sgn.ini ()
@@ -60,11 +63,19 @@ let ( ** ) x y = (Prm tpl)<+x<+y
 let rcd_cl l = List.fold_right (fun x r -> x**r) l (Prm rcd_end)
 let rcd_op l = List.fold_right (fun x r -> x**r) l (Val (Sgn.ini()))
 let ( *| ) x y = (Prm coprd)<+x<+y
+let coprd_unv u x y = ((Prm unv_coprd)<+u<+x<+y)
+let ( *|=) x y = coprd_unv (Prm typ_inj) x y
 let ( *& ) x y = (Prm prd)<+x<+y
 let coprd_cl l = List.fold_right (fun x r -> x*|r) l (Prm coprd_end)
-let coprd_op l = List.fold_right (fun x r -> x*|r) l (Val (Sgn.ini()))
+let coprd_cl_unv u l =
+  List.fold_right (fun x r -> coprd_unv u x r) l (Prm coprd_end)
+let coprd_cl_inj l = coprd_cl_unv (Prm typ_inj) l
+let coprd_op l = List.fold_right (fun x r -> x*|r) l (vsgn())
+let coprd_op_unv u l =
+  List.fold_right (fun x r -> coprd_unv u x r) l (vsgn())
+let coprd_op_inj l = coprd_op_unv (Prm typ_inj) l
 let prd_cl l = List.fold_right (fun x r -> x*&r) l (Prm prd_end)
-let prd_op l = List.fold_right (fun x r -> x*&r) l (Val (Sgn.ini()))
+let prd_op l = List.fold_right (fun x r -> x*&r) l (vsgn())
 let pZ_ini y = (Prm unfld)<+(rcd_cl [y;(Prm pZ)])
 type name = string
 type mdl = name * args * (glb_etr list)
@@ -146,6 +157,9 @@ and tkn =
   | Tkn_IO_Minus
   | Tkn_IO_Eq
   | Tkn_Stg of string
+type agl_gma = tm SgnMap.t
+type typ_gma = (tm * tm) SgnMap.t
+type typ_env = (tm * tm) list
 type vh =
   | V of vh * vh
   | H of vh * vh
@@ -183,3 +197,9 @@ and rcd_nth n e =
       else raise @@ Failure "rcd_nth:1"
     | _ -> raise @@ Failure "rcd_nth:2"
   )
+let env_of_gl_st g =
+  List.fold_left
+    (fun r e ->
+       ( match e with
+         | Etr (h,(name,src,dst,code)) ->
+            ))

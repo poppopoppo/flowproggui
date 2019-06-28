@@ -19,14 +19,58 @@ let rec print_tm e =
       else if p=sgn_sgn then "&"
       else "p"^(Sgn.print p)
     | Val v -> "t"^(Sgn.print v)^"'"
-    | App(App(Prm p,e1),e2) ->
-      if p=imp then ("("^(print_tm e1)^"→"^(print_tm e2)^")")
-      else if p=tpl then ("{ "^(print_rcd e))
-      else if p=prd then "↓[ "^(print_prd e)
-      else if p=coprd then "↑[ "^(print_coprd e)
-      else ("("^(print_tm (Prm p))^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")")
+    | App(App(em,e1),e2) ->
+      ( match em with
+        | Prm p ->
+          if p=imp then ("("^(print_tm e1)^"→"^(print_tm e2)^")")
+          else if p=tpl then ("{ "^(print_rcd e))
+          else if p=prd then "↓[ "^(print_prd e)
+          else if p=coprd then "↑[ "^(print_coprd e)
+          else ("("^(print_tm (Prm p))^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")")
+        | App(Prm p,x) ->
+          if p=unv_coprd then
+            ( match x with
+              | Val v -> "∐[ "^(print_coprd_unv v e)
+              | Prm p1 ->
+                if p1=typ_inj then "↑[ "^(print_coprd_inj e)
+                else "∐[ "^(print_coprd_prm (Prm p1) e)
+              | _ -> "("^(print_tm em)^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")"
+            )
+          else "("^(print_tm em)^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")"
+        | _ -> "("^(print_tm em)^"◂"^(print_tm e1)^"◂"^(print_tm e2)^")"
+      )
     | App (e1,e2) -> ("("^(print_tm e1)^"◂"^(print_tm e2)^")")
   )
+and print_coprd_unv v e =
+  ( match e with
+    | App(App(App(Prm p,Val v1),e1),e2) ->
+      if p=unv_coprd && v=v1 then (print_tm e1)^" "^(print_coprd_unv v e2)
+      else raise @@ Failure "print_prd_unv:0"
+    | Prm p ->
+      if p=coprd_end then "]"
+      else raise @@ Failure "print_coprd_unv:1"
+    | Val _ -> "<]"
+    | _ -> raise @@ Failure "print_coprd_unv:2" )
+and print_coprd_inj e =
+  ( match e with
+    | App(App(App(Prm p,Prm p1),e1),e2) ->
+      if p=unv_coprd && typ_inj=p1 then (print_tm e1)^" "^(print_coprd_inj e2)
+      else raise @@ Failure "print_coprd_inj:0"
+    | Prm p ->
+      if p=coprd_end then "]"
+      else raise @@ Failure "print_coprd_inj:1"
+    | Val _ -> "<]"
+    | _ -> raise @@ Failure "print_coprd_inj:2" )
+and print_coprd_prm p e =
+  ( match e with
+    | App(App(App(Prm p1,p2),e1),e2) ->
+      if p1=unv_coprd && p=p2 then (print_tm e1)^" "^(print_coprd_prm p e2)
+      else raise @@ Failure "print_prd_prm:0"
+    | Prm p ->
+      if p=coprd_end then "]"
+      else raise @@ Failure "print_coprd_prm:1"
+    | Val _ -> "<]"
+    | _ -> raise @@ Failure "print_coprd_prm:2" )
 and print_rcd e =
   ( match e with
     | App(App(Prm p,e1),e2) ->
