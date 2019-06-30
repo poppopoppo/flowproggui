@@ -21,15 +21,15 @@ let open_out_close (s:string) (p:Pervasives.out_channel -> 'a) : 'a =
   close_out f;v
 let rec assoc_group l =
   ( match l with
-    | [] -> []
+    | [] ->
     | (k0,v0)::tl ->
       let tl0 = assoc_group tl in
       let rec l0 l =
         ( match l with
-          | [] -> [(k0,[v0])]
+          | [] -> []
           | (k1,r)::tl1 ->
             if k1=k0 then (k1,v0::r)::tl1
             else (k1,r)::(l0 tl1)
         ) in
-      l0 tl0
+      l0 tl
   )

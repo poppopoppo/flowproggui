@@ -1,6 +1,5 @@
 %{
   open Types
-  open Ty
   open Imp_parser_header
 %}
 
@@ -44,37 +43,22 @@ file:
   ;
 def_mdl:
   | MDL NAM def_arg DEF gl_etr_lst MDL_END {
-    let (x,_) = Ty.typing_mdl($2,[],$5) in
+    let (x,_) = Ty.typing_mdl($2,$3,$5) in
     x }
   ;
 def_arg:
-  | { ([],StgMap.empty) }
+  | { [] }
   | APP args { $2 }
 args:
-  | arg {
-    let (a,m) = $1 in
-    ([a],m) }
-  | arg args {
-    let ((a,m1),(al,m2)) = ($1,$2) in
-    let (m3,_) = mrg_stgMap m1 m2 in
-    ([a]@al,m3) }
+  | arg { [$1] }
+  | arg args { [$1]@$2 }
 arg:
-  | VAL {
-    let v =
-      if StgMap.mem $1 !typ_vct then StgMap.find $1 !typ_vct
-        else vsgn () in
-        typ_vct:=(StgMap.add $1 v !typ_vct);
-    (v,StgMap.add $1 v StgMap.empty) }
-  | L_RCD arg_list R_RCD  {
-    let (al,m) = $2 in
-    (rcd_cl al,m) }
+  | VAL { Arg_Val (-1) }
+  | L_RCD arg_list R_RCD  { Arg_Rcd $2 }
   ;
 arg_list:
-  | arg { let (a,m) = $1 in ([a],m) }
-  | arg_list arg  {
-    let ((al,ml),(a,m)) = ($1,$2) in
-    let (m1,_) = mrg_stgMap ml m in
-    (al@[a],m1) }
+  | arg { [$1] }
+  | arg_list arg  { $1@[$2] }
   ;
 gl_etr_lst:
   |   { [] }
@@ -132,20 +116,18 @@ def_typ_clique:
   | SLF def_typ_body_clq def_typ_clique { [$2]@$3 }
   ;
 def_typ_body:
-  | NAM def_arg  { Def_Abs ($1,fst $2) }
-  | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,fst $2,$4) }
-  | NAM def_arg ISO def_prd  { Def_Prd ($1,fst $2,$4) }
+  | NAM def_arg  { Def_Abs ($1,$2) }
+  | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,$2,$4) }
+  | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
   | FNT NAM ISO name_list { Def_Fnt ($2,$4) }
   | FNT NAM APP L_BLK INT R_BLK ISO NAM   { Def_Fnt_Dep ($2,$5,$8) }
-  | NAM def_arg DEQ typ  { Def_Eqv ($1,fst $2,$4) }
+  | NAM def_arg DEQ typ  { Def_Eqv ($1,$2,$4) }
   ;
 def_typ_body_clq:
-  | NAM def_arg  { Def_Abs ($1,fst $2) }
-  | NAM def_arg ISO def_coprd   {
-    let (a,_) = $2 in
-    Def_CoPrd ($1,a,List.map (fun (y,n) -> (y,n)) $4) }
-  | NAM def_arg ISO def_prd  { Def_Prd ($1,fst $2,$4) }
-  | NAM def_arg DEQ typ  { Def_Eqv ($1,fst $2,$4) }
+  | NAM def_arg  { Def_Abs ($1,$2) }
+  | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,$2,$4) }
+  | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
+  | NAM def_arg DEQ typ  { Def_Eqv ($1,$2,$4) }
   ;
 name_list:
   | NAM { [$1] }
@@ -160,7 +142,7 @@ def_prd:
   | PRD typ_top CLN NAM def_prd  { ($2,$4)::$5 }
   ;
 typ_top:
-  | typs { rcd_cl $1 }
+  | typs { Typ_Rcd $1 }
   | EXP typ { $2 }
   ;
 typs:
@@ -169,23 +151,17 @@ typs:
   ;
 typ:
   | L_RCD typ_top R_RCD { $2 }
-  | typ APP typ { $1<+$3 }
-  | typ PRJ typ { vct<+$1<+$3 }
-  | L_OPN typ R_OPN { opn<+$2 }
-  | L_LST typ R_LST { lst<+$2 }
-  | VAL {
-    ( try
-      let v = StgMap.find $1 !typ_vct in
-      v
-      with _ -> let v = vsgn() in
-      typ_vct:=(StgMap.add $1 v !typ_vct); vsgn()
-    ) }
-  | NAM { Prm (sgn()) }
-  | Z { pZ }
-  | N { nat }
-  | typ IO typ  { $1-*$3 }
-  | SGN { sgn_sgn }
-  | TYP_STG { stg }
+  | typ APP typ { Typ_App ($1,$3) }
+  | typ PRJ typ { Typ_Vct ($1,$3) }
+  | L_OPN typ R_OPN { Typ_App (Typ_Name "‹›",$2) }
+  | L_LST typ R_LST { Typ_App (Typ_Name "⟦⟧",$2) }
+  | VAL { Typ_Val (-1) }
+  | NAM { Typ_Name $1 }
+  | Z { Typ_Name "ℤ" }
+  | N { Typ_Name "ℕ" }
+  | typ IO typ  { Typ_Imp ($1,$3) }
+  | SGN { Typ_Name "&" }
+  | TYP_STG { Typ_Name "ℾ" }
   ;
 glb_etr:
   | LCE glb_etr_body { Etr(SgnMap.empty,$2)  }
@@ -205,7 +181,7 @@ glb_etr_body:
   }
   ;
 typ_def:
-  | { (vsgn(),vsgn()) }
+  | { (Typ_Val (-1),Typ_Val (-1)) }
   | typ_top SRC typ_top CLN { ($1,$3) }
   ;
 stt_code:
@@ -304,7 +280,7 @@ macro_list:
   | macro_list CMM NAM LET exp  { $1@[($3,$5)] }
   ;
 typ_ept:
-  |  { vsgn() }
+  |  { Typ_Val (-1) }
   | ACT typ_top CLN { $2 }
   ;
 

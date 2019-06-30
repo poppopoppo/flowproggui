@@ -15,16 +15,10 @@ end
 end
 let sgn = Sgn.ini
 let rec sgns n = if n=0 then [] else (Sgn.ini ())::(sgns (n-1))
-type valP =
-  | VName of string
-  | VSgn of Sgn.t
-  | PSgn of Sgn.t
 module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
 module StgSet = Set.Make(struct type t = string let compare = compare end)
 module SgnMap = Map.Make(struct type t = Sgn.t let compare = compare end)
 module StgMap = Map.Make(struct type t = string let compare = compare end)
-module ValMap = Map.Make(struct type t = valP let compare = compare end)
-module ValSet = Set.Make(struct type t = valP let compare = compare end)
 let set_of_map m = SgnMap.fold (fun k _ r -> SgnSet.add k r) m SgnSet.empty
 let map_of_set s = SgnSet.fold (fun k r -> SgnMap.add k None r) s SgnMap.empty
 let set_of m = StgMap.fold (fun k _ r -> StgSet.add k r) m StgSet.empty
@@ -33,31 +27,13 @@ type tm =
   | Prm of Sgn.t
   | Val of Sgn.t
   | App of tm * tm
-type 'v tmP =
-  | ValP of 'v
-  | AppP of 'v tmP * 'v tmP
-
-type 'v prm_set = 'v -> bool
-let std_prm v =
-  ( match v with
-    | VName _ -> true
-    | PSgn _ -> true
-    | VSgn _ -> false )
 let vsgn () = Val (sgn ())
-let psgn () = Prm (sgn ())
 let imp = Sgn.ini ()  (* → *)
 let tpl = Sgn.ini () (* ** *)
 let prd = Sgn.ini ()  (* *& *)
 let unv_prd = Sgn.ini ()
 let pol_prd = sgn()
 let coprd = Sgn.ini ()
-let vct = psgn ()
-let opn = psgn ()
-let lst = psgn ()
-let pZ = psgn ()
-let nat = psgn ()
-let sgn_sgn = psgn ()
-let stg = psgn ()
 let unv_coprd = sgn ()
 let typ_inj = sgn ()
 let typ_cho = sgn ()
@@ -68,16 +44,19 @@ let rcd = Sgn.ini ()
 let rcd_end = Sgn.ini ()
 let rcd_edo = Sgn.ini ()
 let z = Sgn.ini ()
+let stg = Sgn.ini ()
 let arg = Sgn.ini ()
 let root = Sgn.ini ()
 let fld = Sgn.ini ()
 let unfld = Sgn.ini ()
+let pZ = Sgn.ini ()
+let sgn_sgn = sgn ()
 let inA = sgn ()
 let outA = sgn ()
+let lst = sgn ()
 type cxt = tm SgnMap.t
-type cxtP = (valP tmP) ValMap.t
 type c = (tm * tm) list
-type cP = (valP tmP * valP tmP) list
+
 let (<+) x y = App(x,y)
 let (-*) x y = (Prm imp)<+x<+y
 let ( ** ) x y = (Prm tpl)<+x<+y
@@ -97,11 +76,13 @@ let coprd_op_unv u l =
 let coprd_op_inj l = coprd_op_unv (Prm typ_inj) l
 let prd_cl l = List.fold_right (fun x r -> x*&r) l (Prm prd_end)
 let prd_op l = List.fold_right (fun x r -> x*&r) l (vsgn())
-let pZ_ini y = (Prm unfld)<+(rcd_cl [y;pZ])
+let pZ_ini y = (Prm unfld)<+(rcd_cl [y;(Prm pZ)])
 type typ_gma = (tm * tm) SgnMap.t
 type typ_env = (tm * tm) list
 type name = string
-type mdl_glb = ((tm * tm) SgnMap.t) * ((tm * tm) StgMap.t)
+type iso_lst = (tm * tm) list
+type glb_typ = (tm * tm) StgMap.t
+type mdl_typ = iso_lst * glb_typ
 type mdl = name * args * (glb_etr list)
 and mdl_scm = mdl_scm_hd * tm
 and mdl_scm_hd = (tm option) SgnMap.t
@@ -115,12 +96,15 @@ and glb_etr =
 and etr_body = string * tm * tm * code
 and flow =
   | Def_Abs of name * args
-  | Def_Prd of name * args * ((tm * name) list)
-  | Def_CoPrd of name * args * ((tm * name) list)
+  | Def_Prd of name * args * ((typ * name) list)
+  | Def_CoPrd of name * args * ((typ * name) list)
   | Def_Fnt of name * (name list)
   | Def_Fnt_Dep of name * int * name
-  | Def_Eqv of name * args * tm
-and args = tm list
+  | Def_Eqv of name * args * typ
+and args = arg list
+and arg =
+  | Arg_Val of int
+  | Arg_Rcd of arg list
 and etr = string * mdl_scm_hd * tm * tm * code
 (* <name> : [scm_hd]∀ <src> ⊢ <dst> ≒ <code> *)
 and gl_st = glb_etr list
@@ -143,7 +127,7 @@ and code =
   | Code_CoPrd of exp * (code list)
   | Code_Prd of exp * (code list)
   | Code_IO of exp * int * code
-and exp = tm * opr * ((name * opr) list)
+and exp = typ * opr * ((name * opr) list)
 and opr =
   | Agl of opr
   | Opr_Z of int
