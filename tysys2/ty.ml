@@ -4,9 +4,6 @@ let b = true
 let pnt x s = if x then (print_string s;flush stdout)
 let sgn () = Sgn.ini ()
 let vsgn () = Val (sgn ())
-let vsgnP () = ValP (VSgn (sgn ()))
-let typ_vct:(tm StgMap.t ref) = ref StgMap.empty
-let prm_vct:(Sgn.t StgMap.t ref) = ref StgMap.empty
 let rec agl (e:opr) : (int list) option =
   ( match e with
     | Agl _ -> Some []
@@ -28,27 +25,17 @@ let rec agl (e:opr) : (int list) option =
     | _ -> None
   )
 let cxt_ini : cxt = SgnMap.empty
-let cxt_iniP : cxtP = ValMap.empty
 let cxt_add (i:_) (e:_) c = SgnMap.add i e c
-let cxt_addP i e c = ValMap.add i e c
 let ( +~ ) c (i,e) = cxt_add i e c
-let ( +~- ) c (i,e) = cxt_addP i e c
 let rec subst (s:cxt) (e:tm) : tm =
   ( match e with
     | Prm _ -> e
     | Val i -> ( try SgnMap.find i s with _ -> e)
     | App(e1,e2) -> App(subst s e1,subst s e2)
   )
-let rec substP s e =
-  ( match e with
-    | ValP i -> ( try ValMap.find i s with _ -> e)
-    | AppP(e1,e2) -> AppP(substP s e1,substP s e2)
-  )
 let (<*) b y = subst b y
-let (<*-) b y = substP b y
 let subst_c s c = List.map (fun (e0,e1) -> (s<*e0,s<*e1)) c
 let (<*~) s c = subst_c s c
-let (<*~-) s c = List.map (fun (e0,e1) -> (s<*-e0,s<*-e1)) c
 let cmpS s0 s1 =
   SgnMap.merge
     (fun _ oa ob ->
@@ -57,16 +44,8 @@ let cmpS s0 s1 =
        | Some a,_ -> Some (s1<*a))
     s0 s1
 let ( *~ ) s0 s1 = cmpS s0 s1
-let ( *~- ) s0 s1 =
-  ValMap.merge
-    (fun _ oa ob ->
-       match oa,ob with
-       | None,_ -> ob
-       | Some a,_ -> Some (s1<*-a))
-    s0 s1
 let cmp_subst (sl:cxt list) : cxt =
   List.fold_left cmpS cxt_ini sl
-let cmp_substP sl = List.fold_left ( *~- ) cxt_iniP sl
 let rec ftvs (e:tm) : SgnSet.t =
   let s0 = SgnSet.empty in
   ( match e with
@@ -74,14 +53,7 @@ let rec ftvs (e:tm) : SgnSet.t =
     | Val i -> SgnSet.add i s0
     | App (e1,e2) -> SgnSet.union (ftvs e1) (ftvs e2)
   )
-let rec ftvsP e =
-  let s0 = ValSet.empty in
-  ( match e with
-    | ValP i -> ValSet.add i s0
-    | AppP(e1,e2) -> ValSet.union (ftvsP e1) (ftvsP e2)
-  )
 let ftv j e = SgnSet.mem j (ftvs e)
-let ftvP j e = ValSet.mem j (ftvsP e)
 exception Fail
 type rnk = SgnSet.t
 let rec unify w (c:c) : cxt =
@@ -94,12 +66,12 @@ let rec unify w (c:c) : cxt =
           | Prm p0,Prm p1 ->
             if p0=p1 then unify w tl else raise @@ Failure "unify:0"
           | Val v0,Val v1 ->
-            let (vf0,vf1) = (SgnSet.mem v0 w,SgnSet.mem v1 w) in
-            if vf0&&vf1 then if v0=v1 then unify w tl else raise @@ Failure "unify:5"
-            else if vf0&&(not vf1) then
+            if v0=v1 then unify w tl
+            else
+            if SgnSet.mem v0 w then
               let s0 = cxt_ini+~(v1,Val v0) in
               s0*~(unify w (s0<*~tl))
-            else if vf1&&(not vf0) then
+            else if SgnSet.mem v1 w then
               let s0 = cxt_ini+~(v0,Val v1) in
               s0*~(unify w (s0<*~tl))
             else
@@ -123,41 +95,6 @@ let rec unify w (c:c) : cxt =
         )
     ) in
   (pnt false ("return unify:"^(print_cxt c)^"\n"));
-  c
-let rec unifyP w c =
-  let c =
-    ( match c with
-      | [] -> ValMap.empty
-      | (e0,e1)::tl ->
-        ( match e0,e1 with
-          | ValP v0,ValP v1 ->
-            let (vf0,vf1) = (w v0 ,w v1) in
-            if vf0&&vf1 then if v0=v1 then unifyP w tl else raise @@ Failure "unify:5"
-            else if vf0&&(not vf1) then
-              let s0 = cxt_iniP+~-(v1,ValP v0) in
-              s0*~-(unifyP w (s0<*~-tl))
-            else if vf1&&(not vf0) then
-              let s0 = cxt_iniP+~-(v0,ValP v1) in
-              s0*~-(unifyP w (s0<*~-tl))
-            else
-              let v2 = vsgnP() in
-              let s0 = cxt_iniP+~-(v0,v2)+~-(v1,v2) in
-              s0*~-(unifyP w (s0<*~-tl))
-          | ValP v0,_ ->
-            if w v0 then (raise @@ Failure "unify:9")
-            else if (ftvP v0 e1) then (raise @@ Failure "unify:1")
-            else
-              let s0 = cxt_iniP+~-(v0,e1) in
-              s0*~-(unifyP w (s0<*~-tl))
-          | _,ValP v1 ->
-            if w v1 then (raise @@ Failure "unify:10")
-            else if (ftvP v1 e0) then (raise @@ Failure "unify:2")
-            else
-              let s0 = cxt_iniP+~-(v1,e0) in
-              s0*~-(unifyP w (s0<*~-tl))
-          | AppP(e1,e2),AppP(e3,e4) -> unifyP w ((e1,e3)::(e2,e4)::tl)
-        )
-    ) in
   c
 let rec unifys_cxt l =
   ( match l with
@@ -193,9 +130,9 @@ let gen (g:mdl_gma) (y:tm) : mdl_scm_hd =
   map_of_set (SgnSet.inter (ftvs_mdl_gma g) (ftvs_mdl_scm (SgnMap.empty,y)))
 
 let typ_env = [
-  (pZ,coprd_cl [Prm rcd_end;Prm rcd_end]);
+  (Prm pZ,coprd_cl_unv (Prm pZ) [Prm rcd_end;Prm rcd_end]);
   let v = vsgn () in
-  (lst<+v,coprd_cl [Prm rcd_end;(rcd_cl [v;lst])])
+  ((Prm lst)<+v,coprd_cl_unv (Prm lst) [Prm rcd_end;(rcd_cl [v;Prm lst])])
 ]
 let typ_gma_to g = SgnMap.map (fun (y1,y2) -> Some (y1-*y2)) g
 let subst_typ_gma s g = SgnMap.map (fun (y1,y2) -> (s<*y1,s<*y2)) g
@@ -239,25 +176,8 @@ let unify_glb_gma g1 g2 =
   let r = unify SgnSet.empty
       (SgnMap.fold (fun _ (y1,y3) r -> (y1,y3)::r) gm []) in
   r
-let unify_stgMap g1 g2 =
-  let gm = StgMap.merge
-      (fun _ v1 v2 ->
-         ( match v1,v2 with
-           | None,_ -> None
-           | _,None -> None
-           | Some y1,Some y3 ->
-             Some (y1,y3)))
-      g1 g2 in
-  let r = unify SgnSet.empty
-      (StgMap.fold (fun _ (y1,y3) r -> (y1,y3)::r) gm []) in
-  r
 let mrg_typ_gma ga0 ga1 =
-  pnt true ("enter mrg_typ_gma:"^
-            (print_typ_gma ga0)^","^
-            (print_typ_gma ga1)^"\n");
   let b0 = unify_typ_gma ga0 ga1 in
-  pnt true ("test1 mrg_typ_gma:"^
-            (print_cxt b0)^"\n");
   let ga2 =
     SgnMap.merge
       (fun _ a0 a1 ->
@@ -267,26 +187,8 @@ let mrg_typ_gma ga0 ga1 =
            | _ -> None
          ))
       ga0 ga1 in
-  pnt true ("test2 mrg_typ_gma:"^
-            (print_typ_gma ga2)^"\n");
-  let glt = SgnMap.fold
-      (fun _ (y1,y2) r -> (y1,y2)::r)
-      ga2 [] in
-  let gl = Util.assoc_group glt in
-  pnt true ("test3:"^
-            (Util.string_of_list ";"
-               (fun (y1,l) -> (print_tm y1)^"≃["^
-                              (Util.string_of_list "," print_tm l)^"]")
-               gl)^"\n");
-  let (w,c) = List.fold_left
-      (fun (w0,c0) (k,l) ->
-         let c = unifys_cxt l in
-         let w = ftvs k in
-         (SgnSet.union w w0,c@c0))
-      (SgnSet.empty,[]) gl in
-  let b1 = unify w c in
-  pnt true ("test2:"^(print_cxt b1)^"\n");
-  (b1<*%ga2,b0*~b1)
+  (ga2,b0)
+
 let mrg_glb_gma ga0 ga1 =
   let b0 = unify_glb_gma ga0 ga1 in
   let ga2 =
@@ -299,18 +201,6 @@ let mrg_glb_gma ga0 ga1 =
          ))
       ga0 ga1 in
   (ga2,b0)
-let mrg_stgMap sm1 sm2 =
-  let b0 = unify_stgMap sm1 sm2 in
-  let ga2 =
-    StgMap.merge
-      (fun _ a0 a1 ->
-         ( match a0,a1 with
-           | None,Some a1 -> Some (b0<*a1)
-           | Some a1,_ -> Some (b0<*a1)
-           | _ -> None
-         ))
-      sm1 sm2 in
-  (ga2,b0)
 let typ_gma_of (g:(tm option) SgnMap.t) : (tm * tm) SgnMap.t =
   SgnMap.fold
     (fun k h r ->
@@ -318,7 +208,10 @@ let typ_gma_of (g:(tm option) SgnMap.t) : (tm * tm) SgnMap.t =
        | None -> r
        | Some y -> SgnMap.add k (Val k,y) r)
     g SgnMap.empty
-let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt * typ_gma) =
+let mrg_iso_lst il =
+  let ilg = assoc_group il in
+  
+let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt * iso_lst) =
   let lb0 = sgn() in
   pnt true ("enter typing_vh:"^(Sgn.print lb0)^
             (Print.print_mdl_gma gv)^(Print.print_vh c)^","^
@@ -432,19 +325,6 @@ let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt *
             (print_scm_hd (typ_gma_to (snd q)))^","^
             "\n");
   q
-and gl_call (g:typ_env*mdl_glb) name =
-  let (_,(ga,gs)) = g in
-  let (y1,y2) = StgMap.find name gs in
-  let s0 = SgnSet.union (ftvs y1) (ftvs y2) in
-  let ga1 =
-    (SgnMap.fold
-       (fun k (y3,y4) r ->
-          let s1 = SgnSet.union (ftvs y3) (ftvs y4) in
-          let s2 = SgnSet.inter s0 s1 in
-          if SgnSet.is_empty s2 then r
-          else SgnMap.add k (y3,y4) r)
-       ga SgnMap.empty) in
-  (ga1,(y1,y2))
 and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
   let lb0 = sgn() in
   pnt true ("enter typing_nd "^(Sgn.print lb0)^":gv="^
@@ -455,21 +335,21 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
     ( match e with
       | Exp_Z _ ->
         emp @@ unify SgnSet.empty
-          [(d,pZ)]
+          [(d,Prm pZ)]
       | Exp_Name n ->
         let f n =
           if n="$" then emp @@ unify SgnSet.empty [(inst_scm r,d)]
           else if n="+" then
             let _ = vsgn () in
-            let z = pZ in
+            let z = Prm pZ in
             emp @@ unify SgnSet.empty [((rcd_cl [z;z])-*z,d)]
           else if n="*" then
             let _ = vsgn () in
-            let z = pZ in
+            let z = Prm pZ in
             emp @@ unify SgnSet.empty [((rcd_cl [z;z])-*z,d)]
           else if n="-" then
             let _ = vsgn () in
-            let z = pZ in
+            let z = Prm pZ in
             emp @@ unify SgnSet.empty [(z-*z,d)]
           else if n="=" then
             let a = sgn() in
@@ -493,14 +373,13 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
                     g
                 with _ -> raise (Failure "typing_opr:34")) in
                emp @@ unify SgnSet.empty [(d,y)]*)
-            (* let (_,(h,mg)) = g in
-               let (src,dst) =
-               (try
+            let (_,(h,mg)) = g in
+            let (src,dst) =
+              (try
                  StgMap.find n mg
-               with _ -> raise (Failure "test1")) in *)
-            let (ga4,(src,dst)) = gl_call g n in
+               with _ -> raise (Failure "test1")) in
             (unify SgnSet.empty [(d,src-*dst)],
-             ga4)
+             h)
         in
         ( try
             if n="∠" then
@@ -552,7 +431,7 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
         let (v0,v1) = (sgn(),sgn()) in
         let l = BatList.init
             (i1+1) (fun j -> if j=i1 then (Val v0) else vsgn()) in
-        let ga = SgnMap.add v1 (Val v1,(coprd_op l)) SgnMap.empty in
+        let ga = SgnMap.add v1 (Val v1,(coprd_op_inj l)) SgnMap.empty in
         (unify SgnSet.empty
            [(d,(Val v0)-*(Val v1))],ga)
       | Cho i1 ->
@@ -561,7 +440,7 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
             (i1+1) (fun j -> if j=i1 then (Val v0) else vsgn()) in
         let ga = SgnMap.add v1 (Val v1,(prd_op l)) SgnMap.empty in
         (unify SgnSet.empty [(d,(Val v1)-*(Val v0))],ga)
-      | Exp_Stg _ -> emp @@ unify SgnSet.empty [(d,stg)]
+      | Exp_Stg _ -> emp @@ unify SgnSet.empty [(d,Prm stg)]
     ) in
   pnt true ("return typing_nd"^(Sgn.print lb0)^":"^
             (print_cxt (fst q))^","^
@@ -687,24 +566,6 @@ let typing_mdl (m:mdl) : (mdl * mdl_glb) =
                     StgMap.add f (b2<*(Val vs),b2<*(Val vd)) gs1)
                  gs vpl in
              (g@[r],(gl,(gax,gs1)))
-           | Flow f ->
-             ( match f with
-               | Def_CoPrd (_,_,l) ->
-                 let vname = psgn () in
-                 let (l1,l2) =
-                   List.fold_left
-                     (fun (l1,l2) (y1,i1) ->
-                        (l1@[y1],l2@[(i1,y1)]))
-                     ([],[]) l in
-                 let (yc,gs1) =
-                   (coprd_cl l1,
-                    List.fold_left
-                      (fun r (i,y1) -> StgMap.add i (y1,vname) r)
-                      gs l2
-                   )
-                 in
-                 (g@[e],(gl@[(vname,yc)],(h,gs1)))
-               | _ -> raise (Failure ""))
-           | _ -> (g@[e],(gl,(h,gs)))))
+           | _ -> (g@[e],(gl,(h,gs))) ))
       ([],([],(SgnMap.empty,StgMap.empty))) l in
   ((name,arg,m0),snd mx)

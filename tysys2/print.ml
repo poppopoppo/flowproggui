@@ -10,13 +10,13 @@ let rec print_tm e =
       else if p=rcd then "{"
       else if p=z then "ℤ"
       else if p=rcd_end then "{}"
-      else if e=stg then "ℾ"
+      else if p=stg then "ℾ"
       else if p=fld then "<>"
       else if p=unfld then "><"
-      else if e=pZ then "pℤ"
+      else if p=pZ then "pℤ"
       else if p=inA then "+"
       else if p=outA then "-"
-      else if e=sgn_sgn then "&"
+      else if p=sgn_sgn then "&"
       else "p"^(Sgn.print p)
     | Val v -> "t"^(Sgn.print v)^"'"
     | App(App(em,e1),e2) ->
@@ -126,11 +126,6 @@ let print_mdl_gma (g:mdl_gma) : string =
     (fun k (h,v) r ->
        r^(print_scm_hd h)^" "^k^":"^(print_tm v)^"\n")
     g ""
-let print_typ_gma (g:typ_gma) : string =
-  SgnMap.fold
-    (fun k (y1,y2) r ->
-       r^(Sgn.print k)^". "^(print_tm y1)^"≃"^(print_tm y2)^"\n")
-    g ""
 let rec string_of_typ d x =
   let ex= if d=0 then "! " else "" in
   match x with
@@ -186,15 +181,15 @@ let rec string_of_code d x =
     let pre = (tabs (d+1))^"⁅ "^(Util.string_of_list ((tabs (d+1))^"¦ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"⁆" in
     pre
   | Code_CoPrd ((t,o,_),l) ->
-    let pre = (tabs d)^"» ` "^(print_tm t)^" : "^(string_of_opr o)^"\n" in
+    let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∐ "^(Util.string_of_list ((tabs (d+1))^"∐ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
   | Code_Prd ((t,o,_),l) ->
-    let pre = (tabs d)^"» ` "^(print_tm t)^" : "^(string_of_opr o)^"\n" in
+    let pre = (tabs d)^"» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
   | Code_IO ((t,o,_),_,c0) ->
-    let pre = (tabs (d+1))^"|» ` "^(print_tm t)^" : "^(string_of_opr o)^"\n" in
+    let pre = (tabs (d+1))^"|» ` "^(string_of_typ 0 t)^" : "^(string_of_opr o)^"\n" in
     let mid = string_of_code (d+1) c0 in
     pre^mid
 and string_of_opr x =
@@ -224,9 +219,9 @@ let string_of_glb_etr f e =
           "" l in
       "§ "^(print_scm_hd h)^"∀ "^p
     | Flow(Def_CoPrd (n,_,l)) ->
-      "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (print_tm t)^" : "^c) l)
+      "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (string_of_typ 0 t)^" : "^c) l)
     | Flow(Def_Prd (n,_,l)) ->
-      "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (print_tm t)^" : "^c) l)
+      "¶ "^n^" ≃ "^(Util.string_of_list " ∐ " (fun (t,c) -> (string_of_typ 0 t)^" : "^c) l)
     | _ -> "¶ _ ≃ _"
   )
 
