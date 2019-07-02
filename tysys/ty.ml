@@ -210,7 +210,7 @@ let (<*^) s g =
              ("subst_agl_gma:2:"^
               (print_tm (Val k))^","^(print_tm k0)^","^
               (print_tm v)^","^(print_tm y0)^"\n") in
-           pnt true p;
+           pnt false p;
            raise (Failure p)
        )
     ) g SgnMap.empty
@@ -252,11 +252,11 @@ let unify_stgMap g1 g2 =
       (StgMap.fold (fun _ (y1,y3) r -> (y1,y3)::r) gm []) in
   r
 let mrg_typ_gma ga0 ga1 =
-  pnt true ("enter mrg_typ_gma:"^
+  pnt false ("enter mrg_typ_gma:"^
             (print_typ_gma ga0)^","^
             (print_typ_gma ga1)^"\n");
   let b0 = unify_typ_gma ga0 ga1 in
-  pnt true ("test1 mrg_typ_gma:"^
+  pnt false ("test1 mrg_typ_gma:"^
             (print_cxt b0)^"\n");
   let ga2 =
     SgnMap.merge
@@ -267,13 +267,13 @@ let mrg_typ_gma ga0 ga1 =
            | _ -> None
          ))
       ga0 ga1 in
-  pnt true ("test2 mrg_typ_gma:"^
+  pnt false ("test2 mrg_typ_gma:"^
             (print_typ_gma ga2)^"\n");
   let glt = SgnMap.fold
       (fun _ (y1,y2) r -> (y1,y2)::r)
       ga2 [] in
   let gl = Util.assoc_group glt in
-  pnt true ("test3:"^
+  pnt false ("test3:"^
             (Util.string_of_list ";"
                (fun (y1,l) -> (print_tm y1)^"≃["^
                               (Util.string_of_list "," print_tm l)^"]")
@@ -285,7 +285,7 @@ let mrg_typ_gma ga0 ga1 =
          (SgnSet.union w w0,c@c0))
       (SgnSet.empty,[]) gl in
   let b1 = unify w c in
-  pnt true ("test2:"^(print_cxt b1)^"\n");
+  pnt false ("test2:"^(print_cxt b1)^"\n");
   (b1<*%ga2,b0*~b1)
 let mrg_glb_gma ga0 ga1 =
   let b0 = unify_glb_gma ga0 ga1 in
@@ -320,7 +320,7 @@ let typ_gma_of (g:(tm option) SgnMap.t) : (tm * tm) SgnMap.t =
     g SgnMap.empty
 let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt * typ_gma) =
   let lb0 = sgn() in
-  pnt true ("enter typing_vh:"^(Sgn.print lb0)^
+  pnt false ("enter typing_vh:"^(Sgn.print lb0)^
             (Print.print_mdl_gma gv)^(Print.print_vh c)^","^
             (print_tm s0)^","^(print_tm d0)^"\n");
   let q =
@@ -332,14 +332,14 @@ let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt *
         let (ga3,b3) = mrg_typ_gma ga1 ga2 in
         (b2*~b1*~b3,ga3)
       | H (c1,c2) ->
-        pnt true ("H:1");
+        pnt false ("H:1");
         let (y1,y2,y3,y4) = (vsgn (),vsgn(),vsgn(),vsgn()) in
         let b0 = unify SgnSet.empty [(y1**y2,d0)] in
-        pnt true ("H:2");
+        pnt false ("H:2");
         let ((b1,ga1),(b2,ga2)) =
           (typing_vh g tg (b0<**gv) c1 y3 (b0<*y1),
            typing_vh g tg (b0<**gv) c2 y4 (b0<*y2)) in
-        pnt true ("H:3");
+        pnt false ("H:3");
         let b3 = unify SgnSet.empty [(s0,(b1<*y3)**(b2<*y4))] in
         let (ga3,b4) = mrg_typ_gma ga1 ga2 in
         (b0*~b1*~b2*~b3*~b4,ga3)
@@ -370,7 +370,7 @@ let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt *
                   rcd_op l
               ) in
             let as0 = List.map (fun v -> a p v) vs0 in
-            pnt true "CP:1\n";
+            pnt false "CP:1\n";
             let (bp,ga1) = List.fold_left
                 (fun (b,ga) (a0,c) ->
                    let (bt,gat) =
@@ -384,8 +384,8 @@ let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt *
                  (List.map
                     (fun (a,v) -> ((cxt_ini+~(v,p0))*~bp)<*a)
                     (List.combine as0 vs0))) in
-            pnt true "CP:2\n";
-            let y0 = coprd_cl_unv (vsgn())
+            pnt false "CP:2\n";
+            let y0 = coprd_cl
                 (List.map
                    (fun v -> (bp*~bx)<*(Val v))
                    vs0) in
@@ -396,7 +396,7 @@ let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt *
                 e1 (SgnMap.empty,(bp*~bx)<*s0)
                 (((cxt_ini+~(List.hd vs0,y0))*~bp*~bx)<*(List.hd as0)) in
             let (ga3,b5) = mrg_typ_gma ga1 ga2 in
-            pnt true ("test 3:"^(print_scm_hd (typ_gma_to ga1))^","^
+            pnt false ("test 3:"^(print_scm_hd (typ_gma_to ga1))^","^
                       (print_scm_hd (typ_gma_to ga3))^"\n");
             (bp*~bx*~b4*~b5,ga3)
           with e -> raise e)
@@ -423,11 +423,11 @@ let rec typing_vh (g:typ_env*mdl_glb) (tg:typ_env) (gv:mdl_gma) c s0 d0 : (cxt *
             (bt<**gv)
             e1 (SgnMap.empty,bt<*s0) (bt<*(Val (List.hd vs_src))) in
         let (ga3,b4) = mrg_typ_gma g2 ga2 in
-        pnt true ("test4"^(Sgn.print lb0)^":"^
+        pnt false ("test4"^(Sgn.print lb0)^":"^
                   (print_scm_hd (typ_gma_to ga3))^"\n");
         (bt*~b2*~b4,ga3)
     ) in
-  pnt true ("return typing_vh"^(Sgn.print lb0)^":"^
+  pnt false ("return typing_vh"^(Sgn.print lb0)^":"^
             (print_cxt (fst q))^","^
             (print_scm_hd (typ_gma_to (snd q)))^","^
             "\n");
@@ -447,7 +447,7 @@ and gl_call (g:typ_env*mdl_glb) name =
   (ga1,(y1,y2))
 and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
   let lb0 = sgn() in
-  pnt true ("enter typing_nd "^(Sgn.print lb0)^":gv="^
+  pnt false ("enter typing_nd "^(Sgn.print lb0)^":gv="^
             (print_mdl_gma gv)^",e="^(print_nd e)^",r="^
             (print_rec_scm r)^",d="^(print_tm d)^"\n");
   let emp x = (x,SgnMap.empty) in
@@ -472,33 +472,23 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
             let z = pZ in
             emp @@ unify SgnSet.empty [(z-*z,d)]
           else if n="=" then
-            let a = sgn() in
-            emp (unify SgnSet.empty [((rcd_cl [Val a;Val a])-*(Prm z),d)])
+            let a = vsgn() in
+            emp @@ unify SgnSet.empty [(a-*(a-*pZ),d)]
+          else if n="?" then
+            let a = vsgn () in
+            emp @@ unify SgnSet.empty [(d,a)]
+          else if n="&" then
+            emp @@ unify SgnSet.empty [(d,(Prm rcd_end)-*sgn_sgn)]
           else if n="⊗" then
-            let (a,b) = (sgn(),sgn()) in
-            emp @@ unify SgnSet.empty [((Val a)-*((Val b)-*((Val a)**(Val b))),d)]
+            let (a,b) = (vsgn(),vsgn()) in
+            emp @@ unify SgnSet.empty [(a-*(b-*(a**b)),d)]
           else if n="}" then emp @@ unify SgnSet.empty [(Prm rcd_end,d)]
           else if n="@" then
             let f = vsgn() in
             emp @@ unify SgnSet.empty [(d,(f-*f)-*f)]
           else
-            (* let y =
-               ( try
-                  BatList.find_map
-                    (fun e ->
-                       ( match e with
-                         | Etr (_,(name,src,dst,_)) ->
-                           if name=n then Some (src-*dst) else None
-                         | _ -> None ))
-                    g
-                with _ -> raise (Failure "typing_opr:34")) in
-               emp @@ unify SgnSet.empty [(d,y)]*)
-            (* let (_,(h,mg)) = g in
-               let (src,dst) =
-               (try
-                 StgMap.find n mg
-               with _ -> raise (Failure "test1")) in *)
-            let (ga4,(src,dst)) = gl_call g n in
+            let (ga4,(src,dst)) =
+              (try gl_call g n with _ -> raise (Failure "Ty.typing_nd:gl_call")) in
             (unify SgnSet.empty [(d,src-*dst)],
              ga4)
         in
@@ -520,17 +510,17 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
         let s3 = s1*~s2 in
         let (ga1s,ga2s) = (s3<*%ga1,s3<*%ga2) in
         let (gax,s4) = mrg_typ_gma ga1s ga2s in
-        pnt true ("Exp_App:"^(print_scm_hd (typ_gma_to ga1))^","^
+        pnt false ("Exp_App:"^(print_scm_hd (typ_gma_to ga1))^","^
                   (print_tm (s3<*((Val v1)-*d)))^","^
                   (print_scm_hd (typ_gma_to ga2))^","^
                   (print_tm (s3<*((Val v1))))^","^
                   (print_cxt s3)^"\n");
-        pnt true ("Exp_App:"^(print_scm_hd (typ_gma_to ga1s))^","^
+        pnt false ("Exp_App:"^(print_scm_hd (typ_gma_to ga1s))^","^
                   (print_tm (s3<*((Val v1)-*d)))^","^
                   (print_scm_hd (typ_gma_to ga2s))^","^
                   (print_tm (s3<*((Val v1))))^","^
                   (print_cxt s3)^"\n");
-        pnt true ("Exp_App:"^(print_scm_hd (typ_gma_to gax))^","^
+        pnt false ("Exp_App:"^(print_scm_hd (typ_gma_to gax))^","^
                   (print_tm ((s3*~s4)<*((Val v1)-*d)))^","^
                   (print_tm ((s3*~s4)<*((Val v1))))^","^
                   (print_cxt (s3*~s4))^","^
@@ -563,7 +553,7 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
         (unify SgnSet.empty [(d,(Val v1)-*(Val v0))],ga)
       | Exp_Stg _ -> emp @@ unify SgnSet.empty [(d,stg)]
     ) in
-  pnt true ("return typing_nd"^(Sgn.print lb0)^":"^
+  pnt false ("return typing_nd"^(Sgn.print lb0)^":"^
             (print_cxt (fst q))^","^
             (print_scm_hd (typ_gma_to (snd q)))^","^
             "\n");
@@ -704,7 +694,7 @@ let typing_mdl (m:mdl) : (mdl * mdl_glb) =
                    )
                  in
                  (g@[e],(gl@[(vname,yc)],(h,gs1)))
-               | _ -> raise (Failure ""))
+               | _ -> raise (Failure "test6"))
            | _ -> (g@[e],(gl,(h,gs)))))
       ([],([],(SgnMap.empty,StgMap.empty))) l in
   ((name,arg,m0),snd mx)

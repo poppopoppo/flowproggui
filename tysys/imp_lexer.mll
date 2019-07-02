@@ -64,6 +64,7 @@ rule token = parse
     | "⁆" { R_HLZ  }
     | "⟦" { L_LST }
     | "⟧" { R_LST }
+    | "⟦|"  { L_LST_PLS } 
     | "‹" { L_OPN }
     | "›" { R_OPN }
     | "{^"  { L_VCT }

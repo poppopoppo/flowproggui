@@ -52,6 +52,7 @@ type token =
   | L_RCD
   | L_PRN
   | L_OPN
+  | L_LST_PLS
   | L_LST
   | L_HLZ
   | L_BLK

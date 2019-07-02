@@ -23,6 +23,7 @@ module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
 module StgSet = Set.Make(struct type t = string let compare = compare end)
 module SgnMap = Map.Make(struct type t = Sgn.t let compare = compare end)
 module StgMap = Map.Make(struct type t = string let compare = compare end)
+module IntMap = Map.Make(struct type t = int let compare = compare end)
 module ValMap = Map.Make(struct type t = valP let compare = compare end)
 module ValSet = Set.Make(struct type t = valP let compare = compare end)
 let set_of_map m = SgnMap.fold (fun k _ r -> SgnSet.add k r) m SgnSet.empty
@@ -198,8 +199,42 @@ and nd =
   | Cho of int
   | Exp_Stg of string
 let id = E (Exp_Name "$")
+type lst =
+  | Lst_Unt
+  | Lst_Exn of string
+  | Lst_Tns of lst * lst
+  | Lst_Vct of lst * ((lst * lst) list)
+  | Lst_CoPrd of int * lst
+  | Lst_Prd of lst * (vh list)
+  | Lst_Code of lst_arg * code_i
+  | Lst_Sgn of Sgn.t
+  | Lst_Z of int * int
+  | Lst_Stg of string
+and lst_arg =
+  | Arg_Rcd of (lst list) * int
+  | Arg_Mno of lst option
+and code_i =
+  | C_VH of vh
+  | C_Name of string
+  | C_Inj of int
+  | C_Cho of int
+  | C_Agl
+let lst_nil = Lst_Unt
+let list_of_lst s =
+  ( try
+      let rec l s =
+        ( match s with
+          | x when x=lst_nil -> []
+          | Lst_Tns(s1,s2) -> s1::(l s2)
+          | _ -> raise (Failure "") ) in
+      Some (l s)
+    with _ -> None )
+let lst_of_list l =
+  List.fold_right
+    (fun x r -> Lst_Tns (x,r)) l lst_nil
+type nd_eval = lst * (int option)
 type buffer =
-  | Evo of code
+  | Evo of nd
   | End
 exception End
 let rec path p e : tm option =
