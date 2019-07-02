@@ -173,7 +173,6 @@ let rec string_of_tkn d s =
       | _ -> "¿"
     ) in
   v
-
 let string_of_st (x:st) : string =
   "` "^(string_of_typ 0 (fst x))^" : "^(string_of_tkn 0 (snd x))
 
@@ -257,3 +256,33 @@ and print_nd n =
     | Cho i -> "↓["^(string_of_int i)^"]"
     | Exp_Stg s -> "Exp_Stg("^s^")"
   )
+
+let rec string_of_lst s =
+  match s with
+  | Lst_Unt -> "{}"
+  | Lst_Exn s -> "?◂"^"\""^s^"\""
+  | Lst_Tns (s1,s2) -> "<"^(string_of_lst s1)^"¦"^(string_of_lst s2)^">"
+  | Lst_Vct _ -> "?◂"^"Lst_Vct"
+  | Lst_CoPrd (i,s1) -> "↑["^(string_of_int i)^"]◂"^(string_of_lst s1)
+  | Lst_Prd _ -> "?◂Lst_Prd"
+  | Lst_Code (Arg_Rcd(as0,i),c) ->
+    let p1 = (print_code_i c) in
+    let p2 =
+      if as0=[] then ""
+      else "◂{"^(string_of_list " " string_of_lst as0) in
+    let p3 =
+      if i=0 then ""
+      else List.fold_left (^) "" (BatList.init i (fun _ -> " _")) in
+    "\\"^p1^p2^p3^"}"
+  | Lst_Code (Arg_Mno None,c) -> print_code_i c
+  | Lst_Code (Arg_Mno (Some x),c) -> "\\"^(string_of_lst x)^"◂"^(print_code_i c)
+  | Lst_Sgn v -> "&."^(Sgn.print v)
+  | Lst_Z (z1,_) -> string_of_int z1
+  | Lst_Stg w -> "\""^w^"\""
+and print_code_i c =
+  ( match c with
+    | C_VH c -> "\\"^(print_vh c)
+    | C_Name n -> "\\"^n
+    | C_Inj i -> "↑["^(string_of_int i)^"]"
+    | C_Cho i -> "↓["^(string_of_int i)^"]"
+    | C_Agl -> "∠" )

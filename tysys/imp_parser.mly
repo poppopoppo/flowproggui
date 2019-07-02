@@ -10,7 +10,7 @@
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN WC TEST PLS_NAT MNS_NAT MLT_NAT L_VCT
+%token DEQ FNT EXN WC TEST PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token <string> NAM STG VAL
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
@@ -36,7 +36,9 @@
 %type <opr> exp
 %%
 buffer:
-  | vh_frm_top EOF { Evo (Code_Exp $1) }
+  | vh_frm_top EOF {
+    let (_,o,_) = $1 in
+    Evo (nd_of_opr o) }
   | ARR_END EOF { End }
   ;
 file:
@@ -93,8 +95,12 @@ dta_grm:
   | DTA_GRM grm_clq { $2 }
   ;
 grm_clq:
-  | SLF NAM ISO grm_ord   { [($2,[],$4)] }
-  | SLF NAM ISO grm_ord grm_clq { ($2,[],$4)::$5 }
+  | grm_etr { [$1] }
+  | grm_etr grm_clq { $1::$2 }
+  ;
+grm_etr:
+  | SLF NAM ISO grm_ord   { ($2,[],$4) }
+  | SLF NAM EQ grm_ptns grm_prd { ($2,[],[((Peg.Synt,$4,$5),None)]) }
   ;
 grm_ord:
   | grm_rule { [($1,None)] }
@@ -113,6 +119,7 @@ grm_ptns:
 grm_ptn:
   | grm_atom { $1 }
   | L_LST grm_atom R_LST { Peg.List $2 }
+  | L_LST_PLS grm_atom R_LST { Peg.List $2 }
   | L_OPN grm_atom R_OPN { Peg.Option $2 }
   ;
 grm_atom:
@@ -137,7 +144,7 @@ def_typ_body:
   | NAM def_arg ISO def_prd  { Def_Prd ($1,fst $2,$4) }
   | FNT NAM ISO name_list { Def_Fnt ($2,$4) }
   | FNT NAM APP L_BLK INT R_BLK ISO NAM   { Def_Fnt_Dep ($2,$5,$8) }
-  | NAM def_arg DEQ typ  { Def_Eqv ($1,fst $2,$4) }
+  | NAM def_arg EQ typ  { Def_Eqv ($1,fst $2,$4) }
   ;
 def_typ_body_clq:
   | NAM def_arg  { Def_Abs ($1,fst $2) }
@@ -145,7 +152,7 @@ def_typ_body_clq:
     let (a,_) = $2 in
     Def_CoPrd ($1,a,List.map (fun (y,n) -> (y,n)) $4) }
   | NAM def_arg ISO def_prd  { Def_Prd ($1,fst $2,$4) }
-  | NAM def_arg DEQ typ  { Def_Eqv ($1,fst $2,$4) }
+  | NAM def_arg EQ typ  { Def_Eqv ($1,fst $2,$4) }
   ;
 name_list:
   | NAM { [$1] }
@@ -206,7 +213,7 @@ glb_etr_body:
   ;
 typ_def:
   | { (vsgn(),vsgn()) }
-  | typ_top SRC typ_top CLN { ($1,$3) }
+  | CLN typ_top SRC typ_top { ($2,$4) }
   ;
 stt_code:
   | vh_frm_top code {
@@ -329,7 +336,7 @@ exp:
   | INJ { Opr_Inj $1 }
   | CHO { Opr_Cho $1  }
   | NAM  { Opr_Name $1 }
-  | SGN { Opr_Name "&" }
+  | SGN { Opr_App(Opr_Name "&",Opr_Rcd []) }
   | STG { Opr_Stg $1 }
   | SLF { Opr_Name "@" }
   | exp PLS exp { Opr_App (Opr_Name "+",Opr_Rcd [$1;$3]) }
@@ -337,7 +344,7 @@ exp:
   | exp MNS exp { Opr_App (Opr_Name "+",Opr_Rcd [$1;Opr_App (Opr_Name "-",$3)]) }
   | exp CST { Opr_App(Opr_Name "//",$1) }
   | L_PRN MNS exp R_PRN { Opr_App (Opr_Name "-",$3) }
-  | exp EQ exp { Opr_App(Opr_Name "=",Opr_Rcd [$1;$3]) }
+  | exp EQ exp { Opr_App(Opr_App(Opr_Name "=",$1),$3) }
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { Opr_App ($1,$3) }
   | exp PRJ INT { Prj ($1,$3) }

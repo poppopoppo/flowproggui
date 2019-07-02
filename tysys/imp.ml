@@ -2,240 +2,162 @@
 let dbg = true
 open Types
 open Print
-let rec tkn_in_typ (g:gl_st) (p:typ) (t:tkn) : bool =
-  match p with
-  | Typ_Rcd r ->
-    ( match t with
-      | Tkn_Exn _ -> true
-      | Tkn_Btm  -> true
-      | Tkn_Rcd v ->
-        ( try
-            List.for_all (fun (x,y) -> tkn_in_typ g x y) (List.combine r v)
-          with | Invalid_argument _ -> false )
-      | _ -> false
-    )
-  | Typ_CoPrd j ->
-    ( match t with
-      | Tkn_Exn _ -> true
-      | Tkn_Btm  -> true
-      | Tkn_CoPrd c ->
-        let l = List.combine j c in
-        let f (p,t) = tkn_in_typ g p t in
-        List.for_all f l
-      | _ -> false
-    )
-  | Typ_Imp (src,dst) ->
-    ( match t with
-      | Tkn_Exn _ -> true
-      | Tkn_Btm  -> true
-      | Tkn_IO_Inj i ->
-        ( match dst with
-          | Typ_CoPrd f ->
-            if src=(List.nth f i)
-            then true else false
-          | _ -> false )
-      | Tkn_IO_Cho i ->
-        ( match src with
-          | Typ_Prd f ->
-            if dst=(List.nth f i)
-            then true else false
-          | _ -> false )
-      | Tkn_IO_Sgn -> src=(Typ_Rcd []) && dst=(Typ_Name "&")
-      | Tkn_IO_Code (_,_,_,_) -> false
-      | _ -> false
-    )
-  | _ -> false
-
 exception Null
-
-let rec evo (g:gl_st) (s:tkn list) (ir:int ref) (ai:int option) (a:opr) : tkn =
-  let agl_flg = ref false in
+let gl_call g n =
+  Util.pnt true ("enter gl_call:"^n^","^(string_of_gl_st g)^"\n");
+  ( try
+      BatList.find_map
+        (fun x ->
+           match x with
+           | Etr (_,(name,_,_,c)) when name=n -> Some c
+           | Etr_Clq (_,l) ->
+             ( try
+                 let c =
+                   BatList.find_map
+                     (fun (name,_,_,c) -> if name=n then Some c else None)
+                     l in
+                 Some c
+               with _ -> None )
+           | _ -> None )
+        g
+    with _ -> raise (Failure "imp.gl_call:1"))
+let rec evo_vh (g:gl_st) (s:lst) (a:vh) : lst =
+  Util.pnt false ("enter evo_vh:"^
+                  (*(string_of_gl_st g)^"\n"^*)
+                  (string_of_lst s)^"\n"^
+                  (print_vh a)^"\n");
   ( match a with
-    | Opr_Z z -> Tkn_Z z
-    | Opr_App (f,x) ->
-      ( match (evo g s ir ai f,evo g s ir ai x) with
-        | (Tkn_IO_Code(vs,k,(t,o,m),c),x) ->
-          let k0 = k-(List.length s) in
-          if k0=0
-          then
-            let v0 = evo g (vs@[x]) ir ai o in
-            let v1 = evo_code g v0 ir c in
-            v1
-          else
-            Tkn_IO_Code(vs@s,k0,(t,o,m),c)
-        | (Tkn_IO_Inj i,x) ->
-          Tkn_CoPrd (BatList.init (i+1) (fun j -> if j=i then x else Tkn_Null))
-        | (Tkn_IO_Cho i,x) ->
-          ( match x with
-            | Tkn_Prd (v0,l) -> (evo_code g v0 ir (List.nth l i))
-            | _ -> raise @@ Failure "error:Flow.evo:App:Cho:type unmatched"
-          )
-        | (Tkn_IO_Sgn,Tkn_Rcd []) ->
-          (let p = !ir in ir:=(!ir + 1); Tkn_Sgn p)
-        | (Tkn_IO_Plus,Tkn_Rcd [x;y]) ->
-          ( match (x,y) with
-            | (Tkn_Z x,Tkn_Z y) -> Tkn_Z (x+y)
-            | (Tkn_Exn s,_) -> Tkn_Exn s
-            | (_,Tkn_Exn s) -> Tkn_Exn s
-            | _ -> raise @@ Failure "error:evo:Plus:type is unmatched"
-          )
-        | (Tkn_IO_Mult,Tkn_Rcd [x;y]) ->
-          ( match (x,y) with
-            | (Tkn_Z x,Tkn_Z y) -> Tkn_Z (x*y)
-            | (Tkn_Exn s,_) -> Tkn_Exn s
-            | (_,Tkn_Exn s) -> Tkn_Exn s
-            | _ -> raise @@ Failure "error:evo:Plus:type is unmatched"
-          )
-        | (Tkn_IO_Minus,x) ->
-          ( match x with
-            | Tkn_Z x -> Tkn_Z (-x)
-            | Tkn_Exn s -> Tkn_Exn s
-            | _ -> raise @@ Failure "error:evo:Plus:type is unmatched"
-          )
-        | (Tkn_IO_Eq,Tkn_Rcd [x;y]) ->
-          if (Eq.eq x y) then Tkn_IO_Inj 1 else Tkn_IO_Inj 0
-        | (Tkn_IO_Exn,Tkn_Stg s) -> Tkn_Exn s
-        | (f,x) -> raise @@ Failure ("error:Flow.evo:App:type unmatched\n"^
-                                     (string_of_tkn 1 f)^" ◂ "^(string_of_tkn 1 x))
-      )
-    | Prj (f,x) ->
-      ( match evo g s ir ai f with
-        | Tkn_Rcd l -> (List.nth l x)
-        | f' -> raise @@ Failure
-            ("error:Imp.evo:Prj:type unmatched\n"^
-             (string_of_tkn 0 f')^" ◃ "^(string_of_int x))
-      )
-    | Opr_Name n ->
-      ( try
-          Util.pnt dbg ("Opr_Name:"^n^"\n");
-          if n="="
-          then Tkn_IO_Eq
-          else if n="+"
-          then Tkn_IO_Plus
-          else if n="*"
-          then Tkn_IO_Mult
-          else if n="&"
-          then Tkn_IO_Sgn
-          else if n="-"
-          then Tkn_IO_Minus
-          else if n = "?"
-          then Tkn_IO_Exn
-          else
-            let find_etr n e =
-              let (name,_,_,code) = e in
-              if n=name
-              then Some (Tkn_IO_Code([],1,(vsgn(),Opr_Name "$",[]),code))
-              else None in
-            let find_flow n f =
-              ( match f with
-                | Def_Prd (_,_,l) ->
-                  ( try
-                      let (i,(_,_)) =
-                        BatList.findi
-                          (fun _ (_,c) -> if c=n then true else false)
-                          l in
-                      Some (Tkn_IO_Cho i)
-                    with _ -> None )
-                | Def_CoPrd (_,_,l) ->
-                  ( try
-                      let (i,(_,_)) =
-                        BatList.findi
-                          (fun _ (_,c) -> if c=n then true else false)
-                          l in
-                      Some (Tkn_IO_Inj i)
-                    with _ -> None )
-                | _ -> raise @@ Failure "find_flow:not found"
-              ) in
-            let e = BatList.find_map
-                (fun e ->
-                   ( match e with
-                     | Etr (_,e) -> find_etr n e
-
-                     | Flow f -> find_flow n f
-                     | Etr_Clq (_,el) ->
-                       (try Some (BatList.find_map (find_etr n) el)
-                        with _ -> None)
-                     | Flow_Clq fl -> (try Some (BatList.find_map (find_flow n) fl) with _ -> None)
-                     | _ -> raise (Failure "err0")
-                   ) )
-                g in
-            Util.pnt dbg ("Opr_Name-found:"^(string_of_tkn 1 e)^"\n");
-            e
-        with
-        | Not_found -> raise @@ Failure ("error:evo:global name "^n^" is not found")
-      )
-    | Opr_Rcd r -> Tkn_Rcd (List.map (evo g s ir ai) r)
-    | Agl e ->
-      let s' = evo g s ir ai e in
-      if !agl_flg
-      then raise @@ Failure "error:evo:Agl:double agl"
-      else
-        let i0 =
-          ( match ai with
-            | None -> raise @@ Failure "error:evo:Agl:agl"
-            | Some i -> i) in
-        agl_flg:=true;
-        ( match s' with
-          | Tkn_Z z ->
-            if (i0=0)
-            then (
-              if z=0
-              then Tkn_Rcd []
-              else raise Null
-            )
-            else if (i0=1)
-            then (
-              if z!=0
-              then Tkn_Rcd []
-              else raise Null )
-            else raise @@ Failure "error:agl:type unmatched"
-          | Tkn_CoPrd l ->
-            let a = List.nth l i0 in
-            if a=Tkn_Null
-            then raise Null
-            else a
-          | Tkn_Btm -> Tkn_Btm
-          | Tkn_Null -> raise Null
-          | _ -> raise @@ Failure "error:agl:type unmatched"
-        )
-    | Opr_Stg s -> Tkn_Stg s
-    | _ -> raise (Failure "Imp.evo:10")
-  )
-and evo_code (g:gl_st) (s:tkn) (ir:int ref) (a:code) : tkn =
-  ( match a with
-    | Code_Exp (_,e,_) -> evo g [s] ir None e
-    | Seq (c1,c2) ->
-      let s' = evo_code g s ir c1 in
-      evo_code g s' ir c2
-    | Canon l ->
+    | E e ->
+      ( match evo_nd g s e with
+        | (s1,None) -> s1
+        | _ -> raise (Failure "evo_vh:4"))
+    | V (c1,c2) ->
+      let s1 = evo_vh g s c1 in
+      evo_vh g s1 c2
+    | H (c1,c2) ->
       ( match s with
-        | Tkn_Rcd v ->
-          let y =
-            List.map
-              (fun (t,x) -> evo_code g x ir t)
-              (List.combine l v) in
-          Tkn_Rcd y
+        | Lst_Tns (x1,x2) ->
+          let s1 = evo_vh g x1 c1 in
+          let s2 = evo_vh g x2 c2 in
+          Lst_Tns (s1,s2)
         | _ -> raise @@ Failure "error:evo_code:Canon"
       )
-    | Code_CoPrd ((_,o,_),l) ->
-      let vs =
-        BatList.mapi
-          (fun i x ->
-             try
-               let vi = evo g [s] ir (Some i) o in
-               Some (evo_code g vi ir x)
-             with Null -> None) l in
-      let v0 = BatList.find_map (fun x -> x) vs in
-      v0
-    | Code_Prd ((_,o,_),l) ->
-      let s0 = evo g [s] ir None o in
-      Tkn_Prd (s0,l)
-    | Code_IO ((t,o,m),i,c0) ->
-      Tkn_IO_Code ([s],i,(t,o,m),c0)
+    | A (e1,_,l) ->
+      let s1 = evo_nd g s e1 in
+      ( match s1 with
+        | (_,None) -> raise @@ Failure "error:evo_nd:1"
+        | (s1,Some j) ->
+          evo_vh g s1 (List.nth l j))
+    | P (e1,l) ->
+      let s0 = evo_nd g s e1 in
+      ( match s0 with
+        | (s1,None) -> Lst_Prd (s1,l)
+        | _ -> raise (Failure "evo_vh:4"))
+    | F (e1,i,c0) ->
+      let s1 = evo_nd g s e1 in
+      ( match s1 with
+        | (s1,None) -> Lst_Code (Arg_Rcd([s1],i),C_VH c0)
+        | _ -> raise (Failure "evo_vh:4"))
   )
-(*
-let check_io (g : gl_st) (c : code) (src:typ) (dst:typ) : bool =
-  let (s,_) = (tkn_of_typ src,tkn_of_typ dst) in
-  let v = evo_code g (src,s) (ref 0) c in
-  tkn_in_typ g dst (snd v)
-*)
+and evo_nd g s e : nd_eval =
+  Util.pnt false ("enter evo_nd:"^
+                  (*(string_of_gl_st g)^"\n"^*)
+                  (string_of_lst s)^"\n"^
+                  (print_nd e)^"\n");
+  let agl_flg = ref None in
+  let rec v e =
+    Util.pnt false ("enter v:"^(print_nd e)^"\n");
+    ( match e with
+      | Exp_Z z -> Lst_Z (z,0)
+      | Exp_Name n ->
+        if n="$" then s
+        else if n="+" then Lst_Code(Arg_Mno None,C_Name "+")
+        else if n="*" then Lst_Code(Arg_Mno None,C_Name "*")
+        else if n="-" then Lst_Code(Arg_Mno None,C_Name "-")
+        else if n="=" then Lst_Code(Arg_Rcd([],2),C_Name "=")
+        else if n="&" then Lst_Code(Arg_Mno None,C_Name "&")
+        else if n="⊗" then Lst_Code(Arg_Rcd([],2),C_Name "⊗")
+        else if n="}" then Lst_Unt
+        else if n="@" then Lst_Code(Arg_Mno None,C_Name "@")
+        else if n="∠" then Lst_Code(Arg_Mno None,C_Agl)
+        else if n="?" then Lst_Code(Arg_Mno None,C_Name "?")
+        else
+          ( try
+              let c = Ty.vh_of_code (gl_call g n) in
+              Lst_Code(Arg_Mno None,C_VH c)
+            with _ -> Lst_Exn "exn8.0")
+      | Exp_App (e1,e2) ->
+        let (s1,s2) = (v e1,v e2) in
+        Util.pnt false ("Exp_App:"^(string_of_lst s1)^","^
+                        (string_of_lst s2)^"\n");
+        ( match s1 with
+          | Lst_Code(Arg_Mno None,f) ->
+            ( match f with
+              | C_Name "+" ->
+                ( match list_of_lst s2 with
+                  | Some [Lst_Z(z1,_);Lst_Z(z2,_)] -> Lst_Z(z1+z2,0)
+                  | Some as2 ->
+                    let p = Util.string_of_list "," string_of_lst as2 in
+                    Lst_Exn ("exn7:"^p)
+                  | None -> Lst_Exn "exn7.1")
+              | C_Name "*" ->
+                ( match list_of_lst s2 with
+                  | Some [Lst_Z(z1,_);Lst_Z(z2,_)] -> Lst_Z(z1*z2,0)
+                  | _ -> Lst_Exn "exn7.2" )
+              | C_Name "-" ->
+                ( match s2 with
+                  | Lst_Z(z1,_) -> Lst_Z(-z1,0)
+                  | _ -> Lst_Exn "exn7.3" )
+              | C_Name "&" ->
+                ( match s2 with
+                  | Lst_Unt -> Lst_Sgn (sgn())
+                  | _ -> Lst_Exn "exn7.4")
+              | C_Name "?" ->
+                ( match s2 with
+                  | Lst_Stg s -> Lst_Exn s
+                  | _ -> Lst_Exn "exn7.7")
+              | C_Agl ->
+                ( match s2 with
+                  | Lst_Code(Arg_Mno (Some x),C_Inj j) ->
+                    agl_flg := Some j;
+                    x
+                  | Lst_Z(z,_) ->
+                    if (z=0) then
+                      ((agl_flg:=(Some 0)); lst_nil)
+                    else (agl_flg:=(Some 1); lst_nil)
+                  | _ -> Lst_Exn "exn7.6" )
+              | C_VH c -> evo_vh g s2 c
+              | C_Inj j -> Lst_Code(Arg_Mno (Some s2),C_Inj j)
+              | _ -> Lst_Exn "exn7.4"
+            )
+          | Lst_Code(Arg_Rcd(as0,k),f) ->
+            if k=0 then Lst_Exn "exn2"
+            else if k=1 then
+              ( match (as0@[s2]),f with
+                | [x1;x2],(C_Name "⊗") -> Lst_Tns (x1,x2)
+                | [x1;x2],(C_Name "=") ->
+                  if x1=x2 then Lst_Z (1,0) else Lst_Z(0,0)
+                | as1,C_VH c -> evo_vh g (lst_of_list as1) c
+                | _ -> Lst_Exn "exn3"
+              )
+            else Lst_Code(Arg_Rcd(as0@[s2],k-1),f)
+          | _-> Lst_Exn "exn9"
+        )
+      | PrjL e1 ->
+        let a = v e1 in
+        ( match a with
+          | Lst_Tns (a1,_) ->
+            a1
+          | _ -> Lst_Exn "exn3")
+      | PrjR e1 ->
+        let a = v e1 in
+        ( match a with
+          | Lst_Tns (_,a2) ->
+            a2
+          | _ -> Lst_Exn "exn4")
+      | Inj i -> Lst_Code(Arg_Mno None,C_Inj i)
+      | Cho i -> Lst_Code(Arg_Mno None,C_Cho i)
+      | Exp_Stg s -> Lst_Stg s
+    ) in
+  let v = v e in
+  (v,!agl_flg)

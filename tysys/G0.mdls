@@ -1,0 +1,135 @@
+§§ G0 ≒
+¶+ℾ
+  @ def_mdl = "§§" name ‹def_arg› "≒" ⟦mdl_etr⟧ "§§."
+	@ def_arg = "◂" ⟦|arg⟧
+	@ arg ≃
+  > val
+  > "{" ⟦|arg⟧ "}"
+	@ mdl_etr ≃
+  > glb_etr
+  > def_typ  
+	@ def_typ ≃ 
+  > "¶" ⟦|def_typ_body_clq⟧
+  > "¶" def_typ_body
+  > "¶+ℾ" ⟦|grm_body⟧
+  @ def_typ_body_clq ≃
+  > "@" name ‹def_arg›
+  > "@" name ‹def_arg› "≃" def_coprd
+  > "@" name ‹def_arg› "≃" def_prd
+  > "@" name ‹def_arg› "=" typ
+  @ def_typ_body ≃
+  > name ‹def_arg›
+  > name ‹def_arg› "≃" def_coprd
+  > name ‹def_arg› "≃" def_prd
+  > "%" name "≃" ⟦|name⟧
+  > "%" name "◂" "[" gidit "]" "≃" name
+  > name ‹def_arg› "=" typ
+  @ grm_body = "@" name "≃" grm_ord
+	@ grm_ord = ⟦|grm_rule⟧
+	@ grm_rule = ord ⟦grm_ptn⟧ ‹grm_prd›
+	@ ord ≃
+  > ">|"
+  > ">"
+	@ grm_ptn ≃
+  > grm_atom
+  > "⟦" grm_atom "⟧"
+  > "‹" grm_atom "›"
+	@ grm_atom ≃
+  > string
+  > name
+	@ grm_prd = prd_flg ⟦grm_ptn⟧
+	@ prd_flg ≃
+  > "|"
+  > "¬|"
+	@ def_coprd ≃
+  > "∐" typ_top ":" name
+  > "∐" typ_top ":" name def_coprd
+	@ def_prd ≃
+  > "∏" typ_top ":" name
+  > "∏" typ_top ":" name def_prd
+	@ typ_top ≃
+  > ⟦typ⟧
+  > "!" typ
+	@ typ ≃
+  > "{" typ_top "}"
+  > typ "◂" typ
+  > typ "◃" typ
+  > "‹" typ "›"
+  > "⟦" typ "⟧"
+  > val
+  > name
+  > "ℤ"
+  > "ℕ"
+  > typ "→" typ
+  > "&"
+  > "ℾ"
+	@ glb_etr ≃
+  > "§" glb_etr_body
+  > "§" ⟦|glb_etr_clique⟧
+	@ glb_etr_clique = "@" name ‹typ_def› "≒" in stt_code
+	@ typ_def = ":" typ_top "⊢" typ_top
+  @ stt_code ≃
+  > vh_frm_top code
+  > "⁅" stt_code ⟦h_frm_mid⟧ "⁆" ‹tail›
+  > vh_frm_top code_coprd_list "∇" ‹tail›
+  > vh_frm_top code_prd_list "∆" ‹tail›
+  > vh_frm_top in stt_code "∎" ‹tail›
+	@ code ≃
+  > "∎" ‹tail›
+  > "»" vh_frm_top code
+  > "»" "⁅" stt_code ⟦h_frm_mid⟧ "⁆" ‹tail›
+  > "»" vh_frm_top code_coprd_list "∇" ‹tail›
+  > "»" vh_frm_top code_prd_list "∆" ‹tail›
+  > "»" vh_frm_top in stt_code "∎" ‹tail›
+	@ eop ≃
+  > "∎"
+  > "»|"
+  @ tail =  "^" code
+	@ code_coprd_list = ⟦code_coprd_etr⟧
+  @ code_coprd_etr = "∐" stt_code
+  @ code_prd_list = ⟦code_prd_etr⟧
+  @ code_prd_etr = "∏" stt_code
+  @ h_frm_mid = "¦" stt_code
+	@ vh_frm_top = typ_ept exp_top
+	@ exp_top ≃
+  > ⟦exp⟧ macro
+  > "!" exp macro
+	@ macro ≃
+  >
+  > "«" macro_list
+	@ macro_list ≃
+  >
+  > macro_list "," name "~" exp
+	@ typ_ept ≃
+  >
+  > "`" typ_top ":"
+  @ exp ≃
+  > int
+  > "(" "+" ")"
+  > "(" "*" ")"
+  > "∠" exp
+  > "⋎"
+  > "⋏"
+  > "?"
+  > "$"
+  > VCT
+  > "↑[" digit "]"
+  > "↓[" digit "]"
+  > name
+  > "&"
+  > string
+  > "@"
+  > exp "+" exp
+  > exp "*" exp
+  > exp "-" exp
+  > exp "////"
+  > "(" "-" exp ")"
+  > exp "=" exp
+  > "(" exp ")"
+  > exp "◂" exp
+  > exp "◃" int
+  > "{" ⟦exp⟧ "}"
+  > "‹›"
+  > "‹" exp "›"
+  > "⟦" ⟦exp⟧ "⟧"
+§§.

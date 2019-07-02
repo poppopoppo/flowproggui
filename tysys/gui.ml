@@ -310,7 +310,7 @@ let main () =
                   pnt "import button pressed\n";
                   let text = buffer#get_text () in
                   let mdl0 = Implib.mdl_from_string text in
-                  mdl := Mdls.concat !mdl mdl0;
+                  mdl := mdl0;
                   Util.pnt dbg text;
                   Util.pnt dbg (Print.string_of_mdl true mdl0);
                   pnt "module is imported\n";
@@ -362,7 +362,7 @@ let main () =
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let insert s = buffer#insert ~iter:!iter s in
     let insert_arr () = buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» " in
-    insert (Print.string_of_st (let (_,st,_) = !st in st));
+    insert (Print.string_of_lst (let (_,_,st) = !st in st));
     insert_arr ();
     let mark_start = ref (buffer#create_mark !iter) in
     let key_press k =
@@ -378,16 +378,17 @@ let main () =
              let ast = (Implib.ast_from_string line) in
              let ast = ( match ast with
                  | Implib.Ast_Some ast -> ast
-                 | Implib.Ast_Fail e -> raise @@ Failure ("error:ast_from_string:"^e)
+                 | Implib.Ast_Fail e -> raise @@ Failure ("error:gui:ast_from_string:"^e)
                ) in
              (try
                 Implib.evo !st ast
-              with Failure e -> raise @@ Failure ("error:Implib.evo:"^e))
+              with Failure e -> raise @@ Failure ("error:gui:Implib.evo:"^e))
            with
-           | Failure s -> pnt ("error:"^s^"\n");
-             buffer#insert ~iter:!iter ("error:parsing error:"^s^"\n");
+           | Failure s -> pnt ("error:gui:"^s^"\n");
+             buffer#insert ~iter:!iter ("error:gui:arsing error:"^s^"\n");
              !st );
-        insert ("~~~~~~~~~~~~~~~~~~~\n"^(Print.string_of_st (let (_,st,_) = !st in st)));
+        insert ("~~~~~~~~~~~~~~~~~~~\n"^
+                (Implib.string_of_t false !st));
         insert_arr ();
         mark_start:=buffer#create_mark !iter;
         source_view#scroll_mark_onscreen (`MARK !mark_start);
@@ -423,7 +424,8 @@ let main () =
         ~callback:(fun s ->
             match s with
             | `MODULE_IMPORT ->
-              buffer#insert ~iter:iter_global (Print.string_of_gl_st (let (g,_,_) = !st in g))) in
+              buffer#insert ~iter:iter_global
+                (Print.string_of_gl_st (let (g,_,_) = !st in g))) in
     source_view in
 
   let global_view =
@@ -440,7 +442,8 @@ let main () =
         ~callback:(fun s ->
             match s with
             | `MODULE_IMPORT ->
-              buffer#insert ~iter:iter_global (Print.string_of_gl_st (let (g,_,_) = !st in g))) in
+              buffer#insert ~iter:iter_global
+                (Print.string_of_gl_st (let (g,_,_) = !st in g))) in
 
     source_view in
 
@@ -588,8 +591,8 @@ let main () =
       ~callback:(fun s ->
           match s with
           | `MODULE_IMPORT ->
-            let ((g,v,ir),(_,_,g0)) = (!st,!mdl) in
-            st := (g0@g,v,ir);
+            let ((g,y,v),(_,_,g0)) = (!st,!mdl) in
+            st := (g0@g,y,v);
             global_signal#call `MODULE_IMPORT
           | `OPEN_FILE ->  open_file ()
         ) in
