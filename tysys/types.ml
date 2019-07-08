@@ -1,8 +1,12 @@
+let compare_int (x:int) (y:int) = compare x y
+let eq_int (x:int) (y:int) = x=y
 module Sgn :
 sig
   type t
   val ini : unit -> t
   val print : t -> string
+  val compare : t -> t -> int
+  val eq : t -> t -> bool
 end
 = struct
   type t = int
@@ -12,7 +16,10 @@ end
     sgn_N := n+1;
     n
   let print x = (string_of_int x)
+  let compare (x:int) (y:int) = compare_int x y
+  let eq (x:int) (y:int) = eq_int x y
 end
+let ( =& ) x y = Sgn.eq x y
 let sgn = Sgn.ini
 let rec sgns n = if n=0 then [] else (Sgn.ini ())::(sgns (n-1))
 type valP =
@@ -21,7 +28,7 @@ type valP =
   | PSgn of Sgn.t
 module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
 module StgSet = Set.Make(struct type t = string let compare = compare end)
-module SgnMap = Map.Make(struct type t = Sgn.t let compare = compare end)
+module SgnMap = Map.Make(struct type t = Sgn.t let compare = Sgn.compare end)
 module StgMap = Map.Make(struct type t = string let compare = compare end)
 module IntMap = Map.Make(struct type t = int let compare = compare end)
 module ValMap = Map.Make(struct type t = valP let compare = compare end)
@@ -210,7 +217,29 @@ type tkn_s =
   | TknS_Tns of tkn_s * tkn_s
   | TknS_Z of int
   | TknS_Plg of Sgn.t
+let tkn_rot = sgn ()
+let tkn_pls = sgn ()
+let tkn_mlt = sgn ()
+let tkn_mns = sgn ()
+let tkn_eq = sgn ()
+let tkn_sgn_ini = sgn ()
+let tkn_tns = sgn ()
+let tkn_unt = sgn ()
+let tkn_fix = sgn ()
+let tkn_agl = sgn ()
+let tkn_anm = sgn ()
 
+let nd_rot = sgn ()
+let nd_pls = sgn ()
+let nd_mlt = sgn ()
+let nd_mns = sgn ()
+let nd_eq = sgn ()
+let nd_sgn_ini = sgn ()
+let nd_tns = sgn ()
+let nd_unt = sgn ()
+let nd_fix = sgn ()
+let nd_agl = sgn ()
+let nd_anm = sgn ()
 type code_p =
   | V_S of Sgn.t * Sgn.t
   | H_S of Sgn.t * Sgn.t
@@ -242,7 +271,7 @@ and tns = tns_p SgnMap.t * Sgn.t
 and code_x =
   | V_X of Sgn.t * Sgn.t
   | H_X of Sgn.t * Sgn.t
-  | E_X of tns 
+  | E_X of tns
   | P_X of tns * (Sgn.t list)
   | A_X of tns * path * (Sgn.t list)
   | F_X of tns * int * Sgn.t
