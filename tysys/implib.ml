@@ -1,9 +1,9 @@
 open Types
 open Ty
-type t = gl_st * tm * lst
+type t = gl_st * tm * tkn_s
 let string_of_t b (g,y,t) =
   let p1 = "global state: "^(Print.string_of_gl_st g) in
-  let p2 = "\nstate: `"^(Print.print_tm y)^" : "^(Print.string_of_lst t) in
+  let p2 = "\nstate: `"^(Print.print_tm y)^" : "^(Print.print_tkn_s t) in
   if b then p1^p2 else p2
 let evo ((g,src,v):t) (b:Types.buffer) : t =
   (try
@@ -17,13 +17,44 @@ let evo ((g,src,v):t) (b:Types.buffer) : t =
                Ty.typing_nd (typ_env,gv)
                  typ_env StgMap.empty e (SgnMap.empty,src) dst
              with Failure e -> raise (Failure e)) in
-         let (v0,_) =
-           (try
-              Imp.evo_nd g v e
-            with Failure e -> raise (Failure ("Implib.evo:3:"^e))) in
-         Util.pnt false "TEST0\n";
-         pnt false ("implib.evo:2:"^(Print.print_tm (b1<*dst))^"\n");
-         (g,b1<*dst,v0)
+         let (c1,p) = Imp.mk_code g (E e) in
+         let et = (c1,p,v) in
+         let fd = Unix.fork () in
+         ( match fd with
+           | 0 ->
+             Util.pnt true "fd=0\n";
+             Util.open_out_close "default.tkn"
+               (fun c -> Marshal.to_channel c et []);
+             let _ = Unix.execve
+                 "evo_tkn.exe"
+                 (Array.make 0 "")
+                 (Array.make 0 "") in
+             exit 0
+           (* let v0 =
+                (try
+                   Imp.evo_tkn v (ref c1) p
+                 with Failure e -> raise (Failure ("Implib.evo:3:"^e))) in
+              ( try
+                  Util.open_out_close "default.tkn"
+                    (fun c -> Marshal.to_channel c v0 [])
+                with _ -> raise (Failure "err1.1"));
+              exit 0 *)
+           | _ ->
+             Util.pnt true "fd=child\n";
+             let (_,x) = Unix.wait () in
+             ( match x with
+               | WEXITED 0 ->
+                 Util.pnt true "WEXITED 0\n";
+                 let ((_,_,v0):et) =
+                   ( try
+                       Util.open_in_close "default.tkn"
+                         (fun c -> Marshal.from_channel c)
+                     with _ -> raise (Failure "err1.2")) in
+                 Util.pnt false "TEST0\n";
+                 pnt false ("implib.evo:2:"^(Print.print_tm (b1<*dst))^"\n");
+                 (g,b1<*dst,v0)
+               | _ -> raise (Failure "err1.3")
+             ))
        | _ -> raise @@ Failure ("Implib:evo:_")
      )
    with
@@ -34,7 +65,7 @@ let evo ((g,src,v):t) (b:Types.buffer) : t =
    | Not_found -> raise (Failure "Implib:evo:Not_found")
   )
 
-let init_st = ([],vsgn(),Types.Lst_Exn "init")
+let init_st = ([],vsgn(),Types.TknS_Stg "{}")
 type ast_return =
   | Ast_Some of Types.buffer
   | Ast_Fail of string

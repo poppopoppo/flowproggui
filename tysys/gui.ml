@@ -362,7 +362,7 @@ let main () =
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let insert s = buffer#insert ~iter:!iter s in
     let insert_arr () = buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» " in
-    insert (Print.string_of_lst (let (_,_,st) = !st in st));
+    insert (Print.print_tkn_s (let (_,_,st) = !st in st));
     insert_arr ();
     let mark_start = ref (buffer#create_mark !iter) in
     let key_press k =

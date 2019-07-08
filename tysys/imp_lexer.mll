@@ -32,6 +32,9 @@ rule token = parse
     | "=="  { DEQ }
     | "~" { LET }
     | "»" { ARR }
+    | "«" { ARR_REV }
+    | "«|"  { ARR_REV_IN }
+    | "~" { LET } 
     | (('|')+ as lxm) "»" { IN(String.length lxm) }
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
@@ -64,7 +67,7 @@ rule token = parse
     | "⁆" { R_HLZ  }
     | "⟦" { L_LST }
     | "⟧" { R_LST }
-    | "⟦|"  { L_LST_PLS } 
+    | "⟦|"  { L_LST_PLS }
     | "‹" { L_OPN }
     | "›" { R_OPN }
     | "{^"  { L_VCT }

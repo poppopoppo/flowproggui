@@ -5,3 +5,7 @@ gui: ty.ml print.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly imp.ml imp
 	dune build gui.exe
 	rm -f gui
 	ln -s ../_build/default/tysys/gui.exe gui
+evo: evo_tkn.ml
+	ocamlfind ocamlopt -o evo_tkn.exe -linkpkg \
+	-package batteries \
+	util.ml types.ml print.ml ty.ml imp.ml evo_tkn.ml
