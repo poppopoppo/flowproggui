@@ -243,14 +243,13 @@ let nd_anm = sgn ()
 type code_p =
   | V_S of Sgn.t * Sgn.t
   | H_S of Sgn.t * Sgn.t
-  | E_S of nd_p
-  | P_S of nd_p * (Sgn.t list)
-  | A_S of nd_p * path * (Sgn.t list)
-  | F_S of nd_p * int * Sgn.t
+  | E_S of tns_s
+  | P_S of tns_s * (Sgn.t list)
+  | A_S of tns_s * (Sgn.t list)
+  | F_S of tns_s * int * Sgn.t
 and nd_p =
   | Z_S of int
   | Gl_S of Sgn.t
-  | Prm_S of string
   | Tns_S of nd_p * nd_p
   | App_S of nd_p * nd_p
   | PL_S of nd_p
@@ -259,15 +258,17 @@ and nd_p =
   | Cho_S of int
   | Stg_S of string
 and tns_p =
-  | PL_x of path
+  | PL_x of (tns_p ref)
+  | PR_x of (tns_p ref)
   | Inj_x of int
   | Cho_x of int
   | Plg_x of Sgn.t
   | Z_x of int
   | Stg_x of string
-  | TnsT of Sgn.t * Sgn.t
-  | AppT of Sgn.t * Sgn.t
+  | TnsT of (tns_p ref) * (tns_p ref)
+  | AppT of (tns_p ref) * (tns_p ref)
 and tns = tns_p SgnMap.t * Sgn.t
+and tns_s = (tns_p ref)
 and code_x =
   | V_X of Sgn.t * Sgn.t
   | H_X of Sgn.t * Sgn.t
@@ -275,6 +276,36 @@ and code_x =
   | P_X of tns * (Sgn.t list)
   | A_X of tns * path * (Sgn.t list)
   | F_X of tns * int * Sgn.t
+let rec tns_of_nd c p n0 =
+  ( match n0 with
+    | Z_S z -> SgnMap.add p (Z_x z) c
+    | Gl_S p1 -> SgnMap.add p (Plg_x p1) c
+    | Tns_S (n1,n2) ->
+      let (q1,q2) = (sgn(),sgn()) in
+      let c1 = tns_of_nd c q1 n1 in
+      let c2 = tns_of_nd c1 q2 n2 in
+      let c3 = SgnMap.add p (TnsT(q1,q2)) c2 in
+      c3
+    | App_S (n1,n2) ->
+      let (q1,q2) = (sgn(),sgn()) in
+      let c1 = tns_of_nd c q1 n1 in
+      let c2 = tns_of_nd c1 q2 n2 in
+      let c3 = SgnMap.add p (AppT(q1,q2)) c2 in
+      c3
+    | PL_S n1 ->
+      let q1 = sgn() in
+      let c1 = tns_of_nd c q1 n1 in
+      let c2 = SgnMap.add p (PL_x q1) c1 in
+      c2
+    | PR_S n1 ->
+      let q1 = sgn() in
+      let c1 = tns_of_nd c q1 n1 in
+      let c2 = SgnMap.add p (PR_x q1) c1 in
+      c2
+    | Inj_S i -> SgnMap.add p (Inj_x i) c
+    | Cho_S i -> SgnMap.add p (Cho_x i) c
+    | Stg_S s -> SgnMap.add p (Stg_x s) c
+  )
 let clj = sgn ()
 let ( <*> ) x y = TknS_Tns(x,y)
 type code_s = code_p SgnMap.t
