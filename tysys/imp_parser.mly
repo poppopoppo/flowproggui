@@ -5,7 +5,7 @@
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT
-%token LCE EXP AGL PRD EOP VCT
+%token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS APP_EVL PLS_EVL MLT_EVL CST
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
@@ -304,17 +304,27 @@ exp_top:
   ;
 macro:
   | { [] }
-  | SPL macro_list  { $2 }
+  | macro ARR_REV macro_node SPL  { [] }
   ;
-macro_list:
-  | { [] }
-  | macro_list CMM NAM LET exp  { $1@[($3,$5)] }
+macro_seq:
+  | {}
+  | SEQ macro {}
+  ;
+macro_node:
+  | let_ptn LET exp_top {}
+  ;
+let_ptn:
+  | let_ptn_atm {}
+  | let_ptn_atm let_ptn {}
+  ;
+let_ptn_atm:
+  | NAM {}
+  | L_RCD let_ptn R_RCD {}
   ;
 typ_ept:
   |  { vsgn() }
   | ACT typ_top CLN { $2 }
   ;
-
 exp_lst:
   | { [] }
   | exp_lst exp  { $1@[$2] }
@@ -352,10 +362,6 @@ exp:
   | L_OPN R_OPN { Opr_Name "‹›" }
   | L_OPN exp R_OPN { Opr_App(Opr_Name "‹",$2) }
   | L_LST lst_list R_LST { $2 }
-  ;
-subst_list:
-  | { [] }
-  | subst_list CMM exp LET exp { $1@[($3,$5)] }
   ;
 lst_list:
   | { Opr_App (Opr_Name "nil",Opr_Rcd []) }

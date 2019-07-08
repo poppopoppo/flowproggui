@@ -84,6 +84,8 @@ type token =
   | CMM
   | CLN
   | CHO of (int)
+  | ARR_REV_IN
+  | ARR_REV
   | ARR_END
   | ARR
   | APP_EVL

@@ -250,6 +250,7 @@ and print_nd n =
     | Exp_Z z -> "Exp_Z("^(string_of_int z)^")"
     | Exp_Name s -> "Exp_Name("^s^")"
     | Exp_App (n1,n2) -> "("^(print_nd n1)^"◂"^(print_nd n2)^")"
+    | Exp_Tns(n1,n2) -> "<"^(print_nd n1)^"¦"^(print_nd n2)^">"
     | PrjL n1 -> "PrjL("^(print_nd n1)^")"
     | PrjR n1 -> "PrjR("^(print_nd n1)^")"
     | Inj i -> "↑["^(string_of_int i)^"]"
@@ -286,3 +287,43 @@ and print_code_i c =
     | C_Inj i -> "↑["^(string_of_int i)^"]"
     | C_Cho i -> "↓["^(string_of_int i)^"]"
     | C_Agl -> "∠" )
+let rec print_tkn_s v =
+  ( match v with
+    | TknS_Stg s -> "\""^s^"\""
+    | TknS_Tns (v1,v2) -> "<"^(print_tkn_s v1)^","^(print_tkn_s v2)^">"
+    | TknS_Z z -> (string_of_int z)
+    | TknS_Plg p -> "&["^(Sgn.print p)^"]"
+  )
+    let rec print_nd_s n =
+  ( match n with
+    | Z_S z -> (string_of_int z)
+    | Prm_S "}" -> "{}"
+    | Prm_S "$" -> "$"
+    | App_S(Prm_S "∠",n1) -> "∠("^(print_nd_s n1)^")"
+    | Prm_S s -> "p"^s
+    | Gl_S p -> "&"^(Sgn.print p)
+    | App_S (n1,n2) -> "("^(print_nd_s n1)^"◂"^(print_nd_s n2)^")"
+    | Tns_S(n1,n2) -> "<"^(print_nd_s n1)^"¦"^(print_nd_s n2)^">"
+    | PL_S n1 -> (print_nd_s n1)^"◃0"
+    | PR_S n1 -> (print_nd_s n1)^"◃1"
+    | Inj_S i -> "↑["^(string_of_int i)^"]"
+    | Cho_S i -> "↓["^(string_of_int i)^"]"
+    | Stg_S s -> "\""^s^"\""
+  )
+(*
+let rec print_net_lst k =
+  ( match k with
+    | LST_Unt -> "{}"
+    | Lst_TnsL k1 -> "<"^(print_net_lst k1)^"¦"
+    | Lst_TnsR k1 -> "¦"^(print_net_lst k1)^">"
+    | Lst_Exn s -> "?["^s^"]"
+    | Lst_CoPrd (j,k1) ->
+      "↑["^(string_of_int j)^","^(print_net_lst k1)^"]"
+    | Lst_Prd (p1,p2) -> "↓["^(Sgn.print p1)^","^(Sgn.print p2)^"]"
+    | Lst_Code (p1,p2) -> "+["^(Sgn.print p1)^","^(Sgn.print p2)^"]"
+    | Lst_Sgn p1 -> "&["^(Sgn.print p1)^"]"
+    | Lst_Z (z1,z2) ->
+      "Z["^(string_of_int z1)^","^(string_of_int z2)^"]"
+    | Lst_Stg s -> "\""^s^"\""
+  )
+*)

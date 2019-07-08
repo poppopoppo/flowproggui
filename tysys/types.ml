@@ -75,6 +75,11 @@ let fld = Sgn.ini ()
 let unfld = Sgn.ini ()
 let inA = sgn ()
 let outA = sgn ()
+let gl_e = sgn ()
+let exn_plg = sgn ()
+let inj = sgn ()
+let cho = sgn ()
+let stg_plg = sgn ()
 type cxt = tm SgnMap.t
 type cxtP = (valP tmP) ValMap.t
 type c = (tm * tm) list
@@ -193,12 +198,58 @@ and nd =
   | Exp_Z of int
   | Exp_Name of string
   | Exp_App of nd * nd
+  | Exp_Tns of nd * nd
   | PrjL of nd
   | PrjR of nd
   | Inj of int
   | Cho of int
   | Exp_Stg of string
 let id = E (Exp_Name "$")
+type tkn_s =
+  | TknS_Stg of string
+  | TknS_Tns of tkn_s * tkn_s
+  | TknS_Z of int
+  | TknS_Plg of Sgn.t
+
+type code_p =
+  | V_S of Sgn.t * Sgn.t
+  | H_S of Sgn.t * Sgn.t
+  | E_S of nd_p
+  | P_S of nd_p * (Sgn.t list)
+  | A_S of nd_p * path * (Sgn.t list)
+  | F_S of nd_p * int * Sgn.t
+and nd_p =
+  | Z_S of int
+  | Gl_S of Sgn.t
+  | Prm_S of string
+  | Tns_S of nd_p * nd_p
+  | App_S of nd_p * nd_p
+  | PL_S of nd_p
+  | PR_S of nd_p
+  | Inj_S of int
+  | Cho_S of int
+  | Stg_S of string
+and tns_p =
+  | PL_x of path
+  | Inj_x of int
+  | Cho_x of int
+  | Plg_x of Sgn.t
+  | Z_x of int
+  | Stg_x of string
+  | TnsT of Sgn.t * Sgn.t
+  | AppT of Sgn.t * Sgn.t
+and tns = tns_p SgnMap.t * Sgn.t
+and code_x =
+  | V_X of Sgn.t * Sgn.t
+  | H_X of Sgn.t * Sgn.t
+  | E_X of tns 
+  | P_X of tns * (Sgn.t list)
+  | A_X of tns * path * (Sgn.t list)
+  | F_X of tns * int * Sgn.t
+let clj = sgn ()
+let ( <*> ) x y = TknS_Tns(x,y)
+type code_s = code_p SgnMap.t
+type et = code_s * Sgn.t * tkn_s
 type lst =
   | Lst_Unt
   | Lst_Exn of string

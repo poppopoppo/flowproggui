@@ -526,6 +526,9 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
                   (print_cxt (s3*~s4))^","^
                   (print_cxt s4)^"\n");
         (s3*~s4,gax)
+      | Exp_Tns(e1,e2) ->
+        let e3 = Exp_App(Exp_App(Exp_Name "⊗",e1),e2) in
+        typing_nd g tg gv e3 r d
       | PrjL e1 ->
         let (v1,v2) = (sgn(),sgn()) in
         let p = (Val v1)**(Val v2) in
@@ -578,9 +581,9 @@ and nd_of_opr o =
   | Opr_Name n -> Exp_Name n
   | Opr_Rcd l ->
     let y1 = List.fold_right
-        (fun x q -> Opr_App(Opr_App(Opr_Name "⊗",x),q))
-        l (Opr_Name "}") in
-    nd_of_opr y1
+        (fun x q -> Exp_Tns(nd_of_opr x,q))
+        l (Exp_Name "}") in
+    y1
   | Opr_App (e1,e2) -> Exp_App (nd_of_opr e1,nd_of_opr e2)
   | Prj (e1,i) ->
     let rec prj i x =
