@@ -467,6 +467,10 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
             let _ = vsgn () in
             let z = pZ in
             emp @@ unify SgnSet.empty [((rcd_cl [z;z])-*z,d)]
+          else if n="std_le" then
+            let _ = vsgn () in
+            let z = pZ in
+            emp @@ unify SgnSet.empty [((rcd_cl [z;z])-*z,d)]
           else if n="-" then
             let _ = vsgn () in
             let z = pZ in

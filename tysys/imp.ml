@@ -29,9 +29,8 @@ let rec code_of_vh g c p f =
              (c1,l@[p]))
           (c,[]) l in
       let n1 = code_of_nd g n in
-      let (s0,p1) = (SgnMap.empty,sgn ()) in
-      let s1 = tns_of_nd s0 p1 n1 in
-      let n1 = P_S((ref s1,p1),lp) in
+      let s1 = tns_of_nd n1 in
+      let n1 = P_S(s1,lp) in
       SgnMap.add p n1 c1
     | A(n,_,l) ->
       let (c1,lp) = BatList.fold_left
@@ -41,17 +40,15 @@ let rec code_of_vh g c p f =
              (c1,l@[p]))
           (c,[]) l in
       let n1 = code_of_nd g n in
-      let (s0,p1) = (SgnMap.empty,sgn ()) in
-      let s1 = tns_of_nd s0 p1 n1 in
-      let n1 = A_S((ref s1,p1),lp) in
+      let s1 = tns_of_nd n1 in
+      let n1 = A_S(s1,lp) in
       SgnMap.add p n1 c1
     | F(n,i,q) ->
       let p1 = sgn () in
       let c1 = code_of_vh g c p1 q in
       let n1 = code_of_nd g n in
-      let (s0,p1) = (SgnMap.empty,sgn ()) in
-      let s1 = tns_of_nd s0 p1 n1 in
-      let n1 = F_S((ref s1,p1),i,p1) in
+      let s1 = tns_of_nd n1 in
+      let n1 = F_S(s1,i,p1) in
       SgnMap.add p n1 c1
   )
 and gl_vct g =
@@ -111,6 +108,7 @@ and code_of_nd g (n:nd) =
       else if s="∠" then Gl_S nd_agl
       else if s="?" then Gl_S nd_anm
       else if s="&" then Gl_S nd_sgn_ini
+      else if s="std_le" then Gl_S nd_std_le
       else
         let q =
           try StgMap.find s g
@@ -366,37 +364,57 @@ and evo_nd_tkn s a p1 =
       if p=&nd_rot then (s,None)
       else (TknS_Plg p,None)
     | AppT (e1,e2) ->
-      let ((s1,o1),(s2,o2)) = (evo_nd_tkn s a e1,evo_nd_tkn s a e2) in
-      let o3 = mrg_agl o1 o2 in
+      let (s1,o1) = evo_nd_tkn s a e1 in
       (* Util.pnt false ("Exp_App:"^(print_tkn_s s1)^","^
                      (print_tkn_s s2)^"\n"); *)
       ( match s1 with
         | TknS_Plg p when p=&nd_pls ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           ( match s2 with
             | TknS_Tns(TknS_Z z1,TknS_Tns(TknS_Z z2,TknS_Plg p)) when p=nd_unt ->
               (TknS_Z (z1+z2),o3)
             | _ -> raise (Failure "err4"))
+        | TknS_Plg p when p=&nd_std_le ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
+          ( match s2 with
+            | TknS_Tns(TknS_Z z1,TknS_Tns(TknS_Z z2,TknS_Plg p)) when p=nd_unt ->
+              if z1<=z2 then (TknS_Z 1,o3)
+              else (TknS_Z 0,o3)
+            | _ -> raise (Failure "err4"))
         | TknS_Plg p when p=&nd_mlt ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           let s2l = list_of_tkn s2 in
           ( match s2l with
             | (TknS_Z z1)::(TknS_Z z2)::[] ->
               (TknS_Z (z1*z2),o3)
             | _ -> raise (Failure "err5"))
-        | TknS_Plg p when p=&nd_tns ->
+            (*
+          | TknS_Plg p when p=&nd_tns ->
           let r = TknS_Tns(TknS_Plg nd_tns,s2) in
           (r,o3)
         | TknS_Tns(TknS_Plg p,_) when p=&nd_tns ->
-          (TknS_Tns(s1,s2),o3)
+          (TknS_Tns(s1,s2),o3) *)
         | TknS_Plg p when p=&nd_mns ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           ( match s2 with
             | TknS_Z z -> (TknS_Z(-z),o3)
             | _ -> raise (Failure "err6"))
         | TknS_Plg p when p=&nd_eq ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           let r = TknS_Tns(TknS_Plg nd_eq,s2) in
           (r,o3)
         | TknS_Tns(TknS_Plg p,s1) when p=&nd_eq ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           if s1=s2 then (TknS_Z 1,o3) else (TknS_Z 0,o3)
         | TknS_Plg p when p=&nd_agl ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           ( match s2 with
             | TknS_Z z ->
               if (z=0) then
@@ -406,17 +424,25 @@ and evo_nd_tkn s a p1 =
               (s3,mrg_agl o3 (Some i))
             | _ -> raise (Failure "err6.1"))
         | TknS_Plg p when p=&nd_sgn_ini ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           ( match s2 with
             | TknS_Plg p when p=&nd_unt -> (TknS_Plg (sgn()),o3)
             | _ -> raise (Failure "err6"))
         | TknS_Plg p when p=&nd_anm ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           ( match s2 with
             | TknS_Tns(TknS_Plg p1,TknS_Stg s) when p1=&stg_plg ->
               (TknS_Tns(TknS_Plg exn_plg,TknS_Stg s),o3)
             | _ -> raise (Failure "err6"))
         | TknS_Tns(TknS_Plg p,TknS_Z _) when p=&inj ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           (TknS_Tns(s1,s2),o3)
         | TknS_Tns(TknS_Plg p,_) when p =&clj ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           let f = list_of_tkn s1 in
           ( match f with
             | _::as0::(TknS_Z i0)::(TknS_Plg p0)::[] ->
@@ -433,6 +459,8 @@ and evo_nd_tkn s a p1 =
               (r,o3)
           )
         | TknS_Tns(TknS_Plg p1,TknS_Z i) when p1 =& cho ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           ( match s2 with
             | TknS_Tns(s3,s4) ->
               let l = list_of_tkn s4 in
@@ -443,6 +471,8 @@ and evo_nd_tkn s a p1 =
                | _ -> raise (Failure "err9.1"))
             | _ -> raise (Failure "err10.1"))
         | TknS_Plg p ->
+          let (s2,o2) = evo_nd_tkn s a e2 in
+          let o3 = mrg_agl o1 o2 in
           (evo_tkn s2 a p,o3)
         | _ -> raise (Failure "err8.1")
       )
