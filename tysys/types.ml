@@ -217,18 +217,6 @@ type tkn_s =
   | TknS_Tns of tkn_s * tkn_s
   | TknS_Z of int
   | TknS_Plg of Sgn.t
-let tkn_rot = sgn ()
-let tkn_pls = sgn ()
-let tkn_mlt = sgn ()
-let tkn_mns = sgn ()
-let tkn_eq = sgn ()
-let tkn_sgn_ini = sgn ()
-let tkn_tns = sgn ()
-let tkn_unt = sgn ()
-let tkn_fix = sgn ()
-let tkn_agl = sgn ()
-let tkn_anm = sgn ()
-
 let nd_rot = sgn ()
 let nd_pls = sgn ()
 let nd_mlt = sgn ()
@@ -240,6 +228,7 @@ let nd_unt = sgn ()
 let nd_fix = sgn ()
 let nd_agl = sgn ()
 let nd_anm = sgn ()
+let nd_std_le = sgn ()
 type code_p =
   | V_S of Sgn.t * Sgn.t
   | H_S of Sgn.t * Sgn.t
@@ -276,35 +265,31 @@ and code_x =
   | P_X of tns * (Sgn.t list)
   | A_X of tns * path * (Sgn.t list)
   | F_X of tns * int * Sgn.t
-let rec tns_of_nd c p n0 =
+let rec tns_of_nd n0 =
   ( match n0 with
-    | Z_S z -> SgnMap.add p (Z_x z) c
-    | Gl_S p1 -> SgnMap.add p (Plg_x p1) c
+    | Z_S z -> ref (Z_x z)
+    | Gl_S p1 -> ref (Plg_x p1)
     | Tns_S (n1,n2) ->
-      let (q1,q2) = (sgn(),sgn()) in
-      let c1 = tns_of_nd c q1 n1 in
-      let c2 = tns_of_nd c1 q2 n2 in
-      let c3 = SgnMap.add p (TnsT(q1,q2)) c2 in
+      let c1 = tns_of_nd n1 in
+      let c2 = tns_of_nd n2 in
+      let c3 = ref (TnsT(c1,c2)) in
       c3
     | App_S (n1,n2) ->
-      let (q1,q2) = (sgn(),sgn()) in
-      let c1 = tns_of_nd c q1 n1 in
-      let c2 = tns_of_nd c1 q2 n2 in
-      let c3 = SgnMap.add p (AppT(q1,q2)) c2 in
+      let c1 = tns_of_nd n1 in
+      let c2 = tns_of_nd n2 in
+      let c3 = ref (AppT(c1,c2)) in
       c3
     | PL_S n1 ->
-      let q1 = sgn() in
-      let c1 = tns_of_nd c q1 n1 in
-      let c2 = SgnMap.add p (PL_x q1) c1 in
+      let c1 = tns_of_nd n1 in
+      let c2 = ref (PL_x c1) in
       c2
     | PR_S n1 ->
-      let q1 = sgn() in
-      let c1 = tns_of_nd c q1 n1 in
-      let c2 = SgnMap.add p (PR_x q1) c1 in
+      let c1 = tns_of_nd n1 in
+      let c2 = ref (PR_x c1) in
       c2
-    | Inj_S i -> SgnMap.add p (Inj_x i) c
-    | Cho_S i -> SgnMap.add p (Cho_x i) c
-    | Stg_S s -> SgnMap.add p (Stg_x s) c
+    | Inj_S i -> ref (Inj_x i)
+    | Cho_S i -> ref (Cho_x i)
+    | Stg_S s -> ref (Stg_x s)
   )
 let clj = sgn ()
 let ( <*> ) x y = TknS_Tns(x,y)
@@ -362,3 +347,91 @@ and rcd_nth n e =
       else raise @@ Failure "rcd_nth:1"
     | _ -> raise @@ Failure "rcd_nth:2"
   )
+module Reg
+  sig
+    type t
+    val compare : t -> t -> int
+    val eq : t -> t -> bool
+    val nth : int -> t
+    val rax : t
+    val rcx : t
+    val rdx : t
+    val rbx : t
+    val rsi : t
+    val rdi : t
+    val r8 : t
+    val r9 : t
+    val r10 : t
+    val r11 : t
+    val r12 : t
+    val r13 : t
+    val r14 : t
+    val r15 : t
+  end
+= struct
+  type t = int
+  let compare x y = compare_int x y
+  let eq x y = eq_int (x mod 14) (y mod 14)
+  let nth n = n mod 14
+  let rax = 0
+  let rcx = 1
+  let rdx = 2
+  let rbx = 3
+  let rsi = 4
+  let rdi = 5
+  let r8 = 6
+  let r9 = 7
+  let r10 = 8
+  let r11 = 9
+  let r12 = 10
+  let r13 = 11
+  let r14 = 12
+  let r15 = 13
+end
+module RegMap = Map.Make(struct type t = Reg.t let compare = Reg.compare end)
+type k =
+  | K_Int of int
+  | K_Tns
+  | K_Sgn of Sgn.t
+  | K_Char of char
+module St =
+sig
+  type t
+  type reg
+  val reg : int -> reg
+  val get : t -> reg -> k
+  val set : t -> reg -> k -> unit
+  val zf : reg
+  val sf : reg
+end = struct
+  type t = k array
+  let n = 50
+  let reg i = i mod 50
+  let get v i = v.(i mod 50)
+  let set v i k = v.(i mod 50)<-k
+  let zf = 14
+  let sf = 15
+end
+module M = struct
+  type t = St.t * (k list) * (Sgn.t list)
+  type op =
+    | Jmp of cnd * Sgn.t
+    | Call
+    | Pop
+    | Push
+    | Cmp
+    | Get
+    | Set
+    | Mov
+    | Add
+    | Mul
+  and cnd =
+    | Cnd_None
+    | Cnd_ZF
+    | Cnd_SF
+  type asm = cdp SgnMap.t
+  and cdp =
+    | Ret
+    | Op of op * Sgn.t
+  let run c p (v:t) : t =
+end
