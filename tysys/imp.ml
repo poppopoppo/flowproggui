@@ -325,17 +325,17 @@ let rec evo_tkn (s:tkn_s ref) (a:(code_s ref)) (f:Sgn.t) : tkn_s ref =
   ( match w with
     | E_S e ->
       ( match evo_nd_tkn s a e with
-        | (s1,None) -> s1
+        | (s1,None) -> ref s1
         | _ -> raise (Failure "evo_vh:4"))
     | V_S (c1,c2) ->
       let s1 = evo_tkn s a c1 in
       evo_tkn s1 a c2
     | H_S (c1,c2) ->
-      ( match s with
+      ( match !s with
         | TknS_Tns (x1,x2) ->
-          let s1 = evo_tkn x1 a c1 in
-          let s2 = evo_tkn x2 a c2 in
-          TknS_Tns (s1,s2)
+          let s1 = evo_tkn (ref x1) a c1 in
+          let s2 = evo_tkn (ref x2) a c2 in
+          ref (TknS_Tns (!s1,!s2))
         | _ -> raise @@ Failure "error:evo_code:Canon"
       )
     | A_S (e1,l) ->
@@ -343,24 +343,24 @@ let rec evo_tkn (s:tkn_s ref) (a:(code_s ref)) (f:Sgn.t) : tkn_s ref =
       ( match s1 with
         | (_,None) -> raise @@ Failure "error:evo_nd:1"
         | (s1,Some j) ->
-          evo_tkn s1 a (List.nth l j))
+          evo_tkn (ref s1) a (List.nth l j))
     | P_S (e1,l) ->
       let s0 = evo_nd_tkn s a e1 in
       let lp = List.map (fun x -> TknS_Plg x) l in
       ( match s0 with
         | (s1,None) ->
-          TknS_Tns(s1,tkn_of_list lp)
+          ref (TknS_Tns(s1,tkn_of_list lp))
         | _ -> raise (Failure "evo_vh:4"))
     | F_S (e1,i,c0) ->
       let s1 = evo_nd_tkn s a e1 in
       ( match s1 with
         | (s1,None) ->
-          tkn_of_list [
+          ref (tkn_of_list [
             (TknS_Plg clj);(tkn_of_list [s1]);
-            (TknS_Z i);(TknS_Plg c0) ]
+            (TknS_Z i);(TknS_Plg c0) ] )
         | _ -> raise (Failure "evo_vh:4"))
   )
-and evo_nd_tkn s a p1 =
+and evo_nd_tkn s a p1 : (tkn_s * (int option))=
   (* Util.pnt dbg_stp ("enter evo_nd_tkn:"^(print_tkn_s s)^","^
                  (print_nd_s e)^"\n"); *)
   (*  Util.pnt false ("enter v:"^(print_nd_s e)^"\n"); *)
@@ -368,7 +368,7 @@ and evo_nd_tkn s a p1 =
   ( match e with
     | Z_x z -> (TknS_Z z,None)
     | Plg_x p ->
-      if p=&nd_rot then (s,None)
+      if p=&nd_rot then (!s,None)
       else (TknS_Plg p,None)
     | AppT (e1,e2) ->
       let (s1,o1) = evo_nd_tkn s a e1 in
@@ -455,7 +455,7 @@ and evo_nd_tkn s a p1 =
             | _::as0::(TknS_Z i0)::(TknS_Plg p0)::[] ->
               let as0l = list_of_tkn as0 in
               if i0=1 then
-                (evo_tkn (tkn_of_list (as0l@[s2])) a p0,o3)
+                (!(evo_tkn (ref (tkn_of_list (as0l@[s2]))) a p0),o3)
               else
                 let r = tkn_of_list
                     [(TknS_Plg clj);(tkn_of_list (as0l@[s2]));
@@ -474,13 +474,13 @@ and evo_nd_tkn s a p1 =
               let vl = List.nth l i in
               (match vl with
                | TknS_Plg p ->
-                 (evo_tkn s3 a p,o3)
+                 (!(evo_tkn (ref s3) a p),o3)
                | _ -> raise (Failure "err9.1"))
             | _ -> raise (Failure "err10.1"))
         | TknS_Plg p ->
           let (s2,o2) = evo_nd_tkn s a e2 in
           let o3 = mrg_agl o1 o2 in
-          (evo_tkn s2 a p,o3)
+          (!(evo_tkn (ref s2) a p),o3)
         | _ -> raise (Failure "err8.1")
       )
     | TnsT(e1,e2) ->
