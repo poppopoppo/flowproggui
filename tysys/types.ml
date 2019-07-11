@@ -7,6 +7,7 @@ sig
   val print : t -> string
   val compare : t -> t -> int
   val eq : t -> t -> bool
+  val hash : t -> int
 end
 = struct
   type t = int
@@ -18,6 +19,7 @@ end
   let print x = (string_of_int x)
   let compare (x:int) (y:int) = compare_int x y
   let eq (x:int) (y:int) = eq_int x y
+  let hash (x:int) = x
 end
 let ( =& ) x y = Sgn.eq x y
 let sgn = Sgn.ini
@@ -33,6 +35,10 @@ module StgMap = Map.Make(struct type t = string let compare = compare end)
 module IntMap = Map.Make(struct type t = int let compare = compare end)
 module ValMap = Map.Make(struct type t = valP let compare = compare end)
 module ValSet = Set.Make(struct type t = valP let compare = compare end)
+module SgnHash = Hashtbl.Make(
+  struct type t=Sgn.t
+    let hash x = Sgn.hash x let equal x y = Sgn.eq x y
+  end )
 let set_of_map m = SgnMap.fold (fun k _ r -> SgnSet.add k r) m SgnSet.empty
 let map_of_set s = SgnSet.fold (fun k r -> SgnMap.add k None r) s SgnMap.empty
 let set_of m = StgMap.fold (fun k _ r -> StgSet.add k r) m StgSet.empty
@@ -217,6 +223,12 @@ type tkn_s =
   | TknS_Tns of tkn_s * tkn_s
   | TknS_Z of int
   | TknS_Plg of Sgn.t
+type tkn_nd =
+  | TknN_Stg of string
+  | TknN_Z of int
+  | TknN_Plg of Sgn.t
+  | TknN_Tns of Sgn.t * Sgn.t
+type tkn_net = (Sgn.t * tkn_nd) BatDynArray.t
 let nd_rot = sgn ()
 let nd_pls = sgn ()
 let nd_mlt = sgn ()
@@ -293,7 +305,7 @@ let rec tns_of_nd n0 =
   )
 let clj = sgn ()
 let ( <*> ) x y = TknS_Tns(x,y)
-type code_s = code_p SgnMap.t
+type code_s = code_p SgnHash.t
 type et = code_s * Sgn.t * tkn_s
 type lst =
   | Lst_Unt
@@ -347,91 +359,3 @@ and rcd_nth n e =
       else raise @@ Failure "rcd_nth:1"
     | _ -> raise @@ Failure "rcd_nth:2"
   )
-module Reg
-  sig
-    type t
-    val compare : t -> t -> int
-    val eq : t -> t -> bool
-    val nth : int -> t
-    val rax : t
-    val rcx : t
-    val rdx : t
-    val rbx : t
-    val rsi : t
-    val rdi : t
-    val r8 : t
-    val r9 : t
-    val r10 : t
-    val r11 : t
-    val r12 : t
-    val r13 : t
-    val r14 : t
-    val r15 : t
-  end
-= struct
-  type t = int
-  let compare x y = compare_int x y
-  let eq x y = eq_int (x mod 14) (y mod 14)
-  let nth n = n mod 14
-  let rax = 0
-  let rcx = 1
-  let rdx = 2
-  let rbx = 3
-  let rsi = 4
-  let rdi = 5
-  let r8 = 6
-  let r9 = 7
-  let r10 = 8
-  let r11 = 9
-  let r12 = 10
-  let r13 = 11
-  let r14 = 12
-  let r15 = 13
-end
-module RegMap = Map.Make(struct type t = Reg.t let compare = Reg.compare end)
-type k =
-  | K_Int of int
-  | K_Tns
-  | K_Sgn of Sgn.t
-  | K_Char of char
-module St =
-sig
-  type t
-  type reg
-  val reg : int -> reg
-  val get : t -> reg -> k
-  val set : t -> reg -> k -> unit
-  val zf : reg
-  val sf : reg
-end = struct
-  type t = k array
-  let n = 50
-  let reg i = i mod 50
-  let get v i = v.(i mod 50)
-  let set v i k = v.(i mod 50)<-k
-  let zf = 14
-  let sf = 15
-end
-module M = struct
-  type t = St.t * (k list) * (Sgn.t list)
-  type op =
-    | Jmp of cnd * Sgn.t
-    | Call
-    | Pop
-    | Push
-    | Cmp
-    | Get
-    | Set
-    | Mov
-    | Add
-    | Mul
-  and cnd =
-    | Cnd_None
-    | Cnd_ZF
-    | Cnd_SF
-  type asm = cdp SgnMap.t
-  and cdp =
-    | Ret
-    | Op of op * Sgn.t
-  let run c p (v:t) : t =
-end
