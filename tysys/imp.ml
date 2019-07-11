@@ -3,24 +3,31 @@ open Types
 open Print
 exception Null
 let dbg_stp = false
+let ini_code () = SgnHash.create 10
+let add_code c p v =
+  SgnHash.remove c p;
+  SgnHash.add c p v;
+  c
+let get_code c p =
+  SgnHash.find c p
 let rec code_of_vh g c p f =
   ( match f with
     | V(f1,f2) ->
       let (p1,p2) = (sgn(),sgn()) in
       let c1 = code_of_vh g c p1 f1 in
       let c2 = code_of_vh g c1 p2 f2 in
-      let c3 = SgnMap.add p (V_S(p1,p2)) c2 in
+      let c3 = add_code c2 p (V_S(p1,p2)) in
       c3
     | H(f1,f2) ->
       let (p1,p2) = (sgn(),sgn()) in
       let c1 = code_of_vh g c p1 f1 in
       let c2 = code_of_vh g c1 p2 f2 in
-      let c3 = SgnMap.add p (H_S(p1,p2)) c2 in
+      let c3 = add_code c2 p (H_S(p1,p2)) in
       c3
     | E n ->
       let n1 = code_of_nd g n in
       let s1 = tns_of_nd n1 in
-      SgnMap.add p (E_S s1) c
+      add_code c p (E_S s1)
     | P (n,l) ->
       let (c1,lp) = List.fold_left
           (fun (c,l) x ->
@@ -31,7 +38,7 @@ let rec code_of_vh g c p f =
       let n1 = code_of_nd g n in
       let s1 = tns_of_nd n1 in
       let n1 = P_S(s1,lp) in
-      SgnMap.add p n1 c1
+      add_code c1 p n1
     | A(n,_,l) ->
       let (c1,lp) = BatList.fold_left
           (fun (c,l) x ->
@@ -42,14 +49,14 @@ let rec code_of_vh g c p f =
       let n1 = code_of_nd g n in
       let s1 = tns_of_nd n1 in
       let n1 = A_S(s1,lp) in
-      SgnMap.add p n1 c1
+      add_code c1 p n1
     | F(n,i,q) ->
       let p1 = sgn () in
       let c1 = code_of_vh g c p1 q in
       let n1 = code_of_nd g n in
       let s1 = tns_of_nd n1 in
       let n1 = F_S(s1,i,p1) in
-      SgnMap.add p n1 c1
+      add_code c1 p n1
   )
 and gl_vct g =
   let nm =
@@ -90,7 +97,7 @@ and gl_vct g =
                   | _ -> raise (Failure "err12") ))
              c0 l
          | _ -> raise (Failure "err10") )
-      SgnMap.empty g in
+      (ini_code()) g in
   (nm,c)
 and code_of_nd g (n:nd) =
   let w = code_of_nd g in
@@ -307,13 +314,13 @@ let mrg_agl (o1:int option) (o2:int option) : int option =
     | None,Some i -> Some i
     | None,None -> None
     | _ -> raise (Failure "mrg_agl") )
-let rec evo_tkn (s:tkn_s) (a:(code_s ref)) (f:Sgn.t) : tkn_s =
+let rec evo_tkn (s:tkn_s ref) (a:(code_s ref)) (f:Sgn.t) : tkn_s ref =
   (* Util.pnt false ("enter evo_vh:"^
                   (*(string_of_gl_st g)^"\n"^*)
                   (print_tkn_s s)^"\n"^
                   "\n"); *)
   let w =
-    try SgnMap.find f !a
+    try get_code !a f
     with _ -> raise (Failure "err:w1") in
   ( match w with
     | E_S e ->
