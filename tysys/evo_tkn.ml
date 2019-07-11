@@ -6,7 +6,8 @@ let _ =
     Util.open_in_close "default.tkn"
       (fun c -> Marshal.from_channel c) in
   Util.pnt true ((Print.print_tkn_s v0)^"\n");
-  let v1 = Imp.evo_tkn v0 (ref c0) p0 in
+  let v1 = Imp.evo_tkn (ref v0) (ref c0) p0 in
+  let v1 = !v1 in
   Util.open_out_close "default.tkn"
     (fun c -> Marshal.to_channel c (c0,p0,v1) []);
   Util.pnt true ((Print.print_tkn_s v1)^"\n");
