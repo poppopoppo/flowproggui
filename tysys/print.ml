@@ -298,7 +298,7 @@ let rec print_tkn_s v =
   ( match n with
     | Z_S z -> (string_of_int z)
     | Gl_S p when p=nd_unt -> "{}"
-    | App_S(Gl_S p,n1) when p=nd_agl -> "∠("^(print_nd_s n1)^")"
+    | Agl_S n1 -> "∠("^(print_nd_s n1)^")"
     | Gl_S p when p=nd_rot -> "$"
     | Gl_S p -> "&"^(Sgn.print p)
     | App_S (n1,n2) -> "("^(print_nd_s n1)^"◂"^(print_nd_s n2)^")"

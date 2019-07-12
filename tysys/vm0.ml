@@ -1,17 +1,21 @@
+(*
 type tkn =
+  | Tkn_Unt
   | Tkn_Stg of string
   | Tkn_Z of int
   | Tkn_Bol of bool
   | Tkn_Sgn of Sgn.t
   | Tkn_Tns of Sgn.t * Sgn.t
+  | Tkn_InjL of Sgn.t
+  | Tkn_InjR of Sgn.t
 type st = (Sgn.t , tkn) Hashtbl.t
-let get v p =
+let get_k v p =
   ( try
       let k = Hashtbl.find v p in
       Hashtbl.remove v p;
       k
     with _ -> raise (Failure "vm0.get:0"))
-let set v p k =
+let set_k v p k =
   Hashtbl.remove v p;
   Hashtbl.add v p k
 type gst = st * (cs Stack.t)
@@ -21,6 +25,7 @@ and cs =
   | CS_R of Sgn.t * st * (Mutex.t * (st option ref))
 type op =
   | Id of Sgn.t * Sgn.t
+  | Rm of Sgn.t
   | Agl of Sgn.t * Sgn.t
   | Prd of Sgn.t * Sgn.t
   | Fnc of Sgn.t * Sgn.t
@@ -49,10 +54,25 @@ type asm = (Sgn.t, pt) Hashtbl.t
 and pt =
   | Ret
   | Op of op * Sgn.t
-(* let rec run a p v =
-  let o = S( match )| Id (p1,p2) ->
-    of Sgn.t * Sgn.t
-  | Agl of Sgn.t * Sgn.t
+let get_pt a p =
+  Hashtbl.find a p
+let rec run a p gv =
+  let ox = get_pt a p in
+  let (v,cs) = gv in
+  ( match ox with
+    | Ret ->
+  ( match o with
+    | Id (p1,p2) ->
+      let k2 = get_k v p2 in
+      set_k v p1 k2;
+      run a p gv
+    | Agl (p1,p2) ->
+      let k1 = get_k v p1 in
+      ( match k1 with
+        | Tkn_InjL p3 ->
+          let k2 = get_k v p3 in
+          set_k v p1 k2;
+          run a )
 | Prd of Sgn.t * Sgn.t
 | Fnc of Sgn.t * Sgn.t
 | PrjL of Sgn.t * Sgn.t

@@ -1,3 +1,27 @@
+module S_Ref :
+sig
+  type 'a t
+  val ini : 'a -> 'a t
+  val get : 'a t -> 'a
+  val set : 'a t -> 'a -> unit
+  val acs : 'a t -> ('a -> ('b * ('a option))) -> 'b
+end = struct
+  type 'a t = 'a ref * Mutex.t
+  let ini x = (ref x,Mutex.create ())
+  let get (x,_) = !x
+  let set (x,_) a = x:=a
+  let acs (x,m) f =
+    Mutex.lock m;
+    let (b,oa) = f !x in
+    ( match oa with
+      | None ->
+        Mutex.unlock m;
+        b
+      | Some a ->
+        x := a;
+        Mutex.unlock m;
+        b )
+end
 let compare_int (x:int) (y:int) = compare x y
 let eq_int (x:int) (y:int) = x=y
 module Sgn :
@@ -253,6 +277,7 @@ and nd_p =
   | Gl_S of Sgn.t
   | Tns_S of nd_p * nd_p
   | App_S of nd_p * nd_p
+  | Agl_S of nd_p
   | PL_S of nd_p
   | PR_S of nd_p
   | Inj_S of int
@@ -263,6 +288,7 @@ and tns_p =
   | PR_x of (tns_p ref)
   | Inj_x of int
   | Cho_x of int
+  | Agl_x of tns_p ref
   | Plg_x of Sgn.t
   | Z_x of int
   | Stg_x of string
@@ -281,6 +307,7 @@ let rec tns_of_nd n0 =
   ( match n0 with
     | Z_S z -> ref (Z_x z)
     | Gl_S p1 -> ref (Plg_x p1)
+    | Agl_S n1 -> ref (Agl_x (tns_of_nd n1))
     | Tns_S (n1,n2) ->
       let c1 = tns_of_nd n1 in
       let c2 = tns_of_nd n2 in

@@ -118,5 +118,10 @@ X:x,Y:y,Z:z \ (<X>◂<Z>)◂(<Y>◂<Z>)
 tm=(tm→tm)
 p : &→(tm→tm)
 #[
+nash equiblium , unification , prolog
 
-nash equibulium , unification , prolog 
+» add : x ~ y z
+» rpc : w0 w1 ~ x
+» mul : q ~ w0 w1
+» app : y ~ f x
+ 
