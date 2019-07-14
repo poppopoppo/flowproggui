@@ -8,7 +8,7 @@ gui: vm2.ml ty.ml print.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly imp
 	ln -s ../_build/default/tysys/gui.exe gui
 evo: evo_tkn.ml
 	ocamlfind ocamlopt -thread -p -o evo_tkn.exe -linkpkg \
-	-package batteries,threads \
+	-package core,batteries,threads \
 	util.ml types.ml print.ml vm2.ml ty.ml imp.ml evo_tkn.ml
 run: gui evo
 	./gui
