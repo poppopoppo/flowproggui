@@ -32,6 +32,7 @@ sig
   val compare : t -> t -> int
   val eq : t -> t -> bool
   val hash : t -> int
+  val sexp_of_t : t -> Core.Sexp.t
 end
 = struct
   type t = int
@@ -44,6 +45,7 @@ end
   let compare (x:int) (y:int) = compare_int x y
   let eq (x:int) (y:int) = eq_int x y
   let hash (x:int) = x
+  let sexp_of_t (_:int) = Core.Sexp.List []
 end
 let ( =& ) x y = Sgn.eq x y
 let sgn = Sgn.ini

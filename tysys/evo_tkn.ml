@@ -6,13 +6,14 @@ let _ =
     Util.open_in_close "default.tkn"
       (fun c -> Marshal.from_channel c) in
   Util.pnt true ((Print.print_tkn_s v0)^"\n");
-  let tb = SgnHash.create 10 in
-  let (a0,s0,q0,r0) = (Vm2.asm_ini (),Vm2.st_ini(),sgn (),sgn ()) in
+  let tb = Core.Hashtbl.create (module Vm2.Sgn_Core) in
+  let (a0,s0,q0,r0) = (Vm2.asm_ini (),Vm2.st_ini(),Vm2.plc (),Vm2.reg ()) in
   let _ = Vm2.asm_of_code tb a0 q0 r0 c0 p0 in
   let k0 = Vm2.k_rcd_of_tkn_s tb v0 in
   Vm2.set_k_rcd s0 r0 k0;
+  Util.pnt true ("asm:\n"^(Vm2.print_asm a0));
   let k1 = Vm2.run a0 q0 s0 (Stack.create ()) in
-  let r1 = sgn () in
+  let r1 = Vm2.reg () in
   Vm2.set_k_rcd s0 r1 k1;
   let v1 = Vm2.tkn_s_of_k tb s0 r1 in
   (* let v1 = Imp.evo_tkn (ref v0) (ref c0) p0 in

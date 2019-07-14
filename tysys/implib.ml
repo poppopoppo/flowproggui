@@ -18,13 +18,6 @@ let evo ((g,src,v):t) (b:Types.buffer) : t =
                  typ_env StgMap.empty e (SgnMap.empty,src) dst
              with Failure e -> raise (Failure e)) in
          let (c1,p) = Imp.mk_code g (E e) in
-         let asm = Vm2.asm_ini () in
-         let p0 = sgn () in
-         ( try
-             let _ =
-               Vm2.asm_of_code (SgnHash.create 10) asm p0 (sgn()) c1 p in
-             Util.pnt true ("asm:\n"^(Vm2.print_asm asm))
-           with _ -> raise (Failure "asm:0"));
          let et = (c1,p,v) in
          let fd = Unix.fork () in
          ( match fd with
