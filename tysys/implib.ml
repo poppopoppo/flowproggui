@@ -22,7 +22,7 @@ let evo ((g,src,v):t) (b:Types.buffer) : t =
          let p0 = sgn () in
          ( try
              let _ =
-               Vm2.asm_of_code (Hashtbl.create 10) asm p0 (sgn()) c1 p in
+               Vm2.asm_of_code (SgnHash.create 10) asm p0 (sgn()) c1 p in
              Util.pnt true ("asm:\n"^(Vm2.print_asm asm))
            with _ -> raise (Failure "asm:0"));
          let et = (c1,p,v) in

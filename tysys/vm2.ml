@@ -1,4 +1,6 @@
 open Types
+let ci = ref 0
+let inc_ci () = ci:=!ci+1
 type reg = Sgn.t
 type plc = Sgn.t
 type tkn =
@@ -25,8 +27,7 @@ type tkn =
 type rcd_tkn =
   | Rcd of rcd_tkn list
   | Atm of tkn
-type st = (reg , tkn) Hashtbl.t
-
+type st = tkn SgnHash.t
 type gst = st * (cs Stack.t)
 and cs =
 | CS of plc * reg * st (* return-plc * return-reg *)
@@ -50,13 +51,13 @@ type op =
 and src =
 | Reg of reg
 | Im of tkn
-type asm = (plc, pt) Hashtbl.t
+type asm = pt SgnHash.t
 and pt =
 | Ret of reg
 | Op of op * plc
 
 let rec print_asm a =
-  Hashtbl.fold
+  SgnHash.fold
     (fun p o s ->
        ( match o with
          | Ret r ->
@@ -67,22 +68,22 @@ let rec print_asm a =
        ))
     a "" (*
 let rec print_asm a =
-let a0 = Hashtbl.copy a in
+let a0 = SgnHash.copy a in
 let rec print_asm_i p =
   ( try
       let o = asm_get a0 p in
       ( match o with
         | Ret r ->
-          Hashtbl.remove a0 p;
+          SgnHash.remove a0 p;
           "p"^(Sgn.print p)^" @ ret : r"^(Sgn.print r)^"\n"
         | Op (o,np) ->
-          Hashtbl.remove a0 p;
+          SgnHash.remove a0 p;
           let s0 = print_op a0 o in
           let s1 = print_asm_i np in
           "p"^(Sgn.print p)^" ⊢ p"^(Sgn.print np)^" @ "^s0^s1
       )
     with _ -> "" ) in
-Hashtbl.fold
+SgnHash.fold
   (fun k _ s ->
      let s0 = print_asm_i k in
      s^s0)
@@ -148,11 +149,11 @@ and print_k k =
     | Tkn_Fnc (p1,r1) -> "→["^(pnt_plc p1)^","^(pnt_reg r1)^"]"
     | Tkn_Clj (_,_,_) -> "tkn-clj"
   )
-let st_ini () : st = Hashtbl.create 10
+let st_ini () : st = SgnHash.create 10
 let get_k v p =
   ( try
-      let k = Hashtbl.find v p in
-      Hashtbl.remove v p;
+      let k = SgnHash.find v p in
+      SgnHash.remove v p;
       k
     with _ -> raise (Failure ("vm0.get_k:"^(pnt_reg p))))
 let get_k_list v r =
@@ -178,8 +179,8 @@ let rec get_k_rcd v r =
         | _ -> raise (Failure "get_k_rcd"))
     | a -> Atm a )
 let set_k v p k =
-  Hashtbl.remove v p;
-  Hashtbl.add v p k
+  SgnHash.remove v p;
+  SgnHash.add v p k
 let rec set_k_rcd v p r =
   ( match r with
     | Atm a ->
@@ -208,18 +209,19 @@ let src a s =
   ( match s with
     | Reg r -> get_k a r
     | Im k -> k )
-let asm_ini () = Hashtbl.create 10
-let asm_add a p o = Hashtbl.add a p o
+let asm_ini () = SgnHash.create 10
+let asm_add a p o = SgnHash.add a p o
 let asm_get a p =
   ( try
-      Hashtbl.find a p
+      SgnHash.find a p
     with _ -> raise (Failure "vm2.asm_get:0"))
 let rec run a p v cs =
-  Util.pnt true ("enter vm2.run:\n");
+  inc_ci ();
+  (* Util.pnt true ("enter vm2.run:\n"); *)
   let ox = asm_get a p in
   ( match ox with
     | Ret r0 ->
-      Util.pnt true ("ret "^(pnt_reg r0)^"\n");
+      (* Util.pnt true ("ret "^(pnt_reg r0)^"\n"); *)
       let k0 = get_k_rcd v r0 in
       if (Stack.is_empty cs) then k0
       else
@@ -227,14 +229,14 @@ let rec run a p v cs =
         ( match hd with
           | CS (p0,r1,v0) ->
             set_k_rcd v0 r1 k0;
-            Hashtbl.clear v;
+            SgnHash.clear v;
             run a p0 v0 cs
           | CS_A (p0,r1) ->
             set_k_rcd v r1 k0;
             run a p0 v cs
           | _ -> raise (Failure "vm1.run:0") )
     | Op (o0,np) ->
-      Util.pnt true ((print_op a o0)^"\n");
+      (* Util.pnt true ((print_op a o0)^"\n"); *)
       ( match o0 with
         | Id (p1,p2) ->
           let k2 = get_k v p2 in
@@ -375,18 +377,18 @@ let rec run a p v cs =
 type asm_of_code = asm * plc * reg * code_s * Sgn.t
 (* asm * src-plc * root-reg * src-code * src-start-ptr *)
 let rec asm_of_code tb a p0 r0 c v0 =
-  Util.pnt true "enter asm_of_code\n";
-  Hashtbl.add tb v0 (p0,r0);
+  (* Util.pnt true "enter asm_of_code\n"; *)
+  SgnHash.add tb v0 (p0,r0);
   let f0 = get_code c v0 in
   ( match f0 with
     | V_S (v1,v2) ->
       let pm0 = asm_of_code tb a p0 r0 c v1 in
       let o1 =
-        ( try Hashtbl.find a pm0
+        ( try SgnHash.find a pm0
           with _ -> raise (Failure "vm2.asm_of_code:0")) in
       ( match o1 with
         | Ret r1 ->
-          Hashtbl.remove a pm0;
+          SgnHash.remove a pm0;
           let pm1 = asm_of_code tb a pm0 r1 c v2 in
           pm1
         | _ -> raise (Failure "vm2:a0")
@@ -398,11 +400,11 @@ let rec asm_of_code tb a p0 r0 c v0 =
       p1
     | P_S (_,_) -> raise (Failure "vm2:a2")
     | A_S (n1,l) ->
-      Util.pnt true "vm2:d1\n";
+      (* Util.pnt true "vm2:d1\n"; *)
       let (p1,r1,ra) = asm_of_tns_tl tb a p0 r0 c n1 in
       ( match ra with
         | Some ra ->
-          Util.pnt true "vm2:d0\n";
+          (* Util.pnt true "vm2:d0\n"; *)
           let ps = List.map (fun _ -> sgn ()) l in
           let pa = Array.of_list ps in
           let r2 = sgn () in
@@ -417,7 +419,7 @@ let rec asm_of_code tb a p0 r0 c v0 =
     | F_S (_,_,_) -> raise (Failure "vm2:a4")
   )
 and asm_of_tns_tl tb a p0 r0 c n0 : (plc * reg * (reg option))=
-  Util.pnt true ("enter asm_of_tns_tl:"^(Print.print_tns_s n0)^"\n");
+  (*   Util.pnt true ("enter asm_of_tns_tl:"^(Print.print_tns_s n0)^"\n"); *)
   ( match !n0 with
     | PL_x n1 ->
       let (np0,rr,_) = asm_of_tns_tl tb a p0 r0 c n1 in
@@ -450,7 +452,7 @@ and asm_of_tns_tl tb a p0 r0 c n0 : (plc * reg * (reg option))=
       let r1 = sgn () in
       let np = sgn () in
       asm_add a p0 (Op(Id(r1,r0),np));
-      Util.pnt true "test0\n";
+      (* Util.pnt true "test0\n"; *)
       (np,r1,None)
     | Unt_x ->
       let r1 = sgn () in
@@ -487,7 +489,7 @@ and asm_of_tns_tl tb a p0 r0 c n0 : (plc * reg * (reg option))=
       let np = sgn () in
       ( try
           let (p2,r2) =
-            ( try Hashtbl.find tb q1
+            ( try SgnHash.find tb q1
               with _ -> raise (Failure "vm2.asm_of_tns_tl:0")) in
           asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Fnc(p2,r2)),np));
           (np,r1,None)
@@ -561,7 +563,7 @@ let rec k_rcd_of_tkn_s tb v =
     | TknS_Plg q1 when q1=nd_eq -> Atm Tkn_Eq
     | TknS_Plg q1 ->
       let (p2,r2) =
-        ( try Hashtbl.find tb q1
+        ( try SgnHash.find tb q1
           with _ -> raise (Failure "vm2.k_rcd_of_tkn_s")) in
       Atm (Tkn_Fnc(p2,r2))
     | TknS_Unt -> Rcd []

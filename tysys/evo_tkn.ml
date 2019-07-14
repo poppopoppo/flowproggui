@@ -6,7 +6,7 @@ let _ =
     Util.open_in_close "default.tkn"
       (fun c -> Marshal.from_channel c) in
   Util.pnt true ((Print.print_tkn_s v0)^"\n");
-  let tb = Hashtbl.create 10 in
+  let tb = SgnHash.create 10 in
   let (a0,s0,q0,r0) = (Vm2.asm_ini (),Vm2.st_ini(),sgn (),sgn ()) in
   let _ = Vm2.asm_of_code tb a0 q0 r0 c0 p0 in
   let k0 = Vm2.k_rcd_of_tkn_s tb v0 in
