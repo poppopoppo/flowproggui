@@ -247,6 +247,9 @@ type tkn_s =
   | TknS_Tns of tkn_s * tkn_s
   | TknS_Z of int
   | TknS_Plg of Sgn.t
+  | TknS_Unt
+  | TknS_Inj of int
+  | TknS_Cho of int
 type tkn_nd =
   | TknN_Stg of string
   | TknN_Z of int
@@ -289,6 +292,8 @@ and tns_p =
   | Inj_x of int
   | Cho_x of int
   | Agl_x of tns_p ref
+  | Rot_x
+  | Unt_x
   | Plg_x of Sgn.t
   | Z_x of int
   | Stg_x of string
@@ -306,6 +311,8 @@ and code_x =
 let rec tns_of_nd n0 =
   ( match n0 with
     | Z_S z -> ref (Z_x z)
+    | Gl_S p when p=nd_unt -> ref Unt_x
+    | Gl_S p when p=nd_rot -> ref Rot_x
     | Gl_S p1 -> ref (Plg_x p1)
     | Agl_S n1 -> ref (Agl_x (tns_of_nd n1))
     | Tns_S (n1,n2) ->
@@ -386,3 +393,10 @@ and rcd_nth n e =
       else raise @@ Failure "rcd_nth:1"
     | _ -> raise @@ Failure "rcd_nth:2"
   )
+let ini_code () = SgnHash.create 10
+let add_code c p v =
+  SgnHash.remove c p;
+  SgnHash.add c p v;
+  c
+let get_code c p =
+  SgnHash.find c p

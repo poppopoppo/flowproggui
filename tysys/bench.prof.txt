@@ -1,0 +1,674 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 91.99     19.35    19.35        1    19.35    19.35  camlBench__tak_1204
+  8.01     21.03     1.69                             camlStd_exit__code_end
+  0.00     21.03     0.00     1481     0.00     0.00  caml_page_table_modify
+  0.00     21.03     0.00       22     0.00     0.00  caml_stat_alloc
+  0.00     21.03     0.00        9     0.00     0.00  caml_alloc_small
+  0.00     21.03     0.00        9     0.00     0.00  caml_page_table_add
+  0.00     21.03     0.00        8     0.00     0.00  caml_process_pending_signals
+  0.00     21.03     0.00        7     0.00     0.00  caml_gc_message
+  0.00     21.03     0.00        6     0.00     0.00  caml_int64_float_of_bits_unboxed
+  0.00     21.03     0.00        5     0.00     0.00  caml_alloc_channel
+  0.00     21.03     0.00        5     0.00     0.00  caml_alloc_custom
+  0.00     21.03     0.00        4     0.00     0.00  caml_alloc_string
+  0.00     21.03     0.00        4     0.00     0.00  caml_enter_blocking_section
+  0.00     21.03     0.00        4     0.00     0.00  caml_enter_blocking_section_default
+  0.00     21.03     0.00        4     0.00     0.00  caml_leave_blocking_section
+  0.00     21.03     0.00        4     0.00     0.00  caml_leave_blocking_section_default
+  0.00     21.03     0.00        4     0.00     0.00  caml_secure_getenv
+  0.00     21.03     0.00        3     0.00     0.00  camlPervasives__output_string_1213
+  0.00     21.03     0.00        3     0.00     0.00  caml_copy_string
+  0.00     21.03     0.00        3     0.00     0.00  caml_insert_global_root
+  0.00     21.03     0.00        3     0.00     0.00  caml_ml_output
+  0.00     21.03     0.00        3     0.00     0.00  caml_ml_output_bytes
+  0.00     21.03     0.00        3     0.00     0.00  caml_open_descriptor_in
+  0.00     21.03     0.00        3     0.00     0.00  caml_putblock
+  0.00     21.03     0.00        3     0.00     0.00  caml_register_custom_operations
+  0.00     21.03     0.00        3     0.00     0.00  caml_register_global_root
+  0.00     21.03     0.00        2     0.00     0.00  alloc_generic_table
+  0.00     21.03     0.00        2     0.00     0.00  caml_aligned_malloc
+  0.00     21.03     0.00        2     0.00     0.00  caml_cplugins_load
+  0.00     21.03     0.00        2     0.00     0.00  caml_flush
+  0.00     21.03     0.00        2     0.00     0.00  caml_flush_partial
+  0.00     21.03     0.00        2     0.00     0.00  caml_fresh_oo_id
+  0.00     21.03     0.00        2     0.00     0.00  caml_ml_flush
+  0.00     21.03     0.00        2     0.00     0.00  caml_ml_open_descriptor_out
+  0.00     21.03     0.00        2     0.00     0.00  caml_open_descriptor_out
+  0.00     21.03     0.00        2     0.00     0.00  caml_register_named_value
+  0.00     21.03     0.00        2     0.00     0.00  caml_sys_time_include_children_unboxed
+  0.00     21.03     0.00        2     0.00     0.00  caml_sys_time_unboxed
+  0.00     21.03     0.00        1     0.00    19.35  camlBench__entry
+  0.00     21.03     0.00        1     0.00     0.00  camlCamlinternalFormatBasics__entry
+  0.00     21.03     0.00        1     0.00     0.00  camlPervasives__entry
+  0.00     21.03     0.00        1     0.00     0.00  camlPervasives__exit_1398
+  0.00     21.03     0.00        1     0.00     0.00  camlPervasives__flush_all_1201
+  0.00     21.03     0.00        1     0.00     0.00  camlPervasives__iter_1202
+  0.00     21.03     0.00        1     0.00     0.00  camlPervasives__loop_1159
+  0.00     21.03     0.00        1     0.00     0.00  camlPervasives__string_of_float_1161
+  0.00     21.03     0.00        1     0.00     0.00  camlPervasives__valid_float_lexem_1156
+  0.00     21.03     0.00        1     0.00     0.00  camlSys__entry
+  0.00     21.03     0.00        1     0.00     0.00  caml_alloc
+  0.00     21.03     0.00        1     0.00     0.00  caml_alloc_array
+  0.00     21.03     0.00        1     0.00     0.00  caml_alloc_for_heap
+  0.00     21.03     0.00        1     0.00     0.00  caml_alloc_sprintf
+  0.00     21.03     0.00        1     0.00     0.00  caml_clip_heap_chunk_wsz
+  0.00     21.03     0.00        1     0.00     0.00  caml_copy_string_array
+  0.00     21.03     0.00        1     0.00     0.00  caml_cplugins_init
+  0.00     21.03     0.00        1     0.00     0.00  caml_debugger_init
+  0.00     21.03     0.00        1     0.00     0.00  caml_executable_name
+  0.00     21.03     0.00        1     0.00     0.00  caml_ext_table_add
+  0.00     21.03     0.00        1     0.00     0.00  caml_ext_table_init
+  0.00     21.03     0.00        1     0.00     0.00  caml_fl_init_merge
+  0.00     21.03     0.00        1     0.00     0.00  caml_fl_merge_block
+  0.00     21.03     0.00        1     0.00     0.00  caml_format_float
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_alloc_for_heap
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_atom_table
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_backtrace
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_custom_operations
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_frame_descriptors
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_gc
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_ieee_floats
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_major_heap
+  0.00     21.03     0.00        1     0.00     0.00  caml_init_signals
+  0.00     21.03     0.00        1     0.00     0.00  caml_make_free_blocks
+  0.00     21.03     0.00        1     0.00     0.00  caml_ml_open_descriptor_in
+  0.00     21.03     0.00        1     0.00     0.00  caml_ml_out_channels_list
+  0.00     21.03     0.00        1     0.00     0.00  caml_modify
+  0.00     21.03     0.00        1     0.00     0.00  caml_normalize_heap_increment
+  0.00     21.03     0.00        1     0.00     0.00  caml_page_table_initialize
+  0.00     21.03     0.00        1     0.00     0.00  caml_parse_ocamlrunparam
+  0.00     21.03     0.00        1     0.00    19.35  caml_program
+  0.00     21.03     0.00        1     0.00     0.00  caml_realloc_custom_table
+  0.00     21.03     0.00        1     0.00     0.00  caml_set_minor_heap_size
+  0.00     21.03     0.00        1     0.00     0.00  caml_startup_exn
+  0.00     21.03     0.00        1     0.00     0.00  caml_sys_exit
+  0.00     21.03     0.00        1     0.00     0.00  caml_sys_get_argv
+  0.00     21.03     0.00        1     0.00     0.00  caml_sys_get_config
+  0.00     21.03     0.00        1     0.00     0.00  caml_sys_init
+  0.00     21.03     0.00        1     0.00     0.00  caml_write_fd
+  0.00     21.03     0.00        1     0.00     0.00  fill_hashtable
+  0.00     21.03     0.00        1     0.00     0.00  init_frame_descriptors
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.05% of 21.03 seconds
+
+index % time    self  children    called     name
+                0.00   19.35       1/1           caml_program [3]
+[1]     92.0    0.00   19.35       1         camlBench__entry [1]
+               19.35    0.00       1/1           camlBench__tak_1204 [2]
+                0.00    0.00       3/3           camlPervasives__output_string_1213 [21]
+                0.00    0.00       2/2           caml_sys_time_include_children_unboxed [40]
+                0.00    0.00       2/2           caml_sys_time_unboxed [41]
+                0.00    0.00       1/1           camlPervasives__loop_1159 [47]
+                0.00    0.00       1/1           camlPervasives__valid_float_lexem_1156 [49]
+                0.00    0.00       1/1           camlPervasives__string_of_float_1161 [48]
+                0.00    0.00       1/1           camlPervasives__exit_1398 [44]
+-----------------------------------------------
+                             3148571352             camlBench__tak_1204 [2]
+               19.35    0.00       1/1           camlBench__entry [1]
+[2]     92.0   19.35    0.00       1+3148571352 camlBench__tak_1204 [2]
+                             3148571352             camlBench__tak_1204 [2]
+-----------------------------------------------
+                0.00   19.35       1/1           caml_start_program [4]
+[3]     92.0    0.00   19.35       1         caml_program [3]
+                0.00   19.35       1/1           camlBench__entry [1]
+                0.00    0.00       1/1           camlCamlinternalFormatBasics__entry [42]
+                0.00    0.00       1/1           camlPervasives__entry [43]
+                0.00    0.00       1/1           camlSys__entry [50]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     92.0    0.00   19.35                 caml_start_program [4]
+                0.00   19.35       1/1           caml_program [3]
+-----------------------------------------------
+                                                 <spontaneous>
+[5]      8.0    1.69    0.00                 camlStd_exit__code_end [5]
+-----------------------------------------------
+                0.00    0.00    1481/1481        caml_page_table_add [9]
+[6]      0.0    0.00    0.00    1481         caml_page_table_modify [6]
+-----------------------------------------------
+                0.00    0.00       1/22          init_frame_descriptors [90]
+                0.00    0.00       1/22          caml_executable_name [59]
+                0.00    0.00       1/22          caml_startup_exn [83]
+                0.00    0.00       1/22          caml_ext_table_init [61]
+                0.00    0.00       2/22          caml_register_named_value [39]
+                0.00    0.00       3/22          caml_open_descriptor_in [26]
+                0.00    0.00       3/22          caml_register_custom_operations [28]
+                0.00    0.00       3/22          caml_insert_global_root [23]
+                0.00    0.00       7/22          caml_init_frame_descriptors [69]
+[7]      0.0    0.00    0.00      22         caml_stat_alloc [7]
+-----------------------------------------------
+                0.00    0.00       1/9           caml_sys_get_argv [85]
+                0.00    0.00       1/9           caml_sys_get_config [86]
+                0.00    0.00       2/9           caml_ml_out_channels_list [76]
+                0.00    0.00       5/9           caml_alloc_custom [14]
+[8]      0.0    0.00    0.00       9         caml_alloc_small [8]
+-----------------------------------------------
+                0.00    0.00       1/9           caml_init_major_heap [72]
+                0.00    0.00       1/9           caml_set_minor_heap_size [82]
+                0.00    0.00       1/9           caml_init_atom_table [66]
+                0.00    0.00       6/9           caml_startup_exn [83]
+[9]      0.0    0.00    0.00       9         caml_page_table_add [9]
+                0.00    0.00    1481/1481        caml_page_table_modify [6]
+-----------------------------------------------
+                0.00    0.00       4/8           caml_enter_blocking_section [16]
+                0.00    0.00       4/8           caml_leave_blocking_section [18]
+[10]     0.0    0.00    0.00       8         caml_process_pending_signals [10]
+-----------------------------------------------
+                0.00    0.00       1/7           caml_startup_exn [83]
+                0.00    0.00       6/7           caml_init_gc [70]
+[11]     0.0    0.00    0.00       7         caml_gc_message [11]
+-----------------------------------------------
+                0.00    0.00       6/6           camlPervasives__entry [43]
+[12]     0.0    0.00    0.00       6         caml_int64_float_of_bits_unboxed [12]
+-----------------------------------------------
+                0.00    0.00       2/5           caml_ml_out_channels_list [76]
+                0.00    0.00       3/5           camlPervasives__entry [43]
+[13]     0.0    0.00    0.00       5         caml_alloc_channel [13]
+                0.00    0.00       5/5           caml_alloc_custom [14]
+-----------------------------------------------
+                0.00    0.00       5/5           caml_alloc_channel [13]
+[14]     0.0    0.00    0.00       5         caml_alloc_custom [14]
+                0.00    0.00       5/9           caml_alloc_small [8]
+                0.00    0.00       2/2           alloc_generic_table [30]
+                0.00    0.00       1/1           caml_realloc_custom_table [81]
+-----------------------------------------------
+                0.00    0.00       1/4           caml_alloc_sprintf [54]
+                0.00    0.00       3/4           caml_copy_string [22]
+[15]     0.0    0.00    0.00       4         caml_alloc_string [15]
+-----------------------------------------------
+                0.00    0.00       1/4           caml_write_fd [88]
+                0.00    0.00       3/4           caml_open_descriptor_in [26]
+[16]     0.0    0.00    0.00       4         caml_enter_blocking_section [16]
+                0.00    0.00       4/8           caml_process_pending_signals [10]
+                0.00    0.00       4/4           caml_enter_blocking_section_default [17]
+-----------------------------------------------
+                0.00    0.00       4/4           caml_enter_blocking_section [16]
+[17]     0.0    0.00    0.00       4         caml_enter_blocking_section_default [17]
+-----------------------------------------------
+                0.00    0.00       1/4           caml_write_fd [88]
+                0.00    0.00       3/4           caml_open_descriptor_in [26]
+[18]     0.0    0.00    0.00       4         caml_leave_blocking_section [18]
+                0.00    0.00       4/8           caml_process_pending_signals [10]
+                0.00    0.00       4/4           caml_leave_blocking_section_default [19]
+-----------------------------------------------
+                0.00    0.00       4/4           caml_leave_blocking_section [18]
+[19]     0.0    0.00    0.00       4         caml_leave_blocking_section_default [19]
+-----------------------------------------------
+                0.00    0.00       2/4           caml_cplugins_load [32]
+                0.00    0.00       2/4           caml_parse_ocamlrunparam [80]
+[20]     0.0    0.00    0.00       4         caml_secure_getenv [20]
+-----------------------------------------------
+                0.00    0.00       3/3           camlBench__entry [1]
+[21]     0.0    0.00    0.00       3         camlPervasives__output_string_1213 [21]
+                0.00    0.00       3/3           caml_ml_output_bytes [25]
+                0.00    0.00       3/3           caml_ml_output [24]
+-----------------------------------------------
+                0.00    0.00       1/3           caml_alloc_array [52]
+                0.00    0.00       1/3           caml_sys_get_argv [85]
+                0.00    0.00       1/3           caml_sys_get_config [86]
+[22]     0.0    0.00    0.00       3         caml_copy_string [22]
+                0.00    0.00       3/4           caml_alloc_string [15]
+-----------------------------------------------
+                0.00    0.00       1/3           caml_startup_exn [83]
+                0.00    0.00       2/3           caml_register_named_value [39]
+[23]     0.0    0.00    0.00       3         caml_insert_global_root [23]
+                0.00    0.00       3/22          caml_stat_alloc [7]
+-----------------------------------------------
+                0.00    0.00       3/3           camlPervasives__output_string_1213 [21]
+[24]     0.0    0.00    0.00       3         caml_ml_output [24]
+-----------------------------------------------
+                0.00    0.00       3/3           camlPervasives__output_string_1213 [21]
+[25]     0.0    0.00    0.00       3         caml_ml_output_bytes [25]
+                0.00    0.00       3/3           caml_putblock [27]
+-----------------------------------------------
+                0.00    0.00       1/3           caml_ml_open_descriptor_in [75]
+                0.00    0.00       2/3           caml_open_descriptor_out [38]
+[26]     0.0    0.00    0.00       3         caml_open_descriptor_in [26]
+                0.00    0.00       3/22          caml_stat_alloc [7]
+                0.00    0.00       3/4           caml_enter_blocking_section [16]
+                0.00    0.00       3/4           caml_leave_blocking_section [18]
+-----------------------------------------------
+                0.00    0.00       3/3           caml_ml_output_bytes [25]
+[27]     0.0    0.00    0.00       3         caml_putblock [27]
+-----------------------------------------------
+                0.00    0.00       1/3           caml_startup_exn [83]
+                0.00    0.00       2/3           caml_init_custom_operations [68]
+[28]     0.0    0.00    0.00       3         caml_register_custom_operations [28]
+                0.00    0.00       3/22          caml_stat_alloc [7]
+-----------------------------------------------
+                0.00    0.00       1/3           caml_startup_exn [83]
+                0.00    0.00       2/3           caml_register_named_value [39]
+[29]     0.0    0.00    0.00       3         caml_register_global_root [29]
+-----------------------------------------------
+                0.00    0.00       2/2           caml_alloc_custom [14]
+[30]     0.0    0.00    0.00       2         alloc_generic_table [30]
+-----------------------------------------------
+                0.00    0.00       1/2           caml_set_minor_heap_size [82]
+                0.00    0.00       1/2           caml_alloc_for_heap [53]
+[31]     0.0    0.00    0.00       2         caml_aligned_malloc [31]
+-----------------------------------------------
+                0.00    0.00       1/2           caml_cplugins_init [57]
+                0.00    0.00       1/2           caml_sys_init [87]
+[32]     0.0    0.00    0.00       2         caml_cplugins_load [32]
+                0.00    0.00       2/4           caml_secure_getenv [20]
+-----------------------------------------------
+                0.00    0.00       2/2           caml_ml_flush [36]
+[33]     0.0    0.00    0.00       2         caml_flush [33]
+                0.00    0.00       2/2           caml_flush_partial [34]
+-----------------------------------------------
+                0.00    0.00       2/2           caml_flush [33]
+[34]     0.0    0.00    0.00       2         caml_flush_partial [34]
+                0.00    0.00       1/1           caml_write_fd [88]
+-----------------------------------------------
+                0.00    0.00       1/2           camlPervasives__entry [43]
+                0.00    0.00       1/2           camlSys__entry [50]
+[35]     0.0    0.00    0.00       2         caml_fresh_oo_id [35]
+-----------------------------------------------
+                0.00    0.00       2/2           camlPervasives__iter_1202 [46]
+[36]     0.0    0.00    0.00       2         caml_ml_flush [36]
+                0.00    0.00       2/2           caml_flush [33]
+-----------------------------------------------
+                0.00    0.00       2/2           camlPervasives__entry [43]
+[37]     0.0    0.00    0.00       2         caml_ml_open_descriptor_out [37]
+                0.00    0.00       2/2           caml_open_descriptor_out [38]
+-----------------------------------------------
+                0.00    0.00       2/2           caml_ml_open_descriptor_out [37]
+[38]     0.0    0.00    0.00       2         caml_open_descriptor_out [38]
+                0.00    0.00       2/3           caml_open_descriptor_in [26]
+-----------------------------------------------
+                0.00    0.00       2/2           camlPervasives__entry [43]
+[39]     0.0    0.00    0.00       2         caml_register_named_value [39]
+                0.00    0.00       2/22          caml_stat_alloc [7]
+                0.00    0.00       2/3           caml_insert_global_root [23]
+                0.00    0.00       2/3           caml_register_global_root [29]
+-----------------------------------------------
+                0.00    0.00       2/2           camlBench__entry [1]
+[40]     0.0    0.00    0.00       2         caml_sys_time_include_children_unboxed [40]
+-----------------------------------------------
+                0.00    0.00       2/2           camlBench__entry [1]
+[41]     0.0    0.00    0.00       2         caml_sys_time_unboxed [41]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_program [3]
+[42]     0.0    0.00    0.00       1         camlCamlinternalFormatBasics__entry [42]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_program [3]
+[43]     0.0    0.00    0.00       1         camlPervasives__entry [43]
+                0.00    0.00       6/6           caml_int64_float_of_bits_unboxed [12]
+                0.00    0.00       3/5           caml_alloc_channel [13]
+                0.00    0.00       2/2           caml_register_named_value [39]
+                0.00    0.00       2/2           caml_ml_open_descriptor_out [37]
+                0.00    0.00       1/2           caml_fresh_oo_id [35]
+                0.00    0.00       1/1           caml_ml_open_descriptor_in [75]
+-----------------------------------------------
+                0.00    0.00       1/1           camlBench__entry [1]
+[44]     0.0    0.00    0.00       1         camlPervasives__exit_1398 [44]
+                0.00    0.00       1/1           camlPervasives__iter_1202 [46]
+                0.00    0.00       1/1           camlPervasives__flush_all_1201 [45]
+                0.00    0.00       1/1           caml_sys_exit [84]
+-----------------------------------------------
+                0.00    0.00       1/1           camlPervasives__exit_1398 [44]
+[45]     0.0    0.00    0.00       1         camlPervasives__flush_all_1201 [45]
+                0.00    0.00       1/1           caml_ml_out_channels_list [76]
+-----------------------------------------------
+                0.00    0.00       1/1           camlPervasives__exit_1398 [44]
+[46]     0.0    0.00    0.00       1         camlPervasives__iter_1202 [46]
+                0.00    0.00       2/2           caml_ml_flush [36]
+-----------------------------------------------
+                0.00    0.00       1/1           camlBench__entry [1]
+[47]     0.0    0.00    0.00       1         camlPervasives__loop_1159 [47]
+-----------------------------------------------
+                0.00    0.00       1/1           camlBench__entry [1]
+[48]     0.0    0.00    0.00       1         camlPervasives__string_of_float_1161 [48]
+                0.00    0.00       1/1           caml_alloc_sprintf [54]
+                0.00    0.00       1/1           caml_format_float [64]
+-----------------------------------------------
+                0.00    0.00       1/1           camlBench__entry [1]
+[49]     0.0    0.00    0.00       1         camlPervasives__valid_float_lexem_1156 [49]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_program [3]
+[50]     0.0    0.00    0.00       1         camlSys__entry [50]
+                0.00    0.00       1/1           caml_sys_get_argv [85]
+                0.00    0.00       1/1           caml_sys_get_config [86]
+                0.00    0.00       1/2           caml_fresh_oo_id [35]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_alloc_array [52]
+[51]     0.0    0.00    0.00       1         caml_alloc [51]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_sys_get_argv [85]
+[52]     0.0    0.00    0.00       1         caml_alloc_array [52]
+                0.00    0.00       1/1           caml_alloc [51]
+                0.00    0.00       1/3           caml_copy_string [22]
+                0.00    0.00       1/1           caml_modify [77]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_major_heap [72]
+[53]     0.0    0.00    0.00       1         caml_alloc_for_heap [53]
+                0.00    0.00       1/2           caml_aligned_malloc [31]
+-----------------------------------------------
+                0.00    0.00       1/1           camlPervasives__string_of_float_1161 [48]
+[54]     0.0    0.00    0.00       1         caml_alloc_sprintf [54]
+                0.00    0.00       1/4           caml_alloc_string [15]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_major_heap [72]
+[55]     0.0    0.00    0.00       1         caml_clip_heap_chunk_wsz [55]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_sys_get_argv [85]
+[56]     0.0    0.00    0.00       1         caml_copy_string_array [56]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_sys_init [87]
+[57]     0.0    0.00    0.00       1         caml_cplugins_init [57]
+                0.00    0.00       1/2           caml_cplugins_load [32]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[58]     0.0    0.00    0.00       1         caml_debugger_init [58]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[59]     0.0    0.00    0.00       1         caml_executable_name [59]
+                0.00    0.00       1/22          caml_stat_alloc [7]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[60]     0.0    0.00    0.00       1         caml_ext_table_add [60]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[61]     0.0    0.00    0.00       1         caml_ext_table_init [61]
+                0.00    0.00       1/22          caml_stat_alloc [7]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_major_heap [72]
+[62]     0.0    0.00    0.00       1         caml_fl_init_merge [62]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_make_free_blocks [74]
+[63]     0.0    0.00    0.00       1         caml_fl_merge_block [63]
+-----------------------------------------------
+                0.00    0.00       1/1           camlPervasives__string_of_float_1161 [48]
+[64]     0.0    0.00    0.00       1         caml_format_float [64]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_gc [70]
+[65]     0.0    0.00    0.00       1         caml_init_alloc_for_heap [65]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[66]     0.0    0.00    0.00       1         caml_init_atom_table [66]
+                0.00    0.00       1/9           caml_page_table_add [9]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[67]     0.0    0.00    0.00       1         caml_init_backtrace [67]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[68]     0.0    0.00    0.00       1         caml_init_custom_operations [68]
+                0.00    0.00       2/3           caml_register_custom_operations [28]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[69]     0.0    0.00    0.00       1         caml_init_frame_descriptors [69]
+                0.00    0.00       7/22          caml_stat_alloc [7]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[70]     0.0    0.00    0.00       1         caml_init_gc [70]
+                0.00    0.00       6/7           caml_gc_message [11]
+                0.00    0.00       1/1           caml_normalize_heap_increment [78]
+                0.00    0.00       1/1           caml_init_alloc_for_heap [65]
+                0.00    0.00       1/1           caml_page_table_initialize [79]
+                0.00    0.00       1/1           caml_set_minor_heap_size [82]
+                0.00    0.00       1/1           caml_init_major_heap [72]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[71]     0.0    0.00    0.00       1         caml_init_ieee_floats [71]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_gc [70]
+[72]     0.0    0.00    0.00       1         caml_init_major_heap [72]
+                0.00    0.00       1/1           caml_clip_heap_chunk_wsz [55]
+                0.00    0.00       1/1           caml_alloc_for_heap [53]
+                0.00    0.00       1/9           caml_page_table_add [9]
+                0.00    0.00       1/1           caml_fl_init_merge [62]
+                0.00    0.00       1/1           caml_make_free_blocks [74]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[73]     0.0    0.00    0.00       1         caml_init_signals [73]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_major_heap [72]
+[74]     0.0    0.00    0.00       1         caml_make_free_blocks [74]
+                0.00    0.00       1/1           caml_fl_merge_block [63]
+-----------------------------------------------
+                0.00    0.00       1/1           camlPervasives__entry [43]
+[75]     0.0    0.00    0.00       1         caml_ml_open_descriptor_in [75]
+                0.00    0.00       1/3           caml_open_descriptor_in [26]
+-----------------------------------------------
+                0.00    0.00       1/1           camlPervasives__flush_all_1201 [45]
+[76]     0.0    0.00    0.00       1         caml_ml_out_channels_list [76]
+                0.00    0.00       2/5           caml_alloc_channel [13]
+                0.00    0.00       2/9           caml_alloc_small [8]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_alloc_array [52]
+[77]     0.0    0.00    0.00       1         caml_modify [77]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_gc [70]
+[78]     0.0    0.00    0.00       1         caml_normalize_heap_increment [78]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_gc [70]
+[79]     0.0    0.00    0.00       1         caml_page_table_initialize [79]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[80]     0.0    0.00    0.00       1         caml_parse_ocamlrunparam [80]
+                0.00    0.00       2/4           caml_secure_getenv [20]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_alloc_custom [14]
+[81]     0.0    0.00    0.00       1         caml_realloc_custom_table [81]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_init_gc [70]
+[82]     0.0    0.00    0.00       1         caml_set_minor_heap_size [82]
+                0.00    0.00       1/2           caml_aligned_malloc [31]
+                0.00    0.00       1/9           caml_page_table_add [9]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup [672]
+[83]     0.0    0.00    0.00       1         caml_startup_exn [83]
+                0.00    0.00       6/9           caml_page_table_add [9]
+                0.00    0.00       1/1           caml_init_ieee_floats [71]
+                0.00    0.00       1/1           init_frame_descriptors [90]
+                0.00    0.00       1/1           caml_init_frame_descriptors [69]
+                0.00    0.00       1/3           caml_register_custom_operations [28]
+                0.00    0.00       1/1           caml_init_custom_operations [68]
+                0.00    0.00       1/1           caml_parse_ocamlrunparam [80]
+                0.00    0.00       1/1           caml_init_atom_table [66]
+                0.00    0.00       1/7           caml_gc_message [11]
+                0.00    0.00       1/1           caml_init_gc [70]
+                0.00    0.00       1/22          caml_stat_alloc [7]
+                0.00    0.00       1/1           caml_ext_table_add [60]
+                0.00    0.00       1/1           caml_ext_table_init [61]
+                0.00    0.00       1/1           caml_debugger_init [58]
+                0.00    0.00       1/3           caml_insert_global_root [23]
+                0.00    0.00       1/3           caml_register_global_root [29]
+                0.00    0.00       1/1           caml_init_backtrace [67]
+                0.00    0.00       1/1           caml_init_signals [73]
+                0.00    0.00       1/1           caml_executable_name [59]
+                0.00    0.00       1/1           caml_sys_init [87]
+-----------------------------------------------
+                0.00    0.00       1/1           camlPervasives__exit_1398 [44]
+[84]     0.0    0.00    0.00       1         caml_sys_exit [84]
+-----------------------------------------------
+                0.00    0.00       1/1           camlSys__entry [50]
+[85]     0.0    0.00    0.00       1         caml_sys_get_argv [85]
+                0.00    0.00       1/3           caml_copy_string [22]
+                0.00    0.00       1/1           caml_alloc_array [52]
+                0.00    0.00       1/1           caml_copy_string_array [56]
+                0.00    0.00       1/9           caml_alloc_small [8]
+-----------------------------------------------
+                0.00    0.00       1/1           camlSys__entry [50]
+[86]     0.0    0.00    0.00       1         caml_sys_get_config [86]
+                0.00    0.00       1/3           caml_copy_string [22]
+                0.00    0.00       1/9           caml_alloc_small [8]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[87]     0.0    0.00    0.00       1         caml_sys_init [87]
+                0.00    0.00       1/2           caml_cplugins_load [32]
+                0.00    0.00       1/1           caml_cplugins_init [57]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_flush_partial [34]
+[88]     0.0    0.00    0.00       1         caml_write_fd [88]
+                0.00    0.00       1/4           caml_enter_blocking_section [16]
+                0.00    0.00       1/4           caml_leave_blocking_section [18]
+-----------------------------------------------
+                0.00    0.00       1/1           init_frame_descriptors [90]
+[89]     0.0    0.00    0.00       1         fill_hashtable [89]
+-----------------------------------------------
+                0.00    0.00       1/1           caml_startup_exn [83]
+[90]     0.0    0.00    0.00       1         init_frame_descriptors [90]
+                0.00    0.00       1/22          caml_stat_alloc [7]
+                0.00    0.00       1/1           fill_hashtable [89]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [30] alloc_generic_table    [17] caml_enter_blocking_section_default [25] caml_ml_output_bytes
+   [1] camlBench__entry       [59] caml_executable_name   [77] caml_modify
+   [2] camlBench__tak_1204    [60] caml_ext_table_add     [78] caml_normalize_heap_increment
+  [42] camlCamlinternalFormatBasics__entry [61] caml_ext_table_init [26] caml_open_descriptor_in
+  [43] camlPervasives__entry  [62] caml_fl_init_merge     [38] caml_open_descriptor_out
+  [44] camlPervasives__exit_1398 [63] caml_fl_merge_block  [9] caml_page_table_add
+  [45] camlPervasives__flush_all_1201 [33] caml_flush     [79] caml_page_table_initialize
+  [46] camlPervasives__iter_1202 [34] caml_flush_partial   [6] caml_page_table_modify
+  [47] camlPervasives__loop_1159 [64] caml_format_float   [80] caml_parse_ocamlrunparam
+  [21] camlPervasives__output_string_1213 [35] caml_fresh_oo_id [10] caml_process_pending_signals
+  [48] camlPervasives__string_of_float_1161 [11] caml_gc_message [3] caml_program
+  [49] camlPervasives__valid_float_lexem_1156 [65] caml_init_alloc_for_heap [27] caml_putblock
+   [5] camlStd_exit__code_end [66] caml_init_atom_table   [81] caml_realloc_custom_table
+  [50] camlSys__entry         [67] caml_init_backtrace    [28] caml_register_custom_operations
+  [31] caml_aligned_malloc    [68] caml_init_custom_operations [29] caml_register_global_root
+  [51] caml_alloc             [69] caml_init_frame_descriptors [39] caml_register_named_value
+  [52] caml_alloc_array       [70] caml_init_gc           [20] caml_secure_getenv
+  [13] caml_alloc_channel     [71] caml_init_ieee_floats  [82] caml_set_minor_heap_size
+  [14] caml_alloc_custom      [72] caml_init_major_heap   [83] caml_startup_exn
+  [53] caml_alloc_for_heap    [73] caml_init_signals       [7] caml_stat_alloc
+   [8] caml_alloc_small       [23] caml_insert_global_root [84] caml_sys_exit
+  [54] caml_alloc_sprintf     [12] caml_int64_float_of_bits_unboxed [85] caml_sys_get_argv
+  [15] caml_alloc_string      [18] caml_leave_blocking_section [86] caml_sys_get_config
+  [55] caml_clip_heap_chunk_wsz [19] caml_leave_blocking_section_default [87] caml_sys_init
+  [22] caml_copy_string       [74] caml_make_free_blocks  [40] caml_sys_time_include_children_unboxed
+  [56] caml_copy_string_array [36] caml_ml_flush          [41] caml_sys_time_unboxed
+  [57] caml_cplugins_init     [75] caml_ml_open_descriptor_in [88] caml_write_fd
+  [32] caml_cplugins_load     [37] caml_ml_open_descriptor_out [89] fill_hashtable
+  [58] caml_debugger_init     [76] caml_ml_out_channels_list [90] init_frame_descriptors
+  [16] caml_enter_blocking_section [24] caml_ml_output

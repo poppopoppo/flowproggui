@@ -124,4 +124,31 @@ nash equiblium , unification , prolog
 » rpc : w0 w1 ~ x
 » mul : q ~ w0 w1
 » app : y ~ f x
- 
+
+first order environment
+first order while-loop
+» hf oije
+  ¬|» feoijf
+  » oijef
+  » b oiejf ∎
+»
+»> x~$ y~z'
+»>
+
+horizontal while
+» ofie oijf ew2 3 4 ¬⁅ 0 1 2 3
+  » 4 5 3*2 +[3,3] {}
+  » oief ∎
+
+  » "test" +[0,"hoge"]
+  » f 3 ∎
+
+  »　+[1 0,"foo"] +[1 1,"hoo"]
+  » t 10 ∎
+⁆
+  +a ⊢ b c d
+  +a +b +c ⊢ d
+» cmd o0 o1 .. on : s0 s1 .. sn ⊢ d0 .. dm
+» r0 r1 .. rn ∎
+
+⸡⸡⸠|||»»»⁅⁆⁅‹›⸡

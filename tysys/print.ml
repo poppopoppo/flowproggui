@@ -293,8 +293,11 @@ let rec print_tkn_s v =
     | TknS_Tns (v1,v2) -> "<"^(print_tkn_s v1)^","^(print_tkn_s v2)^">"
     | TknS_Z z -> (string_of_int z)
     | TknS_Plg p -> "&["^(Sgn.print p)^"]"
+    | TknS_Unt -> "{}"
+    | TknS_Inj i -> "∠["^(string_of_int i)^"]"
+    | TknS_Cho i -> "\\["^(string_of_int i)^"]"
   )
-    let rec print_nd_s n =
+let rec print_nd_s n =
   ( match n with
     | Z_S z -> (string_of_int z)
     | Gl_S p when p=nd_unt -> "{}"
@@ -309,7 +312,21 @@ let rec print_tkn_s v =
     | Cho_S i -> "↓["^(string_of_int i)^"]"
     | Stg_S s -> "\""^s^"\""
   )
-(*
+let rec print_tns_s n =
+  ( match !n with
+    | Z_x z -> (string_of_int z)
+    | Unt_x -> "{}"
+    | Agl_x n1 -> "∠("^(print_tns_s n1)^")"
+    | Rot_x -> "$"
+    | Plg_x p -> "&"^(Sgn.print p)
+    | AppT (n1,n2) -> "("^(print_tns_s n1)^"◂"^(print_tns_s n2)^")"
+    | TnsT(n1,n2) -> "<"^(print_tns_s n1)^"¦"^(print_tns_s n2)^">"
+    | PL_x n1 -> (print_tns_s n1)^"◃0"
+    | PR_x n1 -> (print_tns_s n1)^"◃1"
+    | Inj_x i -> "∠["^(string_of_int i)^"]"
+    | Cho_x i -> "\\["^(string_of_int i)^"]"
+    | Stg_x s -> "\""^s^"\""
+  ) (*
 let rec print_net_lst k =
   ( match k with
     | LST_Unt -> "{}"
