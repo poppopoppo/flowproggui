@@ -260,13 +260,13 @@ let asm_add (a:asm) (p:plc) o = Core.Hashtbl.add a ~key:(plc_to p) ~data:o
 let asm_get (a:asm) (p:plc) = Core.Hashtbl.find a (plc_to p)
 let rec run (a:asm) (p:plc) v cs =
   inc_ci ();
-  Util.pnt true ("enter vm2.run:"^(pnt_plc p)^"\n");
+  (* Util.pnt true ("enter vm2.run:"^(pnt_plc p)^"\n"); *)
   let ox = asm_get a p in
   ( match ox with
     | Some x ->
       ( match x with
         | (Ret r0) ->
-          Util.pnt true ("ret "^(pnt_reg r0)^"\n");
+          (* Util.pnt true ("ret "^(pnt_reg r0)^"\n"); *)
           let k0 = get_k_rcd v r0 in
           if (Stack.is_empty cs) then k0
           else
@@ -281,7 +281,7 @@ let rec run (a:asm) (p:plc) v cs =
                 run a p0 v cs
               | _ -> raise (Failure "vm1.run:0") )
         | (Op (o0,np)) ->
-          Util.pnt true ((print_op o0)^","^(pnt_plc np)^"\n");
+          (*)    Util.pnt true ((print_op o0)^","^(pnt_plc np)^"\n"); *)
           ( match o0 with
             | Id (p1,p2) ->
               let k2 = get_k v p2 in
@@ -440,16 +440,16 @@ let rec run (a:asm) (p:plc) v cs =
 type asm_of_code = asm * plc * reg * code_s * Sgn_Core.t
 (* asm * src-plc * root-reg * src-code * src-start-ptr *)
 let rec asm_of_code tb (a:asm) (p0:plc) (r0:reg) c v0 =
-  Util.pnt true (
+  (* Util.pnt true (
     "enter asm_of_code"^
     (print_asm a)^","^
-    (pnt_plc p0)^","^(pnt_reg r0)^"\n");
+     (pnt_plc p0)^","^(pnt_reg r0)^"\n");*)
   let _ = Core.Hashtbl.add tb ~key:v0 ~data:(p0,r0) in
   let f0 = get_code c v0 in
   ( match f0 with
     | V_S (v1,v2) ->
       let pm0 = asm_of_code tb a p0 r0 c v1 in
-      Util.pnt true (print_asm a);
+      (* Util.pnt true (print_asm a); *)
       let o1 = Core.Hashtbl.find a pm0 in
       ( match o1 with
         | Some Ret r1 ->
