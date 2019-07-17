@@ -281,7 +281,7 @@ let rec run (a:asm) (p:plc) v cs =
                 run a p0 v cs
               | _ -> raise (Failure "vm1.run:0") )
         | (Op (o0,np)) ->
-          (*)    Util.pnt true ((print_op o0)^","^(pnt_plc np)^"\n"); *)
+          (*    Util.pnt true ((print_op o0)^","^(pnt_plc np)^"\n"); *)
           ( match o0 with
             | Id (p1,p2) ->
               let k2 = get_k v p2 in

@@ -27,6 +27,7 @@ let eq_int (x:int) (y:int) = x=y
 module Sgn :
 sig
   type t
+  val n : unit -> int
   val ini : unit -> t
   val print : t -> string
   val compare : t -> t -> int
@@ -37,6 +38,7 @@ end
 = struct
   type t = int
   let sgn_N = ref 0
+  let n () = !sgn_N
   let ini () =
     let n = !sgn_N in
     sgn_N := n+1;

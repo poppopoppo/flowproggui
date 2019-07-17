@@ -9,7 +9,7 @@ gui: vm2.ml ty.ml print.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly imp
 evo: evo_tkn.ml
 	ocamlfind ocamlopt -thread -p -o evo_tkn.exe -linkpkg \
 	-package core,batteries,threads \
-	util.ml types.ml print.ml vm2.ml ty.ml imp.ml evo_tkn.ml
+	util.ml types.ml print.ml vm3.ml vm4.ml ty.ml imp.ml evo_tkn.ml
 run: gui evo
 	./gui
 	gprof ./evo_tkn.exe > evo_tkn.prf.txt
