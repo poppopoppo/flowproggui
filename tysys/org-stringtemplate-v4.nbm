@@ -1095,6 +1095,7 @@ call : p92,r93,{ 0 0 }
 call : p68,r69,{ 0 1 2 }
 call : p78,r79,{ 0 1 }
 call : p85,r86,-1
+
 call : p92,r93,{ -1 1 }
 call : p92,r93,{ 0 2 }
 call : p68,r69,{ 0 2 1 }
@@ -1226,4 +1227,110 @@ call : p92,r93,{ 0 4 }
 call : p68,r69,{ 0 0 3 }
 call : p78,r79,{ 0 0 }
 call : p85,r86,0
+
+asm:
+p48 ⊢ p49 @ rpc : r0 ⊢ r1 r2
+p49 ⊢ p50 @ rpc : r1 ⊢ r0 r3
+p50 ⊢ p51 @ ini_tkn →[p52,r4] :  ⊢ r1
+p51 ⊢ p63 @ ini_tkn 0 :  ⊢ r4
+p52 ⊢ p53 @ rpc : r4 ⊢ r5 r6
+p53 ⊢ p54 @ ini_tkn + :  ⊢ r4
+p54 ⊢ p55 @ rpc : r6 ⊢ r7 r8
+p55 ⊢ p56 @ id : r7 ⊢ r6
+p56 ⊢ p57 @ rpc : r8 ⊢ r7 r9
+p57 ⊢ p58 @ ini_tkn 1 :  ⊢ r8
+p58 ⊢ p59 @ ini_tkn {} :  ⊢ r10
+p59 ⊢ p60 @ cns : r8 r10 ⊢ r11
+p60 ⊢ p61 @ cns : r6 r11 ⊢ r12
+p61 ⊢ p62 @ call : r4 r12 ⊢ r13
+p62 @ ret : r13
+p63 ⊢ p64 @ call : r1 r4 ⊢ r12
+p64 ⊢ p65 @ ini_tkn {} :  ⊢ r1
+p65 ⊢ p66 @ cns : r12 r1 ⊢ r4
+p66 @ ret : r4
+enter vm2.run:p48,⟦ l69 _ _ _ _ _ _ _ _ _ _ _ _ _ ⟧ , {  l69~<l68¦l67> l67~{} l68~"Fnc" }
+rpc : r0 ⊢ r1 r2
+,p49
+enter vm2.run:p49,⟦ _ l72 l75 _ _ _ _ _ _ _ _ _ _ _ ⟧ , {  l71~"Fnc" l75~<l74¦l73> l72~<l71¦l70> l74~"Fnc" l70~{} l73~{} }
+rpc : r1 ⊢ r0 r3
+,p50
+enter vm2.run:p50,⟦ l78 _ l75 l81 _ _ _ _ _ _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+ini_tkn →[p52,r4] :  ⊢ r1
+,p51
+enter vm2.run:p51,⟦ l78 →[p52,r4] l75 l81 _ _ _ _ _ _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+ini_tkn 0 :  ⊢ r4
+,p63
+enter vm2.run:p63,⟦ l78 →[p52,r4] l75 l81 0 _ _ _ _ _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+call : r1 r4 ⊢ r12
+,p64
+enter vm2.run:p52,⟦ l78 _ l75 l81 0 _ _ _ _ _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+rpc : r4 ⊢ r5 r6
+,p53
+enter vm2.run:p53,⟦ l78 _ l75 l81 _ 0 0 _ _ _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+ini_tkn + :  ⊢ r4
+,p54
+enter vm2.run:p54,⟦ l78 _ l75 l81 + 0 0 _ _ _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+rpc : r6 ⊢ r7 r8
+,p55
+enter vm2.run:p55,⟦ l78 _ l75 l81 + 0 _ 0 0 _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+id : r7 ⊢ r6
+,p56
+enter vm2.run:p56,⟦ l78 _ l75 l81 + 0 0 _ 0 _ _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+rpc : r8 ⊢ r7 r9
+,p57
+enter vm2.run:p57,⟦ l78 _ l75 l81 + 0 0 0 _ 0 _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+ini_tkn 1 :  ⊢ r8
+,p58
+enter vm2.run:p58,⟦ l78 _ l75 l81 + 0 0 0 1 0 _ _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+ini_tkn {} :  ⊢ r10
+,p59
+enter vm2.run:p59,⟦ l78 _ l75 l81 + 0 0 0 1 0 {} _ _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+cns : r8 r10 ⊢ r11
+,p60
+enter vm2.run:p60,⟦ l78 _ l75 l81 + 0 0 0 1 0 {} <r8¦r10> _ _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+cns : r6 r11 ⊢ r12
+,p61
+enter vm2.run:p61,⟦ l78 _ l75 l81 + 0 0 0 1 0 {} <r8¦r10> <r6¦r11> _ ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+call : r4 r12 ⊢ r13
+,p62
+enter vm2.run:p62,⟦ l78 _ l75 l81 _ 0 _ 0 _ 0 _ _ _ 1 ⟧ , {  l76~{} l75~<l74¦l73> l74~"Fnc" l73~{} l77~"Fnc" l81~<l80¦l79> l79~{} l80~"Fnc" l78~<l77¦l76> }
+ret r13
+set_k_r 0:r3,l81,l81
+Uncaught exception:
+  
+  (Failure "set_k_r 0:r3,l81,l81")
+
+Raised at file "src/batDynArray.ml", line 642, characters 6-21
+Called from file "vm4.ml", line 161, characters 14-54
+error:gui:error:gui:Implib.evo:err1.3
+enter pressed
+signal called:g0◂0
+
+
+vo_tkn.exe
+<3,{}>
+test3
+asm:
+p48 ⊢ p49 @ rpc : r0 ⊢ r1 r2
+p49 ⊢ p50 @ rpc : r1 ⊢ r0 r3
+p50 ⊢ p51 @ ini_tkn →[p52,r4] :  ⊢ r1
+p51 ⊢ p63 @ ini_tkn 3 :  ⊢ r4
+p52 ⊢ p53 @ rpc : r4 ⊢ r5 r6
+p53 ⊢ p54 @ ini_tkn + :  ⊢ r4
+p54 ⊢ p55 @ rpc : r6 ⊢ r7 r8
+p55 ⊢ p56 @ id : r7 ⊢ r6
+p56 ⊢ p57 @ rpc : r8 ⊢ r7 r9
+p57 ⊢ p58 @ ini_tkn 1 :  ⊢ r8
+p58 ⊢ p59 @ ini_tkn {} :  ⊢ r10
+p59 ⊢ p60 @ cns : r8 r10 ⊢ r11
+p60 ⊢ p61 @ cns : r6 r11 ⊢ r12
+p61 ⊢ p62 @ call : r4 r12 ⊢ r13
+p62 @ ret : r13
+p63 ⊢ p64 @ call : r1 r4 ⊢ r12
+p64 ⊢ p65 @ ini_tkn {} :  ⊢ r1
+p65 ⊢ p66 @ cns : r12 r1 ⊢ r4
+p66 @ ret : r4
+enter vm2.run:p48,⟦ l69 _ _ _ _ _ _ _ _ _ _ _ _ _ ⟧ , {  l69~<l68¦l67> l67~{} l68~3 }
+rpc : r0 ⊢ r1 r2
+,p49
 
