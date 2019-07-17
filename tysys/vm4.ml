@@ -1,3 +1,4 @@
+let dbg = true
 open Types
 type reg = int
 type plc = Plc of Sgn.t
@@ -21,8 +22,8 @@ and tkn =
   | Tkn_Cho of int
   | Tkn_Fix
   | Tkn_Exn
-  | Tkn_Fnc of plc * ptr (* jmp_ptr arg_ptr *)
-  | Tkn_Clj of plc * ptr * ptr (* jmp_ptr arg0 { arg0 x } *)
+  | Tkn_Fnc of plc * reg (* jmp_ptr arg_ptr *)
+  | Tkn_Clj of plc * ptr * reg (* jmp_ptr arg0 { arg0 x } *)
 type rcd_tkn =
   | Rcd of rcd_tkn list
   | Atm of tkn
@@ -134,7 +135,7 @@ and print_k k =
     | Tkn_Cho i -> "\\["^(string_of_int i)^"]"
     | Tkn_Fix -> "@"
     | Tkn_Exn -> "?"
-    | Tkn_Fnc (t1,p1) -> "→["^(pnt_plc t1)^","^(print_ptr p1)^"]"
+    | Tkn_Fnc (t1,r1) -> "→["^(pnt_plc t1)^","^(pnt_reg r1)^"]"
     | Tkn_Clj (_,_,_) -> "tkn-clj"
   )
 let rec print_k_rcd k =
@@ -162,8 +163,8 @@ let min v =
       i
     with _ -> len v)
 let rec set_k_p (v,h) p k =
-  Util.pnt true ("enter set_k_p:"^(print_st (v,h))^
-                 (print_ptr p)^","^(print_k k)^"\n");
+  (* Util.pnt true ("enter set_k_p:"^(print_st (v,h))^
+                 (print_ptr p)^","^(print_k k)^"\n"); *)
   ( match p with
     | Ptr_Reg r -> set_k_r v r k
     | Ptr_Hp p -> set_k_h h p k )
@@ -176,14 +177,15 @@ and set_k_r v r k =
       | Some k1 ->
         let s = ("set_k_r 0:"
                  ^(pnt_reg r)^","^(print_k k)^","^(print_k k1)) in
-        Util.pnt true (s^"\n");
+        (* Util.pnt dbg (s^"\n"); *)
         raise (Failure s))
-  else (BatDynArray.add v None; set_k_r v r k)
+  else (raise @@ Failure "set_k_r:i")
+(* )(BatDynArray.add v None; set_k_r v r k) *)
 and set_k_h h p k =
   if Hashtbl.mem h p then raise (Failure "set_k_h 0")
   else
     Hashtbl.add h p k
-let rec add_k_r v (k:tkn) =
+let rec add_k_r v (k:tkn) : reg =
   let (m,l) = (min v,len v) in
   if m<l then
     (BatDynArray.set v m (Some k); m)
@@ -209,7 +211,7 @@ let get_k_p (v,h) p =
     | Ptr_Reg r -> get_k_r v r
     | Ptr_Hp p -> get_k_h h p )
 let rec free ((v,h):st) (p:ptr) =
-  Util.pnt true ("enter vm4.free :"^(print_st (v,h))^","^(print_ptr p)^"\n");
+  (* Util.pnt true ("enter vm4.free :"^(print_st (v,h))^","^(print_ptr p)^"\n"); *)
   ( match p with
     | Ptr_Reg r -> free_r (v,h) r
     | Ptr_Hp p -> free_h (v,h) p )
@@ -220,10 +222,17 @@ and free_r (v,h) r =
     | Some Tkn_Ln p ->
       free (v,h) (Ptr_Hp p)
     | Some (Tkn_Tns(p1,p2)) ->
-      let (k1,k2) = (free (v,h) p1,free (v,h) p2) in
+      let k1 = free (v,h) p1 in
+      let k2 = free (v,h) p2 in
       ( match k1,k2 with
         | Some k1,Some Rcd l -> Some (Rcd (k1::l))
-        | _,_ -> raise (Failure "vm4 0"))
+        | Some k1,Some k2 ->
+          raise (Failure (
+              "vm4 0:0:"^(print_st (v,h))^","^(pnt_reg r)^","^
+              (print_k_rcd k1)^","^(print_k_rcd k2)))
+        | _,_ ->
+          raise (Failure (
+              "vm4 0:1:"^(print_st (v,h))^","^(pnt_reg r))))
     | Some x -> Some (Atm x) )
 and free_h (v,h) p =
   let k = get_k_h h p in
@@ -290,8 +299,8 @@ let rec set_k_rcd_h (v,h) l k =
         | None -> raise (Failure "set_k_rcd_h 0"))
   )
 and set_k_rcd_r (v,h) r k =
-  Util.pnt true ("enter set_k_rcd_r:"^(print_st (v,h))^
-                 ","^(pnt_reg r)^","^(print_k_rcd k^"\n"));
+  (* Util.pnt true ("enter set_k_rcd_r:"^(print_st (v,h))^
+                 ","^(pnt_reg r)^","^(print_k_rcd k^"\n")); *)
   ( match k with
     | Atm a ->
       ( try set_k_r v r a with _ -> raise (Failure "set_k_rcd_r 0:"))
@@ -326,9 +335,36 @@ let to_list v =
       (fun (i,l) o ->
          ( match o with
            | None -> (i+1,l)
-           | Some k -> (i+1,(i,k)::l)))
+           | Some k -> BatDynArray.set v i None; (i+1,(i,k)::l)))
       (0,[]) v in
   l
+let free_v (v,h) =
+  let _ =
+    BatDynArray.fold_left
+      (fun i o ->
+         BatDynArray.set v i None;
+         ( match o with
+           | Some Tkn_Ln l ->
+             let _ = free_h (v,h) l in
+             i+1
+           | Some (Tkn_Tns(p1,p2)) ->
+             let _ = (
+               ( match p2 with
+                 | Ptr_Hp l1 ->
+                   let _ = free_h (v,h) l1 in
+                   ()
+                 | _ -> ()),
+               ( match p2 with
+                 | Ptr_Hp l2 ->
+                   let _ = free_h (v,h) l2 in
+                   ()
+                 | _ -> ())
+             ) in
+             i+1
+           | _ -> i+1
+         ))
+      0 v in
+  ()
 let src a s =
   ( match s with
     | Src_Reg r -> get_k_r a r
@@ -339,14 +375,15 @@ let asm_ini () = Core.Hashtbl.create (module Sgn)
 let asm_add a p o = Core.Hashtbl.add a ~key:(plc_to p) ~data:o
 let asm_get a p = Core.Hashtbl.find a (plc_to p)
 let rec run a p (v,h) cs =
-  Util.pnt true ("enter vm2.run:"^(pnt_plc p)^","^(print_st (v,h))^"\n");
+  (* Util.pnt dbg ("enter vm2.run:"^(pnt_plc p)^","^(print_st (v,h))^"\n"); *)
   let ox = asm_get a p in
   ( match ox with
     | Some x ->
       ( match x with
         | (Ret r0) ->
-          (* Util.pnt true ("ret "^(pnt_reg r0)^"\n"); *)
-          let k0 = free (v,h) (Ptr_Reg r0) in
+          (* Util.pnt dbg ("ret "^(pnt_reg r0)^"\n"); *)
+          let k0 = free_r (v,h) r0 in
+          let _ = free_v (v,h) in
           ( match k0 with
             | Some k0 ->
               if (Stack.is_empty cs) then k0
@@ -364,7 +401,7 @@ let rec run a p (v,h) cs =
             | None -> raise @@ Failure ("vm3.run:get_k_rcd:1")
           )
         | (Op (o0,np)) ->
-          (* Util.pnt true ((print_op o0)^","^(pnt_plc np)^"\n"); *)
+          (* Util.pnt dbg ((print_op o0)^","^(pnt_plc np)^"\n"); *)
           ( match o0 with
             | Id (r1,r2) ->
               let k2 = free_r (v,h) r2 in
@@ -454,19 +491,20 @@ let rec run a p (v,h) cs =
                     | Tkn_Cho _ -> raise (Failure "vm1.run:4")
                     | Tkn_Fix -> raise (Failure "vm1.run:5")
                     | Tkn_Exn -> raise (Failure "vm1.run:6")
-                    | Tkn_Fnc (t0,p0)->
+                    | Tkn_Fnc (t0,r0)->
                       let k0 = free_r (v,h) x in
                       ( match k0 with
                         | Some k0 ->
                           let l = to_list v in
-                          let _ = set_k_rcd_p (v,h) p0 k0 in
+                          (* let _ = free_v (v,h) in *)
+                          let _ = set_k_rcd_r (v,h) r0 k0 in
                           Stack.push (CS(np,y,l)) cs;
-                            (*
-                            Util.pnt true ("call : "^(pnt_plc p0)^","^(pnt_reg r0)^","^
-                                           (print_k_rcd k0)^"\n"); *)
+                          (* Util.pnt dbg ("call : "^(pnt_plc t0)^","
+                                         ^(pnt_reg r0)^","^
+                                         (print_k_rcd k0)^"\n"); *)
                           run a t0 (v,h) cs
                         | None -> raise @@ Failure ("vm3.run:gkr:2"))
-                    | Tkn_Clj (t0,p0,p1) ->
+                    | Tkn_Clj (t0,p0,r1) ->
                       let k0 = free_r (v,h) x in
                       ( match k0 with
                         | Some k0 ->
@@ -474,7 +512,8 @@ let rec run a p (v,h) cs =
                           ( match k1 with
                             | Some k1 ->
                               let l = to_list v in
-                              let _ = set_k_rcd_p (v,h) p1 (Rcd [k0;k1]) in
+                              (* let _ = free_v (v,h) in *)
+                              let _ = set_k_rcd_r (v,h) r1 (Rcd [k0;k1]) in
                               Stack.push (CS(np,y,l)) cs;
                               run a t0 (v,h) cs
                             | None -> raise @@ Failure ("vm3.run:gkr:4"))
@@ -499,7 +538,7 @@ let rec run a p (v,h) cs =
               ( match k0 with
                 | Some k0 ->
                   let l3 = add_k_rcd_h h k0 in
-                  let _ = set_k_r v r0 (Tkn_Clj(p0,Ptr_Hp l3,Ptr_Reg r2)) in
+                  let _ = set_k_r v r0 (Tkn_Clj(p0,Ptr_Hp l3,r2)) in
                   run a np (v,h) cs
                 | _ -> raise @@ Failure ("vm3.run:gkr:6"))
             | Cns (r0,(r1,r2)) ->
@@ -518,32 +557,40 @@ let rec run a p (v,h) cs =
                   let _ = set_k_rcd_r (v,h) r0 k0 in
                   let _ = set_k_rcd_r (v,h) r1 k0 in
                   run a np (v,h) cs
-                | _ -> raise @@ Failure ("vm3.run:gkr:7"))
+                | _ ->
+                  (* Util.pnt dbg ("enter vm2.run:"^(pnt_plc p)^","^(print_st (v,h))^"\n"); *)
+                  raise @@ Failure ("vm3.run:gkr:7"))
             | Spt((r1,r2),r3) ->
               let k0 = get_k_r v r3 in
-              ( match k0 with
-                | Some Tkn_Tns(p4,p5) ->
-                  let k1 = free (v,h) p4 in
-                  let k2 = free (v,h) p5 in
-                  ( match k1,k2 with
-                    | Some k1,Some k2 ->
-                      let _ = set_k_rcd_r (v,h) r1 k1 in
-                      let _ = set_k_rcd_r (v,h) r2 k2 in
-                      run a np (v,h) cs
-                    | _,_ -> raise (Failure "vm2.run:14"))
-                | _ -> raise (Failure "vm2.run:00")
-              )
+              let rec spt k0 =
+                ( match k0 with
+                  | Some Tkn_Tns(p4,p5) ->
+                    let k1 = free (v,h) p4 in
+                    let k2 = free (v,h) p5 in
+                    ( match k1,k2 with
+                      | Some k1,Some k2 ->
+                        let _ = set_k_rcd_r (v,h) r1 k1 in
+                        let _ = set_k_rcd_r (v,h) r2 k2 in
+                        ()
+                      | _,_ -> raise (Failure "vm2.run:14"))
+                  | Some Tkn_Ln l1 ->
+                    let k1 = get_k_h h l1 in
+                    spt k1
+                  | _ -> raise (Failure "vm2.run:00")
+                ) in
+              spt k0;
+              run a np (v,h) cs
             | Axm(_,_) -> raise (Failure "vm2.run:01")
           )
       )
     | _ -> raise (Failure ("vm2.run:17"^(pnt_plc p)))
   )
 let rec asm_of_code tb a p0 (rv,rh) r0 c v0 =
-  Util.pnt true (
-    "enter asm_of_code"^
-    (print_asm a)^","^
-    (pnt_plc p0)^","^(pnt_reg r0)^"\n");
-  let _ = Core.Hashtbl.add tb ~key:v0 ~data:(p0,Ptr_Reg r0) in
+  (* Util.pnt true (
+     "enter asm_of_code"^
+     (print_asm a)^","^
+     (pnt_plc p0)^","^(pnt_reg r0)^"\n"); *)
+  let _ = Core.Hashtbl.add tb ~key:v0 ~data:(p0,r0) in
   let f0 = get_code c v0 in
   ( match f0 with
     | V_S (v1,v2) ->
@@ -559,7 +606,7 @@ let rec asm_of_code tb a p0 (rv,rh) r0 c v0 =
     | H_S (_,_) -> raise (Failure "vm2:a1")
     | E_S n1 ->
       let (p1,r2,_) = asm_of_tns_tl tb a p0 (rv,rh) r0 c n1 in
-      Util.pnt true "test1\n";
+      (* Util.pnt true "test1\n"; *)
       let _ = asm_add a p1 (Ret r2) in
       (plc_to p1)
     | P_S (_,_) -> raise (Failure "vm2:a2")
@@ -583,7 +630,7 @@ let rec asm_of_code tb a p0 (rv,rh) r0 c v0 =
     | F_S (_,_,_) -> raise (Failure "vm2:a4")
   )
 and asm_of_tns_tl tb a p0 (rv,rh) r0 c n0 =
-  Util.pnt true ("enter asm_of_tns_tl:"^(Print.print_tns_s n0)^"\n");
+  (* Util.pnt true ("enter asm_of_tns_tl:"^(Print.print_tns_s n0)^"\n"); *)
   ( match !n0 with
     | PL_x n1 ->
       let (np0,rr,_) = asm_of_tns_tl tb a p0 (rv,rh) r0 c n1 in
@@ -659,20 +706,20 @@ and asm_of_tns_tl tb a p0 (rv,rh) r0 c n0 =
       let r1 = add_k_r rv Tkn_Unt in
       let np = plc () in
       ( try
-          let (t2,p2) =
+          let (t2,r2) =
             ( match Core.Hashtbl.find tb q1 with
               | Some (p2,r2) -> (p2,r2)
               | _ -> raise (Failure "vm2.asm_of_tns_tl:0")) in
-          let _ = asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Fnc(t2,p2)),np)) in
+          let _ = asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Fnc(t2,r2)),np)) in
           (np,r1,None)
         with _ ->
           let p2 = plc () in
           let r2 = add_k_r rv Tkn_Unt in
           let _ = asm_of_code tb a p2 (rv,rh) r2 c q1 in
-          let _ = asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Fnc(p2,Ptr_Reg r2)),np)) in
+          let _ = asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Fnc(p2,r2)),np)) in
           (np,r1,None))
     | Z_x z ->
-      Util.pnt true "test0\n";
+      (* Util.pnt true "test0\n"; *)
       let r1 = add_k_r rv Tkn_Unt in
       let np = plc () in
       let _ = asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Z z),np)) in
