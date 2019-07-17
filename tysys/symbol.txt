@@ -152,3 +152,19 @@ horizontal while
 » r0 r1 .. rn ∎
 
 ⸡⸡⸠|||»»»⁅⁆⁅‹›⸡
+
+¶ reg ≃ ∐ ! & : reg
+¶ plc ≃ ∐ ! & : plc
+§§ vm2
+‹tkn›◃reg ; register space
+op◃plc ; operand space
+¶ op ≃ ∐ ! ⟦reg⟧ : ret ∐ ⟦reg] ⟦reg⟧ plc : op
+§§.
+
+§§ vm3
+‹tkn›◃(dℤ◂n')
+op◃(dℤ◂n')
+§§.
+
+{> `ℤ:x `ℤ:y `Z:z }
+x a ∀ {> `(x'→a'→a'):f `a':init `⟦x'⟧:data <}→a' : Lst.fld
