@@ -1,3 +1,4 @@
+(*
 open Types
 let err s = raise (Failure s)
 let opn_err e o =
@@ -7,39 +8,38 @@ let opn_err e o =
 let ( *| ) o e = opn_err e o
 let ( |+| ) a b = Array.append a b
 (* type plc = Plc of Sgn.t *)
+let unt () = Array.make 0 (fun _ -> ())
 type 'a rcd_ptn =
-  | P_Rc of 'a array
-  | P_Ro of 'a array * 'a
+  | P_Rc of ('a rcd_ptn) array
+  | P_Ro of ('a rcd_ptn ) array * 'a
   | P_A of 'a
 type plc = int * int
 type reg = int
 type reg_ptn = reg rcd_ptn
 type nd =
-  | Spt of regs * reg (* from heap to reg *)
-  | Cns of reg * regs (* from reg to heap *)
-  | Prj of int * reg * reg
+  | Id of reg_ptn * reg_ptn
+  | Prj of (int list) * reg_ptn * reg_ptn
   | Rm of reg
-  | Id_R of regs * reg
-  | Id_M of reg * reg
   | Agl of reg_ptn * reg_ptn * (int list) * (int array)
   | Call of reg_ptn * reg * reg_ptn
   | HCall of (src array) * ((reg * src) array)
   | Prd of reg * src * src * (plc array)
   | Nd_Clj of reg * src * src * plc
-  | Ini_Tkn of reg * tkn
+  | Ini of reg * tkn
 and src =
   | Src_Rcd of reg array
   | Src_Mno of reg
 and regs = reg array
-and asm = ( * (nd array)) array
+and asm = (reg_ptn * reg_ptn * (nd array)) array
+and rcd_tkn =
+  | Rcd_Rcd of rcd_tkn array
+  | Rcd_Tkn of tkn
 and tkn =
-  | Tkn_Unt
-  | Rcd of ptr array
   | Tkn_Stg of string
   | Tkn_Z of int
   | Tkn_Bol of bool
   | Tkn_Sgn of Sgn.t
-  | Tkn_CoP of int * ptr
+  | Tkn_CoP of int * (rcd_tkn)
   | Tkn_P of (plc array) * ptr * ptr
   | Tkn_Fnc of tkn_fnc
 and tkn_fnc =
@@ -52,15 +52,19 @@ and tkn_fnc =
   | Cho of int
   | Fix
   | Exn
-  | Fnc of plc (* jmp_ptr arg_ptr *)
-  | Clj of plc * ptr (* jmp_ptr arg0 { arg0 x } *)
+  | Fnc of int (* jmp_ptr arg_ptr *)
+  | Clj of int * (rcd_tkn) (* jmp_ptr arg0 { arg0 x } *)
 and ptr = tkn ref
-type st = (tkn option array) * (cs Stack.t)
+type tkn_ptn = tkn rcd_ptn
+type st = (rcd_tkn option array) * (cs Stack.t)
+and reg_ptr =
+  | Rp_A of int
+  | Rp_R of int
 and cs =
-  | CS of plc * src * st_h (* return-plc * return-reg *)
-  | CS_L of plc * src * st_h * (tkn option S_Ref.t)
-  | CS_R of plc * src * st_h * (tkn option S_Ref.t)
-and st_h = (reg * tkn) list
+  | CS of plc * reg_ptn * st_h (* return-plc * return-reg *)
+  | CS_L of plc * reg_ptn * st_h * (tkn option S_Ref.t)
+  | CS_R of plc * reg_ptn * st_h * (tkn option S_Ref.t)
+and st_h = (reg * tkn) list * ((reg * (rcd_tkn)) list)
 let get_r rv r =
   let k = rv.(r) in
   rv.(r)<-None;
@@ -80,16 +84,15 @@ let set_rs rv rs ks =
          | None -> ()
          | Some k -> set_r rv rs.(i) k))
     ks
-let rec free_r rv r = free_k rv (get_r rv r) *| "free_r 0"
-and free_p rv p = free_k rv !p
-and free_k rv k = k
+let free_r rv r = (get_r rv r) *| "free_r 0"
+and free_p rv p : tkn = !p
 let free_rs rv rs =
   let rl = Array.map (fun x -> free_r rv x) rs in
-  rl
+  rl (*
 let free_src rv s =
   ( match s with
     | Src_Mno r -> free_r rv r
-    | Src_Rcd rs -> free_rs rv rs )
+    | Src_Rcd rs -> free_rs rv rs ) *)
 let free_v rv =
   Array.mapi
     (fun i _ -> free_r rv i)
@@ -99,19 +102,121 @@ let alc_r rv =
     Array.fold_left
       (fun i k ->
          ( match i,k with
-           | Idx i,None -> `Alc i
-           | Idx i,Some _ -> `Idx (i+1)
+           | `Idx i,None -> `Alc i
+           | `Idx i,Some _ -> `Idx (i+1)
            | `Alc i,_ -> `Alc i ))
-      rv in
+      (`Idx 0) rv in
   ( match r with
-    | `Idx i -> (Array.append rv [|None|],i)
-    | `Alc i -> (rv,i))
+    | `Idx i -> rv := (Array.append !rv [|None|]); i
+    | `Alc i -> i )
 let add_r rv k =
   let (rv1,r) = alc_r rv in
   let _ = set_r rv1 r k in
   (rv1,r)
+let rec get_ptn (rv:rcd_tkn option array) rt rp ap ai =
+  ( match ai with
+    | `None ->
+      ( match rp with
+        | P_Rc as0 ->
+          Rcd_Rcd (Array.map (fun r -> get_ptn rv rt r ap `None) as0)
+        | P_Ro (as0,a1) ->
+          let (xs0,x1) = (
+            Array.map (fun r -> get_ptn rv rt r ap `None) as0,
+            get_r rt a1 *| "get_ptn 2") in
+          ( match x1 with
+            | Rcd_Rcd xt -> Rcd_Rcd (xs0 |+| xt)
+            | _ -> err "get_ptn 4" )
+        | P_A a0 -> (get_r rv a0 *| "get_ptn 3"))
+    | `Some [] ->
+      ( match rp with
+        | P_Rc _ -> err "get ptn 5"
+        | P_Ro _ -> err "get_ptn 6"
+        | P_A a0 ->
+          ( match get_r rv a0 *| "err 28" with
+            | Tkn_CoP(m1,p3) ->
+              let kx = p3 in
+              ap := m1; kx
+            | Tkn_Z z ->
+              if z=0 then ( ap := 0; Rcd_Rcd [| |] )
+              else ( ap:= 1; Rcd_Rcd [| |])
+            | _ -> err "err 19" )
+      )
+    | `Some (hd::tl) ->
+      ( match rp with
+        | P_Rc as0 ->
+          Rcd_Rcd ( Array.mapi
+                      (fun i r ->
+                         if i=hd then
+                           get_ptn rv rt r ap (`Some tl)
+                         else
+                           get_ptn rv rt r ap `None )
+                      as0 )
+        | P_Ro (as0,a1)->
+          let (xs0,x1) = (
+            ( Array.mapi
+                (fun i r ->
+                   if i=hd then
+                     get_ptn rv rt r ap (`Some tl)
+                   else
+                     get_ptn rv rt r ap `None )
+                as0 ),
+            get_r rt a1 *| "get_ptn 2") in
+          ( match x1 with
+            | Rcd_Rcd xt -> Rcd_Rcd (xs0 |+| xt)
+            | _ -> err "get_ptn 4" )
+        | _ -> err "get_ptn 6" )
+  )
+let rec alc_ptn rv rp =
+  ( match rp with
+    | P_A _ ->
+      let r = alc_r rv in
+      P_A r
+    | P_Rc rs ->
+      let (_,rs1) = Array.fold_left
+          (fun (i,rs1) ->
+             let r = alc_ptn rv rs.(i) in
+             (i+1,rs1 |+| r)) in
+      P_Rc rs1
+    | P_Ro (rs,rt) ->
+      let (_,rs1) = Array.fold_left
+          (fun (i,rs1) ->
+             let r = alc_ptn rv rs.(i) in
+             (i+1,rs1 |+| r)) in
+      let rt1 = alc_r rv in
+      P_Ro(rs1,rt1) )
+let rec set_ptn rv rp kp =
+  ( match rp,kp with
+    | P_A r,Rcd_Tkn k -> set_r rv r k
+    | P_Rc rs,Rcd_Rcd ks ->
+      let _ = Array.mapi (fun i r -> set_ptn rv r (ks.(i))) rs in
+      ()
+    | P_Ro (rs,r0),Rcd_Rcd ks ->
+      let l = Array.length rs in
+      let (ks0,ks1) = (BatArray.head ks l,BatArray.tail ks l) in
+      let _ = Array.mapi (fun i r -> set_ptn rv r ks0.(i)) rs in
+      set_r rv r0 (Rcd_Rcd ks1)
+    | _ -> err "set_ptn 0" )
+let rec add_ptn rv kp =
+  ( match kp with
+    | Rcd_Tkn k ->
+      let (rv,r) = (add_r rv k) in
+      (rv,P_A r)
+    | Rcd_Rcd ks ->
+      let (_,rv,rp) =
+        Array.fold_left
+          (fun (i,rv,rp) r ->
+             let (rv,ri) = add_ptn rv ks.(i) in
+             (i+1,rv,rp |+| ri))
+          (0,rv,[||]) ks in
+      (rv,P_Rc rp))
+let rec get_idx is kp =
+  ( match is,kp with
+    | [],_ -> kp
+    | hd::tl,Rcd_Rcd ps -> get_idx tl ps.(hd)
+    | _ -> err "get_idx" )
 let add_nd a n = Array.append a [|n|]
-let to_list rv =
+let clear_v v = Array.map (fun _ -> None) v
+let to_list rv rt =
   let (_,l) =
     Array.fold_left
       (fun (i,l) k ->
@@ -119,289 +224,117 @@ let to_list rv =
            | None -> (i+1,l)
            | Some k -> (i+1,(i,k)::l)))
       (0,[]) rv in
-  l
-let set_list_r rv l =
-  List.fold_left
-    (fun _ (r,k) -> set_r rv r k)
-    () l
-let rec run a p0 n0 rv cs =
-  let (rs0,ap0) = a.(p0) in
+  let (_,lt) =
+    Array.fold_left
+      (fun (i,l) k ->
+         ( match k with
+           | None -> (i+1,l)
+           | Some k -> (i+1,(i,k)::l)))
+      (0,[]) rt in
+  (l,lt)
+let set_list_r rv rt (l,lt) =
+  let _ = List.fold_left
+      (fun _ (r,k) -> set_r rv r k)
+      () l in
+  let _ = List.fold_left
+      (fun _ (r,k) -> set_r rt r k)
+      () lt in
+  ()
+let rec run a p0 n0 rv rt cs =
+  let (rs0,rd0,ap0) = a.(p0) in
   ( try
       let o0 = ap0.(n0) in
       ( match o0 with
-        | Id_M (r1,r2) ->
-          let k2 = (get_r rv r2) *| "run 0" in
-          let _ = set_r rv r1 k2 in
-          run a p0 (n0+1) rv cs
+        | Id (r1,r2) ->
+          let k2 = (get_ptn rv rt r2 (ref 0) `None) in
+          let _ = set_ptn rv rt r1 k2 in
+          run a p0 (n0+1) rv rt cs
         | Rm r0 ->
           let _ = free_r rv r0 in
-          run a p0 (n0+1) rv cs
-        | Agl_RM (rs0,r1,ps) ->
+          run a p0 (n0+1) rv rt cs
+        | Agl (rp1,rp2,is,ps) ->
           let m0 = ref 0 in
-          let k2 =
-            ( match get_r rv rs1.(i) *| "err 21" with
-              | Tkn_CoP(m1,p3) ->
-                let kx = free_p rv p3 *| "err 18" in
-                m0 := m1; kx
-              | Tkn_Z z ->
-                if z=0 then ( m0 := 0; Tkn_Unt)
-                else ( m0:=1; Tkn_Unt)
-              | _ -> err "err 19" ) in
-          let l = to_list rv in
-          let _ = set_rs rv 0 k2 in
-          Stack.push (CS((p0,n0+1),Src_Rcd rs0,l)) cs;
-          run a ps.(!m0) 0 rv cs
-        | Agl_MM (r0,r1,ps) ->
-          let m0 = ref 0 in
-          let k2 =
-            ( match get_r rv rs1.(i) *| "err 21" with
-              | Tkn_CoP(m1,p3) ->
-                let kx = free_p rv p3 *| "err 18" in
-                m0:=m1; kx
-              | Tkn_Z z ->
-                if z=0 then (m0:=0; Tkn_Unt)
-                else (m0:=1; Tkn_Unt)
-              | _ -> err "err 19" ) in
-          let l = to_list rv in
-          let _ = set_rs rv 0 k2 in
-          Stack.push (CS((p0,n0+1),Src_Mno r0,l)) cs;
-          run a ps.(!m0) 0 rv cs
-        | Agl_RR (rs0,rs1,j,ps) ->
-          let m0 = ref 0 in
-          let k2 =
-            Array.mapi
-              (fun i k ->
-                 if i=j then
-                   ( match get_r rv rs1.(i) *| "err 21" with
-                     | Tkn_CoP(m1,p3) ->
-                       let kx = free_p rv p3 *| "err 18" in
-                       m0 := m1; kx
-                     | Tkn_Z z ->
-                       if z=0 then ( m0 := 0; Tkn_Unt)
-                       else ( m0 := 1; Tkn_Unt)
-                     | _ -> err "err 19" )
-                 else
-                   (get_r rv rs1.(i)) *| "err 20" )
-              rs1 in
-          let l = to_list rv in
-          let _ = set_rs rv (Array.init (Array.length k2) (fun i -> i)) k2 in
-          Stack.push (CS((p0,n0+1),Src_Rcd rs0,l)) cs;
-          run a ps.(!m0) 0 rv cs
-        | Agl_MR (r0,rs1,j,ps) ->
-          let m0 = ref 0 in
-          let k2 =
-            Array.mapi
-              (fun i k ->
-                 if i=j then
-                   ( match get_r rv rs1.(i) *| "err 21" with
-                     | Tkn_CoP(m1,p3) ->
-                       let kx = free_p rv p3 *| "err 18" in
-                       m0 := m1; kx
-                     | Tkn_Z z ->
-                       if z=0 then ( m0 := 0; Tkn_Unt)
-                       else ( m0 := 1; Tkn_Unt)
-                     | _ -> err "err 19" )
-                 else
-                   free_k rv (get_r rv rs1.(i)) *| "err 20" )
-              rs1 in
-          let l = to_list rv in
-          let _ = set_rs rv (Array.init (Array.length k2) (fun i -> i)) k2 in
-          Stack.push (CS((p0,n0+1),Src_Mno r0,l)) cs;
-          run a ps.(!m0) 0 rv cs
-        | Call_MM(r0,rf,r1) ->
-          let k_f = get_r rv rf in
-          let kx = get_r rv r1 in
-          ( match k_f,kx with
-            | Some Tkn_Fnc Mns,Some Tkn_Z z ->
+          let kp = get_ptn rv rt rp2 m0 (`Some is) in
+          let l = to_list rv rt in
+          let (sp,dp,ax) = a.(ps.(!m0)) in
+          let _ = set_ptn rv rt sp kp in
+          Stack.push (CS((p0,n0+1),rp1,l)) cs;
+          run a ps.(!m0) 0 rv rt cs
+        | Call (rp0,r1,rp2) ->
+          let k_f = get_r rv r1 *| "err 23" in
+          let kx = (get_ptn rv rt rp2 (ref 0) `None) in
+          ( match rp0,k_f,kx with
+            | P_A r0,Tkn_Fnc Mns,Rcd_Tkn Tkn_Z z ->
               let _ = set_r rv r0 (Tkn_Z (-z)) in
-              run a p0 (n0+1) rv cs
-            | Some Tkn_Fnc Inj i,Some kx ->
-              let _ = set_r rv r0 (Tkn_CoP (i,Ptr_Hp (ref kx))) in
-              run a p0 (n0+1) rv cs
-            | Some Tkn_Fnc Cho _,_ -> err "err 7"
-            | Some Tkn_Fnc Exn,_ -> err "err 8"
-            | Some Tkn_Fnc Fix,_ -> err "err 9"
-            | Some Tkn_Fnc Fnc (pa,_),Some kx ->
-              let kx = free_k rv kx in
-              let l = to_list rv in
-              let _ = set_r rv 0 kx in
-              Stack.push (CS((p0,n0+1),Src_Mno r0,l)) cs;
-              (* Util.pnt dbg ("call : "^(pnt_plc t0)^","
-                             ^(pnt_reg r0)^","^
-                             (print_k_rcd k0)^"\n"); *)
-              run a pa 0 rv cs
-            | Some Tkn_Fnc Clj ((pa,_),l0),Some kx ->
-              let kx = free_k rv kx in
-              let kx0 = free_p rv l0 in
-              let l = to_list rv in
-              let _ = set_r rv 0 kx0 in
-              let _ = set_r rv 1 kx in
-              Stack.push (CS((p0,n0+1),Src_Mno r0,l)) cs;
-              run a pa 0 rv cs
-            | _ -> err "err 8" )
-        | Call_MR (r0,rf,rs1) ->
-          let k_f = get_r rv rf in
-          let ks = get_rs rv rs1 in
-          let kl = Array.to_list ks in
-          ( match k_f,kl with
-            | Some Tkn_Fnc Pls,(Some Tkn_Z z1)::(Some Tkn_Z z2)::[] ->
+              run a p0 (n0+1) rv rt cs
+            | P_A r0,Tkn_Fnc Inj i,kx ->
+              let _ = set_r rv r0 (Tkn_CoP (i,kx)) in
+              run a p0 (n0+1) rv rt cs
+            | _,Tkn_Fnc Cho _,_ -> err "err 7"
+            | _,Tkn_Fnc Exn,_ -> err "err 8"
+            | _,Tkn_Fnc Fix,_ -> err "err 9"
+            | _,Tkn_Fnc Fnc pa,kx ->
+              let l = to_list rv rt in
+              let (sp,_,_) = a.(pa) in
+              let _ = set_ptn rv rt sp kx in
+              Stack.push (CS((p0,n0+1), rp0,l)) cs;
+              run a pa 0 rv rt cs
+            | _,Tkn_Fnc Clj (pa,l0),kx -> err "run 3"
+            | P_A r0,Tkn_Fnc Pls,Rcd_Rcd [|(Rcd_Tkn Tkn_Z z1);(Rcd_Tkn Tkn_Z z2)|] ->
               let _ = set_r rv r0 (Tkn_Z (z1+z2)) in
-              run a p0 (n0+1) rv cs
-            | Some Tkn_Fnc Mlt,(Some Tkn_Z z1)::(Some Tkn_Z z2)::[] ->
+              run a p0 (n0+1) rv rt cs
+            | P_A r0,Tkn_Fnc Mlt,Rcd_Rcd [|(Rcd_Tkn Tkn_Z z1);(Rcd_Tkn Tkn_Z z2)|] ->
               let _ = set_r rv r0 (Tkn_Z (z1*z2)) in
-              run a p0 (n0+1) rv cs
-            | Some Tkn_Fnc Cmp,(Some Tkn_Z z1)::(Some Tkn_Z z2)::[] ->
+              run a p0 (n0+1) rv rt cs
+            | P_A r0,Tkn_Fnc Cmp,Rcd_Rcd [|(Rcd_Tkn Tkn_Z z1);(Rcd_Tkn Tkn_Z z2)|] ->
               let b = if z1<=z2 then 1 else 0 in
               let _ = set_r rv r0 (Tkn_Z b) in
-              run a p0 (n0+1) rv cs
-            | Some Tkn_Fnc Eq,(Some x)::(Some y)::[] ->
-              let (kx,ky) = (free_k rv x,free_k rv y) in
-              let b = if kx=ky then 1 else 0 in
+              run a p0 (n0+1) rv rt cs
+            | P_A r0,Tkn_Fnc Eq,Rcd_Rcd [|x;y|] ->
+              let b = if x=y then 1 else 0 in
               let _ = set_r rv r0 (Tkn_Z b) in
-              run a p0 (n0+1) rv cs
-            | Some Tkn_Fnc Fnc (pa,_),_ ->
-              let k2 = Array.map
-                  (fun k ->
-                     match k with
-                     | None -> None
-                     | Some k -> Some (free_k rv k))
-                  ks in
-              let l = to_list rv in
-              let _ = set_rs rv (Array.init (Array.length k2) (fun i -> i)) k2 in
-              Stack.push (CS((p0,n0+1),Src_Mno r0,l)) cs;
-              (* Util.pnt dbg ("call : "^(pnt_plc t0)^","
-                             ^(pnt_reg r0)^","^
-                             (print_k_rcd k0)^"\n"); *)
-              run a pa 0 rv cs
-            | _ -> err "err 8" )
-        | Call_RM (rs0,rf,r1) ->
-          let k_f = get_r rv rf in
-          let k1 = get_r rv r1 in
-          ( match k_f,k1 with
-            | Some Tkn_Fnc Fnc (pa,_),Some kx ->
-              let kx = free_k rv kx in
-              let l = to_list rv in
-              let _ = set_r rv 0 kx in
-              Stack.push (CS((p0,n0+1),Src_Rcd rs0,l)) cs;
-              (* Util.pnt dbg ("call : "^(pnt_plc t0)^","
-                             ^(pnt_reg r0)^","^
-                             (print_k_rcd k0)^"\n"); *)
-              run a pa 0 rv cs
-            | Some Tkn_Fnc Clj ((pa,_),l0),Some kx ->
-              let kx = free_k rv kx in
-              let kx0 = free_p rv l0 in
-              let l = to_list rv in
-              let _ = set_r rv 0 kx0 in
-              let _ = set_r rv 1 kx in
-              Stack.push (CS((p0,n0+1),Src_Rcd rs0,l)) cs;
-              run a pa 0 rv cs
-            | _ -> err "err 8" )
-        | Call_RR (rs0,rf,rs1) ->
-          let k_f = get_r rv rf in
-          let ks = get_rs rv rs1 in
-          ( match k_f,ks with
-            | Some Tkn_Fnc Fnc (pa,_),_ ->
-              let k2 = Array.map
-                  (fun k ->
-                     match k with
-                     | None -> None
-                     | Some k -> Some (free_k rv k))
-                  ks in
-              let l = to_list rv in
-              let _ = set_rs rv (Array.init (Array.length k2) (fun i -> i)) k2 in
-              Stack.push (CS((p0,n0+1),Src_Rcd rs0,l)) cs;
-              (* Util.pnt dbg ("call : "^(pnt_plc t0)^","
-                             ^(pnt_reg r0)^","^
-                             (print_k_rcd k0)^"\n"); *)
-              run a pa 0 rv cs
-            | _ -> err "err 8" )
+              run a p0 (n0+1) rv rt cs
+            | _ -> err "err 38"
+          )
         | HCall (_,_) ->
           (* let (y1,y2) = (sgn(),sgn()) in
              let (kf1,kx1,kf2,kx2) = (get_k v f1,get_k *) raise (Failure "vm1.run:7")
         | Prd (r0,rs1,rs2,ps) -> err "err 10"
         | Nd_Clj (r0,rs1,rs2,p0) -> err "err 11"
-        | Cns (r0,rs1) ->
-          let rp1 = Array.map (fun r -> Ptr_Reg r) rs1 in
-          let _ = set_r rv r0 (Rcd rp1) in
-          run a p0 (n0+1) rv cs
-        | Ini_Tkn (r0,k) ->
+        | Ini (r0,k) ->
           let _ = set_r rv r0 k in
-          run a p0 (n0+1) rv cs
-        | Id_R (rs0,r2) ->
-          let k0 = get_r rv r2 in
-          let _ = Array.map (fun r -> set_r rv r k0) rs0 in
-          run a p0 (n0+1) rv cs
-        | Spt(rs1,r2) ->
-          let k0 = get_r rv r2 in
-          ( match k0 with
-            | Some Rcd c ->
-              let _ =
-                Array.mapi
-                  (fun i p ->
-                     let k = get_p rv p in
-                     ( match k with
-                       | None -> err "err 11"
-                       | Some k ->
-                         set_r rv rs1.(i) k ))
-                  c in
-              run a p0 (n0+1) rv cs
-            | _ -> err "err 12" )
+          run a p0 (n0+1) rv rt cs
         | Prj(i,r1,r2) ->
-          let k0 = get_r rv r2 in
-          ( match k0 with
-            | Some Rcd c ->
-              let k = get_p rv c.(i) in
-              ( match k with
-                | None -> err "err 11"
-                | Some k ->
-                  set_r rv r1 k;
-                  run a p0 (n0+1) rv cs )
-            | _ -> err "err 12" )
+          let k0 = get_ptn rv rt r2 (ref 0) `None in
+          let ki = get_idx i k0 in
+          let _ = set_ptn rv rt r1 ki in
+          run a p0 (n0+1) rv rt cs
+      )
     with _ ->
-      ( match rs0 with
-        | Src_Mno r0 ->
-          let k0 = free_r rv r0 in
-          let _ = free_v rv in
-          if (Stack.is_empty cs) then k0
-          else
-            let hd = Stack.pop cs in
-            ( match hd with
-              | CS ((p0,n0),Src_Mno r1,l) ->
-                set_list_r rv l;
-                let _ = set_r rv r1 k0 in
-                run a p0 n0 rv cs
-              | CS_A ((p0,n0),Src_Mno r1) ->
-                let _ = set_r rv r1 k0 in
-                run a p0 n0 rv cs
-              | _ -> raise (Failure "vm1.run:0")
-            )
-        | Src_Rcd rs0 ->
-          let ks0 = free_rs rv rs0 in
-          let _ = free_v rv in
-          if (Stack.is_empty cs) then Rcd (Array.map (fun k -> Ptr_Hp (ref k)) ks0)
-          else
-            let hd = Stack.pop cs in
-            ( match hd with
-              | CS ((p0,n0),Src_Rcd rs1,l) ->
-                set_list_r rv l;
-                let _ = set_rs rv rs1 (Array.map (fun x -> Some x) ks0) in
-                run a p0 n0 rv cs
-              | CS_A ((p0,n0),Src_Rcd rs1) ->
-                let _ = set_rs rv rs1 (Array.map (fun x -> Some x) ks0) in
-                run a p0 n0 rv cs
-              | _ -> err "err 16"
-            )      )
+      (
+        let k0 = get_ptn rv rt rs0 (ref 0) `None in
+        let hd = Stack.pop cs in
+        ( match hd with
+          | CS ((p0,n0),r1,l) ->
+            set_list_r rv rt l;
+            let _ = set_ptn rv rt r1 k0 in
+            run a p0 n0 rv rt cs
+          | _ -> raise (Failure "vm1.run:0")
+        )
+      )
   )
-
 type code =
   | V of code * code
   | H of code array
-  | E of exp rcd_ptn
-  | P of exp * (code array)
-  | A of (exp rcd_ptn) * (int list) * (code array)
-  | F of exp * int * code
+  | E of exp_ptn
+  | P of exp_ptn * (code array)
+  | A of (exp_ptn) * (int list) * (code array)
+  | F of exp_ptn * int * code
+and exp_ptn =
+  | Exp_Rcd of exp_ptn array
+  | Exp_Atm of exp
 and exp =
-  | Prj of int * exp
+  | Prj of int * exp_ptn
   | Inj of int
   | Cho of int
   | Rot
@@ -409,7 +342,7 @@ and exp =
   | Atm of atm
   | Z of int
   | Stg of string
-  | App of exp * exp
+  | App of exp * exp_ptn
 and atm =
   | Pls
   | Mlt
@@ -421,93 +354,132 @@ and atm =
   | Etr of name
 and name = string
 and asm_name = (int, (src * (nd array))) Hashtbl.t
-let rec asm_of_code tb a p0 rv r0 c =
-  (* Util.pnt true (
-     "enter asm_of_code"^
-     (print_asm a)^","^
-     (pnt_plc p0)^","^(pnt_reg r0)^"\n"); *)
+module Net = struct
+  type nd =
+    | Id of reg_ptn * reg_ptn
+    | Prj of (int list) * reg_ptn * reg_ptn
+    | Rm of reg
+    | Agl of reg_ptn * reg_ptn * (int list) * (pt array)
+    | Call of reg_ptn * reg * reg_ptn
+    | HCall of (src array) * ((reg * src) array)
+    | Prd of reg * reg_ptn * reg_ptn * (pt array)
+    | Nd_Clj of reg * reg_ptn * reg_ptn * pt
+    | Ini of reg * tkn
+  and regs = reg array
+  and pt_nd = Ret of reg_ptn | Nxt of nd * pt
+  and pt = pt_nd ref
+end
+let rec net_of_code tb a p0 (rv,rh) r0 c =
   let _ = Core.Hashtbl.add tb ~key:v0 ~data:(p0,r0) in
-  let f0 = get_code c v0 in
-  ( match f0 with
+  ( match c with
     | V (v1,v2) ->
-      let (a1,s1) = asm_of_code tb a rv r0 v1 in
-      let (a2,s2) = asm_of_code tb a rv s1 v2 in
-      (a2,s2)
-    | H _ -> err "vm2:a1"
-    | E_M e1 ->
-      let (a1,r1,_) = asm_of_exp tb a p0 rv r0 e1 in
-      (a1,r1)
+      let (pm0,pm1,_) = net_of_code tb a p0 (rv,rh) r0 v1 in
+      ( match !pm1 with
+        | Ret r1 ->
+          let (pm2,pm3) = net_of_code tb a (rv,rh) r1 v2 in
+          pm1 := !pm2;
+          (pm0,pm3)
+        | _ -> err "net_of_code 0")
+    | H (_,_) -> raise (Failure "vm2:a1")
+    | E n1 ->
+      let (p1,p2,_) = net_of_exp tb a (rv,rh) r0 n1 in
+      (p1,p2)
     | P (_,_) -> raise (Failure "vm2:a2")
-    | A (n1,l) ->
-      (* Util.pnt true "vm2:d1\n"; *)
-      let (p1,r1,ra) = asm_of_exp tb a rv r0 n1 in
-      ( match r1,ra with
-        | Src_Mno r1,Some ra ->
-          (* Util.pnt true "vm2:d0\n"; *)
-          let ps = List.map (fun _ -> plc ()) l in
-          let pa = Array.of_list ps in
-          let r2 = add_r rv Tkn_Unt in
-          let np = plc () in
-          let _ = asm_add a p1 (Agl(r2,ra,pa)) in
-          let lp = List.combine ps l in
-          let _ = List.map (fun (pf,f) -> asm_of_code tb a pf (rv,rh) r1 c f) lp in
-          let _ = asm_add a np (Ret r2) in
-          (plc_to np)
-        | _ -> raise (Failure "vm2:a3")
-      )
+    | A (n1,ix,l) ->
+      let (p1,p2) = net_of_exp tb am rv r0 n1 in
+      let ai = ref 0 in
+      let kp = get_ptn rv rt r1 ai (`Some ix) in
+      let rvc = clear (Array.copy rv) in
+      let (rvc1,rp) = add_ptn rvc kp in
+      let la = Array.map
+          (fun c ->
+             let rvc = clear (Array.copy rv) in
+             let (rvc1,rp) = add_ptn rvc kp in
+             net_of_code tb a (rvc1,rh) rp c ) in
+      let (p0_1,p0_2) = la.(0) in
+      ( match !p0_2,!p2 with
+        | Ret rp,Ret rp2 ->
+          let rp1 = alc_ptn rv rp in
+          let p3 = ref (Ret rp1) in
+          p4 := Nxt(Agl(rp1,rp2,ix,Array.map fst la),p3);
+          (p1,p4)
+        | _ -> err "err 45" )
     | F_S (_,_,_) -> raise (Failure "vm2:a4")
   )
-and asm_of_exp tb rv r0 n0 =
+and asm_of_rm rv rp =
+  ( match rp with
+    | P_Rc rs ->
+      Array.fold_left
+        (fun a r ->
+           let a1 = asm_of_rm rv r in
+           a |+| a1 )
+        (unt ()) rs
+    | P_Ro (rs,rt) ->
+      let a1 =
+        Array.fold_left
+          (fun a r ->
+             let a1 = asm_of_rm rv r in
+             a |+| a1 )
+          (unt ()) rs in
+      let a2 = [|Rm(rt)|] in
+      a1 |+| a2
+    | P_A r -> [|Rm(r)|]
+  )
+and asm_of_exp tb rv rt r0 n0 =
   (* Util.pnt true ("enter asm_of_tns_tl:"^(Print.print_tns_s n0)^"\n"); *)
   ( match !n0 with
     | Prj (i,n1) ->
-      let (a1,rr,_) = asm_of_exp tb rv r0 n1 in
-      ( match rr with
-        | Src_Mno r ->
-          let _ = free_r rv r
-        let (rv,r1) = add_r rv Tkn_Unt in
-        let a2 = a1 |+| [|Prj(r1,i,r)|] in
-        (a2,rv,r1,None)
-      | Src_Rcd rs ->
-        let (a1,_) =
-          Array.fold_left
-            (fun (a,j) r ->
-               if i=j then (a,j+1)
-               else
-                 let _ = free_r rv r in
-                 let a1 = a |+| [|Rm(r)|] in
-                 (a1,j+1))
-            rs in
-        (a1,rv,rs.(i),None)
-      | Inj i ->
-        ( match r0 with
-          | Src_Mno r0 ->
-            let _ = free_r rv r0 in
-            let (rv,r1) = add_r rv Tkn_Unt in
-            let o1 = Ini_Tkn(r1,Tkn_Fnc (Inj i)) in
-            ([|o1|],rv,r1,None)
-          | Src_Rcd rs ->
-            let _ = free_rs rv rs in
-            let r1 = add_r rv Tkn_Unt in
-            let o1 = Ini_Tkn(r1,Tkn_Fnc (Inj i)) in
-            ([|o1|],rv,r1,None))
-      | Cho i -> err "err 23"
-      | Agl n1 ->
-        let (p1,r2,_) = asm_of_tns_tl tb a p0 (rv,rh) r0 c n1 in
-        (p1,r2,Some r2)
-      | Rot ->
-        let r1 = add_k_r rv Tkn_Unt in
-        let np = plc () in
-        let _ = asm_add a p0 (Op(Id(r1,r0),np)) in
-        let _ = free_r (rv,rh) r0 in
-        (* Util.pnt true "test0\n"; *)
-        (np,r1,None)
-      | Unt ->
-        let r1 = add_k_r rv Tkn_Unt in
-        let np = plc () in
-        let _ = asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Unt),np)) in
-        (np,r1,None)
-      | Plg q1 when q1=nd_pls ->
+      let (p1,p2) = asm_of_exp tb rv r0 n1 in
+      ( match r1 with
+        | P_Rc ps ->
+          let (a2,_) =
+            Array.fold_left
+              (fun (a,j) r ->
+                 if i=j then (a,j+1)
+                 else
+                   let _ = free_ptn rv r in
+                   let a1 = asm_of_rm rv r in
+                   (a |+| a1,j+1))
+              rs in
+          (a1 |+| a2,rv,rt,ps.(i),None)
+        | P_Ro (ps,r0) ->
+          let (a2,_) =
+            Array.fold_left
+              (fun (a,j) r ->
+                 if i=j then (a,j+1)
+                 else
+                   let _ = free_ptn rv1 r in
+                   let a1 = asm_of_rm rv1 r in
+                   (a |+| a1,j+1))
+              rs in
+          let _ = free_r rv1 r0 in
+          let a3 = [|Rm r0|] in
+          (a1 |+| (a2 |+| a3),rv1,ps.(i),None)
+        | P_A r0 ->
+          let _ = free_r rv1 r0 in
+          let (rv2,r1) = add_r rv1 Tkn_Unt in
+          (a1 |+| (Prj(i,r1,r0)),rv2,P_A r1,None)
+      )
+    | Inj i ->
+      ( match r0 with
+        | Src_Mno r0 ->
+          let _ = free_r rv r0 in
+          let (rv,r1) = add_r rv Tkn_Unt in
+          let o1 = Ini_Tkn(r1,Tkn_Fnc (Inj i)) in
+          ([|o1|],rv,r1,None)
+        | Src_Rcd rs ->
+          let _ = free_rs rv rs in
+          let r1 = add_r rv Tkn_Unt in
+          let o1 = Ini_Tkn(r1,Tkn_Fnc (Inj i)) in
+          ([|o1|],rv,r1,None))
+    | Cho i -> err "err 23"
+    | Rot ->
+      (ref (Ret r0),ref (Ret r0))
+    | Unt ->
+      let r1 = add_r rv Tkn_Unt in
+      let p1 =  Ini (r1,Tkn_Unt) in
+      (ref p1,ref (Ret (P_A r1)))
+    | Plg q1 when q1=nd_pls ->
       let r1 = add_k_r rv Tkn_Unt in
       let np = plc () in
       let _ = asm_add a p0 (Op(Ini_Tkn(r1,Tkn_Pls),np)) in
@@ -595,3 +567,4 @@ and asm_of_exp tb rv r0 n0 =
       let _ = free_r (rv,rh) nr2 in
       (p3,r4,None)
   )
+*)

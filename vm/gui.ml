@@ -362,7 +362,7 @@ let main () =
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let insert s = buffer#insert ~iter:!iter s in
     let insert_arr () = buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» " in
-    insert (Print.print_tkn_s (let (_,_,st) = !st in st));
+    insert (Vmr.print_rcd_tkn (let (_,_,st) = !st in st));
     insert_arr ();
     let mark_start = ref (buffer#create_mark !iter) in
     let key_press k =
@@ -591,8 +591,8 @@ let main () =
       ~callback:(fun s ->
           match s with
           | `MODULE_IMPORT ->
-            let ((g,y,v),(_,_,g0)) = (!st,!mdl) in
-            st := (g0@g,y,v);
+            let ((_,y,v),(_,_,g0)) = (!st,!mdl) in
+            st := (g0,y,v);
             global_signal#call `MODULE_IMPORT
           | `OPEN_FILE ->  open_file ()
         ) in

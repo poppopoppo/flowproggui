@@ -218,58 +218,58 @@ typ_def:
 stt_code:
   | vh_frm_top code {
       match $2 with
-      | None -> Code_Exp $1
-      | Some x -> Seq (Code_Exp $1,x) }
+      | None -> C_E $1
+      | Some x -> C_V (C_E $1,x) }
   | L_HLZ h_frm_list R_HLZ tail {
     match $4 with
-    | None -> Canon $2
-    | Some x -> Seq(Canon $2,x)
+    | None -> C_H $2
+    | Some x -> C_V(C_H $2,x)
   }
   | vh_frm_top code_coprd_list COPRD_END tail {
-    let c = Code_CoPrd($1,$2) in
+    let c = C_CoP($1,$2) in
     match $4 with
     | None -> c
-    | Some x -> Seq(c,x)
+    | Some x -> C_V(c,x)
    }
   | vh_frm_top code_prd_list PRD_END tail {
-    let c = Code_Prd($1,$2) in
+    let c = C_P($1,$2) in
     match $4 with
     | None -> c
-    | Some x -> Seq(c,x)
+    | Some x -> C_V(c,x)
   }
   | vh_frm_top IN stt_code eop tail {
-    let c = Code_IO($1,$2,$3) in
+    let c = C_IO($1,$2,$3) in
     match $5 with
       | None -> c
-      | Some x -> (Seq(c,x)) }
+      | Some x -> (C_V(c,x)) }
   ;
 code:
   | eop tail { $2 }
   | ARR vh_frm_top code {
     ( match $3 with
-      | None -> Some (Code_Exp $2)
-      | Some x -> Some (Seq (Code_Exp $2,x)) ) }
+      | None -> Some (C_E $2)
+      | Some x -> Some (C_V (C_E $2,x)) ) }
   | ARR L_HLZ h_frm_list R_HLZ tail {
     ( match $5 with
-      | None -> Some (Canon $3)
-      | Some x -> Some (Seq(Canon $3,x))
+      | None -> Some (C_H $3)
+      | Some x -> Some (C_V(C_H $3,x))
       )
   }
   | ARR vh_frm_top code_coprd_list COPRD_END tail {
-    let c = Code_CoPrd($2,$3) in
+    let c = C_CoP($2,$3) in
     match $5 with
     | None -> Some c
-    | Some x -> Some (Seq(c,x)) }
+    | Some x -> Some (C_V(c,x)) }
   | ARR vh_frm_top code_prd_list PRD_END tail {
-    let c = Code_Prd($2,$3) in
+    let c = C_P($2,$3) in
     match $5 with
     | None -> Some c
-    | Some x -> Some (Seq(c,x))  }
+    | Some x -> Some (C_V(c,x))  }
   | ARR vh_frm_top IN stt_code eop tail {
-    let c = Code_IO($2,$3,$4) in
+    let c = C_IO($2,$3,$4) in
     match $6 with
       | None -> Some c
-      | Some x -> Some (Seq(c,x)) }
+      | Some x -> Some (C_V(c,x)) }
   ;
 eop:
   | EOP {}

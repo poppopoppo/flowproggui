@@ -172,12 +172,12 @@ and etr = string * mdl_scm_hd * tm * tm * code
 (* <name> : [scm_hd]∀ <src> ⊢ <dst> ≒ <code> *)
 and gl_st = glb_etr list
 and code =
-  | Code_Exp of exp
-  | Seq of code * code
-  | Canon of (code list)
-  | Code_CoPrd of exp * (code list)
-  | Code_Prd of exp * (code list)
-  | Code_IO of exp * int * code
+  | C_E of exp
+  | C_V of code * code
+  | C_H of (code list)
+  | C_CoP of exp * (code list)
+  | C_P of exp * (code list)
+  | C_IO of exp * int * code
 and exp = tm * opr * ((name * opr) list)
 and opr =
   | Agl of opr

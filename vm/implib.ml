@@ -1,16 +1,17 @@
+open Print
 open Types
 open Ty
-open Vm_r0
-type t = gl_st * tm * tkn
+open Vmr
+type t = gl_st * tm * rcd_tkn
 let string_of_t b (g,y,t) =
   let p1 = "global state: "^(Print.string_of_gl_st g) in
-  let p2 = "\nstate: `"^(Print.print_tm y)^" : "^(print_tkn_s t) in
+  let p2 = "\nstate: `"^(Print.print_tm y)^" : "^(print_rcd_tkn t) in
   if b then p1^p2 else p2
 let evo ((g,src,v):t) (b:Types.buffer) : t =
   (try
      ( match b with
        | Types.Evo e ->
-         Util.pnt false (Print.print_nd e);
+         Util.pnt true (string_of_opr e);
          let (_,dst) = (vsgn(),vsgn()) in
          let (_,gv) = typing_mdl ("M",[],g) in
          let (b1,_) =
@@ -18,8 +19,14 @@ let evo ((g,src,v):t) (b:Types.buffer) : t =
                Ty.typing_nd (typ_env,gv)
                  typ_env StgMap.empty (nd_of_opr e) (SgnMap.empty,src) dst
              with Failure e -> raise (Failure e)) in
-         let (c1,p) = Imp.mk_code g (E e) in
-         let et = (c1,p,v) in
+         Util.pnt dbg "test x0\n";
+         let nm = net_of_g g in
+         Util.pnt dbg ("test x1: "^(print_g nm)^"\n");
+         let r0 = reg () in
+         let (p0,_) = net_of_exp_ptn nm (P_A r0) (code_of_nd (ref []) [] e) in
+         let et = (p0,r0,v) in
+         Util.pnt true (print_asm "" p0);
+         Util.pnt true "test x3";
          let fd = Unix.fork () in
          ( match fd with
            | 0 ->
@@ -41,7 +48,7 @@ let evo ((g,src,v):t) (b:Types.buffer) : t =
                 with _ -> raise (Failure "err1.1"));
               exit 0 *)
            | _ ->
-             Util.pnt true "fd=child\n";
+             Util.pnt true "fd=child ;;\n";
              let (_,x) = Unix.wait () in
              ( match x with
                | WEXITED 0 ->
@@ -66,7 +73,7 @@ let evo ((g,src,v):t) (b:Types.buffer) : t =
    | Not_found -> raise (Failure "Implib:evo:Not_found")
   )
 
-let init_st = ([],vsgn(),Types.TknS_Stg "{}")
+let init_st = ([],vsgn(),Rcd_Rcd [||])
 type ast_return =
   | Ast_Some of Types.buffer
   | Ast_Fail of string

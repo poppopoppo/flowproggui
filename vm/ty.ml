@@ -567,17 +567,17 @@ and typing_nd (g:typ_env*mdl_glb) tg gv (e:nd) r d : (cxt * typ_gma)=
   q
 let rec vh_of_code c =
   ( match c with
-    | Code_Exp (_,e,_) -> E (nd_of_opr e)
-    | Seq (c1,c2) -> V (vh_of_code c1,vh_of_code c2)
-    | Canon l -> List.fold_right (fun x r -> H(vh_of_code x,r)) l id
-    | Code_Prd ((_,e1,_),l) ->
+    | C_E (_,e,_) -> E (nd_of_opr e)
+    | C_V (c1,c2) -> V (vh_of_code c1,vh_of_code c2)
+    | C_H l -> List.fold_right (fun x r -> H(vh_of_code x,r)) l id
+    | C_P ((_,e1,_),l) ->
       P(nd_of_opr e1,List.map vh_of_code l)
-    | Code_CoPrd((_,e1,_),l) ->
+    | C_CoP((_,e1,_),l) ->
       ( match agl e1 with
         | None -> raise (Failure "vh_of_code:3")
         | Some p -> A(nd_of_opr e1,p,List.map vh_of_code l)
       )
-    | Code_IO ((_,e1,_),i,c1) -> F(nd_of_opr e1,i,vh_of_code c1)
+    | C_IO ((_,e1,_),i,c1) -> F(nd_of_opr e1,i,vh_of_code c1)
   )
 and nd_of_opr o =
   match o with

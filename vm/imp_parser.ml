@@ -655,8 +655,8 @@ and _menhir_goto_code : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_code ->
 # 248 "imp_parser.mly"
                         (
     ( match _3 with
-      | None -> Some (Code_Exp _2)
-      | Some x -> Some (Seq (Code_Exp _2,x)) ) )
+      | None -> Some (C_E _2)
+      | Some x -> Some (C_V (C_E _2,x)) ) )
 # 661 "imp_parser.ml"
          in
         _menhir_goto_code _menhir_env _menhir_stack _menhir_s _v) : 'freshtv924)) : 'freshtv926)
@@ -691,8 +691,8 @@ and _menhir_goto_code : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_code ->
 # 219 "imp_parser.mly"
                     (
       match _2 with
-      | None -> Code_Exp _1
-      | Some x -> Seq (Code_Exp _1,x) )
+      | None -> C_E _1
+      | Some x -> C_V (C_E _1,x) )
 # 697 "imp_parser.ml"
          in
         _menhir_goto_stt_code _menhir_env _menhir_stack _menhir_s _v) : 'freshtv932)) : 'freshtv934)
@@ -719,8 +719,8 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
 # 252 "imp_parser.mly"
                                     (
     ( match _5 with
-      | None -> Some (Canon _3)
-      | Some x -> Some (Seq(Canon _3,x))
+      | None -> Some (C_H _3)
+      | Some x -> Some (C_V(C_H _3,x))
       )
   )
 # 727 "imp_parser.ml"
@@ -752,10 +752,10 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
         let _v : 'tv_code = 
 # 268 "imp_parser.mly"
                                         (
-    let c = Code_IO(_2,_3,_4) in
+    let c = C_IO(_2,_3,_4) in
     match _6 with
       | None -> Some c
-      | Some x -> Some (Seq(c,x)) )
+      | Some x -> Some (C_V(c,x)) )
 # 760 "imp_parser.ml"
          in
         _menhir_goto_code _menhir_env _menhir_stack _menhir_s _v) : 'freshtv892)) : 'freshtv894)
@@ -790,10 +790,10 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
         let _v : 'tv_code = 
 # 263 "imp_parser.mly"
                                               (
-    let c = Code_Prd(_2,_3) in
+    let c = C_P(_2,_3) in
     match _5 with
     | None -> Some c
-    | Some x -> Some (Seq(c,x))  )
+    | Some x -> Some (C_V(c,x))  )
 # 798 "imp_parser.ml"
          in
         _menhir_goto_code _menhir_env _menhir_stack _menhir_s _v) : 'freshtv900)) : 'freshtv902)
@@ -824,10 +824,10 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
         let _v : 'tv_code = 
 # 258 "imp_parser.mly"
                                                   (
-    let c = Code_CoPrd(_2,_3) in
+    let c = C_CoP(_2,_3) in
     match _5 with
     | None -> Some c
-    | Some x -> Some (Seq(c,x)) )
+    | Some x -> Some (C_V(c,x)) )
 # 832 "imp_parser.ml"
          in
         _menhir_goto_code _menhir_env _menhir_stack _menhir_s _v) : 'freshtv904)) : 'freshtv906)
@@ -856,10 +856,10 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
         let _v : 'tv_stt_code = 
 # 240 "imp_parser.mly"
                                     (
-    let c = Code_IO(_1,_2,_3) in
+    let c = C_IO(_1,_2,_3) in
     match _5 with
       | None -> c
-      | Some x -> (Seq(c,x)) )
+      | Some x -> (C_V(c,x)) )
 # 864 "imp_parser.ml"
          in
         _menhir_goto_stt_code _menhir_env _menhir_stack _menhir_s _v) : 'freshtv908)) : 'freshtv910)
@@ -877,10 +877,10 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
         let _v : 'tv_stt_code = 
 # 234 "imp_parser.mly"
                                           (
-    let c = Code_Prd(_1,_2) in
+    let c = C_P(_1,_2) in
     match _4 with
     | None -> c
-    | Some x -> Seq(c,x)
+    | Some x -> C_V(c,x)
   )
 # 886 "imp_parser.ml"
          in
@@ -911,10 +911,10 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
         let _v : 'tv_stt_code = 
 # 228 "imp_parser.mly"
                                               (
-    let c = Code_CoPrd(_1,_2) in
+    let c = C_CoP(_1,_2) in
     match _4 with
     | None -> c
-    | Some x -> Seq(c,x)
+    | Some x -> C_V(c,x)
    )
 # 920 "imp_parser.ml"
          in
@@ -935,8 +935,8 @@ and _menhir_goto_tail : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_tail ->
 # 223 "imp_parser.mly"
                                 (
     match _4 with
-    | None -> Canon _2
-    | Some x -> Seq(Canon _2,x)
+    | None -> C_H _2
+    | Some x -> C_V(C_H _2,x)
   )
 # 942 "imp_parser.ml"
          in
