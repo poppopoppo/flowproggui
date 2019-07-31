@@ -134,21 +134,21 @@ let print_typ_gma (g:typ_gma) : string =
 
 let rec string_of_code d x =
   match x with
-  | Seq (c1,Code_Exp(_,o,_)) -> (string_of_code d c1)^"» "^(string_of_opr o)
-  | Code_Exp (_,o,_) -> (tabs d)^"» "^(string_of_opr o)^"\n"
-  | Seq (c1,c2) -> (string_of_code d c1)^(string_of_code d c2)
-  | Canon l ->
+  | C_V (c1,C_E(_,o,_)) -> (string_of_code d c1)^"» "^(string_of_opr o)
+  | C_E (_,o,_) -> (tabs d)^"» "^(string_of_opr o)^"\n"
+  | C_V (c1,c2) -> (string_of_code d c1)^(string_of_code d c2)
+  | C_H l ->
     let pre = (tabs (d+1))^"⁅ "^(Util.string_of_list ((tabs (d+1))^"¦ ") (string_of_code (d+1)) l)^"\n"^(tabs d)^"⁆" in
     pre
-  | Code_CoPrd ((t,o,_),l) ->
+  | C_CoP ((t,o,_),l) ->
     let pre = (tabs d)^"» ` "^(print_tm t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∐ "^(Util.string_of_list ((tabs (d+1))^"∐ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
-  | Code_Prd ((t,o,_),l) ->
+  | C_P ((t,o,_),l) ->
     let pre = (tabs d)^"» ` "^(print_tm t)^" : "^(string_of_opr o)^"\n" in
     let mid = (tabs (d+1))^"∏ "^(Util.string_of_list ((tabs (d+1))^"∏ ") (string_of_code (d+1)) l)^(tabs d)^"∇" in
     pre^mid
-  | Code_IO ((t,o,_),_,c0) ->
+  | C_IO ((t,o,_),_,c0) ->
     let pre = (tabs (d+1))^"|» ` "^(print_tm t)^" : "^(string_of_opr o)^"\n" in
     let mid = string_of_code (d+1) c0 in
     pre^mid
