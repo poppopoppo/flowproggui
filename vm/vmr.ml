@@ -99,7 +99,7 @@ let p_a r =
 let reg () = Reg (sgn ())
 let rec print_asm d a =
   ( match !a with
-    | Ret r -> d^"» ∎ \\ "^(print_rcd_ptn print_reg r)^"\n"
+    | Ret r -> d^"∎ \\ "^(print_rcd_ptn print_reg r)^"\n"
     | Nxt (n1,p2) ->
       let s1 =
         ( match n1 with
@@ -121,7 +121,7 @@ let rec print_asm d a =
           | HCall (_,_) -> err "print_asm 0"
           | Prd (_,_,_,_) -> err "print_asm 1"
           | Nd_Clj (_,_,_,_) -> err "print_asm 2"
-          | Ini (r0,k) -> d^"» ~ "^(print_rcd_tkn k)^" \\ "^(print_rcd_ptn (P_A r0))^"\n"
+          | Ini (r0,k) -> d^"» ~ "^(print_rcd_tkn k)^" \\ "^(print_rcd_ptn print_reg (P_A r0))^"\n"
         ) in
       let s2 = print_asm d p2 in
       s1^s2
@@ -191,7 +191,8 @@ and print_exp e =
 let print_g nm =
   StgMap.fold
     (fun n (p,r0) c ->
-       c^"§+0 "^n^" \\ "^(print_rcd_ptn r0)^" ≒ \n"^(print_asm "\t" p)))
+       c^"§+0 "^n^" \\ "^(print_rcd_ptn print_reg r0)^
+       " ≒ \n"^(print_asm "\t" p))
     nm ""
 let ret p =
   ( match !p with
@@ -332,13 +333,23 @@ let rec get_idx is kp =
     | [],_ -> kp
     | hd::tl,Rcd_Rcd ps -> get_idx tl ps.(hd)
     | _ -> err "get_idx" )
-
+let evo p0 rv cs =
+  
 let rec run p0 rv cs : rcd_tkn =
-  Util.pnt dbg "enter run:\n";
+  (* Util.pnt dbg "enter run:\n"; *)
   ( match !p0 with
     | Ret r1 ->
       let k1 = get_ptn rv r1 (ref 0) `None in
-      k1
+      if Stack.is_empty cs then k1
+      else
+        let hd = Stack.pop cs in
+        ( match hd with
+          | CS (p0,r0,rv1) ->
+            let _ = set_ptn rv1 r0 k1 in
+            Hashtbl.clear rv;
+            run p0 rv1 cs
+          | _ -> raise (Failure "vm1.run:0")
+        )
     | Nxt (o1,p1) ->
       ( match o1 with
         | Id (r1,r2) ->
@@ -573,21 +584,21 @@ and net_of_exp_ptn nm r0 n0 : (pt * pt)=
   Util.pnt dbg ("enter net_of_exp_ptn 0:"^(print_exp_ptn n0)^"\n");
   let (p0,p1) =
     ( match n0 with
-    | Exp_Atm e0 -> net_of_exp nm r0 e0
-    | Exp_Rcd [||] ->
-      let k = Rcd_Rcd [||] in
-      let r1 = reg () in
-      let p1 = ref (Ret (P_A r1)) in
-      let p2 = Nxt(Ini (r1,k),p1) in
-      (ref p2,p1)
-    | Exp_Rcd es ->
-      let (rs,l) = rpc (Array.length es) r0 in
-      let l1 = asm l (P_Rc rs) in
-      let pps = Array.mapi (fun i e -> net_of_exp_ptn nm rs.(i) e) es in
-      let rs1 = Array.map (fun (_,p2) -> ret p2) pps in
-      let (ps0,ps1) = cmps (Array.to_list pps) in
-      ps1 := (Ret (P_Rc rs1));
-      cmp l1 (ps0,ps1)
+      | Exp_Atm e0 -> net_of_exp nm r0 e0
+      | Exp_Rcd [||] ->
+        let k = Rcd_Rcd [||] in
+        let r1 = reg () in
+        let p1 = ref (Ret (P_A r1)) in
+        let p2 = Nxt(Ini (r1,k),p1) in
+        (ref p2,p1)
+      | Exp_Rcd es ->
+        let (rs,l) = rpc (Array.length es) r0 in
+        let l1 = asm l (P_Rc rs) in
+        let pps = Array.mapi (fun i e -> net_of_exp_ptn nm rs.(i) e) es in
+        let rs1 = Array.map (fun (_,p2) -> ret p2) pps in
+        let (ps0,ps1) = cmps (Array.to_list pps) in
+        ps1 := (Ret (P_Rc rs1));
+        cmp l1 (ps0,ps1)
     ) in
   Util.pnt dbg ("return net_of_exp_ptn 0:"^(print_asm "" p0));
   (p0,p1)

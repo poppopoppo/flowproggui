@@ -443,8 +443,7 @@ let main () =
             match s with
             | `MODULE_IMPORT ->
               buffer#insert ~iter:iter_global
-                (Print.string_of_gl_st (let (g,_,_) = !st in g))) in
-
+                (Vmr.print_g (let (g,_,_) = !st in (Vmr.net_of_g g)))) in
     source_view in
 
   let log_view =
