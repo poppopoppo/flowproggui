@@ -333,8 +333,7 @@ let rec get_idx is kp =
     | [],_ -> kp
     | hd::tl,Rcd_Rcd ps -> get_idx tl ps.(hd)
     | _ -> err "get_idx" )
-let evo p0 rv cs =
-  
+(* let evo p0 rv cs = () *)
 let rec run p0 rv cs : rcd_tkn =
   (* Util.pnt dbg "enter run:\n"; *)
   ( match !p0 with
@@ -406,9 +405,7 @@ let rec run p0 rv cs : rcd_tkn =
               run p1 rv cs
             | _ -> err "err 38"
           )
-        | HCall (_,_) ->
-          (* let (y1,y2) = (sgn(),sgn()) in
-             let (kf1,kx1,kf2,kx2) = (get_k v f1,get_k *) raise (Failure "vm1.run:7")
+        | HCall (_,_) -> err "vm1.run:7"
         | Prd (_,_,_,_) -> err "err 10"
         | Nd_Clj (_,_,_,_) -> err "err 11"
         | Ini (r0,k) ->
@@ -456,7 +453,7 @@ let rec mrg_ptns (rps:('a rcd_ptn) list) : ('a array) rcd_ptn =
     | p0::[] -> app_ptn (fun x -> [|x|]) p0
     | p0::p1::tl -> mrg_ptn (fun x a -> [|x|] |+| a) p0 (mrg_ptns (p1::tl))
   )
-let rpc (n:int) (r0:reg rcd_ptn) =
+let rpc (n:int) r0 =
   let rs = Array.init n (fun _ -> alc_ptn r0) in
   let rsm = mrg_ptns (Array.to_list rs) in
   let f = fun x r -> (x,r) in

@@ -1,7 +1,7 @@
 
 open GdkKeysyms
 open StdLabels
-
+module Vmr = Vmr0
 let font_name = "DejaVu Sans Mono 12"
 let theme_name = "test_style"
 let lang_file = "flow"
@@ -362,7 +362,7 @@ let main () =
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let insert s = buffer#insert ~iter:!iter s in
     let insert_arr () = buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» " in
-    insert (Vmr.print_rcd_tkn (let (_,_,st) = !st in st));
+    insert (Vmr.NetInt.print_rcd_tkn (let (_,_,st) = !st in st));
     insert_arr ();
     let mark_start = ref (buffer#create_mark !iter) in
     let key_press k =
@@ -443,7 +443,7 @@ let main () =
             match s with
             | `MODULE_IMPORT ->
               buffer#insert ~iter:iter_global
-                (Vmr.print_g (let (g,_,_) = !st in (Vmr.net_of_g g)))) in
+                (Vmr.NetSgn.print_g (let (g,_,_) = !st in (Vmr.net_of_g g)))) in
     source_view in
 
   let log_view =
