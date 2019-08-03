@@ -1,5 +1,5 @@
 all: gui evo
-gui: vmr.ml ty.ml print.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly imp.ml implib.ml util.ml gui.ml types.ml
+gui: vmr0.ml ty.ml print.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly imp.ml implib.ml util.ml gui.ml types.ml
 	rm -f imp_parser.ml imp_parser.cmi imp_parser.mli imp.cmi
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
@@ -9,7 +9,7 @@ gui: vmr.ml ty.ml print.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly imp
 evo: evo_tkn.ml
 	ocamlfind ocamlopt -thread -p -o evo_tkn.exe -linkpkg \
 	-package core,batteries,threads \
-	peg.ml util.ml types.ml print.ml vmr.ml ty.ml imp.ml evo_tkn.ml
+	peg.ml util.ml types.ml print.ml vmr0.ml ty.ml imp.ml evo_tkn.ml
 run: gui evo
 	./gui
 	gprof ./evo_tkn.exe > evo_tkn.prf.txt

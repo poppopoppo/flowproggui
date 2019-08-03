@@ -32,4 +32,11 @@ let rec assoc_group l =
             else (k1,r)::(l0 tl1)
         ) in
       l0 tl0
-  )  
+  )
+let err s = raise (Failure s)
+let ( *| ) o e =
+  ( match o with
+    | Some x -> x
+    | None -> err e )
+let ( |+| ) a b = Array.append a b
+let unt () = [| |]
