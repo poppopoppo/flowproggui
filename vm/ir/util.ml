@@ -60,9 +60,8 @@ end
     sgn_N := n+1;
     n
   let print x = (string_of_int x)
-  let compare (x:int) (y:int) = c
-      ompare_int x y
-  let eq (x:int) (y:int) = eq_int x y
+  let compare (x:int) (y:int) = compare x y
+  let eq (x:int) (y:int) =  x =y
   let hash (x:int) = x
   let sexp_of_t (_:int) = Core.Sexp.List []
 end
@@ -73,9 +72,8 @@ module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
 module StgSet = Set.Make(struct type t = string let compare = compare end)
 module SgnMap = Map.Make(struct type t = Sgn.t let compare = Sgn.compare end)
 module StgMap = Map.Make(struct type t = string let compare = compare end)
+module IntSet = Set.Make(struct type t = int let compare = compare end)
 module IntMap = Map.Make(struct type t = int let compare = compare end)
-module ValMap = Map.Make(struct type t = valP let compare = compare end)
-module ValSet = Set.Make(struct type t = valP let compare = compare end)
 module SgnHash = Hashtbl.Make(
   struct type t=Sgn.t
     let hash x = Sgn.hash x let equal x y = Sgn.eq x y
