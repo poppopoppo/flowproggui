@@ -927,17 +927,9 @@ and net_of_exp nm r0 n0 =
   )
 and code_of_vh f =
   ( match f with
-    | Types.C_V(f1,f2) ->
-      let c1 = code_of_vh f1 in
-      let c2 = code_of_vh f2 in
-      V(c1,c2)
-    | Types.C_H fs ->
-      let cs = List.map code_of_vh fs in
-      H (Array.of_list cs)
-    | Types.C_E (_,o0,_) ->
-      let ap = ref [] in
-      let n1 = code_of_nd ap [] o0 in
-      E n1
+    | Types.C_V(f1,f2) -> V(code_of_vh f1,code_of_vh f2)
+    | Types.C_H fs ->  H (Array.of_list (List.map code_of_vh fs))
+    | Types.C_E (_,o0,_) -> E (code_of_nd (ref []) [] o0)
     | C_P (_,_) -> err "code_of_vh 0"
     | C_CoP((_,o0,_),l) ->
       let ap = ref [] in
