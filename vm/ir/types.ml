@@ -144,10 +144,12 @@ end
 module Types = struct
   open Tm
   type prm =
-    | Imp | Tpl | Prd | Prd_U | CoPrd | CoPrd_U | Vct | Opn | Lst
+    | Imp | Tpl | Lb_Tpl | Prd | Prd_U | CoPrd | CoPrd_U
+    | Vct | Opn | Lst
     | Zn | N | Sgn | Stg
     | Ul | Ur | In | Out | Iso | Z_n of int | Axm of Sgn.t
     | Inj| Cho | Z_d of Sgn.t
+    | Lb of string
   type t = prm Tm.t
   let (-*) x y = (Prm Imp)<+x<+y
   let ( ** ) x y = (Prm Tpl)<+x<+y
@@ -270,9 +272,10 @@ module IR = struct
   module PtMap = Map.Make(struct type t = pt let compare = compare end)
   type ('c , 'r) etr = 'r Rcd_Ptn.t * 'c
   type ('r ,'c ,'p) t =
+    | In of ('r Rcd_Ptn.t) * 'c
     | Seq of (('r, 'p) nd) * 'c
-    | Agl of 'r * ((('c, 'r) etr) array) * ('c, 'r) etr
-    | Prd of 'r * ('r Rcd_Ptn.t) * ('c array) * ('r Rcd_Ptn.t * 'c)
+    | Agl of 'r * ('c array) * 'c
+    | Prd of 'r * ('r Rcd_Ptn.t) * ('c array) * 'c
     | Nd_Clj of 'r * ('r Rcd_Ptn.t) * 'c * 'c
     | Ret of 'r Rcd_Ptn.t
   type ('r, 'c, 'p) c_m = (('r, 'c, 'p) t * ('r Rcd_Ptn.t)) PtMap.t
@@ -584,12 +587,12 @@ module IR = struct
     ( match l with
       | [] ->
         let ev = PtMap.add p (Ret r) ev in
-        ev
+        (ev,p)
       | hd::tl ->
         let p0 = DName (sgn ()) in
-        let ev = seqs ev p0 tl r in
+        let (ev,p1) = seqs ev p0 tl r in
         let ev = PtMap.add p (Seq(hd,p0)) ev in
-        ev )
+        (ev,p1) )
   let rpc n r0 =
     let rp0 =
       Rcd_Ptn.map
@@ -689,59 +692,78 @@ module IR = struct
         let ev = PtMap.add p2 (Ret r1) ev in
         (ev,p2,r1)
       | Rcd es ->
-        let (c0,rs) = rpc (Array.length es) r0 in
-        let pps = Array.mapi (fun i e -> vh_of_exp_ptn rs.(i) e) es in
-        let (ps,rps) = List.split (Array.to_list pps) in
-        let c1 = List.fold_left (fun c1 cx -> seq c1 cx) c0 ps in
-        let rr = P_R(Array.of_list rps) in
-        (seq c1 (Ret rr),rr)
+        let (l,rr) = rpc (Array.length es) r0 in
+        let (ev,p1) = seqs ev p0 l (P_R rr) in
+        let (_,ev,p2,rs) =
+          Array.fold_left
+            (fun (i,ev,p2,rs) e ->
+               let (ev,p2,r1) = vh_of_exp_ptn ev p2 rr.(i) e in
+               (i+1,ev,p2,rs |+| [|r1|]))
+            (0,ev,p1,[||]) es in
+        let ev = PtMap.add p2 (Ret (P_R rs)) ev in
+        (ev,p2,P_R rs)
       | App (e1,e2) ->
-        let (c0,p0) = rpc v0 2 r0 in
-        ( match p0 with
+        let (l,rr) = rpc 2 r0 in
+        let (ev,p1) = seqs ev p0 l (P_R rr) in
+        ( match rr with
           | [| r1 ; r2 |] ->
-            let (cf,pf) = net_of_exp v0 nm r1 f in
-            let (cx,px) = net_of_exp_ptn v0 nm r2 x in
+            let (ev,pf,rf) = vh_of_exp ev p1 r1 e1 in
+            let (ev,px,rx) = vh_of_exp_ptn ev pf rf e2 in
             let r3 = P_A (sgn()) in
-            let n2 = Call (r3,p_a pf,px) in
-            (seq (seq cf cx) (Seq(n2,Ret r3)),r3)
+            let p3 = DName (sgn ()) in
+            let n2 = Call (r3,p_a rf,rx) in
+            let ev = PtMap.add px (Seq(n2,p3)) ev in
+            let ev = PtMap.add p3 (Ret r3) ev in
+            (ev,p3,r3)
           | _ -> err "err 45" )
       | Prj (e,i) ->
-        let (c1,p1) = net_of_exp_ptn r0 n1 in
-        ( match p1 with
+        let (ev,p1,r1) = vh_of_exp_ptn ev p0 r0 e in
+        ( match r1 with
           | P_R rs ->
-            let rc1 = Array.fold_left
+            let (cl,_) =
+              Array.fold_left
                 (fun (a,j) r ->
                    if i=j then (a,j+1)
                    else
                      let c0 = rm r in
-                     (seq c0 a,j+1))
-                (Ret rs.(i)) rs in
-            (seq c1 rc1,rs.(i))
+                     (c0 @ a,j+1))
+                ([],0) rs in
+            let (ev,p2) = seqs ev p1 cl rs.(i) in
+            (ev,p2,rs.(i))
           | P_Ro (rs,rt) ->
-            let rc1 = Array.fold_left
+            let p2 = DName (sgn ()) in
+            let ev = PtMap.add p1 (Seq(Rm rt,p2)) ev in
+            let (cl,_) =
+              Array.fold_left
                 (fun (a,j) r ->
                    if i=j then (a,j+1)
                    else
                      let c0 = rm r in
-                     (seq c0 a,j+1))
-                (Seq(Rm rt,Ret rs.(i))) rs in
-            (seq c1 rc1,rs.(i))
+                     (c0 @ a,j+1))
+                ([],0) rs in
+            let (ev,p3) = seqs ev p2 cl rs.(i) in
+            (ev,p3,rs.(i))
           | P_A r1 ->
-            let a1 = Array.init (fun i -> sgn ()) (i-1) in
-            let r2 = sgn () in
-            let c1 = Prj(r1,(a1,r2)) in
-            let rc1 = Array.fold_left
+            let rs = Array.init (i-1) (fun i -> sgn ()) in
+            let rt = sgn () in
+            let p2 = DName (sgn ()) in
+            let ev = PtMap.add p1 (Seq(Prj(r1,(rs,rt)),p2)) ev in
+            let p3 = DName (sgn ()) in
+            let ev = PtMap.add p2 (Seq(Rm rt,p3)) ev in
+            let (cl,_) =
+              Array.fold_left
                 (fun (a,j) r ->
                    if i=j then (a,j+1)
                    else
-                     let c0 =  r in
-                     (Seq(Rm r,a),j+1))
-                (Seq(Rm r2,Ret (P_A a1.(i)))) a1 in
-            (seq c1 rc1,P_A a1.(i),P_A a1.(i))
+                     let c0 = rm (P_A r) in
+                     (c0 @ a,j+1))
+                ([],0) rs in
+            let (ev,p4) = seqs ev p3 cl (P_A rs.(i)) in
+            (ev,p4,P_A rs.(i))
         )
-      | Atm a -> vh_of_exp a
+      | Atm a -> vh_of_exp ev p0 r0 a
     )
-  and vh_of_exp e =
+  and vh_of_exp ev p r e =
     let k =
       ( match e with
         | Ast.Z z -> Tkn.Z z
@@ -757,25 +779,30 @@ module IR = struct
         | Cho i -> Tkn.Cho i
         | Stg s -> Tkn.Stg s
       ) in
-    let r1 = sgn () in
-    let p1 = P_A r1 in
-    (Seq(Ini(r1,Rcd_Tkn k),Ret p1),p1)
-  let c_m_of_g g =
+    let r0 = sgn () in
+    let r1 = P_A r0 in
+    let p1 = DName (sgn ()) in
+    let ev = PtMap.add p (Seq(Ini(r0,Tkn.Tkn k),p1)) ev in
+    let ev = PtMap.add p1 (Ret r1) ev in
+    (ev,p1,r1)
+  let c_m_of_g ev g =
     let m0 =
       BatList.fold_left
-        (fun m0 e ->
+        (fun ev e ->
            ( match e with
-             | Types.Etr (_,(name,_,_,f)) ->
+             | Ast.Etr (n,_,_,_,f) ->
                let r0 = P_A (sgn ()) in
-               let (m0,c0,p0) = vh_of_code m0 r0 f in
-               PtMap.add (Name name) c0 m0
+               let pn = Name n in
+               let (ev,_,_) = vh_of_ast ev pn r0 f in
+               ev
              | Etr_Clq(_,l) ->
                BatList.fold_left
-                 (fun r (name,_,_,f) ->
+                 (fun ev (name,_,_,f) ->
                     let r0 = P_A (sgn ()) in
-                    let (c0,p0) = vh_of_code nm r0 f in
-                    StgMap.add (Name name) c0 m0)
-                 m0 l
+                    let pn = Name name in
+                    let (ev,_,_) = vh_of_ast ev pn r0 f in
+                    ev)
+                 ev l
              | _ -> err "err10"))
         PtMap.empty g in
     m0
@@ -785,70 +812,74 @@ module Asm = struct
   type r = int
   type ('r, 'p) op =
     | Ret of 'r Rcd_Ptn.t
-    | Agl of 'r * (('r Rcd_Ptn.t * 'c) array) * ('r Rcd_Ptn.t) * pt
-    | Ini of 'r * ('p rcd_tkn)
-    | Nd of 'r pt IR.nd
-  type t = ((r, r) op) array
-  type etr_vct = (int PtMap.t * (r Rcd_Ptn.t)) * t
+    | Agl of 'r * (pt array) * pt
+    | Nd of ('r, 'p) IR.nd
+  type t = ((r,  pt) op) array
+  type etr_vct = (int IR.PtMap.t * (r Rcd_Ptn.t)) * t
   let save_etr_vct ev = ()
   let save_tkn k p = ()
   let load_tkn _ = ()
-  let rec asm_of_ir j c0 =
-    let open IR in
+  let rec asm_of_ir nm ev p0 j =
+    let c0 = IR.find_etr p0 ev in
     ( match c0 with
-      | Ret r -> ([|Asm.Ret r|],j+1)
-      | Agl (ra,ps,rr,pr) ->
-        let as0 = Array.map (fun (_,p) -> p) ps in
-        let rs = Array.map fst ps in
-        let ls = Array.map Array.length as0 in
-        let (a0,ls,_,j0) = Array.fold_left
-            (fun (a0,ls,i,j0) ai ->
-               let (a0,j0) = asm_of_ir j0 p0 in
-               let ls = ls |+| [|(rs.(i),j0)|] in
-               (a0 |+| ai,ls,i+1,j0))
-            ([||],[||],0,j+1) as0 in
-        let (ar,n) = asm_of_ir j0 pr in
-        ([|(Agl,ra,psi,rr,j0)|] |+| a0 |+| pr,n)
-      | Nd (o,c1) ->
-        let (a0,n0) = asm_of_ir (j+1) c1 in
-        ([|o|] |+| a0,n0)
+      | IR.Ret r -> (IR.PtMap.add p0 j nm,[|Ret r|],j+1)
+      | IR.Agl (ra,ps,(rr,pr)) ->
+        let (nm,a0,psi,j0) = Array.fold_left
+            (fun (nm,a0,psi,j0) (ri,pi) ->
+               let nm = IR.PtMap.add pi j0 nm in
+               let (nm,a1,j0) = asm_of_ir nm ev pi j0 in
+               (nm,a0 |+| a1,psi |+| [|(ri,j0)|],j0))
+            (nm,[||],[||],j+1) ps in
+        let (nm,ar,n) = asm_of_ir nm ev pr j0 in
+        (nm,[|(Agl(ra,psi,(rr,j0)))|] |+| a0 |+| ar,n)
+      | IR.Seq (o,p1) ->
+        let nm = IR.PtMap.add p0 j nm in
+        let (nm,a0,n0) = asm_of_ir nm ev p1 (j+1) in
+        (nm,[|Nd o|] |+| a0,n0)
+      | _ -> err "asm_of_ir:0"
     )
-  let rec asm_of_c_m m0 =
-    let v0 = ini_st_v () in
-    let (mi0,a0,j0) =
-      PtMap.fold
-        (fun s c (mi0,a0,j0) ->
-           let (a1,j1) = asm_of_ir j0 c in
-           let mi0 = PtMap.add s j0 mi0 in
-           (mi0,a0 |+| a1,j1))
-        m0 (PtMap.empty,[||],0) in
-    (mi0,asm_of_ini mi0 a0S)
-  and asm_of_ini mi0 a0 =
+  let rec asm_of_c_m ev =
+    let nm = IR.PtMap.empty in
+    let (a,_,nm) =
+      IR.PtMap.fold
+        (fun p o (a,j,nm) ->
+           ( match p with
+             | IR.Name n ->
+               let nm = IR.PtMap.add p j nm in
+               let (nm,a,j) = asm_of_ir nm ev p j in
+               (a,j,nm)
+             | IR.DName d -> (a,j,nm)))
+        ev ([||],0,nm) in
+    (a,nm)
+  and asm_of_ini nm a0 =
     Array.map
       (fun n0 ->
          ( match n0 with
-           | Ini(r0,k0) -> Ini(r0,asm_tkn mi0 k0)
+           | Nd IR.Ini(r0,k0) -> Nd (IR.Ini(r0,asm_tkn nm k0))
            | _ -> n0))
       a0
-  and asm_tkn mi0 k0 =
+  and asm_tkn nm k0 =
     let open Tkn in
     ( match k0 with
-      | Rcd l -> Rcd (Array.map (asm_tkn mi0) l)
+      | Rcd l -> Rcd (Array.map (asm_tkn nm) l)
       | Tkn tk ->
         let tki =
           ( match tk with
-            | Fnc p -> Fnc(PtMap.find p mi0)
-            | Clj (p,k1) -> Clj(PtMap.find p mi0,asm_tkn mi0 k1)
+            | Fnc (r,p) -> Fnc(r,IR.PtMap.find p nm)
+            | Clj (r,p,k1) -> Clj(r,IR.PtMap.find p nm,asm_tkn nm k1)
             | _ -> tk
           ) in
         Tkn tki
     )
 end
 module Typing = struct
+  open Tm
+  open Rcd_Ptn
+  open Types
   let inst (a,y) =
     let m = SgnSet.fold
         (fun k r -> SgnMap.add k (vsgn()) r)
-        a SgnSet.empty in
+        a SgnMap.empty in
     m<*y
   let subst_scm s (a,e) =
     let s1 =
@@ -867,98 +898,134 @@ module Typing = struct
   let subst_km s km =
     StgMap.map
       (fun q -> subst_scm s q)
-      rm
+      km
   let ftvs_scm (a,e) = SgnSet.diff (ftvs e) a
   let ftvs_km g =
     StgMap.fold
       (fun _ v r -> SgnSet.union (ftvs_scm v) r)
       g SgnSet.empty
   let gen km rm y =
-    (SgnSet.inter (ftvs_km km) (ftvs_scm (SgnMap.empty,y)))
+    (SgnSet.inter (ftvs_km km) (ftvs_scm (SgnSet.empty,y)))
   let rec get_reg_ptn_rm rm rp =
     ( match rp with
       | P_A r -> get_rm rm r
-      | P_R (rs,rt) ->
-        let ts = Array.map (get_reg_ptn rm) rs in
+      | P_R rs ->
+        let ts = Array.map (get_reg_ptn_rm rm) rs in
+        Types.rcd_cl (Array.to_list ts)
+      | P_Ro (rs,rt) ->
+        let ts = Array.map (get_reg_ptn_rm rm) rs in
         let tt = get_rm rm rt in
-        rcd_cns ts tt
+        Types.rcd_cns (Array.to_list ts) tt
     )
   let unifys_reg_ptn rm rps =
     let ts = List.map (fun x -> inst @ get_reg_ptn_rm rm x) rps in
     let s = unifys ts in
     s
-  let rec typing_asm km rm c =
+  let rec typing_asm km rm ev p =
     ( match c with
-      | Nd (e,c1) ->
-        let s0 =
-          ( match e with
+      | Agl (ra,ps,(rr,pr)) ->
+        let vs = Array.init (Array.length ps) (fun _ -> vsgn ()) in
+        let t0 = coprd_op (vsgn ()) vs in
+        let s0 = unify [(t0,inst @ get_rm rm ra)] in
+        let rm = subst_rm s0 rm in
+        let t1 = s0<*t0 in
+        let (rm,s1) = Array.fold_left
+            (fun (rm,s1,i) (r,p) ->
+               let ti = s0<*vs.(i) in
+               let s2 = unify [(inst @ get_reg_ptn_rm rm r,ti)] in
+               let rm = subst_rm s1 rm in
+               let rm = gen_reg_ptn_rm km rm r in
+               let (s3,rm) = typing_asm (subst_km s1 km) rm p in
+               (rm,s1 *~ s2 *~ s3,i+1))
+            (rm,s0,0) ps in
+        let rps = Array.map ret ps in
+        let s2 = unifys_reg_ptn rm (Array.to_list (rr |+| rps)) in
+        let rm = subst_rm s2 rm in
+        let rm = gen_reg_ptn_rm km rm rr in
+        let s3 = s0 *~ s1 *~ s2 in
+        let (s4,rm) = typing_asm (subst_km s3 km) rm pr in
+        (s3*~s4,rm)
+      | Ret r0 -> (rm,cxt_ini ())
+      | Seq (o,p1) ->
+        let (rm,s0) =
+          ( match o with
             | Id (r0,rs) ->
               let s0 = unifys (Array.map (fun r -> inst (get_rm rm r)) (Array.to_list ([|r0|] |+| rs))) in
-              s0
-            | Prj (r0,rs,rt) ->
+              let rm = subst_rm s0 rm in
+              let rm =
+                Array.fold_left
+                  (fun rm r -> gen_rm km rm) rm rs in
+              (rm,s0)
+            | Prj (r0,(rs,rt)) ->
               let ts = Array.map (fun r -> inst (get_rm rm r)) rs in
               let t0 = inst (get_rm rm rt) in
-              let s0 = unify [(get_rm rm r0,rcd ts t0)] in
-              s0
-            | Cns (rs,rt,r0) ->
+              let s0 = unify [(get_rm rm r0,rcd_cns ts t0)] in
+              let rm = subst_rm s0 rm in
+              let rm =
+                Array.fold_left
+                  (fun rm r -> gen_rm km rm) rm rs in
+              let rm = gen_rm km rm rt in
+              rm
+            | Cns ((rs,rt),r0) ->
               let ts = Array.map (fun r -> inst (get_rm rm r)) rs in
               let t0 = inst (get_rm rm rt) in
               let s0 = unify [(inst @ get_rm rm r0,rcd_cns ts t0)] in
-              s0
+              let rm = subst_rm s0 rm in
+              let rm = gen_rm km rm in
+              rm
             | Rm r0 -> cxt_ini ()
-            | Agl (ra,rp,ps) ->
-              let t0 = coprd_op (vsgn ()) [(vsgn ())] in
-              let s0 = unify [(t0,get_rm rm ra)] in
-              let s1 = Array.fold_left
-                  (fun s1 p ->
-                     let s2 = typing_asm (subst_km s1 km) (subst_rm s1 rm) p in
-                     s1 *~ s2)
-                  s0 ps in
-              let rps = Array.map ret ps in
-              let s2 = unifys_reg_ptn (subst_rm s1 rm) (Array.to_list (rp |+| rps)) in
-              s1 *~ s2
             | Call (y,f,x) ->
               let (ty,tf,tx) = (inst @ get_ptn_rm rm y,inst @ get_rm f,inst @ get_ptn_rm rm x) in
               let s0 = unify [(tf,imp tx ty)] in
-              s0
+              let rm = subst_rm s0 rm in
+              let rm = gen_rm km rm y in
+              (rm,s0)
             | Ini (r,k) ->
               let s0 = unify [(inst @ get_rm rm r,typing_rcd_tkn km k)] in
-              s0 ) in
-        typing_asm (subst_km s0 km) (subst_rm s0 rm) c
-      | Ret r0 ->
-        cxt_ini ()
+              let rm = subst_rm s0 rm in
+              let rm = gen_rm km rm r in
+              (rm,s0)
+          ) in
+        typing_asm (subst_km s0 km) rm ev p1
     )
   and typing_rcd_tkn km k =
-    let open Unify in
+    let open Tm in
     let open Tkn in
     ( match k with
       | Rcd l -> rcd_cl (Array.map (typing_rcd_tkn km) l)
       | Tkn k ->
         ( match k with
-          | Stg _ -> Prm Unify.Stg
-          | Z _ -> Prm Unify.Z
-          | Zn(_,z1) -> Prm (Unify.Z z1)
-          | Sgn _ -> Prm Unify.Sgn
+          | Stg _ -> Prm Tm.Stg
+          | Z _ -> (Prm Tm.Zn)<+(Prm Tm.Z_u)
+          | Zn(_,z1) -> zn ()
+          | Sgn _ -> Prm Tm.Sgn
           | CoP (i,k0) ->
             let t0 = typing_rcd_tkn km k0 in
             let l0 = List.init (fun _ -> vsgn ()) (i-2) in
             let l1 = l0 @ [t0] in
             coprd_op l1
           | P (_,_) -> err "err t0"
-          | Pls -> imp (rcd_cl [(zn ());(zn ())]) (zn ())
-          | Mlt -> imp (rcd_cl [(zn ());(zn ())]) (zn ())
-          | Mns -> imp (zn ()) (zn ())
+          | Pls ->
+            let t0 = zn () in
+            imp (rcd_cl [t0;t0]) t0
+          | Mlt ->
+          let t0 = zn () in
+          imp (rcd_cl [t0;t0]) t0
+          | Mns ->
+          let t0 = zn () in
+          imp t0 t0
           | Cmp ->
             let v0 = vsgn () in
-            imp (rcd_cl [z;z]) (Prm (Zn 2))
+            imp (rcd_cl [z;z]) ((Prm Zn)<+(Prm (Z_n 2)))
           | Eq ->
             let v0 = vsgn () in
-            imp (rcd_cl [v0;v0]) (Prm (Zn 2))
+            imp (rcd_cl [v0;v0]) ((Prm Zn)<+(Prm (Z_n 2)))
           | Inj i ->
             let t0 = vsgn () in
+            let ts = vsgn () in
             let l0 = List.init (fun _ -> vsgn ()) (i-1) in
             let l1 = l0 @ [t0] in
-            imp t0 (coprd_op l1)
+            imp t0 (coprd_op ts l1)
           | Cho _ -> err "err t2"
           | Fix ->
             let (a,b) = (vsgn(),vsgn()) in
@@ -966,7 +1033,8 @@ module Typing = struct
           | Exn ->
             let a = vsgn () in
             imp (Prm Stg) a
-          | Fnc _ -> err "t4"
+          | Fnc (_,p) ->
+            let
           | Clj _ -> err "t3"
         )
     )
