@@ -132,40 +132,46 @@ module Types = struct
     | Zn | N | Sgn | Stg | Z_u
     | Z_n of int | Axm of Sgn.t
     | Inj| Cho | Z_d of Sgn.t
-  type t =
+  type v_p = Sgn.t
+  type v =
+    | V_Var of Sgn.t * level
+    | Link of t
+  and vm = v SgnMap.t
+  and t =
     | WC
-    | Val of Sgn.t * level
-    | QVal of Sgn.t
+    | Var of v ref
+    | QVar of Sgn.t
     | App of t * t
     | Imp of t * t
     | Prm of prm
-    | Scm of Sgn.t * t
-    | Cns of t * t
-    | CnsL of t * t
-    | Ul | Ur
-    | Rc of t list
-    | Ro of t list
-    | Rlc of (string * t) list
-    | Rlo of (string * t) list
-    | CPc of t * (t list)
-    | CPo of t * (t list)
-    | Pc of t * (t list)
-    | Po of t * (t list)
-  let (-*) x y = (Prm Imp)<+x<+y
-  let imp x y = (Prm Imp)<+x<+y
-  let ( ** ) x y = (Prm Tpl)<+x<+y
-  let ( *~* ) x y = (Prm Lb_Tpl)<+x<+y
-  let psgn () = Prm (Axm (sgn ()))
-  let unt = (Prm Ul)**(Prm Ur)
-  let lb_unt = (Prm Ul)*~*(Prm Ur)
+    | Rcd of t_rcd
+    | Rcd_Lb of t_rcd_lb
+    | Rec of (Sgn.t ref) * (t_rec ref)
+  and t_rec =
+    | CP of t * t_co_prd
+    | P of t * t* t_prd
+  and t_co_prd =
+    | CoPrd of t * t_to_prd
+    | Tl_CP of t
+    | U_CP
+  and t_co_prd =
+    | Prd of t * t_to_prd
+    | Tl_P of t
+    | U_P
+  and t_rcd =
+    | Cns of t * t_rcd
+    | Tl of t
+    | U
+  and t_rcd_lb =
+    | Cns_Lb of string * t * t_rcd
+    | Tl_Lb of t
+    | U_Lb
   let rcd_cl l = List.fold_right (fun x r -> x**r) l unt
   let rcd_op l = List.fold_right (fun x r -> x**r) l ((vsgn())**(vsgn()))
   let rcd_cns l t = List.fold_right (fun x r -> x**r) l t
   let lb_rcd_cl l =
     List.fold_right
       (fun (l,y) r -> ((Prm (Lb l))<+y)**r) l lb_unt
-  let ( *| ) x y = (Prm CoPrd)<+x<+y
-  let ( *& ) x y = (Prm Prd)<+x<+y
   let coprd_cl a l =
     if (List.length l)>0 then
       let t0 = List.fold_right (fun x r -> x*|r) l (Prm CoPrd_U) in
@@ -898,25 +904,81 @@ module Asm = struct
     )
 end
 module Typing = struct
-  open Tm
-  open Types
-  open Rcd_Ptn
-  open Ast
-  open IR
-  type ('p, 'r) c =
-    | C_Id of 'r Rcd_Ptn.t * ('r list)
-    | C_Agl of 'r * (('r Rcd_Ptn.t) list)
-    | C_Agl_End of (('r Rcd_Ptn.t list) * ('r Rcd_Ptn.t))
-    | C_Prj of 'r * (('r list) * 'r)
-    | C_Cns of 'r (('r list) * 'r)
-    | C_Call of ('r Rcd_Ptn.t) * 'r * ('r Rcd_Ptn.t)
-    | C_Ini of 'r * (('p, 'r) Tkn.t)
-  let get rm r = get_scm rm r
-  let inst (a,y) =
-    let m = SgnSet.fold
-        (fun k r -> SgnMap.add k (vsgn()) r)
-        a SgnMap.empty in
-    m<*y
+  open Tm open Types
+  open Rcd_Ptn open Ast open IR
+  let rec occurs v1 = function
+    | Var v2 when v1 == v2 -> true
+    | Var v2 ->
+      ( match !v2 with
+        | V_Var (p1,l1) ->
+          let ml = (match !v1 with V_Var (_,l) -> min l l' | _ -> l') in
+          v2 := V_Var (p1,ml);
+          false
+        | Link t1 -> occurs v1 t1 )
+    | App(t1,t2)
+    | Imp(t1,t2) -> occurs v1 t1; occurs v1 t2
+    | Rcd l1 -> occurs_rcd l1
+    | Rcd_Lb l1 -> occurs_rcd_lb l1
+    | Rec rp -> occurs_rec rp
+  let unify t0 t1 =
+    ( match t0,t1 with
+      | Val vp1,t2
+      | t2,Val vp1 ->
+        ( match get_v vm vp1 with
+          | V_Val(v1,l1) ->
+            ( match t2 with
+              | Rec(rp,rv) ->
+                let _ = occurs_rec v1 rv in
+                vp1 := Link (Ret(rp,rv));
+                ()
+              | _ ->
+                let b = occurs v1 rv in
+                if b then err "unify: 0"
+                else vp1 := (Link t2); ()
+            )
+          | Link t3 -> unify t2 t3
+        )
+      | App(t2,t3),App(t4,t5)
+      | Imp(t2,t3),Imp(t4,t5) -> unify t2 t4; unify t3 t5
+      | Prm p1,Prm p2 -> if p1=p2 then vm else err "unify:1"
+      | Rec(p1,v1),Rec(p2,v2) ->
+        if p1=p2 then unify_rec rm v1 v2
+        else
+          let p3 = sgn () in
+          p1 := p3; p2 := p3;
+          unify_rec rm v1 v2
+      | Rcd l1,Rcd l2 -> unify_rcd l1 l2
+      | Rcd_Lb l1,Rcd_Lb l2 -> unify_rcd l1 l2
+      | -> false
+    )
+  let gen l y =
+    ( match y with
+      | Var v ->
+        ( match !v with
+          | V_Var (v1,l) -> QVar v1
+          | Link y1 -> gen l y1 )
+      | App(t2,t3)
+      | Imp(t2,t3) -> gen l t2; gen l t3
+      | Prm p1,Prm p2 -> if p1=p2 then vm else err "unify:1"
+      | Rec(p1,v1) -> gen_rec v1
+      | Rcd l1 -> gen_rcd l l1
+      | Rcd_Lb l1 -> gen_rcd_lb l l1
+      | _ -> y
+    )
+  let inst l y =
+    let rec loop al = function
+      | QVar p1 ->
+        ( try (List.assoc p1 al,al)
+          with Not_found ->
+            let v1 = sgn () in
+            (Var (ref (V_Var(v1,l))),(name,tv)::subst))
+      | TVar {contents = Link ty} -> loop subst ty
+      | TArrow (ty1,ty2) ->
+        let (ty1,subst) = loop subst ty1 in
+        let (ty2,subst) = loop subst ty2 in
+        (TArrow (ty1,ty2), subst)
+      | ty -> (ty, subst)
+    in fun ty -> fst (loop [] ty)
   let subst_scm s ((a,e):(SgnSet.t * _)) =
     let open Tm in
     let s1 =
@@ -982,43 +1044,43 @@ module Typing = struct
         let (s1,t1) = unifys (rrt::(Array.to_list tts)) in
         let rm = subst_rm s1 rm in
         let rm = gen l rm in
-        let rm slv l rm c0 pr 
-      | Ret r -> rm
-      | Seq(o,p1) ->
-        ( match o with
-          | Id (r,rs) ->
-            let (rm,ts) = new_val_rs (l+1) rm rs in
-            let t = inst (l+1) rm r in
-            let (s0,t0) = unifys @@ t::(Array.to_list ts) in
-            let rm = subst_rm s0 rm in
-            let rm =
-              Array.fold_left
-                (fun r -> gen l rm r) rm rs in
-            slv l rm c0 tl
-          | Prj(r0,(rs,rt)) ->
-            let (rm,ts) = new_val_rs (l+1) rm rs in
-            let t = inst (l+1) rm r in
-            let (s0,t0) = unifys @@ t::(Array.to_list ts) in
-            let rm = subst_rm s0 rm in
-            let rm =
-              Array.fold_left
-                (fun r -> gen l rm r) rm rs in
-            slv l rm c0 tl
-          | Cns((rs,rt),r0) ->
-            let (rm,ts) = new_val_rs (l+1) rm rs in
-            let t = inst (l+1) rm r in
-            let (s0,t0) = unifys @@ t::(Array.to_list ts) in
-            let rm = subst_rm s0 rm in
-            let rm =
-              Array.fold_left
-                (fun r -> gen l rm r) rm rs in
-            slv l rm c0 tl
-          | Rm r -> slv l rm c0 tl
-          | Call(y,f,x) ->
-            slv l rm c0 tl
-          | Ini(r,k) ->
-            slv l rm c0 tl
-        )
+        let rm slv l rm c0 pr
+          | Ret r -> rm
+          | Seq(o,p1) ->
+            ( match o with
+              | Id (r,rs) ->
+                let (rm,ts) = new_val_rs (l+1) rm rs in
+                let t = inst (l+1) rm r in
+                let (s0,t0) = unifys @@ t::(Array.to_list ts) in
+                let rm = subst_rm s0 rm in
+                let rm =
+                  Array.fold_left
+                    (fun r -> gen l rm r) rm rs in
+                slv l rm c0 tl
+              | Prj(r0,(rs,rt)) ->
+                let (rm,ts) = new_val_rs (l+1) rm rs in
+                let t = inst (l+1) rm r in
+                let (s0,t0) = unifys @@ t::(Array.to_list ts) in
+                let rm = subst_rm s0 rm in
+                let rm =
+                  Array.fold_left
+                    (fun r -> gen l rm r) rm rs in
+                slv l rm c0 tl
+              | Cns((rs,rt),r0) ->
+                let (rm,ts) = new_val_rs (l+1) rm rs in
+                let t = inst (l+1) rm r in
+                let (s0,t0) = unifys @@ t::(Array.to_list ts) in
+                let rm = subst_rm s0 rm in
+                let rm =
+                  Array.fold_left
+                    (fun r -> gen l rm r) rm rs in
+                slv l rm c0 tl
+              | Rm r -> slv l rm c0 tl
+              | Call(y,f,x) ->
+                slv l rm c0 tl
+              | Ini(r,k) ->
+                slv l rm c0 tl
+            )
     )
   let rec gnr rm ev p =
     ( match IR.find p ev with
