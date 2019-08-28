@@ -12,7 +12,7 @@
 %left MULOP DIVOP
 %left NEG
 %%
-input : 
+input : '
 s       : list
         ;
 list    : /* empty */

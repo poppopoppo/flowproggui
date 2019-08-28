@@ -167,7 +167,10 @@ module Net (R : R_T) = struct
     | Ret of reg_ptn
   and asm = reg_ptn * (nd array ref)
   and pt = int
-  type rcd_tkn_v = rcd_tkn R.st_v
+  type code =
+    | V of code * code
+    | H of code * code
+    | type rcd_tkn_v = rcd_tkn R.st_v
   type cs_v = (reg * rcd_tkn) list
   type tkn_ptn = tkn rcd_ptn
   type st = rcd_tkn_v * (cs Stack.t)

@@ -15,26 +15,23 @@ let z = (('-' digit+)|digit+)
 rule token = parse
     | '\"' (([^ '\"']|"\\\"")* as lxm) '\"' { STG(lxm) }
     | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
-    | ".;" [^ ';']* ";."  { token lexbuf }
+    | "[;" [^ ';']* ";]"  { token lexbuf }
     | "§"  { LCE }
     | "§§"  { MDL }
     | "§§." { MDL_END }
     | "¶" { DTA }
     | "¶+ℾ" { DTA_GRM }
-    | ">" { ORD_COPRD }
-    | ">|"  { ORD_LEX_COPRD }
     | "¬|"  { NOT_SPL }
     | "\\"  { SLH }
     | "∀" { FOR_ALL }
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
     | "≃" { ISO }
-    | "=="  { DEQ }
+    | "="  { DEQ }
     | "~" { LET }
     | "»" { ARR }
     | "«" { ARR_REV }
     | "«|"  { ARR_REV_IN }
-    | "~" { LET } 
     | (('|')+ as lxm) "»" { IN(String.length lxm) }
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
@@ -45,7 +42,6 @@ rule token = parse
     | "|" { SPL }
     | "∠" { AGL_TOP }
     | "∠" "["  { AGL }
-    | "∠|"  { AGL_COD }
     | "]" { R_BLK }
     | "[" { L_BLK }
     | "^" { SEQ }
@@ -63,14 +59,12 @@ rule token = parse
     | "↓[" (digit+ as lxm) "]" { CHO(int_of_string lxm) }
     | "{" { L_RCD }
     | "}" { R_RCD }
-    | "⁅" { L_HLZ }
-    | "⁆" { R_HLZ  }
+    | "|{" { L_HLZ }
+    | "}|" { R_HLZ  }
     | "⟦" { L_LST }
     | "⟧" { R_LST }
-    | "⟦|"  { L_LST_PLS }
     | "‹" { L_OPN }
     | "›" { R_OPN }
-    | "{^"  { L_VCT }
     | "&" { SGN }
     | "#" { VCT }
     | "(" { L_PRN }
@@ -87,16 +81,12 @@ rule token = parse
     | "-" { MNS }
     | "⅁" { GRM }
     | "¬" { NOT }
-    | ">" { ORD_COPRD }
-    | ">|"  { ORD_LEX_COPRD }
+    | "∐\\"  { ORD_LEX_COPRD }
     | "," { CMM }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "@" (("\'")* as lxm) { SLF (String.length lxm) }
     | (digit+ as lxm) "\'" { IDX (int_of_string lxm) }
-    | "◂\'" { APP_EVL }
-    | "+<" { PLS_NAT }
-    | "*<" { MLT_NAT }
-    | "-<"  { MNS_NAT }
+    | "." { DOT }
     | "∠"  { AGL }
     | digit+ as lxm  { INT (int_of_string lxm) }
     | (digit+ as lxm) '<'  { NAT (int_of_string lxm) }
