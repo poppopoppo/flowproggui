@@ -187,3 +187,4 @@ concrete type → ?
 B = bit = b
 { value (concrete type) } : ?
 { (a'→b') ? }→‹b'›
+pnt : ?→ℾ
