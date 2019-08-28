@@ -75,6 +75,7 @@ type token =
   | EMT
   | DTA_GRM
   | DTA
+  | DOT
   | DEQ
   | DEF
   | CST
@@ -101,6 +102,6 @@ exception Error
 
 (* The monolithic API. *)
 
-val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Types.mdl)
+val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.mdl)
 
-val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Types.buffer)
+val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.line)

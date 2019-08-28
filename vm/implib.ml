@@ -1,5 +1,5 @@
 open Print
-open Types
+open Lang
 open Ty
 module Vmr = Vmr0
 open Vmr
