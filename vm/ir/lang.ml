@@ -372,9 +372,13 @@ module IR = struct
                    (st,i+1) )
                 (st,0) rs in
             let ln = Array.length l in
-            let lt = Array.init (ln-i-1) (fun n -> l.(i+n)) in
-            let st = set_r st rt (Rcd lt) in
-            st
+            if i=ln then st
+            else
+              let lt =
+                ( try Array.init (ln-i) (fun n -> l.(i+n))
+                  with _ -> err "set_reg_ptn:1" ) in
+              let st = set_r st rt (Rcd lt) in
+              st
         )
     )
   let rec set_cs_k st l =
@@ -748,7 +752,7 @@ module IR = struct
             let (ev,p3) = seqs ev p2 cl rs.(i) in
             (ev,p3,rs.(i))
           | P_A r1 ->
-            let rs = Array.init (i-1) (fun _ -> sgn ()) in
+            let rs = Array.init (i+1) (fun _ -> sgn ()) in
             let rt = sgn () in
             let p2 = DName (sgn ()) in
             let ev = PtMap.add p1 (Seq(Prj(r1,(rs,rt)),p2)) ev in
