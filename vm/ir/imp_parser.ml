@@ -4067,7 +4067,7 @@ and _menhir_goto_exp : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_exp -> '
             let _1 = () in
             let _v : 'tv_exp = 
 # 268 "imp_parser.mly"
-                          ( _2 )
+                          ( Agl_Op _2 )
 # 4072 "imp_parser.ml"
              in
             _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv320)

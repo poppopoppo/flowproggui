@@ -39,8 +39,7 @@ rule token = parse
     | "?" { EXN }
     | ":" { CLN }
     | "|" { SPL }
-    | "∠" { AGL_TOP }
-    | "∠" "["  { AGL }
+    | "∠"  { AGL }
     | "]" { R_BLK }
     | "[" { L_BLK }
     | "^" { SEQ }

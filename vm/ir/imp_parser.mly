@@ -265,7 +265,7 @@ exp_lst:
   ;
 
 exp:
-  | AGL exp %prec AGL_PRE { $2 }
+  | AGL exp %prec AGL_PRE { Agl_Op $2 }
   | INT { Atm(Z $1) }
   | EXN { Atm Exn }
   | ROT { Rot }
