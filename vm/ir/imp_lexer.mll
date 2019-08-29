@@ -20,14 +20,13 @@ rule token = parse
     | "§§"  { MDL }
     | "§§." { MDL_END }
     | "¶" { DTA }
-    | "¶+ℾ" { DTA_GRM }
+    | "¶+ℙ" { DTA_GRM }
     | "¬|"  { NOT_SPL }
     | "\\"  { SLH }
     | "∀" { FOR_ALL }
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
     | "≃" { ISO }
-    | "="  { DEQ }
     | "~" { LET }
     | "»" { ARR }
     | "«" { ARR_REV }
@@ -75,7 +74,7 @@ rule token = parse
     | "◃" { PRJ }
     | "ℤ" { Z }
     | "ℕ" { N }
-    | "ℾ" { TYP_STG }
+    | "ℙ" { TYP_STG }
     | "+" { PLS }
     | "*" { MLT }
     | "-" { MNS }

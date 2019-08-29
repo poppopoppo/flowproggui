@@ -38,6 +38,7 @@ let ( *| ) o e =
   ( match o with
     | Some x -> x
     | None -> err e )
+let try_err f s = try f with _ -> err s
 let ( |+| ) a b = Array.append a b
 let unt () = [| |]
 module Sgn :

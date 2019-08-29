@@ -1,7 +1,6 @@
 %{
   open Lang
   open Ast
-  open Imp_parser_header
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT
@@ -28,7 +27,7 @@
 %start buffer
 %start file
 
-%type <Lang.Ast.mdl> file
+%type <Lang.Ast.mdl list> file
 %type <Lang.Ast.line> buffer
 %type <Peg.grammar> dta_grm
 %%
@@ -37,7 +36,8 @@ buffer:
   | ARR_END EOF { End }
   ;
 file:
-  | def_mdl { Util.pnt flg "parse:file\n"; $1 }
+  | EOF { [] }
+  | def_mdl file { $1::$2 }
   ;
 def_mdl:
   | MDL NAM DEF gl_etr_lst MDL_END { ($2,$4) }
@@ -72,7 +72,6 @@ grm_clq:
   ;
 grm_etr:
   | SLF NAM ISO grm_ord   { ($2,[],$4) }
-  | SLF NAM EQ grm_ptns grm_prd { ($2,[],[((Peg.Synt,$4,$5),None)]) }
   ;
 grm_ord:
   | grm_rule { [($1,None)] }
@@ -81,7 +80,7 @@ grm_rule:
   | ord grm_ptns grm_prd { ($1,$2,$3) }
   ;
 ord:
-  | ORD_COPRD { Peg.Synt }
+  | COPRD { Peg.Synt }
   | ORD_LEX_COPRD { Peg.Lex }
   ;
 grm_ptns:
@@ -89,14 +88,13 @@ grm_ptns:
   | grm_ptns grm_ptn  { $1@[$2] }
   ;
 grm_ptn:
-  | grm_atom { $1 }
+  | grm_atom { Peg.Atm $1 }
   | L_LST grm_atom R_LST { Peg.List $2 }
-  | L_LST_PLS grm_atom R_LST { Peg.List $2 }
   | L_OPN grm_atom R_OPN { Peg.Option $2 }
   ;
 grm_atom:
-  | STG { Peg.Text $1 }
-  | NAM { Peg.Name $1 }
+  | STG { (Peg.Text $1) }
+  | NAM { (Peg.Name $1) }
   ;
 grm_prd:
   | { None }
@@ -146,6 +144,8 @@ typs:
   | typs typ { }
   ;
 typ:
+  | L_PRN typ R_PRN {}
+  | SLF DOT NAM
   | L_RCD typ_top R_RCD {  }
   | typ APP typ {  }
   | typ PRJ typ {  }
@@ -274,6 +274,7 @@ exp:
   | INJ { Atm(Inj $1) }
   | CHO { Atm(Cho $1)  }
   | NAM  { Atm (Name $1) }
+  | NAM DOT NAM { Atm(Name ($1^"."^$3)) }
   | SGN { App(Atm (Name "&"),Rcd [||]) }
   | STG { Atm (Stg $1) }
   | SLF { Atm Fix }

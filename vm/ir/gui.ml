@@ -470,7 +470,7 @@ let main () =
              (* navi_view#source_buffer#set_text "entering code view\n" *) ()
            | MODIFIED s ->
               let mdl = Implib.mdl_from_string s in
-              let s = Lang.Ast.print_mdl false mdl in
+              let s = Lang.IR.print (Lang.ir_of_ast (snd mdl)) in
               navi_view#source_buffer#set_text s
           ))
   in
@@ -575,7 +575,7 @@ let main () =
           match s with
           | `MODULE_IMPORT ->
             let ((_,y,v),(_,g0)) = (!st,!mdl) in
-            st := (Lang.IR.c_m_of_g g0,y,v);
+            st := (Lang.ir_of_ast g0,y,v);
             global_signal#call `MODULE_IMPORT
           | `OPEN_FILE ->  open_file ()
         ) in
