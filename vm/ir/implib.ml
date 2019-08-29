@@ -1,15 +1,15 @@
 open Util
 open Lang
 open IR
-type t = IR.ir_vct * Types.t * (IR.pt, Sgn.t) Tkn.t
+type t = IR.mdl * Types.t * (IR.pt, Sgn.t) Tkn.t
 let print (_,_,k) = Tkn.print k
-let init_st:t = PtMap.empty,(Types.Var (ref Types.WC)),Tkn.Rcd [||]
+let init_st:t = { flow = []; grm = []; ir_vct = PtMap.empty; rm = SgnMap.empty; },(Types.Var (ref Types.WC)),Tkn.Rcd [||]
 let evo (g,src,k) (b:Ast.line) =
   ( match b with
     | Ast.Line e ->
       let p0 = DName (sgn()) in
       let r0 = Rcd_Ptn.P_A(sgn ()) in
-      let (ev,_,_) = vh_of_exp_ptn g p0 r0 e in
+      let (ev,_,_) = vh_of_exp_ptn g.ir_vct p0 r0 e in
       let st = SgnMap.empty in
       let cs = Stack.create () in
       let st = set_reg_ptn st r0 k in
@@ -27,7 +27,7 @@ let ast_from_file (f:string) =
 
 let mdl_from_string (s:string) =
   let lexbuf = Lexing.from_string s in
-  Imp_parser.file Imp_lexer.token lexbuf
+  List.hd @@ Imp_parser.file Imp_lexer.token lexbuf
 exception Load
 let load_from_file (s:string) =
     if Filename.check_suffix s "st"

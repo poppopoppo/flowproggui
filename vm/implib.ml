@@ -1,9 +1,4 @@
-open Print
 open Lang
-open Ty
-module Vmr = Vmr0
-open Vmr
-open NetSgn
 type t = gl_st * tm * NetInt.rcd_tkn
 let string_of_t b (g,y,k) =
   let p1 = "global state: "^(Print.string_of_gl_st g) in
@@ -103,7 +98,7 @@ let ast_from_file (f:string) : Types.mdl =
 
 let mdl_from_string (s:string) : mdl  =
   let lexbuf = Lexing.from_string s in
-  Imp_parser.file Imp_lexer.token lexbuf
+  hd @@ Imp_parser.file Imp_lexer.token lexbuf
 
 type ide =
   string list * (* file names for loading *)

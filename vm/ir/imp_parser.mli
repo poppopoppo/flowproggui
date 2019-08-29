@@ -102,6 +102,6 @@ exception Error
 
 (* The monolithic API. *)
 
-val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.mdl)
+val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.mdl list)
 
 val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.line)
