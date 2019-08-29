@@ -135,7 +135,7 @@ module Types = struct
     ( match t with
       | Rcd t -> List.fold_right (fun x r -> Cns(x,r)) l t
       | Var { contents = Ln y } -> rcd_cns l y
-      | _ -> err "rcd_cns" )
+      | _ -> err ("rcd_cns:"^(print (ref []) t)) )
   let coprd_cl a l =
     if (List.length l)>0 then CP(a,rcd_cl l)
     else err "coprd_cl"
@@ -286,25 +286,27 @@ module Tkn = struct
           | Rcd rts -> Rcd ((Array.map of_reg_ptn rs) |+| rts)
           | _ -> err "of_reg_ptn 0" ))
   let rec get_agl i k =
-    ( match i,k with
-      | [],_ -> agl k
-      | hd::tl,Rcd rs ->
-        let (rs,j,_) =
-          Array.fold_left
-            (fun (rs,j,i) r ->
-               if i=hd then
-                 let (j,ki) = get_agl tl r in
-                 (rs |+| [|ki|],j,i+1)
-               else (rs |+| [|r|],j,i+1))
-            ([||],0,0) rs in
-        (j,Rcd rs)
-      | _ -> err "get_agl:0" )
+    (try
+       ( match i,k with
+         | [],_ -> agl k
+         | hd::tl,Rcd rs ->
+           let (rs,j,_) =
+             Array.fold_left
+               (fun (rs,j,i) r ->
+                  if i=hd then
+                    let (j,ki) = get_agl tl r in
+                    (rs |+| [|ki|],j,i+1)
+                  else (rs |+| [|r|],j,i+1))
+               ([||],0,0) rs in
+           (j,Rcd rs)
+         | _ -> err "get_agl:0" )
+     with _ -> err ("get_agl:1:["^(Util.string_of_list "," string_of_int i)^"]"))
   and agl k =
     ( match k with
       | Tkn (CoP(m1,kx)) -> (m1,kx)
       | Tkn (Z z) -> ((if z=0 then 0 else 1),Rcd [||])
       | Tkn (Zn(z0,_)) -> ((if z0=0 then 0 else 1),Rcd [||])
-      | _ -> err "err 19" )
+      | _ -> err ("err 19:"^(print k)) )
 end
 module IR = struct
   open Rcd_Ptn
@@ -1315,6 +1317,7 @@ module Typing = struct
               let (t0,_) = inst (l+1) (inst_ini()) (SgnMap.find r0 rm) in
               let ts = Array.map (fun r -> fst @@ inst (l+1) (inst_ini()) (SgnMap.find r rm)) rs in
               let (tr,_) = inst (l+1) (inst_ini()) (SgnMap.find rt rm) in
+              let _ = unify tr (Rcd (Types.Uo (ref (Types.V (l+1))))) in
               let _ = unify t0 (Rcd (rcd_cns (Array.to_list ts) tr)) in
               let _ = gen_rm l rm in ()
             | Cns((rs,rt),r0) ->
