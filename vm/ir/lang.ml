@@ -1535,12 +1535,10 @@ let rec slv_mdl (rm:Types.t SgnMap.t) (iv:IR.ir_vct) (el:_ list) : unit =
       let ql =
         List.fold_left
           (fun ql (n,_) ->
-             let e = try (IR.PtMap.find (Name n) iv) with _ -> err "slv_mdl:0" in
-             ( match e with
-               | IR.Etr(r,p1) ->
-                 let _ = try (Rcd_Ptn.map (fun r -> Typing.inst 0 (Typing.inst_ini ()) (SgnMap.find r rm)) r) with _ -> err "slv_mdl:1" in
-                 ql@[p1]
-               | _ -> err "slv_mdl" ))
+             let ((r0,p0),r1) = try (IR.etr iv (Name n),IR.ret iv (Name n)) with _ -> err "slv_mdl:0" in
+             let _ = Typing.inst 0 (Typing.inst_ini ()) (IR.get_rm_ptn rm r0) in
+             let _ = Typing.inst 0 (Typing.inst_ini ()) (IR.get_rm_ptn rm r1) in
+             ql@[p0])
           [] q in
       let _ = List.map (fun x -> Typing.slv 0 rm iv x) ql in
       let _ = Typing.gen_rm (-1) rm in
