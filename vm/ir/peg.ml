@@ -22,7 +22,15 @@ type ast =
   | Ast_Option of (ast option)
 type rtn = Parse of (ast * string) | Fail of string
 type global = grammar list
-let rec print g =
+let rec print_ast a =
+  ( match a with
+    | Ast_Rule (None,l) -> "_[_]◂{ "^(Util.string_of_list " " print_ast l)^" }"
+    | Ast_Rule (Some s,l) -> s^"◂{ "^(Util.string_of_list " " print_ast l)^" }"
+    | Ast_Text s -> "\""^s^"\""
+    | Ast_List l -> "⟦ "^(Util.string_of_list " " print_ast l)^" ⟧"
+    | Ast_Option None -> "‹›"
+    | Ast_Option (Some x) -> "‹"^(print_ast x)^"›" )
+  let rec print g =
   ( match g with
     | [] -> ""
     | (n,vs,l)::tl ->
