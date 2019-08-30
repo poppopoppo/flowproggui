@@ -71,7 +71,7 @@ grm_clq:
   | grm_etr grm_clq { $1::$2 }
   ;
 grm_etr:
-  | SLF NAM ISO grm_ord   { ($2,[],$4) }
+  | SLF DOT NAM ISO grm_ord   { ($3,[],$5) }
   ;
 grm_ord:
   | grm_rule { [($1,None)] }
@@ -287,11 +287,11 @@ exp:
   | exp APP exp { App($1,$3) }
   | exp PRJ INT { Prj($1,$3) }
   | L_RCD exp_lst R_RCD { Rcd (Array.of_list $2) }
-  | L_OPN R_OPN { Atm (Name "‹›") }
+  | L_OPN R_OPN { App(Atm(Name "‹›"),Rcd [||]) }
   | L_OPN exp R_OPN { App(Atm (Name "‹"),$2) }
   | L_LST lst_list R_LST { $2 }
   ;
 lst_list:
-  | { App(Atm (Name "nil"),Rcd [||]) }
-  | exp lst_list { App(Atm (Name "cns"),Rcd [|$1;$2|]) }
+  | { App(Atm (Name "⟦⟧"),Rcd [||]) }
+  | exp lst_list { App(Atm (Name "⟦"),Rcd [|$1;$2|]) }
   ;
