@@ -35,7 +35,7 @@ let rec print_ast a =
     | [] -> ""
     | (n,vs,l)::tl ->
       let s0 = print_entry l in
-      "\t@ "^n^" ◂ "^(Util.string_of_list "," (fun x -> x) vs)^" ≃ \n"^s0^(print tl) )
+      "\t@."^n^" ◂ "^(Util.string_of_list "," (fun x -> x) vs)^" ≃ \n"^s0^(print tl) )
 and print_entry l =
   ( match l with
     | [] -> ""
@@ -72,6 +72,7 @@ and print_po po =
         | And -> " +| "^(print_pl pl)
         | Not -> " ¬| "^(print_pl pl)))
 let rec parse (g:grammar) (n:name) (s:string) : (ast option) * string =
+  Util.pnt true ("enter parse:"^n^","^s^"\n");
   let e = List.find (fun (n0,_,_) -> n=n0) g in
   let (_,_,rs) = e in
   parse_entry g rs s

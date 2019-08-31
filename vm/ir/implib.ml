@@ -1,20 +1,39 @@
 open Util
 open Lang
 open IR
-type t = IR.mdl * Types.t * (IR.pt, Sgn.t) Tkn.t
-let print (_,_,k) = Tkn.print k
-let init_st:t = { flow = []; grm = []; ir_vct = PtMap.empty; rm = SgnMap.empty; },(Types.Var (ref Types.WC)),Tkn.Rcd [||]
-let evo (g,src,k) (b:Ast.line) =
+type t = IR.mdl * IR.pt * (Sgn.t Rcd_Ptn.t) * (IR.pt, Sgn.t) Tkn.t
+let print (_,_,_,k) = Tkn.print k
+let init_st () : t =
+  let iv = PtMap.empty in
+  let p0 = DName(sgn ()) in
+  let p1 = DName(sgn ()) in
+  let r0 = (sgn ()) in
+  let iv = PtMap.add p0 (Seq(Ini(r0,Rcd [||]),p1)) iv in
+  let iv = PtMap.add p1 (Ret (P_A r0)) iv in
+  { flow = []; grm = []; ir_vct = iv; rm = SgnMap.empty; },
+  p1,(Rcd_Ptn.P_A r0),Tkn.Rcd [||]
+let mk_st g k =
+  let m0 = Lang.ir_of_ast g in
+  let p0 = DName(sgn ()) in
+  let p1 = DName(sgn ()) in
+  let r0 = (sgn ()) in
+  let iv = PtMap.add p0 (Seq(Ini(r0,Rcd [||]),p1)) m0.ir_vct in
+  let iv = PtMap.add p1 (Ret (P_A r0)) iv in
+  let rm = init_rm m0.rm iv in
+  { m0 with ir_vct = iv; rm = rm },
+  p1,(Rcd_Ptn.P_A r0),k
+let evo (g,p0,r0,k) (b:Ast.line) =
   ( match b with
     | Ast.Line e ->
-      let p0 = DName (sgn()) in
-      let r0 = Rcd_Ptn.P_A(sgn ()) in
-      let (ev,_,_) = vh_of_exp_ptn g.ir_vct p0 r0 e in
+      let (iv,p1,r1) = vh_of_exp_ptn g.ir_vct p0 r0 e in
+      let rm = init_rm g.rm iv in
+      let g0 = { g with ir_vct = iv; rm = rm } in
+      let _ = Typing.slv g0 0 p0 in
       let st = SgnMap.empty in
       let cs = Stack.create () in
       let st = set_reg_ptn st r0 k in
-      let k1 = run ev p0 st cs in
-      (g,src,k1)
+      let k1 = run g0 p0 st cs in
+      (g0,p1,r1,k1)
     | _ -> err "evo:0" )
 let ast_from_string s =
       let lexbuf = Lexing.from_string s in

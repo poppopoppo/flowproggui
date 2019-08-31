@@ -1,5 +1,5 @@
 all: gui evo
-gui: lang.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly implib.ml util.ml gui.ml
+gui: peg.ml lang.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly implib.ml util.ml gui.ml
 	rm -f imp_parser.ml imp_parser.cmi imp_parser.mli imp.cmi
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
