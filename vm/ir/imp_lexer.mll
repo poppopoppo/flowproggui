@@ -79,7 +79,7 @@ rule token = parse
     | "-" { MNS }
     | "⅁" { GRM }
     | "¬" { NOT }
-    | "∐\\"  { ORD_LEX_COPRD }
+    | "∐*"  { ORD_LEX_COPRD }
     | "," { CMM }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "@" (("\'")* as lxm) { SLF (String.length lxm) }
