@@ -13,7 +13,7 @@ let alnum = digit | alpha
 let name = alpha+  ("_" | digit | alpha)*
 let z = (('-' digit+)|digit+)
 rule token = parse
-    | '\"' (([^ '\"']|"\\\"")* as lxm) '\"' { STG(lxm) }
+    | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n")* as lxm) '\"' { STG(lxm) }
     | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
     | "[;" [^ ';']* ";]"  { token lexbuf }
     | "§"  { LCE }

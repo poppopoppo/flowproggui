@@ -88,6 +88,7 @@ grm_ptns:
   | grm_ptns grm_ptn  { $1@[$2] }
   ;
 grm_ptn:
+  | WC  { Peg.Atm Any } 
   | grm_atom { Peg.Atm $1 }
   | L_LST grm_atom R_LST { Peg.List $2 }
   | L_OPN grm_atom R_OPN { Peg.Option $2 }
