@@ -471,7 +471,7 @@ let main () =
            | MODIFIED s ->
               let mdl = Implib.mdl_from_string s in
               let s = Lang.IR.print (Lang.ir_of_ast (snd mdl)) in
-              Util.pnt true s;
+              (* Util.pnt true s; *)
               navi_view#source_buffer#set_text s
           ))
   in
