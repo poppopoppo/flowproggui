@@ -1171,34 +1171,39 @@ module Typing = struct
   let rec unify ru t0 t1 =
     (* let h = ref [] in
        Util.pnt true ("enter unify:"^(Types.print h [] t0)^","^(Types.print h [] t1)^"\n")*)
-    ( match t0,t1 with
-      | Var v1,t2
-      | t2,Var v1 ->
-        ( match !v1 with
-          | Ln t3 -> unify ru t2 t3
-          | _ ->
-            ( match t2 with
-              | Rec rv ->
-                let _ = occurs_rec [rv] v1 rv in
-                v1 := Ln t2;
-                ()
-              | _ ->
-                let b = occurs [] v1 t2 in
-                if b then err "unify: 0"
-                else v1 := (Ln t2); ()
-            )
-        )
-      | App(t2,t3),App(t4,t5)
-      | Imp(t2,t3),Imp(t4,t5) -> unify ru t2 t4; unify ru t3 t5
-      | Prm p1,Prm p2 -> if p1=p2 then () else err "unify:1"
-      | Rec v1,Rec v2 ->
-        if v1==v2 then ()
-        else if List.exists (fun (x1,x2) -> (x1==v1&&x2==v2)||(x1==v2&&x2==v1)) ru then ()
-        else unify_rec ((v1,v2)::ru) v1 v2
-      | Rcd l1,Rcd l2 -> unify_rcd ru l1 l2
-      | Rcd_Lb l1,Rcd_Lb l2 -> unify_rcd_lb ru l1 l2
-      | _ -> err "unify:2"
-    )
+    let h = ref [] in
+    let se = (Types.print h [] t0)^" ~ "^(Types.print h [] t1) in
+    Util.pnt true ("enter unify:"^se^"\n");
+    if t0==t1 then ()
+    else
+      ( match t0,t1 with
+        | Var v1,t2
+        | t2,Var v1 ->
+          ( match !v1 with
+            | Ln t3 -> unify ru t2 t3
+            | _ ->
+              ( match t2 with
+                | Rec rv ->
+                  let _ = occurs_rec [rv] v1 rv in
+                  v1 := Ln t2;
+                  ()
+                | _ ->
+                  let b = occurs [] v1 t2 in
+                  if b then err ("unify:0:"^se)
+                  else v1 := (Ln t2); ()
+              )
+          )
+        | App(t2,t3),App(t4,t5)
+        | Imp(t2,t3),Imp(t4,t5) -> unify ru t2 t4; unify ru t3 t5
+        | Prm p1,Prm p2 -> if p1=p2 then () else err ("unify:1:"^se)
+        | Rec v1,Rec v2 ->
+          if v1==v2 then ()
+          else if List.exists (fun (x1,x2) -> (x1==v1&&x2==v2)||(x1==v2&&x2==v1)) ru then ()
+          else unify_rec ((v1,v2)::ru) v1 v2
+        | Rcd l1,Rcd l2 -> unify_rcd ru l1 l2
+        | Rcd_Lb l1,Rcd_Lb l2 -> unify_rcd_lb ru l1 l2
+        | _ -> err ("unify:2"^se)
+      )
   and unify_rcd ru l1 l2 =
     ( match l1,l2 with
       | U,U -> ()
@@ -1208,11 +1213,11 @@ module Typing = struct
           | Ln t3 -> unify_rcd ru l3 t3
           | _ ->
             let b = rcd_occurs t1 l3 in
-            if b then err "unify: 0"
+            if b then err "unify_rcd: 0"
             else t1 := (Ln l3); ()
         )
       | Cns(t1,t2),Cns(t3,t4) -> unify ru t1 t3; unify_rcd ru t2 t4
-      | _ -> err "unify_rcd:0" )
+      | _ -> err "unify_rcd:1" )
   and tl_rcd_lb l1 =
     ( match l1 with
       | U_Lb -> `Tl_U
@@ -1356,14 +1361,14 @@ module Typing = struct
         (Imp(y1,y2),i)
       | Rcd r -> let (r,i) = (inst_rcd l i r) in (Rcd r,i)
       | Rcd_Lb r -> let (r,i) = (inst_rcd_lb l i r) in (Rcd_Lb r,i)
-      | Rec r ->
-        ( try (Rec (List.assq r i.rl),i)
+      | Rec r0 ->
+        ( try (Rec (List.assq r0 i.rl),i)
           with Not_found ->
-            let r0 = r in
-            let i0 = { i with rl = (r,r0)::i.rl } in
-            let (r1,i) = inst_rec l i0 r in
-            r0 := r1;
-            (Rec r0,i))
+            let r1 = ref Rec_WC in
+            let i0 = { i with rl = (r0,r1)::i.rl } in
+            let (r2,i) = inst_rec l i0 r0 in
+            r1 := r2;
+            (Rec r1,i))
       | _ -> (y,i))
   and inst_rcd l (i:inst) r =
     ( match r with
@@ -1531,7 +1536,7 @@ module Typing = struct
           ( try
               BatList.find_map
                 (fun g -> try Some (find_grm g n) with _ -> None) gs
-            with _ -> err "slv_grm:0" )
+            with _ -> err ("slv_grm:0:"^n))
         in
         let y = ref Rec_WC in
         yl := (n,y)::!yl;

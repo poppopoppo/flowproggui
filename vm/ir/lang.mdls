@@ -2,11 +2,11 @@
 ¶+ℙ 
 	@.nl ≃ ∐ "\n"
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
-	@.def_arg ≃ ∐ "◂" arg ⟦args⟧
-	@.arg ≃ ∐ "," var 
-	@.var ≃ ∐ name "'" 
-	@.mdl_etr ≃ 
-  ∐ glb_etr   
+	@.def_arg ≃ ∐ "◂" var ⟦args⟧
+	@.args ≃ ∐ "," var 
+	@.var ≃ ∐ name "'"  
+	@.mdl_etr ≃  
+  ∐ glb_etr    
   ∐ def_typ 
 	@.def_typ ≃   
   ∐ "¶" def_typ_body_clq ⟦def_typ_body_clq⟧
@@ -15,73 +15,76 @@
 	@.def_typ_body_clq ≃ ∐ "@" "." def_typ_body
   @.def_typ_body ≃
   ∐ name ‹def_arg›
-  ∐ name ‹def_arg› "≃" def_coprd
-  ∐ name ‹def_arg› "≃" def_prd
+  ∐ name ‹def_arg› "≃" def_coprd ⟦def_coprd⟧
+  ∐ name ‹def_arg› "≃" def_prd ⟦def_prd⟧
   ∐ name ‹def_arg› "=" typ
-  @.grm_body ≃ ∐ "@" name "≃" grm_ord
+  @.def_coprd ≃ ∐ "∐" typ_top ":" name
+	@.def_prd ≃ ∐ "∏" typ_top ":" name
+  @.grm_body ≃ ∐ "@" "." name "≃" grm_ord
 	@.grm_ord ≃ ∐ grm_rule ⟦grm_rule⟧
-	@.grm_rule ≃ ∐ ord ⟦grm_ptn⟧ ‹grm_prd›
+	@.grm_rule ≃ ∐ ord ⟦grm_ptn⟧ ‹grm_pred›
 	@.ord ≃ ∐ "∐*" ∐ "∐"
 	@.grm_ptn ≃
   ∐ grm_atom
   ∐ "⟦" grm_atom "⟧"
 	∐ "‹" grm_atom "›"
-	@.grm_atom ≃ ∐ string ∐ name
-	@.grm_prd ≃ ∐ prd_flg ⟦grm_ptn⟧
-	@.prd_flg ≃ ∐ "+|" ∐ "¬|"
-	@.def_coprd ≃
-  ∐ "∐" typ_top ":" name
-  ∐ "∐" typ_top ":" name def_coprd
-	@.def_prd ≃
-  ∐ "∏" typ_top ":" name
-  ∐ "∏" typ_top ":" name def_prd
+	@.grm_atom ≃ ∐ str ∐ name
+	@.grm_pred ≃ ∐ pred_flg ⟦grm_ptn⟧
+	@.pred_flg ≃ ∐ "+|" ∐ "¬|"
 	@.typ_top ≃
   ∐ ⟦typ⟧
   ∐ "!" typ
-	@.typ ≃
+	@.typ ≃ ∐ typ_imp 
+	@.typ_imp ≃ ∐ typ_vct ⟦typ_imp_tl⟧ 
+	@.typ_imp_tl ≃ ∐ "→" typ_vct
+	@.typ_vct ≃ ∐ typ_app ⟦typ_vct_tl⟧
+	@.typ_vct_tl ≃ ∐ "◃" typ_app
+	@.typ_app ≃ ∐ typ_atm ⟦typ_app_tl⟧
+	@.typ_app_tl ≃ ∐ "◂" typ_atm
+	@.typ_atm ≃
+  ∐ typ_rec 
   ∐ "{" typ_top "}"
-  ∐ typ "◂" typ
-  ∐ typ "◃" typ
-  ∐ "‹" typ "›"
-  ∐ "⟦" typ "⟧"
+  ∐ "‹" typ_imp "›"
+  ∐ "⟦" ⟦typ_imp⟧ "⟧"
   ∐ name
   ∐ "ℤ"
-  ∐ "ℕ"
-  ∐ typ "→" typ
+  ∐ "ℕ" 
   ∐ "&"
   ∐ "ℙ"
   ∐ "_"
+  @.typ_rec ≃ 
+  ∐ "@" "." typ_imp typ_rec_body 
+  @.typ_rec_body ≃
+  ∐ "≃∐[" ⟦typ_imp⟧ typ_rec_r
+  ∐ "≃∏[" typ_imp "⊢" ⟦typ_imp⟧ typ_rec_r 
+  @.typ_rec_r ≃
+  ∐ "]" ∐ "<]"
+	@.in ≃ ∐ "|»" 
 	@.glb_etr ≃
-  ∐ "§" glb_etr_body
-  ∐ "§" glb_etr_clique ⟦glb_etr_clique⟧
-	@.glb_etr_clique ≃ ∐ "@" name ‹typ_def› "≒" in stt_code
+  ∐ "§" name ‹typ_def› "≒" in stt_code
+  ∐ "§" glb_etr_clq ⟦glb_etr_clq⟧
+	@.glb_etr_clq ≃ ∐ "@" "." name ‹typ_def› "≒" in stt_code
 	@.typ_def ≃ ∐ ":" typ_top "⊢" typ_top
   @.stt_code ≃
-  ∐ vh_frm_top code
-  ∐ "|{" stt_code ⟦h_frm_mid⟧ "}|" ‹tail›
-  ∐ vh_frm_top code_coprd_list "∇" ‹tail›
-  ∐ vh_frm_top code_prd_list "∆" ‹tail›
-  ∐ vh_frm_top in stt_code "∎" ‹tail›
+  ∐ exp_top code
+  ∐ exp_top code_coprd_lst "∇" ‹tail›
+  ∐ exp_top code_prd_lst "∆" ‹tail›
+  ∐ exp_top in stt_code "∎" ‹tail›
 	@.code ≃ 
   ∐ "∎" ‹tail›
-  ∐ "»" vh_frm_top code
-  ∐ "»" "|{" stt_code ⟦h_frm_mid⟧ "}|" ‹tail›
-  ∐ "»" vh_frm_top code_coprd_list "∇" ‹tail›
-  ∐ "»" vh_frm_top code_prd_list "∆" ‹tail›
-  ∐ "»" vh_frm_top in stt_code "∎" ‹tail›
+  ∐ "|{" ⟦code⟧ "}|" ‹tail›
+  ∐ "»" stt_code
 	@.eop ≃
   ∐ "∎"
   ∐ "»|"
   @.tail ≃ ∐ "^" code
-	@.code_coprd_list ≃ ∐ ⟦code_coprd_etr⟧
+	@.code_coprd_lst ≃ ∐ ⟦code_coprd_etr⟧
   @.code_coprd_etr ≃ ∐ "∐" stt_code
-  @.code_prd_list ≃ ∐ ⟦code_prd_etr⟧
-  @.code_prd_etr ≃ ∐ "∏" stt_code
-  @.h_frm_mid ≃ ∐ "¦" stt_code
-	@.vh_frm_top ≃ ∐ exp_top 
+  @.code_prd_lst ≃ ∐ ⟦code_prd_etr⟧
+  @.code_prd_etr ≃ ∐ "∏" stt_code 
 	@.exp_top ≃
-  ∐ ⟦exp⟧
-  ∐ "!" exp 
+  ∐ ⟦exp_top_rcd⟧
+  ∐ "!" exp_top_rcd
   @.exp_top_rcd ≃
   ∐ "{" ⟦exp_top_rcd⟧ "}" 
   ∐ "∠" exp_eq
@@ -123,15 +126,27 @@
   ∐ "↓[" num "]"
   ∐ name
   ∐ "&"
-  ∐ "ℙ"
   ∐ "@"
   ∐ "‹›"
-	@.name ≃ 
-	∐* alph ⟦alph⟧ ⟦digit⟧
+	@.str ≃  
+	∐* "\"" str_in  
+	@.str_in ≃ 
+	∐* "\\" str_sp str_in 
+	∐* "\""    
+	∐* _ str_in 
+	@.str_sp ≃ ∐* "\\" ∐* "\"" ∐* "t" ∐* "n" 
+	@.name ≃ ∐ alph ⟦alph_us⟧ ⟦digit⟧
 	@.num ≃ 
 	∐* digit ⟦digit⟧
-	@.alph ≃ ∐* "a" ∐* "b" ∐* "c" ∐* "A" ∐* "B" ∐* "C"
-	@.digit ≃ ∐* "0" ∐* "1" ∐* "2" ∐* "3" 
+	@.alph_us ≃ 
+	∐* alph 
+	∐* "_" 
+	@.alph ≃ 
+	∐* "a" ∐* "b" ∐* "c" ∐* "d" ∐* "e" ∐* "f" ∐* "g" ∐* "h" ∐* "i" ∐* "j" ∐* "k" ∐* "l" 
+	∐* "m" ∐* "n" ∐* "o" ∐* "p" ∐* "q" ∐* "r" ∐* "s" ∐* "t" ∐* "u" ∐* "v" ∐* "w" ∐* "x" ∐* "y" ∐* "z" 
+	∐* "A" ∐* "B" ∐* "C"
+	@.digit ≃ ∐* "0" ∐* "1" ∐* "2" ∐* "3" ∐* "4" ∐* "5" ∐* "6" ∐* "7" ∐* "8" ∐* "9" 
+
 ¶ @ rcd_ptn ◂ a' ≃
 	∐ ! a' : rp_a
 	∐ ! ⟦a'⟧ : rp_r
