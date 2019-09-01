@@ -1169,8 +1169,8 @@ module Typing = struct
       | P(_,_,p) -> occurs_rcd pl v1 p
       | _ -> err "occurs_rec:0" )
   let rec unify ru t0 t1 =
-    let h = ref [] in
-    let _ = Util.pnt true ("enter unify:"^(Types.print h [] t0)^","^(Types.print h [] t1)^"\n") in
+    (* let h = ref [] in
+       Util.pnt true ("enter unify:"^(Types.print h [] t0)^","^(Types.print h [] t1)^"\n")*)
     ( match t0,t1 with
       | Var v1,t2
       | t2,Var v1 ->
@@ -1415,7 +1415,7 @@ module Typing = struct
       | _ -> err "inst_rec:0" )
   let gen_rm (l:int) rm = SgnMap.map (fun y -> gen [] l y) rm
   let rec slv m l (p0:pt) =
-    Util.pnt true ("enter slv:"^(print_op m.ir_vct p0)^"\n");
+    (* Util.pnt true ("enter slv:"^(print_op m.ir_vct p0)^"\n"); *)
     ( match (try (find p0 m.ir_vct) with _ -> err "slv:4") with
           | Etr(r,p1) ->
             let _ = Rcd_Ptn.map (fun r -> inst l (inst_ini ()) (SgnMap.find r m.rm)) r in

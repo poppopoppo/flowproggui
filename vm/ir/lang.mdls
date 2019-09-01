@@ -1,26 +1,22 @@
 §§ Lang ≒
 ¶+ℙ 
+	@.nl ≃ ∐ "\n"
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
-	@.def_arg ≃ ∐ "◂" arg ⟦arg⟧
-	@.arg ≃ ∐ var ∐ "{" ⟦arg⟧ "}"
+	@.def_arg ≃ ∐ "◂" arg ⟦args⟧
+	@.arg ≃ ∐ "," var 
+	@.var ≃ ∐ name "'" 
 	@.mdl_etr ≃ 
   ∐ glb_etr   
   ∐ def_typ 
-	@.def_typ ≃ 
+	@.def_typ ≃   
   ∐ "¶" def_typ_body_clq ⟦def_typ_body_clq⟧
   ∐ "¶" def_typ_body
   ∐ "¶+ℙ" grm_body ⟦grm_body⟧
-	@.def_typ_body_clq ≃ 
-	∐ "@" name ‹def_arg›
-  ∐ "@" name ‹def_arg› "≃" def_coprd
-  ∐ "@" name ‹def_arg› "≃" def_prd
-  ∐ "@" name ‹def_arg› "=" typ
+	@.def_typ_body_clq ≃ ∐ "@" "." def_typ_body
   @.def_typ_body ≃
   ∐ name ‹def_arg›
   ∐ name ‹def_arg› "≃" def_coprd
   ∐ name ‹def_arg› "≃" def_prd
-  ∐ "%" name "≃" name ⟦name⟧
-  ∐ "%" name "◂" "[" gidit "]" "≃" name
   ∐ name ‹def_arg› "=" typ
   @.grm_body ≃ ∐ "@" name "≃" grm_ord
 	@.grm_ord ≃ ∐ grm_rule ⟦grm_rule⟧
@@ -29,7 +25,7 @@
 	@.grm_ptn ≃
   ∐ grm_atom
   ∐ "⟦" grm_atom "⟧"
-  ∐ "‹" grm_atom "›"
+	∐ "‹" grm_atom "›"
 	@.grm_atom ≃ ∐ string ∐ name
 	@.grm_prd ≃ ∐ prd_flg ⟦grm_ptn⟧
 	@.prd_flg ≃ ∐ "+|" ∐ "¬|"
@@ -82,35 +78,54 @@
   @.code_prd_list ≃ ∐ ⟦code_prd_etr⟧
   @.code_prd_etr ≃ ∐ "∏" stt_code
   @.h_frm_mid ≃ ∐ "¦" stt_code
-	@.vh_frm_top ≃ ∐ exp_top
+	@.vh_frm_top ≃ ∐ exp_top 
 	@.exp_top ≃
   ∐ ⟦exp⟧
   ∐ "!" exp 
-  @.exp ≃
+  @.exp_top_rcd ≃
+  ∐ "{" ⟦exp_top_rcd⟧ "}" 
+  ∐ "∠" exp_eq
+  ∐ exp_eq
+  @.exp_rcd ≃ 
+  ∐ "{" ⟦exp_rcd⟧ "}" 
+  ∐ exp_eq  
+  @.exp_eq ≃ ∐ exp_add ⟦exp_eq_tl⟧ 
+  @.exp_eq_tl ≃ ∐ "=" exp_add
+  @.exp_add ≃ ∐ exp_mlt ⟦exp_add_tl⟧
+  @.exp_add_tl ≃ ∐ op_add exp_mlt 
+  @.op_add ≃ ∐ "+" ∐ "-"
+  @.exp_mlt ≃ 
+  ∐ exp_app "*" exp_mlt 
+  ∐ exp_app  
+  @.exp_app ≃
+  ∐ exp_prj "◂" exp_app 
+  ∐ exp_prj
+  @.exp_prj ≃
+  ∐ exp_atm "◃" exp_idx
+  ∐ exp_atm
+  @.exp_idx ≃
+  ∐ idx "◃" exp_idx 
+  ∐ idx
+  @.idx ≃ 
+  ∐ num 
+  ∐ name
+  @.exp_atm ≃
   ∐ num
   ∐ "(" "+" ")"
   ∐ "(" "*" ")"
-  ∐ "∠" exp
+  ∐ "(" exp_rcd ")" 
+  ∐ "{" ⟦exp_rcd⟧ "}" 
+  ∐ "‹" exp_rcd "›"
+  ∐ "⟦" ⟦exp_rcd⟧ "⟧"
   ∐ "?"
   ∐ "$"
-  ∐ "↑[" digit "]"
-  ∐ "↓[" digit "]"
+  ∐ "↑[" num "]"
+  ∐ "↓[" num "]"
   ∐ name
   ∐ "&"
   ∐ "ℙ"
   ∐ "@"
-  ∐ exp "+" exp
-  ∐ exp "*" exp
-  ∐ exp "-" exp
-  ∐ "(" "-" exp ")"
-  ∐ exp "=" exp
-  ∐ "(" exp ")"
-  ∐ exp "◂" exp
-  ∐ exp "◃" num
-  ∐ "{" ⟦exp⟧ "}"
   ∐ "‹›"
-  ∐ "‹" exp "›"
-  ∐ "⟦" ⟦exp⟧ "⟧"
 	@.name ≃ 
 	∐* alph ⟦alph⟧ ⟦digit⟧
 	@.num ≃ 
