@@ -443,11 +443,11 @@ module IR = struct
       | Rcd_Ptn.P_A r -> (try (SgnMap.find r rm) with _ -> err "get_rm_ptn:0")
       | Rcd_Ptn.P_R rs ->
         let ts = Array.map (get_rm_ptn rm) rs in
-        Rcd(Types.rcd_cl (Array.to_list ts))
+        Types.Rcd(Types.rcd_cl (Array.to_list ts))
       | Rcd_Ptn.P_Ro (rs,rt) ->
         let ts = Array.map (get_rm_ptn rm) rs in
         let tt = (try (SgnMap.find rt rm) with Not_found -> err "get_rm_ptn:1") in
-        Rcd (Types.rcd_cns (Array.to_list ts) tt)
+        Types.Rcd (Types.rcd_cns (Array.to_list ts) tt)
     )
   let find ev p = try PtMap.find ev p with _ -> err "find:0"
   let rec ret ev p =
@@ -525,6 +525,7 @@ module IR = struct
   let rec set_reg_ptn (st:(_ SgnMap.t)) r (k:(_ Tkn.t)) =
     let open Rcd_Ptn in
     let open Tkn in
+    ( try
     ( match r with
       | P_A r -> set_r st r k
       | P_R rs ->
@@ -561,6 +562,7 @@ module IR = struct
               st
         )
     )
+      with | Failure s -> err s | _ -> err "set_reg_ptn:3" )
   let rec set_cs_k st l =
     ( match l with
       | [] -> st
@@ -1412,6 +1414,7 @@ module Typing = struct
       | _ -> err "inst_rec:0" )
   let gen_rm (l:int) rm = SgnMap.map (fun y -> gen [] l y) rm
   let rec slv m l (p0:pt) =
+    let open Rcd_Ptn in
     (* Util.pnt true ("enter slv:"^(print_op m.ir_vct p0)^"\n"); *)
     ( match (try (find p0 m.ir_vct) with _ -> err "slv:4") with
           | Etr(r,p1) ->
@@ -1556,10 +1559,10 @@ module Typing = struct
       | Atm a -> slv_pattern_atm gs yl a )
   and slv_pattern_atm gs yl a =
     ( match a with
-      | Text _ -> Rcd U
-      | Name n -> slv_grm gs yl n
-      | Var _ -> err "slv_pattern_atm:0"
-      | Any -> Prm Stg )
+      | Peg.Text _ -> Rcd U
+      | Peg.Name n -> slv_grm gs yl n
+      | Peg.Var _ -> err "slv_pattern_atm:0"
+      | Peg.Any -> Prm Stg )
   let slv_ns_t m0 =
     let ns0 = StgMap.empty in
     let ns0 = StgMap.add "‹›" (opn (Var (newvar_q (-1)))) ns0 in
@@ -1589,6 +1592,7 @@ module Typing = struct
 end
 let rec init_rm rm iv =
   let open IR in
+  let open Rcd_Ptn in
   PtMap.fold
     (fun p e rm ->
        Util.pnt true ("enter init_rm:"^(print_op iv p)^"\n");
