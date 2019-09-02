@@ -23,12 +23,16 @@ let mk_st g k =
   { m0 with ir_vct = iv; rm = rm },
   p1,(Rcd_Ptn.P_A r0),k
 let evo (g,p0,r0,k) (b:Ast.line) =
+  let _ = Timer.init () in
   ( match b with
     | Ast.Line e ->
       let (iv,p1,r1) = vh_of_exp_ptn g.ir_vct p0 r0 e in
+      Timer.pnt "t0";
       let rm = init_rm g.rm iv in
+      Timer.pnt "t1";
       let g0 = { g with ir_vct = iv; rm = rm } in
       let _ = Typing.slv g0 0 p0 in
+      Timer.pnt "t2";
       let et = (g0,p0,r0,k) in
       let fd = Unix.fork () in
       ( match fd with
