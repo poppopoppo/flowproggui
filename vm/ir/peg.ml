@@ -72,7 +72,7 @@ and print_po po =
         | And -> " +| "^(print_pl pl)
         | Not -> " ¬| "^(print_pl pl)))
 let rec parse (g:grammar) (n:name) (s:string) : (ast option) * string =
-  Util.pnt true ("enter parse:"^n^","^s^"\n");
+  (* Util.pnt true ("enter parse:"^n^","^s^"\n"); *)
   let e = List.find (fun (n0,_,_) -> n=n0) g in
   let (_,_,rs) = e in
   parse_entry g rs s

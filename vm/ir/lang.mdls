@@ -6,7 +6,7 @@
 	@.args ≃ ∐ "," var 
 	@.var ≃ ∐ name "'"  
 	@.mdl_etr ≃  
-  ∐ glb_etr    
+  ∐ glb_etr     
   ∐ def_typ 
 	@.def_typ ≃   
   ∐ "¶" def_typ_body_clq ⟦def_typ_body_clq⟧
