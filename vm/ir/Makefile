@@ -9,7 +9,7 @@ gui: peg.ml lang.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly implib.ml 
 evo: evo_tkn.ml
 	ocamlfind ocamlopt -thread -p -o evo_tkn.exe -linkpkg \
 	-package core,batteries,threads \
-	peg.ml util.ml lang.ml evo_tkn.ml
+	util.ml peg.ml lang.ml evo_tkn.ml
 run: gui evo
 	./gui
 	gprof ./evo_tkn.exe > evo_tkn.prf.txt

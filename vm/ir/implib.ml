@@ -1,7 +1,7 @@
 open Util
 open Lang
 open IR
-type t = IR.mdl * IR.pt * (Sgn.t Rcd_Ptn.t) * (IR.pt, Sgn.t) Tkn.t
+type t = et
 let print (_,_,_,k) = Tkn.print k
 let init_st () : t =
   let iv = PtMap.empty in
@@ -10,7 +10,7 @@ let init_st () : t =
   let r0 = (sgn ()) in
   let iv = PtMap.add p0 (Seq(Ini(r0,Rcd [||]),p1)) iv in
   let iv = PtMap.add p1 (Ret (P_A r0)) iv in
-  { flow = []; grm = []; ir_vct = iv; rm = SgnMap.empty; },
+  { flow = []; grm = []; ir_vct = iv; rm = SgnMap.empty; ns_t = StgMap.empty },
   p1,(Rcd_Ptn.P_A r0),Tkn.Rcd [||]
 let mk_st g k =
   let m0 = Lang.ir_of_ast g in
@@ -29,11 +29,28 @@ let evo (g,p0,r0,k) (b:Ast.line) =
       let rm = init_rm g.rm iv in
       let g0 = { g with ir_vct = iv; rm = rm } in
       let _ = Typing.slv g0 0 p0 in
-      let st = SgnMap.empty in
-      let cs = Stack.create () in
-      let st = set_reg_ptn st r0 k in
-      let k1 = run g0 p0 st cs in
-      (g0,p1,r1,k1)
+      let et = (g0,p1,r1,k) in
+      let fd = Unix.fork () in
+      ( match fd with
+        | 0 ->
+          Util.open_out_close "default.tkn" (fun c -> Marshal.to_channel c et []);
+          let _ = Unix.execve
+              "evo_tkn.exe"
+              (Array.make 0 "")
+              (Array.make 0 "") in
+          exit 0
+        | _ ->
+          let (_,x) = Unix.wait () in
+          ( match x with
+            | WEXITED 0 ->
+              let ((_,_,_,k1):t) =
+                ( try
+                    Util.open_in_close "default.tkn"
+                      (fun c -> Marshal.from_channel c)
+                  with _ -> err "err1.2") in
+              (g0,p1,r1,k1)
+            | _ -> err "err1.3"
+          ))
     | _ -> err "evo:0" )
 let ast_from_string s =
       let lexbuf = Lexing.from_string s in
