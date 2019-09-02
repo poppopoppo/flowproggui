@@ -29,7 +29,7 @@ let evo (g,p0,r0,k) (b:Ast.line) =
       let rm = init_rm g.rm iv in
       let g0 = { g with ir_vct = iv; rm = rm } in
       let _ = Typing.slv g0 0 p0 in
-      let et = (g0,p1,r1,k) in
+      let et = (g0,p0,r0,k) in
       let fd = Unix.fork () in
       ( match fd with
         | 0 ->
