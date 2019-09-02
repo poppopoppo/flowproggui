@@ -1,6 +1,6 @@
 §§ Lang ≒
 ¶+ℙ 
-	@.nl ≃ ∐ "\n"
+	@.nl ≃ ∐ "\n" 
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
 	@.def_arg ≃ ∐ "◂" var ⟦args⟧
 	@.args ≃ ∐ "," var 
@@ -188,6 +188,7 @@
 ¶ ir_vct◂r',c',p' = (ir◂r'◂c'◂p')◃&
 ¶ ir_mdl 
 ¶ ns_v ≃ ∐ ! & : ns_sgn 
+§ a0 ≒ |» ! def_mdl ∎
 § @ ir_of_ast ≒ |» ∎
 § occurs ≒ |» ∎
 § @ unify ≒ |» ! 0 ∎

@@ -526,42 +526,42 @@ module IR = struct
     let open Rcd_Ptn in
     let open Tkn in
     ( try
-    ( match r with
-      | P_A r -> set_r st r k
-      | P_R rs ->
-        ( match k with
-          | Tkn _ -> err "set_reg_ptn 0"
-          | Rcd l ->
-            let (st,_) =
-              Array.fold_left
-                (fun (st,i) r ->
-                   let st = set_reg_ptn st r l.(i) in
-                   (st,i+1) )
-                (st,0) rs in
-            st)
-      | P_Ro (rs,rt) ->
-        ( match k with
-          | Tkn _ -> err "set_reg_ptn 0"
-          | Rcd l ->
-            let (st,i) =
-              Array.fold_left
-                (fun (st,i) r ->
-                   let st = set_reg_ptn st r l.(i) in
-                   (st,i+1) )
-                (st,0) rs in
-            let ln = Array.length l in
-            if i=ln
-            then
-              let st = set_r st rt (Rcd [||]) in
-              st
-            else
-              let lt =
-                ( try Array.init (ln-i) (fun n -> l.(i+n))
-                  with _ -> err "set_reg_ptn:1" ) in
-              let st = set_r st rt (Rcd lt) in
-              st
+        ( match r with
+          | P_A r -> set_r st r k
+          | P_R rs ->
+            ( match k with
+              | Tkn _ -> err "set_reg_ptn 0"
+              | Rcd l ->
+                let (st,_) =
+                  Array.fold_left
+                    (fun (st,i) r ->
+                       let st = set_reg_ptn st r l.(i) in
+                       (st,i+1) )
+                    (st,0) rs in
+                st)
+          | P_Ro (rs,rt) ->
+            ( match k with
+              | Tkn _ -> err "set_reg_ptn 0"
+              | Rcd l ->
+                let (st,i) =
+                  Array.fold_left
+                    (fun (st,i) r ->
+                       let st = set_reg_ptn st r l.(i) in
+                       (st,i+1) )
+                    (st,0) rs in
+                let ln = Array.length l in
+                if i=ln
+                then
+                  let st = set_r st rt (Rcd [||]) in
+                  st
+                else
+                  let lt =
+                    ( try Array.init (ln-i) (fun n -> l.(i+n))
+                      with _ -> err "set_reg_ptn:1" ) in
+                  let st = set_r st rt (Rcd lt) in
+                  st
+            )
         )
-    )
       with | Failure s -> err s | _ -> err "set_reg_ptn:3" )
   let rec set_cs_k st l =
     ( match l with
@@ -1292,8 +1292,8 @@ module Typing = struct
       | App(t2,t3)
       | Imp(t2,t3) -> gen rl l t2; gen rl l t3
       | Rec v1 ->
-        if List.exists (fun v -> v==v1) rl then ()
-        else gen_rec (v1::rl) l v1
+        if List.exists (fun v -> v==v1) !rl then ()
+        else (rl := !rl@[v1]; gen_rec rl l v1)
       | Rcd l1 -> gen_rcd rl l l1
       | Rcd_Lb l1 -> gen_rcd_lb rl l l1
       | _ -> ()
@@ -1412,10 +1412,11 @@ module Typing = struct
         let (t2i,i) = inst_rcd l i t2 in
         (Types.P(t0i,t1i,t2i),i)
       | _ -> err "inst_rec:0" )
-  let gen_rm (l:int) rm = SgnMap.map (fun y -> gen [] l y) rm
+  let gen_rm (l:int) rm = SgnMap.map (fun y -> gen (ref []) l y) rm
   let rec slv m l (p0:pt) =
     let open Rcd_Ptn in
-    (* Util.pnt true ("enter slv:"^(print_op m.ir_vct p0)^"\n"); *)
+    Util.pnt true ("enter slv:"^(print_op m.ir_vct p0)^"\n");
+    Util.Timer.pnt "slv-t0";
     ( match (try (find p0 m.ir_vct) with _ -> err "slv:4") with
           | Etr(r,p1) ->
             let _ = Rcd_Ptn.map (fun r -> inst l (inst_ini ()) (SgnMap.find r m.rm)) r in
@@ -1445,10 +1446,16 @@ module Typing = struct
             let _ =
               ( match o with
                 | Id (r,rs) ->
+                  Timer.pnt "id 0";
                   let ts = Array.map (fun r -> fst @@ inst (l+1) (inst_ini()) (SgnMap.find r m.rm)) rs in
+                  Timer.pnt "id 1";
                   let (t,_) = inst (l+1) (inst_ini()) (SgnMap.find r m.rm) in
+                  Timer.pnt "id 2";
                   let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) t (Array.to_list ts) in
-                  let _ = gen_rm l m.rm in ()
+                  Timer.pnt "id 3";
+                  let _ = gen_rm l m.rm in
+                  Timer.pnt "id 0";
+                  ()
                 | Prj(r0,(rs,rt)) ->
                   let (t0,_) = inst (l+1) (inst_ini()) (SgnMap.find r0 m.rm) in
                   let ts = Array.map (fun r -> fst @@ inst (l+1) (inst_ini()) (SgnMap.find r m.rm)) rs in
@@ -1474,6 +1481,7 @@ module Typing = struct
                       unify [] tk (fst @@ (inst (l+1) (inst_ini ()) (slv_tkn m k)))
                     with Not_found -> err "slv:7" )
               ) in
+            Util.Timer.pnt "slv t2";
             slv m l p1
     )
   and slv_tkn m k =
@@ -1594,8 +1602,8 @@ let rec init_rm rm iv =
   let open IR in
   let open Rcd_Ptn in
   PtMap.fold
-    (fun p e rm ->
-       Util.pnt true ("enter init_rm:"^(print_op iv p)^"\n");
+    (fun _ e rm ->
+       (* Util.pnt true ("enter init_rm:"^(print_op iv p)^"\n"); *)
        ( match e with
          | Etr (r,_) -> init_rm_r rm r
          | Clj(r,_,_,_) -> init_rm_r rm (P_A r)

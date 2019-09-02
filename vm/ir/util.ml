@@ -1,9 +1,18 @@
+
 let pnt (b:bool) s =
   if b
   then (print_string s;flush stdout)
   else ()
 let _ = pnt true ""
-
+module Timer = struct
+  type t = float ref
+  let v = ref 0.0
+  let init () = v := Sys.time ()
+  let pnt p =
+    let t1 = Sys.time () in
+    pnt true ("Timer.pnt "^p^" :"); print_float (t1 -. !v); pnt true "\n";
+    v := t1
+end
 let rec string_of_list f p l =
   match l with
   | [] -> ""
