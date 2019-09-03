@@ -4,6 +4,7 @@
 type token = 
   | Z
   | WC
+  | VCT_INI
   | VCT
   | VAL of (string)
   | TYP_VCT
@@ -75,6 +76,7 @@ type token =
   | EMT
   | DTA_GRM
   | DTA
+  | DSH
   | DOT
   | DEQ
   | DEF

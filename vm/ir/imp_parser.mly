@@ -4,12 +4,12 @@
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT
-%token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT
+%token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT VCT_INI
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS APP_EVL PLS_EVL MLT_EVL CST
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN WC TEST PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS
+%token DEQ FNT EXN WC TEST PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token <string> NAM STG VAL
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
@@ -17,6 +17,7 @@
 %nonassoc AGL_PRE
 %left FOR_ALL
 %left EQ
+%left VCT
 %left PLS MNS
 %left MLT
 %left APP
@@ -32,7 +33,12 @@
 %type <Peg.grammar> dta_grm
 %%
 buffer:
-  | exp_top EOF { Line $1 }
+  | exp_top EOF
+  {
+    ( try
+      let (i,a) = Ast.tk_agl $1 in
+      Line_Agl (i,a)
+      with _ -> Line $1 ) }
   | ARR_END EOF { End }
   ;
 file:
@@ -45,6 +51,11 @@ def_mdl:
 def_arg:
   | { [] }
   | APP args { $2 }
+  | APP args_rot { BatList.init $2 (fun n -> "$"^(String.make n '\'')) }
+  ;
+args_rot:
+  | DSH { 1 }
+  | DSH args_rot { 1+$2 }
   ;
 args:
   | VAL { [$1] }
@@ -88,7 +99,7 @@ grm_ptns:
   | grm_ptns grm_ptn  { $1@[$2] }
   ;
 grm_ptn:
-  | WC  { Peg.Atm Any } 
+  | WC  { Peg.Atm Any }
   | grm_atom { Peg.Atm $1 }
   | L_LST grm_atom R_LST { Peg.List $2 }
   | L_OPN grm_atom R_OPN { Peg.Option $2 }
@@ -106,8 +117,8 @@ prd_flg:
   | NOT_SPL { Peg.Not }
   ;
 def_typ_clique:
-  | SLF def_typ_body_clq { [$2] }
-  | SLF def_typ_body_clq def_typ_clique { [$2]@$3 }
+  | SLF DOT def_typ_body_clq { [$3] }
+  | SLF DOT def_typ_body_clq def_typ_clique { [$3]@$4 }
   ;
 def_typ_body:
   | NAM def_arg  { Def_Abs ($1,$2) }
@@ -165,8 +176,8 @@ glb_etr:
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
   ;
 glb_etr_clique:
-  | SLF glb_etr_body { [$2] }
-  | SLF glb_etr_body glb_etr_clique { [$2]@$3 }
+  | SLF DOT glb_etr_body { [$3] }
+  | SLF DOT glb_etr_body glb_etr_clique { [$3]@$4 }
   ;
 glb_etr_body:
   | NAM typ_def DEF IN stt_code { ($1,fst $2,snd $2,$5) }
@@ -271,7 +282,8 @@ exp:
   | EXN { Atm Exn }
   | ROT { Rot }
   | IDX { Prj(Rot,$1) }
-  | VCT { Atm (Name "#")  }
+  | VCT_INI { App(Atm (Name "#"),Rcd [||])  }
+  | exp VCT exp { App(Atm (Name "⊵"),Rcd [|$1;$3|]) }
   | INJ { Atm(Inj $1) }
   | CHO { Atm(Cho $1)  }
   | NAM  { Atm (Name $1) }

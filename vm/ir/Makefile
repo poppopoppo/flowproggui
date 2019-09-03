@@ -6,7 +6,7 @@ gui: peg.ml lang.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly implib.ml 
 	dune build gui.exe
 	rm -f gui
 	ln -s /home/kohe/git-repos/flow/_build/default/vm/ir/gui.exe gui
-evo: evo_tkn.ml
+evo: util.ml evo_tkn.ml
 	ocamlfind ocamlopt -thread -p -o evo_tkn.exe -linkpkg \
 	-package core,batteries,threads \
 	util.ml peg.ml lang.ml evo_tkn.ml
