@@ -11,7 +11,11 @@ let _ =
       with e -> raise e )  in
   let st = SgnMap.empty in
   let cs = Stack.create () in
-  pnt true "evo_tkn:0\n";
+  pnt true "evo_tkn:0xx\n";
+
+  ( try pnt true ((Tkn.print k0)^"\n") with Failure e -> pnt true e | _ -> pnt true "erLL");
+  pnt true "evo_tkn:p0\n";
+  pnt true ((Rcd_Ptn.print (fun r -> "r"^(Sgn.print r)) r0)^"\n");
   let st = set_reg_ptn st r0 k0 in
   pnt true "evo_tkn:1\n";
   let k1 = run g0 p0 st cs in

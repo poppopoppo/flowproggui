@@ -13,6 +13,16 @@ module Timer = struct
     pnt true ("Timer.pnt "^p^" :"); print_float (t1 -. !v); pnt true "\n";
     v := t1
 end
+let load_file f =
+  let ic = open_in f in
+  let rec lp s0 =
+    ( try
+        let s1 = input_line ic in
+        lp (s0^s1^"\n")
+      with End_of_file -> s0 ) in
+  let s = lp "" in
+  close_in ic;
+  s
 let rec string_of_list f p l =
   match l with
   | [] -> ""
@@ -53,6 +63,7 @@ let unt () = [| |]
 module Sgn :
 sig
   type t
+  type env
   val n : unit -> int
   val ini : unit -> t
   val print : t -> string
@@ -60,25 +71,38 @@ sig
   val eq : t -> t -> bool
   val hash : t -> int
   val sexp_of_t : t -> Core.Sexp.t
+  val get_env : unit -> env
+  val set_env : env -> unit
 end
 = struct
-  type t = int
+  type t = int ref
+  type env = int
   let sgn_N = ref 0
+  let env = ref []
   let n () = !sgn_N
+  let rec hash x =
+    ( try
+        let (i,_) = BatList.findi (fun _ v -> x==v) !env in
+        x := i; i
+      with _ -> (env := !env @ [x]; hash x) )
   let ini () =
-    let n = !sgn_N in
-    sgn_N := n+1;
-    n
-  let print x = (string_of_int x)
-  let compare (x:int) (y:int) = compare x y
-  let eq (x:int) (y:int) =  x =y
-  let hash (x:int) = x
-  let sexp_of_t (_:int) = Core.Sexp.List []
+    let v = ref 0 in
+    env := !env @ [v];
+    v := hash v;
+    v
+  let print x =
+    let i = hash x in
+    (string_of_int i)
+  let compare x y = compare (hash x) (hash y)
+  let eq x y = x==y
+  let sexp_of_t _ = Core.Sexp.List []
+  let get_env () = 0
+  let set_env _ = ()
 end
 let ( =& ) x y = Sgn.eq x y
 let sgn = Sgn.ini
 let rec sgns n = if n=0 then [] else (Sgn.ini ())::(sgns (n-1))
-module SgnSet = Set.Make(struct type t = Sgn.t let compare = compare end)
+module SgnSet = Set.Make(struct type t = Sgn.t let compare = Sgn.compare end)
 module StgSet = Set.Make(struct type t = string let compare = compare end)
 module SgnMap = Map.Make(struct type t = Sgn.t let compare = Sgn.compare end)
 module StgMap = Map.Make(struct type t = string let compare = compare end)

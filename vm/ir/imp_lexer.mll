@@ -13,7 +13,7 @@ let alnum = digit | alpha
 let name = alpha+  ("_" | digit | alpha)*
 let z = (('-' digit+)|digit+)
 rule token = parse
-    | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n")* as lxm) '\"' { STG(lxm) }
+    | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
     | "[;" [^ ';']* ";]"  { token lexbuf }
     | "§"  { LCE }
@@ -55,6 +55,7 @@ rule token = parse
     | "_" { WC }
     | "↑[" (digit+ as lxm) "]" { INJ(int_of_string lxm) }
     | "↓[" (digit+ as lxm) "]" { CHO(int_of_string lxm) }
+    | "⊵" { VCT }
     | "{" { L_RCD }
     | "}" { R_RCD }
     | "|{" { L_HLZ }
@@ -64,9 +65,10 @@ rule token = parse
     | "‹" { L_OPN }
     | "›" { R_OPN }
     | "&" { SGN }
-    | "#" { VCT }
+    | "#" { VCT_INI }
     | "(" { L_PRN }
     | ")" { R_PRN }
+    | "\'" { DSH }
     | "=" { EQ }
     | "!" { EXP }
     | "◂" { APP }

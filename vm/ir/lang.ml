@@ -26,17 +26,18 @@ module Rcd_Ptn = struct
       | P_R rs -> P_R (Array.map (map f) rs)
       | P_Ro (rs,rt) -> P_Ro(Array.map (map f) rs,f rt))
   let rec get_path i p =
+    let s = "⟦"^(Util.string_of_list "," string_of_int i)^"⟧" in
     ( match i with
       | [] -> p
       | hd::tl ->
         ( match p with
           | P_R rs ->
             if hd<(Array.length rs) then get_path tl rs.(hd)
-            else err "get_path 0"
+            else err ("get_path 0:"^s)
           | P_Ro (rs,_) ->
             if hd<(Array.length rs) then get_path tl rs.(hd)
-            else err "get_path 1"
-          | _ -> err "get_path 2")
+            else err ("get_path 1:"^s)
+          | _ -> err ("get_path 2:"^s))
     )
   let rec set_path i p0 p1 =
     ( match i with
@@ -47,7 +48,7 @@ module Rcd_Ptn = struct
             if hd<(Array.length rs)
             then
               P_R (Array.mapi
-                     (fun i x -> if i=hd then x else set_path tl x p1)
+                     (fun i x -> if i=hd then set_path tl x p1 else x)
                      rs)
             else err "get_path 0"
           | P_Ro (rs,rt) ->
@@ -55,7 +56,7 @@ module Rcd_Ptn = struct
             then
               let rs0 =
                 (Array.mapi
-                   (fun i x -> if i=hd then x else set_path tl x p1)
+                   (fun i x -> if i=hd then set_path tl x p1 else x)
                    rs) in
               P_Ro(rs0,rt)
             else err "get_path 1"
@@ -185,6 +186,14 @@ module Types = struct
       | 0,Cns(t0,_) -> t0
       | _,Cns(_,t1) -> path_rcd (j-1) t1
       | _ -> err "path_rcd" )
+  let rec get_agl_i i y =
+    ( match y with
+      | Var { contents = Ln y0 } -> get_agl_i i y0
+      | Rec r ->
+        ( match !r with
+          | CP(_,rs) -> path_rcd i rs
+          | _ -> err "get_agl_i 0" )
+      | _ -> err "get_agl_i 1" )
   let rec get_agl a i y =
     ( match i,y with
       | [],_ -> a
@@ -256,7 +265,7 @@ module Ast = struct
     | Z of int | Pls | Mlt | Mns | Cmp | Eq | Fix
     | Exn | Name of string | Inj of int | Cho of int | Stg of string
   type line =
-    | End | Line of exp_rcd
+    | End | Line of exp_rcd | Line_Agl of int list * exp_rcd
   let rec print_mdl _ (n,g) =
     let s0 = "§§ "^n^" ≒ \n" in
     let rec lp g =
@@ -279,13 +288,14 @@ module Ast = struct
       |  _ -> "¶"^"\n" )
   let tk_agl a =
     let i = ref [] in
+    let b = ref false in
     let rec lp p a =
       ( match a with
-        | Agl_Op r -> i := p; r
+        | Agl_Op r -> i := p; b := true; r
         | Rcd r -> Rcd (Array.mapi (fun i r -> lp (i::p) r) r)
         | _ -> a ) in
     let a = lp [] a in
-    (!i,a)
+    if !b then (!i,a) else err "tk_agl:0"
 end
 module Tkn = struct
   type ('p, 'r) t =
@@ -297,32 +307,62 @@ module Tkn = struct
     | P of ('p array) * (('p, 'r) t) | Pls | Mlt | Mns
     | Cmp | Eq | Inj of int | Cho of int | Fix
     | Exn | Fnc of 'p | Clj of 'p * (('p, 'r) t)
-    | Ast of Peg.ast
+    | Ast of Peg.ast | Vct of (('p, 'r) t , ('p, 'r) t) Hashtbl.t
   let rec print k =
-    ( match k with
-      | Rcd rs -> "{"^(Array.fold_left (fun s r -> s^" "^(print r)) "" rs)^"}"
-      | Tkn v ->
-        ( match v with
-          | Name n -> n
-          | Stg s -> "\""^s^"\""
-          | Z z -> (string_of_int z)
-          | Zn (z0,z1) -> "ℤ["^(string_of_int z1)^"]."^(string_of_int z0)
-          | Sgn p -> "&."^(Sgn.print p)
-          | CoP(i,ki) -> "∐["^(string_of_int i)^"]◂"^(print ki)
-          | P (_,_) -> err "print"
-          | Pls -> "+"
-          | Mlt -> "*"
-          | Mns -> "-"
-          | Cmp -> "≤"
-          | Eq -> "="
-          | Inj i -> "↑["^(string_of_int i)^"]"
-          | Cho i -> "↓["^(string_of_int i)^"]"
-          | Fix -> "@"
-          | Exn -> "¿"
-          | Fnc _ -> "Fnc"
-          | Clj (_,_) -> "Clj"
-          | Ast a -> Peg.print_ast a
-        ))
+    pnt true "enter Tkn.print\n";
+    ( try
+        ( match k with
+          | Rcd rs ->
+            pnt true "Tkn.print x1\n";
+            ( try "{"^(Array.fold_left (fun s r -> s^" "^(print r)) "" rs)^"}"
+              with _ -> err "Tkn.print 6")
+          | Tkn v ->
+            pnt true "Tkn.print x3\n";
+            ( match v with
+              | Name n -> n
+              | Stg s ->
+                if (String.length s)>=20
+                then let s0 = String.sub s 0 20 in ("(\""^s0^"\""^"..)")
+                else "\""^(String.escaped s)^"\""
+              | Z z -> (string_of_int z)
+              | Zn (z0,z1) -> "ℤ["^(string_of_int z1)^"]."^(string_of_int z0)
+              | Sgn p ->
+                pnt true "Tkn.print x0\n";
+                ( try "&."^(Sgn.print p) with _ -> err "Tkn.print 0")
+              | CoP(i,ki) -> "∐["^(string_of_int i)^","^(print ki)^"]"
+              | P (_,_) -> err "print"
+              | Pls -> "+"
+              | Mlt -> "*"
+              | Mns -> "-"
+              | Cmp -> "≤"
+              | Eq -> "="
+              | Inj i -> "↑["^(string_of_int i)^"]"
+              | Cho i -> "↓["^(string_of_int i)^"]"
+              | Fix -> "@"
+              | Exn -> "¿"
+              | Fnc _ -> "Fnc"
+              | Clj (_,_) -> "Clj"
+              | Ast a -> Peg.print_ast a
+              | Vct v ->
+                let s0 =
+                  Hashtbl.fold
+                    ( fun b k s0 ->
+                        s0^" "^(print b)^"~"^(print k))
+                    v "#.{" in
+                s0^" }"
+            ))
+      with _ -> err "Tkn.print 8" )
+  let vct_op v k a0 =
+    if Hashtbl.mem v k
+    then
+      let a1 = Hashtbl.find v k in
+      ( match a0 with
+        | Tkn(CoP(0,Rcd [||])) -> ( Hashtbl.remove v k; a1)
+        | _ -> ( Hashtbl.remove v k; Hashtbl.add v k a0; a1))
+    else
+      ( match a0 with
+        | Tkn(CoP(0,Rcd [||])) -> Tkn(CoP(0,Rcd [||]))
+        | _ -> (Hashtbl.add v k a0; Tkn(CoP(0,Rcd [||]))))
   let rec of_reg_ptn p =
     let open Rcd_Ptn in
     ( match p with
@@ -332,6 +372,12 @@ module Tkn = struct
         ( match rt with
           | Rcd rts -> Rcd ((Array.map of_reg_ptn rs) |+| rts)
           | _ -> err "of_reg_ptn 0" ))
+  let rec get_path i k =
+    ( match i,k with
+      | [],_ -> k
+      | hd::tl,Rcd rs -> get_path tl rs.(hd)
+      | _ -> err "get_path 0"
+    )
   let rec get_agl i k =
     (try
        ( match i,k with
@@ -469,7 +515,7 @@ module IR = struct
       | Seq (Call (y,_,_),p1) -> (y,p1)
       | _ -> err "etr:0" )
   let get_r st r =
-    let k = SgnMap.find r st in
+    let k =  (try SgnMap.find r st with _ -> err "get_r 0") in
     let st = SgnMap.remove r st in
     (k,st)
   let rec get_reg_ptn st r : (_ Tkn.t * _) =
@@ -656,6 +702,7 @@ module IR = struct
     let open Tkn in
     ( match f,x with
       | Tkn Mns,Tkn (Z z) -> `Tkn (Tkn (Z (-z)))
+      | Tkn Mns,Tkn (Zn(z0,z1)) -> `Tkn(Tkn(Zn(z1-(z0 mod z1),z1)))
       | Tkn Inj i,_ -> `Tkn (Tkn (CoP(i,x)))
       | Tkn (Cho _),_ -> err "err 7"
       | Tkn Exn,_ -> err "err 8"
@@ -663,10 +710,14 @@ module IR = struct
       | Tkn (Fnc pa),_ -> `Fnc pa
       | Tkn (Clj (_,_)),_ -> err "run 3"
       | Tkn Pls,Rcd [|(Tkn Z z1);(Tkn Z z2)|] -> `Tkn (Tkn (Z (z1+z2)))
+      | Tkn Pls,Rcd [|(Tkn Zn(z1,z2));(Tkn Zn(z3,z4))|] when z2=z4 ->
+        `Tkn (Tkn (Zn((z1+z3) mod z2,z2)))
       | Tkn Mlt,Rcd [|(Tkn Z z1);(Tkn Z z2)|] -> `Tkn (Tkn (Z (z1*z2)))
+      | Tkn Mlt,Rcd [|(Tkn Zn(z1,z2));(Tkn Zn(z3,z4))|] when z2=z4 ->
+        `Tkn (Tkn (Zn((z1*z3) mod z2,z2)))
       | Tkn Cmp,Rcd [|(Tkn Z z1);(Tkn Z z2)|] ->
         let b = if z1<=z2 then 1 else 0 in
-        `Tkn (Tkn (Z b))
+        `Tkn (Tkn (Zn(b,2)))
       | Tkn Eq,Rcd [|x;y|] ->
         let b = if x=y then 1 else 0 in
         `Tkn (Tkn (Zn (b,2)))
@@ -676,6 +727,27 @@ module IR = struct
           | "‹" -> app m (Tkn(Inj 1)) x
           | "⟦⟧" -> app m (Tkn(Inj 0)) x
           | "⟦" -> app m (Tkn(Inj 1)) x
+          | "&" ->
+            ( match x with
+              | Rcd [||] -> `Tkn(Tkn (Tkn.Sgn (sgn ())))
+              | _ -> err "app 3" )
+          | "⊵" ->
+            ( match x with
+              | Rcd [|Rcd[|Tkn Vct v;k|];a0|] ->
+                let a1 = Tkn.vct_op v k a0 in
+                `Tkn(Rcd [|Rcd[|(Tkn (Vct v));k|];a1|])
+              | _ -> err "app 8" )
+          | "#" -> `Tkn(Tkn(Vct (Hashtbl.create 10)))
+          | "pnt" ->
+            let s = Tkn.print x in
+            Util.pnt true ("pnt:"^s^"\n");
+            `Tkn(Rcd [||])
+          | "read" ->
+            ( match x with
+              | Tkn (Stg s) ->
+                let l = Util.load_file s in
+                `Tkn(Tkn (Stg l))
+              | _ -> err "app:5" )
           | _ ->
             ( try
                 let g = List.find (List.exists (fun (n0,_,_) -> n=n0)) m.grm in
@@ -1179,6 +1251,12 @@ module Typing = struct
                   let _ = occurs_rec [rv] v1 rv in
                   v1 := Ln t2;
                   ()
+                | Var v2 ->
+                  if v1==v2 then ()
+                  else
+                    let b = occurs [] v1 t2 in
+                    if b then err ("unify:0:"^se)
+                    else v1 := (Ln t2); ()
                 | _ ->
                   let b = occurs [] v1 t2 in
                   if b then err ("unify:0:"^se)
@@ -1429,12 +1507,12 @@ module Typing = struct
             let _ = unify [] (Types.path i ta) (Rec (ref (coprd_cl (Var (newvar_l (l+1))) (Array.to_list ts)))) in
             let _ =
               Array.fold_left
-                (fun j (r,p) ->
-                   let (ti,_) = inst (l+1) (inst_ini()) (get_rm_ptn m.rm r) in
-                   let _ = unify [] ti (get_agl (ts.(j)) i ta) in
-                   let _ = gen_rm l m.rm in
-                   let _ = slv m l p in
-                   j+1 )
+                ( fun j (r,p) ->
+                    let (ti,_) = inst (l+1) (inst_ini()) (get_rm_ptn m.rm r) in
+                    let _ = unify [] ti (get_agl (ts.(j)) i ta) in
+                    let _ = gen_rm l m.rm in
+                    let _ = slv m l p in
+                    j+1 )
                 0 ps in
             let tts = Array.map (fun (_,p) -> fst @@ inst (l+1) (inst_ini()) (get_rm_ptn m.rm (ret m.ir_vct p))) ps in
             let (rrt,_) = inst (l+1) (inst_ini()) (get_rm_ptn m.rm rr) in
@@ -1524,6 +1602,21 @@ module Typing = struct
         let y = lst v in
         Imp(Rcd (rcd_cl [v;y]),y)
       | "&" -> Imp(Rcd U,Prm Sgn)
+      | "read" -> Imp(Prm Stg,Prm Stg)
+      | "pnt" -> Imp(Var (newvar()),Rcd U)
+      | "⊵" ->
+        let t_b = Var (newvar ()) in
+        let t_k = Var (newvar ()) in
+        let t_o = opn t_k in
+        let t_v = App(App(Prm Vct,t_o),t_b) in
+        let t_s = Rcd(rcd_cl [Rcd(rcd_cl [t_v;t_b]);t_o]) in
+        Imp(t_s,t_s)
+      | "#" ->
+        let t_b = Var (newvar ()) in
+        let t_k = Var (newvar ()) in
+        let t_o = opn t_k in
+        let t_v = App(App(Prm Vct,t_o),t_b) in
+        Imp(Rcd U,t_v)
       | _ ->
         ( try
             Util.pnt true "slv_name:0\n";

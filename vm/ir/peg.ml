@@ -22,10 +22,11 @@ type ast =
   | Ast_Option of (ast option)
 type rtn = Parse of (ast * string) | Fail of string
 type global = grammar list
+let iter = ref 0
 let rec print_ast a =
   ( match a with
-    | Ast_Rule (None,l) -> "_[_]◂{ "^(Util.string_of_list " " print_ast l)^" }"
-    | Ast_Rule (Some s,l) -> s^"◂{ "^(Util.string_of_list " " print_ast l)^" }"
+    | Ast_Rule (None,l) -> "_[_,{ "^(Util.string_of_list " " print_ast l)^" }]"
+    | Ast_Rule (Some s,l) -> "["^s^",{ "^(Util.string_of_list " " print_ast l)^" }]"
     | Ast_Text s -> "\""^s^"\""
     | Ast_List l -> "⟦ "^(Util.string_of_list " " print_ast l)^" ⟧"
     | Ast_Option None -> "‹›"
@@ -60,7 +61,7 @@ and print_pl pl =
       s0^" "^(print_pl tl))
 and print_pa a =
   ( match a with
-    | Text s -> "\""^s^"\""
+    | Text s -> "\""^(String.escaped s)^"\""
     | Name n -> n
     | Var v -> v^"'"
     | Any -> "_" )

@@ -1,11 +1,13 @@
-§§ Lang ≒
-¶+ℙ 
+§§ Lang ≒ 
+¶+ℙ   
 	@.nl ≃ ∐ "\n" 
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
-	@.def_arg ≃ ∐ "◂" var ⟦args⟧
+	@.def_arg ≃ 
+	∐ "◂" var ⟦args⟧ 
+	∐ "◂" "'" ⟦"'"⟧ 
 	@.args ≃ ∐ "," var 
-	@.var ≃ ∐ name "'"  
-	@.mdl_etr ≃  
+	@.var ≃ ∐ name "'"   
+	@.mdl_etr ≃   
   ∐ glb_etr     
   ∐ def_typ 
 	@.def_typ ≃   
@@ -27,8 +29,8 @@
 	@.grm_ptn ≃
   ∐ grm_atom
   ∐ "⟦" grm_atom "⟧"
-	∐ "‹" grm_atom "›"
-	@.grm_atom ≃ ∐ str ∐ name
+	∐ "‹" grm_atom "›" 
+	@.grm_atom ≃ ∐ str ∐ name ∐ "_" 
 	@.grm_pred ≃ ∐ pred_flg ⟦grm_ptn⟧
 	@.pred_flg ≃ ∐ "+|" ∐ "¬|"
 	@.typ_top ≃
@@ -47,6 +49,7 @@
   ∐ "‹" typ_imp "›"
   ∐ "⟦" ⟦typ_imp⟧ "⟧"
   ∐ name
+  ∐ "$" 
   ∐ "ℤ"
   ∐ "ℕ" 
   ∐ "&"
@@ -135,19 +138,21 @@
 	∐* "\""    
 	∐* _ str_in 
 	@.str_sp ≃ ∐* "\\" ∐* "\"" ∐* "t" ∐* "n" 
-	@.name ≃ ∐ alph ⟦alph_us⟧ ⟦digit⟧
+	@.name ≃ ∐* alph ⟦alph_us⟧ ⟦digit⟧
 	@.num ≃ 
 	∐* digit ⟦digit⟧
 	@.alph_us ≃ 
 	∐* alph 
-	∐* "_" 
+	∐* "_"  
 	@.alph ≃ 
 	∐* "a" ∐* "b" ∐* "c" ∐* "d" ∐* "e" ∐* "f" ∐* "g" ∐* "h" ∐* "i" ∐* "j" ∐* "k" ∐* "l" 
 	∐* "m" ∐* "n" ∐* "o" ∐* "p" ∐* "q" ∐* "r" ∐* "s" ∐* "t" ∐* "u" ∐* "v" ∐* "w" ∐* "x" ∐* "y" ∐* "z" 
-	∐* "A" ∐* "B" ∐* "C"
+	∐* "A" ∐* "B" ∐* "C" ∐* "D" ∐* "E" ∐* "F" ∐* "G" ∐* "H" ∐* "I" ∐* "J" ∐* "K"
+	∐* "L" ∐* "M" ∐* "N" ∐* "O" ∐* "P" ∐* "Q" ∐* "R" ∐* "S" ∐* "T" ∐* "U" ∐* "V" 
+	∐* "W" ∐* "X" ∐* "Y" ∐* "Z" 
 	@.digit ≃ ∐* "0" ∐* "1" ∐* "2" ∐* "3" ∐* "4" ∐* "5" ∐* "6" ∐* "7" ∐* "8" ∐* "9" 
 
-¶ @ rcd_ptn ◂ a' ≃
+¶ @.rcd_ptn ◂' ≃
 	∐ ! a' : rp_a
 	∐ ! ⟦a'⟧ : rp_r
 	∐ ⟦a'⟧ a' : rp_ro
@@ -155,26 +160,26 @@
 	∐ : vct ∐ : opn ∐ : lst ∐ : zn ∐ : n
 	∐ : sgn ∐ : stg ∐ : z_u ∐ ℤ : z_n
 	∐ ! & : axm ∐ : inj ∐ : cho ∐ ! & : z_d
-¶ v_t ◂ y' ≃ ∐ : wc ∐ ! ℤ : v ∐ : q ∐ ! y' : ln
-¶ @ ty ≃
+¶ v_t ◂' ≃ ∐ : wc ∐ ! ℤ : v ∐ : q ∐ ! y' : ln
+¶ @.ty ≃
 	∐ ! & : var ∐ @.ty @.ty : app
 	∐ @.ty @.ty : imp ∐ ! ty_prm : prm
 	∐ ! ty_rcd : rcd ∐ ! ty_rcd_lb : rcd_lb
 	∐ ! & : ty_rec
-	@ ty_rec ≃
+	@.ty_rec ≃
 	∐ ty ty_rcd : cp ∐ ty ty ty_rcd : p
-	@ ty_rcd ≃
+	@.ty_rcd ≃
 	∐ ty ty_rcd : cns ∐ & : uo ∐ : u
-	@ ty_rcd_lb ≃
+	@.ty_rcd_lb ≃
 	∐ ℙ ty ty_rcd_lb : cns_lb
 	∐ & : uo_lb ∐ : u_lb
-¶ @ tkn ◂ p',r' ≃
+¶ @.tkn ◂'' ≃
 	∐ : name ∐ : stg ∐ ℤ : z ∐ ℤ ℤ : zn
 	∐ ! & : sgn ∐ ℤ @.tkn : co_p
 	∐ : pls ∐ : mlt ∐ : mns ∐ : cmp
 	∐ : eq ∐ ℤ : inj ∐ ! ℤ : cho ∐ : fix
 	∐ : exn
-¶ @ nd ◂ r',p' ≃
+¶ @.nd ◂'' ≃
 	∐ r' ⟦r'⟧ : id
 	∐ r' { ⟦r'⟧ r' } : prj 
 	∐ { ⟦r'⟧ r' } r' : cns
@@ -182,19 +187,20 @@
 	∐ { r' rcd_ptn◂r' } rcd_ptn◂r' : call 
 	∐ { rcd_ptn◂r' ⟦ℤ⟧ ⟦{ rcd_ptn◂r' p'}⟧ } rcd_ptn◂r' : agl
 	∐ rcd_ptn◂r' rcd_ptn◂r' : etr
-¶ ir◂r',c',p' ≃
+¶ ir◂''' ≃
 	∐ nd◂r'◂p' c' : seq
 	∐ : ret
-¶ ir_vct◂r',c',p' = (ir◂r'◂c'◂p')◃&
+¶ ir_vct◂''' = (ir◂r'◂c'◂p')◃&
 ¶ ir_mdl 
 ¶ ns_v ≃ ∐ ! & : ns_sgn 
+§ apt ≒ |» ! pnt◂(def_mdl◂(read◂$)) ∎ 
 § a0 ≒ |» ! def_mdl ∎
-§ @ ir_of_ast ≒ |» ∎
+§ @.ir_of_ast ≒ |» ∎
 § occurs ≒ |» ∎
-§ @ unify ≒ |» ! 0 ∎
-§ @ gen ≒ |» ∎
-§ @ inst ≒ |» ∎
-§ @ slv ≒ |» ∎
+§ @.unify ≒ |» ! 0 ∎
+§ @.gen ≒ |» ∎
+§ @.inst ≒ |» ∎
+§ @.slv ≒ |» ∎
 § run ≒
 	|» ∎
 §§.
