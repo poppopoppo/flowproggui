@@ -1,11 +1,11 @@
-§§ Lang ≒ 
-¶+ℙ    
-	@.nl ≃ ∐ "\n"  
+§§ Grm ≒
+¶+ℙ   
+	@.nl ≃ ∐ "\n" 
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
 	@.def_arg ≃ 
 	∐ "◂" var ⟦args⟧ 
 	∐ "◂" "'" ⟦"'"⟧  
-	@.args ≃ ∐ "," var  
+	@.args ≃ ∐ "," var 
 	@.var ≃ ∐ name "'"   
 	@.mdl_etr ≃   
   ∐ glb_etr     
@@ -13,13 +13,13 @@
 	@.def_typ ≃   
   ∐ "¶" def_typ_body_clq ⟦def_typ_body_clq⟧
   ∐ "¶" def_typ_body
-  ∐ "¶+ℙ" grm_body ⟦grm_body⟧  
+  ∐ "¶+ℙ" grm_body ⟦grm_body⟧
 	@.def_typ_body_clq ≃ ∐ "@" "." def_typ_body
   @.def_typ_body ≃
+  ∐ name ‹def_arg›
   ∐ name ‹def_arg› "≃" def_coprd ⟦def_coprd⟧
   ∐ name ‹def_arg› "≃" def_prd ⟦def_prd⟧
-  ∐ name ‹def_arg› "=" typ  
-  ∐ name ‹def_arg›
+  ∐ name ‹def_arg› "=" typ
   @.def_coprd ≃ ∐ "∐" typ_top ":" name
 	@.def_prd ≃ ∐ "∏" typ_top ":" name
   @.grm_body ≃ ∐ "@" "." name "≃" grm_ord
@@ -34,8 +34,8 @@
 	@.grm_pred ≃ ∐ pred_flg ⟦grm_ptn⟧
 	@.pred_flg ≃ ∐ "+|" ∐ "¬|"
 	@.typ_top ≃
-  ∐ "!" typ 
   ∐ ⟦typ⟧
+  ∐ "!" typ
 	@.typ ≃ ∐ typ_imp 
 	@.typ_imp ≃ ∐ typ_vct ⟦typ_imp_tl⟧ 
 	@.typ_imp_tl ≃ ∐ "→" typ_vct
@@ -45,18 +45,16 @@
 	@.typ_app_tl ≃ ∐ "◂" typ_atm
 	@.typ_atm ≃
   ∐ typ_rec 
-  ∐ "(" typ ")"
   ∐ "{" typ_top "}"
   ∐ "‹" typ_imp "›"
-  ∐ "⟦" typ_imp "⟧" 
-  ∐ var 
+  ∐ "⟦" typ_imp "⟧"
   ∐ name
   ∐ "$" ⟦"'"⟧
   ∐ "ℤ"
   ∐ "ℕ" 
   ∐ "&"
   ∐ "ℙ"
-  ∐ "_"  
+  ∐ "_"
   @.typ_rec ≃ 
   ∐ "@" "." typ_imp typ_rec_body 
   @.typ_rec_body ≃
@@ -72,27 +70,28 @@
 	@.typ_def ≃ ∐ ":" typ_top "⊢" typ_top
   @.stt_code ≃
   ∐ exp_top code
-  ∐ exp_top code_coprd_etr ⟦code_coprd_etr⟧ "∇" ‹tail›
-  ∐ exp_top code_prd_etr ⟦code_prd_etr⟧ "∆" ‹tail›
+  ∐ exp_top code_coprd_lst "∇" ‹tail›
+  ∐ exp_top code_prd_lst "∆" ‹tail›
   ∐ exp_top in stt_code "∎" ‹tail›
 	@.code ≃ 
   ∐ "∎" ‹tail›
   ∐ "|{" ⟦code⟧ "}|" ‹tail›
   ∐ "»" stt_code
-	@.eop ≃ 
-	∐ "∎"
-	∐ "»|"
+	@.eop ≃
+  ∐ "∎"
+  ∐ "»|"
   @.tail ≃ ∐ "^" code
+	@.code_coprd_lst ≃ ∐ ⟦code_coprd_etr⟧
   @.code_coprd_etr ≃ ∐ "∐" stt_code
+  @.code_prd_lst ≃ ∐ ⟦code_prd_etr⟧
   @.code_prd_etr ≃ ∐ "∏" stt_code 
 	@.exp_top ≃
-  ∐ "!" exp_top_rcd 
   ∐ ⟦exp_top_rcd⟧
+  ∐ "!" exp_top_rcd
   @.exp_top_rcd ≃
   ∐ "{" ⟦exp_top_rcd⟧ "}" 
   ∐ "∠" exp_eq
   ∐ exp_eq
-  @.exp ≃ ∐ exp_rcd 
   @.exp_rcd ≃ 
   ∐ "{" ⟦exp_rcd⟧ "}" 
   ∐ exp_eq  
@@ -117,7 +116,6 @@
   ∐ num 
   ∐ name
   @.exp_atm ≃
-  ∐ num "'" 
   ∐ num
   ∐ "(" "+" ")"
   ∐ "(" "*" ")"
@@ -129,9 +127,8 @@
   ∐ "$"
   ∐ "↑[" num "]"
   ∐ "↓[" num "]"
-  ∐ var 
   ∐ name
-  ∐ "&"
+  ∐ "&" 
   ∐ "@"
   ∐ "‹›"
 	@.str ≃  
@@ -155,55 +152,9 @@
 	∐* "W" ∐* "X" ∐* "Y" ∐* "Z" 
 	@.digit ≃ ∐* "0" ∐* "1" ∐* "2" ∐* "3" ∐* "4" ∐* "5" ∐* "6" ∐* "7" ∐* "8" ∐* "9" 
 
-¶ @.rcd_ptn ◂' ≃
-	∐ ! $ : rp_a 
-	∐ ! ⟦$⟧ : rp_r
-	∐ ⟦$⟧ $ : rp_ro
 ¶ ty_prm ≃
 	∐ : vct ∐ : opn ∐ : lst ∐ : zn ∐ : n
 	∐ : sgn ∐ : stg ∐ : z_u ∐ ℤ : z_n 
 	∐ ! & : axm ∐ : inj ∐ : cho ∐ ! & : z_d
-¶ v_t ◂' ≃ ∐ : wc ∐ ! ℤ : v ∐ : q ∐ ! $ : ln
-¶ @.ty ≃
-	∐ ! & : var ∐ ty ty : app
-	∐ ty ty : imp ∐ ! ty_prm : prm
-	∐ ! ty_rcd : rcd ∐ ! ty_rcd_lb : rcd_lb
-	∐ ! & : ty_rec
-	@.ty_rec ≃
-	∐ ty ty_rcd : cp ∐ ty ty ty_rcd : p
-	@.ty_rcd ≃
-	∐ ty ty_rcd : cns ∐ & : uo ∐ : u
-	@.ty_rcd_lb ≃
-	∐ ℙ ty ty_rcd_lb : cns_lb
-	∐ & : uo_lb ∐ : u_lb
-¶ @.tkn ◂'' ≃ 
-	∐ : name ∐ : stg ∐ ℤ : z ∐ ℤ ℤ : zn
-	∐ ! & : sgn ∐ ℤ tkn : co_p
-	∐ : pls ∐ : mlt ∐ : mns ∐ : cmp
-	∐ : eq ∐ ℤ : inj ∐ ! ℤ : cho ∐ : fix
-	∐ : exn
-¶ @.nd ◂'' ≃
-	∐ $ ⟦$⟧ : id
-	∐ $ { ⟦$⟧ $ } : prj 
-	∐ { ⟦$⟧ $ } $ : cns
-	∐ ! $ : rm ∐ tkn◂$'◂$ $ : ini
-	∐ { $ rcd_ptn◂$ } rcd_ptn◂$ : call 
-	∐ { rcd_ptn◂$ ⟦ℤ⟧ ⟦{ rcd_ptn◂$ $'}⟧ } rcd_ptn◂$ : agl
-	∐ rcd_ptn◂$ rcd_ptn◂$ : etr
-¶ ir◂''' ≃
-	∐ nd◂$◂$' $'' : seq
-	∐ : ret
-¶ ir_vct◂''' = (ir◂$◂$'◂$'')◃&
-¶ ir_mdl 
-¶ ns_v ≃ ∐ ! & : ns_sgn 
-§ apt ≒ |» ! pnt◂(def_mdl◂(read◂$)) ∎ 
-§ a0 ≒ |» ! def_mdl ∎
-§ @.ir_of_ast ≒ |» ∎
-§ occurs ≒ |» ∎
-§ @.unify ≒ |» ! 0 ∎
-§ @.gen ≒ |» ∎
-§ @.inst ≒ |» ∎
-§ @.slv ≒ |» ∎
-§ run ≒
-	|» ∎
+	
 §§.
