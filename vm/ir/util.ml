@@ -3,6 +3,10 @@ let pnt (b:bool) s =
   if b
   then (print_string s;flush stdout)
   else ()
+let string_abr s =
+  if (String.length s)>=20
+  then let s0 = String.sub s 0 20 in ("(\""^s0^"\""^"..)")
+  else "\""^s^"\""
 let _ = pnt true ""
 module Timer = struct
   type t = float ref

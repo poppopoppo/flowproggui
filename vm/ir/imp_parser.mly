@@ -167,10 +167,15 @@ typ:
   | NAM { }
   | Z { }
   | N {  }
+  | ROT rot_dsh { }
   | typ IO typ  { }
   | SGN { }
   | TYP_STG { }
   ;
+rot_dsh:
+  | { 0 }
+  | rot_dsh DSH { $1+1 }
+  ; 
 glb_etr:
   | LCE glb_etr_body { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d)  }
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
