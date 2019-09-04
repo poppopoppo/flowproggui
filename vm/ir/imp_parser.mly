@@ -1,6 +1,8 @@
 %{
   open Lang
+  open Types
   open Ast
+
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT
@@ -122,10 +124,17 @@ def_typ_clique:
   ;
 def_typ_body:
   | NAM def_arg  { Def_Abs ($1,$2) }
-  | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,$2,$4) }
+  | NAM def_arg ISO def_coprd   {
+    ( try
+        let _ = List.assoc $1 !IR.ns_t in
+        Def_CoPrd ($1,$2,$4)
+      with Not_found ->
+        let v = newvar () in
+        IR.ns_t := ($1,v)::!IR.ns_t;
+        Def_CoPrd ($1,$2,$4)) }
   | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
   | FNT NAM ISO name_list { Def_Fnt ($2,$4) }
-  | NAM def_arg EQ typ  { Def_EqT ($1,$2,Var (ref Types.WC)) }
+  | NAM def_arg EQ typ  { Def_EqT ($1,$2,Var(Types.newvar ())) }
   ;
 def_typ_body_clq:
   | NAM def_arg  { Def_Abs ($1,$2) }
@@ -133,7 +142,7 @@ def_typ_body_clq:
     let a = $2 in
     Def_CoPrd ($1,a,List.map (fun (y,n) -> (y,n)) $4) }
   | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
-  | NAM def_arg EQ typ  { Def_EqT ($1,$2,Var (ref Types.WC)) }
+  | NAM def_arg EQ typ  { Def_EqT ($1,$2,Var(Types.newvar ())) }
   ;
 name_list:
   | NAM { [$1] }
@@ -148,34 +157,39 @@ def_prd:
   | PRD typ_top CLN NAM def_prd  { ($2,$4)::$5 }
   ;
 typ_top:
-  | typs { Var (ref Types.WC) }
-  | EXP typ { Var (ref Types.WC) }
+  | typs { Rcd(rcd_cl $1) }
+  | EXP typ { $2 }
   ;
 typs:
-  | { }
-  | typs typ { }
+  | { [] }
+  | typs typ { $1@[$2] }
   ;
 typ:
-  | L_PRN typ R_PRN {}
-  | SLF DOT NAM
-  | L_RCD typ_top R_RCD {  }
-  | typ APP typ {  }
-  | typ PRJ typ {  }
-  | L_OPN typ R_OPN {  }
-  | L_LST typ R_LST {  }
-  | VAL { }
-  | NAM { }
-  | Z { }
-  | N {  }
-  | ROT rot_dsh { }
-  | typ IO typ  { }
-  | SGN { }
-  | TYP_STG { }
+  | L_PRN typ R_PRN { $2 }
+  | L_RCD typ_top R_RCD { $2 }
+  | typ APP typ { App($1,$3) }
+  | typ PRJ typ { App(App(Prm Vct,$1),$3) }
+  | L_OPN typ R_OPN { opn $2 }
+  | L_LST typ R_LST { lst $2 }
+  | VAL { Var (newvar ()) }
+  | NAM {
+    ( try
+        let v = List.assoc $1 !IR.ns_t in
+        Var v
+      with Not_found ->
+        let v = newvar () in
+        IR.ns_t := ($1,v)::!IR.ns_t; Var v ) }
+  | Z { zn (Prm Z_u) }
+  | N { Prm N }
+  | ROT rot_dsh { Var (newvar_q (-($2+1))) }
+  | typ IO typ  { Imp($1,$3) }
+  | SGN { Prm Sgn }
+  | TYP_STG { Prm Stg }
   ;
 rot_dsh:
   | { 0 }
   | rot_dsh DSH { $1+1 }
-  ; 
+  ;
 glb_etr:
   | LCE glb_etr_body { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d)  }
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
@@ -188,7 +202,7 @@ glb_etr_body:
   | NAM typ_def DEF IN stt_code { ($1,fst $2,snd $2,$5) }
   ;
 typ_def:
-  | { (Var (ref Types.WC),Var (ref Types.WC)) }
+  | { (Var (newvar()),Var (newvar())) }
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
 stt_code:
@@ -209,7 +223,7 @@ stt_code:
     | Some x -> V(c,x)
    }
   | exp_top code_prd_list PRD_END tail {
-    let c = P($1,$2) in
+    let c = Ast.P($1,$2) in
     match $4 with
     | None -> c
     | Some x -> V(c,x)
@@ -239,12 +253,12 @@ code:
     | None -> Some c
     | Some x -> Some (V(c,x)) }
   | ARR exp_top code_prd_list PRD_END tail {
-    let c = P($2,$3) in
+    let c = Ast.P($2,$3) in
     match $5 with
     | None -> Some c
     | Some x -> Some (V(c,x))  }
   | ARR exp_top IN stt_code eop tail {
-    let c = F($2,$3,$4) in
+    let c = Ast.F($2,$3,$4) in
     match $6 with
       | None -> Some c
       | Some x -> Some (V(c,x)) }
