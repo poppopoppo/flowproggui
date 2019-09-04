@@ -34,7 +34,7 @@ let evo ((g,p0,r0,k):t) (b:Ast.line) =
       let g0 = { g with ir_vct = iv; rm = rm } in
       let _ = Typing.slv g0 0 p0 in
       Timer.pnt "t2";
-      let et = (Sgn.get_env (),g0,p0,r0,k) in
+      let et:t = (g0,p0,r0,k) in
       let fd = Unix.fork () in
       ( match fd with
         | 0 ->
@@ -94,6 +94,57 @@ let evo ((g,p0,r0,k):t) (b:Ast.line) =
             | _ -> err "err1.3"
           ))
     | _ -> err "evo:0" )
+(*
+let evo0 ((g,p0,r0,k0):t) (b:Ast.line) =
+  let _ = Timer.init () in
+  ( match b with
+    | Ast.Line_Agl (i,e) ->
+      let (iv,p1,r1) = vh_of_exp_ptn g.ir_vct p0 r0 e in
+      Timer.pnt "t0";
+      let rm = init_rm g.rm iv in
+      Timer.pnt "t1";
+      let g0 = { g with ir_vct = iv; rm = rm } in
+      let _ = Typing.slv g0 0 p0 in
+      Timer.pnt "t2";
+      let et = (g0,p0,r0,k0) in
+      pnt true "evo_tkn:-1\n";
+      let t0 = Sys.time () in
+      let st = SgnMap.empty in
+      let cs = Stack.create () in
+      pnt true "evo_tkn:0xx\n";
+
+      ( try pnt true ((Tkn.print k0)^"\n") with Failure e -> pnt true e | _ -> pnt true "erLL");
+      pnt true "evo_tkn:p0\n";
+      pnt true ((Rcd_Ptn.print (fun r -> "r"^(Sgn.print r)) r0)^"\n");
+      let st = set_reg_ptn st r0 k0 in
+      pnt true "evo_tkn:1\n";
+      let k1 = run g0 p0 st cs in
+      pnt true "time 0:";print_float (t1-.t0); pnt true "\n";
+      (g0,p1,r1,k1)
+    | Ast.Line e ->
+      let (iv,p1,r1) = vh_of_exp_ptn g.ir_vct p0 r0 e in
+      Timer.pnt "t0";
+      let rm = init_rm g.rm iv in
+      Timer.pnt "t1";
+      let g0 = { g with ir_vct = iv; rm = rm } in
+      let _ = Typing.slv g0 0 p0 in
+      Timer.pnt "t2";
+      let et = (g0,p0,r0,k0) in
+      pnt true "evo_tkn:-1\n";
+      let t0 = Sys.time () in
+      let st = SgnMap.empty in
+      let cs = Stack.create () in
+      pnt true "evo_tkn:0xx\n";
+
+      ( try pnt true ((Tkn.print k0)^"\n") with Failure e -> pnt true e | _ -> pnt true "erLL");
+      pnt true "evo_tkn:p0\n";
+      pnt true ((Rcd_Ptn.print (fun r -> "r"^(Sgn.print r)) r0)^"\n");
+      let st = set_reg_ptn st r0 k0 in
+      pnt true "evo_tkn:1\n";
+      let k1 = run g0 p0 st cs in
+      pnt true "time 0:";print_float (t1-.t0); pnt true "\n";
+      k1
+    | _ -> err "evo:0" ) *)
 let ast_from_string s =
       let lexbuf = Lexing.from_string s in
       (Imp_parser.buffer Imp_lexer.token lexbuf)
