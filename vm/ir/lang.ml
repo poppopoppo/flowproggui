@@ -275,7 +275,7 @@ module Ast = struct
           let s1 =
             ( match hd with
               | Etr(n,_,_,_) -> "§ "^n^"\n"
-              | Flow f -> print_flow f
+              | Flow f -> "¶ "^(print_flow f)
               | Etr_Clq _ -> "§ @ "^"\n"
               | Flow_Clq _ -> "¶ @"^"\n"
               | Gram g -> "¶+ℙ"^"\n"^(Peg.print g) ) in
@@ -283,9 +283,18 @@ module Ast = struct
     s0^(lp g)
   and print_flow f =
     ( match f with
-      | (Def_Abs(n,_)) -> "¶ "^n^"\n"
-      | (Def_CoPrd(n,_,_)) -> "¶ "^n^" ≃ ∐ "^"\n"
+      | (Def_Abs(n,a)) -> let sa = print_args a in n^sa^"\n"
+      | (Def_CoPrd(n,a,ps)) ->
+        let ss =
+          List.fold_left
+            (fun ss (y,n) ->
+               ss^"\t∐ "^(Types.print (ref []) y)^" : "^n^"\n")
+            "" ps in
+        let sa = print_args a in
+        n^sa^" ≃ "^ss
       |  _ -> "¶"^"\n" )
+  and print_args l =
+    if l=[] then "" else List.fold_left (fun s _ -> s^"'") "◂" l
   let tk_agl a =
     let i = ref [] in
     let b = ref false in
@@ -308,6 +317,8 @@ module Tkn = struct
     | Cmp | Eq | Inj of int | Cho of int | Fix
     | Exn | Fnc of 'p | Clj of 'p * (('p, 'r) t)
     | Ast of Peg.ast | Vct of (('p, 'r) t , ('p, 'r) t) Hashtbl.t
+    | Grm of Peg.grammar * string | Frgn of string
+
   let rec print k =
     pnt true "enter Tkn.print\n";
     ( try
@@ -317,39 +328,57 @@ module Tkn = struct
             ( try "{"^(Array.fold_left (fun s r -> s^" "^(print r)) "" rs)^"}"
               with _ -> err "Tkn.print 6")
           | Tkn v ->
-            pnt true "Tkn.print x3\n";
+            pnt true "Tkn.print x14\n";
             ( match v with
-              | Name n -> n
+              | Name n ->
+                pnt true "Tkn.print x13\n";
+                pnt true (n^"\n"); n
               | Stg s ->
                 if (String.length s)>=20
                 then let s0 = String.sub s 0 20 in ("(\""^s0^"\""^"..)")
                 else "\""^(String.escaped s)^"\""
-              | Z z -> (string_of_int z)
-              | Zn (z0,z1) -> "ℤ["^(string_of_int z1)^"]."^(string_of_int z0)
+              | Z z ->
+                pnt true "Tkn.print x11\n";
+                (string_of_int z)
+              | Zn (z0,z1) ->
+                pnt true "Tkn.print x12\n";
+                "ℤ["^(string_of_int z1)^"]."^(string_of_int z0)
               | Sgn p ->
                 pnt true "Tkn.print x0\n";
                 ( try "&."^(Sgn.print p) with _ -> err "Tkn.print 0")
-              | CoP(i,ki) -> "∐["^(string_of_int i)^","^(print ki)^"]"
-              | P (_,_) -> err "print"
+              | CoP(i,ki) ->
+                pnt true "Tkn.print x5\n";
+                "∐["^(string_of_int i)^","^(print ki)^"]"
+              | P (_,_) ->
+                pnt true "Tkn.print x10\n";
+                err "print"
               | Pls -> "+"
               | Mlt -> "*"
               | Mns -> "-"
               | Cmp -> "≤"
               | Eq -> "="
-              | Inj i -> "↑["^(string_of_int i)^"]"
+              | Inj i ->
+                pnt true "Tkn.print x7\n";
+                "↑["^(string_of_int i)^"]"
               | Cho i -> "↓["^(string_of_int i)^"]"
               | Fix -> "@"
               | Exn -> "¿"
               | Fnc _ -> "Fnc"
               | Clj (_,_) -> "Clj"
-              | Ast a -> Peg.print_ast a
+              | Ast a ->
+                pnt true "Tkn.print x6\n";
+                Peg.print_ast a
               | Vct v ->
+                pnt true "Tkn.print x9\n";
+
                 let s0 =
                   Hashtbl.fold
                     ( fun b k s0 ->
                         s0^" "^(print b)^"~"^(print k))
                     v "#.{" in
                 s0^" }"
+              | Frgn _ -> "Frgn"
+              | Grm (_,n) -> "Grm."^n
             ))
       with _ -> err "Tkn.print 8" )
   let vct_op v k a0 =
@@ -425,12 +454,22 @@ module IR = struct
     | CS_f of ((Sgn.t * (pt, 'r) Tkn.t) list) * 'c
     | CS_f_il of 'c
   type ('c, 'r) cs = (('c, 'r) cs_f) Stack.t
+  type ns = (string * Types.v ref) list ref
+  type ns_t = (string * Types.v ref) list ref
+  type ns_e = (string * ((pt, Sgn.t) Tkn.tkn)) list ref
+  let ns:ns = ref []
+  let ns_t:ns_t = ref []
+  let ns_e:(ns_e) = ref []
+  let clear () = ns := []; ns_t := []
   type mdl = {
     flow : (Ast.flow list) list;
     grm : Peg.grammar list;
     ir_vct : ir_vct;
     rm : Types.t SgnMap.t;
     ns_t : Types.t StgMap.t;
+    ns : (string * Types.v ref) list;
+    ns_e : (string * ((pt, Sgn.t) Tkn.tkn)) list;
+    ns_f : (string * Types.v ref) list;
   }
   type et = mdl * pt * (Sgn.t Rcd_Ptn.t) * (pt, Sgn.t) Tkn.t
   let rtl = " : "
@@ -548,7 +587,8 @@ module IR = struct
   let print m =
     let s0 =
       List.fold_left
-        (fun s0 fs -> List.fold_left (fun s0 f -> s0^(Ast.print_flow f)) s0 fs) "" m.flow in
+        (fun s0 fs ->
+           List.fold_left (fun s0 f -> s0^(Ast.print_flow f)) s0 fs) "" m.flow in
     let s1 = List.fold_left (fun s0 g -> s0^(Peg.print g)) "" m.grm in
     let s2 =
       PtMap.fold
@@ -721,54 +761,46 @@ module IR = struct
       | Tkn Eq,Rcd [|x;y|] ->
         let b = if x=y then 1 else 0 in
         `Tkn (Tkn (Zn (b,2)))
+      | Tkn (Grm (g,n)),Tkn Stg s ->
+        let (a,s0) = Peg.parse g n s in
+        ( match a with
+          | None -> `Tkn (Rcd [| (Tkn(CoP(0,Rcd [||]))); (Tkn(Stg s0)) |])
+          | Some a -> `Tkn(Rcd [|(Tkn(CoP(1,Tkn(Ast a))));(Tkn(Stg s0))|])
+        )
+      | Tkn(Frgn f),_ ->
+        `Tkn(frgn f x)
       | Tkn (Tkn.Name n),_ ->
-        ( match n with
-          | "‹›" -> app m (Tkn (Inj 0)) x
-          | "‹" -> app m (Tkn(Inj 1)) x
-          | "⟦⟧" -> app m (Tkn(Inj 0)) x
-          | "⟦" -> app m (Tkn(Inj 1)) x
-          | "&" ->
-            ( match x with
-              | Rcd [||] -> `Tkn(Tkn (Tkn.Sgn (sgn ())))
-              | _ -> err "app 3" )
-          | "⊵" ->
-            ( match x with
-              | Rcd [|Rcd[|Tkn Vct v;k|];a0|] ->
-                let a1 = Tkn.vct_op v k a0 in
-                `Tkn(Rcd [|Rcd[|(Tkn (Vct v));k|];a1|])
-              | _ -> err "app 8" )
-          | "#" -> `Tkn(Tkn(Vct (Hashtbl.create 10)))
-          | "pnt" ->
-            let s = Tkn.print x in
-            Util.pnt true ("pnt:"^s^"\n");
-            `Tkn(Rcd [||])
-          | "read" ->
-            ( match x with
-              | Tkn (Stg s) ->
-                let l = Util.load_file s in
-                `Tkn(Tkn (Stg l))
-              | _ -> err "app:5" )
-          | _ ->
-            ( try
-                let g = List.find (List.exists (fun (n0,_,_) -> n=n0)) m.grm in
-                ( match x with
-                  | Tkn (Stg s) ->
-                    let (a,s0) = Peg.parse g n s in
-                    ( match a with
-                      | None -> `Tkn (Rcd [| (Tkn(CoP(0,Rcd [||]))); (Tkn(Stg s0)) |])
-                      | Some a -> `Tkn(Rcd [|(Tkn(CoP(1,Tkn(Ast a))));(Tkn(Stg s0))|])
-                    )
-                  | _ -> err "app:0" )
-              with
-              | Failure s ->
-                Util.pnt true ("not grammar:"^s^"\n");
-                `Fnc ((Name n):pt)
-              | Stack_overflow -> err "parse:stack overflow"
-              | _ ->
-                Util.pnt true ("not grammar:x\n");
-                `Fnc ((Name n):pt)
-            ))
+        let f = List.assoc n m.ns_e in
+        app m (Tkn f) x
       | _ -> err "app:1"
+    )
+  and frgn f x =
+    ( match f with
+      | "&" ->
+        ( match x with
+          | Tkn.Rcd [||] -> Tkn.Tkn(Tkn.Sgn (sgn ()))
+          | _ -> err "app 3" )
+      | "⊵" ->
+        ( match x with
+          | Tkn.Rcd [|Tkn.Rcd[|Tkn.Tkn Tkn.Vct v;k|];a0|] ->
+            let a1 = Tkn.vct_op v k a0 in
+            Tkn.Rcd [|Rcd[|(Tkn (Vct v));k|];a1|]
+          | _ -> err "app 8" )
+      | "#" ->
+        ( match x with
+          | Tkn.Rcd [||] -> Tkn.Tkn(Vct (Hashtbl.create 10))
+          | _ -> err "app 3" )
+      | "pnt" ->
+        let s = Tkn.print x in
+        Util.pnt true ("pnt:"^s^"\n");
+        Rcd [||]
+      | "read" ->
+        ( match x with
+          | Tkn.Tkn(Stg s) ->
+            let l = Util.load_file s in
+            Tkn.Tkn (Stg l)
+          | _ -> err "read 0" )
+      | _ -> err "frgn 0"
     )
   let rec seq ev p1 p2 =
     let c1 = find p1 ev in
@@ -1093,6 +1125,7 @@ module IR = struct
         PtMap.empty g in
     m0
 end
+
 module Asm = struct
   type pt = int
   type r = int
@@ -1619,13 +1652,15 @@ module Typing = struct
         Imp(Rcd U,t_v)
       | _ ->
         ( try
-            Util.pnt true "slv_name:0\n";
-            let y = StgMap.find n m.ns_t in
-            Util.pnt true "slv_name:1\n";
-            let y0 = Imp(Prm Stg,Rcd(rcd_cl[(opn y);(Prm Stg)])) in
-            Util.pnt true "slv_name:2\n";
-            y0
-          with Failure s -> err ("slv_name:e0"^s) )
+            let y = List.assoc n !IR.ns in
+            Var y
+          with Not_found ->
+            ( try
+                let y = StgMap.find n m.ns_t in
+                let y0 = Imp(Prm Stg,Rcd(rcd_cl[(opn y);(Prm Stg)])) in
+                y0
+              with Failure s -> err ("slv_name:e0"^s))
+        )
     )
   and slv_grm gs yl n =
     ( try
@@ -1664,32 +1699,97 @@ module Typing = struct
       | Peg.Name n -> slv_grm gs yl n
       | Peg.Var _ -> err "slv_pattern_atm:0"
       | Peg.Any -> Prm Stg )
+  let rec slv_grms ns0 yl (gs:Peg.grammar list) =
+    Util.pnt true "enter slv_grms:\n";
+    ( match gs with
+      | [] -> ns0
+      | g::tl ->
+        let (ns0,yl) =
+          List.fold_left
+            (fun (ns0,yl) (n,_,_) ->
+               let y = ref Rec_WC in
+               (StgMap.add n (Rec y) ns0,(n,y)::yl))
+            (ns0,yl) g in
+        let _ =
+          List.fold_left
+            (fun _ (n,_,rs) ->
+               let y = coprd_cl (Prm (Name n)) (List.map (fun (r,_) -> slv_rule [g] (ref yl) r) rs) in
+               let v = List.assoc n yl in
+               v := y
+            ) () g in
+        slv_grms ns0 yl tl
+    )
+  let rec slv_flows _ fs =
+    Util.pnt true "enter slv_flows:\n";
+    ( match fs with
+      | [] -> ()
+      | q :: tl ->
+        let _ =
+          List.fold_left
+            (fun _ f ->
+               ( match f with
+                 | Ast.Def_CoPrd (n,_,_) ->
+                   let v = List.assoc n !IR.ns_t in
+                   let y = ref Rec_WC in
+                   v := Ln (Rec y)
+                 | _ -> err "slv_flows 4" ))
+            () q in
+        let _ =
+          List.fold_left
+            (fun _ f ->
+               ( match f with
+                 | Ast.Def_CoPrd (n,_,ps) ->
+                   let (ys,_) = List.split ps in
+                   let y = (coprd_cl (Prm (Name (n^"_r"))) ys) in
+                   ( match !(List.assoc n !IR.ns_t) with
+                     | Ln (Rec r) ->
+                       r := y;
+                       let _ =
+                         List.fold_left
+                           (fun i (t,n) ->
+                              let tc = Imp(t,Rec r) in
+                              ns := (n,ref (Ln tc))::!ns;
+                              ns_e := (n,Tkn.Inj i)::!ns_e;
+                              (i+1))
+                           0 ps in
+                       ()
+                     | _ -> err "slv_flows 0" )
+                 | _ -> err "slv_flows 1" ))
+            () q in
+        slv_flows [] tl
+    )
   let slv_ns_t m0 =
     let ns0 = StgMap.empty in
     let ns0 = StgMap.add "‹›" (opn (Var (newvar_q (-1)))) ns0 in
     let ns0 = StgMap.add "⟦⟧" (lst (Var (newvar_q (-1)))) ns0 in
-    let rec slv_grms ns0 yl (gs:Peg.grammar list) =
-      Util.pnt true "enter slv_grms:\n";
-      ( match gs with
-        | [] -> ns0
-        | g::tl ->
-          let (ns0,yl) =
-            List.fold_left
-              (fun (ns0,yl) (n,_,_) ->
-                 let y = ref Rec_WC in
-                 (StgMap.add n (Rec y) ns0,(n,y)::yl))
-              (ns0,yl) g in
-          let _ =
-            List.fold_left
-              (fun _ (n,_,rs) ->
-                 let y = coprd_cl (Prm (Name n)) (List.map (fun (r,_) -> slv_rule [g] (ref yl) r) rs) in
-                 let v = List.assoc n yl in
-                 v := y
-              ) () g in
-          slv_grms ns0 yl tl
-      ) in
     let ns0 = slv_grms ns0 [] m0.grm in
     { m0 with ns_t = ns0 }
+  let slv_ns_e m0 =
+    IR.ns_e := ("‹›",Tkn.Inj 0)::!IR.ns_e;
+    IR.ns_e := ("‹",Tkn.Inj 1)::!IR.ns_e;
+    IR.ns_e := ("⟦⟧",Tkn.Inj 0)::!IR.ns_e;
+    IR.ns_e := ("⟦",Tkn.Inj 0)::!IR.ns_e;
+    IR.ns_e := ("&",Tkn.Frgn "&")::!IR.ns_e;
+    IR.ns_e := ("⊵",Tkn.Frgn "⊵")::!IR.ns_e;
+    IR.ns_e := ("#",Tkn.Frgn "#")::!IR.ns_e;
+    IR.ns_e := ("pnt",Tkn.Frgn "pnt")::!IR.ns_e;
+    IR.ns_e := ("read",Tkn.Frgn "read")::!IR.ns_e;
+    let _ =
+      List.fold_left
+        (fun _ g ->
+           List.fold_left
+             (fun _ (n,_,_) ->
+                IR.ns_e := (n,Tkn.Grm(g,n))::!IR.ns_e )
+             () g )
+        () m0.grm in
+    let _ =
+      PtMap.fold
+        (fun p _ _ ->
+           ( match p with
+             | IR.Name n -> IR.ns_e := (n,Tkn.Fnc (IR.Name n))::!IR.ns_e
+             | _ -> ()))
+        m0.ir_vct in
+    ()
 end
 let rec init_rm rm iv =
   let open IR in
@@ -1777,7 +1877,13 @@ let ir_of_ast g =
   let (fl,gl,el) = filter_mdl g in
   let ir_vct = mk_ir_vct el in
   let rm = init_rm (SgnMap.empty) ir_vct in
-  let m = { flow = fl; grm = gl; ir_vct = ir_vct; rm = rm; ns_t = StgMap.empty } in
+  let m = {
+    flow = fl; grm = gl; ir_vct = ir_vct;
+    rm = rm; ns_t = StgMap.empty;
+    ns = []; ns_e = []; ns_f = [] } in
   let m = Typing.slv_ns_t m in
+  let _ = Typing.slv_ns_e m in
+  let _ = Typing.slv_flows [] m.flow in
   let _ = slv_mdl m el in
+  let m = { m with ns = !ns; ns_e = !ns_e; ns_f = !ns_t } in
   m

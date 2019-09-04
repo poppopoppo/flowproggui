@@ -10,7 +10,8 @@ let init_st () : t =
   let r0 = (sgn ()) in
   let iv = PtMap.add p0 (Seq(Ini(r0,Rcd [||]),p1)) iv in
   let iv = PtMap.add p1 (Ret (P_A r0)) iv in
-  { flow = []; grm = []; ir_vct = iv; rm = SgnMap.empty; ns_t = StgMap.empty },
+  { flow = []; grm = []; ir_vct = iv; rm = SgnMap.empty;
+    ns_t = StgMap.empty; ns =[]; ns_e = []; ns_f = [] },
   p1,(Rcd_Ptn.P_A r0),Tkn.Rcd [||]
 let mk_st g k =
   let m0 = Lang.ir_of_ast g in
@@ -74,7 +75,7 @@ let evo ((g,p0,r0,k):t) (b:Ast.line) =
       let fd = Unix.fork () in
       ( match fd with
         | 0 ->
-          Util.open_out_close "default.tkn" (fun c -> Marshal.to_channel c et []);
+          Util.open_out_close "default.tkn" (fun c -> Marshal.to_channel c et [Marshal.Closures]);
           let _ = Unix.execve
               "evo_tkn.exe"
               (Array.make 0 "")

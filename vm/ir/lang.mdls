@@ -4,7 +4,7 @@
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
 	@.def_arg ≃ 
 	∐ "◂" var ⟦args⟧ 
-	∐ "◂" "'" ⟦"'"⟧  
+	∐ "◂" "'" ⟦"'"⟧   
 	@.args ≃ ∐ "," var  
 	@.var ≃ ∐ name "'"   
 	@.mdl_etr ≃   
@@ -182,7 +182,7 @@
 	∐ : pls ∐ : mlt ∐ : mns ∐ : cmp
 	∐ : eq ∐ ℤ : inj ∐ ! ℤ : cho ∐ : fix
 	∐ : exn
-¶ @.nd ◂'' ≃
+¶ nd ◂'' ≃
 	∐ $ ⟦$⟧ : id
 	∐ $ { ⟦$⟧ $ } : prj 
 	∐ { ⟦$⟧ $ } $ : cns
