@@ -84,7 +84,13 @@ grm_clq:
   | grm_etr grm_clq { $1::$2 }
   ;
 grm_etr:
-  | SLF DOT NAM ISO grm_ord   { ($3,[],$5) }
+  | SLF DOT NAM ISO grm_ord   {
+    ( try
+      let v = List.find (fun v -> let (n,_,_) = !v in n=$3) !Peg.ns in
+      (v := ($3,[],$5); ($3,[],$5))
+      with Not_found ->
+      let v = ref ($3,[],$5) in
+      (Peg.ns := v::!Peg.ns; ($3,[],$5))) }
   ;
 grm_ord:
   | grm_rule { [($1,None)] }
@@ -108,7 +114,13 @@ grm_ptn:
   ;
 grm_atom:
   | STG { (Peg.Text $1) }
-  | NAM { (Peg.Name $1) }
+  | NAM {
+    ( try
+      let v = List.find (fun v -> let (n,_,_) = !v in n=$1) !Peg.ns in
+      Var v
+      with Not_found ->
+      let v = ref ($1,[],[]) in
+      (Peg.ns := v::!Peg.ns; Var v)) }
   ;
 grm_prd:
   | { None }
@@ -119,11 +131,14 @@ prd_flg:
   | NOT_SPL { Peg.Not }
   ;
 def_typ_clique:
-  | SLF DOT def_typ_body_clq { [$3] }
-  | SLF DOT def_typ_body_clq def_typ_clique { [$3]@$4 }
+  | SLF DOT def_typ_body { [$3] }
+  | SLF DOT def_typ_body def_typ_clique { [$3]@$4 }
   ;
 def_typ_body:
-  | NAM def_arg  { Def_Abs ($1,$2) }
+  | NAM def_arg  {
+    let v = ref (Ln (Prm(Name $1))) in
+    IR.ns_t := ($1,v)::!IR.ns_t;
+    Def_Abs ($1,$2) }
   | NAM def_arg ISO def_coprd   {
     ( try
         let _ = List.assoc $1 !IR.ns_t in
@@ -134,15 +149,12 @@ def_typ_body:
         Def_CoPrd ($1,$2,$4)) }
   | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
   | FNT NAM ISO name_list { Def_Fnt ($2,$4) }
-  | NAM def_arg EQ typ  { Def_EqT ($1,$2,Var(Types.newvar ())) }
-  ;
-def_typ_body_clq:
-  | NAM def_arg  { Def_Abs ($1,$2) }
-  | NAM def_arg ISO def_coprd   {
-    let a = $2 in
-    Def_CoPrd ($1,a,List.map (fun (y,n) -> (y,n)) $4) }
-  | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
-  | NAM def_arg EQ typ  { Def_EqT ($1,$2,Var(Types.newvar ())) }
+  | NAM def_arg EQ typ  {
+    let a = List.map (fun _ -> newvar_q (-1)) $2 in
+    let y = abs $4 a in
+    let v = ref (Ln y) in
+    IR.ns_t := ($1,v)::!IR.ns_t;
+    Def_EqT ($1,$2,$4) }
   ;
 name_list:
   | NAM { [$1] }
@@ -181,7 +193,7 @@ typ:
         IR.ns_t := ($1,v)::!IR.ns_t; Var v ) }
   | Z { zn (Prm Z_u) }
   | N { Prm N }
-  | ROT rot_dsh { Var (newvar_q (-($2+1))) }
+  | ROT rot_dsh { Var (newvar_q (-($2+2))) }
   | typ IO typ  { Imp($1,$3) }
   | SGN { Prm Sgn }
   | TYP_STG { Prm Stg }

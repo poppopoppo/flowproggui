@@ -1,4 +1,3 @@
-open Util
 type rule_flag = Synt | Lex
 type pred_flag = And | Not
 type grammar = entry list
@@ -11,7 +10,7 @@ and pattern =
 and pattern_atm =
   | Text of string
   | Name of name
-  | Var of _val
+  | Var of entry ref
   | Any
 and name = string
 and _val = string
@@ -22,6 +21,8 @@ type ast =
   | Ast_Option of (ast option)
 type rtn = Parse of (ast * string) | Fail of string
 type global = grammar list
+type ns = (entry ref) list ref
+let ns:ns = ref []
 let iter = ref 0
 let rec print_ast a =
   ( match a with
@@ -63,7 +64,9 @@ and print_pa a =
   ( match a with
     | Text s -> "\""^(String.escaped s)^"\""
     | Name n -> n
-    | Var v -> v^"'"
+    | Var v ->
+      let (n,_,_) = !v in
+      n
     | Any -> "_" )
 and print_po po =
   ( match po with
@@ -72,6 +75,23 @@ and print_po po =
       ( match pf with
         | And -> " +| "^(print_pl pl)
         | Not -> " ¬| "^(print_pl pl)))
+(* let rec mk_ns gs =
+  ( match gs with
+    | [] -> ()
+    | g::tl ->
+      let _ =
+        List.fold_left
+          (fun _ (n,v,rs) ->
+             ns := (ref (n,v,rs))::!ns )
+          () g in
+      let _ =
+        List.fold_left
+          (fun _ (n,v,rs) ->
+             let rsv = mk_var rs in
+             let v = List.find (fun v -> let (nv,_,_) = !v in n==nv) !ns in
+             v := (n,v,rsv))
+          () g in
+      mk_ns tl ) *)
 let rec parse (g:grammar) (n:name) (s:string) : (ast option) * string =
   Util.pnt true ("enter parse:"^n^","^(Util.string_abr s)^"\n");
   let e = List.find (fun (n0,_,_) -> n=n0) g in
@@ -142,7 +162,9 @@ and parse_pattern_atm _ g s0 p =
           else (None,s0)
         with Invalid_argument _ -> (None,s0))
     | Name n0 -> parse g n0 s0
-    | Var _ -> err "err0"
+    | Var v ->
+      let (_,_,rs) = !v in
+      parse_entry g rs s0
     | Any ->
       ( try
           let s00 = Str.string_before s0 1 in
