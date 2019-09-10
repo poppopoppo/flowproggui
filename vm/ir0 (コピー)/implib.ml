@@ -12,7 +12,7 @@ let init_st () : t =
   let iv = PtMap.add p1 (Ret (P_A r0)) iv in
   { flow = []; grm = []; ir_vct = iv; rm = SgnMap.empty;
     ns_t = StgMap.empty; ns =[]; ns_e = []; ns_f = [] },
-  (Rcd_Ptn.P_A r0),p1,Tkn.Rcd [||]
+  p1,(Rcd_Ptn.P_A r0),Tkn.Rcd [||]
 let mk_st g k =
   let m0 = Lang.ir_of_ast g in
   let p0 = DName(sgn ()) in
@@ -22,8 +22,8 @@ let mk_st g k =
   let iv = PtMap.add p1 (Ret (P_A r0)) iv in
   let rm = init_rm m0.rm iv in
   { m0 with ir_vct = iv; rm = rm },
-  (Rcd_Ptn.P_A r0),p1,k
-let evo ((g,r0,p0,k):t) (b:Ast.line) =
+  p1,(Rcd_Ptn.P_A r0),k
+let evo ((g,p0,r0,k):t) (b:Ast.line) =
   let _ = Timer.init () in
   ( match b with
     | Ast.Line_Agl (i,e) ->
@@ -34,7 +34,7 @@ let evo ((g,r0,p0,k):t) (b:Ast.line) =
       let g0 = { g with ir_vct = iv; rm = rm } in
       let _ = Typing.slv g0 0 p0 in
       Timer.pnt "t2";
-      let et:t = (g0,r0,p0,k) in
+      let et:t = (g0,p0,r0,k) in
       let fd = Unix.fork () in
       ( match fd with
         | 0 ->
