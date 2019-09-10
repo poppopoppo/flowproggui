@@ -48,8 +48,7 @@ module Rcd_Ptn = struct
             if hd<(Array.length rs)
             then
               P_R (Array.mapi
-                     (fun i x -> if i=hd then set_path tl x p1 else x)
-                     rs)
+                     (fun i x -> if i=hd then set_path tl x p1 else x) rs)
             else err "get_path 0"
           | P_Ro (rs,rt) ->
             if hd<(Array.length rs)
@@ -62,20 +61,6 @@ module Rcd_Ptn = struct
             else err "get_path 1"
           | _ -> err "get_path 2")
     )
-end
-module Level : sig
-  type t
-  val set : int -> unit
-  val get : unit -> int
-  val inc : unit -> unit
-  val dec : unit -> unit
-end = struct
-  type t = int
-  let lv = ref 0
-  let set i = lv:=i
-  let get _ = !lv
-  let inc () = lv := !lv+1
-  let dec () = lv := !lv-1
 end
 module Types = struct
   type level = int
@@ -1765,7 +1750,7 @@ module Typing = struct
                let y = coprd_cl (Prm (Name n)) (List.map (fun (r,_) -> slv_rule [g] r) rs) in
                let v = List.assoc n !ns_grm in
                v := y;
-               ns := (n,ref (Ln(Imp(Prm Stg,Rec v))))::!ns
+               ns := (n,ref (Ln(Imp(Prm Stg,Rcd(rcd_cl [Rec v;(Prm Stg)])))))::!ns
             ) () g in
         slv_grms tl
     )

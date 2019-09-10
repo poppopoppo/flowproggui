@@ -1,27 +1,4 @@
 §§ Lang ≒ 
-¶+ℙ 
-	@.str ≃  
-	∐* "\"" str_in  
-	@.str_in ≃  
-	∐* "\\" str_sp str_in 
-	∐* "\""    
-	∐* _ str_in 
-	@.str_sp ≃ ∐* "\\" ∐* "\"" ∐* "t" ∐* "n" 
-	@.name ≃ ∐* alph ⟦alph_us⟧ ⟦digit⟧
-	@.num ≃ 
-	∐* digit ⟦digit⟧
-	@.alph_us ≃  
-	∐* alph 
-	∐* "_"
-	@.alph ≃ ∐* lo_c ∐* up_c  
-	@.lo_c ≃ 
-	∐* "a" ∐* "b" ∐* "c" ∐* "d" ∐* "e" ∐* "f" ∐* "g" ∐* "h" ∐* "i" ∐* "j" ∐* "k" ∐* "l" 
-	∐* "m" ∐* "n" ∐* "o" ∐* "p" ∐* "q" ∐* "r" ∐* "s" ∐* "t" ∐* "u" ∐* "v" ∐* "w" ∐* "x" ∐* "y" ∐* "z" 
-	@.digit ≃ ∐* "0" ∐* "1" ∐* "2" ∐* "3" ∐* "4" ∐* "5" ∐* "6" ∐* "7" ∐* "8" ∐* "9" 
-	@.up_c ≃
-	∐* "A" ∐* "B" ∐* "C" ∐* "D" ∐* "E" ∐* "F" ∐* "G" ∐* "H" ∐* "I" ∐* "J" ∐* "K"
-	∐* "L" ∐* "M" ∐* "N" ∐* "O" ∐* "P" ∐* "Q" ∐* "R" ∐* "S" ∐* "T" ∐* "U" ∐* "V" 
-	∐* "W" ∐* "X" ∐* "Y" ∐* "Z" 
 ¶+ℙ     
 	@.nl ≃ ∐ "\n"  
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
@@ -91,44 +68,6 @@
 	@.glb_etr ≃
   ∐ "§" name ‹typ_def› "≒" in stt_code
   ∐ "§" glb_etr_clq ⟦glb_etr_clq⟧
-  ∐ "§+0" name ‹typ_def› "≒" ir_code
-  @.ir_code ≃ 
-  ∐ ir_etr ⟦ir_line⟧ ir_ret 
-  @.ir_etr ≃ ∐ "»" reg_ptn  
-  @.ir_ret ≃ ∐ "∎" reg_ptn 
-  @.ir_line ≃  
-  ∐ "»" exp "|~" reg_ptn "⊢" reg_ptn 
-  ∐ "$" reg_ptn "⊢" reg_ptn ⟦regs⟧ 
-  ∐ "◂" reg "," reg_ptn "⊢" reg_ptn 
-  ∐ call_etr reg_ptn "⊢" reg_ptn 
-  ∐ "|◂" reg "," reg_ptn "⊢|" 
-  ∐ "∇" reg_ptn "⊢" reg_ptn co_prd_etr ⟦co_prd_etr⟧ 
-  @.call_etr ≃
-  ∐ name
-  ∐ "(" "+" ")" 
-  ∐ "(" "*" ")" 
-  ∐ "(" "-" ")" 
-  ∐ "(" "=" ")"   
-  @.reg ≃ ∐ name 
-  @.regs ≃ ∐ "," reg_ptn 
-  @.reg_ptn ≃
-  ∐ "∠" reg
-  ∐ reg 
-  ∐ "_"
-  ∐ "{" ⟦reg_ptn⟧ "}" 
-  ∐ "{" ⟦reg_ptn⟧ "<" reg "}"
-  @.ir_tkn ≃ 
-	∐ "-" num 
-	∐ num 
-	∐ str 
-  ∐ call_etr  
-  ∐ tkn_ptn
-  @.tkn_ptn ≃
-  ∐ ir_tkn 
-  ∐ "{" ⟦tkn_ptn⟧ "}" 
-	∐ "{" ⟦tkn_ptn⟧ "<" ir_tkn "}" 
-  @.co_prd_etr ≃ 
-  ∐ "∐" reg_ptn ⟦ir_line⟧ ir_ret
 	@.glb_etr_clq ≃ ∐ "@" "." name ‹typ_def› "≒" in stt_code
 	@.typ_def ≃ ∐ ":" typ_top "⊢" typ_top
   @.stt_code ≃
@@ -195,7 +134,27 @@
   ∐ "&"
   ∐ "@"
   ∐ "‹›"
-	
+	@.str ≃  
+	∐* "\"" str_in  
+	@.str_in ≃ 
+	∐* "\\" str_sp str_in 
+	∐* "\""    
+	∐* _ str_in 
+	@.str_sp ≃ ∐* "\\" ∐* "\"" ∐* "t" ∐* "n" 
+	@.name ≃ ∐* alph ⟦alph_us⟧ ⟦digit⟧
+	@.num ≃ 
+	∐* digit ⟦digit⟧
+	@.alph_us ≃ 
+	∐* alph 
+	∐* "_"  
+	@.alph ≃ 
+	∐* "a" ∐* "b" ∐* "c" ∐* "d" ∐* "e" ∐* "f" ∐* "g" ∐* "h" ∐* "i" ∐* "j" ∐* "k" ∐* "l" 
+	∐* "m" ∐* "n" ∐* "o" ∐* "p" ∐* "q" ∐* "r" ∐* "s" ∐* "t" ∐* "u" ∐* "v" ∐* "w" ∐* "x" ∐* "y" ∐* "z" 
+	∐* "A" ∐* "B" ∐* "C" ∐* "D" ∐* "E" ∐* "F" ∐* "G" ∐* "H" ∐* "I" ∐* "J" ∐* "K"
+	∐* "L" ∐* "M" ∐* "N" ∐* "O" ∐* "P" ∐* "Q" ∐* "R" ∐* "S" ∐* "T" ∐* "U" ∐* "V" 
+	∐* "W" ∐* "X" ∐* "Y" ∐* "Z" 
+	@.digit ≃ ∐* "0" ∐* "1" ∐* "2" ∐* "3" ∐* "4" ∐* "5" ∐* "6" ∐* "7" ∐* "8" ∐* "9" 
+
 ¶ @.rcd_ptn ◂' ≃
 	∐ ! $ : rp_a 
 	∐ ! ⟦$⟧ : rp_r
@@ -227,21 +186,19 @@
 	∐ $ ⟦$⟧ : id
 	∐ $ { ⟦$⟧ $ } : prj 
 	∐ { ⟦$⟧ $ } $ : cns
-	∐ ! $ : rm 
-	∐ tkn◂$'◂$ $ : ini
+	∐ ! $ : rm ∐ tkn◂$'◂$ $ : ini
 	∐ { $ rcd_ptn◂$ } rcd_ptn◂$ : call 
-	∐ call_etr rcd_ptn◂$ rcd_ptn◂$ : glb_call
 	∐ { rcd_ptn◂$ ⟦ℤ⟧ ⟦{ rcd_ptn◂$ $'}⟧ } rcd_ptn◂$ : agl
 	∐ rcd_ptn◂$ rcd_ptn◂$ : etr
-¶ ir◂'' ≃
-	∐ nd◂$◂$' $' : seq
+¶ ir◂''' ≃
+	∐ nd◂$◂$' $'' : seq
 	∐ : ret
-¶ ir_vct◂'' = (ir◂$◂$')◃&
+¶ ir_vct◂''' = (ir◂$◂$'◂$'')◃&
 ¶ ir_mdl 
 ¶ ns_v ≃ ∐ ! & : ns_sgn 
 § apt ≒ |» ! pnt◂(def_mdl◂(read◂$)) ∎ 
 § a0 ≒ |» ! def_mdl ∎
-§ @.ir_of_apt ≒ |» ∎
+§ @.ir_of_ast ≒ |» ∎
 § occurs ≒ |» ∎
 § @.unify ≒ |» ! 0 ∎
 § @.gen ≒ |» ∎

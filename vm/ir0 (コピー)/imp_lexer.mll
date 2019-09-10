@@ -17,6 +17,7 @@ rule token = parse
     | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
     | "[;" [^ ';']* ";]"  { token lexbuf }
     | "§"  { LCE }
+    | "§+0" { LCE_IR  }
     | "§§"  { MDL }
     | "§§." { MDL_END }
     | "¶" { DTA }
@@ -26,8 +27,14 @@ rule token = parse
     | "∀" { FOR_ALL }
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
+    | "|◂"  { OUT_IR }
+    | "|◃"  { PRJ_IR  }
+    | "◃|"  { CNS_IR  }
+    | "|~"  { INI_IR }
+    | "~|"  { RM  }
     | "≃" { ISO }
     | "~" { LET }
+    | "<" { OP }
     | ">" { LB }
     | "»" { ARR }
     | "«" { ARR_REV }
@@ -35,6 +42,7 @@ rule token = parse
     | (('|')+ as lxm) "»" { IN(String.length lxm) }
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
+    | "⊢|"  { SRC_OUT }
     | "⋎" { EMT }
     | "⋏" { CNT }
     | "?" { EXN }
@@ -90,7 +98,6 @@ rule token = parse
     | "." { DOT }
     | "∠"  { AGL }
     | digit+ as lxm  { INT (int_of_string lxm) }
-    | (digit+ as lxm) '<'  { NAT (int_of_string lxm) }
     | space+        { token lexbuf                         }
     | eof           { EOF               }
     | _             { raise (Error (Printf.sprintf
