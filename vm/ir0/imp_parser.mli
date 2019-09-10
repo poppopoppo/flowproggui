@@ -11,7 +11,6 @@ type token =
   | TYP_STG
   | TYP_SGN
   | TYP_OPN_VCT
-  | TEST
   | STG of (string)
   | SRC_OUT
   | SRC
@@ -33,7 +32,6 @@ type token =
   | PRD_END
   | PRD
   | PLS_NAT
-  | PLS_EVL
   | PLS
   | OUT_IR
   | OUT of (int)
@@ -49,7 +47,6 @@ type token =
   | MNS_NAT
   | MNS
   | MLT_NAT
-  | MLT_EVL
   | MLT
   | MDL_END
   | MDL
@@ -81,7 +78,6 @@ type token =
   | EQ
   | EOP
   | EOF
-  | EMT
   | DTA_GRM
   | DTA
   | DSH
@@ -91,7 +87,6 @@ type token =
   | CST
   | COPRD_END
   | COPRD
-  | CNT
   | CNS_IR
   | CMM
   | CLN
@@ -100,7 +95,6 @@ type token =
   | ARR_REV
   | ARR_END
   | ARR
-  | APP_EVL
   | APP
   | AGL_TOP
   | AGL_COD

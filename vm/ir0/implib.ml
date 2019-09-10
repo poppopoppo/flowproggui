@@ -17,7 +17,7 @@ let evo ((g,k),r0,p0) (b:Ast.line) =
   let _ = Timer.init () in
   ( match b with
     | Ast.Line_Agl (i,e) ->
-      let (p1,r1) = ir_of_ast p0 r0 (E e) in
+      let (p1,r1) = ir_of_exp p0 r0 e in
       let _ = slv g 0 p0 in
       let fd = Unix.fork () in
       let et = ((g,k),r0,p0) in
@@ -41,7 +41,7 @@ let evo ((g,k),r0,p0) (b:Ast.line) =
             | _ -> err "err1.3.a"
           ))
     | Ast.Line e ->
-      let (p1,r1) = ir_of_ast p0 r0 (E e) in
+      let (p1,r1) = ir_of_exp p0 r0 e in
       let _ = slv g 0 p0 in
       let fd = Unix.fork () in
       let et = ((g,k),r0,p0) in

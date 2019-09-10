@@ -30,7 +30,8 @@
 
 @.[_].+[ a b c <]◂_ ≃∐[ .. <]
  = a +< (b +< (c +< d'))
-± : {({a' e'}→‹e'›) e'}→(-a') ; create callback
+± : {> evo~({a' e'}→‹e'›) init~(-a'→e') } → -a' ; create callback
 
 $-syntax
 +0-syntax
+Σ◂g0 

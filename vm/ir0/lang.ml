@@ -76,7 +76,7 @@ module Types = struct
   type prm =
     | Vct | Opn | Lst | Zn | N | Sgn | Stg | Z_u
     | Z_n of int | Axm of Sgn.t | Inj| Cho | Z_d of Sgn.t
-    | EqT of string | Name of string
+    | Grm | EqT of string | Name of string
   type v_p = Sgn.t
   type 'y v_t = | WC | V of level | Q of level | Ln of 'y
   and v = t v_t
@@ -107,7 +107,7 @@ module Types = struct
   let print_prm p =
     ( match p with
       | Vct -> "◃" | Opn -> "‹›" | Lst -> "⟦⟧" | Zn -> "ℤn"
-      | N -> "ℕ" | Sgn -> "&" | Stg -> "ℙ"
+      | N -> "ℕ" | Sgn -> "&" | Stg -> "ℙ" | Grm -> "Σ"
       | Z_u -> "ℤ_u" | Z_n n -> "ℤ_n["^(string_of_int n)^"]"
       | Axm p -> "p"^(Sgn.print p) | Inj -> "↑" | Cho -> "↓"
       | Z_d p -> "ℤ_d_"^(Sgn.print p) | EqT s -> s^"( = _)"
@@ -363,11 +363,9 @@ module Ast = struct
   and scm = Types.t
   and mdl_gma = scm StgMap.t
   and glb_etr =
-    | Etr of string * Types.t * Types.t * code
-    | Etr_IR of string * Types.t * Types.t * pt
+    | Etr of string * Types.t * Types.t * pt
     | Flow of flow
-    | Etr_Clq of ((string * Types.t * Types.t * code) list)
-    | Etr_Clq_IR of (string * Types.t * Types.t * pt) list
+    | Etr_Clq of (string * Types.t * Types.t * pt) list
     | Flow_Clq of flow list
     | Gram of Peg.grammar
   and flow =
@@ -377,10 +375,6 @@ module Ast = struct
     | Def_Fnt of name * (name list)
     | Def_EqT of name * args * Types.t
   and args = name list
-  and code =
-    | E of exp_rcd | V of code * code | H of (code list)
-    | A of exp_rcd * Rcd_Ptn.path * (code list)
-    | P of exp_rcd * (code list) | F of exp_rcd * int * code
   and exp_rcd =
     | Agl_Op of exp_rcd
     | Rot | Rcd of exp_rcd array
@@ -388,11 +382,10 @@ module Ast = struct
     | App of exp_rcd * exp_rcd | Prj of exp_rcd * Rcd_Ptn.lb
     | Atm of exp_atm
   and exp_atm =
-    | Z of int | Pls | Mlt | Mns | Cmp | Eq | Fix
+    | Z of int | Zn of (int * int) | Pls | Mlt | Mns | Cmp | Eq | Fix
     | Exn | Name of string | Inj of int | Cho of int | Stg of string
   and nd =
     | IR_Id of (r Rcd_Ptn.t) * ((r Rcd_Ptn.t) array)
-    | IR_Ini of r * ((pt, r) Tkn.t)
     | IR_Call of (r * (r Rcd_Ptn.t)) * (r Rcd_Ptn.t)
     | IR_Glb_Call of string * r Rcd_Ptn.t * r Rcd_Ptn.t
     | IR_Out of r * (r Rcd_Ptn.t)
@@ -400,6 +393,7 @@ module Ast = struct
     | IR_Etr of r Rcd_Ptn.t
     | IR_Clj of r * (r Rcd_Ptn.t) * pt
     | IR_Agl of (r Rcd_Ptn.t) * Rcd_Ptn.path * ((r Rcd_Ptn.t * pt) array) * r Rcd_Ptn.t
+    | IR_Exp of exp_rcd * (r Rcd_Ptn.t) * (r Rcd_Ptn.t)
     | IR_Prd of r * (r Rcd_Ptn.t) * (pt array)
   and r = Types.v ref
   and pt = ir_code ref
@@ -439,20 +433,18 @@ module Ast = struct
     rl : (t_rec ref * t_rec ref) list;
   }
   let rec print_mdl (n,g) =
-    let s0 = "§§ "^n^" ≒ \n" in
+    let s0 = "§§ "^n^"\n" in
     let rec lp g =
       ( match g with
         | [] -> "§§.\n"
         | hd::tl ->
           let s1 =
             ( match hd with
-              | Etr(n,_,_,_) -> "§ "^n^"\n"
+              | Etr(n,_,_,_) -> "§ .."^n^"\n"
               | Flow f -> "¶ "^(print_flow f)
-              | Etr_Clq _ -> "§ @ "^"\n"
-              | Flow_Clq _ -> "¶ @"^"\n"
-              | Gram g -> "¶+ℙ"^"\n"^(Peg.print g)
-              | Etr_IR (n,_,_,_) -> "§+0 "^n^" ≒ ..\n"
-              | Etr_Clq_IR _ -> "§+0"^" @. ..\n" ) in
+              | Etr_Clq _ -> "§ @. .. "^"\n"
+              | Flow_Clq _ -> "¶ @. .."^"\n"
+              | Gram g -> "¶+ℙ "^"\n"^(Peg.print g) ) in
           s1^(lp tl)) in
     s0^(lp g)
   and print_flow f =
@@ -500,7 +492,7 @@ and print_nd o =
     | IR_Glb_Out(n,_) -> n^" ⊢|"
     | IR_Glb_Call(n,_,_) -> n^" ⊢ "
     | IR_Call((f,x),y) -> "◂ "^(print_reg f)^" , "^(pnt_ptn x)^" ⊢ "^(pnt_ptn y)
-    | IR_Ini(r,k) -> "|~"^(Tkn.print k)^" ⊢ "^(print_reg r)^rtl^(print_ty (A r))
+    | IR_Exp(_,r0,r1) -> "» "^" _ "^" |~"^(pnt_ptn r0)^" ⊢ "^(pnt_ptn r1)^rtl^(print_ty r1)
   )
 and print_reg r =
   let (n,_) = Lst.find (fun (_,v) -> r==v) !rm in
@@ -508,7 +500,7 @@ and print_reg r =
 and print_ty r = Types.print (ref []) (get_rm_ptn r)
 and get_rm_ptn rp =
   ( match rp with
-    | Rcd_Ptn.A r -> Var r
+    | Rcd_Ptn.A r -> Types.Var r
     | Rcd_Ptn.R rs ->
       let ts = Array.map get_rm_ptn rs in
       Types.Rcd(Types.rcd_cl (Array.to_list ts))
@@ -658,8 +650,19 @@ let rec run m p0 st cs =
           let _ = set_reg_ptn st rx k1 in
           Stack.push (CS_f_il p0) cs;
           run m pr st cs
-        | IR_Ini (r0,k) ->
-          let _ = set_r st r0 k in
+        | IR_Exp (e,_,r1) ->
+          let k =
+            ( match e with
+              | Atm a ->
+                ( match a with
+                  | Z i -> Tkn.Z i | Zn (z0,z1) -> Tkn.Zn(z0,z1) | Pls -> Tkn.Pls | Mlt -> Tkn.Mlt
+                  | Mns -> Tkn.Mns | Cmp -> Tkn.Cmp | Eq -> Tkn.Eq
+                  | Fix -> Tkn.Fix | Exn -> Tkn.Exn
+                  | Name n -> Tkn.Name n | Inj i -> Tkn.Inj i | Cho i -> Tkn.Cho i
+                  | Stg s -> Tkn.Stg s
+                )
+              | _ -> err "run x8" ) in
+          let _ = set_reg_ptn st r1 (Tkn.Tkn k) in
           run m p1 st cs
         | IR_Id (r1,r2) ->
           let k1 = get_reg_ptn st r1 in
@@ -1334,102 +1337,58 @@ let rec slv m l (p0:pt) =
           | IR_Glb_Call(_,_,_) -> err "slv x0"
           | IR_Out (_,_) -> err "slv x1"
           | IR_Glb_Out (_,_) -> err "slv x2"
-          | IR_Ini(r,k) ->
-            let (tk,_) = inst (l+1) (inst_ini ()) (get_rm_ptn (A r)) in
-            unify [] tk (fst @@ (inst (l+1) (inst_ini ()) (slv_tkn m k)))
+          | IR_Exp(a,_,r1) ->
+            let (tk,_) = inst (l+1) (inst_ini ()) (get_rm_ptn r1) in
+            let _ = unify [] tk (fst @@ (inst (l+1) (inst_ini ()) (slv_exp_atm m a))) in
+            gen (ref []) l tk
         ) in
       (*  Util.Timer.pnt "slv t2"; *)
       slv m l p1
   )
-and slv_tkn m k =
+and slv_exp_atm m a =
   let open Types in
-  let open Tkn in
-  ( match k with
-    | Rcd rs -> Rcd(rcd_cl (Array.to_list (Array.map (slv_tkn m) rs)))
-    | Rcd_Lb _ -> err "slv_kn 4"
-    | Tkn a ->
+  ( match a with
+    | Atm a ->
       ( match a with
         | Stg _ -> Prm Types.Stg
         | Z _ -> zn (Prm Z_u)
         | Zn(_,_) -> zn (Var (newvar()))
-        | Sgn _ -> Prm Sgn
         | Pls -> let y = zn (Var (newvar())) in Imp(Rcd (rcd_cl [y;y]),y)
         | Mlt -> let y = zn (Var (newvar())) in Imp(Rcd (rcd_cl [y;y]),y)
         | Mns -> let y = zn (Var (newvar())) in Imp(y,y)
         | Cmp -> let (y0,y1) = (zn (Prm Z_u),zn (Prm (Z_n 2))) in Imp(Rcd(rcd_cl [y0;y0]),y1)
         | Eq -> let y = Var (newvar()) in Imp(Rcd(rcd_cl [y;y]),y)
         | Name n -> Var(List.assoc n m.ns)
-        | _ -> Var (newvar()) ))
+        | _ -> Var (newvar()) )
+    | _ -> err "slv_exp_atm 0" )
 
-and slv_grm gs n =
-  ( try
-      let y = List.assoc n !ns_grm in
-      Rec y
-    with Not_found ->
-      let (_,(n,v,rs)) =
-        ( try
-            BatList.find_map
-              (fun g -> try Some (find_grm g n) with _ -> None) gs
-          with _ -> err ("slv_grm:0:"^n))
-      in
-      let y = ref Rec_WC in
-      ns_grm := (n,y)::!ns_grm;
-      let y0 = slv_entry gs (n,v,rs) in
-      y := y0;
-      Rec y )
-and slv_entry gs (n,_,rs) =
-  coprd_cl (Prm (Name n)) (List.map (fun (r,_) -> slv_rule gs r) rs)
-and find_grm g n =
-  BatList.find_map
-    (fun (n0,v,rs) -> if n=n0 then Some(g,(n0,v,rs)) else None)
-    g
-and slv_rule gs (_,ps,_) = Rcd (slv_ps gs ps)
-and slv_ps gs ps =
+and slv_rule m (_,ps,_) = Rcd (slv_ps m ps)
+and slv_ps m ps =
   ( match ps with
     | [] -> U
-    | hd::tl -> Cns(slv_pattern gs hd,slv_ps gs tl))
-and slv_pattern gs p =
+    | hd::tl -> Cns(slv_pattern m hd,slv_ps m tl))
+and slv_pattern m p =
   let open Peg in
   ( match p with
-    | List a -> lst (slv_pattern_atm gs a)
-    | Option a -> opn (slv_pattern_atm gs a)
-    | Atm a -> slv_pattern_atm gs a )
-and slv_pattern_atm gs a =
+    | List a -> lst (slv_pattern_atm m a)
+    | Option a -> opn (slv_pattern_atm m a)
+    | Atm a -> slv_pattern_atm m a )
+and slv_pattern_atm m a =
   ( match a with
     | Peg.Text _ -> Rcd U
-    | Peg.Name n -> slv_grm gs n
+    | Peg.Name n ->
+      let k = List.assoc n m.ns_e in
+      ( match k with
+        | Tkn.Tkn(Tkn.Grm(_,_)) -> Types.Var(List.assoc n m.ns_t)
+        | _ -> err "slv_pattern_atm 0" )
     | Peg.Var v ->
       let (n,_,_) = !v in
       let y  = List.assoc n !ns_grm in
       Rec y
     | Peg.Any -> Prm Stg )
-let rec slv_grms (gs:Peg.grammar list) =
-  Util.pnt true "enter slv_grms:\n";
-  ( match gs with
-    | [] -> ()
-    | g::tl ->
-      let _  =
-        List.fold_left
-          (fun _ (n,_,_) ->
-             let y = ref Rec_WC in
-             ns_grm := (n,y)::!ns_grm )
-          () g in
-      let _ =
-        List.fold_left
-          (fun _ (n,_,rs) ->
-             let y = coprd_cl (Prm (Name n)) (List.map (fun (r,_) -> slv_rule [g] r) rs) in
-             let v = List.assoc n !ns_grm in
-             v := y;
-             ns := (n,ref (Ln(Imp(Prm Stg,Rcd(rcd_cl [Rec v;(Prm Stg)])))))::!ns
-          ) () g in
-      slv_grms tl
-  )
-let ir_of_ast p0 r0 c =
-  ( match c with
-    | E _ ->
-      p0 := Ret r0; (p0,r0)
-    | _ -> err "ir_of_ast 0" )
+
 let rec mk_ir_mdl el =
+  let open Tkn in
   let m = { ns_v =[]; ns = []; ns_e = []; ns_t = [] } in
   m.ns_e <- ("‹›",Tkn(Tkn.Inj 0))::m.ns_e;
   m.ns <- ("‹›",ref (Ln(Imp(Rcd U,opn (Var(newvar_q (-1)))))))::m.ns;
@@ -1449,7 +1408,7 @@ let rec mk_ir_mdl el =
   let t_k = Var (newvar_q (-1)) in
   let t_o = opn t_k in
   let t_v = App(App(Prm Vct,t_o),t_b) in
-  let t_s = Rcd(rcd_cl [Rcd(rcd_cl [t_v;t_b]);t_o]) in
+  let t_s = Types.Rcd(rcd_cl [Types.Rcd(rcd_cl [t_v;t_b]);t_o]) in
   m.ns <- ("⊵",ref(Ln(Imp(t_s,t_s))))::m.ns;
   m.ns_e <- ("#",Tkn(Tkn.Frgn "#"))::m.ns_e;
   let t_b = Var (newvar_q (-1)) in
@@ -1468,15 +1427,7 @@ and mk_ir_mdl_etr m el =
     | e::tl ->
       let _ =
         ( match e with
-          | Etr(n,_,_,c) ->
-            let r0 = Rcd_Ptn.A (Types.newvar ()) in
-            let p0 = ref (Ret r0) in
-            let (_,r1) = (ir_of_ast p0 r0 c) in
-            let _ = slv m (-1) p0 in
-            let y = Imp(get_rm_ptn r0,get_rm_ptn r1) in
-            m.ns_v <- (n,p0)::m.ns_v;
-            m.ns <- (n,ref(Ln y))::m.ns
-          | Etr_IR(n,_,_,p) ->
+          | Etr(n,_,_,p) ->
             let _ = slv m (-1) p in
             let (r0,_) = etr p in
             let (r1,_) = ret p in
@@ -1486,11 +1437,10 @@ and mk_ir_mdl_etr m el =
           | Etr_Clq q ->
             let _ =
               List.fold_left
-                (fun _ (n,_,_,c) ->
-                   let r0 = Rcd_Ptn.A (Types.newvar ()) in
-                   let p0 = ref (Ret r0) in
-                   let (_,r1) = ir_of_ast p0 r0 c in
-                   m.ns_v <- (n,p0)::m.ns_v;
+                (fun _ (n,_,_,p) ->
+                   let (r0,_) = etr p in
+                   let (r1,_) = ret p in
+                   m.ns_v <- (n,p)::m.ns_v;
                    let (y0,_) = inst (-1) (inst_ini ()) (get_rm_ptn r0) in
                    let (y1,_) = inst (-1) (inst_ini ()) (get_rm_ptn r1) in
                    let y = Imp(y0,y1) in
@@ -1504,9 +1454,52 @@ and mk_ir_mdl_etr m el =
                    gen (ref []) (-1) (Var y) )
                 () q in
             ()
-          | Etr_Clq_IR _ -> err "x0"
-          | Flow _ -> err "x1"
+          | Flow f ->
+            ( match f with
+              | Ast.Def_CoPrd (n,a,ps) ->
+                let v = newvar () in
+                m.ns_t <- (n,v)::m.ns_t;
+                let a = List.map (fun _ -> newvar_q (-1)) a in
+                let (ys,_) = List.split ps in
+                let ya = List.fold_left (fun ya v -> App(ya,Var v)) (Prm(Name n)) a in
+                let y0 = (coprd_cl ya ys) in
+                let y1 = Rec (ref y0) in
+                let y2 = abs y1 a in
+                v := Ln y2;
+                let _ =
+                  List.fold_left
+                    (fun i (t,n) ->
+                       let tc = Imp(t,y1) in
+                       m.ns <- (n,ref (Ln tc))::m.ns;
+                       m.ns_e <- (n,Tkn.Tkn(Tkn.Inj i))::m.ns_e;
+                       (i+1))
+                    0 ps in
+                ()
+              | Ast.Def_Abs _ -> ()
+              | Ast.Def_EqT (_,_,_) -> ()
+              | _ -> err "slv_flows 1" )
           | Flow_Clq _ -> err "x2"
-          | Gram _ -> err "x3" ) in
+          | Gram g ->
+            let _  =
+              List.fold_left
+                (fun _ (n,_,_) ->
+                   m.ns_t <- (n,newvar ())::m.ns_t;
+                   m.ns_e <- (n,Tkn.Tkn (Tkn.Grm(g,n)))::m.ns_e )
+                () g in
+            let _ =
+              List.fold_left
+                (fun _ (n,_,rs) ->
+                   let y = coprd_cl (App(Prm Grm,Prm (Name n))) (List.map (fun (r,_) -> slv_rule m r) rs) in
+                   let v = List.assoc n m.ns_t in
+                   v := Ln (Rec (ref y));
+                   m.ns <- (n,ref (Ln(Imp(Prm Stg,Rcd(rcd_cl [Var v;(Prm Stg)])))))::m.ns
+                ) () g in
+            ()
+        ) in
       mk_ir_mdl_etr m tl
   )
+let ir_of_exp p0 r0 e =
+  let r1 = Rcd_Ptn.A(Types.newvar ()) in
+  let p1 = ref (Ret r1) in
+  p0 := Seq(IR_Exp(e,r0,r1),p1);
+  (p1,r1)

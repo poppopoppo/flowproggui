@@ -43,8 +43,6 @@ rule token = parse
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
     | "⊢|"  { SRC_OUT }
-    | "⋎" { EMT }
-    | "⋏" { CNT }
     | "?" { EXN }
     | ":" { CLN }
     | "|" { SPL }
