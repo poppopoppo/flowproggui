@@ -5,13 +5,13 @@
 
 %}
 
-%token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA CNT EMT RM INI_IR SRC_OUT
+%token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA RM INI_IR SRC_OUT
 %token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT VCT_INI OP LCE_IR
-%token L_PRN R_PRN  APP COPRD_END PRD_END MNS APP_EVL PLS_EVL MLT_EVL CST
+%token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
 %token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN WC TEST PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH
+%token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token <string> NAM STG VAL
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
@@ -49,7 +49,7 @@ file:
   | def_mdl file { $1::$2 }
   ;
 def_mdl:
-  | MDL NAM DEF gl_etr_lst MDL_END { ($2,$4) }
+  | MDL NAM gl_etr_lst MDL_END { ($2,$3) }
   ;
 def_arg:
   | { [] }
@@ -175,19 +175,15 @@ rot_dsh:
   | rot_dsh DSH { $1+1 }
   ;
 glb_etr:
-  | LCE glb_etr_body { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d)  }
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
-  | LCE_IR glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr_IR(a,b,c,d) }
+  | LCE_IR glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d) }
   ;
 glb_etr_clique:
-  | SLF DOT glb_etr_body { [$3] }
-  | SLF DOT glb_etr_body glb_etr_clique { [$3]@$4 }
-  ;
-glb_etr_body:
-  | NAM typ_def DEF IN stt_code { ($1,fst $2,snd $2,$5) }
+  | SLF DOT glb_etr_body_ir { [$3] }
+  | SLF DOT glb_etr_body_ir glb_etr_clique { [$3]@$4 }
   ;
 glb_etr_body_ir:
-  | NAM typ_def DEF ir_code { ($1,fst $2,snd $2,ref $4) }
+  | NAM typ_def ir_code { ($1,fst $2,snd $2,ref $3) }
   ;
 ir_code:
   | ir_etr ir_lines ir_ret { Seq($1,ref $3) }
@@ -204,14 +200,11 @@ ir_lines:
   ;
 ir_line:
   | ROT NAM SRC NAM regs { }
-  | INI_IR ir_tkn SRC NAM  {}
+  | ARR exp INI_IR reg_ptn SRC reg_ptn  {}
+  | ARR exp INI_IR reg_ptn  {}
   | NAM reg_ptn SRC reg_ptn {}
   | COPRD_END reg_ptn SRC reg_ptn coprd_ir {}
   | APP NAM CMM reg_ptn SRC reg_ptn {}
-  | PRJ_IR NAM SRC NAM names OP NAM  {}
-  | CNS_IR NAM names OP NAM SRC NAM  {}
-  | PRJ_IR LB NAM SRC lb_let names_lb OP NAM  {}
-  | CNS_IR LB lb_let names_lb OP NAM SRC NAM {}
   | OUT_IR NAM reg_ptn SRC_OUT {}
   | NAM reg_ptn SRC_OUT {}
   ;
@@ -262,91 +255,9 @@ typ_def:
   | { (Var (newvar()),Var (newvar())) }
   | CLN typ_top SRC typ_top { ($2,$4) }
   ;
-stt_code:
-  | exp_top code {
-      match $2 with
-      | None -> E $1
-      | Some x -> V(E $1,x) }
-  | L_HLZ h_frm_list R_HLZ tail {
-    match $4 with
-    | None -> H $2
-    | Some x -> V(H $2,x)
-  }
-  | exp_top code_coprd_list COPRD_END tail {
-    let (i,a) = Ast.tk_agl $1 in
-    let c = A(a,i,$2) in
-    match $4 with
-    | None -> c
-    | Some x -> V(c,x)
-   }
-  | exp_top code_prd_list PRD_END tail {
-    let c = Ast.P($1,$2) in
-    match $4 with
-    | None -> c
-    | Some x -> V(c,x)
-  }
-  | exp_top IN stt_code eop tail {
-    let c = F($1,$2,$3) in
-    match $5 with
-      | None -> c
-      | Some x -> V(c,x) }
-  ;
-code:
-  | eop tail { $2 }
-  | ARR exp_top code {
-    ( match $3 with
-      | None -> Some (Ast.E $2)
-      | Some x -> Some (Ast.V(Ast.E $2,x)) ) }
-  | ARR L_HLZ h_frm_list R_HLZ tail {
-    ( match $5 with
-      | None -> Some (H $3)
-      | Some x -> Some (V(H $3,x))
-      )
-  }
-  | ARR exp_top code_coprd_list COPRD_END tail {
-    let (i,a) = Ast.tk_agl $2 in
-    let c = A(a,i,$3) in
-    match $5 with
-    | None -> Some c
-    | Some x -> Some (V(c,x)) }
-  | ARR exp_top code_prd_list PRD_END tail {
-    let c = Ast.P($2,$3) in
-    match $5 with
-    | None -> Some c
-    | Some x -> Some (V(c,x))  }
-  | ARR exp_top IN stt_code eop tail {
-    let c = Ast.F($2,$3,$4) in
-    match $6 with
-      | None -> Some c
-      | Some x -> Some (V(c,x)) }
-  ;
-eop:
-  | EOP {}
-  | OUT {}
-  ;
-tail:
-  | { None  }
-  | SEQ code { $2 }
-  ;
-
-code_coprd_list:
-  | { [] }
-  | code_coprd_list COPRD stt_code  { $1@[$3] }
-  ;
-
-code_prd_list:
-  | { [] }
-  | code_prd_list PRD stt_code  { $1@[$3] }
-  ;
-
-h_frm_list:
-  | stt_code { [$1] }
-  | stt_code M_HLZ h_frm_list { $1::$3 }
-  ;
 exp_top:
   | exp_lst { Rcd (Array.of_list $1) }
   | LB exp_lst_lb { Rcd_Lb(None,Array.of_list $2) }
-  | exp LB exp_lst_lb { Rcd_Lb(Some $1,Array.of_list $3) }
   | DOT LB exp_lst_lb { Rcd_Lb(Some Rot,Array.of_list $3) }
   | EXP exp { $2 }
   ;
@@ -382,9 +293,9 @@ exp:
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { App($1,$3) }
   | exp PRJ INT { Prj($1,Idx $3) }
-  | L_RCD exp_lst R_RCD { Rcd (Array.of_list $2) }
+  | L_RCD exp_lst OP exp R_RCD { Rcd (Array.of_list $2) }
   | L_RCD LB exp_lst_lb R_RCD { Rcd_Lb (None,Array.of_list $3) }
-  | L_RCD exp LB exp_lst_lb R_RCD { Rcd_Lb (Some $2,Array.of_list $4) }
+  | L_RCD LB exp_lst_lb OP exp R_RCD { Rcd_Lb (Some $5,Array.of_list $3) }
   | L_OPN R_OPN { App(Atm(Name "‹›"),Rcd [||]) }
   | L_OPN exp R_OPN { App(Atm (Name "‹"),$2) }
   | L_LST lst_list R_LST { $2 }

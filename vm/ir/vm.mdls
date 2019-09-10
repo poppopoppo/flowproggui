@@ -1,8 +1,8 @@
-§§ Lang ≒ 
+§§ Lang 
 ¶+ℙ 
 	@.str ≃  
 	∐* "\"" str_in  
-	@.str_in ≃  
+	@.str_in ≃   
 	∐* "\\" str_sp str_in 
 	∐* "\""    
 	∐* _ str_in 
@@ -105,10 +105,10 @@
   ∐ "∇" reg_ptn "⊢" reg_ptn co_prd_etr ⟦co_prd_etr⟧ 
   @.call_etr ≃
   ∐ name
-  ∐ "(" "+" ")" 
-  ∐ "(" "*" ")" 
-  ∐ "(" "-" ")" 
-  ∐ "(" "=" ")"   
+  ∐ "+"  
+  ∐ "*"  
+  ∐ "-"  
+  ∐ "="    
   @.reg ≃ ∐ name 
   @.regs ≃ ∐ "," reg_ptn 
   @.reg_ptn ≃
@@ -239,6 +239,7 @@
 ¶ ir_vct◂'' = (ir◂$◂$')◃&
 ¶ ir_mdl 
 ¶ ns_v ≃ ∐ ! & : ns_sgn 
+[;
 § apt ≒ |» ! pnt◂(def_mdl◂(read◂$)) ∎ 
 § a0 ≒ |» ! def_mdl ∎
 § @.ir_of_apt ≒ |» ∎
@@ -249,4 +250,5 @@
 § @.slv ≒ |» ∎
 § run ≒
 	|» ∎
+	;]
 §§.
