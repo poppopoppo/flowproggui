@@ -176,7 +176,7 @@ rot_dsh:
   ;
 glb_etr:
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
-  | LCE_IR glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d) }
+  | LCE glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d) }
   ;
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }
@@ -186,7 +186,7 @@ glb_etr_body_ir:
   | NAM typ_def ir_code { ($1,fst $2,snd $2,ref $3) }
   ;
 ir_code:
-  | ir_etr ir_lines ir_ret { Seq($1,ref $3) }
+  | ir_etr ir_lines { Seq($1,ref $2) }
   ;
 ir_etr:
   | IN reg_ptn { IR_Etr $2 }
@@ -195,13 +195,13 @@ ir_ret:
   | EOP reg_ptn { Ret $2 }
   ;
 ir_lines:
-  | {}
-  | ir_line ir_lines {}
+  | ir_ret  { $1 }
+  | ir_line ir_lines { Seq($1,$2) }
   ;
 ir_line:
-  | ROT NAM SRC NAM regs { }
-  | ARR exp INI_IR reg_ptn SRC reg_ptn  {}
-  | ARR exp INI_IR reg_ptn  {}
+  | ROT reg_ptn SRC reg_ptn regs { IR_Id($2,[|$4|] |+| $5)  }
+  | ARR exp INI_IR reg_ptn SRC reg_ptn  { IR_Exp($2,$4,$6) }
+  | ARR exp INI_IR reg_ptn  { }
   | NAM reg_ptn SRC reg_ptn {}
   | COPRD_END reg_ptn SRC reg_ptn coprd_ir {}
   | APP NAM CMM reg_ptn SRC reg_ptn {}
@@ -248,7 +248,7 @@ coprd_ir:
   ;
 regs:
   | {}
-  | CMM NAM regs {}
+  | CMM reg_ptn regs {}
   ;
 
 typ_def:

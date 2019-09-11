@@ -112,10 +112,13 @@ module Types = struct
       | Axm p -> "p"^(Sgn.print p) | Inj -> "↑" | Cho -> "↓"
       | Z_d p -> "ℤ_d_"^(Sgn.print p) | EqT s -> s^"( = _)"
       | Name n -> n )
+  let rec print_v v =
+    (try (fst @@ BatList.findi (fun _ vi -> vi==v) !v_vct)
+     with _ -> v_vct := !v_vct@[v]; print_v v)
   let rec print (rl:(t_rec ref list ref)) y =
     ( match y with
       | Var v ->
-        let i = fst @@ (BatList.findi (fun _ vi -> vi==v) !v_vct) in
+        let i = print_v v in
         ( match !v with
           | WC -> "_"
           | V l -> "v"^(string_of_int i)^"''("^(string_of_int l)^")"
@@ -385,17 +388,18 @@ module Ast = struct
     | Z of int | Zn of (int * int) | Pls | Mlt | Mns | Cmp | Eq | Fix
     | Exn | Name of string | Inj of int | Cho of int | Stg of string
   and nd =
-    | IR_Id of (r Rcd_Ptn.t) * ((r Rcd_Ptn.t) array)
-    | IR_Call of (r * (r Rcd_Ptn.t)) * (r Rcd_Ptn.t)
-    | IR_Glb_Call of string * r Rcd_Ptn.t * r Rcd_Ptn.t
-    | IR_Out of r * (r Rcd_Ptn.t)
-    | IR_Glb_Out of string * (r Rcd_Ptn.t)
-    | IR_Etr of r Rcd_Ptn.t
-    | IR_Clj of r * (r Rcd_Ptn.t) * pt
-    | IR_Agl of (r Rcd_Ptn.t) * Rcd_Ptn.path * ((r Rcd_Ptn.t * pt) array) * r Rcd_Ptn.t
+    | IR_Id of ptn * (ptn array)
+    | IR_Call of (r * ptn) * ptn
+    | IR_Glb_Call of string * ptn * ptn
+    | IR_Out of r * ptn
+    | IR_Glb_Out of string * ptn
+    | IR_Etr of ptn
+    | IR_Clj of r * ptn * pt
+    | IR_Agl of r * Rcd_Ptn.path * ((r Rcd_Ptn.t * pt) array) * r Rcd_Ptn.t
     | IR_Exp of exp_rcd * (r Rcd_Ptn.t) * (r Rcd_Ptn.t)
     | IR_Prd of r * (r Rcd_Ptn.t) * (pt array)
   and r = Types.v ref
+  and ptn = (r option) Rcd_Ptn.t
   and pt = ir_code ref
   and ir_code =
     | Seq of nd * pt
@@ -480,10 +484,10 @@ let rec pnt_ptn r = Rcd_Ptn.print print_reg r
 and print_ir p0 =
   ( match !p0 with
     | Seq (o,p1) -> "\t"^(print_nd o)^"\n"^(print_ir p1)
-    | Ret r -> "\t ∎"^(Rcd_Ptn.print print_reg r)^"\n" )
+    | Ret r -> "\t ∎ "^(Rcd_Ptn.print print_reg r)^"\n" )
 and print_nd o =
   ( match o with
-    | IR_Etr r -> "|»"^(pnt_ptn r)^rtl^(print_ty r)
+    | IR_Etr r -> "|» "^(pnt_ptn r)^rtl^(print_ty r)
     | IR_Clj (_,_,_) -> "||»"
     | IR_Prd (_,_,_) -> "∆ "
     | IR_Agl (ra,_,_,rr) -> "∇ "^(pnt_ptn ra)^" ⊢ "^(Rcd_Ptn.print print_reg rr)
@@ -495,7 +499,7 @@ and print_nd o =
     | IR_Exp(_,r0,r1) -> "» "^" _ "^" |~"^(pnt_ptn r0)^" ⊢ "^(pnt_ptn r1)^rtl^(print_ty r1)
   )
 and print_reg r =
-  let (n,_) = Lst.find (fun (_,v) -> r==v) !rm in
+  let (n,_) = (try Lst.find (fun (_,v) -> r==v) !rm with _ -> err "print_reg 0") in
   n
 and print_ty r = Types.print (ref []) (get_rm_ptn r)
 and get_rm_ptn rp =
@@ -573,7 +577,7 @@ let print m =
          let p1 = Types.print (ref []) y1 in
          let sf = "§ "^n^" : "^p0^" ⊢ "^p1 in
          let sc = print_ir (List.assoc n m.ns_v) in
-         s_ns_v^sf^" ≒ \n"^sc)
+         s_ns_v^sf^"\n"^sc)
       "" m.ns_v in
   s_ns^s_ns_e^s_ns_t^s_ns_v
 let set_r st r k = Hashtbl.add st r k
@@ -1200,8 +1204,6 @@ and gen_rcd_lb rl l r =
     | Cns_Lb(_,None,t1) -> gen_rcd_lb rl l t1 )
 let inst_ini () = { al = []; al_rcd = []; al_rcd_lb = []; rl = []; }
 let rec inst l i y =
-  (* Util.pnt true "inst:0\n";
-     Util.pnt true ("enter inst:"^(Types.print (ref []) y)^"\n"); *)
   ( match y with
     | App(Var {contents = Ln y0 },y1) -> inst l i (App(y0,y1))
     | App(Abs(v,y0),y1) ->
@@ -1478,7 +1480,36 @@ and mk_ir_mdl_etr m el =
               | Ast.Def_Abs _ -> ()
               | Ast.Def_EqT (_,_,_) -> ()
               | _ -> err "slv_flows 1" )
-          | Flow_Clq _ -> err "x2"
+          | Flow_Clq q ->
+            let _ =
+              List.fold_left
+                ( fun _ f ->
+                    ( match f with
+                      | Ast.Def_CoPrd (n,a,ps) ->
+                        let v = newvar () in
+                        m.ns_t <- (n,v)::m.ns_t;
+                        let a = List.map (fun _ -> newvar_q (-1)) a in
+                        let (ys,_) = List.split ps in
+                        let ya = List.fold_left (fun ya v -> App(ya,Var v)) (Prm(Name n)) a in
+                        let y0 = (coprd_cl ya ys) in
+                        let y1 = Rec (ref y0) in
+                        let y2 = abs y1 a in
+                        v := Ln y2;
+                        let _ =
+                          List.fold_left
+                            (fun i (t,n) ->
+                               let tc = Imp(t,y1) in
+                               m.ns <- (n,ref (Ln tc))::m.ns;
+                               m.ns_e <- (n,Tkn.Tkn(Tkn.Inj i))::m.ns_e;
+                               (i+1))
+                            0 ps in
+                        ()
+                      | Ast.Def_Abs _ -> ()
+                      | Ast.Def_EqT (_,_,_) -> ()
+                      | _ -> err "slv_flows 1" )
+                )
+                () q in
+            ()
           | Gram g ->
             let _  =
               List.fold_left
@@ -1498,8 +1529,31 @@ and mk_ir_mdl_etr m el =
         ) in
       mk_ir_mdl_etr m tl
   )
-let ir_of_exp p0 r0 e =
-  let r1 = Rcd_Ptn.A(Types.newvar ()) in
-  let p1 = ref (Ret r1) in
-  p0 := Seq(IR_Exp(e,r0,r1),p1);
-  (p1,r1)
+let rec ir_of_exp p0 r0 e =
+  let open Ast in
+  let open Rcd_Ptn in
+  ( match e with
+    | Rot -> p0 := Ret r0; (p0,r0)
+    | Rcd [||] -> p0 := Ret (R [||]); (p0,R [||])
+    | Rcd es ->
+      let vs = Array.map (fun _ -> newvar ()) es in
+      let rs = Array.map (fun v -> Rcd_Ptn.A v) vs in
+      let p2 = ref(Ret (Rcd_Ptn.R [||])) in
+      p0 := (Seq(IR_Id(r0,rs),p2));
+      let (p3,_,rr) =
+        Array.fold_left
+          (fun (p0,i,rr) e ->
+             let (pi,ri) = ir_of_exp p0 rs.(i) e in
+             (pi,i+1,rr |+| [|ri|]))
+          (p2,0,[||]) es in
+      p3 := Ret (Rcd_Ptn.R rr);
+      (p3,Rcd_Ptn.R rr)
+    | Rcd_Lb _ -> err "ir_of_exp 0"
+    | App (_,_) -> err "ir_of_exp 1"
+    | Prj(_,_) -> err "ir_of_exp 2"
+    | Agl_Op _ -> err "ir_of_exp 3"
+    | Atm a ->
+      let r1 = Rcd_Ptn.A (newvar ()) in
+      let p1 = ref (Ret r1) in
+      p0 := Seq(IR_Exp(Atm a,r0,r1),p1);
+      (p1,r1) )
