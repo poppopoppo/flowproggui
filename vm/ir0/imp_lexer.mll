@@ -4,6 +4,7 @@
 }
 
 let space = [' ' '\t' '\n' '\r']
+let line = [' ' '\t' '\r']
 let digit = ['0'-'9']
 let alpha = ['a'-'z' 'A'-'Z']
 let ascii = ['a'-'z' 'A'-'Z' '0'-'9' '(' ')' '!' '"' '#'
@@ -42,7 +43,8 @@ rule token = parse
     | (('|')+ as lxm) "»" { IN(String.length lxm) }
     | "»" (('|')+ as lxm)  { OUT(String.length lxm) }
     | "⊢" { SRC }
-    | "⊢|"  { SRC_OUT }
+    | "|⊢"  { SRC_OUT }
+    | "⊢|"  { SRC_IL }
     | "?" { EXN }
     | ":" { CLN }
     | "|" { SPL }
@@ -50,7 +52,6 @@ rule token = parse
     | "]" { R_BLK }
     | "[" { L_BLK }
     | "^" { SEQ }
-    | "¦"  { M_HLZ }
     | "∐"   { COPRD }
     | "∏"   { PRD }
     | "∎" { EOP }
@@ -65,8 +66,6 @@ rule token = parse
     | "⊵" { VCT }
     | "{" { L_RCD }
     | "}" { R_RCD }
-    | "|{" { L_HLZ }
-    | "}|" { R_HLZ  }
     | "⟦" { L_LST }
     | "⟧" { R_LST }
     | "‹" { L_OPN }
@@ -97,6 +96,7 @@ rule token = parse
     | "∠"  { AGL }
     | digit+ as lxm  { INT (int_of_string lxm) }
     | space+        { token lexbuf                         }
+    | '\n'  { NL }
     | eof           { EOF               }
     | _             { raise (Error (Printf.sprintf
                       "At offset %d: unexpected character.\n"

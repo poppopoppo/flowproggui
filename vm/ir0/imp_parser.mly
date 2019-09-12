@@ -2,14 +2,14 @@
   open Lang
   open Types
   open Ast
-
+  open Util
 %}
 
 %token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA RM INI_IR SRC_OUT
 %token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT VCT_INI OP LCE_IR
-%token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST
+%token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
-%token IO PRJ N SLH L_HLZ R_HLZ M_HLZ  L_OPN R_OPN L_LST R_LST SGN
+%token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
@@ -183,13 +183,13 @@ glb_etr_clique:
   | SLF DOT glb_etr_body_ir glb_etr_clique { [$3]@$4 }
   ;
 glb_etr_body_ir:
-  | NAM typ_def ir_code { ($1,fst $2,snd $2,ref $3) }
+  | NAM typ_def ir_code { ($1,fst $2,snd $2,$3) }
   ;
 ir_code:
-  | ir_etr ir_lines { Seq($1,ref $2) }
+  | ir_etr ir_lines { ($1,ref $2) }
   ;
 ir_etr:
-  | IN reg_ptn { IR_Etr $2 }
+  | IN reg_ptn { $2 }
   ;
 ir_ret:
   | EOP reg_ptn { Ret $2 }
@@ -197,19 +197,28 @@ ir_ret:
 ir_lines:
   | ir_ret  { $1 }
   | ir_line ir_lines { Seq($1,$2) }
+  | AGL reg coprd_ir COPRD_END {
+    match $2 with
+    | None -> err "imp_parser 0"
+    | Some r -> Agl(r,$3) }
+  | NAM reg_ptn SRC_IL { IL_Call((Frgn $1),$2) }
   ;
 ir_line:
   | ROT reg_ptn SRC reg_ptn regs { IR_Id($2,[|$4|] |+| $5)  }
   | ARR exp INI_IR reg_ptn SRC reg_ptn  { IR_Exp($2,$4,$6) }
-  | ARR exp INI_IR reg_ptn  { }
-  | NAM reg_ptn SRC reg_ptn {}
-  | COPRD_END reg_ptn SRC reg_ptn coprd_ir {}
-  | APP NAM CMM reg_ptn SRC reg_ptn {}
-  | OUT_IR NAM reg_ptn SRC_OUT {}
-  | NAM reg_ptn SRC_OUT {}
+  | NAM reg_ptn SRC reg_ptn { IR_Glb_Call($1,$2,$4) }
+  | APP reg CMM reg_ptn SRC reg_ptn {
+    match $2 with
+    | None -> err "imp_parser 2"
+    | Some r -> IR_Call((r,$4),$6) }
+  | OUT_IR reg reg_ptn SRC_OUT {
+    match $2 with
+    | None -> err "imp_parser 1"
+    | Some r -> IR_Out(r,$3) }
+  | NAM reg_ptn SRC_OUT { IR_Glb_Out($1,$2) }
   ;
 names:
-  | {}
+  | {  }
   | NAM names {}
 names_lb:
   | {}
@@ -219,10 +228,10 @@ ir_tkn:
   | NAM   {}
   ;
 reg:
-  | WC { newvar () }
+  | WC { None }
   | NAM {
-    try List.assoc $1 !rm
-    with Not_found -> let v = newvar () in rm := ($1,v)::!rm; v }
+    try Some(List.assoc $1 !rm)
+    with Not_found -> let v = newvar () in rm := ($1,v)::!rm; Some v }
   ;
 reg_ptn:
   | reg { Rcd_Ptn.A $1 }
@@ -244,11 +253,12 @@ lb_let:
   | NAM LET NAM {}
   ;
 coprd_ir:
-  | COPRD reg_ptn ir_lines LET reg_ptn {}
+  | COPRD reg_ptn ir_lines { [|($2,$3)|] }
+  | COPRD reg_ptn ir_lines coprd_ir { [|($2,$3)|] |+| $4 }
   ;
 regs:
-  | {}
-  | CMM reg_ptn regs {}
+  | { [||] }
+  | CMM reg_ptn regs { [|$2|] |+| $3 }
   ;
 
 typ_def:
@@ -272,24 +282,24 @@ exp_lst_lb:
 exp:
   | AGL exp %prec AGL_PRE { Agl_Op $2 }
   | INT { Atm(Z $1) }
-  | EXN { Atm Exn }
+  | EXN { Atm (Fnc Exn) }
   | ROT { Rot }
   | IDX { Prj(Rot,Idx $1) }
   | VAL { Prj(Rot,Lb $1) }
   | VCT_INI { App(Atm (Name "#"),Rcd [||])  }
   | exp VCT exp { App(Atm (Name "⊵"),Rcd [|$1;$3|]) }
-  | INJ { Atm(Inj $1) }
-  | CHO { Atm(Cho $1)  }
+  | INJ { Atm(Fnc(Inj $1)) }
+  | CHO { Atm(Fnc(Cho $1))  }
   | NAM  { Atm (Name $1) }
   | NAM DOT NAM { Atm(Name ($1^"."^$3)) }
   | SGN { App(Atm (Name "&"),Rcd [||]) }
   | STG { Atm (Stg $1) }
-  | SLF { Atm Fix }
-  | exp PLS exp { App(Atm Pls,Rcd [|$1;$3|]) }
-  | exp MLT exp { App(Atm Mlt,Rcd [|$1;$3|]) }
-  | exp MNS exp { App(Atm Pls,Rcd [|$1;App(Atm Mns,$3)|]) }
-  | L_PRN MNS exp R_PRN { App(Atm Mns,$3) }
-  | exp EQ exp { App(Atm Eq,Rcd [|$1;$3|]) }
+  | SLF { Atm(Fnc Fix) }
+  | exp PLS exp { App(Atm(Fnc Pls),Rcd [|$1;$3|]) }
+  | exp MLT exp { App(Atm(Fnc Mlt),Rcd [|$1;$3|]) }
+  | exp MNS exp { App(Atm(Fnc Pls),Rcd [|$1;App(Atm(Fnc Mns),$3)|]) }
+  | L_PRN MNS exp R_PRN { App(Atm(Fnc Mns),$3) }
+  | exp EQ exp { App(Atm(Fnc Eq),Rcd [|$1;$3|]) }
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { App($1,$3) }
   | exp PRJ INT { Prj($1,Idx $3) }

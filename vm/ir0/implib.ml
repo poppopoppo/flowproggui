@@ -1,50 +1,50 @@
 open Util
 open Lang
 open Ast
-type t = et * r Rcd_Ptn.t * pt
-let print ((_,k),_,_) = Tkn.print k
+type t = et * Types.t
+type st = ir_mdl * Ast.st * ir_code
+let print ((_,k),_) = Tkn.print k
 let init_st () : t =
-  let r0 = Rcd_Ptn.R [||] in
-  let p0 = ref (Ret r0) in
   ({ ns_v = []; ns =[]; ns_e = []; ns_t = [] },Tkn.Rcd [||])
-  ,r0,p0
-let mk_st g k =
-  let r0 = Rcd_Ptn.R [||] in
-  let p0 = ref (Ret r0) in
+,Types.Rcd Types.U
+let mk_st g =
   let m0 = Lang.mk_ir_mdl g in
-  (m0,k),r0,p0
-let evo ((g,k),r0,p0) (b:Ast.line) =
+  (m0,Tkn.Rcd [||]),Types.Rcd Types.U
+let evo ((g,k),y0) (b:Ast.line) =
   let _ = Timer.init () in
+  let r0 = Rcd_Ptn.A (Some (ref (Types.Ln y0))) in
   ( match b with
     | Ast.Line_Agl (i,e) ->
-      let (p1,r1) = ir_of_exp p0 r0 e in
-      let _ = slv g 0 p0 in
+      let p0 = ir_of_exp r0 e in
+      let y1 = slv g 0 p0 in
+      let st = Hashtbl.create 10 in
+      let _ = set_reg_ptn st r0 k in
+      let st = (g,st,p0) in
       let fd = Unix.fork () in
-      let et = ((g,k),r0,p0) in
       ( match fd with
         | 0 ->
-          Util.open_out_close "default.tkn" (fun c -> Marshal.to_channel c et []);
+          Util.open_out_close "default.tkn" (fun c -> Marshal.to_channel c st []);
           let _ = Unix.execve "evo_tkn.exe" [||] [||] in
           exit 0
         | _ ->
           let (_,x) = Unix.wait () in
           ( match x with
             | WEXITED 0 ->
-              let (((_,k1),_,_):t) =
+              let (k1:Ast.tkn) =
                 Util.open_in_close "default.tkn" (fun c -> Marshal.from_channel c) in
               let (j,ki) = Tkn.get_agl i k1 in
-              let yi = Types.path i (get_rm_ptn r1) in
+              let yi = Types.path i y1 in
               let yi = Types.get_agl_i j yi in
-              let ri = ref (Types.Ln yi) in
-              let rp = Rcd_Ptn.set_path i r1 (Rcd_Ptn.A ri) in
-              ((g,ki),rp,p1)
+              ((g,ki),yi)
             | _ -> err "err1.3.a"
           ))
     | Ast.Line e ->
-      let (p1,r1) = ir_of_exp p0 r0 e in
-      let _ = slv g 0 p0 in
+      let p0 = ir_of_exp r0 e in
+      let y1 = slv g 0 p0 in
+      let st = Hashtbl.create 10 in
+      let _ = set_reg_ptn st r0 k in
       let fd = Unix.fork () in
-      let et = ((g,k),r0,p0) in
+      let et = (g,st,p0) in
       ( match fd with
         | 0 ->
           Util.open_out_close "default.tkn" (fun c -> Marshal.to_channel c et [Marshal.Closures]);
@@ -54,9 +54,9 @@ let evo ((g,k),r0,p0) (b:Ast.line) =
           let (_,x) = Unix.wait () in
           ( match x with
             | WEXITED 0 ->
-              let (((_,k1),_,_):t) =
+              let (k1:Ast.tkn) =
                 Util.open_in_close "default.tkn" (fun c -> Marshal.from_channel c) in
-              ((g,k1),r1,p1)
+              ((g,k1),y1)
             | _ -> err "err1.3"
           ))
     | _ -> err "evo:0" )
