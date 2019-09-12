@@ -198,9 +198,7 @@ ir_lines:
   | ir_ret  { $1 }
   | ir_line ir_lines { Seq($1,$2) }
   | AGL reg coprd_ir COPRD_END {
-    match $2 with
-    | None -> err "imp_parser 0"
-    | Some r -> Agl(r,$3) }
+     Agl($2,$3) }
   | NAM reg_ptn SRC_IL { IL_Call((Frgn $1),$2) }
   ;
 ir_line:
@@ -208,13 +206,9 @@ ir_line:
   | ARR exp INI_IR reg_ptn SRC reg_ptn  { IR_Exp($2,$4,$6) }
   | NAM reg_ptn SRC reg_ptn { IR_Glb_Call($1,$2,$4) }
   | APP reg CMM reg_ptn SRC reg_ptn {
-    match $2 with
-    | None -> err "imp_parser 2"
-    | Some r -> IR_Call((r,$4),$6) }
+     IR_Call(($2,$4),$6) }
   | OUT_IR reg reg_ptn SRC_OUT {
-    match $2 with
-    | None -> err "imp_parser 1"
-    | Some r -> IR_Out(r,$3) }
+    IR_Out($2,$3) }
   | NAM reg_ptn SRC_OUT { IR_Glb_Out($1,$2) }
   ;
 names:
@@ -228,10 +222,9 @@ ir_tkn:
   | NAM   {}
   ;
 reg:
-  | WC { None }
+  | WC { let v = newvar () in rm := ("_",v)::!rm; v}
   | NAM {
-    try Some(List.assoc $1 !rm)
-    with Not_found -> let v = newvar () in rm := ($1,v)::!rm; Some v }
+     let v = newvar () in rm := ($1,v)::!rm; v }
   ;
 reg_ptn:
   | reg { Rcd_Ptn.A $1 }

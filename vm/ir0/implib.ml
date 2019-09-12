@@ -12,10 +12,12 @@ let mk_st g =
   (m0,Tkn.Rcd [||]),Types.Rcd Types.U
 let evo ((g,k),y0) (b:Ast.line) =
   let _ = Timer.init () in
-  let r0 = Rcd_Ptn.A (Some (ref (Types.Ln y0))) in
+  let r0 = Rcd_Ptn.A (ref (Types.Ln y0)) in
   ( match b with
     | Ast.Line_Agl (i,e) ->
-      let p0 = ir_of_exp r0 e in
+      let r1 = Rcd_Ptn.A (Types.newvar ()) in
+      let l = ir_of_exp r0 r1 e in
+      let p0 = List.fold_right (fun n p0 -> Seq(n,p0)) l (Ret r1) in
       let y1 = slv g 0 p0 in
       let st = Hashtbl.create 10 in
       let _ = set_reg_ptn st r0 k in
@@ -39,8 +41,11 @@ let evo ((g,k),y0) (b:Ast.line) =
             | _ -> err "err1.3.a"
           ))
     | Ast.Line e ->
-      let p0 = ir_of_exp r0 e in
+      let r1 = Rcd_Ptn.A (Types.newvar ()) in
+      let l = ir_of_exp r0 r1 e in
+      let p0 = List.fold_right (fun n p0 -> Seq(n,p0)) l (Ret r1) in
       let y1 = slv g 0 p0 in
+      Util.pnt true (print_ir p0);
       let st = Hashtbl.create 10 in
       let _ = set_reg_ptn st r0 k in
       let fd = Unix.fork () in
