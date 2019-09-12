@@ -13,6 +13,7 @@ type token =
   | TYP_OPN_VCT
   | STG of (string)
   | SRC_OUT
+  | SRC_IL
   | SRC
   | SPL
   | SLH
@@ -23,7 +24,6 @@ type token =
   | R_PRN
   | R_OPN
   | R_LST
-  | R_HLZ
   | R_BLK
   | ROT of (int)
   | RM
@@ -40,10 +40,10 @@ type token =
   | OP
   | NOT_SPL
   | NOT
+  | NL
   | NAT of (int)
   | NAM of (string)
   | N
-  | M_HLZ
   | MNS_NAT
   | MNS
   | MLT_NAT
@@ -57,7 +57,6 @@ type token =
   | L_OPN
   | L_LST_PLS
   | L_LST
-  | L_HLZ
   | L_BLK
   | LET
   | LCE_IR

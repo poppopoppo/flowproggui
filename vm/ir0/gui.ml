@@ -360,7 +360,7 @@ let main () =
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let insert s = buffer#insert ~iter:!iter s in
     let insert_arr () = buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» " in
-    insert (Lang.Tkn.print (let ((_,k),_,_) = !st in k));
+    insert (Lang.Tkn.print (let ((_,k),_) = !st in k));
     insert_arr ();
     let mark_start = ref (buffer#create_mark !iter) in
     let key_press k =
@@ -575,8 +575,8 @@ let main () =
       ~callback:(fun s ->
           match s with
           | `MODULE_IMPORT ->
-            let (((_,v),_,_),(_,g0)) = (!st,!mdl) in
-            let st0 = Implib.mk_st g0 v in
+            let (((_,_),_),(_,g0)) = (!st,!mdl) in
+            let st0 = Implib.mk_st g0 in
             st := st0;
             global_signal#call `MODULE_IMPORT
           | `OPEN_FILE ->  open_file ()

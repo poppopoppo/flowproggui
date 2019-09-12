@@ -81,7 +81,7 @@
     ∐ _
     » (0'-1) (0'*1') |~ { x1 y } ⊢ { x y }
     fact_i  { x y } ⊢|
-
+    ∐|
 @.[_].+[ a b c <]◂_ ≃∐[ .. <]
  = a +< (b +< (c +< d'))
 ± : -{> evo~({> in~a' st~e' }→‹e'›) init~(-a'→e') } ; create callback
@@ -89,3 +89,8 @@
 $-syntax
 +0-syntax
 Σ◂g0
+
+
+a|→b
+{a|→b a}→(a|→b) : in
+(a|→b)→‹{a|→b b}› : out
