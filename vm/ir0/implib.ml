@@ -3,7 +3,7 @@ open Lang
 open Ast
 type t = et * Types.t
 type st = ir_mdl * Ast.st * ir_code
-let print ((_,k),_) = Tkn.print k
+let print ((_,k),y) = (Tkn.print k)^" : "^(Types.print (ref []) y) 
 let init_st () : t =
   ({ ns_v = []; ns =[]; ns_e = []; ns_t = [] },Tkn.Rcd [||])
 ,Types.Rcd Types.U
@@ -48,6 +48,7 @@ let evo ((g,k),y0) (b:Ast.line) =
       Util.pnt true (print_ir p0);
       let st = Hashtbl.create 10 in
       let _ = set_reg_ptn st r0 k in
+      Util.pnt true ((print_st st)^"\n");
       let fd = Unix.fork () in
       let et = (g,st,p0) in
       ( match fd with

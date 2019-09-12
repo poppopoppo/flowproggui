@@ -360,7 +360,10 @@ let main () =
     let _ = buffer#create_tag ~name:"not_editable" [`EDITABLE false] in
     let insert s = buffer#insert ~iter:!iter s in
     let insert_arr () = buffer#insert ~iter:!iter ~tag_names:["not_editable"] "\n» " in
-    insert (Lang.Tkn.print (let ((_,k),_) = !st in k));
+    let s =
+      let ((_,k),y) = !st in
+      (Lang.Tkn.print k)^" : "^(Lang.Types.print (ref []) y) in
+    insert s;
     insert_arr ();
     let mark_start = ref (buffer#create_mark !iter) in
     let key_press k =
