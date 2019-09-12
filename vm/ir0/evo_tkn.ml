@@ -9,7 +9,9 @@ let _ =
           (fun c -> Marshal.from_channel c)
       with e -> raise e )  in
   let cs = Stack.create () in
-  let k1 = run g0 p0 st cs in
+  let k1 =
+    ( try run g0 p0 st cs
+      with Failure e -> err e) in
   let _ = Util.open_out_close "default.tkn"
       (fun c -> Marshal.to_channel c k1 []) in
   let t1 = Sys.time () in
