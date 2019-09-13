@@ -270,14 +270,16 @@ module Tkn = struct
     | Name of string
     | Etr of ('p, 'r) etr
     | Stg of string | Z of int
+    | Exn of string
     | P of ('p array) * (('p, 'r) t)
     | Zn of int * int | Sgn of Sgn.t | CoP of int * (('p, 'r) t)
     | Ast of Peg.ast | Vct of (('p, 'r) t , ('p, 'r) t) Hashtbl.t
   and ('p, 'r) etr =
     | Grm of Peg.grammar * string | Frgn of string
     | Clj of 'p * (('p, 'r) t)
-    | Pls | Mlt | Mns | Exn | Fnc of 'p
+    | Pls | Mlt | Mns | Exn_Ini | Fnc of 'p
     | Cmp | Eq | Inj of int | Cho of int | Fix
+  exception Tkn_exn of string
   let rec print k =
     ( match k with
       | Rcd rs -> "{"^(Array.fold_left (fun s r -> s^" "^(print r)) "" rs)^"}"
@@ -286,6 +288,7 @@ module Tkn = struct
       | Tkn v ->
         ( match v with
           | Name n -> n
+          | Exn s -> "?."^"\""^s^"\""
           | Stg s ->
             if (String.length s)>=20
             then let s0 = String.sub s 0 20 in ("(\""^s0^"\""^"..)")
@@ -307,8 +310,8 @@ module Tkn = struct
   and print_etr e =
     ( match e with
       | Pls -> "+" | Mlt -> "*" | Mns -> "-" | Cmp -> "≤" | Eq -> "="
-      | Inj i -> "↑["^(string_of_int i)^"]" | Cho i -> "↓["^(string_of_int i)^"]"
-      | Fix -> "@" | Exn -> "¿"
+      | Inj i -> "∐["^(string_of_int i)^"]" | Cho i -> "∏["^(string_of_int i)^"]"
+      | Fix -> "@" | Exn_Ini -> "?"
       | Fnc _ -> "Fnc"
       | Clj (_,_) -> "Clj"
       | Frgn _ -> "Frgn"
@@ -417,7 +420,8 @@ module Ast = struct
     | IL_Call of fnc * ptn
   type line =
     | End | Line of exp_rcd | Line_Agl of Rcd_Ptn.path * exp_rcd
-  type st = (v ref, tkn) Hashtbl.t
+  module VHash = Hashtbl.Make (struct type t = v ref let equal = (==) let hash = Hashtbl.hash end)
+  type st = tkn VHash.t
   type cs_f =
     | CS_f of ((r * tkn) list) * pt
     | CS_f_il of pt
@@ -451,7 +455,7 @@ module Ast = struct
     ( try let (n,_) = List.find (fun (_,w) -> v==w) !rm in n
       with _ -> "_r"^(string_of_int (Types.print_v v)))
   let print_st st =
-    (Hashtbl.fold
+    (VHash.fold
        (fun k v s ->
           s^" "^(print_v k)^"~"^(Tkn.print v))
        st "{> ")^" }\n"
@@ -590,15 +594,25 @@ let rtn p =
     | Seq(IR_Call ((_,_),y),p1) -> (y,p1)
     | _ -> err "etr:0" )
 let get_r st r =
-  let k =  (try Hashtbl.find st r with _ -> err ("get_r 0:")) in
-  let _ = Hashtbl.remove st r in
-  k
+  let open Tkn in
+  let k =  (try VHash.find st r with _ -> err ("get_r 0:")) in
+  let _ = VHash.remove st r in
+  ( match k with
+    | Tkn(Exn s) -> raise (Tkn_exn s)
+    | _ -> k )
 let rec get_reg_ptn (st:st) r =
   let open Rcd_Ptn in
   let open Tkn in
   ( match r with
-    | A r0 -> get_r st r0
-    | R rs -> Rcd (Array.fold_left (fun ks r0 -> ks |+| [|get_reg_ptn st r0|]) [||] rs)
+    | A r0 -> Util.pnt true ((print_v r0)^"\n"); get_r st r0
+    | R rs ->
+      let ks =
+        Array.fold_left
+          (fun ks r0 ->
+             let ki = get_reg_ptn st r0 in
+             Util.pnt true ("ki="^(Tkn.print ki)^"\n");
+             ks |+| [|ki|]) [||] rs in
+      Rcd ks
     | Ro (rs,rt) ->
       let ks =
         Array.fold_left
@@ -610,6 +624,10 @@ let rec get_reg_ptn (st:st) r =
         | _ -> err "get_reg_ptn 0")
     | _ -> err "get_reg_ptn"
   )
+let get_reg_ptn_exn st r =
+  let open Tkn in
+  ( try get_reg_ptn st r
+    with | Tkn_exn s -> Tkn(Exn s) )
 let print m =
   let s_ns =
     List.fold_left
@@ -634,7 +652,7 @@ let print m =
       "" m.ns_v in
   s_ns^s_ns_e^s_ns_t^s_ns_v
 let set_r (st:st) r k =
-  Hashtbl.add st r k
+  VHash.add st r k
 let rec set_reg_ptn (st:st) r k =
   let open Rcd_Ptn in
   let open Tkn in
@@ -674,15 +692,15 @@ let rec set_cs_k (st:st) l =
   ( match l with
     | [] -> ()
     | (r,k)::tl -> set_r st r k; set_cs_k st tl )
-let get_cs_k st = Hashtbl.fold (fun r k l -> Hashtbl.remove st r; (r,k)::l) st []
-let free_st st = Hashtbl.clear st
-let rec run m p0 st cs =
+let get_cs_k st = VHash.fold (fun r k l -> VHash.remove st r; (r,k)::l) st []
+let free_st st = VHash.clear st
+let rec run m p0 (st:st) cs =
   let s0 = (print_st st)^(print_line p0)^"~~~~~~~~~~~~~~~~~~~~\n" in
   Util.pnt true s0;
   ( try
       ( match p0 with
         | Ret r ->
-          let k = get_reg_ptn st r in
+          let k = get_reg_ptn_exn st r in
           if Stack.is_empty cs then k
           else
             let hd = Stack.pop cs in
@@ -699,14 +717,17 @@ let rec run m p0 st cs =
                 run m p1 st cs
             )
         | Agl (ra,ps) ->
-          let k0 = get_reg_ptn st (Rcd_Ptn.A ra) in
-          let open Tkn in
-          let (j,k1) = agl k0 in
-          let (rx,pr) = ps.(j) in
-          let _ = set_reg_ptn st rx k1 in
-          run m pr st cs
+          ( try
+              let k0 = get_reg_ptn st (Rcd_Ptn.A ra) in
+              let open Tkn in
+              let (j,k1) = agl k0 in
+              let (rx,pr) = ps.(j) in
+              let _ = set_reg_ptn st rx k1 in
+              run m pr st cs
+            with Tkn.Tkn_exn s ->
+              ret m st cs (Tkn.Tkn(Tkn.Exn s)))
         | IL_Call(n,r) ->
-          let kx = get_reg_ptn st r in
+          let kx = get_reg_ptn_exn st r in
           let y = app m (Tkn.Tkn(Tkn.Etr n)) kx in
           ( match y with
             | `Tkn k ->
@@ -748,12 +769,14 @@ let rec run m p0 st cs =
               let _ = set_reg_ptn st r1 (Tkn.Tkn k) in
               run m p1 st cs
             | IR_Id (r1,r2) ->
-              let k1 = get_reg_ptn st r1 in
+              Util.pnt true "enter id:\n";
+              let k1 = get_reg_ptn_exn st r1 in
+              Util.pnt true ((Tkn.print k1)^"\n");
               let _ = Array.fold_left (fun _ r -> set_reg_ptn st r k1) () r2 in
               run m p1 st cs
             | IR_Call ((r1,rp2),rp0) ->
-              let k_f = get_r st r1 in
-              let kx = get_reg_ptn st rp2 in
+              let k_f = get_reg_ptn_exn st (Rcd_Ptn.A r1) in
+              let kx = get_reg_ptn_exn st rp2 in
               let y = app m k_f kx in
               ( match y with
                 | `Tkn y ->
@@ -777,16 +800,35 @@ let rec run m p0 st cs =
     | _ ->
       let s0 = (print_st st)^(print_line p0) in
       err s0 )
+and ret m st cs k =
+  if Stack.is_empty cs then k
+  else
+    let hd = Stack.pop cs in
+    ( match hd with
+      | CS_f_il pe ->
+        let (r0,p1) = rtn pe in
+        let _ = set_reg_ptn st r0 k in
+        run m p1 st cs
+      | CS_f (l,pe) ->
+        let (r0,p1) = rtn pe in
+        let _ = free_st st in
+        let _ = set_cs_k st l in
+        let _ = set_reg_ptn st r0 k in
+        run m p1 st cs
+    )
 and app m f x =
   let open Tkn in
   ( match f,x with
+    | Tkn(Exn s0),Tkn(Exn s1) -> `Tkn(Tkn(Exn ("◂ "^s0^","^s1)))
+    | Tkn (Exn s),_
+    | _,Tkn(Exn s) ->`Tkn(Tkn(Exn s))
     | Tkn Etr e,_ ->
       ( match e,x with
         | Mns,Tkn (Z z) -> `Tkn (Tkn (Z (-z)))
         | Mns,Tkn (Zn(z0,z1)) -> `Tkn(Tkn(Zn(z1-(z0 mod z1),z1)))
         | Inj i,_ -> `Tkn (Tkn (CoP(i,x)))
         | (Cho _),_ -> err "err 7"
-        | Exn,_ -> err "err 8"
+        | Exn_Ini,Tkn(Stg s) -> `Tkn(Tkn(Exn s))
         | Fix,_ -> err "err 9"
         | (Fnc pa),_ -> `Fnc pa
         | (Clj (_,_)),_ -> err "run 3"
@@ -812,8 +854,12 @@ and app m f x =
           `Tkn(frgn f x)
         | _ -> err "app 0"      )
     | Tkn.Tkn (Tkn.Name n),_ ->
-      let e = List.assoc n m.ns_v in
-      app m (Tkn.Tkn(Tkn.Etr(Tkn.Fnc e))) x
+      let e =
+        ( try (Tkn.Tkn(Tkn.Etr(Tkn.Fnc(List.assoc n m.ns_v))))
+          with Not_found ->
+            ( try List.assoc n m.ns_e
+              with _ -> err "app 7"            )) in
+      app m e x
     | _ -> err "app:1"
   )
 and frgn f x =
@@ -1193,6 +1239,7 @@ let rec slv_etr m l (r0,p0) =
   let _ = inst (l+1) (get_rm_ptn r0) in
   slv m (l+1) !p0
 and slv m l p0 =
+  Util.pnt true ("enter slv:"^(print_line p0)^"\n");
   let open Rcd_Ptn in
   ( match p0 with
     | Ret r -> get_rm_ptn r
@@ -1265,8 +1312,11 @@ and slv_exp_atm m a =
             | Tkn.Cmp -> let (y0,y1) = (zn (Prm Z_u),zn (Prm (Z_n 2))) in Imp(Rcd(rcd_cl [y0;y0]),y1)
             | Tkn.Eq -> let y = Var (newvar()) in Imp(Rcd(rcd_cl [y;y]),y)
             | Tkn.Frgn n -> Var(List.assoc n m.ns)
+            | Tkn.Exn_Ini -> let y = Var (newvar()) in Imp(Prm Stg,y)
             | _ -> err "slv_exp_atm 0" )
-        | Name n -> Var(List.assoc n m.ns))
+        | Name n ->
+          ( try Var(List.assoc n m.ns)
+            with _ -> err ("slv_exp_atm 3:"^n) ))
     | _ -> err "slv_exp_atm 1" )
 
 and slv_rule m (_,ps,_) = Rcd (slv_ps m ps)
@@ -1458,7 +1508,15 @@ and ir_of_exp r0 r1 e =
             let n1 = IR_Call((r1,r2),A v3) in
             ([n0]@l1@l2@[n1],A v3)
           | _ -> err "ir_of_exp 5" )
-      | Prj(_,_) -> err "ir_of_exp 2"
+      | Prj(e0,Idx i) ->
+        let (l0,r1) = lp r0 e0 in
+        let vs = Array.init (i+1) (fun _ -> newvar ()) in
+        let vt = newvar () in
+        vt := Ln(Rcd(Uo(ref WC)));
+        let rs = Array.map (fun v -> A v) vs in
+        let n0 = IR_Id(r1,[|Ro(rs,vt)|]) in
+        (l0@[n0],A vs.(i))
+      | Prj(_,_) -> err "ir_of_exp 6"
       | Agl_Op _ -> err "ir_of_exp 3"
       | Atm a ->
         let v = newvar () in
@@ -1526,7 +1584,7 @@ and mk_ir rv p0 =
 and csm_rv r rv =
   let (s,_) = List.find (fun (_,v) -> v==r) !Ast.rm in
   let v = Hashtbl.find rv s in
-  Hashtbl.remove rv s; 
+  Hashtbl.remove rv s;
   v
 and csm_ptn_rv r rv = Rcd_Ptn.map (fun r0 -> csm_rv r0 rv) r
 and crt_rv r rv =

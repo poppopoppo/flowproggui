@@ -228,19 +228,25 @@ reg:
   ;
 reg_ptn:
   | reg { Rcd_Ptn.A $1 }
-  | L_RCD reg_ptn_lst reg_ptn_op { Rcd_Ptn.R [||] }
-  | L_RCD LB reg_ptn_lst_lb reg_ptn_op { Rcd_Ptn.R [||] }
+  | L_RCD reg_ptn_lst reg_ptn_op {
+    match $3 with
+    | None ->  Rcd_Ptn.R $2
+    | Some r -> Rcd_Ptn.Ro ($2,r) }
+  | L_RCD LB reg_ptn_lst_lb reg_ptn_op {
+    match $4 with
+    | None -> Rcd_Ptn.R_Lb $3
+    | Some r -> Rcd_Ptn.Ro_Lb ($3,r) }
   ;
 reg_ptn_op:
-  | OP NAM R_RCD  {}
-  | R_RCD {}
+  | OP reg R_RCD  { Some $2 }
+  | R_RCD { None }
 reg_ptn_lst:
-  | {}
-  | reg_ptn reg_ptn_lst {}
+  | { [||] }
+  | reg_ptn reg_ptn_lst { [|$1|] |+| $2 }
   ;
 reg_ptn_lst_lb:
-  | {}
-  | NAM LET reg_ptn reg_ptn_lst_lb {}
+  | { [||] }
+  | NAM LET reg_ptn reg_ptn_lst_lb { [|($1,$3)|] |+| $4 }
   ;
 lb_let:
   | NAM LET NAM {}
@@ -275,7 +281,7 @@ exp_lst_lb:
 exp:
   | AGL exp %prec AGL_PRE { Agl_Op $2 }
   | INT { Atm(Z $1) }
-  | EXN { Atm (Fnc Exn) }
+  | EXN { Atm (Fnc Exn_Ini) }
   | ROT { Rot }
   | IDX { Prj(Rot,Idx $1) }
   | VAL { Prj(Rot,Lb $1) }
@@ -296,6 +302,7 @@ exp:
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { App($1,$3) }
   | exp PRJ INT { Prj($1,Idx $3) }
+  | L_RCD exp_lst R_RCD { Rcd (Array.of_list $2) }
   | L_RCD exp_lst OP exp R_RCD { Rcd (Array.of_list $2) }
   | L_RCD LB exp_lst_lb R_RCD { Rcd_Lb (None,Array.of_list $3) }
   | L_RCD LB exp_lst_lb OP exp R_RCD { Rcd_Lb (Some $5,Array.of_list $3) }

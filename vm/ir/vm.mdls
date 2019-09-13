@@ -1,5 +1,5 @@
 §§ Lang 
-¶+ℙ 
+¶+ℙ  
 	@.str ≃  
 	∐* "\"" str_in  
 	@.str_in ≃   
@@ -22,8 +22,8 @@
 	∐* "A" ∐* "B" ∐* "C" ∐* "D" ∐* "E" ∐* "F" ∐* "G" ∐* "H" ∐* "I" ∐* "J" ∐* "K"
 	∐* "L" ∐* "M" ∐* "N" ∐* "O" ∐* "P" ∐* "Q" ∐* "R" ∐* "S" ∐* "T" ∐* "U" ∐* "V" 
 	∐* "W" ∐* "X" ∐* "Y" ∐* "Z" 
-¶+ℙ     
 	@.nl ≃ ∐ "\n"  
+¶+ℙ     
   @.def_mdl ≃ ∐ "§§" name "≒" ⟦mdl_etr⟧ "§§."
 	@.def_arg ≃ 
 	∐ "◂" var ⟦args⟧ 
@@ -206,7 +206,7 @@
 	∐ ! & : axm ∐ : inj ∐ : cho ∐ ! & : z_d
 ¶ v_t ◂' ≃ ∐ : wc ∐ ! ℤ : v ∐ : q ∐ ! $ : ln
 ¶ @.ty ≃
-	∐ ! & : var ∐ ty ty : app
+	∐ ! & : ty_v ∐ ty ty : app
 	∐ ty ty : imp ∐ ! ty_prm : prm
 	∐ ! ty_rcd : rcd ∐ ! ty_rcd_lb : rcd_lb
 	∐ ! & : ty_rec
@@ -218,7 +218,7 @@
 	∐ ℙ ty ty_rcd_lb : cns_lb
 	∐ & : uo_lb ∐ : u_lb
 ¶ @.tkn ◂'' ≃ 
-	∐ : name ∐ : stg ∐ ℤ : z ∐ ℤ ℤ : zn
+	∐ : ns_k ∐ : stg ∐ ℤ : z ∐ ℤ ℤ : zn
 	∐ ! & : sgn ∐ ℤ tkn : co_p
 	∐ : pls ∐ : mlt ∐ : mns ∐ : cmp
 	∐ : eq ∐ ℤ : inj ∐ ! ℤ : cho ∐ : fix
