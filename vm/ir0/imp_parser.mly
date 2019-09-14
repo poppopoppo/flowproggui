@@ -148,7 +148,7 @@ typ_top:
   ;
 typ_top_lb:
   | { U_Lb }
-  | NAM LET typ typ_top_lb  { Cns_Lb($1,Some $3,$4) }
+  | NAM LET typ typ_top_lb  { Cns_Lb($1,$3,$4) }
 typs:
   | { [] }
   | typs typ { $1@[$2] }
@@ -156,7 +156,7 @@ typs:
 typ:
   | L_PRN typ R_PRN { $2 }
   | L_RCD typ_top R_RCD { $2 }
-  | L_RCD LB typ_top_lb R_RCD { Rcd_Lb $3 }
+  | L_RCD LB typ_top_lb R_RCD { Rcd_Lb(ref StgSet.empty,$3) }
   | typ APP typ { Types.App($1,$3) }
   | typ PRJ typ { App(App(Prm Vct,$1),$3) }
   | L_OPN typ R_OPN { opn $2 }
@@ -302,6 +302,7 @@ exp:
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { App($1,$3) }
   | exp PRJ INT { Prj($1,Idx $3) }
+  | exp PRJ NAM { Prj($1,Lb $3) }
   | L_RCD exp_lst R_RCD { Rcd (Array.of_list $2) }
   | L_RCD exp_lst OP exp R_RCD { Rcd (Array.of_list $2) }
   | L_RCD LB exp_lst_lb R_RCD { Rcd_Lb (None,Array.of_list $3) }
