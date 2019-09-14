@@ -82,30 +82,31 @@ module Types = struct
     | Z_n of int | Axm of Sgn.t | Inj| Cho | Z_d of Sgn.t
     | Grm | EqT of string | Name of string
   type v_p = Sgn.t
-  type 'y v_t = | WC | V of level | Q of level | Ln of 'y
-  and v = t v_t
+  type ('y, 'k) v_t = | WC of 'k | V of 'k * level | Q of 'k * level | Ln of 'y
+  and v = (t, unit) v_t
   and t =
     | Abs of v ref * t
     | Var of v ref | App of t * t
     | Imp of t * t | Prm of prm | Rcd of t_rcd
-    | Rcd_Lb of (StgSet.t ref) * t_rcd_lb | Rec of t_rec ref
-  and v_rcd = t_rcd v_t
-  and v_rcd_lb = t_rcd_lb v_t
+    | Rcd_Lb of t_rcd_lb | Rec of t_rec ref
+  and v_rcd = (t_rcd, unit) v_t
+  and v_rcd_lb = (t_rcd_lb, StgSet.t) v_t
   and t_rec = | CP of t * t_rcd | P of t * t * t_rcd | Rec_WC
   and t_rcd = | Cns of t * t_rcd | Uo of v_rcd ref | U
   and t_rcd_lb = | Cns_Lb of string * t * t_rcd_lb | Uo_Lb of v_rcd_lb ref | U_Lb
   type print = { rl : (t_rec ref) list; vl : (v ref) list; }
   let v_vct:((v ref) list ref) = ref []
+  let v_rcd_lb_vct:((v_rcd_lb ref) list ref) = ref []
   let newvar () =
-    let v = ref WC in
+    let v = ref (WC ()) in
     v_vct := !v_vct@[v];
     v
   let newvar_l l =
-    let v = ref (V l) in
+    let v = ref (V ((),l)) in
     v_vct := !v_vct@[v];
     v
   let newvar_q l =
-    let v = ref (Q l) in
+    let v = ref (Q ((),l)) in
     v_vct := !v_vct@[v];
     v
   let print_prm p =
@@ -116,24 +117,24 @@ module Types = struct
       | Axm p -> "p"^(Sgn.print p) | Inj -> "↑" | Cho -> "↓"
       | Z_d p -> "ℤ_d_"^(Sgn.print p) | EqT s -> s^"( = _)"
       | Name n -> n )
-  let rec print_v v =
+  let rec print_v v_vct v =
     (try (fst @@ BatList.findi (fun _ vi -> vi==v) !v_vct)
-     with _ -> v_vct := !v_vct@[v]; print_v v)
+     with _ -> v_vct := !v_vct@[v]; print_v v_vct v)
   let rec print (rl:(t_rec ref list ref)) y =
     ( match y with
       | Var v ->
-        let i = print_v v in
+        let i = print_v v_vct v in
         ( match !v with
-          | WC -> "_"
-          | V l -> "v"^(string_of_int i)^"''("^(string_of_int l)^")"
-          | Q l -> "t"^(string_of_int i)^"'("^(string_of_int l)^")"
+          | WC _-> "_"
+          | V (_,l) -> "v"^(string_of_int i)^"''("^(string_of_int l)^")"
+          | Q (_,l) -> "t"^(string_of_int i)^"'("^(string_of_int l)^")"
           | Ln y -> print rl y )
       | App(y0,y1) -> "("^(print rl y0)^")◂("^(print rl y1)^")"
       | Imp(y0,y1) -> (print rl y0)^"→"^(print rl y1)
       | Prm p -> print_prm p
       | Rcd r -> "{ "^(print_rcd rl r)^"}"
-      | Rcd_Lb (nr,r) ->
-        "{> "^(StgSet.fold (fun s lb -> s^lb^"~| ") !nr "")^(print_rcd_lb rl r)^"}"
+      | Rcd_Lb r ->
+        "{> "^(print_rcd_lb rl r)^"}"
       | Rec r ->
         ( try
             let (i,_) = BatList.findi (fun _ p -> r==p) !rl in
@@ -163,11 +164,16 @@ module Types = struct
       | Uo { contents = Ln r0 } -> print_rcd rl r0
       | Uo _ -> "<"
       | Cns(t0,t1) -> (print rl t0)^" "^(print_rcd rl t1) )
+  and print_nr nr = "{> "^(StgSet.fold (fun lb p -> p^lb^"~| ") nr "")^"<}"
   and print_rcd_lb rl r =
     ( match r with
       | U_Lb -> ""
-      | Uo_Lb { contents = Ln r0 } -> print_rcd_lb rl r0
-      | Uo_Lb _ -> "<"
+      | Uo_Lb v ->
+        ( match !v with
+          | Ln r0 ->  print_rcd_lb rl r0
+          | WC nr -> "< _l"^(string_of_int (print_v v_rcd_lb_vct v))^"::"^(print_nr nr)
+          | V (nr,l) -> "< l"^(string_of_int (print_v v_rcd_lb_vct v))^"''("^(string_of_int l)^")::"^(print_nr nr)
+          | Q (nr,l) -> "< l"^(string_of_int (print_v v_rcd_lb_vct v))^"'("^(string_of_int l)^")::"^(print_nr nr) )
       | Cns_Lb(lb,t0,t1) -> lb^"~"^(print rl t0)^" "^(print_rcd_lb rl t1))
   let rec path i y : t =
     ( match i,y with
@@ -199,7 +205,7 @@ module Types = struct
       | _ -> err "get_agl_rcd" )
   let new_wc () = newvar ()
   let rcd_cl l = List.fold_right (fun x r -> Cns(x,r)) l U
-  let rcd_op l = List.fold_right (fun x r -> Cns(x,r)) l (Uo (ref WC))
+  let rcd_op l = List.fold_right (fun x r -> Cns(x,r)) l (Uo (ref (WC ())))
   let rec rcd_cns l t =
     ( match t with
       | Rcd t -> List.fold_right (fun x r -> Cns(x,r)) l t
@@ -213,18 +219,32 @@ module Types = struct
       | _ -> s )
   let rcd_cl_lb l = List.fold_right (fun (lb,x) r -> Cns_Lb(lb,x,r)) l U_Lb
   let rec rcd_cns_lb l t =
+    let s1 = List.fold_left (fun s (lb,_) -> StgSet.add lb s) StgSet.empty l in
     ( match t with
-      | Rcd_Lb (nr,t) ->
-        let s0 = get_lbs StgSet.empty t in
-        let s1 = List.fold_left (fun s (lb,_) -> StgSet.add lb s) StgSet.empty l in
-        let s2 = StgSet.inter s0 s1 in
-        if StgSet.is_empty s2
-        then
-          let nr0 = StgSet.diff !nr s1 in
-          (nr0,List.fold_right (fun (n,x) r -> Cns_Lb(n,x,r)) l t)
-        else err "rcd_cns_lb 1"
-      | Var { contents = Ln y } -> rcd_cns_lb l y
-      | _ -> err ("rcd_cns_lb:"^(print (ref []) t)))
+      | Rcd_Lb r ->
+        let rec lp r =
+          ( match r with
+            | Cns_Lb(lb,y0,y1) ->
+              if List.exists (fun (l,_) -> l=lb) l then err "rcd_cns_lb 0"
+              else
+                Cns_Lb(lb,y0,lp y1)
+            | U_Lb -> List.fold_right (fun (n,x) r -> Cns_Lb(n,x,r)) l U_Lb
+            | Uo_Lb v ->
+              ( match !v with
+                | Ln y -> lp y
+                | V (nr,lv) ->
+                  let y =
+                    List.fold_right
+                      (fun (n,x) r -> Cns_Lb(n,x,r))
+                      l (Uo_Lb v) in
+                  v := V(StgSet.union s1 nr,lv); y
+                | _ -> err "rcd_cnd_lb 2" )) in
+        lp r
+      | Var v ->
+        ( match !v with
+          | Ln y -> rcd_cns_lb l y
+          | _ -> err "rcd_cns_lb 3" )
+      | _ -> err "rcd_cns_lb 4" )
   let zn v = Rec (ref (CP(App(Prm Zn,v),Cns(Rcd U,Cns(Rcd U,U)))))
   let opn v = Rec (ref (CP(App(Prm Opn,v),rcd_cl [(Rcd U);v])))
   let lst v =
@@ -254,14 +274,14 @@ module Types = struct
       | Abs(_,y0) -> mk_abs rl x y0
       | Var v ->
         ( match !v with
-          | Q (-2) -> v := Ln (Var x)
-          | Q q when q<(-2) -> v := Q (q+1)
+          | Q ((),-2) -> v := Ln (Var x)
+          | Q ((),q) when q<(-2) -> v := Q ((),q+1)
           | Ln y -> mk_abs rl x y
           | _ -> () )
       | Imp(y0,y1)
       | App(y0,y1) -> mk_abs rl x y0; mk_abs rl x y1
       | Rcd r -> mk_abs_rcd rl x r
-      | Rcd_Lb (_,r) -> mk_abs_rcd_lb rl x r
+      | Rcd_Lb r -> mk_abs_rcd_lb rl x r
       | Rec r ->
         if List.exists (fun x -> x==r) !rl then ()
         else
@@ -479,7 +499,7 @@ module Ast = struct
   }
   let print_v v =
     ( try let (n,_) = List.find (fun (_,w) -> v==w) !rm in n
-      with _ -> "_r"^(string_of_int (Types.print_v v)))
+      with _ -> "_r"^(string_of_int (Types.print_v v_vct v)))
   let print_st st =
     (VHash.fold
        (fun k v s ->
@@ -593,29 +613,8 @@ and print_reg r =
   (try
      let (n,_) = Lst.find (fun (_,v) -> r==v) !rm in
      n
-   with _ -> "_r"^(string_of_int (Types.print_v r)) )
+   with _ -> "_r"^(string_of_int (Types.print_v Types.v_vct r)) )
 and print_ty r = Rcd_Ptn.print (fun v -> Types.print (ref []) (Types.Var v)) r
-and get_rm_r r = Types.Var r
-and get_rm_ptn rp =
-  ( match rp with
-    | Rcd_Ptn.A r -> get_rm_r r
-    | Rcd_Ptn.R rs ->
-      let ts = Array.map get_rm_ptn rs in
-      Types.Rcd(Types.rcd_cl (Array.to_list ts))
-    | Rcd_Ptn.Ro (rs,rt) ->
-      let ts = Array.map get_rm_ptn rs in
-      let tt = get_rm_r rt in
-      Types.Rcd (Types.rcd_cns (Array.to_list ts) tt)
-    | Rcd_Ptn.R_Lb rs ->
-      let ts = Array.map (fun (n,r) -> (n,get_rm_ptn r)) rs in
-      Types.Rcd_Lb(ref StgSet.empty,Types.rcd_cl_lb (Array.to_list ts))
-    | Rcd_Ptn.Ro_Lb (rs,rt) ->
-      let ts = Array.map (fun (n,r) -> (n,get_rm_ptn r)) rs in
-      let tt = Types.Var rt in
-      let (nr,ys) = Types.rcd_cns_lb (Array.to_list ts) tt in
-      Types.Rcd_Lb(ref nr,ys) )
-
-let etr (r,p) : etr = (r,p)
 let rtn p =
   ( match !p with
     | Seq(IR_Call ((_,_),y),p1) -> (y,p1)
@@ -829,9 +828,8 @@ let rec run m p0 (st:st) cs =
                 | `Tkn y ->
                   let _ = set_reg_ptn st rp0 y in
                   run m p1 st cs
-                | `Fnc p ->
+                | `Fnc (re,p1) ->
                   let l = get_cs_k st in
-                  let (re,p1) = etr p in
                   let _ = set_reg_ptn st re kx in
                   Stack.push (CS_f(l,ref p0)) cs;
                   run m !p1 st cs )
@@ -945,19 +943,19 @@ let rec occurs rl v1 =
     if v1 == v2 then true
     else
       ( match !v2 with
-        | V l1 ->
-          let ml = (match !v1 with V l -> min l l1 | _ -> l1) in
-          v2 := V ml; false
-        | WC ->
+        | V (k,l1) ->
+          let ml = (match !v1 with V (_,l) -> min l l1 | _ -> l1) in
+          v2 := V (k,ml); false
+        | WC _ ->
           ( match !v1 with
-            | V l -> v2 := V l; false
+            | V (k,l) -> v2 := V (k,l); false
             | _ -> false )
         | Ln t1 -> occurs rl v1 t1
         | Q _ -> err "occurs:0" )
   | App(t1,t2)
   | Imp(t1,t2) -> (occurs rl v1 t1) || (occurs rl v1 t2)
   | Rcd l1 -> occurs_rcd rl v1 l1
-  | Rcd_Lb (_,l1) -> occurs_rcd_lb rl v1 l1
+  | Rcd_Lb l1 -> occurs_rcd_lb rl v1 l1
   | Rec rp ->
     if List.exists (fun p -> rp==p) rl then false
     else occurs_rec (rp::rl) v1 rp
@@ -975,13 +973,13 @@ and rcd_occurs (v1:v_rcd ref) (l1:t_rcd) =
     | U -> false
     | Uo t ->
       ( match !t with
-        | V l1 ->
-          let ml = (match !v1 with V l -> min l l1 | _ -> l1) in
-          t := V ml;
+        | V (k,l1) ->
+          let ml = (match !v1 with V (_,l) -> min l l1 | _ -> l1) in
+          t := V (k,ml);
           false
-        | WC ->
+        | WC _ ->
           ( match !v1 with
-            | V l -> t := V l; false
+            | V (k,l) -> t := V (k,l); false
             | _ -> false )
         | Ln t1 -> rcd_occurs v1 t1
         | Q _ -> err "occurs:0" )
@@ -991,11 +989,11 @@ and occurs_rcd_lb rl (v1:v ref) (l1:t_rcd_lb) =
     | U_Lb -> false
     | Uo_Lb t ->
       ( match !t with
-        | V l1 ->
-          let ml = (match !v1 with V l -> min l l1 | _ -> l1) in
-          t := V ml;
+        | V (k,l1) ->
+          let ml = (match !v1 with V (_,l) -> min l l1 | _ -> l1) in
+          t := V (k,ml);
           false
-        | WC -> false
+        | WC _ -> false
         | Ln t1 -> occurs_rcd_lb rl v1 t1
         | Q _ -> err "occurs:0" )
     | Cns_Lb(_,t1,t2) -> (occurs rl v1 t1)||(occurs_rcd_lb rl v1 t2))
@@ -1003,10 +1001,25 @@ and rcd_lb_occurs (v1:v_rcd_lb ref) (l1:t_rcd_lb) =
   ( match l1 with
     | U_Lb -> false
     | Uo_Lb t ->
-      ( match !t with
-        | Ln t0 -> rcd_lb_occurs v1 t0
-        | _ -> false )
-    | Cns_Lb(_,_,t2) -> rcd_lb_occurs v1 t2)
+      if t==v1 then true
+      else
+        ( match !t with
+          | Ln t0 -> rcd_lb_occurs v1 t0
+          | V (nr0,l0) ->
+            ( match !v1 with
+              | V (nr1,l1) ->
+                let l2 = min l0 l1 in
+                let nr2 = StgSet.union nr0 nr1 in
+                t := V(nr2,l2); false
+              | _ -> err "rcd_lb_occurs 1" )
+          | _ -> err "rcd_lb_occurs 0" )
+    | Cns_Lb(_,t1,t2) ->
+      let lv =
+        ( match !v1 with
+          | V (_,l1) -> l1
+          | _ -> err "rcd_lb_occurs 2" ) in
+      let _ = occurs [] (newvar_l lv) t1 in
+      rcd_lb_occurs v1 t2 )
 and occurs_rec pl v1 rp =
   ( match !rp with
     | CP(_,cp) -> occurs_rcd pl v1 cp
@@ -1050,7 +1063,7 @@ let rec unify ru t0 t1 =
         else if List.exists (fun (x1,x2) -> (x1==v1&&x2==v2)||(x1==v2&&x2==v1)) ru then ()
         else unify_rec ((v1,v2)::ru) v1 v2
       | Rcd l1,Rcd l2 -> unify_rcd ru l1 l2
-      | Rcd_Lb (nr1,l1),Rcd_Lb (nr2,l2) -> unify_rcd_lb ru (nr1,l1) (nr2,l2)
+      | Rcd_Lb l1,Rcd_Lb l2 -> unify_rcd_lb ru l1 l2
       | _ -> err ("unify:2"^se)
     )
 and unify_rcd ru l1 l2 =
@@ -1067,60 +1080,49 @@ and unify_rcd ru l1 l2 =
       )
     | Cns(t1,t2),Cns(t3,t4) -> unify ru t1 t3; unify_rcd ru t2 t4
     | _ -> err "unify_rcd:1" )
-and tl_rcd_lb l1 =
+and find_lb ru t0 (b:string) l1 =
   ( match l1 with
-    | U_Lb -> `Tl_U
-    | Uo_Lb t0  ->
-      ( match !t0 with
-        | Ln t1 -> tl_rcd_lb t1
-        | _ -> `Tl_Uo t0 )
-    | Cns_Lb(_,_,l2) -> tl_rcd_lb l2 )
-and find_lb (b:string) l1 =
-  ( match l1 with
-    | U_Lb -> `U
+    | U_Lb -> err "find_lb 0"
     | Uo_Lb t1 ->
       ( match !t1 with
-        | Ln t3 -> find_lb b t3
-        | _ ->
-          let w1 = Var (newvar ()) in
-          t1 := Ln (Cns_Lb(b,w1,Uo_Lb (ref WC)));
-          `Lb w1
-      )
+        | Ln t3 -> find_lb ru t0 b t3
+        | V (nr,l) ->
+          if StgSet.mem b nr then err "find_lb 1"
+          else
+            let nr = StgSet.add b nr in
+            let v = ref (V(nr,l)) in
+            let _ = occurs [] (newvar_l l) t0 in
+            t1 := Ln (Cns_Lb(b,t0,Uo_Lb v))
+        | _ -> err "find_lb 2" )
     | Cns_Lb(b1,t1,t2) ->
-      if b = b1 then `Lb t1 else find_lb b t2 )
-and unify_rcd_lb ru (nr1,l1) (nr2,l2) =
-  let rec f_l l1 nr2 l2 =
+      if b = b1 then unify ru t0 t1 else find_lb ru t0 b t2 )
+
+and unify_rcd_lb ru l1 l2 =
+  let rec f_l l1 l2 =
     ( match l1 with
       | U_Lb -> ()
       | Uo_Lb t1 ->
         ( match !t1 with
-          | Ln t2 -> f_l t2 nr2 l2
-          | _ -> ()
-        )
+          | Ln t2 -> f_l t2 l2
+          | _ -> () )
       | Cns_Lb(b1,t1,t2) ->
-        if StgSet.mem b1 !nr2 then err "unify_rcd_lb 2"
-        else
-          let _ =
-            ( match find_lb b1 l2 with
-              | `U -> err "unify_rcd_lb:0"
-              | `Lb t -> unify ru t t1 ) in
-          f_l t2 nr2 l2 ) in
-  let _ = f_l l1 nr2 l2 in
-  let _ = f_l l2 nr1 l1 in
-  let nr3 = StgSet.union !nr1 !nr2 in
-  nr1 := nr3; nr2 := nr3;
+        let _ = find_lb ru t1 b1 l2 in
+        f_l t2 l2 ) in
+  let _ = f_l l1 l2 in
+  let _ = f_l l2 l1 in
   let rec f_tl l1 l2 =
     ( match l1,l2 with
-      | Cns_Lb(_,_,t0),l3 | l3,Cns_Lb(_,_,t0) -> f_tl t0 l3
+      | Cns_Lb(_,_,t0) , l3 | l3 , Cns_Lb(_,_,t0) -> f_tl t0 l3
       | U_Lb,U_Lb -> ()
-      | Uo_Lb v0,l3 | l3,Uo_Lb v0 ->
-        ( match !v0 with
-          | Ln l4 -> f_tl l3 l4
-          | _ ->
-            let b = rcd_lb_occurs v0 l3 in
-            if b then err "unify_rcd_lb:0"
-            else v0 := (Ln l3); ())
-    ) in
+      | Uo_Lb { contents = Ln y }, l3
+      | l3,Uo_Lb { contents = Ln y } -> f_tl y l3
+      | Uo_Lb v0, l3
+      | l3,Uo_Lb v0 ->
+        if l3==(Uo_Lb v0) then ()
+        else
+          let b = rcd_lb_occurs v0 l3 in
+          if b then err "unify_rcd_lb:0"
+          else v0 := (Ln l3); ()) in
   let _ = f_tl l1 l2 in
   ()
 and unify_rec ru v1 v2 =
@@ -1132,8 +1134,8 @@ let rec gen rl l y =
   ( match y with
     | Var v ->
       ( match !v with
-        | WC -> ()
-        | V l0 -> if l<l0 then v := (Q l)
+        | WC _ -> ()
+        | V (k,l0) -> if l<l0 then v := (Q (k,l))
         | Q _ -> ()
         | Ln y1 -> gen rl l y1 )
     | App(t2,t3)
@@ -1142,7 +1144,7 @@ let rec gen rl l y =
       if List.exists (fun v -> v==v1) !rl then ()
       else (rl := !rl@[v1]; gen_rec rl l v1)
     | Rcd l1 -> gen_rcd rl l l1
-    | Rcd_Lb (_,l1) -> gen_rcd_lb rl l l1
+    | Rcd_Lb l1 -> gen_rcd_lb rl l l1
     | _ -> ()
   )
 and gen_rec rl l v1 =
@@ -1155,8 +1157,8 @@ and gen_rcd rl l r =
     | U -> ()
     | Uo v ->
       ( match !v with
-        | WC -> ()
-        | V l0 -> if l<l0 then v := (Q l)
+        | WC _ -> ()
+        | V (k,l0) -> if l<l0 then v := (Q (k,l))
         | Q _ -> ()
         | Ln y1 -> gen_rcd rl l y1 )
     | Cns(t0,t1) -> gen rl l t0; gen_rcd rl l t1 )
@@ -1165,8 +1167,8 @@ and gen_rcd_lb rl l r =
     | U_Lb -> ()
     | Uo_Lb v ->
       ( match !v with
-        | V l0 -> if l<l0 then v := (Q l)
-        | WC -> ()
+        | V (k,l0) -> if l<l0 then v := (Q (k,l))
+        | WC _ -> ()
         | Q _ -> ()
         | Ln y1 -> gen_rcd_lb rl l y1 )
     | Cns_Lb(_,t0,t1) -> gen rl l t0; gen_rcd_lb rl l t1 )
@@ -1189,7 +1191,7 @@ let rec inst l i y =
               let i = { i with al = (v,v0)::i.al } in
               (Var v0,i))
         | Ln y -> inst l i y
-        | WC -> v := Types.V l; (y,i)
+        | WC _ -> v := Types.V ((),l); (y,i)
         | _ -> (y,i))
     | App (y1,y2) ->
       let (y1,i) = inst l i y1 in
@@ -1200,9 +1202,9 @@ let rec inst l i y =
       let (y2,i) = inst l i y2 in
       (Imp(y1,y2),i)
     | Rcd r -> let (r,i) = (inst_rcd l i r) in (Rcd r,i)
-    | Rcd_Lb (nr,r) ->
+    | Rcd_Lb r ->
       let (r,i) = (inst_rcd_lb l i r) in
-      (Rcd_Lb (nr,r),i)
+      (Rcd_Lb r,i)
     | Rec r0 ->
       ( try (Rec (List.assq r0 i.rl),i)
         with Not_found ->
@@ -1220,11 +1222,11 @@ and inst_rcd l (i:inst) r =
         | Q _ ->
           ( try (Uo (List.assq v i.al_rcd),i)
             with Not_found ->
-              let v0 = ref (Types.V l) in
+              let v0 = ref (Types.V ((),l)) in
               let i = { i with al_rcd = (v,v0)::i.al_rcd } in
               (Uo v0,i))
         | Ln y -> inst_rcd l i y
-        | WC -> v := Types.V l; (r,i)
+        | WC _-> v := Types.V ((),l); (r,i)
         | _ -> (r,i))
     | Cns(t1,t2) ->
       let (t1i,i) = inst l i t1 in
@@ -1235,14 +1237,14 @@ and inst_rcd_lb l (i:inst) r =
     | U_Lb -> (r,i)
     | Uo_Lb v ->
       ( match !v with
-        | Q _ ->
+        | Q (k,l) ->
           ( try (Uo_Lb (List.assq v i.al_rcd_lb),i)
             with Not_found ->
-              let v0 = ref (Types.V l) in
+              let v0 = ref (Types.V (k,l)) in
               let i = { i with al_rcd_lb = (v,v0)::i.al_rcd_lb } in
               (Uo_Lb v0,i))
         | Ln y -> inst_rcd_lb l i y
-        | WC -> v := Types.V l; (r,i)
+        | WC k -> v := Types.V (k,l); (r,i)
         | _ -> (r,i))
     | Cns_Lb(b,t1,t2) ->
       let (t1i,i) = inst l i t1 in
@@ -1268,10 +1270,10 @@ let rec inst_ptn l (rp:ptn) : Types.t =
     | R rs -> Rcd(rcd_cl (Array.to_list (Array.map (fun r -> inst_ptn l r) rs)))
     | Ro(rs,rt) ->
       let yt = inst l (Var rt) in
-      unify [] yt (Rcd(Uo(ref WC)));
+      unify [] yt (Rcd(Uo(ref (WC()))));
       Rcd(rcd_cns (Array.to_list(Array.map (fun r -> inst_ptn l r) rs)) yt)
     | R_Lb rs ->
-      Rcd_Lb(ref StgSet.empty,rcd_cl_lb (Array.fold_left (fun ys (lb,r) -> ys@[(lb,inst_ptn l r)]) [] rs))
+      Rcd_Lb(rcd_cl_lb (Array.fold_left (fun ys (lb,r) -> ys@[(lb,inst_ptn l r)]) [] rs))
     | Ro_Lb (rs,rt) ->
       let (ls,ys) =
         Array.fold_left
@@ -1279,23 +1281,13 @@ let rec inst_ptn l (rp:ptn) : Types.t =
              (StgSet.add lb ls,ys@[(lb,inst_ptn l r)]))
           (StgSet.empty,[]) rs in
       let yt = inst l (Var rt) in
-      unify [] yt (Rcd_Lb(ref ls,Uo_Lb(ref WC)));
-      let (nr,yr) = rcd_cns_lb ys yt in
-      Rcd_Lb(ref nr,yr)
+      unify [] yt (Rcd_Lb(Uo_Lb(ref (V(ls,l)))));
+      let yr = rcd_cns_lb ys yt in
+      Rcd_Lb yr
     | A r -> inst l (Var r) )
-(* let rec lp rt =
-      ( match !rt with
-        | Ln(Var v) -> lp v
-        | Ln(Rcd_Lb(nls,rr)) ->
-          let b =
-            Array.fold_left
-              (fun b (lb,_) -> b||(List.mem lb ls)) rr in
-          if b then err "mk_lb 0:"
-          else
-      nls := !nls@ls ) *)
 let rec slv_etr m l (r0,p0) =
-  let _ = inst_ptn (l+1) r0 in
-  slv m (l+1) !p0
+  let y0 = inst_ptn (l+1) r0 in
+  (y0,slv m (l+1) !p0)
 and slv m l p0 =
   Util.pnt true ("enter slv:"^(print_line p0)^"\n");
   let open Rcd_Ptn in
@@ -1338,6 +1330,7 @@ and slv m l p0 =
             let ts = Array.map (fun r -> inst_ptn (l+1) r) rs in
             let t = inst_ptn (l+1) r in
             let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) t (Array.to_list ts) in
+            Util.pnt true "test 0";
             let _ = Array.map (fun t -> gen (ref []) l t) ts in
             ()
           | IR_Call((f,x),y) ->
@@ -1448,10 +1441,9 @@ and mk_ir_mdl_etr m el =
         ( match e with
           | Etr(n,_,_,p) ->
             let p = mk_ir_etr p in
-            let y1 = slv_etr m (-1) p in
-            let _ = gen (ref []) (-1) y1 in
-            let (r0,_) = etr p in
-            let y = Imp(get_rm_ptn r0,y1) in
+            let (y0,y1) = slv_etr m (-1) p in
+            let _ = gen (ref []) (-1) y0 in
+            let y = Imp(y0,y1) in
             m.ns_v <- (n,p)::m.ns_v;
             m.ns <- (n,ref(Ln y))::m.ns
           | Etr_Clq q ->
@@ -1465,9 +1457,8 @@ and mk_ir_mdl_etr m el =
               List.fold_left
                 (fun _ (n,_,_,_) ->
                    let p = List.assoc n m.ns_v in
-                   let y0 = slv_etr m (-1) p in
-                   let (r0,_) = p in
-                   let y1 = Imp(get_rm_ptn r0,y0) in
+                   let (y0,y1) = slv_etr m (-1) p in
+                   let y1 = Imp(y0,y1) in
                    let v0 = List.assoc n m.ns in
                    unify [] (Var v0) y1)
                 () q in
@@ -1572,7 +1563,7 @@ and ir_of_exp r0 r1 e =
         let (l0,r1) = lp r0 e0 in
         let vs = Array.init (i+1) (fun _ -> newvar ()) in
         let vt = newvar () in
-        vt := Ln(Rcd(Uo(ref WC)));
+        vt := Ln(Rcd(Uo(ref (WC()))));
         let rs = Array.map (fun v -> A v) vs in
         let n0 = IR_Id(r1,[|Ro(rs,vt)|]) in
         (l0@[n0],A vs.(i))

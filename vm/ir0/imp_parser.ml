@@ -1297,7 +1297,7 @@ and _menhir_goto_typ_top_lb : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_t
 # 1298 "imp_parser.ml"
             ) = 
 # 159 "imp_parser.mly"
-                              ( Rcd_Lb(ref StgSet.empty,_3) )
+                              ( Rcd_Lb _3 )
 # 1302 "imp_parser.ml"
              in
             _menhir_goto_typ _menhir_env _menhir_stack _menhir_s _v) : 'freshtv902)) : 'freshtv904)
