@@ -82,14 +82,16 @@
     » (0'-1) (0'*1') |~ { x1 y } ⊢ { x y }
     fact_i  { x y } ⊢|
     ∐|
+    ∐.? e
 
   ? x
-    ∐ x
-    ∐ e
-    ∐|
+  ∐ x
+  ∐ e
+  ∐|
 @.[_].+[ a b c <]◂_ ≃∐[ .. <]
  = a +< (b +< (c +< d'))
 ± : -{> evo~({> in~a' st~e' }→‹e'›) init~(-a'→e') } ; create callback
+{ ± &'◂a' a' }
 
 $-syntax
 +0-syntax
