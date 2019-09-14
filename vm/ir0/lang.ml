@@ -1409,7 +1409,7 @@ let rec mk_ir_mdl el =
   m.ns <- ("‹",ref(Ln(Imp(v,opn v))))::m.ns;
   m.ns_e <- ("⟦⟧",Tkn(Etr(Tkn.Inj 0)))::m.ns_e;
   m.ns <- ("⟦⟧",ref(Ln(Imp(Rcd U,lst (Var(newvar_q (-1)))))))::m.ns;
-  m.ns_e <- ("⟦",Tkn(Etr(Tkn.Inj 0)))::m.ns_e;
+  m.ns_e <- ("⟦",Tkn(Etr(Tkn.Inj 1)))::m.ns_e;
   let v = Var (newvar_q (-1)) in
   let y = lst v in
   m.ns <- ("⟦",ref(Ln(Imp(Rcd (rcd_cl [v;y]),y))))::m.ns;
