@@ -101,3 +101,20 @@ $-syntax
 a|→b
 {a|→b a}→(a|→b) : in
 (a|→b)→‹{a|→b b}› : out
+
+kinds
+_ : toplevel types
+{} : record types
+{> x y .. } : restricted labeled record types
+ℤ : z types
+Σ : grammar types
+@ : iso recursive types
+a'→b' : type constructor
+  ‹›::_→_  ⟦⟧::_→_
+{ a0 .. an } : record kind
+
+ l0::{> z~| w~| <} ∀ {> x~t0' y~t1' < l0' } {> s~ℤ < l0' }
+ r0::{<} ∀ { ℤ ℙ < r0' }
+ z0::ℤ ∀ { ℤn◂z0' ℤn◂z0' }→ℤn◂z0'
+ (→)::{ _ _ }→_
+ 

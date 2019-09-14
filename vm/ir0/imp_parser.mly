@@ -156,7 +156,7 @@ typs:
 typ:
   | L_PRN typ R_PRN { $2 }
   | L_RCD typ_top R_RCD { $2 }
-  | L_RCD LB typ_top_lb R_RCD { Rcd_Lb(ref StgSet.empty,$3) }
+  | L_RCD LB typ_top_lb R_RCD { Rcd_Lb $3 }
   | typ APP typ { Types.App($1,$3) }
   | typ PRJ typ { App(App(Prm Vct,$1),$3) }
   | L_OPN typ R_OPN { opn $2 }
