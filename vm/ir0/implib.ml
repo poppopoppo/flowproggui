@@ -31,7 +31,7 @@ let evo ((g,k),y0) (b:Ast.line) =
         | _ ->
           let (_,x) = Unix.wait () in
           ( match x with
-            | WEXITED 0 ->
+            | Unix.WEXITED 0 ->
               let (k1:Ast.tkn) =
                 Util.open_in_close "default.tkn" (fun c -> Marshal.from_channel c) in
               let (j,ki) = Tkn.get_agl i k1 in
@@ -59,7 +59,7 @@ let evo ((g,k),y0) (b:Ast.line) =
         | _ ->
           let (_,x) = Unix.wait () in
           ( match x with
-            | WEXITED 0 ->
+            | Unix.WEXITED 0 ->
               let (k1:Ast.tkn) =
                 Util.open_in_close "default.tkn" (fun c -> Marshal.from_channel c) in
               ((g,k1),y1)

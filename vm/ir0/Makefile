@@ -1,4 +1,4 @@
-all: gui evo
+all: gui evo nc
 gui: peg.ml lang.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly implib.ml util.ml gui.ml
 	rm -f imp_parser.ml imp_parser.cmi imp_parser.mli imp.cmi
 	ocamllex imp_lexer.mll
@@ -13,10 +13,13 @@ evo: util.ml evo_tkn.ml
 run: gui evo
 	./gui
 	gprof ./evo_tkn.exe > evo_tkn.prf.txt
-nc: util.ml lang.ml vgpp.ml nc.ml
+nc: util.ml lang.ml nc.ml
+	ocamllex imp_lexer.mll
+	menhir --explain imp_parser.mly
+	ocamlc -c imp_parser.mli
 	ocamlfind ocamlopt -thread -p -o nc.exe -linkpkg \
 	-package core,batteries,threads \
-	util.ml peg.ml lang.ml vgpp.ml nc.ml
+	util.ml peg.ml lang.ml imp_lexer.ml imp_parser.ml implib.ml nc.ml
 	gcc -o test test.s
 run_nc: nc
 	./test
