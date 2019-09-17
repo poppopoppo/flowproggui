@@ -13,6 +13,14 @@ evo: util.ml evo_tkn.ml
 run: gui evo
 	./gui
 	gprof ./evo_tkn.exe > evo_tkn.prf.txt
+nc: util.ml lang.ml vgpp.ml nc.ml
+	ocamlfind ocamlopt -thread -p -o nc.exe -linkpkg \
+	-package core,batteries,threads \
+	util.ml peg.ml lang.ml vgpp.ml nc.ml
+	gcc -o test test.s
+run_nc: nc
+	./test
+	echo $?
 bench: bench.ml
 	ocamlopt -p -o bench bench.ml
 	./bench
