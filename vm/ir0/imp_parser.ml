@@ -611,7 +611,7 @@ and _menhir_run207 : _menhir_env -> 'ttv_tail -> _menhir_state -> 'ttv_return =
     ((let _1 = () in
     let _v : 'tv_grm_ptn = 
 # 105 "imp_parser.mly"
-        ( Peg.Atm Any )
+        ( Peg.Atm Peg.Any )
 # 616 "imp_parser.ml"
      in
     _menhir_goto_grm_ptn _menhir_env _menhir_stack _menhir_s _v) : 'freshtv982)
@@ -2880,7 +2880,7 @@ and _menhir_goto_reg_ptn : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_reg_
             let _3 = () in
             let _v : 'tv_ir_lines = 
 # 202 "imp_parser.mly"
-                       ( IL_Call((Frgn _1),_2) )
+                       ( IL_Glb_Call((Tkn.Frgn _1),_2) )
 # 2885 "imp_parser.ml"
              in
             _menhir_goto_ir_lines _menhir_env _menhir_stack _menhir_s _v) : 'freshtv698)) : 'freshtv700)
@@ -4430,7 +4430,7 @@ and _menhir_run34 : _menhir_env -> 'ttv_tail * _menhir_state * 'tv_exp -> _menhi
         let _2 = () in
         let _v : 'tv_exp = 
 # 304 "imp_parser.mly"
-                ( Prj(_1,Idx _3) )
+                ( Prj(_1,Rcd_Ptn.Idx _3) )
 # 4435 "imp_parser.ml"
          in
         _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv516)) : 'freshtv518)
@@ -4458,7 +4458,7 @@ and _menhir_run34 : _menhir_env -> 'ttv_tail * _menhir_state * 'tv_exp -> _menhi
         let _2 = () in
         let _v : 'tv_exp = 
 # 305 "imp_parser.mly"
-                ( Prj(_1,Lb _3) )
+                ( Prj(_1,Rcd_Ptn.Lb _3) )
 # 4463 "imp_parser.ml"
          in
         _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv520)) : 'freshtv522)
@@ -5500,7 +5500,7 @@ and _menhir_goto_exp : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_exp -> '
             let _2 = () in
             let _v : 'tv_exp = 
 # 297 "imp_parser.mly"
-                ( App(Atm(Fnc Pls),Rcd [|_1;_3|]) )
+                ( App(Atm(Fnc Tkn.Pls),Rcd [|_1;_3|]) )
 # 5505 "imp_parser.ml"
              in
             _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv364)
@@ -5525,7 +5525,7 @@ and _menhir_goto_exp : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_exp -> '
             let _2 = () in
             let _v : 'tv_exp = 
 # 298 "imp_parser.mly"
-                ( App(Atm(Fnc Mlt),Rcd [|_1;_3|]) )
+                ( App(Atm(Fnc Tkn.Mlt),Rcd [|_1;_3|]) )
 # 5530 "imp_parser.ml"
              in
             _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv368)
@@ -5575,7 +5575,7 @@ and _menhir_goto_exp : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_exp -> '
             let _2 = () in
             let _v : 'tv_exp = 
 # 299 "imp_parser.mly"
-                ( App(Atm(Fnc Pls),Rcd [|_1;App(Atm(Fnc Mns),_3)|]) )
+                ( App(Atm(Fnc Tkn.Pls),Rcd [|_1;App(Atm(Fnc Tkn.Mns),_3)|]) )
 # 5580 "imp_parser.ml"
              in
             _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv376)
@@ -5608,7 +5608,7 @@ and _menhir_goto_exp : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_exp -> '
             let _2 = () in
             let _v : 'tv_exp = 
 # 301 "imp_parser.mly"
-               ( App(Atm(Fnc Eq),Rcd [|_1;_3|]) )
+               ( App(Atm(Fnc Tkn.Eq),Rcd [|_1;_3|]) )
 # 5613 "imp_parser.ml"
              in
             _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv380)
@@ -5749,7 +5749,7 @@ and _menhir_goto_exp : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_exp -> '
             let _1 = () in
             let _v : 'tv_exp = 
 # 300 "imp_parser.mly"
-                        ( App(Atm(Fnc Mns),_3) )
+                        ( App(Atm(Fnc Tkn.Mns),_3) )
 # 5754 "imp_parser.ml"
              in
             _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv392)) : 'freshtv394)
@@ -6343,7 +6343,7 @@ and _menhir_run7 : _menhir_env -> 'ttv_tail -> _menhir_state -> (
     )) = _v in
     ((let _v : 'tv_exp = 
 # 287 "imp_parser.mly"
-        ( Prj(Rot,Lb _1) )
+        ( Prj(Rot,Rcd_Ptn.Lb _1) )
 # 6348 "imp_parser.ml"
      in
     _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv322)
@@ -6395,7 +6395,7 @@ and _menhir_run9 : _menhir_env -> 'ttv_tail -> _menhir_state -> (
     )) = _v in
     ((let _v : 'tv_exp = 
 # 296 "imp_parser.mly"
-        ( Atm(Fnc Fix) )
+        ( Atm(Fnc Tkn.Fix) )
 # 6400 "imp_parser.ml"
      in
     _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv318)
@@ -6808,7 +6808,7 @@ and _menhir_run26 : _menhir_env -> 'ttv_tail -> _menhir_state -> (
     )) = _v in
     ((let _v : 'tv_exp = 
 # 290 "imp_parser.mly"
-        ( Atm(Fnc(Inj _1)) )
+        ( Atm(Fnc(Tkn.Inj _1)) )
 # 6813 "imp_parser.ml"
      in
     _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv290)
@@ -6834,7 +6834,7 @@ and _menhir_run27 : _menhir_env -> 'ttv_tail -> _menhir_state -> (
     )) = _v in
     ((let _v : 'tv_exp = 
 # 286 "imp_parser.mly"
-        ( Prj(Rot,Idx _1) )
+        ( Prj(Rot,Rcd_Ptn.Idx _1) )
 # 6839 "imp_parser.ml"
      in
     _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv288)
@@ -6848,7 +6848,7 @@ and _menhir_run28 : _menhir_env -> 'ttv_tail -> _menhir_state -> 'ttv_return =
     ((let _1 = () in
     let _v : 'tv_exp = 
 # 284 "imp_parser.mly"
-        ( Atm (Fnc Exn_Ini) )
+        ( Atm (Fnc Tkn.Exn_Ini) )
 # 6853 "imp_parser.ml"
      in
     _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv286)
@@ -6874,7 +6874,7 @@ and _menhir_run29 : _menhir_env -> 'ttv_tail -> _menhir_state -> (
     )) = _v in
     ((let _v : 'tv_exp = 
 # 291 "imp_parser.mly"
-        ( Atm(Fnc(Cho _1))  )
+        ( Atm(Fnc(Tkn.Cho _1))  )
 # 6879 "imp_parser.ml"
      in
     _menhir_goto_exp _menhir_env _menhir_stack _menhir_s _v) : 'freshtv284)

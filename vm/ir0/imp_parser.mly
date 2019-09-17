@@ -102,7 +102,7 @@ grm_ptns:
   | grm_ptns grm_ptn  { $1@[$2] }
   ;
 grm_ptn:
-  | WC  { Peg.Atm Any }
+  | WC  { Peg.Atm Peg.Any }
   | grm_atom { Peg.Atm $1 }
   | L_LST grm_atom R_LST { Peg.List $2 }
   | L_OPN grm_atom R_OPN { Peg.Option $2 }
@@ -199,7 +199,7 @@ ir_lines:
   | ir_line ir_lines { Seq($1,$2) }
   | AGL reg coprd_ir COPRD_END {
      Agl($2,$3) }
-  | NAM reg_ptn SRC_IL { IL_Call((Frgn $1),$2) }
+  | NAM reg_ptn SRC_IL { IL_Glb_Call((Tkn.Frgn $1),$2) }
   ;
 ir_line:
   | ROT reg_ptn SRC reg_ptn regs { IR_Id($2,[|$4|] |+| $5)  }
@@ -281,28 +281,28 @@ exp_lst_lb:
 exp:
   | AGL exp %prec AGL_PRE { Agl_Op $2 }
   | INT { Atm(Z $1) }
-  | EXN { Atm (Fnc Exn_Ini) }
+  | EXN { Atm (Fnc Tkn.Exn_Ini) }
   | ROT { Rot }
-  | IDX { Prj(Rot,Idx $1) }
-  | VAL { Prj(Rot,Lb $1) }
+  | IDX { Prj(Rot,Rcd_Ptn.Idx $1) }
+  | VAL { Prj(Rot,Rcd_Ptn.Lb $1) }
   | VCT_INI { App(Atm (Name "#"),Rcd [||])  }
   | exp VCT exp { App(Atm (Name "⊵"),Rcd [|$1;$3|]) }
-  | INJ { Atm(Fnc(Inj $1)) }
-  | CHO { Atm(Fnc(Cho $1))  }
+  | INJ { Atm(Fnc(Tkn.Inj $1)) }
+  | CHO { Atm(Fnc(Tkn.Cho $1))  }
   | NAM  { Atm (Name $1) }
   | NAM DOT NAM { Atm(Name ($1^"."^$3)) }
   | SGN { App(Atm (Name "&"),Rcd [||]) }
   | STG { Atm (Stg $1) }
-  | SLF { Atm(Fnc Fix) }
-  | exp PLS exp { App(Atm(Fnc Pls),Rcd [|$1;$3|]) }
-  | exp MLT exp { App(Atm(Fnc Mlt),Rcd [|$1;$3|]) }
-  | exp MNS exp { App(Atm(Fnc Pls),Rcd [|$1;App(Atm(Fnc Mns),$3)|]) }
-  | L_PRN MNS exp R_PRN { App(Atm(Fnc Mns),$3) }
-  | exp EQ exp { App(Atm(Fnc Eq),Rcd [|$1;$3|]) }
+  | SLF { Atm(Fnc Tkn.Fix) }
+  | exp PLS exp { App(Atm(Fnc Tkn.Pls),Rcd [|$1;$3|]) }
+  | exp MLT exp { App(Atm(Fnc Tkn.Mlt),Rcd [|$1;$3|]) }
+  | exp MNS exp { App(Atm(Fnc Tkn.Pls),Rcd [|$1;App(Atm(Fnc Tkn.Mns),$3)|]) }
+  | L_PRN MNS exp R_PRN { App(Atm(Fnc Tkn.Mns),$3) }
+  | exp EQ exp { App(Atm(Fnc Tkn.Eq),Rcd [|$1;$3|]) }
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { App($1,$3) }
-  | exp PRJ INT { Prj($1,Idx $3) }
-  | exp PRJ NAM { Prj($1,Lb $3) }
+  | exp PRJ INT { Prj($1,Rcd_Ptn.Idx $3) }
+  | exp PRJ NAM { Prj($1,Rcd_Ptn.Lb $3) }
   | L_RCD exp_lst R_RCD { Rcd (Array.of_list $2) }
   | L_RCD exp_lst OP exp R_RCD { Rcd (Array.of_list $2) }
   | L_RCD LB exp_lst_lb R_RCD { Rcd_Lb (None,Array.of_list $3) }
