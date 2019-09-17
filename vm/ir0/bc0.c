@@ -7,10 +7,10 @@
 
 #define IR_ID 0
 #define IR_CLL 4
-#define IR_IL_CLL 5
 #define IR_AGL 6
 #define IR_RET 8
 #define IR_INI 10
+#define IR_GLB_CLL 11
 
 #define K_RCD 0
 #define K_STG 1
@@ -46,46 +46,38 @@ struct void_list {
 };
 typedef struct void_list void_list_t;
 typedef struct {
-  enum reg_ptn_t { PTN_R, PTN_A } reg_ptn_t;
+  enum reg_ptn_t { PTN_R, PTN_A PTN_RO , PTN_R_LB, PTN_RO_LB } t;
   union {
-    struct { void_list_t* ptn_hd; reg ptn_tl; } ptn_rcd ;
-    reg ptn_atm;
-  } reg_ptn_v;
-} reg_ptn;
-typedef struct rcd_tkn {
-  enum rcd_tkn_t { RCD_RCD, RCD_STG, RCD_Z, RCD_SGN, RCD_COP ,RCD_FNC, BTM } t;
-  union rcd_tkn_v {
-    struct rcd_rcd { int n; struct rcd_tkn** rcd; } rcd;
-    union rcd_atm {
-      char* stg;
-      int z;
-      int sgn;
-      struct { int i; struct rcd_tkn* k; } co_p;
-      struct {
-        enum { PLS, MLT, MNS, CMP, EQ, FIX, EXN, INJ, CHO, FNC } t;
-        union fnc_v {
-          struct inj { int i; } inj;
-          struct cho { int i; } cho;
-          struct { int rs_n; reg* rs; int jmp_pt; } fnc;
-        } v;
-      } fnc;
-    } atm;
+    struct { int hd_n; reg_ptn* hd; reg tl; } rcd ;
+    struct { int hd_n; reg_ptn* hd; char** lb; reg tl; } rcd_lb;
+    reg atm;
   } v;
-} rcd_tkn;
+} reg_ptn;
+typedef void* pt
+typedef struct { int n; pt v; } rcd;
+typedef struct { int i; pt k; } co_p;
+typedef struct int z;
+typedef struct int sgn;
+typedef struct char* stg;
+typedef struct {
+  enum { PLS, MLT, MNS, CMP, EQ, FIX, EXN, INJ, CHO, FNC } t;
+  int v;
+} glb_etr;
+
 typedef struct {
   enum op_t { INI, ID, CALL, AGL, RET
   } t;
   union op_v {
     struct ini { rcd_tkn* k; reg src; } ini;
-    struct id { reg src; int dsts_n; reg* dsts; } id;
-    struct call { int ry_n; reg* ry; reg rf; int rx_n; reg* rx; } call;
-    struct agl { int jmps_n; int* jmps; reg ra; int rr_n; reg* rr; } agl;
-    struct ret { int p; int rs_n; reg* rs; } ret;
+    struct id { reg_ptn* src; int dsts_n; reg_ptn* dsts; } id;
+    struct call { reg_ptn* y; reg f; reg_ptn* x; } call;
+    struct agl { int jmps_n; int* jmps; reg ra; reg_ptn* ri; } agl;
+    struct ret { reg_ptn* r; } ret;
   } v;
 } op;
 typedef op* code;
-typedef rcd_tkn* vct;
-typedef struct { reg reg; rcd_tkn* tkn; } cs_k;
+typedef reg_v* vct;
+typedef struct { reg reg; reg_v* tkn; } cs_k;
 typedef struct {
   enum cs_f_t { IL, CS } t;
   op* ret_pt;
@@ -94,7 +86,6 @@ typedef struct {
 } cs_f;
 typedef cs_f* cs[252];
 typedef struct { int code_l; op* code; op* pc; int vct_l; vct vct; cs_f* cs_b; cs_f* cs_p; } st;
-
 void copy_rcd_tkn(rcd_tkn* src,rcd_tkn* dst);
 void set_unt(vct vct,reg r);
 void free_vct(vct vct);
@@ -196,29 +187,6 @@ void load_op(char* c,op* o){
       c = c+4;
     };
     break;
-    case IR_PRJ:
-    ++c; o->t = PRJ;
-    o->v.prj.src = *((int*)c); c = c+4;
-    o->v.prj.dsts_n = *((int*)c); c = c+4;
-    o->v.prj.dsts = malloc(sizeof(reg)*o->v.prj.dsts_n);
-    while(i<o->v.prj.dsts_n){
-      o->v.prj.dsts[i] = *((int*)c);
-      c = c+4;
-    };
-    break;
-    case IR_RCD:
-    ++c; o->t = RCD;
-    o->v.rcd.srcs_n = *((int*)c); c = c+4;
-    o->v.rcd.srcs = malloc(sizeof(reg)*o->v.rcd.srcs_n);
-    while(i<o->v.rcd.srcs_n){
-      o->v.rcd.srcs[i] = *((int*)c); c = c+4;
-    };
-    o->v.rcd.dst = *((int*)c); c = c+4;
-    break;
-    case IR_RM:
-    ++c; o->t = RM;
-    o->v.rm = *((int*)c); c = c+4;
-    break;
     case IR_CLL:
     ++c; o->t = CALL;
     o->v.call.ry_n = *((int*)c); c = c+4;
@@ -273,61 +241,8 @@ void load_bc(char* c,st* st){
     ++i; ++o;
   };
 };
-void copy_rcd_tkn_void(void* src,void* dst){
-  copy_rcd_tkn((void*)src,(void*)dst);
-};
-void copy_rcd_tkn(rcd_tkn* src,rcd_tkn* dst){
-  int i = 0;
-  switch(src->t){
-    case RCD_RCD:
-    dst = malloc(sizeof(rcd_tkn));
-    dst->t = RCD_RCD;
-    dst->v.rcd.rcd = malloc(sizeof(rcd_tkn*)*src->v.rcd.n);
-    dst->v.rcd.n = src->v.rcd.n;
-    while(i<src->v.rcd.n){
-      dst->v.rcd.rcd[i] = src->v.rcd.rcd[i];
-    };
-    break;
-    case RCD_STG:
-    dst->v.atm.stg = malloc(sizeof(char)*(strlen(src->v.atm.stg)+1));
-    break;
-    case RCD_Z:
-    dst->v.atm.z = src->v.atm.z;
-    case RCD_SGN:
-    dst->v.atm.sgn = src->v.atm.sgn;
-    break;
-    case RCD_COP:
-    dst->v.atm.co_p.i = src->v.atm.co_p.i;
-    copy_rcd_tkn(dst->v.atm.co_p.k,src->v.atm.co_p.k);
-    break;
-    case RCD_FNC:
-    break;
-  };
-};
-void set_r(vct vct,reg i,rcd_tkn* k){
-  copy_rcd_tkn(vct+i,k);
-};
-void get_r(vct vct,reg i,rcd_tkn* k){
-  copy_rcd_tkn(k,vct+i);
-};
 void free_r(vct vct,reg i){
   vct[i].t = BTM;
-};
-void set_rs(vct vct,int n,reg* rs,rcd_tkn** ks){
-  int ni = 0;
-  while(ni<n){
-    set_r(vct,rs[ni],ks[ni]);
-    ++ni;
-  };
-};
-void get_rs(vct vct,int n,reg* rs,rcd_tkn** ks){
-  int i = 0;
-  while(i<n){
-    get_r(vct,rs[i],ks[i]);
-    ++i;
-  };
-};
-void get_ptn(vct vct,reg_ptn* r,rcd_tkn* k){
 };
 char* save_rcd_tkn(char* s,rcd_tkn* k){
 };
@@ -357,37 +272,54 @@ void mk_cs_f(st* st,op* ret_pt,reg* rs,cs_f* f){
   p = malloc(sizeof(void_list_t));
   p->t = NIL;
 };
-void prj(vct vct,struct prj* prj){
-  int i = 0;
-  while(i<prj->dsts_n){
-    copy_rcd_tkn(vct[prj->src].v.rcd.rcd[i],vct+prj->dsts[i]);
-    ++i;
-  };
-};
-void rcd(vct vct,struct rcd* rcd){
-  int i = 0;
-  vct[rcd->dst].t = RCD_RCD;
-  vct[rcd->dst].v.rcd.n = rcd->srcs_n;
-  vct[rcd->dst].v.rcd.rcd = malloc(sizeof(rcd_tkn*)*rcd->srcs_n);
-  while(i<rcd->srcs_n){
-    copy_rcd_tkn(vct+rcd->srcs[i],vct[rcd->dst].v.rcd.rcd[i]);
-    ++i;
-  };
-};
-void rm(vct vct,reg r){
-  free_r(vct,r);
-};
+
 void ini(vct vct,struct ini* ini){
   set_r(vct,ini->src,ini->k);
-}
+};
 void id(vct vct,struct id* id){
   int i = 0;
-  reg* ri = id->dsts;
   while(i<id->dsts_n){
-    set_r(vct,ri[i],vct+id->src);
-    ri++;
+    mov_ptn(vct,id->src,id->dsts[i]);
   };
-  free_r(vct,id->src);
+  free_ptn(vct,id->src);
+};
+void mov_ptn(vct vct,reg_ptn* src,reg_ptn* dst){
+  int i; int j;
+  switch(src->t){
+  case PTN_A:
+  switch(dst->t){
+    case PTN_A:
+    if (dst->v.atm!=(-1)) {
+      mov(vct[src->v.atm],vct[dst->v.atm]);
+    };
+    break;
+    case PTN_R:
+    i = 0;
+    while(i<dst->v.hd_n){
+      mov(((rcd*)vct[src->v.atm])->v[i],vct[dst->v.hd[i]]);
+    };
+    break;
+  };
+  break;
+  case PTN_R:
+  switch(dst->t){
+    case PTN_A:
+    if (dst->v.atm!=-1) {
+      vct[dst->atm] = malloc(sizeof(rcd));
+      vct[dst->atm]->k = malloc(sizeof(void*)*src->v.hd_n);
+      while(i<src->v.hd_n){
+        mov(vct[src->v.hd[i]],vct[dst->atm]->k+i);
+      };
+    };
+    break;
+    case PTN_R:
+    i = 0;
+    while(i<src->v.hd_n){
+      mov(vct[src->v.hd[i]],vct[dst->v.hd[i]]);
+    };
+    break;
+  };
+  break;
 };
 void call(st* st,struct call* call){
   rcd_tkn* f;
@@ -396,11 +328,10 @@ void call(st* st,struct call* call){
   ++st->cs_p;
   get_r(st->vct,call->rf,f);
   get_rs(st->vct,call->rx_n,call->rx,xs);
-  switch(f->v.atm.fnc.t){
+  switch((glb_etr*)st->vct[call->f]->t){
     case PLS:
-    if (call->rx_n == 2 && call->ry_n==1) {
-      y = st->vct+(call->ry[0]);
-      y->t = RCD_Z;
+    st->vct[call->y.v.atm] = st->vct[call->x.v.atm] = st->vct+(call->ry[0]);
+    y->t = RCD_Z;
       y->v.atm.z = xs[0]->v.atm.z + xs[1]->v.atm.z;
       free_r(st->vct,call->ry[0]);
       break;
@@ -519,17 +450,8 @@ void run_vm(st* st){
     op_t = st->pc->t;
     st->pc++;
     switch (op_t) {
-        case PRJ:
-          prj(vct,&(st->pc->v.prj));
-          goto again;
         case INI:
           ini(vct,&(st->pc->v.ini));
-          goto again;
-        case RCD:
-          rcd(vct,&(st->pc->v.rcd));
-          goto again;
-        case RM:
-          rm(vct,(st->pc->v.rm));
           goto again;
         case ID:
           id(vct,&(st->pc->v.id));
@@ -554,12 +476,8 @@ void run_vm(st* st){
 };
 
 int main(int argc, char *argv[]) {
-  FILE* fp;
-  FILE* fpk;
-  st st;
-  char* ks;
-  int bn;
-  char* bs;
+  FILE* fp; FILE* fpk; st st;
+  char* ks; int bn; char* bs;
   fp = fopen("default.lir","r");
   fread(&bn,sizeof(int),1,fp);
   bs = malloc(sizeof(char)*bn);
@@ -567,9 +485,5 @@ int main(int argc, char *argv[]) {
   load_bc(bs,&st);
   fclose(fp);
   run_vm(&st);
-  fpk = fopen("default.lk","w");
-  save_vct(&st,ks);
-  fputs(ks,fpk);
-  fclose(fpk);
   return 1;
 };

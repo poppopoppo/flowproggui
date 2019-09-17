@@ -313,11 +313,8 @@ module Tkn = struct
     | Rcd_Lb of ((string * ('p, 'r) t) array)
     | Tkn of ('p, 'r) tkn
   and ('p, 'r) tkn =
-    | Name of string
-    | Etr of ('p, 'r) etr
-    | Stg of string | Z of int
-    | Exn of string
-    | P of ('p array) * (('p, 'r) t)
+    | Name of string | Etr of ('p, 'r) etr | Stg of string | Z of int
+    | Exn of string | P of ('p array) * (('p, 'r) t)
     | Zn of int * int | Sgn of Sgn.t | CoP of int * (('p, 'r) t)
     | Ast of Peg.ast | Vct of (('p, 'r) t , ('p, 'r) t) Hashtbl.t
   and ('p, 'r) etr =
@@ -463,11 +460,13 @@ module Ast = struct
     | Seq of nd * ir_code
     | Ret of ptn
     | Agl of r * ((ptn * ir_code) array)
-    | IL_Call of fnc * ptn
+    | IL_Call of r * ptn
+    | IL_Glb_Call of fnc * ptn
   type line =
     | End | Line of exp_rcd | Line_Agl of Rcd_Ptn.path * exp_rcd
   module VHash = Hashtbl.Make (struct type t = v ref let equal = (==) let hash = Hashtbl.hash end)
   type st = tkn VHash.t
+  type idx = int VHash.t
   type cs_f =
     | CS_f of ((r * tkn) list) * pt
     | CS_f_il of pt
@@ -557,14 +556,16 @@ and print_ir p0 =
     | Seq (o,p1) -> "\t"^(print_nd o)^"\n"^(print_ir p1)
     | Ret r -> "\t∎ "^(Rcd_Ptn.print print_reg r)^"\n"
     | Agl (r,ps) -> "\t∠ "^(pnt_ptn (Rcd_Ptn.A r))^"\n"^(print_ir_coprds ps)
-    | IL_Call(n,r) -> "\t"^(Tkn.print_etr n)^"\t"^(pnt_ptn r)^" ⊢|"
+    | IL_Glb_Call(n,r) -> "\t"^(Tkn.print_etr n)^"\t"^(pnt_ptn r)^" ⊢|"
+    | IL_Call(f,x) -> "\t"^(print_reg f)^","^(pnt_ptn x)^" ⊢|"
   )
 and print_line p0 =
   ( match p0 with
     | Seq (o,_) -> (print_nd o)^"\n"
     | Ret r -> "∎ "^(pnt_ptn r)^"\n"
     | Agl (r,_) -> "∠ "^(print_reg r)^"\n"
-    | IL_Call(n,r) -> (Tkn.print_etr n)^"\t"^(pnt_ptn r)^" ⊢|" )
+    | IL_Call(f,x) -> "◂ "^(print_reg f)^","^(pnt_ptn x)^" ⊢|\n"
+    | IL_Glb_Call(n,r) -> (Tkn.print_etr n)^"\t"^(pnt_ptn r)^" ⊢|" )
 and print_ir_coprds ps =
   Array.fold_left
     (fun s (r,p) ->
@@ -772,9 +773,35 @@ let rec run m p0 (st:st) cs =
               run m pr st cs
             with Tkn.Tkn_exn s ->
               ret m st cs (Tkn.Tkn(Tkn.Exn s)))
-        | IL_Call(n,r) ->
+        | IL_Glb_Call(n,r) ->
           let kx = get_reg_ptn_exn st r in
           let y = app m (Tkn.Tkn(Tkn.Etr n)) kx in
+          ( match y with
+            | `Tkn k ->
+              if Stack.is_empty cs then k
+              else
+                let hd = Stack.pop cs in
+                ( match hd with
+                  | CS_f_il pe ->
+                    let (r0,p1) = rtn pe in
+                    let _ = set_reg_ptn st r0 k in
+                    run m p1 st cs
+                  | CS_f (l,pe) ->
+                    let (r0,p1) = rtn pe in
+                    let _ = free_st st in
+                    let _ = set_cs_k st l in
+                    let _ = set_reg_ptn st r0 k in
+                    run m p1 st cs
+                )
+            | `Fnc p ->
+              let _ = get_cs_k st in
+              let (re,p1) = p in
+              let _ = set_reg_ptn st re kx in
+              run m !p1 st cs )
+        | IL_Call(f,x) ->
+          let kx = get_reg_ptn_exn st x in
+          let kf = get_reg_ptn_exn st (Rcd_Ptn.A f) in
+          let y = app m kf kx in
           ( match y with
             | `Tkn k ->
               if Stack.is_empty cs then k
@@ -815,9 +842,8 @@ let rec run m p0 (st:st) cs =
               let _ = set_reg_ptn st r1 (Tkn.Tkn k) in
               run m p1 st cs
             | IR_Id (r1,r2) ->
-              Util.pnt true "enter id:\n";
               let k1 = get_reg_ptn_exn st r1 in
-              Util.pnt true ((Tkn.print k1)^"\n");
+              (* Util.pnt true ((Tkn.print k1)^"\n"); *)
               let _ = Array.fold_left (fun _ r -> set_reg_ptn st r k1) () r2 in
               run m p1 st cs
             | IR_Call ((r1,rp2),rp0) ->
@@ -1296,12 +1322,19 @@ and slv m l p0 =
       let y = inst_ptn (l+1) r in
       let _ = gen (ref []) l y in
       y
-    | IL_Call(e,r) ->
+    | IL_Glb_Call(e,r) ->
       let ye = inst (l+1) (slv_exp_atm m (Atm (Fnc e))) in
       let yr = inst_ptn (l+1) r in
       let yy = Var(newvar_l (l+1)) in
       unify [] (Imp(yr,yy)) ye;
       gen (ref []) l ye;
+      yy
+    | IL_Call(f,x) ->
+      let yf = inst_ptn (l+1) (Rcd_Ptn.A f) in
+      let yr = inst_ptn (l+1) x in
+      let yy = Var(newvar_l (l+1)) in
+      unify [] (Imp(yr,yy)) yf;
+      gen (ref []) l yf;
       yy
     | Agl(ra,ps) ->
       let ta = inst (l+1) (Var ra) in
@@ -1613,9 +1646,13 @@ and mk_ir rv p0 =
     | Ret r ->
       let r = csm_ptn_rv r rv in
       Ret r
-    | IL_Call(n,r) ->
+    | IL_Glb_Call(n,r) ->
       let r = csm_ptn_rv r rv in
-      IL_Call(n,r)
+      IL_Glb_Call(n,r)
+    | IL_Call(f,x) ->
+      let f = csm_rv f rv in
+      let x  = csm_ptn_rv x rv in
+      IL_Call(f,x)
     | Agl(ra,ps) ->
       let ra = csm_rv ra rv in
       let ps =
@@ -1670,3 +1707,181 @@ and mk_ir_etr (r0,p0) =
   let _ = crt_ptn_rv r0 rv in
   let p = mk_ir rv !p0 in
   (r0,ref p)
+
+let rec mk_idx e =
+  let s = VHash.create 10 in
+  let i = VHash.create 10 in
+  let (r0,p0) = e in
+  let ri0 = idx_crt_ptn s i r0 in
+  let rec lp s p0 =
+    ( match p0 with
+      | Ret r -> idx_csm_ptn s i r
+      | IL_Glb_Call(n,r) -> idx_csm_ptn s i r
+      | IL_Call(f,x) ->
+        idx_csm s i f;
+        idx_csm_ptn s i x
+      | Agl(ra,ps) ->
+        idx_csm s i ra;
+        Array.fold_left
+          ( fun _ (r,p) ->
+              let s = VHash.copy s in
+              idx_crt_ptn s i r;
+              lp s p )
+          () ps
+      | Seq(o,p1) ->
+        let _ =
+          ( match o with
+            | IR_Clj (_,_,_) -> err "slv:0"
+            | IR_Prd (_,_,_) -> err "slv:1"
+            | IR_Id (r,rs) ->
+              idx_csm_ptn s i r;
+              Array.fold_left (fun _ r -> idx_crt_ptn s i r) () rs
+            | IR_Call((f,x),y) ->
+              idx_csm s i f;
+              idx_csm_ptn s i x;
+              idx_crt_ptn s i y
+            | IR_Glb_Call(_,_,_) -> err "slv x0"
+            | IR_Out (_,_) -> err "slv x1"
+            | IR_Glb_Out (_,_) -> err "slv x2"
+            | IR_Exp(a,r0,r1) ->
+              idx_csm_ptn s i r0;
+              idx_crt_ptn s i r1
+          ) in
+        lp s p1
+    ) in
+  lp s !p0;
+  i
+and idx_crt_ptn s i r = let _ = Rcd_Ptn.map (fun v -> idx_crt s i v) r in ()
+and idx_crt s i v =
+  if VHash.mem s v then err "idx_crt 0"
+  else
+    let n = idx_min s 0 in
+    (VHash.add s v n; VHash.add i v n)
+and idx_csm_ptn s i r =
+  let _ = Rcd_Ptn.map (fun v -> idx_csm s i v) r in ()
+and idx_csm s i v =
+  if VHash.mem s v
+  then
+    VHash.remove s v
+  else err "idx_csm 0"
+and idx_min s i =
+  let b =
+    VHash.fold
+      (fun _ j b -> if j=i then true else b) s false in
+  if b then idx_min s (i+1) else i
+
+let rec emt m = emt_el m m.ns_v
+and emt_el m el =
+  ( match el with
+    | [] -> ""
+    | (n,e)::tl ->
+      let s0 = emt_etr m e in
+      let s1 = emt_el m tl in
+      n^":\n"^s0^s1 )
+and emt_etr m e =
+  let i = mk_idx e in
+  let s = Hashtbl.create 10 in
+  let (r0,p0) = e in
+  set_ptn i s r0;
+  let rec lp p =
+    ( match p with
+      | Seq(n,p1) ->
+        let s0 =
+          ( match n with
+            | IR_Id(r,rs) -> emt_id i s r rs
+            | IR_Call((f,x),y) -> emt_call i s f x y
+            | IR_Glb_Call(n,r0,r1) -> emt_gl_call i s n r0 r1
+            | IR_Exp(e,r0,r1) -> emt_exp i s e r0 r1
+            | _ -> err "emt_etr 0" ) in
+        s0^(lp p1)
+      | Ret r -> emt_ret i s r
+      | Agl(r,ps) -> emt_agl i s r ps
+      | IL_Call(f,r) -> emt_il_call i s f r
+      | IL_Glb_Call(n,r) -> emt_il_glb_call i s n r ) in
+  lp !p0
+and set_ptn i s r =
+  let _ =
+    Rcd_Ptn.map
+      (fun v -> let n = VHash.find i v in Hashtbl.add s n ())
+      r in
+  ()
+and emt_id ix s r rs =
+  let l = Array.length rs in
+  let (s,_) =
+    Array.fold_left
+      (fun (s,i) ri ->
+       if i=(l-1) then (rpc_ptn ix s r ri,i+1)
+       else (rpc_ptn ix s r ri,i+1)) ("",0) rs in
+  s
+and idx i v = VHash.find i v
+and rpc_ptn i s r0 r1 =
+  ( match r0 with
+    | A v0 ->
+      ( match r1 with
+        | A v1 -> rpc_r i s (idx i v0) (idx i v1)
+        | R r -> ""
+        | Ro (r,rt) -> ""
+        | R_Lb r -> ""
+        | Ro_Lb(r,rt) -> "" )
+    | R r ->
+      ( match r1 with
+        | A v0 -> ""
+        | R r -> ""
+        | Ro(r,rt) -> ""
+        | _ -> err "rpc_ptn 0" )
+    | Ro (r,rt) ->
+      ( match r1 with
+        | A v -> ""
+        | R r -> ""
+        | Ro (r1,rt1) -> ""
+        | _ -> err "rpc_ptn 1" )
+    | R_Lb r ->
+      ( match r1 with
+        | A v -> ""
+        | R_Lb r -> ""
+        | Ro_Lb(r1,rt) -> ""
+        | _ -> err "rpc_ptn 2" )
+    | Ro_Lb(r,rt) ->
+      ( match r1 with
+        | A v -> ""
+        | R_Lb r -> ""
+        | Ro_Lb(r,rt) -> ""
+        | _ -> err "rpc_ptn 3" ))
+and rpc_r i s i0 i1 =
+  let r0 = reg i0 in
+  let r1 = reg i1 in
+  let i2 = add s in
+  let r2 = reg i2 in
+  let l0 = "entry_"^(Sgn.print (sgn())) in
+  let l1 = "entry_"^(Sgn.print (sgn())) in
+  let l2 = "entry_"^(Sgn.print (sgn())) in
+  "\tmov  "^r2^","^r0^"\n"^
+  "\tshr  "^r2^","^"1"^"\n"^
+  "\tjc "^l0^"\n"^
+  l0^":\n"^
+  "\tmov  "^r1^","^r0^"\n"^
+  "jmp  "^l2^"\n"^
+  l1^":\n"^
+  (call_fun "rpc_r")^
+  "jmp "^l2^"\n"^
+  l2^":\n"
+and reg i =
+  if i=0 then "rax"
+  else if i=1 then "rdi"
+  else if i=2 then "rsi"
+  else if i=3 then "rdx"
+  else if i=4 then "rcx"
+  else if i=5 then "r8"
+  else if i=6 then "r9"
+  else if i=7 then "r10"
+  else if i=8 then "[r11+"^(string_of_int (i-8))^"]"
+and add
+and call_fun f = "call "^f^"\n"
+and emt_call i s f x y = ""
+and emt_gl_call _ _ = ""
+and emt_gl_all i s n r0 r1 = ""
+and emt_exp i s e r0 r1 = ""
+and emt_ret i s r = ""
+and emt_agl i s r ps = ""
+and emt_il_call i s f r = ""
+and emt_il_glb_call i s n r = "emt_il_glb_call\n"
