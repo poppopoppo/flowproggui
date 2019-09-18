@@ -964,7 +964,7 @@ and app m f x =
             | Some a -> `Tkn(Rcd [|(Tkn(CoP(1,Tkn(Ast a))));(Tkn(Stg s0))|])
           )
         | (Frgn f),_ ->
-          `Tkn(frgn f x)
+          frgn m f x
         | _ -> err "app 0"      )
     | Tkn.Tkn (Tkn.Name n),_ ->
       let e =
@@ -975,34 +975,36 @@ and app m f x =
       app m e x
     | _ -> err "app:1"
   )
-and frgn f x =
+and frgn m f x =
   let open Tkn in
   ( match f with
     | "&" ->
       ( match x with
-        | Tkn.Rcd [||] -> Tkn.Tkn(Tkn.Sgn (sgn ()))
+        | Tkn.Rcd [||] -> `Tkn(Tkn.Tkn(Tkn.Sgn (sgn ())))
         | _ -> err "app 3" )
     | "⊵" ->
       ( match x with
         | Tkn.Rcd [|Tkn.Rcd[|Tkn.Tkn Tkn.Vct v;k|];a0|] ->
           let a1 = Tkn.vct_op v k a0 in
-          Tkn.Rcd [|Rcd[|(Tkn (Vct v));k|];a1|]
+          `Tkn(Tkn.Rcd [|Rcd[|(Tkn (Vct v));k|];a1|])
         | _ -> err "app 8" )
     | "#" ->
       ( match x with
-        | Tkn.Rcd [||] -> Tkn.Tkn(Vct (Hashtbl.create 10))
+        | Tkn.Rcd [||] -> `Tkn(Tkn.Tkn(Vct (Hashtbl.create 10)))
         | _ -> err "app 3" )
     | "pnt" ->
       let s = Tkn.print x in
       Util.pnt true ("pnt:"^s^"\n");
-      Tkn.Rcd [||]
+      `Tkn(Tkn.Rcd [||])
     | "read" ->
       ( match x with
         | Tkn.Tkn(Tkn.Stg s) ->
           let l = Util.load_file s in
-          Tkn.Tkn (Tkn.Stg l)
+          `Tkn(Tkn.Tkn (Tkn.Stg l))
         | _ -> err "read 0" )
-    | _ -> err "frgn 0"
+    | n ->
+      ( try `Fnc(List.assoc n m.ns_v)
+        with Not_found -> app m (List.assoc n m.ns_e) x )
   )
 open Types
 let rec occurs rl v1 =
