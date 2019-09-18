@@ -578,8 +578,8 @@ and print_nd o =
     | IR_Id(r,rs) -> "$ "^(pnt_ptn r)^" ⊢ "^(Arr.fld_l (fun s r -> s^","^(pnt_ptn r)) "" rs)^rtl^(Arr.fld_l (fun s r -> s^","^(print_ty r)) "" rs)
     | IR_Out(_,_) -> "|◂"
     | IR_Glb_Out(n,_) -> n^" |⊢"
-    | IR_Glb_Call(n,_,_) -> n^" ⊢ "
-    | IR_Call((f,x),y) -> "◂ "^(print_reg f)^" , "^(pnt_ptn x)^" ⊢ "^(pnt_ptn y)
+    | IR_Glb_Call(n,x,y) -> n^" "^(pnt_ptn x)^" ⊢ "^(pnt_ptn y)^rtl^(print_ty y)
+    | IR_Call((f,x),y) -> "◂ "^(print_reg f)^" , "^(pnt_ptn x)^" ⊢ "^(pnt_ptn y)^rtl^(print_ty y)
     | IR_Exp(e,r0,r1) -> "» "^(print_exp e)^" |~ "^(pnt_ptn r0)^" ⊢ "^(pnt_ptn r1)^rtl^(print_ty r1)
   )
 and print_exp e =
@@ -619,6 +619,7 @@ and print_ty r = Rcd_Ptn.print (fun v -> Types.print (ref []) (Types.Var v)) r
 let rtn p =
   ( match !p with
     | Seq(IR_Call ((_,_),y),p1) -> (y,p1)
+    | Seq(IR_Glb_Call(_,_,y),p1) -> (y,p1)
     | _ -> err "etr:0" )
 let get_r st r =
   let open Tkn in
@@ -859,7 +860,18 @@ let rec run m p0 (st:st) cs =
                   let _ = set_reg_ptn st re kx in
                   Stack.push (CS_f(l,ref p0)) cs;
                   run m !p1 st cs )
-            | IR_Glb_Call (_,_,_) -> err "run a2"
+            | IR_Glb_Call (n,x,y) ->
+              let kx = get_reg_ptn_exn st x in
+              let ky = app m (Tkn.Tkn(Tkn.Name n)) kx in
+              ( match ky with
+                | `Tkn ky ->
+                  let _ = set_reg_ptn st y ky in
+                  run m p1 st cs
+                | `Fnc (re,p1) ->
+                  let l = get_cs_k st in
+                  let _ = set_reg_ptn st re kx in
+                  Stack.push (CS_f(l,ref p0)) cs;
+                  run m !p1 st cs )
             | IR_Out (_,_) -> err "run a4"
             | IR_Glb_Out(_,_) -> err "run a5"
           )
@@ -1372,7 +1384,12 @@ and slv m l p0 =
             let ty = inst_ptn (l+1) y in
             unify [] tf (Imp(tx,ty));
             gen (ref []) l ty
-          | IR_Glb_Call(_,_,_) -> err "slv x0"
+          | IR_Glb_Call(n,x,y) ->
+            let tf = inst (l+1) (Var(List.assoc n m.ns)) in
+            let tx = inst_ptn (l+1) x in
+            let ty = inst_ptn (l+1) y in
+            unify [] tf (Imp(tx,ty));
+            gen (ref []) l ty
           | IR_Out (_,_) -> err "slv x1"
           | IR_Glb_Out (_,_) -> err "slv x2"
           | IR_Exp(a,_,r1) ->
@@ -1582,6 +1599,11 @@ and ir_of_exp r0 r1 e =
     ( match e with
       | Rot -> ([],r0)
       | Rcd [||] -> ([],R [||])
+      | App(Atm(Name n),e2) ->
+        let v = newvar () in
+        let (l2,r2) = lp r0 e2 in
+        let n1 = IR_Glb_Call(n,r2,A v) in
+        (l2@[n1],A v)
       | App (e1,e2) ->
         let (v1,v2,v3) = (newvar (),newvar (),newvar ()) in
         let n0 = IR_Id(r0,[|A v1;A v2|]) in
@@ -1787,7 +1809,7 @@ and emt_el m el =
       let s0 = emt_etr m e in
       let s1 = emt_el m tl in
       n^":\n"^s0^s1 )
-and cmt s = if emt_flg then "\\\\"^s^"\n" else ""
+and cmt s = if emt_flg then "# "^s^"\n" else ""
 and emt_etr _ e =
   let s = Hashtbl.create 10 in
   let (r0,p0) = e in
@@ -1827,7 +1849,9 @@ and emt_id s r rs =
   let s0 =
     Array.fold_left
       (fun s0 ri -> let _ = idx_crt_ptn s ri in s0^(rpc_ptn s r ri)) "" rs in
-  let c0 = cmt ("\t$ "^(emt_pnt_ptn s r)^" ⊢ "^(Array.fold_left (fun b r -> b^","^(emt_pnt_ptn s r)) "" rs)) in
+  let c0 =
+    cmt ("\t$ "^(emt_pnt_ptn s r)^" ⊢ "^(Array.fold_left (fun b r -> b^","^(emt_pnt_ptn s r)) "" rs)^
+         rtl^(Arr.fld_l (fun s r -> s^","^(print_ty r)) "" rs)) in
   let s1 = rm_ptn s r in
   idx_csm_ptn s r;
   c0^s0^s1
@@ -1914,10 +1938,17 @@ and reg i =
 and call_fun f = "call "^f^"\n"
 and emt_call s f x y =
   let _ = idx_crt_ptn s y in
-  let c0 = cmt ("\t◂ "^(emt_pnt_ptn s (Rcd_Ptn.A f))^","^(emt_pnt_ptn s x)^" ⊢ "^(emt_pnt_ptn s y)) in
+  let c0 =
+    cmt ("\t◂ "^(emt_pnt_ptn s (Rcd_Ptn.A f))^","^(emt_pnt_ptn s x)^" ⊢ "^(emt_pnt_ptn s y)
+         ^rtl^(print_ty y)) in
   idx_csm s f; idx_csm_ptn s x;
   c0
-and emt_gl_call _ _ _ _ = ""
+and emt_gl_call s n x y =
+  let _ = idx_crt_ptn s y in
+  let c0 =
+    cmt ("\t"^n^(emt_pnt_ptn s x)^" ⊢ "^(emt_pnt_ptn s y)^rtl^(print_ty y)) in
+  idx_csm_ptn s x;
+  c0
 and emt_ret s r =
   let c0 = cmt ("\t∎ "^(emt_pnt_ptn s r)) in
   idx_csm_ptn s r;
@@ -1950,5 +1981,3 @@ and emt_il_glb_call s n r =
   let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_pnt_ptn s r)^" ⊢|") in
   let _ = idx_csm_ptn s r in
   c0
-(*
-*)

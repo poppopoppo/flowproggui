@@ -2,60 +2,9 @@
 // src = r8 i = r9 tmp = r10
 .intel_syntax noprefix
 .global main
-f3:
-\\	|» 0'
-\\	$ 0' ⊢ ,1',2'
-	mov r8,rax
-	call rpc_r
-	mov rdi,r9
-	mov r8,rax
-	call rpc_r
-	mov rsi,r9
-	mov r8,rax
-	call rmv_r
-\\	$ 1' ⊢ ,{> s~3' < 0' }
-	mov r8,rdi
-	call rmv_r
-\\	$ 2' ⊢ ,{> t~4' < 1' }
-	mov r8,rsi
-	call rmv_r
-\\	∎ { 3' 0' 4' 1' }
-f2:
-\\	|» 0'
-\\	$ 0' ⊢ ,1',2'
-	mov r8,rax
-	call rpc_r
-	mov rdi,r9
-	mov r8,rax
-	call rpc_r
-	mov rsi,r9
-	mov r8,rax
-	call rmv_r
-\\	$ 1' ⊢ ,{> x~3' < 0' }
-	mov r8,rdi
-	call rmv_r
-\\	$ 2' ⊢ ,{> y~4' < 1' }
-	mov r8,rsi
-	call rmv_r
-\\	$ { 3' 4' } ⊢ ,2'
-rpc_r_a
-	mov r8,rdx
-	call rmv_r
-	mov r8,rcx
-	call rmv_r
-\\	∎ 2'
-f1:
-\\	|» { 0' 1' }
-\\	$ { 0' 1' } ⊢ ,2'
-rpc_r_a
-	mov r8,rax
-	call rmv_r
-	mov r8,rdi
-	call rmv_r
-\\	∎ 2'
 fact:
-\\	|» 0'
-\\	$ 0' ⊢ ,1',2'
+# 	|» 0'
+# 	$ 0' ⊢ ,1',2'
 	mov r8,rax
 	call rpc_r
 	mov rdi,r9
@@ -64,20 +13,20 @@ fact:
 	mov rsi,r9
 	mov r8,rax
 	call rmv_r
-\\	∠ 1'
-\\	∐ 0'
+# 	∠ 1'
+# 	∐ 0'
 agl_0_0:
-\\	» .. |~ 0' ⊢ 1'
-\\	$ 1' ⊢ ,0'
+# 	» .. |~ 0' ⊢ 1'
+# 	$ 1' ⊢ ,0'
 	mov r8,rdi
 	call rpc_r
 	mov rax,r9
 	mov r8,rdi
 	call rmv_r
-\\	∎ 0'
-\\	∐ 0'
+# 	∎ 0'
+# 	∐ 0'
 agl_0_1:
-\\	$ 2' ⊢ ,1',3'
+# 	$ 2' ⊢ ,1',3'
 	mov r8,rsi
 	call rpc_r
 	mov rdi,r9
@@ -86,8 +35,8 @@ agl_0_1:
 	mov rdx,r9
 	mov r8,rsi
 	call rmv_r
-\\	» .. |~ 1' ⊢ 2'
-\\	$ 3' ⊢ ,1',4'
+# 	» .. |~ 1' ⊢ 2'
+# 	$ 3' ⊢ ,1',4'
 	mov r8,rdx
 	call rpc_r
 	mov rdi,r9
@@ -96,7 +45,7 @@ agl_0_1:
 	mov rcx,r9
 	mov r8,rdx
 	call rmv_r
-\\	$ 4' ⊢ ,3',5'
+# 	$ 4' ⊢ ,3',5'
 	mov r8,rcx
 	call rpc_r
 	mov rdx,r9
@@ -105,8 +54,8 @@ agl_0_1:
 	mov r12,r9
 	mov r8,rcx
 	call rmv_r
-\\	» .. |~ 3' ⊢ 4'
-\\	$ 5' ⊢ ,3',6'
+# 	» .. |~ 3' ⊢ 4'
+# 	$ 5' ⊢ ,3',6'
 	mov r8,r12
 	call rpc_r
 	mov rdx,r9
@@ -115,8 +64,8 @@ agl_0_1:
 	mov r13,r9
 	mov r8,r12
 	call rmv_r
-\\	» .. |~ 3' ⊢ 5'
-\\	$ 6' ⊢ ,3',7'
+# 	» .. |~ 3' ⊢ 5'
+# 	$ 6' ⊢ ,3',7'
 	mov r8,r13
 	call rpc_r
 	mov rdx,r9
@@ -125,7 +74,7 @@ agl_0_1:
 	mov r14,r9
 	mov r8,r13
 	call rmv_r
-\\	$ 7' ⊢ ,6',8'
+# 	$ 7' ⊢ ,6',8'
 	mov r8,r14
 	call rpc_r
 	mov r13,r9
@@ -134,22 +83,22 @@ agl_0_1:
 	mov r15,r9
 	mov r8,r14
 	call rmv_r
-\\	» .. |~ 6' ⊢ 7'
-\\	» .. |~ 8' ⊢ 6'
-\\	◂ 7',6' ⊢ 8'
-\\	◂ 5',{ 3' 8' } ⊢ 6'
-\\	◂ 4',6' ⊢ 3'
-\\	◂ 2',{ 1' 3' } ⊢ 4'
-\\	$ 4' ⊢ ,1'
+# 	» .. |~ 6' ⊢ 7'
+# 	» .. |~ 8' ⊢ 6'
+# 	◂ 7',6' ⊢ 8'
+# 	◂ 5',{ 3' 8' } ⊢ 6'
+# 	◂ 4',6' ⊢ 3'
+# 	◂ 2',{ 1' 3' } ⊢ 4'
+# 	$ 4' ⊢ ,1'
 	mov r8,rcx
 	call rpc_r
 	mov rdi,r9
 	mov r8,rcx
 	call rmv_r
-\\	∎ 1'
+# 	∎ 1'
 f0:
-\\	|» 0'
-\\	∎ 0'
+# 	|» 0'
+# 	∎ 0'
 rpc_r:
   mov r10,r8
   shr r10,1
