@@ -199,12 +199,12 @@ ir_lines:
   | ir_line ir_lines { Seq($1,$2) }
   | AGL reg coprd_ir COPRD_END {
      Agl($2,$3) }
-  | NAM reg_ptn SRC_IL { IL_Glb_Call((Tkn.Frgn $1),$2) }
+  | NAM reg_ptn SRC_IL { IL_Glb_Call((Tkn.Etr_N $1),$2) }
   ;
 ir_line:
   | ROT reg_ptn SRC reg_ptn regs { IR_Id($2,[|$4|] |+| $5)  }
   | ARR exp INI_IR reg_ptn SRC reg_ptn  { IR_Exp($2,$4,$6) }
-  | NAM reg_ptn SRC reg_ptn { IR_Glb_Call($1,$2,$4) }
+  | NAM reg_ptn SRC reg_ptn { IR_Glb_Call(Tkn.Etr_N $1,$2,$4) }
   | APP reg CMM reg_ptn SRC reg_ptn {
      IR_Call(($2,$4),$6) }
   | OUT_IR reg reg_ptn SRC_OUT {

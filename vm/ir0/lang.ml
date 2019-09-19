@@ -343,12 +343,12 @@ module Tkn = struct
     | Rcd_Lb of ((string * ('p, 'r) t) array)
     | Tkn of ('p, 'r) tkn
   and ('p, 'r) tkn =
-    | Name of string | Etr of ('p, 'r) etr | Stg of string | Z of int
+    | Tkn_N of string | Etr of ('p, 'r) etr | Stg of string | Z of int
     | Exn of string | P of ('p array) * (('p, 'r) t)
     | Zn of int * int | Sgn of Sgn.t | CoP of int * (('p, 'r) t)
     | Ast of Peg.ast | Vct of (('p, 'r) t , ('p, 'r) t) Hashtbl.t
   and ('p, 'r) etr =
-    | Grm of Peg.grammar * string | Frgn of string
+    | Grm of Peg.grammar * string | Etr_N of string
     | Clj of 'p * (('p, 'r) t)
     | Pls | Mlt | Mns | Exn_Ini | Fnc of 'p
     | Cmp | Eq | Inj of int | Cho of int | Fix
@@ -360,7 +360,7 @@ module Tkn = struct
         "{>"^(Array.fold_left (fun s (l,r) -> s^" "^l^"~"^(print r)) "" rs)^"}"
       | Tkn v ->
         ( match v with
-          | Name n -> n
+          | Tkn_N n -> n
           | Exn s -> "?."^"\""^s^"\""
           | Stg s ->
             if (String.length s)>=20
@@ -387,7 +387,7 @@ module Tkn = struct
       | Fix -> "@" | Exn_Ini -> "?"
       | Fnc _ -> "Fnc"
       | Clj (_,_) -> "Clj"
-      | Frgn n -> n
+      | Etr_N n -> n
       | Grm (_,n) -> "Grm."^n )
 
   let vct_op v k a0 =
@@ -471,15 +471,6 @@ module Ast = struct
     | Z of int | Zn of (int * int)
     | Fnc of (etr, r) Tkn.etr
     | Name of string | Stg of string
-  and nd =
-    | IR_Id of ptn * (ptn array)
-    | IR_Call of (r * ptn) * ptn
-    | IR_Glb_Call of string * ptn * ptn
-    | IR_Out of r * ptn
-    | IR_Glb_Out of string * ptn
-    | IR_Clj of r * ptn * pt
-    | IR_Exp of exp_rcd * ptn * ptn
-    | IR_Prd of r * (r Rcd_Ptn.t) * (pt array)
   and r = Types.v ref
   and fnc = (etr, r) Tkn.etr
   and ptn = r Rcd_Ptn.t
@@ -492,6 +483,15 @@ module Ast = struct
     | Agl of r * ((ptn * ir_code) array)
     | IL_Call of r * ptn
     | IL_Glb_Call of fnc * ptn
+  and nd =
+    | IR_Id of ptn * (ptn array)
+    | IR_Call of (r * ptn) * ptn
+    | IR_Glb_Call of fnc * ptn * ptn
+    | IR_Out of r * ptn
+    | IR_Glb_Out of string * ptn
+    | IR_Clj of r * ptn * pt
+    | IR_Exp of exp_rcd * ptn * ptn
+    | IR_Prd of r * (r Rcd_Ptn.t) * (pt array)
   type line =
     | End | Line of exp_rcd | Line_Agl of Rcd_Ptn.path * exp_rcd
   module VHash = Hashtbl.Make (struct type t = v ref let equal = (==) let hash = Hashtbl.hash end)
@@ -608,7 +608,7 @@ and print_nd o =
     | IR_Id(r,rs) -> "$ "^(pnt_ptn r)^" ⊢ "^(Arr.fld_l (fun s r -> s^","^(pnt_ptn r)) "" rs)^rtl^(Arr.fld_l (fun s r -> s^","^(print_ty r)) "" rs)
     | IR_Out(_,_) -> "|◂"
     | IR_Glb_Out(n,_) -> n^" |⊢"
-    | IR_Glb_Call(n,x,y) -> n^" "^(pnt_ptn x)^" ⊢ "^(pnt_ptn y)^rtl^(print_ty y)
+    | IR_Glb_Call(n,x,y) -> (Tkn.print_etr n)^" "^(pnt_ptn x)^" ⊢ "^(pnt_ptn y)^rtl^(print_ty y)
     | IR_Call((f,x),y) -> "◂ "^(print_reg f)^" , "^(pnt_ptn x)^" ⊢ "^(pnt_ptn y)^rtl^(print_ty y)
     | IR_Exp(e,r0,r1) -> "» "^(print_exp e)^" |~ "^(pnt_ptn r0)^" ⊢ "^(pnt_ptn r1)^rtl^(print_ty r1)
   )
@@ -865,7 +865,7 @@ let rec run m p0 (st:st) cs =
                   | Atm a ->
                     ( match a with
                       | Z i -> Tkn.Z i | Zn (z0,z1) -> Tkn.Zn(z0,z1)
-                      | Name n -> Tkn.Name n
+                      | Name n -> Tkn.Tkn_N n
                       | Stg s -> Tkn.Stg s
                       | Fnc f -> Tkn.Etr f
                     )
@@ -892,7 +892,7 @@ let rec run m p0 (st:st) cs =
                   run m !p1 st cs )
             | IR_Glb_Call (n,x,y) ->
               let kx = get_reg_ptn_exn st x in
-              let ky = app m (Tkn.Tkn(Tkn.Name n)) kx in
+              let ky = app m (Tkn.Tkn (Tkn.Etr n)) kx in
               ( match ky with
                 | `Tkn ky ->
                   let _ = set_reg_ptn st y ky in
@@ -963,10 +963,10 @@ and app m f x =
             | None -> `Tkn (Rcd [| (Tkn(CoP(0,Rcd [||]))); (Tkn(Stg s0)) |])
             | Some a -> `Tkn(Rcd [|(Tkn(CoP(1,Tkn(Ast a))));(Tkn(Stg s0))|])
           )
-        | (Frgn f),_ ->
+        | (Etr_N f),_ ->
           frgn m f x
         | _ -> err "app 0"      )
-    | Tkn.Tkn (Tkn.Name n),_ ->
+    | Tkn.Tkn (Tkn.Tkn_N n),_ ->
       let e =
         ( try (Tkn.Tkn(Tkn.Etr(Tkn.Fnc(List.assoc n m.ns_v))))
           with Not_found ->
@@ -1423,7 +1423,7 @@ and slv m l p0 =
             unify [] tf (Imp(tx,ty));
             gen (ref []) l ty
           | IR_Glb_Call(n,x,y) ->
-            let tf = inst (l+1) (Var(List.assoc n m.ns)) in
+            let tf = inst (l+1) (slv_exp_atm m (Atm (Fnc n))) in
             let tx = inst_ptn (l+1) x in
             let ty = inst_ptn (l+1) y in
             unify [] tf (Imp(tx,ty));
@@ -1453,7 +1453,7 @@ and slv_exp_atm m a =
             | Tkn.Mns -> let y = zn (Var (newvar())) in Imp(y,y)
             | Tkn.Cmp -> let (y0,y1) = (zn (Prm Z_u),zn (Prm (Z_n 2))) in Imp(Rcd(rcd_cl [y0;y0]),y1)
             | Tkn.Eq -> let y = Var (newvar()) in Imp(Rcd(rcd_cl [y;y]),y)
-            | Tkn.Frgn n -> Var(List.assoc n m.ns)
+            | Tkn.Etr_N n -> Var(List.assoc n m.ns)
             | Tkn.Exn_Ini -> let y = Var (newvar()) in Imp(Prm Stg,y)
             | _ -> err "slv_exp_atm 0" )
         | Name n ->
@@ -1501,24 +1501,24 @@ let rec mk_ir_mdl el =
   let v = Var (newvar_q (-1)) in
   let y = lst v in
   m.ns <- ("⟦",ref(Ln(Imp(Rcd (rcd_cl [v;y]),y))))::m.ns;
-  m.ns_e <- ("&",Tkn(Etr(Tkn.Frgn "&")))::m.ns_e;
+  m.ns_e <- ("&",Tkn(Etr(Tkn.Etr_N "&")))::m.ns_e;
   m.ns <- ("&",ref(Ln(Imp(Rcd U,Prm Sgn))))::m.ns;
-  m.ns_e <- ("⊵",Tkn(Etr(Tkn.Frgn "⊵")))::m.ns_e;
+  m.ns_e <- ("⊵",Tkn(Etr(Tkn.Etr_N "⊵")))::m.ns_e;
   let t_b = Var (newvar_q (-1)) in
   let t_k = Var (newvar_q (-1)) in
   let t_o = opn t_k in
   let t_v = App(App(Prm Vct,t_o),t_b) in
   let t_s = Types.Rcd(rcd_cl [Types.Rcd(rcd_cl [t_v;t_b]);t_o]) in
   m.ns <- ("⊵",ref(Ln(Imp(t_s,t_s))))::m.ns;
-  m.ns_e <- ("#",Tkn(Etr(Tkn.Frgn "#")))::m.ns_e;
+  m.ns_e <- ("#",Tkn(Etr(Tkn.Etr_N "#")))::m.ns_e;
   let t_b = Var (newvar_q (-1)) in
   let t_k = Var (newvar_q (-1)) in
   let t_o = opn t_k in
   let t_v = App(App(Prm Vct,t_o),t_b) in
   m.ns <- ("#",ref(Ln(Imp(Rcd U,t_v))))::m.ns;
-  m.ns_e <- ("read",Tkn(Etr(Tkn.Frgn "read")))::m.ns_e;
+  m.ns_e <- ("read",Tkn(Etr(Tkn.Etr_N "read")))::m.ns_e;
   m.ns <- ("read",ref(Ln(Imp(Prm Stg,Prm Stg))))::m.ns;
-  m.ns_e <- ("pnt",Tkn(Etr(Tkn.Frgn "pnt")))::m.ns_e;
+  m.ns_e <- ("pnt",Tkn(Etr(Tkn.Etr_N "pnt")))::m.ns_e;
   m.ns <- ("pnt",ref(Ln(Imp(Var (newvar_q (-1)),Rcd U))))::m.ns;
   mk_ir_mdl_etr m el
 and mk_ir_mdl_etr m el =
@@ -1645,7 +1645,12 @@ and ir_of_exp r0 r1 e =
       | App(Atm(Name n),e2) ->
         let v = newvar () in
         let (l2,r2) = lp r0 e2 in
-        let n1 = IR_Glb_Call(n,r2,A v) in
+        let n1 = IR_Glb_Call(Tkn.Etr_N n,r2,A v) in
+        (l2@[n1],A v)
+      | App(Atm(Fnc e),e2) ->
+        let v = newvar () in
+        let (l2,r2) = lp r0 e2 in
+        let n1 = IR_Glb_Call(e,r2,A v) in
         (l2@[n1],A v)
       | App (e1,e2) ->
         let (v1,v2,v3) = (newvar (),newvar (),newvar ()) in
@@ -2012,7 +2017,10 @@ and reg i =
   else if i=2 then "rsi"
   else if i=3 then "rdx"
   else if i=4 then "rcx"
-  else  "[r12+"^(string_of_int (5-i))^"]"
+  else if i=5 then "r8"
+  else if i=6 then "r9"
+  else  "[r12+"^(string_of_int (7-i))^"]"
+and reg_idx s v = reg (idx s v)
 and call_fun f = "call "^f^"\n"
 and emt_call s f x y =
   let _ = idx_crt_ptn s y in
@@ -2022,18 +2030,24 @@ and emt_call s f x y =
   idx_csm s f; idx_csm_ptn s x;
   c0
 and emt_gl_call s n x y =
+  let cx = (emt_pnt_ptn s x) in
+  (*( match n with
+    | *)
   let _ = idx_crt_ptn s y in
   let c0 =
-    cmt ("\t"^n^" "^(emt_pnt_ptn s x)^" ⊢ "^(emt_pnt_ptn s y)^rtl^(print_ty y)) in
+    cmt ("\t"^(Tkn.print_etr n)^" "^cx^" ⊢ "^(emt_pnt_ptn s y)^rtl^(print_ty y)) in
+  (* let a0 = set_arg s x in  *)
   idx_csm_ptn s x;
+  (* let a1 = push_arg s in
+     let a1 = s *)
   c0
 and emt_ret s r =
   let c0 = cmt ("\t∎ "^(emt_pnt_ptn s r)) in
   idx_csm_ptn s r;
   c0
-and emt_exp s _ r0 r1 =
+and emt_exp s e r0 r1 =
   let _ = idx_crt_ptn s r1 in
-  let c0 = cmt ("\t» "^".. |~ "^(emt_pnt_ptn s r0)^" ⊢ "^(emt_pnt_ptn s r1)) in
+  let c0 = cmt ("\t» "^(print_exp e)^" |~ "^(emt_pnt_ptn s r0)^" ⊢ "^(emt_pnt_ptn s r1)^(print_ty r1)) in
   idx_csm_ptn s r0;
   c0
 and emt_agl s ra ps =
@@ -2059,3 +2073,57 @@ and emt_il_glb_call s n r =
   let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_pnt_ptn s r)^" ⊢|") in
   let _ = idx_csm_ptn s r in
   c0
+and reg_arg i = "[r13+"^(string_of_int i)^"]"
+and tmp0 = "r10"
+and tmp1 = "r11"
+and set_arg s r =
+  let rec lp j r =
+    ( match r with
+      | A i ->
+        let a =
+          "\tstc\n"^
+          "\tmov "^(reg_arg j)^","^(reg_idx s i)^"\n" in
+        (j+1,a)
+      | R rs ->
+        let l = Array.length rs in
+        let b0 = bin_of_int l in
+        let fl =
+          Array.fold_left
+            (fun fl r ->
+               let b = ( match r with | A _ -> "1" | _ -> "0" ) in
+               b^fl ) "" rs in
+        let b1 = String.init (62-(String.length b0)) (fun i -> if i<l then fl.[i] else '0') in
+        let hd = "0b"^b1^b0^"00" in
+        let r0 = reg_arg j in
+        let a0 =
+          "\tmov "^r0^","^hd^"\n" in
+        let (j,as0) =
+          Array.fold_left
+            (fun (j,as0) r ->
+               let (j,ai) = lp j r in
+               (j,as0^ai) )
+            (j+1,"") rs in
+        (j,a0^as0)
+      | Ro (rs,rt) ->
+        let l = Array.length rs in
+        let b0 = bin_of_int l in
+        let fl =
+          Array.fold_left
+            (fun fl r ->
+               let b = ( match r with | A _ -> "1" | _ -> "0" ) in
+               b^fl )
+            "" rs in
+        let b1 = String.init (62-(String.length b0)) (fun i -> if i<l then fl.[i] else '0') in
+        let hd = "0b"^b1^b0^"00" in
+        let a0 =
+          "\tmov "^(reg_arg j)^","^hd^"\n" in
+        let (j,as0) =
+          Array.fold_left
+            (fun (j,as0) r ->
+               let (j,ai) = lp j r in
+               (j,as0^ai) )
+            (j+1,"") rs in
+        let a5 = "\tmov "^(reg_arg j)^","^(reg_idx s rt)^"\n" in
+        (j+1,a0^as0^a5)
+      | _ -> err "set_arg 0" ) in
+  lp 0 r
