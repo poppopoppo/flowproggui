@@ -2880,7 +2880,7 @@ and _menhir_goto_reg_ptn : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_reg_
             let _3 = () in
             let _v : 'tv_ir_lines = 
 # 202 "imp_parser.mly"
-                       ( IL_Glb_Call((Tkn.Frgn _1),_2) )
+                       ( IL_Glb_Call((Tkn.Etr_N _1),_2) )
 # 2885 "imp_parser.ml"
              in
             _menhir_goto_ir_lines _menhir_env _menhir_stack _menhir_s _v) : 'freshtv698)) : 'freshtv700)
@@ -2942,7 +2942,7 @@ and _menhir_goto_reg_ptn : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_reg_
         let _3 = () in
         let _v : 'tv_ir_line = 
 # 207 "imp_parser.mly"
-                            ( IR_Glb_Call(_1,_2,_4) )
+                            ( IR_Glb_Call(Tkn.Etr_N _1,_2,_4) )
 # 2947 "imp_parser.ml"
          in
         _menhir_goto_ir_line _menhir_env _menhir_stack _menhir_s _v) : 'freshtv710)) : 'freshtv712)

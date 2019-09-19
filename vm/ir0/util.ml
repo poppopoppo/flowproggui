@@ -1,3 +1,21 @@
+let bin_of_int d =
+  if d < 0 then invalid_arg "bin_of_int" else
+  if d = 0 then "0" else
+    let rec aux acc d =
+      if d = 0 then acc else
+        aux (string_of_int (d land 1) :: acc) (d lsr 1)
+    in
+    String.concat "" (aux [] d)
+let fact_f n =
+  if n=0 then 1.
+  else
+    let rec lp i =
+      if i=n then 1. else (float_of_int i)*.(lp (i+1)) in
+    lp 1
+let log2 x = (log x) /. (log 2.)
+let log_fct n = log2 (fact_f n)
+let rec log_fct_r n =
+  if n=1 then log2 1. else (log2 (float_of_int n))+.(log_fct_r (n-1))
 module Arr = struct
   include Array
   let fld_l = Array.fold_left
