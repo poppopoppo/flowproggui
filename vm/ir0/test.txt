@@ -117,3 +117,49 @@ a'→b' : type constructor
  r0::{<} ∀ { ℤ ℙ < r0' }
  z0::ℤ ∀ { ℤn◂z0' ℤn◂z0' }→ℤn◂z0'
  (→)::{ _ _ }→_
+
+
+ \\ { x y }
+ ∐\ { a' "A" }
+ ∐\ { 3 _ }
+ ∐\ _
+ ∐|
+
+ |» { v0 v1 v2 }
+ » _ |~ { l~v0 s~v1 } ⊢ r
+ ![
+ mov a,b
+ usr0 ◂ { l' s' }
+ xor r0,r1
+ "# Hello , World !!"
+ and rx,[rb],(f◂$)',rcx
+
+ ]!
+ \\ r0
+  ∐\ ∠[0]◂(∠[1]◂x')
+  ..
+  ∎ ..
+  ∐\ ⟦ "!" "ab" < tl' ⟧
+  ∐\ ⟦ "L" < tl' ⟧
+  ∐\ _
+ ∇
+§+ nt0
+  |« x y { z w }
+  +» { x y } , st0
+  ..
+  @.x r2 |⊢
+  ∎ out , st1
+  +» y z
+  ..
+  ∎ ⟦⟧ , { 10 "TX33" ‹› }
+  +» z { w x }
+  ..
+  ∎ ⟦ p0 p1 p2 p3 ⟧ , {}
+
+pkt :
+
+§ main
+  |» {}
+  ..
+  ∎ { .. }
+nc test.mdls main

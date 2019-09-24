@@ -28,3 +28,6 @@ bench: bench.ml
 	ocamlopt -p -o bench bench.ml
 	./bench
 	gprof ./bench > bench.prof.txt
+test: mem.s
+	nasm -f elf64 mem.s
+	gcc mem.o -g -nostartfiles -no-pie -o mem
