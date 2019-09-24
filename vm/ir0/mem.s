@@ -19,8 +19,8 @@ section .data
   fmt_nl: db 10,0
   fmt_ref: db "(%d)*{| ",0
 ;  fmt: db "%d",10,0
-  blk_l: db "{|",0
-  blk_r: db "|}",0
+  blk_l: db "{| ",0
+  blk_r: db "|} ",0
   spc: db " ",0
 
 section .text
@@ -75,7 +75,9 @@ _start:
   mov rdi,0xff
   stc
   mov rsi,str_ret
+  push rdi
   call pnt
+  pop rdi
   mov rdi,str_ret
   mov rax,0
   call printf
@@ -89,21 +91,27 @@ _start:
   push rdi
   mov rsi,str_ret
   clc
+  push rdi
   call pnt
+  pop rdi
   pop rdi
   call pnt_str_ret
   call inc_r_p
   push rdi
   mov rsi,str_ret
   clc
+  push rdi
   call pnt
+  pop rdi
   pop rdi
   call pnt_str_ret
   call dec_r_p
   push rdi
   mov rsi,str_ret
   clc
+  push rdi
   call pnt
+  pop rdi
   pop rdi
   call pnt_str_ret
   mov rsi,2
@@ -113,7 +121,30 @@ _start:
   push rdi
   mov rsi,str_ret
   clc
+  push rdi
   call pnt
+  pop rdi
+  pop rdi
+  call pnt_str_ret
+  push rdi
+  call dcp
+  mov rdi,rax
+  push rax
+  mov rsi,str_ret
+  clc
+  push rdi
+  call pnt
+  pop rdi
+  pop rdi
+  pop rdx
+  mov rsi,3
+  clc
+  call exc
+  mov rsi,str_ret
+  clc
+  push rdi
+  call pnt
+  pop rdi
   pop rdi
   call pnt_str_ret
   jmp _end
@@ -250,11 +281,88 @@ dec_r_p_end:
 dec_r_p_end_lv:
   mov rax,rdi
   ret
-
+; rdi ~ src cf~tag
+; rax ~ dst
+dcp:
+  push rdi
+  mov rdi,0
+  call dbg
+  pop rdi
+  jc dcp_r64
+dcp_blk:
+  mov r9,[rdi]
+  shl r9,16
+  shr r9,48
+  push rdi
+  push r9
+  mov rdi,r9
+  call mlc
+  pop r9
+  pop rdi
+  mov r11,[rdi]
+  mov r10,r9
+  shl r11,48
+  shr r11,48
+  mov rdx,[rax]
+  shr rdx,16
+  shl rdx,16
+  add rdx,r11
+  mov [rax],rdx
+  mov rsi,0
+dcp_blk_lp:
+  push rdi
+  mov rdi,2
+  call dbg
+  pop rdi
+  cmp rsi,r10
+  je dcp_end
+  rcr r11,1
+  jc dcp_blk_lp_nxt
+  push r11
+  push r10
+  push r9
+  push rax
+  push rsi
+  push rdi
+  mov rdi,[r9+8*rsi+8*1]
+  call dcp_blk
+  mov r9,rax
+  pop rax
+  mov [rax+8*rsi+8*1],r9
+  pop rdi
+  pop rsi
+  pop rax
+  pop r9
+  pop r10
+  pop r11
+dcp_blk_lp_nxt:
+  push rdi
+  mov rdi,4
+  call dbg
+  pop rdi
+  mov rdx,[rdi+8*rsi+8*1]
+  mov [rax+8*rsi+8*1],rdx
+  add rsi,1
+  jmp dcp_blk_lp
+dcp_end:
+  clc
+  ret
+dcp_r64:
+  mov rax,rdi
+  stc
+  ret
 ; rdi ~ src-blk rsi~idx rdx~dst-dta cf~tag-of-dta
 ; rax ~ src.(idx)
 exc:
   jc exc_cf
+  mov r9,[rdi]
+  btr r9,rsi
+  mov [rdi],r9
+  lea r10,[rdi+8*rsi+8*1]
+  mov rax,[r10]
+  mov [r10],rdx
+  mov [rdi+8*rsi+8*1],rdx
+  ret
 exc_cf:
   mov r9,[rdi]
   bts r9,rsi
@@ -264,8 +372,8 @@ exc_cf:
   mov [r10],rdx
   mov [rdi+8*rsi+8*1],rdx
   ret
+; rdi ~ src-dta rsi~dst-str
 pnt:
-  push rdi
   jc pnt_end
   jmp pnt_r_p
 pnt_end:
@@ -276,10 +384,8 @@ pnt_end:
   mov rax,0
   call sprintf
   pop rsi
-  pop rdi
   lea rsi,[rsi+1*rax]
   mov rax,rsi
-  call dbg
   ret
 pnt_r_p:
   push rdi
@@ -326,22 +432,18 @@ pnt_r_p_lp:
   push r10
   push r11
   push rdi
+  push rsi
   mov rdi,[rdi]
-  push rdi
-  mov rdi,2
-  call dbg
-  pop rdi
   call pnt_r_p
+  pop rsi
   pop rdi
   pop r11
   pop r10
   pop r9
   mov rsi,rax
+  lea rdi,[rdi+8*1]
+  jmp pnt_r_p_lp
 pnt_r_p_lp_nxt:
-  push rdi
-  mov rdi,12
-  call dbg
-  pop rdi
   push rdi
   push rsi
   push r9
@@ -360,7 +462,6 @@ pnt_r_p_lp_nxt:
   pop r9
   pop rsi
   pop rdi
-  call pnt_str_ret
   lea rsi,[rsi+1*rax]
   lea rdi,[rdi+8*1]
   jmp pnt_r_p_lp
@@ -371,9 +472,9 @@ pnt_r_p_end:
   mov rsi,blk_r
   mov rax,0
   call sprintf
+  mov rdx,rax
   pop rax
   pop rsi
-  pop rdi
-  lea rsi,[rsi+1*rax]
+  lea rsi,[rsi+1*rdx]
   mov rax,rsi
   ret
