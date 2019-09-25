@@ -15,18 +15,10 @@ main:
 	jmp _end
 test0:
 ; 	|» {  }
+	push rdi
 ; emt_set_ptn {  }
-	mov r9,[rdi]
-	ror r9,48
-	sub r9,1
-	mov r10,r9
-	shl r10,48
-	rol r9,48
-	mov [rdi],r9
-	cmp r10,0
-	jne emt_set_ptn_end_0
-	call free
-emt_set_ptn_end_0:
+	pop rdi
+	call dec_r
 ; 	$ { {  } {  } } ⊢ ,0',1',2' : ,{ { } { } },{ { } { } },{ { } { } }
 ; emt_get_ptn { {  } {  } }
 	mov rdi,2
@@ -59,26 +51,21 @@ emt_set_ptn_end_0:
 	rcl r9,1
 	mov rax,r9
 	rcr r9,1
-	jc lb_1
-	push rdi
-	push rax
-	mov rsi,3
-	call inc_r_p_n
-	clc
-	pop rax
-	pop rdi
-lb_1:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
 	mov [r12-8*1],rdi
-	xor r9,r9
-	rcl r9,1
+	jc lb_0
 	mov r10,[r12]
 	btr r10,0
-	or r10,r9
 	mov [r12],r10
+	call inc_r
 	mov rax,rdi
+	jmp lb_1
+lb_0:
+	bts r10,0
+	mov [r12],r10
+lb_1:
 	pop rax
 	pop rdi
 	bt rax,0
@@ -86,13 +73,17 @@ lb_1:
 	push rax
 ; emt_set_ptn 1'
 	mov [r12-8*2],rdi
-	xor r9,r9
-	rcl r9,2
+	jc lb_2
 	mov r10,[r12]
 	btr r10,1
-	or r10,r9
 	mov [r12],r10
+	call inc_r
 	mov rax,rdi
+	jmp lb_3
+lb_2:
+	bts r10,1
+	mov [r12],r10
+lb_3:
 	pop rax
 	pop rdi
 	bt rax,0
@@ -100,37 +91,58 @@ lb_1:
 	push rax
 ; emt_set_ptn 2'
 	mov [r12-8*3],rdi
-	xor r9,r9
-	rcl r9,3
+	jc lb_4
 	mov r10,[r12]
 	btr r10,2
-	or r10,r9
 	mov [r12],r10
+	call inc_r
 	mov rax,rdi
+	jmp lb_5
+lb_4:
+	bts r10,2
+	mov [r12],r10
+lb_5:
 	pop rax
 	pop rdi
 	bt rax,0
-	jc lb_2
+	jc lb_6
 	push rdi
-	call dec_r_p
+	call dec_r
 	pop rdi
 	clc
-lb_2:
-; 	∎ 1'
+lb_6:
+; 	∎ { 0' 1' }
+; emt_get_ptn { 0' 1' }
+	mov rdi,2
+	call mlc
+	push rax
+	mov rax,[r12-8*1]
+	mov r9,[r12]
+	bt r9,0
+	mov rdx,rax
+	pop rdi
+	mov rsi,0
+	push rdi
+	call exc
+	pop rax
+	push rax
 	mov rax,[r12-8*2]
 	mov r9,[r12]
 	bt r9,1
-;clear  2'~r2 0'~r0
+	mov rdx,rax
+	pop rdi
+	mov rsi,1
+	push rdi
+	call exc
+	pop rax
+	clc
+	push rax
+;clear  2'~r2
 	mov r9,[r12]
 	bt r9,2
-	jc lb_3
+	jc lb_7
 	mov rdi,[r12-8*3]
-	call dec_r_p
-lb_3:
-	mov r9,[r12]
-	bt r9,0
-	jc lb_4
-	mov rdi,[r12-8*1]
-	call dec_r_p
-lb_4:
+	call dec_r
+lb_7:
+	pop rax
 	ret

@@ -293,6 +293,59 @@ chk_t0_dec_end:
 chk_t0_dec_end_lv:
   ret
 
+dec_r:
+  push rdi
+  ; decrement ref-count
+  mov r9,[rdi]
+  mov r11,r9
+  shr r11,48
+  ror QWORD r9,48
+  sub QWORD r9,1
+  rol QWORD r9,48
+  mov [rdi],r9
+  cmp r11,0
+  jne dec_r_end
+  ; mov to temporary register
+  mov r10,r9
+  mov r11,r9
+  ; prepared for loop
+  lea r9,[rdi+8*1]
+  shl r10,16
+  shr r10,48
+dec_r_lp:
+  cmp r10,0
+  je dec_r_lp_end
+  sub r10,1
+  rcr r11,1
+  jc dec_r_lp_nxt
+  push r11
+  push r10
+  push r9
+  mov rdi,[r9]
+  call dec_r
+  pop r9
+  pop r10
+  pop r11
+dec_r_lp_nxt:
+  lea r9,[r9+8*1]
+  jmp dec_r_lp
+dec_r_lp_end:
+ pop rdi
+ call free
+ ret
+dec_r_end:
+  pop rdi
+  ret
+
+inc_r:
+  ; increment ref-count
+  mov r9,[rdi]
+  ror QWORD r9,48
+  add QWORD r9,1
+  rol QWORD r9,48
+  mov [rdi],r9
+  ret
+
 dec_r_p:
   push rdi
   ; decrement ref-count
