@@ -27,10 +27,21 @@ test0:
 	jne emt_set_ptn_end_0
 	call free
 emt_set_ptn_end_0:
-; 	$ {  } ⊢ ,0' : ,{ }
+; 	$ { {  } } ⊢ ,0' : ,{ { } }
+; emt_get_ptn { {  } }
+	mov rdi,1
+	call mlc
+	push rax
 ; emt_get_ptn {  }
 	mov rdi,0
 	call mlc
+	clc
+	mov rdx,rax
+	pop rdi
+	mov rsi,0
+	push rdi
+	call exc
+	pop rax
 	clc
 	mov rdi,rax
 	xor rax,rax
@@ -53,22 +64,22 @@ lb_1:
 	xor r9,r9
 	rcl r9,1
 	mov r10,[r12]
-	btr r10,1
+	btr r10,0
 	or r10,r9
 	mov [r12],r10
-	mov rax,1
+	mov rax,rdi
 	pop rax
 	pop rdi
-	bt rax,1
+	bt rax,0
 	jc lb_2
 	push rdi
 	call dec_r_p
 	pop rdi
 	clc
 lb_2:
-; emt_get_ptn {  }
-	mov rdi,0
-	call mlc
-	clc
+; 	∎ 0'
+	mov rax,[r12-8*1]
+	mov r9,[r12]
+	bt r9,0
 ; clear
 	ret
