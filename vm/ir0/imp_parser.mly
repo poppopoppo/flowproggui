@@ -283,8 +283,8 @@ exp:
   | INT { Atm(Z $1) }
   | EXN { Atm (Fnc Tkn.Exn_Ini) }
   | ROT { Rot }
-  | IDX { Prj(Rot,Rcd_Ptn.Idx $1) }
-  | VAL { Prj(Rot,Rcd_Ptn.Lb $1) }
+  | IDX { Prj(Rot,Rcd_Ptn.Idx($1,Rcd_Ptn.End)) }
+  | VAL { Prj(Rot,Rcd_Ptn.Lb($1,Rcd_Ptn.End)) }
   | VCT_INI { App(Atm (Name "#"),Rcd [||])  }
   | exp VCT exp { App(Atm (Name "⊵"),Rcd [|$1;$3|]) }
   | INJ { Atm(Fnc(Tkn.Inj $1)) }
@@ -301,8 +301,8 @@ exp:
   | exp EQ exp { App(Atm(Fnc Tkn.Eq),Rcd [|$1;$3|]) }
   | L_PRN exp R_PRN { $2 }
   | exp APP exp { App($1,$3) }
-  | exp PRJ INT { Prj($1,Rcd_Ptn.Idx $3) }
-  | exp PRJ NAM { Prj($1,Rcd_Ptn.Lb $3) }
+  | exp PRJ INT { Prj($1,Rcd_Ptn.Idx($3,Rcd_Ptn.End)) }
+  | exp PRJ NAM { Prj($1,Rcd_Ptn.Lb($3,Rcd_Ptn.End)) }
   | L_RCD exp_lst R_RCD { Rcd (Array.of_list $2) }
   | L_RCD exp_lst OP exp R_RCD { Rcd (Array.of_list $2) }
   | L_RCD LB exp_lst_lb R_RCD { Rcd_Lb (None,Array.of_list $3) }

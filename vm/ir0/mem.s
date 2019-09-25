@@ -24,7 +24,9 @@ section .data
   spc: db " ",0
 
 section .text
-  global _start               ; _startを指名
+global _start               ; _startを指名
+_start:
+  jmp main 
 dbg:
   push rax
   push rdi
@@ -70,7 +72,7 @@ pnt_str_ret:
   pop rdi
   pop rax
   ret
-_start:
+_test:
   call pnt_str_ret
   mov rdi,0xff
   stc

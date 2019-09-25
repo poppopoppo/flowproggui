@@ -17,7 +17,7 @@ nc: util.ml lang.ml nc.ml
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
 	ocamlc -c imp_parser.mli
-	ocamlfind ocamlopt -thread -p -o nc.exe -linkpkg \
+	ocamlfind ocamlopt -thread -p -o nc -linkpkg \
 	-package core,batteries,threads \
 	util.ml peg.ml lang.ml imp_lexer.ml imp_parser.ml implib.ml nc.ml
 	gcc -o test test.s
@@ -28,6 +28,10 @@ bench: bench.ml
 	ocamlopt -p -o bench bench.ml
 	./bench
 	gprof ./bench > bench.prof.txt
+ncc: 
+	./nc inc.mdls test0
+	nasm -f elf64 Inc.s
+	gcc Inc.o -nostartfiles -no-pie -g -o Inc
 test: mem.s
 	nasm -f elf64 mem.s
 	gcc mem.o -g -nostartfiles -no-pie -o mem
