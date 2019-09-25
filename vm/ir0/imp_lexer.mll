@@ -8,15 +8,20 @@ let line = [' ' '\t' '\r']
 let digit = ['0'-'9']
 let alpha = ['a'-'z' 'A'-'Z']
 let ascii = ['a'-'z' 'A'-'Z' '0'-'9' '(' ')' '!' '"' '#'
-  '$' '%' '&' '\'' '=' '~' '~' '|' '{' '}' '`' '@' '[' ']'
-  '*' '+' ';' ':' '<' '>' ',' '.' '?' '/' '\\' '_' ]
+  '*' '+' ';' ':' '<' '>' ',' '.' '?' '/' '\\' '_'
+  '$' '%' '&' '\'' '=' '~' '~' '|' '{' '}' '`' '@' '[' ']' ]
+let hex = [ 'a'-'f' 'A'-'F' '0'-'9' ]
 let alnum = digit | alpha
 let name = alpha+  ("_" | digit | alpha)*
+let r64 = "0r" digit+
+let hr64 = "0xr" hex+
 let z = (('-' digit+)|digit+)
 rule token = parse
     | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
     | "[;" [^ ';']* ";]"  { token lexbuf }
+    | "0r" (digit+ as lxm) { R64(Int64.of_string lxm) }
+    | "0xr" (hex+ as lxm) { R64(Int64.of_string ("0x"^lxm)) }
     | "§"  { LCE }
     | "§+0" { LCE_IR  }
     | "§§"  { MDL }

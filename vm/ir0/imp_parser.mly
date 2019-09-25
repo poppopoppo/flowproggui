@@ -15,7 +15,7 @@
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token <string> NAM STG VAL
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
-
+%token <int64> R64
 %nonassoc AGL_PRE
 %left FOR_ALL
 %left EQ
@@ -300,6 +300,7 @@ exp:
   | L_PRN MNS exp R_PRN { App(Atm(Fnc Tkn.Mns),$3) }
   | exp EQ exp { App(Atm(Fnc Tkn.Eq),Rcd [|$1;$3|]) }
   | L_PRN exp R_PRN { $2 }
+  | R64 { Atm(R64 $1) }
   | exp APP exp { App($1,$3) }
   | exp PRJ INT { Prj($1,Rcd_Ptn.Idx($3,Rcd_Ptn.End)) }
   | exp PRJ NAM { Prj($1,Rcd_Ptn.Lb($3,Rcd_Ptn.End)) }
