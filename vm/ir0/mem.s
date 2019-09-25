@@ -2,6 +2,7 @@
 ; r9 = tmp0  r10 = tmp1 r11 = tmp2
 ; [r9] = 32,32 ref-count,len
 ; [r9+1] = tag_bit list ; right to left
+bits 64
 extern free
 extern printf
 extern malloc
@@ -13,6 +14,7 @@ section .data
   str_hw: db "Hello World!!",10,0
   str_dbg: db "DBG:%d",10,0
   fmt64: db "0x%llx",0
+  fmtr64: db "0xr","0x%llx",0
   str_r64: db "0x%llx FEFEF",0
   fmt64_spc: db "0x%llx ",0
   fmt32: db "%d",0

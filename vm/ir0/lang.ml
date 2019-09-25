@@ -344,6 +344,7 @@ module Tkn = struct
     | Rcd_Lb of ((string * ('p, 'r) t) array)
     | Tkn of ('p, 'r) tkn
   and ('p, 'r) tkn =
+    | R64 of int64
     | Tkn_N of string | Etr of ('p, 'r) etr | Stg of string | Z of int
     | Exn of string | P of ('p array) * (('p, 'r) t)
     | Zn of int * int | Sgn of Sgn.t | CoP of int * (('p, 'r) t)
@@ -361,6 +362,7 @@ module Tkn = struct
         "{>"^(Array.fold_left (fun s (l,r) -> s^" "^l^"~"^(print r)) "" rs)^"}"
       | Tkn v ->
         ( match v with
+          | R64 x -> "0xr"^(Int64.format "%x" x)
           | Tkn_N n -> n
           | Exn s -> "?."^"\""^s^"\""
           | Stg s ->
@@ -469,7 +471,7 @@ module Ast = struct
     | App of exp_rcd * exp_rcd | Prj of exp_rcd * Rcd_Ptn.idx
     | Atm of exp_atm
   and exp_atm =
-    | Z of int | Zn of (int * int)
+    | Z of int | Zn of (int * int) | R64 of int64
     | Fnc of (etr, r) Tkn.etr
     | Name of string | Stg of string
   and r = Types.v ref
@@ -636,6 +638,7 @@ and print_exp e =
     | Prj(e0,l) -> (print_exp e0)^"◃"^(Rcd_Ptn.print_lb l)
     | Atm a ->
       ( match a with
+        | R64 x -> "0xr"^(Int64.format "%x" x)
         | Z i -> string_of_int i
         | Zn(z0,z1) -> "ℤ["^(string_of_int z1)^"]."^(string_of_int z0)
         | Name s -> s
@@ -866,6 +869,7 @@ let rec run m p0 (st:st) cs =
                   | Atm a ->
                     ( match a with
                       | Z i -> Tkn.Z i | Zn (z0,z1) -> Tkn.Zn(z0,z1)
+                      | R64 x -> Tkn.R64 x
                       | Name n -> Tkn.Tkn_N n
                       | Stg s -> Tkn.Stg s
                       | Fnc f -> Tkn.Etr f
@@ -1444,6 +1448,7 @@ and slv_exp_atm m a =
   ( match a with
     | Atm a ->
       ( match a with
+        | R64 _ -> Prm (Types.Name "r64")
         | Stg _ -> Prm Types.Stg
         | Z _ -> zn (Prm Z_u)
         | Zn(_,_) -> zn (Var (newvar()))
@@ -1914,7 +1919,7 @@ and emt_get_ptn r =
         "\tmov rax,"^(emt_reg i)^"\n"^
         "\tmov r9,[r12]\n"^
         "\tbt r9,"^(string_of_int i)^"\n" in
-      e0
+      (cmt c0)^e0
     | R rs ->
       let l = Array.length rs in
       let e0 =
@@ -2005,7 +2010,12 @@ and emt_ir s p =
       let e0 = emt_get_ptn i0 in
       let e1 =
         "\tpush rax\n"^
+        "\tmov r9,0\n"^
+        "\trcl r9,1\n"^
+        "\tpush r9\n"^
         (clear s)^
+        "\tpop r9\n"^
+        "\trcr r9,1\n"^
         "\tpop rax\n" in
       let e2 =
         "\tret\n" in
@@ -2058,7 +2068,8 @@ and emt_ir s p =
             let e0 = emt_get_ptn ir in
             let ec =
               "\tmov rdi,rax\n"^
-              "\txor rax,rax\n"^
+              "\tmov rax,0\n"^
+              "\tmov r9,0\n"^
               "\trcl r9,1\n"^
               "\tmov rax,r9\n"^
               "\trcr r9,1\n" in
@@ -2087,8 +2098,16 @@ and emt_ir s p =
             "; ir_call\n"
           | IR_Glb_Call(_,_,_) ->
             "; ir_glb_call\n"
-          | IR_Exp(_,_,_) ->
-            "; ir_exp \n"
+          | IR_Exp(Ast.Atm(Ast.R64 x),_,Rcd_Ptn.A r) ->
+            let ir = idx_crt s r in
+            let c0 = cmt ("\t» "^(print_exp (Ast.Atm(Ast.R64 x)))^" |~ "^(emt_ptn (Rcd_Ptn.A ir))^rtl^(print_ty (Rcd_Ptn.A r))) in
+            let e0 =
+              "\tmov r9,0x"^(Int64.format "%x" x)^"\n"^
+              "\tmov "^(emt_reg ir)^",r9\n"^
+              "\tmov r9,[r12]\n"^
+              "\tbts r9,"^(string_of_int ir)^"\n"^
+              "\tmov [r12],r9\n" in
+            c0^e0
           | _ -> err "emt_etr 0" ) in
       s0^(emt_ir s p1) )
 and idx_crt_ptn s r = Rcd_Ptn.map (fun v -> idx_crt s v) r

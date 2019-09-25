@@ -2,7 +2,13 @@
 § test0
   |» {}
   $ {{} {}} ⊢ r0,r1,r2
-  ∎ { r0 r1 }
+  $ r0 ⊢ { r3 r4 }
+  ∎ { r3 r1 }
+§ test2
+  |» {}
+  » 0xrFFFF |~ {} ⊢ x0
+  » 0xrffffccccAFAB00b0 |~ {} ⊢ y
+  ∎ { x0 y }
 [;
 § test1
   |» {}

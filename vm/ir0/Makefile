@@ -13,7 +13,7 @@ evo: util.ml evo_tkn.ml
 run: gui evo
 	./gui
 	gprof ./evo_tkn.exe > evo_tkn.prf.txt
-nc: util.ml lang.ml nc.ml
+nc: util.ml lang.ml nc.ml imp_lexer.mll
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
 	ocamlc -c imp_parser.mli
