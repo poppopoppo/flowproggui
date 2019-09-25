@@ -1845,6 +1845,8 @@ let emt_flg = true
 let rec emt m f =
   "%include \"mem.s\"\n"^
   "main:\n"^
+  "\tmov r12,rsp\n"^
+  "\tlea rsp,[rsp-8*200]\n"^
   "\txor rax,rax\n"^
   "\tmov rdi,0\n"^
   "\tcall mlc\n"^
@@ -1977,6 +1979,7 @@ and emt_reg i = "[r12-8*"^(string_of_int (i+1))^"]"
 and clear _ = "; clear\n"
 and csn = "r15"
 and emt_agl = "; emt_agl\n"
+and lb () = "lb_"^(Sgn.print (sgn ()))
 and emt_ir s p =
   pnt true ("enter emt_ir:"^(pnt_idx s)^","^(print_line p)^"\n");
   ( match p with
@@ -2021,8 +2024,57 @@ and emt_ir s p =
     | Seq(n,p1) ->
       let s0 =
         ( match n with
-          | IR_Id(_,_) ->
-            "; ir_id\n"
+          | IR_Id(r,rs) ->
+            let n = Array.length rs in
+            let ir = idx_csm_ptn s r in
+            let irs =
+              Array.fold_left
+                (fun irs r ->
+                   let ii = idx_crt_ptn s r in
+                   irs |+| [|ii|] )
+                [||] rs in
+            let c0 =
+              cmt ("\t$ "^(emt_ptn ir)^" ⊢ "^(Array.fold_left (fun b r -> b^","^(emt_ptn r)) "" irs)^
+                   rtl^(Arr.fld_l (fun s r -> s^","^(print_ty r)) "" rs)) in
+            let e0 = emt_get_ptn ir in
+            let ec =
+              "\tmov rdi,rax\n"^
+              "\txor rax,rax\n"^
+              "\trcl r9,1\n"^
+              "\tmov rax,r9\n"^
+              "\trcr r9,1\n" in
+            let lc0 = lb () in
+            let e1 =
+              "\tjc "^lc0^"\n"^
+              "\tpush rdi\n"^
+              "\tpush rax\n"^
+              "\tmov rsi,"^(string_of_int n)^"\n"^
+              "\tcall inc_r_p_n\n"^
+              "\tclc\n"^
+              "\tpop rax\n"^
+              "\tpop rdi\n"^
+              lc0^":\n" in
+            let e2 =
+              Array.fold_left
+                (fun e2 r ->
+                   let ei1 =
+                     "\tpush rdi\n"^
+                     "\tpush rax\n"^
+                     (emt_set_ptn r)^
+                     "\tpop rax\n"^
+                     "\tpop rdi\n"^
+                     "\tbt rax,1\n" in
+                   e2^ei1 )
+                "" irs in
+            let lc1 = lb () in
+            let e3 =
+              "\tjc "^lc1^"\n"^
+              "\tpush rdi\n"^
+              "\tcall dec_r_p\n"^
+              "\tpop rdi\n"^
+              "\tclc\n"^
+              lc1^":\n" in
+            c0^e0^ec^e1^e2^e3
           | IR_Call((_,_),_) ->
             "; ir_call\n"
           | IR_Glb_Call(_,_,_) ->
