@@ -1976,7 +1976,24 @@ and emt_set_ptn r =
       (cmt c0)^e0^e2
     | _ -> ";emt_set_ptn\n" )
 and emt_reg i = "[r12-8*"^(string_of_int (i+1))^"]"
-and clear _ = "; clear\n"
+and pnt_s s =
+  Hashtbl.fold
+    (fun n v e -> e^" "^(string_of_int n)^"\'~"^(Ast.print_v v))
+    s ""
+and clear s =
+  Hashtbl.fold
+    (fun n _ e ->
+       Hashtbl.remove s n;
+       let l0 = lb () in
+       let ex =
+         "\tmov r9,[r12]\n"^
+         "\tbt r9,"^(string_of_int n)^"\n"^
+         "\tjc "^l0^"\n"^
+         "\tmov rdi,"^(emt_reg n)^"\n"^
+         "\tcall dec_r_p\n"^
+         l0^":\n" in
+       e^ex )
+    s (";clear "^(pnt_s s)^"\n")
 and csn = "r15"
 and emt_agl = "; emt_agl\n"
 and lb () = "lb_"^(Sgn.print (sgn ()))

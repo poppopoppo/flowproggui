@@ -27,9 +27,9 @@ test0:
 	jne emt_set_ptn_end_0
 	call free
 emt_set_ptn_end_0:
-; 	$ { {  } } ⊢ ,0' : ,{ { } }
-; emt_get_ptn { {  } }
-	mov rdi,1
+; 	$ { {  } {  } } ⊢ ,0',1',2' : ,{ { } { } },{ { } { } },{ { } { } }
+; emt_get_ptn { {  } {  } }
+	mov rdi,2
 	call mlc
 	push rax
 ; emt_get_ptn {  }
@@ -42,6 +42,17 @@ emt_set_ptn_end_0:
 	push rdi
 	call exc
 	pop rax
+	push rax
+; emt_get_ptn {  }
+	mov rdi,0
+	call mlc
+	clc
+	mov rdx,rax
+	pop rdi
+	mov rsi,1
+	push rdi
+	call exc
+	pop rax
 	clc
 	mov rdi,rax
 	xor rax,rax
@@ -51,7 +62,7 @@ emt_set_ptn_end_0:
 	jc lb_1
 	push rdi
 	push rax
-	mov rsi,1
+	mov rsi,3
 	call inc_r_p_n
 	clc
 	pop rax
@@ -71,15 +82,55 @@ lb_1:
 	pop rax
 	pop rdi
 	bt rax,0
+	push rdi
+	push rax
+; emt_set_ptn 1'
+	mov [r12-8*2],rdi
+	xor r9,r9
+	rcl r9,2
+	mov r10,[r12]
+	btr r10,1
+	or r10,r9
+	mov [r12],r10
+	mov rax,rdi
+	pop rax
+	pop rdi
+	bt rax,0
+	push rdi
+	push rax
+; emt_set_ptn 2'
+	mov [r12-8*3],rdi
+	xor r9,r9
+	rcl r9,3
+	mov r10,[r12]
+	btr r10,2
+	or r10,r9
+	mov [r12],r10
+	mov rax,rdi
+	pop rax
+	pop rdi
+	bt rax,0
 	jc lb_2
 	push rdi
 	call dec_r_p
 	pop rdi
 	clc
 lb_2:
-; 	∎ 0'
-	mov rax,[r12-8*1]
+; 	∎ 1'
+	mov rax,[r12-8*2]
+	mov r9,[r12]
+	bt r9,1
+;clear  2'~r2 0'~r0
+	mov r9,[r12]
+	bt r9,2
+	jc lb_3
+	mov rdi,[r12-8*3]
+	call dec_r_p
+lb_3:
 	mov r9,[r12]
 	bt r9,0
-; clear
+	jc lb_4
+	mov rdi,[r12-8*1]
+	call dec_r_p
+lb_4:
 	ret
