@@ -28,7 +28,7 @@ bench: bench.ml
 	ocamlopt -p -o bench bench.ml
 	./bench
 	gprof ./bench > bench.prof.txt
-ncc: 
+ncc:
 	./nc inc.mdls test0
 	nasm -f elf64 Inc.s
 	gcc Inc.o -nostartfiles -no-pie -g -o Inc

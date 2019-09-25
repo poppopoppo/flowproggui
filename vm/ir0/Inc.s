@@ -1,5 +1,7 @@
 %include "mem.s"
 main:
+	mov r12,rsp
+	lea rsp,[rsp-8*200]
 	xor rax,rax
 	mov rdi,0
 	call mlc
@@ -25,31 +27,48 @@ test0:
 	jne emt_set_ptn_end_0
 	call free
 emt_set_ptn_end_0:
-; emt_get_ptn { {  } {  } }
-	mov rdi,2
-	call mlc
-	push rax
+; 	$ {  } ⊢ ,0' : ,{ }
 ; emt_get_ptn {  }
 	mov rdi,0
 	call mlc
 	clc
-	mov rdx,rax
-	pop rdi
-	mov rsi,0
+	mov rdi,rax
+	xor rax,rax
+	rcl r9,1
+	mov rax,r9
+	rcr r9,1
+	jc lb_1
 	push rdi
-	call exc
-	pop rax
 	push rax
-; emt_get_ptn {  }
-	mov rdi,0
-	call mlc
-	clc
-	mov rdx,rax
-	pop rdi
 	mov rsi,1
-	push rdi
-	call exc
+	call inc_r_p_n
+	clc
 	pop rax
+	pop rdi
+lb_1:
+	push rdi
+	push rax
+; emt_set_ptn 0'
+	mov [r12-8*1],rdi
+	xor r9,r9
+	rcl r9,1
+	mov r10,[r12]
+	btr r10,1
+	or r10,r9
+	mov [r12],r10
+	mov rax,1
+	pop rax
+	pop rdi
+	bt rax,1
+	jc lb_2
+	push rdi
+	call dec_r_p
+	pop rdi
+	clc
+lb_2:
+; emt_get_ptn {  }
+	mov rdi,0
+	call mlc
 	clc
 ; clear
 	ret

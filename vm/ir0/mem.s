@@ -26,7 +26,7 @@ section .data
 section .text
 global _start               ; _startを指名
 _start:
-  jmp main 
+  jmp main
 dbg:
   push rax
   push rdi
@@ -187,6 +187,11 @@ chk_t0_inc_end:
   pop r9
   ret
 ; rdi~src cf~tag_bit
+chk_inc:
+  jc chk_inc_end
+  jmp inc_r_p
+chk_inc_end:
+  ret
 inc_r_p:
   ; increment ref-count
   push rdi
@@ -223,6 +228,53 @@ inc_r_p_end:
   pop rdi
   mov rax,rdi
   ret
+set_cf:
+  rcl r9,1
+  mov rax,r9
+  rcr r9,1
+  ret
+cf_call:
+  jnc cf_call_end
+  call rdi
+cf_call_end:
+  ret
+inc_r_p_n:
+  ; increment ref-count
+  push rdi
+  mov r9,[rdi]
+  ror QWORD r9,48
+  add QWORD r9,rsi
+  rol QWORD r9,48
+  mov [rdi],r9
+  ; mov to temporary register
+  mov r10,r9
+  mov r11,r9
+  ; prepared for loop
+  lea r9,[r9+8*1]
+  shl r10,16
+  shr r10,48
+inc_r_p_n_lp:
+  cmp r10,0
+  je inc_r_p_n_end
+  sub r10,1
+  rcr r11,1
+  jc inc_r_p_n_lp_nxt
+  push r9
+  push r10
+  push r11
+  mov rdi,[r9]
+  call inc_r_p_n
+  pop r11
+  pop r10
+  pop r9
+inc_r_p_n_lp_nxt:
+  lea r9,[r9+8*1]
+  jmp inc_r_p_n_lp
+inc_r_p_n_end:
+  pop rdi
+  mov rax,rdi
+  ret
+
 
 chk_t0_dec:
   push r9
