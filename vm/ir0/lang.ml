@@ -1907,9 +1907,9 @@ and emt_get_ptn r =
   ( match r with
     | A i ->
       let e0 =
-        "mov rax,"^(emt_reg i)^"\n"^
-        "mov r9,[r12]"^
-        "bt r9,"^(string_of_int i)^"\n" in
+        "\tmov rax,"^(emt_reg i)^"\n"^
+        "\tmov r9,[r12]\n"^
+        "\tbt r9,"^(string_of_int i)^"\n" in
       e0
     | R rs ->
       let l = Array.length rs in
@@ -1943,10 +1943,10 @@ and emt_set_ptn r =
         "\txor r9,r9\n"^
         "\trcl r9,"^(string_of_int (i+1))^"\n"^
         "\tmov r10,[r12]\n"^
-        "\tbtr r10,"^(string_of_int (i+1))^"\n"^
+        "\tbtr r10,"^(string_of_int i)^"\n"^
         "\tor r10,r9\n"^
         "\tmov [r12],r10\n"^
-        "\tmov rax,1\n" in
+        "\tmov rax,rdi\n" in
       (cmt c0)^e0
     | R rs ->
       let (e0,_) =
@@ -1985,11 +1985,12 @@ and emt_ir s p =
   ( match p with
     | Ret r ->
       let i0 = idx_csm_ptn s r in
+      let c0 = cmt ("\t∎ "^(emt_ptn i0)) in
       let e0 = emt_get_ptn i0 in
       let e1 = clear s in
       let e2 =
         "\tret\n" in
-      e0^e1^e2
+      c0^e0^e1^e2
     | Agl(r,ps) ->
       let c0 = cmt ("\t∠ "^(emt_pnt_ptn s (Rcd_Ptn.A r))) in
       let i0 = idx_csm_ptn s (Rcd_Ptn.A r) in
@@ -2063,7 +2064,7 @@ and emt_ir s p =
                      (emt_set_ptn r)^
                      "\tpop rax\n"^
                      "\tpop rdi\n"^
-                     "\tbt rax,1\n" in
+                     "\tbt rax,0\n" in
                    e2^ei1 )
                 "" irs in
             let lc1 = lb () in

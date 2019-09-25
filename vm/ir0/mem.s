@@ -204,7 +204,7 @@ inc_r_p:
   mov r10,r9
   mov r11,r9
   ; prepared for loop
-  lea r9,[r9+8*1]
+  lea r9,[rdi+8*1]
   shl r10,16
   shr r10,48
 inc_r_p_lp:
@@ -250,7 +250,7 @@ inc_r_p_n:
   mov r10,r9
   mov r11,r9
   ; prepared for loop
-  lea r9,[r9+8*1]
+  lea r9,[rdi+8*1]
   shl r10,16
   shr r10,48
 inc_r_p_n_lp:
@@ -305,7 +305,7 @@ dec_r_p:
   mov r10,r9
   mov r11,r9
   ; prepared for loop
-  lea r9,[r9+8*1]
+  lea r9,[rdi+8*1]
   shl r10,16
   shr r10,48
 dec_r_p_lp:

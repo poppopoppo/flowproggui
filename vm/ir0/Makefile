@@ -30,7 +30,7 @@ bench: bench.ml
 	gprof ./bench > bench.prof.txt
 ncc:
 	./nc inc.mdls test0
-	nasm -f elf64 Inc.s
+	nasm -gdwarf -f elf64 Inc.s
 	gcc Inc.o -nostartfiles -no-pie -g -o Inc
 test: mem.s
 	nasm -f elf64 mem.s
