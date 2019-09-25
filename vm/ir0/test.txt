@@ -144,7 +144,7 @@ a'→b' : type constructor
   ∐\ _
  ∇
 §+ nt0
-  |« x y { z w }
+  |« { x y { z w } }
   +» { x y } , st0
   ..
   @.x r2 |⊢

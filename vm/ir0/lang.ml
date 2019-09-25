@@ -229,7 +229,6 @@ module Types = struct
       | Rcd_Ptn.Idx(i,tl),Rcd r -> Rcd (get_agl_rcd a i tl r)
       | _ -> err "get_agl:0" )
   and get_agl_rcd a hd tl r =
-    let open Rcd_Ptn in
     ( match hd,r with
       | _,Uo { contents = Ln r0 } -> get_agl_rcd a hd tl r0
       | 0,Cns(t0,t1) -> Cns(get_agl a tl t0,t1)
@@ -1842,26 +1841,25 @@ and idx_min s i =
     VHash.fold
       (fun _ j b -> if j=i then true else b) s false in
   if b then idx_min s (i+1) else i *)
-open Rcd_Ptn
 let emt_flg = true
 let rec emt m f =
-  ".intel_syntax noprefix\n"^
-  ".global _start\n"^
-  "_start:\n"^
+  "%include \"mem.s\"\n"^
+  "main:\n"^
   "\txor rax,rax\n"^
-  "\tnot rax\n"^
-  "\tmov r12,esp\n"^
-  "\tsub esp,50\n"^
-  "\tmov r13,esp\n"^
-  "\tsub esp,50\n"^
-  "\tmov r14,esp\n"^
-  "\tsub esp,50\n"^
-  "\tmov r15,esp\n"^
+  "\tmov rdi,0\n"^
+  "\tcall mlc\n"^
+  "\tmov rdi,rax\n"^
+  "\tclc\n"^
   "\tcall "^f^"\n"^
-  "\tmov rax,[r13]\n"^
+  "\tmov rdi,rax\n"^
+  "\tmov rsi,str_ret\n"^
+  "\tcall pnt\n"^
+  "\tcall pnt_str_ret\n"^
+  "\tjmp _end\n"^
   (emt_el m m.ns_v)
 
 and emt_pnt_ptn s r = Rcd_Ptn.print (fun v -> (string_of_int (idx s v))^"\'") r
+and emt_ptn r = Rcd_Ptn.print (fun i -> (string_of_int i)^"\'") r
 and emt_el m el =
   ( match el with
     | [] -> ""
@@ -1869,13 +1867,14 @@ and emt_el m el =
       let s0 = emt_etr m e in
       let s1 = emt_el m tl in
       n^":\n"^s0^s1 )
-and cmt s = if emt_flg then "# "^s^"\n" else ""
+and cmt s = if emt_flg then "; "^s^"\n" else ""
 and emt_etr _ e =
   let s = Hashtbl.create 10 in
   let (r0,p0) = e in
-  let _ = idx_crt_ptn s r0 in
+  let i0 = idx_crt_ptn s r0 in
   let c0 = cmt ("\t|» "^(emt_pnt_ptn s r0)) in
-  c0^(emt_ir s !p0)
+  let e0 = emt_set_ptn i0 in
+  c0^e0^(emt_ir s !p0)
 and pnt_idx s = Hashtbl.fold (fun n v q -> q^" "^(string_of_int n)^"~"^(Ast.print_v v)) s ""
 (*
 and asm_of_ir i s p =
@@ -1900,24 +1899,99 @@ and asm_of_ir i s p =
     | IL_Call(f,r) -> emt_il_call s f r
     | IL_Glb_Call(n,r) -> emt_il_glb_call s n r )
 *)
+and emt_get_ptn r =
+  let c0 = "emt_get_ptn "^(emt_ptn r) in
+  let open Rcd_Ptn in
+  ( match r with
+    | A i ->
+      let e0 =
+        "mov rax,"^(emt_reg i)^"\n"^
+        "mov r9,[r12]"^
+        "bt r9,"^(string_of_int i)^"\n" in
+      e0
+    | R rs ->
+      let l = Array.length rs in
+      let e0 =
+        "\tmov rdi,"^(string_of_int l)^"\n"^
+        "\tcall mlc\n" in
+      let (e1,_) =
+        Array.fold_left
+          (fun (e1,i) r ->
+             let ei0 =
+               "\tpush rax\n" in
+             let ei1 = emt_get_ptn r in
+             let ei2 =
+               "\tmov rdx,rax\n"^
+               "\tpop rdi\n"^
+               "\tmov rsi,"^(string_of_int i)^"\n"^
+               "\tpush rdi\n"^
+               "\tcall exc\n"^
+               "\tpop rax\n" in
+             (e1^ei0^ei1^ei2,i+1))
+          (e0,0) rs in
+      (cmt c0)^e1^"\tclc\n"
+    | _ -> "; emt_get_ptn\n" )
+and emt_set_ptn r =
+  let c0 = "emt_set_ptn "^(emt_ptn r) in
+  let open Rcd_Ptn in
+  ( match r with
+    | A i ->
+      let e0 =
+        "\tmov "^(emt_reg i)^","^"rdi\n"^
+        "\txor r9,r9\n"^
+        "\trcl r9,"^(string_of_int (i+1))^"\n"^
+        "\tmov r10,[r12]\n"^
+        "\tbtr r10,"^(string_of_int (i+1))^"\n"^
+        "\tor r10,r9\n"^
+        "\tmov [r12],r10\n"^
+        "\tmov rax,1\n" in
+      (cmt c0)^e0
+    | R rs ->
+      let (e0,_) =
+        Array.fold_left
+          (fun (e0,i) r ->
+             let ei =
+               "\tpush rdi\n"^
+               "\tmov rdi,[rdi+8*"^(string_of_int (i+1))^"]\n" in
+             let e1 = emt_set_ptn r in
+             let e2 =
+               "\tpop rdi\n" in
+             (e0^ei^e1^e2,i+1))
+          ("",0) rs in
+      let l0 = "emt_set_ptn_end_"^(Sgn.print (sgn ())) in
+      let e2 =
+        "\tmov r9,[rdi]\n"^
+        "\tror r9,48\n"^
+        "\tsub r9,1\n"^
+        "\tmov r10,r9\n"^
+        "\tshl r10,48\n"^
+        "\trol r9,48\n"^
+        "\tmov [rdi],r9\n"^
+        "\tcmp r10,0\n"^
+        "\tjne "^l0^"\n"^
+        "\tcall free\n"^
+        l0^":\n" in
+      (cmt c0)^e0^e2
+    | _ -> ";emt_set_ptn\n" )
+and emt_reg i = "[r12-8*"^(string_of_int (i+1))^"]"
+and clear _ = "; clear\n"
+and csn = "r15"
+and emt_agl = "; emt_agl\n"
 and emt_ir s p =
   pnt true ("enter emt_ir:"^(pnt_idx s)^","^(print_line p)^"\n");
   ( match p with
     | Ret r ->
       let i0 = idx_csm_ptn s r in
-      let a0 = get_ptn_t0 i0 in
-      let a1 = clear s in
-      let a2 =
-        "\tcmp "^csn^",0\n"^
-        "\tje _exit\n"^
-        "\tsub "^csn^",1\n"^
+      let e0 = emt_get_ptn i0 in
+      let e1 = clear s in
+      let e2 =
         "\tret\n" in
-      a0^a1^a2
+      e0^e1^e2
     | Agl(r,ps) ->
       let c0 = cmt ("\t∠ "^(emt_pnt_ptn s (Rcd_Ptn.A r))) in
-      let i0 = idx_csm_ptn s r in
-      let e0 = get_ptn_t0 i0 in
-      let e1 = emt_agl_t0 in
+      let i0 = idx_csm_ptn s (Rcd_Ptn.A r) in
+      let e0 = emt_get_ptn i0 in
+      let e1 = emt_agl in
       let l0 = "agl_"^(Sgn.print (sgn ())) in
       let (_,a0) =
         Array.fold_left
@@ -1925,7 +1999,7 @@ and emt_ir s p =
              let s = Hashtbl.copy s in
              let ii = idx_crt_ptn s r in
              let ci = cmt ("\t∐ "^(emt_pnt_ptn s r)) in
-             let ex = set_ptn_t0 ii in
+             let ex = emt_set_ptn ii in
              let li = l0^"_"^(string_of_int i)^":\n" in
              let ei =
                "\tcmp "^tmp1^",0\n"^
@@ -1937,20 +2011,24 @@ and emt_ir s p =
       a0
     | IL_Glb_Call(n,r) ->
       let ir = idx_csm_ptn s r in
-      let er = get_ptn_t0 ir in
+      let er = emt_get_ptn ir in
       let e0 =
         ( match n with
           | _ -> "emt_ir_glb_call\n" ) in
       er^e0
-    | IL_Call(f,r) ->
-      emt_il_call s f r
+    | IL_Call(_,_) ->
+      "; il_call\n"
     | Seq(n,p1) ->
       let s0 =
         ( match n with
-          | IR_Id(r,rs) -> emt_id s r rs
-          | IR_Call((f,x),y) -> emt_call s f x y
-          | IR_Glb_Call(n,r0,r1) -> emt_gl_call s n r0 r1
-          | IR_Exp(e,r0,r1) -> emt_exp s e r0 r1
+          | IR_Id(_,_) ->
+            "; ir_id\n"
+          | IR_Call((_,_),_) ->
+            "; ir_call\n"
+          | IR_Glb_Call(_,_,_) ->
+            "; ir_glb_call\n"
+          | IR_Exp(_,_,_) ->
+            "; ir_exp \n"
           | _ -> err "emt_etr 0" ) in
       s0^(emt_ir s p1) )
 and idx_crt_ptn s r = Rcd_Ptn.map (fun v -> idx_crt s v) r
@@ -2005,6 +2083,7 @@ and idx_csm_ptn s r = Rcd_Ptn.map (fun v -> idx_csm s v) r
 and idx_add s = let v = newvar () in idx_crt s v
 and idx_min i s =
   if Hashtbl.mem s i then idx_min (i+1) s else i
+(*
 and emt_id s r rs =
   let s0 =
     Array.fold_left
@@ -2015,10 +2094,12 @@ and emt_id s r rs =
   let s1 = rm_ptn s r in
   idx_csm_ptn s r;
   c0^s0^s1
+*)
 and idx s v =
   let i = Hashtbl.fold (fun n v0 m -> if v0==v then n else m) s (-1) in
   if i=(-1) then err ("idx 0:"^(string_of_int i)) else i
 and idx_ptn s r = Rcd_Ptn.map (idx s) r
+(*
 and rpc_ptn s r0 r1 =
   ( match r0 with
     | A v0 -> rpc_a_ptn [] (idx s v0) (idx_ptn s r1)
@@ -2046,6 +2127,8 @@ and rpc_ptn s r0 r1 =
         | R_Lb _ -> ""
         | Ro_Lb(_,_) -> ""
         | _ -> err "rpc_ptn 3" ))
+*)
+    (*
 and rpc_a_ptn p i0 r1 =
   let r0 = reg i0 in
   ( match r1 with
@@ -2068,7 +2151,7 @@ and rpc_a_ptn p i0 r1 =
         (mov_path (p@[Tl i]))^
         "\tmov "^(reg it)^","^tmp1^"\n"
       in a0^a1
-    | _ -> "rpc_a_ptn\n" )
+    | _ -> "rpc_a_ptn\n" ) *)
 (*
  and mov_p_r i0 p i1 =
   let rec lp p =
@@ -2112,62 +2195,19 @@ and set_tbv_cf n =
 and get_tbv n =
   "\tmov "^tmp0^","^tbv^"\n"^
   "\trcl "^tmp0^","^(string_of_int n)^"\n"
-and push_s s =
-  let (a0,l) =
-    Hashtbl.fold
-      (fun i _ (a,l) ->
-         let ai =
-           if 5<i then
-             "\tpush "^(reg i)^"\n"^
-             "\tpush "^(string_of_int i)^"\n"
-           else "" in
-         (a^ai,l+1) ) s ("",0) in
-  let a1 = "\tpush "^(string_of_int l) in
-  let a2 =
-    "\tpush r8\n"^
-    "\tpush rcx\n"^
-    "\tpush rdx\n"^
-    "\tpush rsi\n"^
-    "\tpush rdi\n"^
-    "\tpush rax\n" in
-  let a3 = "\tpush "^tbv^"\n" in
-  a0^a1^a2^a3
-and pop_s =
-  "pop_s:\n"^
-  "\tpop "^tmp0^"\n"^
-  "\tpop "^tbv^"\n"^
-  "\tpop rax\n"^
-  "\tpop rdi\n"^
-  "\tpop rsi\n"^
-  "\tpop rdx\n"^
-  "\tpop rcx\n"^
-  "\tpop r8\n"^
-  "\tpop "^tmp1^"\n"^
-  "pop_s_lp:\n"^
-  "\tcmp "^tmp1^",0\n"^
-  "\tje pop_s_end\n"^
-  "\tsub "^tmp1^",1\n"^
-  "\tpop "^tmp2^"\n"^
-  "\tsub "^tmp2^",6\n"^
-  "\tadd "^tmp2^",r12\n"^
-  "\tpop ["^tmp2^"]\n"^
-  "\tjmp pop_s_lp\n"^
-  "pop_s_end:\n"^
-  "\tpush "^tmp0^"\n"^
-  "\tret\n"
 
 and call_fun f = "call "^f^"\n"
-and emt_call s f x y =
-  let _ = idx_crt_ptn s y in
-  let c0 =
+(* and emt_call s f x y =
+   let _ = idx_crt_ptn s y in
+   let c0 =
     cmt ("\t◂ "^(emt_pnt_ptn s (Rcd_Ptn.A f))^","^(emt_pnt_ptn s x)^" ⊢ "^(emt_pnt_ptn s y)
          ^rtl^(print_ty y)) in
-  idx_csm s f; idx_csm_ptn s x;
-  c0
-and emt_gl_call s e x y =
-  let open Rcd_Ptn in
-  let cx = (emt_pnt_ptn s x) in
-  let a0 =
+   idx_csm s f; idx_csm_ptn s x;
+   c0
+   and emt_gl_call s e x y =
+   let open Rcd_Ptn in
+   let cx = (emt_pnt_ptn s x) in
+   let a0 =
     ( match e with
       | Mns -> "emt_gl_call 0\n"
       | Inj _ -> "emt_gl_call 1\n"
@@ -2179,39 +2219,39 @@ and emt_gl_call s e x y =
       | (Grm (g,n)) -> "emt_gl_call 7\n"
       | (Etr_N f) -> "emt_gl_call 8\n"
       | _ -> err "emt_gl_call 0:" ) in
-  let _ = idx_crt_ptn s y in
-  let c0 =
+   let _ = idx_crt_ptn s y in
+   let c0 =
     cmt ("\t"^(Tkn.print_etr e)^" "^cx^" ⊢ "^(emt_pnt_ptn s y)^rtl^(print_ty y)) in
-  (* let a0 = set_arg s x in  *)
-  idx_csm_ptn s x;
-  (* let a1 = push_arg s in
+   (* let a0 = set_arg s x in  *)
+   idx_csm_ptn s x;
+   (* let a1 = push_arg s in
      let a1 = s *)
-  c0^a0
-and emt_ret s r =
-  let c0 = cmt ("\t∎ "^(emt_pnt_ptn s r)) in
-  let a0 = set_arg s r in
-  idx_csm_ptn s r;
-  let a1 = clear_s s in
-  let a2 =
+   c0^a0
+   and emt_ret s r =
+   let c0 = cmt ("\t∎ "^(emt_pnt_ptn s r)) in
+   let a0 = set_arg s r in
+   idx_csm_ptn s r;
+   let a1 = clear_s s in
+   let a2 =
     "\tret\n" in
-  c0^a0^a1^a2
-and clear_s _ = "clear_s\n"
-and emt_exp s e r0 r1 =
-  let _ = idx_crt_ptn s r1 in
-  let c0 = cmt ("\t» "^(print_exp e)^" |~ "^(emt_pnt_ptn s r0)^" ⊢ "^(emt_pnt_ptn s r1)^(print_ty r1)) in
-  idx_csm_ptn s r0;
-  c0
-and emt_il_call s f x =
-  let c0 = cmt ("\t◂ "^(emt_pnt_ptn s (Rcd_Ptn.A f))^(emt_pnt_ptn s x)^" ⊢|") in
-  idx_csm s f; idx_csm_ptn s x;
-  c0
-and emt_il_glb_call s n r =
-  let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_pnt_ptn s r)^" ⊢|") in
-  let _ = idx_csm_ptn s r in
-  c0
-and reg_arg i = "[r13+"^(string_of_int i)^"]"
-and set_arg s r =
-  let rec lp j r =
+   c0^a0^a1^a2
+   and clear_s _ = "clear_s\n"
+   and emt_exp s e r0 r1 =
+   let _ = idx_crt_ptn s r1 in
+   let c0 = cmt ("\t» "^(print_exp e)^" |~ "^(emt_pnt_ptn s r0)^" ⊢ "^(emt_pnt_ptn s r1)^(print_ty r1)) in
+   idx_csm_ptn s r0;
+   c0
+   and emt_il_call s f x =
+   let c0 = cmt ("\t◂ "^(emt_pnt_ptn s (Rcd_Ptn.A f))^(emt_pnt_ptn s x)^" ⊢|") in
+   idx_csm s f; idx_csm_ptn s x;
+   c0
+   and emt_il_glb_call s n r =
+   let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_pnt_ptn s r)^" ⊢|") in
+   let _ = idx_csm_ptn s r in
+   c0
+   and reg_arg i = "[r13+"^(string_of_int i)^"]"
+   and set_arg s r =
+   let rec lp j r =
     ( match r with
       | A i ->
         let a =
@@ -2260,5 +2300,6 @@ and set_arg s r =
         let a5 = "\tmov "^(reg_arg j)^","^(reg_idx s rt)^"\n" in
         (j+1,a0^as0^a5)
       | _ -> err "set_arg 0" ) in
-  lp 0 r
-and get_arg _ _ = "get_arg\n"
+   lp 0 r
+   and get_arg _ _ = "get_arg\n"
+*)
