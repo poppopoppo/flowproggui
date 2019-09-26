@@ -12,6 +12,55 @@
   » 0r24 |~ {} ⊢ x2
   mul { x2 x1 } ⊢ x3
   ∎ { x0 x3 }
+§ test3
+  |» {}
+  » 0x2r1 |~ {} ⊢ b0
+  » 0xrff |~ {} ⊢ x0
+  » 0xrff |~ {} ⊢ x1
+  cmp { x0 x1 } ⊢ b1
+  ∠ b1
+    ∐ b1
+    ∎ b1
+    ∐ b2
+    ∎ b2
+  ∇
+§ @.f0
+  |» x
+  $ x ⊢ x0,x1
+  » 0r0 |~ {} ⊢ y
+  cmp { x0 y } ⊢ b
+  ∠ b
+    ∐ b0
+    » 0r1 |~ {} ⊢ t0
+    sub { x1 t0 } ⊢ x1
+    f0 x1 ⊢ y1
+    ∎ y1
+    ∐ b1
+    » 0r0 |~ {} ⊢ y
+    ∎ y
+  ∇
+§ @.fact
+  |» x
+  $ x ⊢ x0,x1
+  » 0r0 |~ {} ⊢ y
+  cmp { x0 y } ⊢ b
+  ∠ b
+    ∐ b
+    » 0r1 |~ {} ⊢ t0
+    $ x1 ⊢ x1,x2
+    sub { x1 t0 } ⊢ x1
+    fact x1 ⊢ y1
+    mul { x2 y1 } ⊢ y1
+    ∎ y1
+    ∐ b
+    » 0r1 |~ {} ⊢ y
+    ∎ y
+  ∇
+§ test4
+  |» {}
+  » 0r5 |~ {} ⊢ x
+  fact x ⊢ y
+  ∎ y
 [;
 § test1
   |» {}

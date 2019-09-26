@@ -22,6 +22,8 @@ rule token = parse
     | "[;" [^ ';']* ";]"  { token lexbuf }
     | "0r" (digit+ as lxm) { R64(Int64.of_string lxm) }
     | "0xr" (hex+ as lxm) { R64(Int64.of_string ("0x"^lxm)) }
+    | "0x2r0" { R2(false) }
+    | "0x2r1" { R2(true) }
     | "§"  { LCE }
     | "§+0" { LCE_IR  }
     | "§§"  { MDL }

@@ -16,6 +16,7 @@
 %token <string> NAM STG VAL
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
 %token <int64> R64
+%token <bool> R2
 %nonassoc AGL_PRE
 %left FOR_ALL
 %left EQ
@@ -301,6 +302,7 @@ exp:
   | exp EQ exp { App(Atm(Fnc Tkn.Eq),Rcd [|$1;$3|]) }
   | L_PRN exp R_PRN { $2 }
   | R64 { Atm(R64 $1) }
+  | R2 { Atm(R2 $1) }
   | exp APP exp { App($1,$3) }
   | exp PRJ INT { Prj($1,Rcd_Ptn.Idx($3,Rcd_Ptn.End)) }
   | exp PRJ NAM { Prj($1,Rcd_Ptn.Lb($3,Rcd_Ptn.End)) }
