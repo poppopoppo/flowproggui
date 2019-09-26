@@ -17,7 +17,7 @@
   » 0x2r1 |~ {} ⊢ b0
   » 0xrff |~ {} ⊢ x0
   » 0xrff |~ {} ⊢ x1
-  cmp { x0 x1 } ⊢ b1
+  cmp { x0 x1 } ⊢ { b1 c }
   ∠ b1
     ∐ b1
     ∎ b1
@@ -28,7 +28,7 @@
   |» x
   $ x ⊢ x0,x1
   » 0r0 |~ {} ⊢ y
-  cmp { x0 y } ⊢ b
+  cmp { x0 y } ⊢ { b c }
   ∠ b
     ∐ b0
     » 0r1 |~ {} ⊢ t0
@@ -43,7 +43,7 @@
   |» x
   $ x ⊢ x0,x1
   » 0r0 |~ {} ⊢ y
-  cmp { x0 y } ⊢ b
+  cmp { x0 y } ⊢ { b c }
   ∠ b
     ∐ b
     » 0r1 |~ {} ⊢ t0
@@ -56,11 +56,41 @@
     » 0r1 |~ {} ⊢ y
     ∎ y
   ∇
+§ @.tak
+  |» { x y z }
+  $ x ⊢ x,x0
+  $ y ⊢ y,y0
+  cmp { x0 y0 } ⊢ { b c }
+  ∠ c
+    ∐ c
+    $ x ⊢ x,x0,x1
+    $ y ⊢ y,y0,y1
+    $ z ⊢ z,z0,z1
+    » 0r1 |~ {} ⊢ t
+    $ t ⊢ t,t0,t1
+    sub { x t } ⊢ xt
+    tak { xt y0 z0 } ⊢ r0
+    sub { y t0 } ⊢ yt
+    tak { yt z1 x0 } ⊢ r1
+    sub { z t1 } ⊢ zt
+    tak { zt x1 y1 } ⊢ r2
+    tak { r0 r1 r2 } ⊢ rr
+    ∎ rr
+    ∐ c
+    ∎ z
+  ∇
 § test4
   |» {}
   » 0r5 |~ {} ⊢ x
   fact x ⊢ y
   ∎ y
+§ test5
+  |» {}
+  » 0r18 |~ {} ⊢ x
+  » 0r9 |~ {} ⊢ y
+  » 0r0 |~ {} ⊢ z
+  tak { x y z } ⊢ r
+  ∎ r
 [;
 § test1
   |» {}
