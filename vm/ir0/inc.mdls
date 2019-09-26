@@ -10,9 +10,8 @@
   » 0xrffffccccAFAB0000 |~ {} ⊢ y
   » 0r10 |~ {} ⊢ x1
   » 0r24 |~ {} ⊢ x2
-  add { x1 x2 } ⊢ y1
-  add { x0 y } ⊢ z
-  ∎ y1
+  mul { x2 x1 } ⊢ x3
+  ∎ { x0 x3 }
 [;
 § test1
   |» {}
