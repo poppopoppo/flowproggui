@@ -170,6 +170,7 @@ mlc:
   push rdi
   add rdi,1
   imul rdi,8
+  mov rax,0
   call malloc
   pop rdi
   xor r9,r9
@@ -482,6 +483,15 @@ exc_cf:
   mov [rdi+8*rsi+8*1],rdx
   ret
 ; rdi ~ src-dta rsi~dst-str
+pnt_tkn:
+  pushf
+  push rdi
+  mov rsi,str_ret
+  call pnt
+  call pnt_str_ret
+  pop rdi
+  popf
+  ret
 pnt:
   jc pnt_end
   jmp pnt_r_p
@@ -498,8 +508,6 @@ pnt_end:
   ret
 pnt_r_p:
   push rdi
-  mov rdi,9
-  call dbg
   pop rdi
   mov r10,[rdi]
   shr r10,48
@@ -528,10 +536,6 @@ pnt_r_p:
   ; prepared for loop
   lea rdi,[rdi+8*1]
 pnt_r_p_lp:
-  push rdi
-  mov rdi,11
-  call dbg
-  pop rdi
   cmp r9,0
   je pnt_r_p_end
   sub r9,1
