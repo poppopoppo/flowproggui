@@ -28,6 +28,7 @@ type token =
   | ROT of (int)
   | RM
   | R64 of (int64)
+  | R2 of (bool)
   | PRJ_IR
   | PRJ
   | PRD_END

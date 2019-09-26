@@ -1,6 +1,7 @@
 §§ Hex 
 § hex 
 	|» {} 
-	» 0xraafFAbc40212BCDE |~ {} ⊢ x 
-	∎ x  
+	» 0xraafFAbc40212BCDE |~ {} ⊢ x  
+	» 0x2r0 |~ {} ⊢ y
+	∎ y 
 §§.
