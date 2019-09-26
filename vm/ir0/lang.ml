@@ -1542,7 +1542,7 @@ let rec mk_ir_mdl el =
   m.ns <- ("mul",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Types.Prm(Types.Name "r64")))))::m.ns;
   m.ns_e<-("cmp",Tkn(Etr(Tkn.Etr_N "cmp")))::m.ns_e;
   m.ns <- ("cmp",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Rcd(rcd_cl [r2 ();r2 ()])))))::m.ns;
-           mk_ir_mdl_etr m el
+  mk_ir_mdl_etr m el
 and mk_ir_mdl_etr m el =
   ( match el with
     | [] -> m
@@ -1871,6 +1871,8 @@ let rec emt m f =
   "%include \"mem.s\"\n"^
   "main:\n"^
   "\tmov r15,0\n"^
+  "\tmov r14,0\n"^
+  "\tmov r13,0\n"^
   "\tmov r12,rsp\n"^
   "\tlea rsp,[rsp-8*200]\n"^
   "\tmov r9,0\n"^
@@ -1918,7 +1920,7 @@ and emt_etr _ e =
     (emt_set_ptn i0)^
     l2^":\n"^
     ep
-    in
+  in
   c0^e0
 and pnt_idx s = Hashtbl.fold (fun n v q -> q^" "^(string_of_int n)^"~"^(Ast.print_v v)) s ""
 (*
@@ -2037,13 +2039,13 @@ and push_s s =
   let c0 = cmt ("push_s "^(pnt_s s)) in
   let (e0,l) =
     Hashtbl.fold
-    (fun n _ (e0,l) ->
-       let e1 =
-         "\tmov r9,"^(emt_reg n)^"\n"^
-         "\tpush r9\n" in
-       let l = n::l in
-       (e0^e1,l))
-    s ("",[]) in
+      (fun n _ (e0,l) ->
+         let e1 =
+           "\tmov r9,"^(emt_reg n)^"\n"^
+           "\tpush r9\n" in
+         let l = n::l in
+         (e0^e1,l))
+      s ("",[]) in
   let e1 =
     "\tmov r9,[r12]\n"^
     "\tpush r9\n"^
@@ -2061,9 +2063,9 @@ and pop_s l =
          "\tpop r9\n"^
          "\tmov "^(emt_reg n)^",r9\n" ) "" l in
   let e2 =
-  "\tpushf\n"^
-  "\tsub r15,1\n"^
-  "\tpopf\n" in
+    "\tpushf\n"^
+    "\tsub r15,1\n"^
+    "\tpopf\n" in
   c0^e0^e1^e2
 and csn = "r15"
 and emt_agl = "; emt_agl\n"
@@ -2174,10 +2176,10 @@ and emt_ir s p =
             "; ir_call\n"
           | IR_Glb_Call(n,x,y) ->
             let ix = idx_csm_ptn s x in
-            let iy = idx_crt_ptn s y in
-            let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
             ( match n with
               | Tkn.Etr_N "add" ->
+                let iy = idx_crt_ptn s y in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
                 let v0 = newvar () in
                 let v1 = newvar () in
@@ -2198,6 +2200,8 @@ and emt_ir s p =
                 let _ = idx_csm_ptn s xt in
                 c0^e0
               | Tkn.Etr_N "mul" ->
+                let iy = idx_crt_ptn s y in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
                 let v0 = newvar () in
                 let v1 = newvar () in
@@ -2218,6 +2222,8 @@ and emt_ir s p =
                 let _ = idx_csm_ptn s xt in
                 c0^e0
               | Tkn.Etr_N "sub" ->
+                let iy = idx_crt_ptn s y in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
                 let v0 = newvar () in
                 let v1 = newvar () in
@@ -2238,6 +2244,8 @@ and emt_ir s p =
                 let _ = idx_csm_ptn s xt in
                 c0^e0
               | Tkn.Etr_N "cmp" ->
+                let iy = idx_crt_ptn s y in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
                 let v0 = newvar () in
                 let v1 = newvar () in
@@ -2284,6 +2292,8 @@ and emt_ir s p =
                   (emt_get_ptn ix)^
                   "\tmov rax,rdi\n" in
                 let (e1,sl) = push_s s in
+                let iy = idx_crt_ptn s y in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let e2 =
                   "\tmov r9,0\n"^
                   "\tnot r9\n"^
