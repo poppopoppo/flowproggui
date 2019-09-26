@@ -1541,7 +1541,7 @@ let rec mk_ir_mdl el =
   m.ns_e<-("mul",Tkn(Etr(Tkn.Etr_N "mul")))::m.ns_e;
   m.ns <- ("mul",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Types.Prm(Types.Name "r64")))))::m.ns;
   m.ns_e<-("cmp",Tkn(Etr(Tkn.Etr_N "cmp")))::m.ns_e;
-  m.ns <- ("cmp",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),r2 ()))))::m.ns;
+  m.ns <- ("cmp",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Rcd(rcd_cl [r2 ();r2 ()])))))::m.ns;
            mk_ir_mdl_etr m el
 and mk_ir_mdl_etr m el =
   ( match el with
@@ -2239,23 +2239,34 @@ and emt_ir s p =
                 let p = idx_crt_ptn s xt in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
-                let l0 = lb () in
-                let l1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
                   (emt_set_ptn p)^
                   "\tmov r9,"^(emt_reg i0)^"\n"^
                   "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\tpush rdi\n"^
+                  "\tpush r9\n"^
+                  "\tpush r10\n"^
+                  "\tmov rdi,2\n"^
+                  "\tcall mlc\n"^
+                  "\tpop r10\n"^
+                  "\tpop r9\n"^
+                  "\tpop rdi\n"^
                   "\tcmp r9,r10\n"^
-                  "\tje "^l0^"\n"^
-                  "\tmov rdi,0\n"^
-                  "\tjmp "^l1^"\n"^
-                  l0^":\n"^
-                  "\tmov rdi,1\n"^
-                  l1^":\n"^
-                  "\tstc\n"^
-                  (emt_set_ptn iy) in
+                  "\tmov r9,0\n"^
+                  "\tsetz r9b\n"^
+                  "\tmov r10,0\n"^
+                  "\tsetc r10b\n"^
+                  "\tmov [rax+8*1],r9\n"^
+                  "\tmov [rax+8*2],r10\n"^
+                  "\tclc\n"^
+                  "\tmov rdi,rax\n"^
+                  "\tpush rdi\n"^
+                  (emt_set_ptn iy)^
+                  "\tpop rdi\n"^
+                  "\tclc\n"^
+                  "\tcall dec_r\n" in
                 let _ = idx_csm_ptn s xt in
                 c0^e0
               | Tkn.Etr_N f ->
