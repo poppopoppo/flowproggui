@@ -1870,6 +1870,7 @@ let emt_flg = true
 let rec emt m f =
   "%include \"mem.s\"\n"^
   "main:\n"^
+  "\tmov r15,0\n"^
   "\tmov r12,rsp\n"^
   "\tlea rsp,[rsp-8*200]\n"^
   "\tmov r9,0\n"^
@@ -2045,7 +2046,8 @@ and push_s s =
     s ("",[]) in
   let e1 =
     "\tmov r9,[r12]\n"^
-    "\tpush r9\n" in
+    "\tpush r9\n"^
+    "\tadd r15,1\n" in
   (c0^e0^e1,l)
 and pop_s l =
   let c0 = cmt ("pop_s") in
@@ -2058,7 +2060,11 @@ and pop_s l =
          e1^
          "\tpop r9\n"^
          "\tmov "^(emt_reg n)^",r9\n" ) "" l in
-  c0^e0^e1
+  let e2 =
+  "\tpushf\n"^
+  "\tsub r15,1\n"^
+  "\tpopf\n" in
+  c0^e0^e1^e2
 and csn = "r15"
 and emt_agl = "; emt_agl\n"
 and lb () = "lb_"^(Sgn.print (sgn ()))
@@ -2239,6 +2245,7 @@ and emt_ir s p =
                 let p = idx_crt_ptn s xt in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let l_na = "cmp_jb_"^(lb ()) in
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
@@ -2257,7 +2264,10 @@ and emt_ir s p =
                   "\tmov r9,0\n"^
                   "\tsetz r9b\n"^
                   "\tmov r10,0\n"^
-                  "\tsetc r10b\n"^
+                  "\tjle "^l_na^"\n"^
+                  "\tmov r10,1\n"^
+                  l_na^":\n"^
+                  (* "\tsetc r10b\n"^ *)
                   "\tmov [rax+8*1],r9\n"^
                   "\tmov [rax+8*2],r10\n"^
                   "\tclc\n"^

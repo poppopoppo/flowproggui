@@ -63,21 +63,31 @@
   cmp { x0 y0 } ⊢ { b c }
   ∠ c
     ∐ c
-    $ x ⊢ x,x0,x1
-    $ y ⊢ y,y0,y1
-    $ z ⊢ z,z0,z1
+    ∎ z
+    ∐ c
+    $ x ⊢ x,x0
     » 0r1 |~ {} ⊢ t
-    $ t ⊢ t,t0,t1
-    sub { x t } ⊢ xt
+    sub { x0 t } ⊢ xt
+    $ z ⊢ z,z0
+    $ y ⊢ y,y0
     tak { xt y0 z0 } ⊢ r0
-    sub { y t0 } ⊢ yt
-    tak { yt z1 x0 } ⊢ r1
-    sub { z t1 } ⊢ zt
-    tak { zt x1 y1 } ⊢ r2
+
+    $ y ⊢ y,y0
+    » 0r1 |~ {} ⊢ t
+    sub { y0 t } ⊢ yt
+    $ z ⊢ z,z0
+    $ x ⊢ x,x0
+    tak { yt z0 x0 } ⊢ r1
+
+    $ z ⊢ z,z0
+    » 0r1 |~ {} ⊢ t
+    sub { z0 t } ⊢ zt
+    $ x ⊢ x,x0
+    $ y ⊢ y,y0
+    tak { zt x0 y0 } ⊢ r2
+
     tak { r0 r1 r2 } ⊢ rr
     ∎ rr
-    ∐ c
-    ∎ z
   ∇
 § test4
   |» {}
@@ -86,8 +96,8 @@
   ∎ y
 § test5
   |» {}
-  » 0r18 |~ {} ⊢ x
-  » 0r9 |~ {} ⊢ y
+  » 0r14 |~ {} ⊢ x
+  » 0r7 |~ {} ⊢ y
   » 0r0 |~ {} ⊢ z
   tak { x y z } ⊢ r
   ∎ r
