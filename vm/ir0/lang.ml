@@ -1863,8 +1863,8 @@ let rec emt m f =
   "\tmov r12,rsp\n"^
   "\tlea rsp,[rsp-8*200]\n"^
   "\tmov r9,0\n"^
-	"\tnot r9\n"^
-	"\tmov [r12],r9\n"^
+  "\tnot r9\n"^
+  "\tmov [r12],r9\n"^
   "\txor rax,rax\n"^
   "\tmov rdi,0\n"^
   "\tcall mlc\n"^
@@ -2135,8 +2135,46 @@ and emt_ir s p =
                   (emt_set_ptn iy) in
                 let _ = idx_csm_ptn s xt in
                 c0^e0
-              | Tkn.Etr_N "mul" -> "; mul\n"
-              | Tkn.Etr_N "sub" -> "; sub\n"
+              | Tkn.Etr_N "mul" ->
+                let open Rcd_Ptn in
+                let v0 = newvar () in
+                let v1 = newvar () in
+                let xt = R [|A v0;A v1|] in
+                let p = idx_crt_ptn s xt in
+                let i0 = idx s v0 in
+                let i1 = idx s v1 in
+                let e0 =
+                  (emt_get_ptn ix)^
+                  "\tmov rdi,rax\n"^
+                  (emt_set_ptn p)^
+                  "\tmov r9,"^(emt_reg i0)^"\n"^
+                  "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\timul r9,r10\n"^
+                  "\tmov rdi,r9\n"^
+                  "\tstc\n"^
+                  (emt_set_ptn iy) in
+                let _ = idx_csm_ptn s xt in
+                c0^e0
+              | Tkn.Etr_N "sub" ->
+                let open Rcd_Ptn in
+                let v0 = newvar () in
+                let v1 = newvar () in
+                let xt = R [|A v0;A v1|] in
+                let p = idx_crt_ptn s xt in
+                let i0 = idx s v0 in
+                let i1 = idx s v1 in
+                let e0 =
+                  (emt_get_ptn ix)^
+                  "\tmov rdi,rax\n"^
+                  (emt_set_ptn p)^
+                  "\tmov r9,"^(emt_reg i0)^"\n"^
+                  "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\tsub r9,r10\n"^
+                  "\tmov rdi,r9\n"^
+                  "\tstc\n"^
+                  (emt_set_ptn iy) in
+                let _ = idx_csm_ptn s xt in
+                c0^e0
               | _ -> "; ir_glb_call\n" )
           | IR_Exp(Ast.Atm(Ast.R64 x),_,Rcd_Ptn.A r) ->
             let ir = idx_crt s r in

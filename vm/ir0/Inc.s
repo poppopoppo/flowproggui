@@ -190,15 +190,15 @@ lb_10:
 	pop rdi
 	clc
 lb_11:
-; 	add { 2' 3' } ⊢ 2' : r64
-; emt_get_ptn { 2' 3' }
+; 	mul { 3' 2' } ⊢ 2' : r64
+; emt_get_ptn { 3' 2' }
 	mov rdi,2
 	call mlc
 	push rax
-; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+; emt_get_ptn 3'
+	mov rax,[r12-8*4]
 	mov r9,[r12]
-	bt r9,2
+	bt r9,3
 	mov rdx,rax
 	pop rdi
 	mov rsi,0
@@ -206,10 +206,10 @@ lb_11:
 	call exc
 	pop rax
 	push rax
-; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+; emt_get_ptn 2'
+	mov rax,[r12-8*3]
 	mov r9,[r12]
-	bt r9,3
+	bt r9,2
 	mov rdx,rax
 	pop rdi
 	mov rsi,1
@@ -259,7 +259,7 @@ lb_17:
 	pop rdi
 	mov r9,[r12-8*4]
 	mov r10,[r12-8*5]
-	add r9,r10
+	imul r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 2'
@@ -276,8 +276,8 @@ lb_12:
 	bts r10,2
 	mov [r12],r10
 lb_13:
-; 	add { 0' 1' } ⊢ 0' : r64
-; emt_get_ptn { 0' 1' }
+; 	∎ { 0' 2' }
+; emt_get_ptn { 0' 2' }
 	mov rdi,2
 	call mlc
 	push rax
@@ -292,10 +292,10 @@ lb_13:
 	call exc
 	pop rax
 	push rax
-; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+; emt_get_ptn 2'
+	mov rax,[r12-8*3]
 	mov r9,[r12]
-	bt r9,1
+	bt r9,2
 	mov rdx,rax
 	pop rdi
 	mov rsi,1
@@ -303,81 +303,17 @@ lb_13:
 	call exc
 	pop rax
 	clc
-	mov rdi,rax
-; emt_set_ptn { 1' 3' }
-	push rdi
-	mov r9,[rdi]
-	bt r9,0
-	mov rdi,[rdi+8*1]
-; emt_set_ptn 1'
-	mov [r12-8*2],rdi
-	jc lb_20
-	mov r10,[r12]
-	btr r10,1
-	mov [r12],r10
-	call inc_r
-	mov rax,rdi
-	jmp lb_21
-lb_20:
-	mov r10,[r12]
-	bts r10,1
-	mov [r12],r10
-lb_21:
-	pop rdi
-	push rdi
-	mov r9,[rdi]
-	bt r9,1
-	mov rdi,[rdi+8*2]
-; emt_set_ptn 3'
-	mov [r12-8*4],rdi
-	jc lb_22
-	mov r10,[r12]
-	btr r10,3
-	mov [r12],r10
-	call inc_r
-	mov rax,rdi
-	jmp lb_23
-lb_22:
-	mov r10,[r12]
-	bts r10,3
-	mov [r12],r10
-lb_23:
-	pop rdi
-	mov r9,[r12-8*2]
-	mov r10,[r12-8*4]
-	add r9,r10
-	mov rdi,r9
-	stc
-; emt_set_ptn 0'
-	mov [r12-8*1],rdi
-	jc lb_18
-	mov r10,[r12]
-	btr r10,0
-	mov [r12],r10
-	call inc_r
-	mov rax,rdi
-	jmp lb_19
-lb_18:
-	mov r10,[r12]
-	bts r10,0
-	mov [r12],r10
-lb_19:
-; 	∎ 2'
-; emt_get_ptn 2'
-	mov rax,[r12-8*3]
-	mov r9,[r12]
-	bt r9,2
 	push rax
 	mov r9,0
 	rcl r9,1
 	push r9
-;clear  0'~z
+;clear  1'~y
 	mov r9,[r12]
-	bt r9,0
-	jc lb_24
-	mov rdi,[r12-8*1]
+	bt r9,1
+	jc lb_18
+	mov rdi,[r12-8*2]
 	call dec_r
-lb_24:
+lb_18:
 	pop r9
 	rcr r9,1
 	pop rax
@@ -425,18 +361,18 @@ test0:
 	push rax
 ; emt_set_ptn 0'
 	mov [r12-8*1],rdi
-	jc lb_25
+	jc lb_19
 	mov r10,[r12]
 	btr r10,0
 	mov [r12],r10
 	call inc_r
 	mov rax,rdi
-	jmp lb_26
-lb_25:
+	jmp lb_20
+lb_19:
 	mov r10,[r12]
 	bts r10,0
 	mov [r12],r10
-lb_26:
+lb_20:
 	pop rax
 	pop rdi
 	bt rax,0
@@ -444,18 +380,18 @@ lb_26:
 	push rax
 ; emt_set_ptn 1'
 	mov [r12-8*2],rdi
-	jc lb_27
+	jc lb_21
 	mov r10,[r12]
 	btr r10,1
 	mov [r12],r10
 	call inc_r
 	mov rax,rdi
-	jmp lb_28
-lb_27:
+	jmp lb_22
+lb_21:
 	mov r10,[r12]
 	bts r10,1
 	mov [r12],r10
-lb_28:
+lb_22:
 	pop rax
 	pop rdi
 	bt rax,0
@@ -463,27 +399,27 @@ lb_28:
 	push rax
 ; emt_set_ptn 2'
 	mov [r12-8*3],rdi
-	jc lb_29
+	jc lb_23
 	mov r10,[r12]
 	btr r10,2
 	mov [r12],r10
 	call inc_r
 	mov rax,rdi
-	jmp lb_30
-lb_29:
+	jmp lb_24
+lb_23:
 	mov r10,[r12]
 	bts r10,2
 	mov [r12],r10
-lb_30:
+lb_24:
 	pop rax
 	pop rdi
 	bt rax,0
-	jc lb_31
+	jc lb_25
 	push rdi
 	call dec_r
 	pop rdi
 	clc
-lb_31:
+lb_25:
 ; 	$ 0' ⊢ ,{ 0' 3' } : ,{ { } { } }
 ; emt_get_ptn 0'
 	mov rax,[r12-8*1]
@@ -504,18 +440,18 @@ lb_31:
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 0'
 	mov [r12-8*1],rdi
-	jc lb_32
+	jc lb_26
 	mov r10,[r12]
 	btr r10,0
 	mov [r12],r10
 	call inc_r
 	mov rax,rdi
-	jmp lb_33
-lb_32:
+	jmp lb_27
+lb_26:
 	mov r10,[r12]
 	bts r10,0
 	mov [r12],r10
-lb_33:
+lb_27:
 	pop rdi
 	push rdi
 	mov r9,[rdi]
@@ -523,28 +459,28 @@ lb_33:
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 3'
 	mov [r12-8*4],rdi
-	jc lb_34
+	jc lb_28
 	mov r10,[r12]
 	btr r10,3
 	mov [r12],r10
 	call inc_r
 	mov rax,rdi
-	jmp lb_35
-lb_34:
+	jmp lb_29
+lb_28:
 	mov r10,[r12]
 	bts r10,3
 	mov [r12],r10
-lb_35:
+lb_29:
 	pop rdi
 	pop rax
 	pop rdi
 	bt rax,0
-	jc lb_36
+	jc lb_30
 	push rdi
 	call dec_r
 	pop rdi
 	clc
-lb_36:
+lb_30:
 ; 	∎ { 0' 1' }
 ; emt_get_ptn { 0' 1' }
 	mov rdi,2
@@ -579,16 +515,16 @@ lb_36:
 ;clear  2'~r2 3'~r4
 	mov r9,[r12]
 	bt r9,2
-	jc lb_37
+	jc lb_31
 	mov rdi,[r12-8*3]
 	call dec_r
-lb_37:
+lb_31:
 	mov r9,[r12]
 	bt r9,3
-	jc lb_38
+	jc lb_32
 	mov rdi,[r12-8*4]
 	call dec_r
-lb_38:
+lb_32:
 	pop r9
 	rcr r9,1
 	pop rax
