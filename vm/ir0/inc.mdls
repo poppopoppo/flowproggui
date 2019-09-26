@@ -79,12 +79,9 @@
     $ x ⊢ x,x0
     tak { yt z0 x0 } ⊢ r1
 
-    $ z ⊢ z,z0
     » 0r1 |~ {} ⊢ t
-    sub { z0 t } ⊢ zt
-    $ x ⊢ x,x0
-    $ y ⊢ y,y0
-    tak { zt x0 y0 } ⊢ r2
+    sub { z t } ⊢ zt
+    tak { zt x y } ⊢ r2
 
     tak { r0 r1 r2 } ⊢ rr
     ∎ rr
@@ -96,7 +93,7 @@
   ∎ y
 § test5
   |» {}
-  » 0r14 |~ {} ⊢ x
+  » 0r17 |~ {} ⊢ x
   » 0r7 |~ {} ⊢ y
   » 0r0 |~ {} ⊢ z
   tak { x y z } ⊢ r
