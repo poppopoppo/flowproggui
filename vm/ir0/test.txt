@@ -163,3 +163,8 @@ pkt :
   ..
   ∎ { .. }
 nc test.mdls main
+
+
+
+0xSffa0033cdedf
+0bS0000110110010110

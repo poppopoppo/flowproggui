@@ -1526,6 +1526,12 @@ let rec mk_ir_mdl el =
   m.ns <- ("read",ref(Ln(Imp(Prm Stg,Prm Stg))))::m.ns;
   m.ns_e <- ("pnt",Tkn(Etr(Tkn.Etr_N "pnt")))::m.ns_e;
   m.ns <- ("pnt",ref(Ln(Imp(Var (newvar_q (-1)),Rcd U))))::m.ns;
+  m.ns_e<-("add",Tkn(Etr(Tkn.Etr_N "add")))::m.ns_e;
+  m.ns <- ("add",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Types.Prm(Types.Name "r64")))))::m.ns;
+  m.ns_e<-("sub",Tkn(Etr(Tkn.Etr_N "sub")))::m.ns_e;
+  m.ns <- ("sub",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Types.Prm(Types.Name "r64")))))::m.ns;
+  m.ns_e<-("mul",Tkn(Etr(Tkn.Etr_N "mul")))::m.ns_e;
+  m.ns <- ("mul",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Types.Prm(Types.Name "r64")))))::m.ns;
   mk_ir_mdl_etr m el
 and mk_ir_mdl_etr m el =
   ( match el with
@@ -1756,7 +1762,11 @@ and mk_ir rv p0 =
           let _ = crt_ptn_rv y rv in
           let p1 = mk_ir rv p1 in
           Seq(IR_Call((f,x),y),p1)
-        | IR_Glb_Call(_,_,_) -> err "slv x0"
+        | IR_Glb_Call(e,x,y) ->
+          let x = csm_ptn_rv x rv in
+          let _ = crt_ptn_rv y rv in
+          let p1 = mk_ir rv p1 in
+          Seq(IR_Glb_Call(e,x,y),p1)
         | IR_Out (_,_) -> err "slv x1"
         | IR_Glb_Out (_,_) -> err "slv x2"
         | IR_Exp(a,r0,r1) ->
@@ -1852,6 +1862,9 @@ let rec emt m f =
   "main:\n"^
   "\tmov r12,rsp\n"^
   "\tlea rsp,[rsp-8*200]\n"^
+  "\tmov r9,0\n"^
+	"\tnot r9\n"^
+	"\tmov [r12],r9\n"^
   "\txor rax,rax\n"^
   "\tmov rdi,0\n"^
   "\tcall mlc\n"^
@@ -1959,6 +1972,7 @@ and emt_set_ptn r =
         "\tmov rax,rdi\n"^
         "\tjmp "^l1^"\n"^
         l0^":\n"^
+        "\tmov r10,[r12]\n"^
         "\tbts r10,"^(string_of_int i)^"\n"^
         "\tmov [r12],r10\n"^
         l1^":\n" in
@@ -2096,8 +2110,34 @@ and emt_ir s p =
             c0^e0^ec^e2^e3
           | IR_Call((_,_),_) ->
             "; ir_call\n"
-          | IR_Glb_Call(_,_,_) ->
-            "; ir_glb_call\n"
+          | IR_Glb_Call(n,x,y) ->
+            let ix = idx_csm_ptn s x in
+            let iy = idx_crt_ptn s y in
+            let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
+            ( match n with
+              | Tkn.Etr_N "add" ->
+                let open Rcd_Ptn in
+                let v0 = newvar () in
+                let v1 = newvar () in
+                let xt = R [|A v0;A v1|] in
+                let p = idx_crt_ptn s xt in
+                let i0 = idx s v0 in
+                let i1 = idx s v1 in
+                let e0 =
+                  (emt_get_ptn ix)^
+                  "\tmov rdi,rax\n"^
+                  (emt_set_ptn p)^
+                  "\tmov r9,"^(emt_reg i0)^"\n"^
+                  "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\tadd r9,r10\n"^
+                  "\tmov rdi,r9\n"^
+                  "\tstc\n"^
+                  (emt_set_ptn iy) in
+                let _ = idx_csm_ptn s xt in
+                c0^e0
+              | Tkn.Etr_N "mul" -> "; mul\n"
+              | Tkn.Etr_N "sub" -> "; sub\n"
+              | _ -> "; ir_glb_call\n" )
           | IR_Exp(Ast.Atm(Ast.R64 x),_,Rcd_Ptn.A r) ->
             let ir = idx_crt s r in
             let c0 = cmt ("\t» "^(print_exp (Ast.Atm(Ast.R64 x)))^" |~ "^(emt_ptn (Rcd_Ptn.A ir))^rtl^(print_ty (Rcd_Ptn.A r))) in
