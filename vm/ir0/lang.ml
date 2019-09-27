@@ -2403,14 +2403,51 @@ and emt_ir s p =
               | Tkn.Etr_N "cmp" ->
                 let open Rcd_Ptn in
                 let iy = idx_crt_ptn s y in
-                let ix = idx_csm_ptn s x in
-                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let v0 = newvar () in
                 let v1 = newvar () in
                 let xt = R [|A v0;A v1|] in
                 let p = idx_crt_ptn s xt in
+                let ix = idx_csm_ptn s x in
+                let v2 = newvar () in
+                let v3 = newvar () in
+                let yt = R [|A v2;A v3|] in
+                let py = idx_crt_ptn s yt in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let i2 = idx s v2 in
+                let i3 = idx s v3 in
+                let _ = idx_csm_ptn s xt in
+                let l_na = "cmp_jb_"^(lb ()) in
+                let e0 =
+                  (emt_ptn_set_ptn ix p)^
+                  (emt_dec_ptn ix)^
+                  "\tmov r9,"^(emt_reg i0)^"\n"^
+                  "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\tcmp r9,r10\n"^
+                  "\tmov r9,0\n"^
+                  "\tsetz r9b\n"^
+                  "\tmov r10,0\n"^
+                  "\tjle "^l_na^"\n"^
+                  "\tmov r10,1\n"^
+                  l_na^":\n"^
+                  "\tmov "^(emt_reg i2)^",r9\n"^
+                  "\tmov "^(emt_reg i3)^",r10\n"^
+                  "\tmov r9,[r12]\n"^
+                  "\tbts r9,"^(string_of_int i2)^"\n"^
+                  "\tbts r9,"^(string_of_int i3)^"\n"^
+                  "\tmov [r12],r9\n"^
+                  (emt_ptn_set_ptn py iy) in
+                c0^e0
+                (*
+                "\tpush rdi\n"^
+                "\tpush r9\n"^
+                "\tpush r10\n"^
+                "\tmov rdi,2\n"^
+                "\tcall mlc\n"^
+                "\tpop r10\n"^
+                "\tpop r9\n"^
+                "\tpop rdi\n"^
                 let l_na = "cmp_jb_"^(lb ()) in
                 let lc1 = lb () in
                 let e0 =
@@ -2458,7 +2495,7 @@ and emt_ir s p =
                   "\tclc\n"^
                   "\tcall dec_r\n" in
                 let _ = idx_csm_ptn s xt in
-                c0^e0
+                c0^e0 *)
               | Tkn.Etr_N f ->
                 let iy = idx_crt_ptn s y in
                 let ix = idx_csm_ptn s x in
