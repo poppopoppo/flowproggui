@@ -2252,18 +2252,30 @@ and emt_ir s p =
           | IR_Call((_,_),_) ->
             "; ir_call\n"
           | IR_Glb_Call(n,x,y) ->
-            let ix = idx_csm_ptn s x in
             ( match n with
               | Tkn.Etr_N "add" ->
-                let iy = idx_crt_ptn s y in
-                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
+                let iy = idx_crt_ptn s y in
                 let v0 = newvar () in
                 let v1 = newvar () in
                 let xt = R [|A v0;A v1|] in
                 let p = idx_crt_ptn s xt in
+                let ix = idx_csm_ptn s x in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let _ = idx_csm_ptn s xt in
+                let e0 =
+                  (emt_ptn_set_ptn ix p)^
+                  (emt_dec_ptn ix)^
+                  "\tmov r9,"^(emt_reg i0)^"\n"^
+                  "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\tadd r9,r10\n"^
+                  "\tmov rdi,r9\n"^
+                  "\tstc\n"^
+                  (emt_set_ptn iy) in
+                c0^e0
+                  (*
                 let lc1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
@@ -2289,17 +2301,30 @@ and emt_ir s p =
                   "\tstc\n"^
                   (emt_set_ptn iy) in
                 let _ = idx_csm_ptn s xt in
-                c0^e0
+                c0^e0 *)
               | Tkn.Etr_N "mul" ->
-                let iy = idx_crt_ptn s y in
-                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
+                let iy = idx_crt_ptn s y in
                 let v0 = newvar () in
                 let v1 = newvar () in
                 let xt = R [|A v0;A v1|] in
                 let p = idx_crt_ptn s xt in
+                let ix = idx_csm_ptn s x in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let _ = idx_csm_ptn s xt in
+                let e0 =
+                  (emt_ptn_set_ptn ix p)^
+                  (emt_dec_ptn ix)^
+                  "\tmov r9,"^(emt_reg i0)^"\n"^
+                  "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\timul r9,r10\n"^
+                  "\tmov rdi,r9\n"^
+                  "\tstc\n"^
+                  (emt_set_ptn iy) in
+                c0^e0
+                (*
                 let lc1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
@@ -2325,17 +2350,30 @@ and emt_ir s p =
                   "\tstc\n"^
                   (emt_set_ptn iy) in
                 let _ = idx_csm_ptn s xt in
-                c0^e0
+                c0^e0 *)
               | Tkn.Etr_N "sub" ->
-                let iy = idx_crt_ptn s y in
-                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
+                let iy = idx_crt_ptn s y in
                 let v0 = newvar () in
                 let v1 = newvar () in
                 let xt = R [|A v0;A v1|] in
                 let p = idx_crt_ptn s xt in
+                let ix = idx_csm_ptn s x in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let _ = idx_csm_ptn s xt in
+                let e0 =
+                  (emt_ptn_set_ptn ix p)^
+                  (emt_dec_ptn ix)^
+                  "\tmov r9,"^(emt_reg i0)^"\n"^
+                  "\tmov r10,"^(emt_reg i1)^"\n"^
+                  "\tsub r9,r10\n"^
+                  "\tmov rdi,r9\n"^
+                  "\tstc\n"^
+                  (emt_set_ptn iy) in
+                c0^e0
+                (*
                 let lc1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
@@ -2361,11 +2399,12 @@ and emt_ir s p =
                   "\tstc\n"^
                   (emt_set_ptn iy) in
                 let _ = idx_csm_ptn s xt in
-                c0^e0
+                c0^e0 *)
               | Tkn.Etr_N "cmp" ->
-                let iy = idx_crt_ptn s y in
-                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let open Rcd_Ptn in
+                let iy = idx_crt_ptn s y in
+                let ix = idx_csm_ptn s x in
+                let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let v0 = newvar () in
                 let v1 = newvar () in
                 let xt = R [|A v0;A v1|] in
@@ -2421,11 +2460,12 @@ and emt_ir s p =
                 let _ = idx_csm_ptn s xt in
                 c0^e0
               | Tkn.Etr_N f ->
+                let iy = idx_crt_ptn s y in
+                let ix = idx_csm_ptn s x in
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n" in
                 let (e1,sl) = push_s s in
-                let iy = idx_crt_ptn s y in
                 let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
                 let lc1 = lb () in
                 let e2 =
