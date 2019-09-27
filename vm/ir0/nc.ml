@@ -9,9 +9,9 @@ let _ =
     let (n,el) = Implib.mdl_from_string s in
     let m = mk_ir_mdl el in
     let a = emt m e0 in
-    pnt true a;
+    (* pnt true a; *)
     let d = open_out (n^".s") in
     let _ = output_string d a in
-    flush_all ();
+    flush_all (); 
     let _ = close_out d in
     exit 0

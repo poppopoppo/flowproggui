@@ -2016,7 +2016,53 @@ and emt_set_ptn r =
           ("",0) rs in
       (cmt c0)^e0
     | _ -> ";emt_set_ptn\n" )
-and emt_reg i = "[r12-8*"^(string_of_int (i+1))^"]"
+and emt_ptn_set_ptn r0 r1 =
+  let c0 = "emt_ptn_set_ptn "^(emt_ptn r0)^","^(emt_ptn r1) in
+  let open Rcd_Ptn in
+  ( match r0,r1 with
+    | A i,_ ->
+      let e0 =
+        "\tmov rdi,"^(emt_reg i)^"\n"^
+        "\tmov r9,[r12]\n"^
+        "\bbt r9,"^(string_of_int i)^"\n"^
+        (emt_set_ptn r1) in
+      (cmt c0)^e0
+    | R _,A i ->
+      let e0 =
+        (emt_get_ptn r0)^
+        "\tmov "^(emt_reg i)^",rax\n"^
+        "\tmov r9,[r12]\n"^
+        "\tbtr r9,"^(string_of_int i)^
+        "\tmov [r12],r9\n" in
+      (cmt c0)^e0
+    | R rs0,R rs1 ->
+      let (_,e0) =
+        Array.fold_left
+          (fun (i,e0) ri ->
+             let e1 =
+               emt_ptn_set_ptn ri rs1.(i) in
+             (i+1,e0^e1) )
+          (0,"") rs0 in
+      (cmt c0)^e0
+    | _,_ -> "; emt_ptn_set_ptn\n" )
+and emt_dec_ptn r =
+  let l = Rcd_Ptn.to_list r in
+  let e0 =
+    List.fold_left
+      (fun e0 n ->
+         let l0 = lb () in
+         let e1 =
+           "\tmov rdi,"^(emt_reg n)^"\n"^
+           "\tmov r9,[r12]\n"^
+           "\tbt r9,"^(string_of_int n)^"\n"^
+           "\tjc "^l0^"\n"^
+           "\tbts r9,"^(string_of_int n)^"\n"^
+           "\tmov [r12],r9\n"^
+           "\tcall dec_r\n" in
+         e0^e1 )
+      "" l in
+  (cmt ("; emt_dec_ptn "^(emt_ptn r)))^e0
+and emt_reg i = (* "[r12-8*"^(string_of_int (i+1))^"]" *) "[st_vct+8*"^(string_of_int i)^"]"
 and pnt_s s =
   Hashtbl.fold
     (fun n v e -> e^" "^(string_of_int n)^"\'~"^(Ast.print_v v))
