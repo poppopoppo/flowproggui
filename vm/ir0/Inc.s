@@ -13,7 +13,7 @@ main:
 	call mlc
 	mov rdi,rax
 	clc
-	call test4
+	call test5
 	mov rdi,rax
 	mov rsi,str_ret
 	call pnt
@@ -32,13 +32,13 @@ emt_etr_c_lb_0:
 emt_etr_start_lb_1:
 ; 	» 0xr12 |~ 0' : r64
 	mov r9,0x12
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	mov r9,[r12]
 	bts r9,0
 	mov [r12],r9
 ; 	$ 0' ⊢ ,0' : ,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -50,7 +50,7 @@ emt_etr_start_lb_1:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_2
 	mov r10,[r12]
 	btr r10,0
@@ -72,15 +72,15 @@ lb_3:
 	pop rdi
 	clc
 lb_4:
-; 	» 0xr7 |~ 1' : r64
-	mov r9,0x7
-	mov [r12-8*2],r9
+; 	» 0xr9 |~ 1' : r64
+	mov r9,0x9
+	mov [st_vct+8*1],r9
 	mov r9,[r12]
 	bts r9,1
 	mov [r12],r9
 ; 	$ 1' ⊢ ,1' : ,r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
@@ -92,7 +92,7 @@ lb_4:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_5
 	mov r10,[r12]
 	btr r10,1
@@ -116,13 +116,13 @@ lb_6:
 lb_7:
 ; 	» 0xr0 |~ 2' : r64
 	mov r9,0x0
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	mov r9,[r12]
 	bts r9,2
 	mov [r12],r9
 ; 	$ 2' ⊢ ,2' : ,r64
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdi,rax
@@ -134,7 +134,7 @@ lb_7:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_8
 	mov r10,[r12]
 	btr r10,2
@@ -162,7 +162,7 @@ lb_10:
 	call mlc
 	push rax
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdx,rax
@@ -173,7 +173,7 @@ lb_10:
 	pop rax
 	push rax
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdx,rax
@@ -184,7 +184,7 @@ lb_10:
 	pop rax
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -215,7 +215,7 @@ lb_10:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_12
 	mov r10,[r12]
 	btr r10,0
@@ -238,7 +238,7 @@ lb_13:
 lb_11:
 ; 	∎ 0'
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	push rax
@@ -263,13 +263,13 @@ emt_etr_c_lb_14:
 emt_etr_start_lb_15:
 ; 	» 0xr5 |~ 0' : r64
 	mov r9,0x5
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	mov r9,[r12]
 	bts r9,0
 	mov [r12],r9
 ; 	$ 0' ⊢ ,0' : ,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -281,7 +281,7 @@ emt_etr_start_lb_15:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_16
 	mov r10,[r12]
 	btr r10,0
@@ -305,7 +305,7 @@ lb_17:
 lb_18:
 ; 	fact 0' ⊢ 0' : r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -329,7 +329,7 @@ lb_18:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_20
 	mov r10,[r12]
 	btr r10,0
@@ -352,7 +352,7 @@ lb_21:
 lb_19:
 ; 	∎ 0'
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	push rax
@@ -374,7 +374,7 @@ tak:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_136
 	mov r10,[r12]
 	btr r10,0
@@ -393,7 +393,7 @@ lb_137:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_138
 	mov r10,[r12]
 	btr r10,1
@@ -412,7 +412,7 @@ lb_139:
 	bt r9,2
 	mov rdi,[rdi+8*3]
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_140
 	mov r10,[r12]
 	btr r10,2
@@ -436,7 +436,7 @@ emt_etr_c_lb_22:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_130
 	mov r10,[r12]
 	btr r10,0
@@ -455,7 +455,7 @@ lb_131:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_132
 	mov r10,[r12]
 	btr r10,1
@@ -474,7 +474,7 @@ lb_133:
 	bt r9,2
 	mov rdi,[rdi+8*3]
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_134
 	mov r10,[r12]
 	btr r10,2
@@ -491,7 +491,7 @@ lb_135:
 emt_etr_start_lb_23:
 ; 	$ 0' ⊢ ,0',3' : ,r64,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -503,7 +503,7 @@ emt_etr_start_lb_23:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_24
 	mov r10,[r12]
 	btr r10,0
@@ -522,7 +522,7 @@ lb_25:
 	push rdi
 	push rax
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_26
 	mov r10,[r12]
 	btr r10,3
@@ -546,7 +546,7 @@ lb_27:
 lb_28:
 ; 	$ 1' ⊢ ,1',4' : ,r64,r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
@@ -558,7 +558,7 @@ lb_28:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_29
 	mov r10,[r12]
 	btr r10,1
@@ -577,7 +577,7 @@ lb_30:
 	push rdi
 	push rax
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_31
 	mov r10,[r12]
 	btr r10,4
@@ -605,7 +605,7 @@ lb_33:
 	call mlc
 	push rax
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdx,rax
@@ -616,7 +616,7 @@ lb_33:
 	pop rax
 	push rax
 ; emt_get_ptn 4'
-	mov rax,[r12-8*5]
+	mov rax,[st_vct+8*4]
 	mov r9,[r12]
 	bt r9,4
 	mov rdx,rax
@@ -635,7 +635,7 @@ lb_33:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 5'
-	mov [r12-8*6],rdi
+	mov [st_vct+8*5],rdi
 	jc lb_40
 	mov r10,[r12]
 	btr r10,5
@@ -654,7 +654,7 @@ lb_41:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 6'
-	mov [r12-8*7],rdi
+	mov [st_vct+8*6],rdi
 	jc lb_42
 	mov r10,[r12]
 	btr r10,6
@@ -676,8 +676,8 @@ lb_43:
 	pop rdi
 	clc
 lb_35:
-	mov r9,[r12-8*6]
-	mov r10,[r12-8*7]
+	mov r9,[st_vct+8*5]
+	mov r10,[st_vct+8*6]
 	push rdi
 	push r9
 	push r10
@@ -704,7 +704,7 @@ cmp_jb_lb_34:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_36
 	mov r10,[r12]
 	btr r10,3
@@ -723,7 +723,7 @@ lb_37:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_38
 	mov r10,[r12]
 	btr r10,4
@@ -742,7 +742,7 @@ lb_39:
 	call dec_r
 ; 	∠ 4'
 ; emt_get_ptn 4'
-	mov rax,[r12-8*5]
+	mov rax,[st_vct+8*4]
 	mov r9,[r12]
 	bt r9,4
 	cmp rax,0
@@ -760,7 +760,7 @@ agl_44_0:
 	pushf
 	push rdi
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_51
 	mov r10,[r12]
 	btr r10,4
@@ -783,7 +783,7 @@ lb_52:
 lb_46:
 ; 	∎ 2'
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	push rax
@@ -794,25 +794,25 @@ lb_46:
 	mov r9,[r12]
 	bt r9,3
 	jc clear_lb_47
-	mov rdi,[r12-8*4]
+	mov rdi,[st_vct+8*3]
 	call dec_r
 clear_lb_47:
 	mov r9,[r12]
 	bt r9,4
 	jc clear_lb_48
-	mov rdi,[r12-8*5]
+	mov rdi,[st_vct+8*4]
 	call dec_r
 clear_lb_48:
 	mov r9,[r12]
 	bt r9,0
 	jc clear_lb_49
-	mov rdi,[r12-8*1]
+	mov rdi,[st_vct+8*0]
 	call dec_r
 clear_lb_49:
 	mov r9,[r12]
 	bt r9,1
 	jc clear_lb_50
-	mov rdi,[r12-8*2]
+	mov rdi,[st_vct+8*1]
 	call dec_r
 clear_lb_50:
 	pop r9
@@ -824,7 +824,7 @@ agl_44_1:
 	pushf
 	push rdi
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_128
 	mov r10,[r12]
 	btr r10,4
@@ -847,7 +847,7 @@ lb_129:
 lb_53:
 ; 	$ 0' ⊢ ,0',5' : ,r64,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -859,7 +859,7 @@ lb_53:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_54
 	mov r10,[r12]
 	btr r10,0
@@ -878,7 +878,7 @@ lb_55:
 	push rdi
 	push rax
 ; emt_set_ptn 5'
-	mov [r12-8*6],rdi
+	mov [st_vct+8*5],rdi
 	jc lb_56
 	mov r10,[r12]
 	btr r10,5
@@ -902,13 +902,13 @@ lb_57:
 lb_58:
 ; 	» 0xr1 |~ 6' : r64
 	mov r9,0x1
-	mov [r12-8*7],r9
+	mov [st_vct+8*6],r9
 	mov r9,[r12]
 	bts r9,6
 	mov [r12],r9
 ; 	$ 6' ⊢ ,6' : ,r64
 ; emt_get_ptn 6'
-	mov rax,[r12-8*7]
+	mov rax,[st_vct+8*6]
 	mov r9,[r12]
 	bt r9,6
 	mov rdi,rax
@@ -920,7 +920,7 @@ lb_58:
 	push rdi
 	push rax
 ; emt_set_ptn 6'
-	mov [r12-8*7],rdi
+	mov [st_vct+8*6],rdi
 	jc lb_59
 	mov r10,[r12]
 	btr r10,6
@@ -948,7 +948,7 @@ lb_61:
 	call mlc
 	push rax
 ; emt_get_ptn 5'
-	mov rax,[r12-8*6]
+	mov rax,[st_vct+8*5]
 	mov r9,[r12]
 	bt r9,5
 	mov rdx,rax
@@ -959,7 +959,7 @@ lb_61:
 	pop rax
 	push rax
 ; emt_get_ptn 6'
-	mov rax,[r12-8*7]
+	mov rax,[st_vct+8*6]
 	mov r9,[r12]
 	bt r9,6
 	mov rdx,rax
@@ -978,7 +978,7 @@ lb_61:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 6'
-	mov [r12-8*7],rdi
+	mov [st_vct+8*6],rdi
 	jc lb_65
 	mov r10,[r12]
 	btr r10,6
@@ -997,7 +997,7 @@ lb_66:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 7'
-	mov [r12-8*8],rdi
+	mov [st_vct+8*7],rdi
 	jc lb_67
 	mov r10,[r12]
 	btr r10,7
@@ -1019,13 +1019,13 @@ lb_68:
 	pop rdi
 	clc
 lb_62:
-	mov r9,[r12-8*7]
-	mov r10,[r12-8*8]
+	mov r9,[st_vct+8*6]
+	mov r10,[st_vct+8*7]
 	sub r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 5'
-	mov [r12-8*6],rdi
+	mov [st_vct+8*5],rdi
 	jc lb_63
 	mov r10,[r12]
 	btr r10,5
@@ -1040,7 +1040,7 @@ lb_63:
 lb_64:
 ; 	$ 2' ⊢ ,2',6' : ,r64,r64
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdi,rax
@@ -1052,7 +1052,7 @@ lb_64:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_69
 	mov r10,[r12]
 	btr r10,2
@@ -1071,7 +1071,7 @@ lb_70:
 	push rdi
 	push rax
 ; emt_set_ptn 6'
-	mov [r12-8*7],rdi
+	mov [st_vct+8*6],rdi
 	jc lb_71
 	mov r10,[r12]
 	btr r10,6
@@ -1095,7 +1095,7 @@ lb_72:
 lb_73:
 ; 	$ 1' ⊢ ,1',7' : ,r64,r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
@@ -1107,7 +1107,7 @@ lb_73:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_74
 	mov r10,[r12]
 	btr r10,1
@@ -1126,7 +1126,7 @@ lb_75:
 	push rdi
 	push rax
 ; emt_set_ptn 7'
-	mov [r12-8*8],rdi
+	mov [st_vct+8*7],rdi
 	jc lb_76
 	mov r10,[r12]
 	btr r10,7
@@ -1154,7 +1154,7 @@ lb_78:
 	call mlc
 	push rax
 ; emt_get_ptn 5'
-	mov rax,[r12-8*6]
+	mov rax,[st_vct+8*5]
 	mov r9,[r12]
 	bt r9,5
 	mov rdx,rax
@@ -1165,7 +1165,7 @@ lb_78:
 	pop rax
 	push rax
 ; emt_get_ptn 7'
-	mov rax,[r12-8*8]
+	mov rax,[st_vct+8*7]
 	mov r9,[r12]
 	bt r9,7
 	mov rdx,rax
@@ -1176,7 +1176,7 @@ lb_78:
 	pop rax
 	push rax
 ; emt_get_ptn 6'
-	mov rax,[r12-8*7]
+	mov rax,[st_vct+8*6]
 	mov r9,[r12]
 	bt r9,6
 	mov rdx,rax
@@ -1188,15 +1188,15 @@ lb_78:
 	clc
 	mov rdi,rax
 ; push_s  2'~z 3'~b 4'~c 0'~x 1'~y
-	mov r9,[r12-8*3]
+	mov r9,[st_vct+8*2]
 	push r9
-	mov r9,[r12-8*4]
+	mov r9,[st_vct+8*3]
 	push r9
-	mov r9,[r12-8*5]
+	mov r9,[st_vct+8*4]
 	push r9
-	mov r9,[r12-8*1]
+	mov r9,[st_vct+8*0]
 	push r9
-	mov r9,[r12-8*2]
+	mov r9,[st_vct+8*1]
 	push r9
 	mov r9,[r12]
 	push r9
@@ -1211,15 +1211,15 @@ lb_78:
 	pop r9
 	mov [r12],r9
 	pop r9
-	mov [r12-8*2],r9
+	mov [st_vct+8*1],r9
 	pop r9
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	pop r9
-	mov [r12-8*5],r9
+	mov [st_vct+8*4],r9
 	pop r9
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	pop r9
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	pushf
 	sub r15,1
 	popf
@@ -1227,7 +1227,7 @@ lb_78:
 	pushf
 	push rdi
 ; emt_set_ptn 5'
-	mov [r12-8*6],rdi
+	mov [st_vct+8*5],rdi
 	jc lb_80
 	mov r10,[r12]
 	btr r10,5
@@ -1250,7 +1250,7 @@ lb_81:
 lb_79:
 ; 	$ 1' ⊢ ,1',6' : ,r64,r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
@@ -1262,7 +1262,7 @@ lb_79:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_82
 	mov r10,[r12]
 	btr r10,1
@@ -1281,7 +1281,7 @@ lb_83:
 	push rdi
 	push rax
 ; emt_set_ptn 6'
-	mov [r12-8*7],rdi
+	mov [st_vct+8*6],rdi
 	jc lb_84
 	mov r10,[r12]
 	btr r10,6
@@ -1305,13 +1305,13 @@ lb_85:
 lb_86:
 ; 	» 0xr1 |~ 7' : r64
 	mov r9,0x1
-	mov [r12-8*8],r9
+	mov [st_vct+8*7],r9
 	mov r9,[r12]
 	bts r9,7
 	mov [r12],r9
 ; 	$ 7' ⊢ ,7' : ,r64
 ; emt_get_ptn 7'
-	mov rax,[r12-8*8]
+	mov rax,[st_vct+8*7]
 	mov r9,[r12]
 	bt r9,7
 	mov rdi,rax
@@ -1323,7 +1323,7 @@ lb_86:
 	push rdi
 	push rax
 ; emt_set_ptn 7'
-	mov [r12-8*8],rdi
+	mov [st_vct+8*7],rdi
 	jc lb_87
 	mov r10,[r12]
 	btr r10,7
@@ -1351,7 +1351,7 @@ lb_89:
 	call mlc
 	push rax
 ; emt_get_ptn 6'
-	mov rax,[r12-8*7]
+	mov rax,[st_vct+8*6]
 	mov r9,[r12]
 	bt r9,6
 	mov rdx,rax
@@ -1362,7 +1362,7 @@ lb_89:
 	pop rax
 	push rax
 ; emt_get_ptn 7'
-	mov rax,[r12-8*8]
+	mov rax,[st_vct+8*7]
 	mov r9,[r12]
 	bt r9,7
 	mov rdx,rax
@@ -1381,7 +1381,7 @@ lb_89:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 7'
-	mov [r12-8*8],rdi
+	mov [st_vct+8*7],rdi
 	jc lb_93
 	mov r10,[r12]
 	btr r10,7
@@ -1400,7 +1400,7 @@ lb_94:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 8'
-	mov [r12-8*9],rdi
+	mov [st_vct+8*8],rdi
 	jc lb_95
 	mov r10,[r12]
 	btr r10,8
@@ -1422,13 +1422,13 @@ lb_96:
 	pop rdi
 	clc
 lb_90:
-	mov r9,[r12-8*8]
-	mov r10,[r12-8*9]
+	mov r9,[st_vct+8*7]
+	mov r10,[st_vct+8*8]
 	sub r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 6'
-	mov [r12-8*7],rdi
+	mov [st_vct+8*6],rdi
 	jc lb_91
 	mov r10,[r12]
 	btr r10,6
@@ -1443,7 +1443,7 @@ lb_91:
 lb_92:
 ; 	$ 2' ⊢ ,2',7' : ,r64,r64
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdi,rax
@@ -1455,7 +1455,7 @@ lb_92:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_97
 	mov r10,[r12]
 	btr r10,2
@@ -1474,7 +1474,7 @@ lb_98:
 	push rdi
 	push rax
 ; emt_set_ptn 7'
-	mov [r12-8*8],rdi
+	mov [st_vct+8*7],rdi
 	jc lb_99
 	mov r10,[r12]
 	btr r10,7
@@ -1498,7 +1498,7 @@ lb_100:
 lb_101:
 ; 	$ 0' ⊢ ,0',8' : ,r64,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -1510,7 +1510,7 @@ lb_101:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_102
 	mov r10,[r12]
 	btr r10,0
@@ -1529,7 +1529,7 @@ lb_103:
 	push rdi
 	push rax
 ; emt_set_ptn 8'
-	mov [r12-8*9],rdi
+	mov [st_vct+8*8],rdi
 	jc lb_104
 	mov r10,[r12]
 	btr r10,8
@@ -1557,7 +1557,7 @@ lb_106:
 	call mlc
 	push rax
 ; emt_get_ptn 6'
-	mov rax,[r12-8*7]
+	mov rax,[st_vct+8*6]
 	mov r9,[r12]
 	bt r9,6
 	mov rdx,rax
@@ -1568,7 +1568,7 @@ lb_106:
 	pop rax
 	push rax
 ; emt_get_ptn 7'
-	mov rax,[r12-8*8]
+	mov rax,[st_vct+8*7]
 	mov r9,[r12]
 	bt r9,7
 	mov rdx,rax
@@ -1579,7 +1579,7 @@ lb_106:
 	pop rax
 	push rax
 ; emt_get_ptn 8'
-	mov rax,[r12-8*9]
+	mov rax,[st_vct+8*8]
 	mov r9,[r12]
 	bt r9,8
 	mov rdx,rax
@@ -1591,17 +1591,17 @@ lb_106:
 	clc
 	mov rdi,rax
 ; push_s  2'~z 3'~b 5'~r0 4'~c 0'~x 1'~y
-	mov r9,[r12-8*3]
+	mov r9,[st_vct+8*2]
 	push r9
-	mov r9,[r12-8*4]
+	mov r9,[st_vct+8*3]
 	push r9
-	mov r9,[r12-8*6]
+	mov r9,[st_vct+8*5]
 	push r9
-	mov r9,[r12-8*5]
+	mov r9,[st_vct+8*4]
 	push r9
-	mov r9,[r12-8*1]
+	mov r9,[st_vct+8*0]
 	push r9
-	mov r9,[r12-8*2]
+	mov r9,[st_vct+8*1]
 	push r9
 	mov r9,[r12]
 	push r9
@@ -1616,17 +1616,17 @@ lb_106:
 	pop r9
 	mov [r12],r9
 	pop r9
-	mov [r12-8*2],r9
+	mov [st_vct+8*1],r9
 	pop r9
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	pop r9
-	mov [r12-8*5],r9
+	mov [st_vct+8*4],r9
 	pop r9
-	mov [r12-8*6],r9
+	mov [st_vct+8*5],r9
 	pop r9
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	pop r9
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	pushf
 	sub r15,1
 	popf
@@ -1634,7 +1634,7 @@ lb_106:
 	pushf
 	push rdi
 ; emt_set_ptn 6'
-	mov [r12-8*7],rdi
+	mov [st_vct+8*6],rdi
 	jc lb_108
 	mov r10,[r12]
 	btr r10,6
@@ -1657,13 +1657,13 @@ lb_109:
 lb_107:
 ; 	» 0xr1 |~ 7' : r64
 	mov r9,0x1
-	mov [r12-8*8],r9
+	mov [st_vct+8*7],r9
 	mov r9,[r12]
 	bts r9,7
 	mov [r12],r9
 ; 	$ 7' ⊢ ,7' : ,r64
 ; emt_get_ptn 7'
-	mov rax,[r12-8*8]
+	mov rax,[st_vct+8*7]
 	mov r9,[r12]
 	bt r9,7
 	mov rdi,rax
@@ -1675,7 +1675,7 @@ lb_107:
 	push rdi
 	push rax
 ; emt_set_ptn 7'
-	mov [r12-8*8],rdi
+	mov [st_vct+8*7],rdi
 	jc lb_110
 	mov r10,[r12]
 	btr r10,7
@@ -1703,7 +1703,7 @@ lb_112:
 	call mlc
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -1714,7 +1714,7 @@ lb_112:
 	pop rax
 	push rax
 ; emt_get_ptn 7'
-	mov rax,[r12-8*8]
+	mov rax,[st_vct+8*7]
 	mov r9,[r12]
 	bt r9,7
 	mov rdx,rax
@@ -1733,7 +1733,7 @@ lb_112:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 7'
-	mov [r12-8*8],rdi
+	mov [st_vct+8*7],rdi
 	jc lb_116
 	mov r10,[r12]
 	btr r10,7
@@ -1752,7 +1752,7 @@ lb_117:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 8'
-	mov [r12-8*9],rdi
+	mov [st_vct+8*8],rdi
 	jc lb_118
 	mov r10,[r12]
 	btr r10,8
@@ -1774,13 +1774,13 @@ lb_119:
 	pop rdi
 	clc
 lb_113:
-	mov r9,[r12-8*8]
-	mov r10,[r12-8*9]
+	mov r9,[st_vct+8*7]
+	mov r10,[st_vct+8*8]
 	sub r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_114
 	mov r10,[r12]
 	btr r10,2
@@ -1799,7 +1799,7 @@ lb_115:
 	call mlc
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -1810,7 +1810,7 @@ lb_115:
 	pop rax
 	push rax
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdx,rax
@@ -1821,7 +1821,7 @@ lb_115:
 	pop rax
 	push rax
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdx,rax
@@ -1833,13 +1833,13 @@ lb_115:
 	clc
 	mov rdi,rax
 ; push_s  6'~r1 3'~b 5'~r0 4'~c
-	mov r9,[r12-8*7]
+	mov r9,[st_vct+8*6]
 	push r9
-	mov r9,[r12-8*4]
+	mov r9,[st_vct+8*3]
 	push r9
-	mov r9,[r12-8*6]
+	mov r9,[st_vct+8*5]
 	push r9
-	mov r9,[r12-8*5]
+	mov r9,[st_vct+8*4]
 	push r9
 	mov r9,[r12]
 	push r9
@@ -1854,13 +1854,13 @@ lb_115:
 	pop r9
 	mov [r12],r9
 	pop r9
-	mov [r12-8*5],r9
+	mov [st_vct+8*4],r9
 	pop r9
-	mov [r12-8*6],r9
+	mov [st_vct+8*5],r9
 	pop r9
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	pop r9
-	mov [r12-8*7],r9
+	mov [st_vct+8*6],r9
 	pushf
 	sub r15,1
 	popf
@@ -1868,7 +1868,7 @@ lb_115:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_121
 	mov r10,[r12]
 	btr r10,0
@@ -1895,7 +1895,7 @@ lb_120:
 	call mlc
 	push rax
 ; emt_get_ptn 5'
-	mov rax,[r12-8*6]
+	mov rax,[st_vct+8*5]
 	mov r9,[r12]
 	bt r9,5
 	mov rdx,rax
@@ -1906,7 +1906,7 @@ lb_120:
 	pop rax
 	push rax
 ; emt_get_ptn 6'
-	mov rax,[r12-8*7]
+	mov rax,[st_vct+8*6]
 	mov r9,[r12]
 	bt r9,6
 	mov rdx,rax
@@ -1917,7 +1917,7 @@ lb_120:
 	pop rax
 	push rax
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdx,rax
@@ -1929,9 +1929,9 @@ lb_120:
 	clc
 	mov rdi,rax
 ; push_s  3'~b 4'~c
-	mov r9,[r12-8*4]
+	mov r9,[st_vct+8*3]
 	push r9
-	mov r9,[r12-8*5]
+	mov r9,[st_vct+8*4]
 	push r9
 	mov r9,[r12]
 	push r9
@@ -1946,9 +1946,9 @@ lb_120:
 	pop r9
 	mov [r12],r9
 	pop r9
-	mov [r12-8*5],r9
+	mov [st_vct+8*4],r9
 	pop r9
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	pushf
 	sub r15,1
 	popf
@@ -1956,7 +1956,7 @@ lb_120:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_124
 	mov r10,[r12]
 	btr r10,0
@@ -1979,7 +1979,7 @@ lb_125:
 lb_123:
 ; 	∎ 0'
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	push rax
@@ -1990,13 +1990,13 @@ lb_123:
 	mov r9,[r12]
 	bt r9,3
 	jc clear_lb_126
-	mov rdi,[r12-8*4]
+	mov rdi,[st_vct+8*3]
 	call dec_r
 clear_lb_126:
 	mov r9,[r12]
 	bt r9,4
 	jc clear_lb_127
-	mov rdi,[r12-8*5]
+	mov rdi,[st_vct+8*4]
 	call dec_r
 clear_lb_127:
 	pop r9
@@ -2008,7 +2008,7 @@ fact:
 	jc emt_etr_c_lb_142
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_205
 	mov r10,[r12]
 	btr r10,0
@@ -2026,7 +2026,7 @@ lb_206:
 jmp emt_etr_start_lb_143
 emt_etr_c_lb_142:
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_203
 	mov r10,[r12]
 	btr r10,0
@@ -2042,7 +2042,7 @@ lb_204:
 emt_etr_start_lb_143:
 ; 	$ 0' ⊢ ,0',1' : ,r64,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -2054,7 +2054,7 @@ emt_etr_start_lb_143:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_144
 	mov r10,[r12]
 	btr r10,0
@@ -2073,7 +2073,7 @@ lb_145:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_146
 	mov r10,[r12]
 	btr r10,1
@@ -2097,13 +2097,13 @@ lb_147:
 lb_148:
 ; 	» 0xr0 |~ 2' : r64
 	mov r9,0x0
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	mov r9,[r12]
 	bts r9,2
 	mov [r12],r9
 ; 	$ 2' ⊢ ,2' : ,r64
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdi,rax
@@ -2115,7 +2115,7 @@ lb_148:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_149
 	mov r10,[r12]
 	btr r10,2
@@ -2143,7 +2143,7 @@ lb_151:
 	call mlc
 	push rax
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdx,rax
@@ -2154,7 +2154,7 @@ lb_151:
 	pop rax
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -2173,7 +2173,7 @@ lb_151:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_158
 	mov r10,[r12]
 	btr r10,3
@@ -2192,7 +2192,7 @@ lb_159:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_160
 	mov r10,[r12]
 	btr r10,4
@@ -2214,8 +2214,8 @@ lb_161:
 	pop rdi
 	clc
 lb_153:
-	mov r9,[r12-8*4]
-	mov r10,[r12-8*5]
+	mov r9,[st_vct+8*3]
+	mov r10,[st_vct+8*4]
 	push rdi
 	push r9
 	push r10
@@ -2242,7 +2242,7 @@ cmp_jb_lb_152:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_154
 	mov r10,[r12]
 	btr r10,0
@@ -2261,7 +2261,7 @@ lb_155:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_156
 	mov r10,[r12]
 	btr r10,2
@@ -2280,7 +2280,7 @@ lb_157:
 	call dec_r
 ; 	∠ 0'
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	cmp rax,0
@@ -2298,7 +2298,7 @@ agl_162_0:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_192
 	mov r10,[r12]
 	btr r10,0
@@ -2321,13 +2321,13 @@ lb_193:
 lb_164:
 ; 	» 0xr1 |~ 3' : r64
 	mov r9,0x1
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	mov r9,[r12]
 	bts r9,3
 	mov [r12],r9
 ; 	$ 3' ⊢ ,3' : ,r64
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdi,rax
@@ -2339,7 +2339,7 @@ lb_164:
 	push rdi
 	push rax
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_165
 	mov r10,[r12]
 	btr r10,3
@@ -2363,7 +2363,7 @@ lb_166:
 lb_167:
 ; 	$ 1' ⊢ ,1',4' : ,r64,r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
@@ -2375,7 +2375,7 @@ lb_167:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_168
 	mov r10,[r12]
 	btr r10,1
@@ -2394,7 +2394,7 @@ lb_169:
 	push rdi
 	push rax
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_170
 	mov r10,[r12]
 	btr r10,4
@@ -2422,7 +2422,7 @@ lb_172:
 	call mlc
 	push rax
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdx,rax
@@ -2433,7 +2433,7 @@ lb_172:
 	pop rax
 	push rax
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdx,rax
@@ -2452,7 +2452,7 @@ lb_172:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_176
 	mov r10,[r12]
 	btr r10,3
@@ -2471,7 +2471,7 @@ lb_177:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 5'
-	mov [r12-8*6],rdi
+	mov [st_vct+8*5],rdi
 	jc lb_178
 	mov r10,[r12]
 	btr r10,5
@@ -2493,13 +2493,13 @@ lb_179:
 	pop rdi
 	clc
 lb_173:
-	mov r9,[r12-8*4]
-	mov r10,[r12-8*6]
+	mov r9,[st_vct+8*3]
+	mov r10,[st_vct+8*5]
 	sub r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_174
 	mov r10,[r12]
 	btr r10,1
@@ -2514,16 +2514,16 @@ lb_174:
 lb_175:
 ; 	fact 1' ⊢ 1' : r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
 ; push_s  2'~c 4'~x2 0'~b
-	mov r9,[r12-8*3]
+	mov r9,[st_vct+8*2]
 	push r9
-	mov r9,[r12-8*5]
+	mov r9,[st_vct+8*4]
 	push r9
-	mov r9,[r12-8*1]
+	mov r9,[st_vct+8*0]
 	push r9
 	mov r9,[r12]
 	push r9
@@ -2538,11 +2538,11 @@ lb_175:
 	pop r9
 	mov [r12],r9
 	pop r9
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	pop r9
-	mov [r12-8*5],r9
+	mov [st_vct+8*4],r9
 	pop r9
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	pushf
 	sub r15,1
 	popf
@@ -2550,7 +2550,7 @@ lb_175:
 	pushf
 	push rdi
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_181
 	mov r10,[r12]
 	btr r10,1
@@ -2577,7 +2577,7 @@ lb_180:
 	call mlc
 	push rax
 ; emt_get_ptn 4'
-	mov rax,[r12-8*5]
+	mov rax,[st_vct+8*4]
 	mov r9,[r12]
 	bt r9,4
 	mov rdx,rax
@@ -2588,7 +2588,7 @@ lb_180:
 	pop rax
 	push rax
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdx,rax
@@ -2607,7 +2607,7 @@ lb_180:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_186
 	mov r10,[r12]
 	btr r10,3
@@ -2626,7 +2626,7 @@ lb_187:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_188
 	mov r10,[r12]
 	btr r10,4
@@ -2648,13 +2648,13 @@ lb_189:
 	pop rdi
 	clc
 lb_183:
-	mov r9,[r12-8*4]
-	mov r10,[r12-8*5]
+	mov r9,[st_vct+8*3]
+	mov r10,[st_vct+8*4]
 	imul r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_184
 	mov r10,[r12]
 	btr r10,1
@@ -2669,7 +2669,7 @@ lb_184:
 lb_185:
 ; 	∎ 1'
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	push rax
@@ -2680,13 +2680,13 @@ lb_185:
 	mov r9,[r12]
 	bt r9,2
 	jc clear_lb_190
-	mov rdi,[r12-8*3]
+	mov rdi,[st_vct+8*2]
 	call dec_r
 clear_lb_190:
 	mov r9,[r12]
 	bt r9,0
 	jc clear_lb_191
-	mov rdi,[r12-8*1]
+	mov rdi,[st_vct+8*0]
 	call dec_r
 clear_lb_191:
 	pop r9
@@ -2698,7 +2698,7 @@ agl_162_1:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_201
 	mov r10,[r12]
 	btr r10,0
@@ -2721,13 +2721,13 @@ lb_202:
 lb_194:
 ; 	» 0xr1 |~ 3' : r64
 	mov r9,0x1
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	mov r9,[r12]
 	bts r9,3
 	mov [r12],r9
 ; 	$ 3' ⊢ ,3' : ,r64
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdi,rax
@@ -2739,7 +2739,7 @@ lb_194:
 	push rdi
 	push rax
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_195
 	mov r10,[r12]
 	btr r10,3
@@ -2763,7 +2763,7 @@ lb_196:
 lb_197:
 ; 	∎ 3'
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	push rax
@@ -2774,19 +2774,19 @@ lb_197:
 	mov r9,[r12]
 	bt r9,2
 	jc clear_lb_198
-	mov rdi,[r12-8*3]
+	mov rdi,[st_vct+8*2]
 	call dec_r
 clear_lb_198:
 	mov r9,[r12]
 	bt r9,0
 	jc clear_lb_199
-	mov rdi,[r12-8*1]
+	mov rdi,[st_vct+8*0]
 	call dec_r
 clear_lb_199:
 	mov r9,[r12]
 	bt r9,1
 	jc clear_lb_200
-	mov rdi,[r12-8*2]
+	mov rdi,[st_vct+8*1]
 	call dec_r
 clear_lb_200:
 	pop r9
@@ -2798,7 +2798,7 @@ f0:
 	jc emt_etr_c_lb_207
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_258
 	mov r10,[r12]
 	btr r10,0
@@ -2816,7 +2816,7 @@ lb_259:
 jmp emt_etr_start_lb_208
 emt_etr_c_lb_207:
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_256
 	mov r10,[r12]
 	btr r10,0
@@ -2832,7 +2832,7 @@ lb_257:
 emt_etr_start_lb_208:
 ; 	$ 0' ⊢ ,0',1' : ,r64,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -2844,7 +2844,7 @@ emt_etr_start_lb_208:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_209
 	mov r10,[r12]
 	btr r10,0
@@ -2863,7 +2863,7 @@ lb_210:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_211
 	mov r10,[r12]
 	btr r10,1
@@ -2887,13 +2887,13 @@ lb_212:
 lb_213:
 ; 	» 0xr0 |~ 2' : r64
 	mov r9,0x0
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	mov r9,[r12]
 	bts r9,2
 	mov [r12],r9
 ; 	$ 2' ⊢ ,2' : ,r64
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdi,rax
@@ -2905,7 +2905,7 @@ lb_213:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_214
 	mov r10,[r12]
 	btr r10,2
@@ -2933,7 +2933,7 @@ lb_216:
 	call mlc
 	push rax
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdx,rax
@@ -2944,7 +2944,7 @@ lb_216:
 	pop rax
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -2963,7 +2963,7 @@ lb_216:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_223
 	mov r10,[r12]
 	btr r10,3
@@ -2982,7 +2982,7 @@ lb_224:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_225
 	mov r10,[r12]
 	btr r10,4
@@ -3004,8 +3004,8 @@ lb_226:
 	pop rdi
 	clc
 lb_218:
-	mov r9,[r12-8*4]
-	mov r10,[r12-8*5]
+	mov r9,[st_vct+8*3]
+	mov r10,[st_vct+8*4]
 	push rdi
 	push r9
 	push r10
@@ -3032,7 +3032,7 @@ cmp_jb_lb_217:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_219
 	mov r10,[r12]
 	btr r10,0
@@ -3051,7 +3051,7 @@ lb_220:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_221
 	mov r10,[r12]
 	btr r10,2
@@ -3070,7 +3070,7 @@ lb_222:
 	call dec_r
 ; 	∠ 0'
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	cmp rax,0
@@ -3088,7 +3088,7 @@ agl_227_0:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_245
 	mov r10,[r12]
 	btr r10,0
@@ -3111,13 +3111,13 @@ lb_246:
 lb_229:
 ; 	» 0xr1 |~ 3' : r64
 	mov r9,0x1
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	mov r9,[r12]
 	bts r9,3
 	mov [r12],r9
 ; 	$ 3' ⊢ ,3' : ,r64
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdi,rax
@@ -3129,7 +3129,7 @@ lb_229:
 	push rdi
 	push rax
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_230
 	mov r10,[r12]
 	btr r10,3
@@ -3157,7 +3157,7 @@ lb_232:
 	call mlc
 	push rax
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdx,rax
@@ -3168,7 +3168,7 @@ lb_232:
 	pop rax
 	push rax
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdx,rax
@@ -3187,7 +3187,7 @@ lb_232:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_236
 	mov r10,[r12]
 	btr r10,3
@@ -3206,7 +3206,7 @@ lb_237:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_238
 	mov r10,[r12]
 	btr r10,4
@@ -3228,13 +3228,13 @@ lb_239:
 	pop rdi
 	clc
 lb_233:
-	mov r9,[r12-8*4]
-	mov r10,[r12-8*5]
+	mov r9,[st_vct+8*3]
+	mov r10,[st_vct+8*4]
 	sub r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_234
 	mov r10,[r12]
 	btr r10,1
@@ -3249,14 +3249,14 @@ lb_234:
 lb_235:
 ; 	f0 1' ⊢ 1' : r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
 ; push_s  2'~c 0'~b0
-	mov r9,[r12-8*3]
+	mov r9,[st_vct+8*2]
 	push r9
-	mov r9,[r12-8*1]
+	mov r9,[st_vct+8*0]
 	push r9
 	mov r9,[r12]
 	push r9
@@ -3271,9 +3271,9 @@ lb_235:
 	pop r9
 	mov [r12],r9
 	pop r9
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	pop r9
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	pushf
 	sub r15,1
 	popf
@@ -3281,7 +3281,7 @@ lb_235:
 	pushf
 	push rdi
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_241
 	mov r10,[r12]
 	btr r10,1
@@ -3304,7 +3304,7 @@ lb_242:
 lb_240:
 ; 	∎ 1'
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	push rax
@@ -3315,13 +3315,13 @@ lb_240:
 	mov r9,[r12]
 	bt r9,2
 	jc clear_lb_243
-	mov rdi,[r12-8*3]
+	mov rdi,[st_vct+8*2]
 	call dec_r
 clear_lb_243:
 	mov r9,[r12]
 	bt r9,0
 	jc clear_lb_244
-	mov rdi,[r12-8*1]
+	mov rdi,[st_vct+8*0]
 	call dec_r
 clear_lb_244:
 	pop r9
@@ -3333,7 +3333,7 @@ agl_227_1:
 	pushf
 	push rdi
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_254
 	mov r10,[r12]
 	btr r10,0
@@ -3356,13 +3356,13 @@ lb_255:
 lb_247:
 ; 	» 0xr0 |~ 3' : r64
 	mov r9,0x0
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	mov r9,[r12]
 	bts r9,3
 	mov [r12],r9
 ; 	$ 3' ⊢ ,3' : ,r64
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdi,rax
@@ -3374,7 +3374,7 @@ lb_247:
 	push rdi
 	push rax
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_248
 	mov r10,[r12]
 	btr r10,3
@@ -3398,7 +3398,7 @@ lb_249:
 lb_250:
 ; 	∎ 3'
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	push rax
@@ -3409,19 +3409,19 @@ lb_250:
 	mov r9,[r12]
 	bt r9,2
 	jc clear_lb_251
-	mov rdi,[r12-8*3]
+	mov rdi,[st_vct+8*2]
 	call dec_r
 clear_lb_251:
 	mov r9,[r12]
 	bt r9,0
 	jc clear_lb_252
-	mov rdi,[r12-8*1]
+	mov rdi,[st_vct+8*0]
 	call dec_r
 clear_lb_252:
 	mov r9,[r12]
 	bt r9,1
 	jc clear_lb_253
-	mov rdi,[r12-8*2]
+	mov rdi,[st_vct+8*1]
 	call dec_r
 clear_lb_253:
 	pop r9
@@ -3441,13 +3441,13 @@ emt_etr_c_lb_260:
 emt_etr_start_lb_261:
 ; 	» 0x2r1 |~ 0' : @[0].r2 ≃ ∐[@[0] @[0] ]
 	mov r9,0x1
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	mov r9,[r12]
 	bts r9,0
 	mov [r12],r9
 ; 	$ 0' ⊢ ,0' : ,@[0].r2 ≃ ∐[@[0] @[0] ]
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -3459,7 +3459,7 @@ emt_etr_start_lb_261:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_262
 	mov r10,[r12]
 	btr r10,0
@@ -3483,13 +3483,13 @@ lb_263:
 lb_264:
 ; 	» 0xrff |~ 1' : r64
 	mov r9,0xff
-	mov [r12-8*2],r9
+	mov [st_vct+8*1],r9
 	mov r9,[r12]
 	bts r9,1
 	mov [r12],r9
 ; 	$ 1' ⊢ ,1' : ,r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
@@ -3501,7 +3501,7 @@ lb_264:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_265
 	mov r10,[r12]
 	btr r10,1
@@ -3525,13 +3525,13 @@ lb_266:
 lb_267:
 ; 	» 0xrff |~ 2' : r64
 	mov r9,0xff
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	mov r9,[r12]
 	bts r9,2
 	mov [r12],r9
 ; 	$ 2' ⊢ ,2' : ,r64
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdi,rax
@@ -3543,7 +3543,7 @@ lb_267:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_268
 	mov r10,[r12]
 	btr r10,2
@@ -3571,7 +3571,7 @@ lb_270:
 	call mlc
 	push rax
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdx,rax
@@ -3582,7 +3582,7 @@ lb_270:
 	pop rax
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -3601,7 +3601,7 @@ lb_270:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_277
 	mov r10,[r12]
 	btr r10,3
@@ -3620,7 +3620,7 @@ lb_278:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_279
 	mov r10,[r12]
 	btr r10,4
@@ -3642,8 +3642,8 @@ lb_280:
 	pop rdi
 	clc
 lb_272:
-	mov r9,[r12-8*4]
-	mov r10,[r12-8*5]
+	mov r9,[st_vct+8*3]
+	mov r10,[st_vct+8*4]
 	push rdi
 	push r9
 	push r10
@@ -3670,7 +3670,7 @@ cmp_jb_lb_271:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_273
 	mov r10,[r12]
 	btr r10,1
@@ -3689,7 +3689,7 @@ lb_274:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_275
 	mov r10,[r12]
 	btr r10,2
@@ -3708,7 +3708,7 @@ lb_276:
 	call dec_r
 ; 	∠ 1'
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	cmp rax,0
@@ -3726,7 +3726,7 @@ agl_281_0:
 	pushf
 	push rdi
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_286
 	mov r10,[r12]
 	btr r10,1
@@ -3749,7 +3749,7 @@ lb_287:
 lb_283:
 ; 	∎ 1'
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	push rax
@@ -3760,13 +3760,13 @@ lb_283:
 	mov r9,[r12]
 	bt r9,2
 	jc clear_lb_284
-	mov rdi,[r12-8*3]
+	mov rdi,[st_vct+8*2]
 	call dec_r
 clear_lb_284:
 	mov r9,[r12]
 	bt r9,0
 	jc clear_lb_285
-	mov rdi,[r12-8*1]
+	mov rdi,[st_vct+8*0]
 	call dec_r
 clear_lb_285:
 	pop r9
@@ -3778,7 +3778,7 @@ agl_281_1:
 	pushf
 	push rdi
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_291
 	mov r10,[r12]
 	btr r10,1
@@ -3801,7 +3801,7 @@ lb_292:
 lb_288:
 ; 	∎ 1'
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	push rax
@@ -3812,13 +3812,13 @@ lb_288:
 	mov r9,[r12]
 	bt r9,2
 	jc clear_lb_289
-	mov rdi,[r12-8*3]
+	mov rdi,[st_vct+8*2]
 	call dec_r
 clear_lb_289:
 	mov r9,[r12]
 	bt r9,0
 	jc clear_lb_290
-	mov rdi,[r12-8*1]
+	mov rdi,[st_vct+8*0]
 	call dec_r
 clear_lb_290:
 	pop r9
@@ -3838,13 +3838,13 @@ emt_etr_c_lb_293:
 emt_etr_start_lb_294:
 ; 	» 0xrffff |~ 0' : r64
 	mov r9,0xffff
-	mov [r12-8*1],r9
+	mov [st_vct+8*0],r9
 	mov r9,[r12]
 	bts r9,0
 	mov [r12],r9
 ; 	$ 0' ⊢ ,0' : ,r64
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -3856,7 +3856,7 @@ emt_etr_start_lb_294:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_295
 	mov r10,[r12]
 	btr r10,0
@@ -3880,13 +3880,13 @@ lb_296:
 lb_297:
 ; 	» 0xrffffccccafab0000 |~ 1' : r64
 	mov r9,0xffffccccafab0000
-	mov [r12-8*2],r9
+	mov [st_vct+8*1],r9
 	mov r9,[r12]
 	bts r9,1
 	mov [r12],r9
 ; 	$ 1' ⊢ ,1' : ,r64
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdi,rax
@@ -3898,7 +3898,7 @@ lb_297:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_298
 	mov r10,[r12]
 	btr r10,1
@@ -3922,13 +3922,13 @@ lb_299:
 lb_300:
 ; 	» 0xra |~ 2' : r64
 	mov r9,0xa
-	mov [r12-8*3],r9
+	mov [st_vct+8*2],r9
 	mov r9,[r12]
 	bts r9,2
 	mov [r12],r9
 ; 	$ 2' ⊢ ,2' : ,r64
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdi,rax
@@ -3940,7 +3940,7 @@ lb_300:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_301
 	mov r10,[r12]
 	btr r10,2
@@ -3964,13 +3964,13 @@ lb_302:
 lb_303:
 ; 	» 0xr18 |~ 3' : r64
 	mov r9,0x18
-	mov [r12-8*4],r9
+	mov [st_vct+8*3],r9
 	mov r9,[r12]
 	bts r9,3
 	mov [r12],r9
 ; 	$ 3' ⊢ ,3' : ,r64
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdi,rax
@@ -3982,7 +3982,7 @@ lb_303:
 	push rdi
 	push rax
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_304
 	mov r10,[r12]
 	btr r10,3
@@ -4010,7 +4010,7 @@ lb_306:
 	call mlc
 	push rax
 ; emt_get_ptn 3'
-	mov rax,[r12-8*4]
+	mov rax,[st_vct+8*3]
 	mov r9,[r12]
 	bt r9,3
 	mov rdx,rax
@@ -4021,7 +4021,7 @@ lb_306:
 	pop rax
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -4040,7 +4040,7 @@ lb_306:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_310
 	mov r10,[r12]
 	btr r10,3
@@ -4059,7 +4059,7 @@ lb_311:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 4'
-	mov [r12-8*5],rdi
+	mov [st_vct+8*4],rdi
 	jc lb_312
 	mov r10,[r12]
 	btr r10,4
@@ -4081,13 +4081,13 @@ lb_313:
 	pop rdi
 	clc
 lb_307:
-	mov r9,[r12-8*4]
-	mov r10,[r12-8*5]
+	mov r9,[st_vct+8*3]
+	mov r10,[st_vct+8*4]
 	imul r9,r10
 	mov rdi,r9
 	stc
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_308
 	mov r10,[r12]
 	btr r10,2
@@ -4106,7 +4106,7 @@ lb_309:
 	call mlc
 	push rax
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdx,rax
@@ -4117,7 +4117,7 @@ lb_309:
 	pop rax
 	push rax
 ; emt_get_ptn 2'
-	mov rax,[r12-8*3]
+	mov rax,[st_vct+8*2]
 	mov r9,[r12]
 	bt r9,2
 	mov rdx,rax
@@ -4135,7 +4135,7 @@ lb_309:
 	mov r9,[r12]
 	bt r9,1
 	jc clear_lb_314
-	mov rdi,[r12-8*2]
+	mov rdi,[st_vct+8*1]
 	call dec_r
 clear_lb_314:
 	pop r9
@@ -4189,7 +4189,7 @@ emt_etr_start_lb_316:
 	push rdi
 	push rax
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_317
 	mov r10,[r12]
 	btr r10,0
@@ -4208,7 +4208,7 @@ lb_318:
 	push rdi
 	push rax
 ; emt_set_ptn 1'
-	mov [r12-8*2],rdi
+	mov [st_vct+8*1],rdi
 	jc lb_319
 	mov r10,[r12]
 	btr r10,1
@@ -4227,7 +4227,7 @@ lb_320:
 	push rdi
 	push rax
 ; emt_set_ptn 2'
-	mov [r12-8*3],rdi
+	mov [st_vct+8*2],rdi
 	jc lb_321
 	mov r10,[r12]
 	btr r10,2
@@ -4251,7 +4251,7 @@ lb_322:
 lb_323:
 ; 	$ 0' ⊢ ,{ 0' 3' } : ,{ { } { } }
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdi,rax
@@ -4268,7 +4268,7 @@ lb_323:
 	bt r9,0
 	mov rdi,[rdi+8*1]
 ; emt_set_ptn 0'
-	mov [r12-8*1],rdi
+	mov [st_vct+8*0],rdi
 	jc lb_324
 	mov r10,[r12]
 	btr r10,0
@@ -4287,7 +4287,7 @@ lb_325:
 	bt r9,1
 	mov rdi,[rdi+8*2]
 ; emt_set_ptn 3'
-	mov [r12-8*4],rdi
+	mov [st_vct+8*3],rdi
 	jc lb_326
 	mov r10,[r12]
 	btr r10,3
@@ -4316,7 +4316,7 @@ lb_328:
 	call mlc
 	push rax
 ; emt_get_ptn 0'
-	mov rax,[r12-8*1]
+	mov rax,[st_vct+8*0]
 	mov r9,[r12]
 	bt r9,0
 	mov rdx,rax
@@ -4327,7 +4327,7 @@ lb_328:
 	pop rax
 	push rax
 ; emt_get_ptn 1'
-	mov rax,[r12-8*2]
+	mov rax,[st_vct+8*1]
 	mov r9,[r12]
 	bt r9,1
 	mov rdx,rax
@@ -4345,13 +4345,13 @@ lb_328:
 	mov r9,[r12]
 	bt r9,2
 	jc clear_lb_329
-	mov rdi,[r12-8*3]
+	mov rdi,[st_vct+8*2]
 	call dec_r
 clear_lb_329:
 	mov r9,[r12]
 	bt r9,3
 	jc clear_lb_330
-	mov rdi,[r12-8*4]
+	mov rdi,[st_vct+8*3]
 	call dec_r
 clear_lb_330:
 	pop r9
