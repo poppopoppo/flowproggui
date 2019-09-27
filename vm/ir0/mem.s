@@ -10,6 +10,7 @@ extern sprintf
 section .bss
   str_ret: resb 100
   st_vct: resb 400
+  st_vct_tmp: resb 400
 section .data
   str_tkn: db "tkn: ",0
   str_hw: db "Hello World!!",10,0
