@@ -167,6 +167,8 @@ _end:
   int 0x80
 
 mlc:
+  add r13,rdi
+  add r13,1
   push rdi
   add rdi,1
   imul rdi,8
@@ -302,12 +304,14 @@ dec_r:
   mov r9,[rdi]
   mov r11,r9
   shr r11,48
+  sub r11,1
   ror QWORD r9,48
   sub QWORD r9,1
   rol QWORD r9,48
   mov [rdi],r9
   cmp r11,0
   jne dec_r_end
+  ; free blk
   ; mov to temporary register
   mov r10,r9
   mov r11,r9
@@ -315,6 +319,10 @@ dec_r:
   lea r9,[rdi+8*1]
   shl r10,16
   shr r10,48
+  pushf
+  sub r13,r10
+  sub r13,1
+  popf
 dec_r_lp:
   cmp r10,0
   je dec_r_lp_end

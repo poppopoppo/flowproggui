@@ -2049,7 +2049,9 @@ and push_s s =
   let e1 =
     "\tmov r9,[r12]\n"^
     "\tpush r9\n"^
-    "\tadd r15,1\n" in
+    "\tpushf\n"^
+    "\tadd r15,1\n"^
+    "\tpopf\n" in
   (c0^e0^e1,l)
 and pop_s l =
   let c0 = cmt ("pop_s") in
@@ -2112,10 +2114,21 @@ and emt_ir s p =
              let s = Hashtbl.copy s in
              let ii = idx_crt_ptn s r in
              let ci = cmt ("\t∐ "^(emt_ptn ii)) in
+             let lc1 = lb () in
              let ei =
                ci^
                l0^"_"^(string_of_int i)^":\n"^
+               "\tpushf\n"^
+               "\tpush rdi\n"^
                (emt_set_ptn ii)^
+               "\tpop rdi\n"^
+               "\tpopf\n"^
+               "\tjc "^lc1^"\n"^
+               "\tpush rdi\n"^
+               "\tcall dec_r\n"^
+               "\tpop rdi\n"^
+               "\tclc\n"^
+               lc1^":\n"^
                (emt_ir s p) in
              (i+1,a^ei) )
           (0,c0^e0) ps in
@@ -2187,10 +2200,21 @@ and emt_ir s p =
                 let p = idx_crt_ptn s xt in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let lc1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
+                  "\tpushf\n"^
+                  "\tpush rdi\n"^
                   (emt_set_ptn p)^
+                  "\tpop rdi\n"^
+                  "\tpopf\n"^
+                  "\tjc "^lc1^"\n"^
+                  "\tpush rdi\n"^
+                  "\tcall dec_r\n"^
+                  "\tpop rdi\n"^
+                  "\tclc\n"^
+                  lc1^":\n"^
                   "\tmov r9,"^(emt_reg i0)^"\n"^
                   "\tmov r10,"^(emt_reg i1)^"\n"^
                   "\tadd r9,r10\n"^
@@ -2209,10 +2233,21 @@ and emt_ir s p =
                 let p = idx_crt_ptn s xt in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let lc1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
+                  "\tpushf\n"^
+                  "\tpush rdi\n"^
                   (emt_set_ptn p)^
+                  "\tpop rdi\n"^
+                  "\tpopf\n"^
+                  "\tjc "^lc1^"\n"^
+                  "\tpush rdi\n"^
+                  "\tcall dec_r\n"^
+                  "\tpop rdi\n"^
+                  "\tclc\n"^
+                  lc1^":\n"^
                   "\tmov r9,"^(emt_reg i0)^"\n"^
                   "\tmov r10,"^(emt_reg i1)^"\n"^
                   "\timul r9,r10\n"^
@@ -2231,10 +2266,21 @@ and emt_ir s p =
                 let p = idx_crt_ptn s xt in
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
+                let lc1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
+                  "\tpushf\n"^
+                  "\tpush rdi\n"^
                   (emt_set_ptn p)^
+                  "\tpop rdi\n"^
+                  "\tpopf\n"^
+                  "\tjc "^lc1^"\n"^
+                  "\tpush rdi\n"^
+                  "\tcall dec_r\n"^
+                  "\tpop rdi\n"^
+                  "\tclc\n"^
+                  lc1^":\n"^
                   "\tmov r9,"^(emt_reg i0)^"\n"^
                   "\tmov r10,"^(emt_reg i1)^"\n"^
                   "\tsub r9,r10\n"^
@@ -2254,10 +2300,21 @@ and emt_ir s p =
                 let i0 = idx s v0 in
                 let i1 = idx s v1 in
                 let l_na = "cmp_jb_"^(lb ()) in
+                let lc1 = lb () in
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
+                  "\tpushf\n"^
+                  "\tpush rdi\n"^
                   (emt_set_ptn p)^
+                  "\tpop rdi\n"^
+                  "\tpopf\n"^
+                  "\tjc "^lc1^"\n"^
+                  "\tpush rdi\n"^
+                  "\tcall dec_r\n"^
+                  "\tpop rdi\n"^
+                  "\tclc\n"^
+                  lc1^":\n"^
                   "\tmov r9,"^(emt_reg i0)^"\n"^
                   "\tmov r10,"^(emt_reg i1)^"\n"^
                   "\tpush rdi\n"^
@@ -2290,10 +2347,11 @@ and emt_ir s p =
               | Tkn.Etr_N f ->
                 let e0 =
                   (emt_get_ptn ix)^
-                  "\tmov rax,rdi\n" in
+                  "\tmov rdi,rax\n" in
                 let (e1,sl) = push_s s in
                 let iy = idx_crt_ptn s y in
                 let c0 = cmt ("\t"^(Tkn.print_etr n)^" "^(emt_ptn ix)^" ⊢ "^(emt_ptn iy)^rtl^(print_ty y)) in
+                let lc1 = lb () in
                 let e2 =
                   "\tmov r9,0\n"^
                   "\tnot r9\n"^
@@ -2301,7 +2359,18 @@ and emt_ir s p =
                   "\tcall "^f^"\n"^
                   (pop_s sl)^
                   "\tmov rdi,rax\n"^
-                  (emt_set_ptn iy) in
+                  "\tpushf\n"^
+                  "\tpush rdi\n"^
+                  (emt_set_ptn iy)^
+                  "\tpop rdi\n"^
+                  "\tpopf\n"^
+                  "\tjc "^lc1^"\n"^
+                  "\tpush rdi\n"^
+                  "\tcall dec_r\n"^
+                  "\tpop rdi\n"^
+                  "\tclc\n"^
+                  lc1^":\n"
+                in
                 c0^e0^e1^e2
               | _ -> "; ir_glb_call\n" )
           | IR_Exp(Ast.Atm(Ast.R64 x),_,Rcd_Ptn.A r) ->
