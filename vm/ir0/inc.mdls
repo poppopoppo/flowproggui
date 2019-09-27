@@ -43,16 +43,16 @@
   |» x
   $ x ⊢ x0,x1
   » 0r0 |~ {} ⊢ y
-  cmp { x0 y } ⊢ { b c }
+  cmp { x0 y } ⊢ { b _ }
   ∠ b
-    ∐ b
+    ∐ _
     » 0r1 |~ {} ⊢ t0
     $ x1 ⊢ x1,x2
     sub { x1 t0 } ⊢ x1
     fact x1 ⊢ y1
     mul { x2 y1 } ⊢ y1
     ∎ y1
-    ∐ b
+    ∐ _
     » 0r1 |~ {} ⊢ y
     ∎ y
   ∇
@@ -60,11 +60,11 @@
   |» { x y z }
   $ x ⊢ x,x0
   $ y ⊢ y,y0
-  cmp { x0 y0 } ⊢ { b c }
+  cmp { x0 y0 } ⊢ { _ c }
   ∠ c
-    ∐ c
+    ∐ _
     ∎ z
-    ∐ c
+    ∐ _
     $ x ⊢ x,x0
     » 0r1 |~ {} ⊢ t
     sub { x0 t } ⊢ xt
