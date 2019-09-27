@@ -2024,7 +2024,7 @@ and emt_ptn_set_ptn r0 r1 =
       let e0 =
         "\tmov rdi,"^(emt_reg i)^"\n"^
         "\tmov r9,[r12]\n"^
-        "\bbt r9,"^(string_of_int i)^"\n"^
+        "\tbt r9,"^(string_of_int i)^"\n"^
         (emt_set_ptn r1) in
       (cmt c0)^e0
     | R _,A i ->
@@ -2032,7 +2032,7 @@ and emt_ptn_set_ptn r0 r1 =
         (emt_get_ptn r0)^
         "\tmov "^(emt_reg i)^",rax\n"^
         "\tmov r9,[r12]\n"^
-        "\tbtr r9,"^(string_of_int i)^
+        "\tbtr r9,"^(string_of_int i)^"\n"^
         "\tmov [r12],r9\n" in
       (cmt c0)^e0
     | R rs0,R rs1 ->
@@ -2058,7 +2058,8 @@ and emt_dec_ptn r =
            "\tjc "^l0^"\n"^
            "\tbts r9,"^(string_of_int n)^"\n"^
            "\tmov [r12],r9\n"^
-           "\tcall dec_r\n" in
+           "\tcall dec_r\n"^
+           l0^":\n" in
          e0^e1 )
       "" l in
   (cmt ("; emt_dec_ptn "^(emt_ptn r)))^e0
@@ -2095,9 +2096,12 @@ and push_s s =
   let e1 =
     "\tmov r9,[r12]\n"^
     "\tpush r9\n"^
-    "\tpushf\n"^
+    "\tmov rax,0\n"^
+    "\tsetc al\n"^
+    "\tpush rax\n"^
     "\tadd r15,1\n"^
-    "\tpopf\n" in
+    "\tpop rax\n"^
+    "\tbt rax,0\n" in
   (c0^e0^e1,l)
 and pop_s l =
   let c0 = cmt ("pop_s") in
@@ -2111,9 +2115,12 @@ and pop_s l =
          "\tpop r9\n"^
          "\tmov "^(emt_reg n)^",r9\n" ) "" l in
   let e2 =
-    "\tpushf\n"^
+    "\tmov rax,0\n"^
+    "\tsetc al\n"^
+    "\tpush rax\n"^
     "\tsub r15,1\n"^
-    "\tpopf\n" in
+    "\tpop rax\n"^
+    "\tbt rax,0\n" in
   c0^e0^e1^e2
 and csn = "r15"
 and emt_agl = "; emt_agl\n"
@@ -2149,10 +2156,12 @@ and emt_ir s p =
         "\tje "^l_0^"\n"^
         "\tmov rdi,0\n"^
         "\tstc\n"^
+        "\tmov rax,1\n"^
         "\tjmp "^l0^"_1\n"^
         l_0^":\n"^
         "\tmov rdi,1\n"^
         "\tstc\n"^
+        "\tmov rax,1\n"^
         "\tjmp "^l0^"_0\n" in
       let (_,a0) =
         Array.fold_left
@@ -2164,11 +2173,12 @@ and emt_ir s p =
              let ei =
                ci^
                l0^"_"^(string_of_int i)^":\n"^
-               "\tpushf\n"^
+               "\tpush rax\n"^
                "\tpush rdi\n"^
                (emt_set_ptn ii)^
                "\tpop rdi\n"^
-               "\tpopf\n"^
+               "\tpop rax\n"^
+               "\tbt rax,0\n"^
                "\tjc "^lc1^"\n"^
                "\tpush rdi\n"^
                "\tcall dec_r\n"^
@@ -2192,24 +2202,32 @@ and emt_ir s p =
       let s0 =
         ( match n with
           | IR_Id(r,rs) ->
-            let ir = idx_csm_ptn s r in
             let irs =
               Array.fold_left
                 (fun irs r ->
                    let ii = idx_crt_ptn s r in
                    irs |+| [|ii|] )
                 [||] rs in
+            let ir = idx_csm_ptn s r in
             let c0 =
               cmt ("\t$ "^(emt_ptn ir)^" ⊢ "^(Array.fold_left (fun b r -> b^","^(emt_ptn r)) "" irs)^
                    rtl^(Arr.fld_l (fun s r -> s^","^(print_ty r)) "" rs)) in
+            let (_,e0) =
+              Array.fold_left
+                ( fun (i,e0) ri ->
+                    let e1 =
+                      emt_ptn_set_ptn ir ri in
+                    (i+1,e0^e1) )
+                (0,"") irs in
+            let e1 =
+              emt_dec_ptn ir in
+            c0^e0^e1
+            (*
             let e0 = emt_get_ptn ir in
             let ec =
               "\tmov rdi,rax\n"^
               "\tmov rax,0\n"^
-              "\tmov r9,0\n"^
-              "\trcl r9,1\n"^
-              "\tmov rax,r9\n"^
-              "\trcr r9,1\n" in
+              "\tsetc al\n" in
             let e2 =
               Array.fold_left
                 (fun e2 r ->
@@ -2230,7 +2248,7 @@ and emt_ir s p =
               "\tpop rdi\n"^
               "\tclc\n"^
               lc1^":\n" in
-            c0^e0^ec^e2^e3
+            c0^e0^ec^e2^e3 *)
           | IR_Call((_,_),_) ->
             "; ir_call\n"
           | IR_Glb_Call(n,x,y) ->
@@ -2250,11 +2268,14 @@ and emt_ir s p =
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
-                  "\tpushf\n"^
+                  "\tmov rax,0\n"^
+                  "\tsetc al\n"^
+                  "\tpush rax\n"^
                   "\tpush rdi\n"^
                   (emt_set_ptn p)^
                   "\tpop rdi\n"^
-                  "\tpopf\n"^
+                  "\tpop rax\n"^
+                  "\tbt rax,0\n"^
                   "\tjc "^lc1^"\n"^
                   "\tpush rdi\n"^
                   "\tcall dec_r\n"^
@@ -2283,11 +2304,14 @@ and emt_ir s p =
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
-                  "\tpushf\n"^
+                  "\tmov rax,0\n"^
+                  "\tsetc al\n"^
+                  "\tpush rax\n"^
                   "\tpush rdi\n"^
                   (emt_set_ptn p)^
                   "\tpop rdi\n"^
-                  "\tpopf\n"^
+                  "\tpop rax\n"^
+                  "\tbt rax,0\n"^
                   "\tjc "^lc1^"\n"^
                   "\tpush rdi\n"^
                   "\tcall dec_r\n"^
@@ -2316,11 +2340,14 @@ and emt_ir s p =
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
-                  "\tpushf\n"^
+                  "\tmov rax,0\n"^
+                  "\tsetc al\n"^
+                  "\tpush rax\n"^
                   "\tpush rdi\n"^
                   (emt_set_ptn p)^
                   "\tpop rdi\n"^
-                  "\tpopf\n"^
+                  "\tpop rax\n"^
+                  "\tbt rax,0\n"^
                   "\tjc "^lc1^"\n"^
                   "\tpush rdi\n"^
                   "\tcall dec_r\n"^
@@ -2350,11 +2377,14 @@ and emt_ir s p =
                 let e0 =
                   (emt_get_ptn ix)^
                   "\tmov rdi,rax\n"^
-                  "\tpushf\n"^
+                  "\tmov rax,0\n"^
+                  "\tsetc al\n"^
+                  "\tpush rax\n"^
                   "\tpush rdi\n"^
                   (emt_set_ptn p)^
                   "\tpop rdi\n"^
-                  "\tpopf\n"^
+                  "\tpop rax\n"^
+                  "\tbt rax,0\n"^
                   "\tjc "^lc1^"\n"^
                   "\tpush rdi\n"^
                   "\tcall dec_r\n"^
@@ -2405,11 +2435,14 @@ and emt_ir s p =
                   "\tcall "^f^"\n"^
                   (pop_s sl)^
                   "\tmov rdi,rax\n"^
-                  "\tpushf\n"^
+                  "\tmov rax,0\n"^
+                  "\tsetc al\n"^
+                  "\tpush rax\n"^
                   "\tpush rdi\n"^
                   (emt_set_ptn iy)^
                   "\tpop rdi\n"^
-                  "\tpopf\n"^
+                  "\tpop rax\n"^
+                  "\tbt rax,0\n"^
                   "\tjc "^lc1^"\n"^
                   "\tpush rdi\n"^
                   "\tcall dec_r\n"^
