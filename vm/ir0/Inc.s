@@ -181,10 +181,12 @@ lb_11:
 	call dec_r
 lb_12:
 ; push_s 
+	mov [tmp],rbx
 	push r12
-	rcl r9,1
+	rcl rbx,1
 	add r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov r9,[st_vct_tmp+8*2]
 	mov [st_vct+8*2],r9
 	mov r9,[st_vct_tmp+8*1]
@@ -195,9 +197,11 @@ lb_12:
 	call _tak
 ; pop_s
 	pop r12
-	rcl r9,1
+	mov [tmp],rbx
+	rcl rbx,1
 	sub r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov rdi,rax
 	jc lb_19
 	push rdi
@@ -305,19 +309,23 @@ lb_31:
 	call dec_r
 lb_29:
 ; push_s 
+	mov [tmp],rbx
 	push r12
-	rcl r9,1
+	rcl rbx,1
 	add r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov r9,[st_vct_tmp+8*0]
 	mov [st_vct+8*0],r9
 	mov r12,rbx
 	call _fact
 ; pop_s
 	pop r12
-	rcl r9,1
+	mov [tmp],rbx
+	rcl rbx,1
 	sub r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov rdi,rax
 	jc lb_32
 	push rdi
@@ -952,16 +960,18 @@ lb_93:
 	call dec_r
 lb_94:
 ; push_s  2'~y 4'~z 1'~x
-	mov r9,[st_vct+8*2]
-	push r9
-	mov r9,[st_vct+8*4]
-	push r9
-	mov r9,[st_vct+8*1]
-	push r9
+	mov [tmp],rbx
+	mov rbx,[st_vct+8*2]
+	push rbx
+	mov rbx,[st_vct+8*4]
+	push rbx
+	mov rbx,[st_vct+8*1]
+	push rbx
 	push r12
-	rcl r9,1
+	rcl rbx,1
 	add r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov r9,[st_vct_tmp+8*2]
 	mov [st_vct+8*2],r9
 	mov r9,[st_vct_tmp+8*1]
@@ -972,15 +982,17 @@ lb_94:
 	call _tak
 ; pop_s
 	pop r12
-	pop r9
-	mov [st_vct+8*1],r9
-	pop r9
-	mov [st_vct+8*4],r9
-	pop r9
-	mov [st_vct+8*2],r9
-	rcl r9,1
+	mov [tmp],rbx
+	pop rbx
+	mov [st_vct+8*1],rbx
+	pop rbx
+	mov [st_vct+8*4],rbx
+	pop rbx
+	mov [st_vct+8*2],rbx
+	rcl rbx,1
 	sub r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov rdi,rax
 	jc lb_101
 	push rdi
@@ -1289,18 +1301,20 @@ lb_134:
 	call dec_r
 lb_135:
 ; push_s  3'~y 4'~x 5'~z 0'~r0
-	mov r9,[st_vct+8*3]
-	push r9
-	mov r9,[st_vct+8*4]
-	push r9
-	mov r9,[st_vct+8*5]
-	push r9
-	mov r9,[st_vct+8*0]
-	push r9
+	mov [tmp],rbx
+	mov rbx,[st_vct+8*3]
+	push rbx
+	mov rbx,[st_vct+8*4]
+	push rbx
+	mov rbx,[st_vct+8*5]
+	push rbx
+	mov rbx,[st_vct+8*0]
+	push rbx
 	push r12
-	rcl r9,1
+	rcl rbx,1
 	add r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov r9,[st_vct_tmp+8*2]
 	mov [st_vct+8*2],r9
 	mov r9,[st_vct_tmp+8*1]
@@ -1311,17 +1325,19 @@ lb_135:
 	call _tak
 ; pop_s
 	pop r12
-	pop r9
-	mov [st_vct+8*0],r9
-	pop r9
-	mov [st_vct+8*5],r9
-	pop r9
-	mov [st_vct+8*4],r9
-	pop r9
-	mov [st_vct+8*3],r9
-	rcl r9,1
+	mov [tmp],rbx
+	pop rbx
+	mov [st_vct+8*0],rbx
+	pop rbx
+	mov [st_vct+8*5],rbx
+	pop rbx
+	mov [st_vct+8*4],rbx
+	pop rbx
+	mov [st_vct+8*3],rbx
+	rcl rbx,1
 	sub r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov rdi,rax
 	jc lb_142
 	push rdi
@@ -1516,14 +1532,16 @@ lb_160:
 	call dec_r
 lb_161:
 ; push_s  0'~r0 1'~r1
-	mov r9,[st_vct+8*0]
-	push r9
-	mov r9,[st_vct+8*1]
-	push r9
+	mov [tmp],rbx
+	mov rbx,[st_vct+8*0]
+	push rbx
+	mov rbx,[st_vct+8*1]
+	push rbx
 	push r12
-	rcl r9,1
+	rcl rbx,1
 	add r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov r9,[st_vct_tmp+8*2]
 	mov [st_vct+8*2],r9
 	mov r9,[st_vct_tmp+8*1]
@@ -1534,13 +1552,15 @@ lb_161:
 	call _tak
 ; pop_s
 	pop r12
-	pop r9
-	mov [st_vct+8*1],r9
-	pop r9
-	mov [st_vct+8*0],r9
-	rcl r9,1
+	mov [tmp],rbx
+	pop rbx
+	mov [st_vct+8*1],rbx
+	pop rbx
+	mov [st_vct+8*0],rbx
+	rcl rbx,1
 	sub r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov rdi,rax
 	jc lb_168
 	push rdi
@@ -1646,10 +1666,12 @@ lb_175:
 	call dec_r
 lb_176:
 ; push_s 
+	mov [tmp],rbx
 	push r12
-	rcl r9,1
+	rcl rbx,1
 	add r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov r9,[st_vct_tmp+8*2]
 	mov [st_vct+8*2],r9
 	mov r9,[st_vct_tmp+8*1]
@@ -1660,9 +1682,11 @@ lb_176:
 	call _tak
 ; pop_s
 	pop r12
-	rcl r9,1
+	mov [tmp],rbx
+	rcl rbx,1
 	sub r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov rdi,rax
 	jc lb_183
 	push rdi
@@ -2060,23 +2084,27 @@ lb_229:
 	call dec_r
 lb_227:
 ; push_s  3'~x2
-	mov r9,[st_vct+8*3]
-	push r9
+	mov [tmp],rbx
+	mov rbx,[st_vct+8*3]
+	push rbx
 	push r12
-	rcl r9,1
+	rcl rbx,1
 	add r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov r9,[st_vct_tmp+8*0]
 	mov [st_vct+8*0],r9
 	mov r12,rbx
 	call _fact
 ; pop_s
 	pop r12
-	pop r9
-	mov [st_vct+8*3],r9
-	rcl r9,1
+	mov [tmp],rbx
+	pop rbx
+	mov [st_vct+8*3],rbx
+	rcl rbx,1
 	sub r15,1
-	rcr r9,1
+	rcr rbx,1
+	mov rbx,[tmp]
 	mov rdi,rax
 	jc lb_230
 	push rdi
