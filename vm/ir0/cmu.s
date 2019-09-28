@@ -2,6 +2,10 @@
 ; r9 = tmp0  r10 = tmp1 r11 = tmp2
 ; [r9] = 32,32 ref-count,len
 ; [r9+1] = tag_bit list ; right to left
+; r15 call stack depth
+; r12 tbv
+; r13 heap
+; r14 tmp-tbv
 bits 64
 extern free
 extern printf
@@ -153,11 +157,13 @@ dec_r_end:
 
 inc_r:
   ; increment ref-count
+  push rax
   mov rax,[rdi]
   ror QWORD rax,48
   add QWORD rax,1
   rol QWORD rax,48
   mov [rdi],rax
+  pop rax
   ret
 
 ; rdi ~ src cf~tag
