@@ -1868,13 +1868,14 @@ and idx_min s i =
     VHash.fold
       (fun _ j b -> if j=i then true else b) s false in
   if b then idx_min s (i+1) else i *)
-let x86_reg_lst = [|
-  "r8"; "r9"; "r10"; "r11"; "rcx"; "rdx"; "rsi"; "rdi"; "rax";  |]
+let x86_reg_lst = [
+  "r8"; "r9"; "r10"; "r11"; "rcx"; "rdx"; "rsi"; "rdi"; "rax";  ]
 let emt_reg_x86 n =
-  if n<9 then x86_reg_lst.(n)
+  if n<9 then List.nth x86_reg_lst n
   else "[st_vct+8*"^(string_of_int (n-9))^"]"
 let idx_x86 s =
-  BatArray.findi (fun t -> s=t) x86_reg_lst
+  let (i,_) = BatList.findi (fun _ t -> s=t) x86_reg_lst in
+  i
 let push_reg s l =
   List.fold_left
     (fun (e,q) r ->
@@ -1994,7 +1995,7 @@ and emt_set_ptn s tbv idx r =
       let e0 =
         "\tmov "^(idx i)^","^"rdi\n"^
         "\tjc "^l0^"\n"^
-         "\tbtr "^tbv^","^(string_of_int i)^"\n"^
+        "\tbtr "^tbv^","^(string_of_int i)^"\n"^
         (*"\tand "^tbv^","^"~"^(emt_0b i)^"\n"^ *)
         "\tpush "^tbv^"\n"^
         "\tcall inc_r\n"^
@@ -2055,7 +2056,7 @@ and emt_ptn_set_ptn s tbv idx0 idx1 r0 r1 =
       (cmt c0)^e0
     | _,_ -> "; emt_ptn_set_ptn\n" )
 
-and emt_dec_ptn _ idx r =
+and emt_dec_ptn s idx r =
   let l = Rcd_Ptn.to_list r in
   let e0 =
     List.fold_left
@@ -2065,10 +2066,12 @@ and emt_dec_ptn _ idx r =
            "\tmov rdi,"^(idx n)^"\n"^
            "\tbt r12,"^(string_of_int n)^"\n"^
            "\tjc "^l0^"\n"^
-           "\tbts r12,"^(string_of_int n)^"\n"^
-           "\tcall dec_r\n"^
-           l0^":\n" in
-         e0^e1 )
+           "\tbts r12,"^(string_of_int n)^"\n" in
+         let (e2,l) = push_reg s x86_reg_lst in
+         e0^e1^e2^
+         "\tcall dec_r\n"^
+         (pop_reg l)^
+         l0^":\n" )
       "" l in
   (cmt ("; emt_dec_ptn "^(emt_ptn r)))^e0
 and emt_reg i = (* "[r12-8*"^(string_of_int (i+1))^"]" *) "[st_vct+8*"^(string_of_int i)^"]"
@@ -2083,11 +2086,14 @@ and clear idx s =
        let l0 = "clear_"^(lb ()) in
        let ex =
          "\tbt r12,"^(string_of_int n)^"\n"^
-         "\tjc "^l0^"\n"^
+         "\tjc "^l0^"\n" in
+       let (e0,l) = push_reg s x86_reg_lst in
+       let e1 =
          "\tmov rdi,"^(idx n)^"\n"^
          "\tcall dec_r\n"^
+         (pop_reg l)^
          l0^":\n" in
-       e^ex )
+       e^ex^e0^e1 )
     s (";clear "^(pnt_s s)^"\n")
 and push_s idx s =
   let c0 = cmt ("push_s "^(pnt_s s)) in

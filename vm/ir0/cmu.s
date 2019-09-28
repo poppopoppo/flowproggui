@@ -144,6 +144,7 @@ dec_r_lp_nxt:
   jmp dec_r_lp
 dec_r_lp_end:
  pop rdi
+ mov rax,0
  call free
  ret
 dec_r_end:
