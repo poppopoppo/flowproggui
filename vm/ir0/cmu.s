@@ -11,6 +11,7 @@ section .bss
   str_ret: resb 100
   st_vct: resb 400
   st_vct_tmp: resb 400
+  tmp: resb 80
 section .data
   str_tkn: db "tkn: ",0
   str_dbg: db "DBG:%d",10,0
