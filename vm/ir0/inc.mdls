@@ -116,15 +116,29 @@
     » 0r0 |~ {} ⊢ y
     ∎ y
   ∇
+§ test6
+  |» {}
+  » 0r5 |~ {} ⊢ x
+  fib x ⊢ y0
+  » 0r6 |~ {} ⊢ x
+  fib x ⊢ y1
+  ∎ { y0 y1 }
 § test4
   |» {}
   » 0r5 |~ {} ⊢ x
   fact x ⊢ y
   ∎ y
-§ test5
+§ test7
   |» {}
   » 0r20 |~ {} ⊢ x
   » 0r10 |~ {} ⊢ y
+  » 0r0 |~ {} ⊢ z
+  tak { x y z } ⊢ r
+  ∎ r
+§ test5
+  |» {}
+  » 0r19 |~ {} ⊢ x
+  » 0r11 |~ {} ⊢ y
   » 0r0 |~ {} ⊢ z
   tak { x y z } ⊢ r
   » 0r5 |~ {} ⊢ x
