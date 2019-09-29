@@ -17,9 +17,9 @@ main:
 	call pnt
 	call pnt_str_ret
 	jmp _end
-test5:
+test8:
 ; 	|» {  }
-	jz _test5
+	jz _test8
 	jc emt_etr_c_lb_0
 	push rbx
 	mov rbx,rdi
@@ -29,8 +29,141 @@ test5:
 	mov rdi,rbx
 	call dec_r
 	pop rbx
-jmp _test5
+jmp _test8
 emt_etr_c_lb_0:
+	push rbx
+	mov rbx,rdi
+; emt_set_ptn {  }
+	pop rbx
+_test8:
+; 	» 0xr14 |~ 0' : r64
+	mov r9,0x14
+	mov r8,r9
+	bts r12,0
+; 	$ 0' ⊢ ,1' : ,r64
+; emt_ptn_set_ptn 0',1'
+	bt r12,0
+; emt_set_ptn 1'
+; unboxed
+	mov r9,r8
+	bts r12,1
+; ; emt_dec_ptn 0'
+	bt r12,0
+	jc lb_624
+	push r9
+	mov rdi,r8
+	call dec_r
+	pop r9
+lb_624:
+; 	» 0xra |~ 0' : r64
+	mov r10,0xa
+	mov r8,r10
+	bts r12,0
+; 	$ 0' ⊢ ,2' : ,r64
+; emt_ptn_set_ptn 0',2'
+	bt r12,0
+; emt_set_ptn 2'
+; unboxed
+	mov r10,r8
+	bts r12,2
+; ; emt_dec_ptn 0'
+	bt r12,0
+	jc lb_627
+	push r9
+	push r10
+	mov rdi,r8
+	call dec_r
+	pop r10
+	pop r9
+lb_627:
+; 	» 0xr0 |~ 0' : r64
+	mov r11,0x0
+	mov r8,r11
+	bts r12,0
+; 	$ 0' ⊢ ,3' : ,r64
+; emt_ptn_set_ptn 0',3'
+	bt r12,0
+; emt_set_ptn 3'
+; unboxed
+	mov r11,r8
+	bts r12,3
+; ; emt_dec_ptn 0'
+	bt r12,0
+	jc lb_630
+	push r9
+	push r10
+	push r11
+	mov rdi,r8
+	call dec_r
+	pop r11
+	pop r10
+	pop r9
+lb_630:
+; 	tak_i { 1' 2' 3' } ⊢| 
+
+mov r14,0
+
+not r14
+; emt_ptn_set_ptn { 1' 2' 3' },{ 0' 1' 2' }
+; emt_ptn_set_ptn 1',0'
+	bt r12,1
+; emt_set_ptn 0'
+; unboxed
+	mov [st_vct_tmp+8*0],r9
+	bts r14,0
+; emt_ptn_set_ptn 2',1'
+	bt r12,2
+; emt_set_ptn 1'
+; unboxed
+	mov [st_vct_tmp+8*1],r10
+	bts r14,1
+; emt_ptn_set_ptn 3',2'
+	bt r12,3
+; emt_set_ptn 2'
+; unboxed
+	mov [st_vct_tmp+8*2],r11
+	bts r14,2
+; ; emt_dec_ptn { 1' 2' 3' }
+	bt r12,3
+	jc lb_631
+	mov rdi,r11
+	call dec_r
+lb_631:
+	bt r12,2
+	jc lb_632
+	mov rdi,r10
+	call dec_r
+lb_632:
+	bt r12,1
+	jc lb_633
+	mov rdi,r9
+	call dec_r
+lb_633:
+;clear 
+	push rbx
+	mov rbx,[st_vct_tmp+8*2]
+	mov r10,rbx
+	mov rbx,[st_vct_tmp+8*1]
+	mov r9,rbx
+	mov rbx,[st_vct_tmp+8*0]
+	mov r8,rbx
+	pop rbx
+	mov r12,r14
+	jmp _tak_i
+test5:
+; 	|» {  }
+	jz _test5
+	jc emt_etr_c_lb_1
+	push rbx
+	mov rbx,rdi
+	push rbx
+; emt_set_ptn {  }
+	pop rbx
+	mov rdi,rbx
+	call dec_r
+	pop rbx
+jmp _test5
+emt_etr_c_lb_1:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
@@ -44,22 +177,17 @@ _test5:
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_1
-	btr r12,1
-	call inc_r
-	jmp lb_2
-lb_1:
 	bts r12,1
-lb_2:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_3
+	jc lb_564
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-lb_3:
+lb_564:
 ; 	» 0xra |~ 0' : r64
 	mov r10,0xa
 	mov r8,r10
@@ -68,24 +196,19 @@ lb_3:
 ; emt_ptn_set_ptn 0',2'
 	bt r12,0
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r8
-	jc lb_4
-	btr r12,2
-	call inc_r
-	jmp lb_5
-lb_4:
 	bts r12,2
-lb_5:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_6
+	jc lb_567
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_6:
+lb_567:
 ; 	» 0xr0 |~ 0' : r64
 	mov r11,0x0
 	mov r8,r11
@@ -94,17 +217,12 @@ lb_6:
 ; emt_ptn_set_ptn 0',3'
 	bt r12,0
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r8
-	jc lb_7
-	btr r12,3
-	call inc_r
-	jmp lb_8
-lb_7:
 	bts r12,3
-lb_8:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_9
+	jc lb_570
 	push r9
 	push r10
 	push r11
@@ -113,7 +231,7 @@ lb_8:
 	pop r11
 	pop r10
 	pop r9
-lb_9:
+lb_570:
 ; 	tak { 1' 2' 3' } ⊢ 0' : r64
 
 mov r14,0
@@ -123,52 +241,37 @@ not r14
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r9
-	jc lb_13
-	btr r14,0
-	call inc_r
-	jmp lb_14
-lb_13:
 	bts r14,0
-lb_14:
 ; emt_ptn_set_ptn 2',1'
 	bt r12,2
 ; emt_set_ptn 1'
+; unboxed
 	mov [st_vct_tmp+8*1],r10
-	jc lb_15
-	btr r14,1
-	call inc_r
-	jmp lb_16
-lb_15:
 	bts r14,1
-lb_16:
 ; emt_ptn_set_ptn 3',2'
 	bt r12,3
 ; emt_set_ptn 2'
+; unboxed
 	mov [st_vct_tmp+8*2],r11
-	jc lb_17
-	btr r14,2
-	call inc_r
-	jmp lb_18
-lb_17:
 	bts r14,2
-lb_18:
 ; ; emt_dec_ptn { 1' 2' 3' }
 	bt r12,3
-	jc lb_10
+	jc lb_571
 	mov rdi,r11
 	call dec_r
-lb_10:
+lb_571:
 	bt r12,2
-	jc lb_11
+	jc lb_572
 	mov rdi,r10
 	call dec_r
-lb_11:
+lb_572:
 	bt r12,1
-	jc lb_12
+	jc lb_573
 	mov rdi,r9
 	call dec_r
-lb_12:
+lb_573:
 ; push_s 
 	mov [tmp],rbx
 	push r12
@@ -188,34 +291,24 @@ lb_12:
 	call _tak
 	push rbx
 	mov rbx,rax
-	jc lb_19
+	jc lb_580
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_23
-	btr r12,0
-	call inc_r
-	jmp lb_24
-lb_23:
 	bts r12,0
-lb_24:
 	pop rbx
 	push r8
 	mov rdi,rbx
 	call dec_r
 	pop r8
-	jmp lb_20
-lb_19:
+	jmp lb_581
+lb_580:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_21
-	btr r12,0
-	call inc_r
-	jmp lb_22
-lb_21:
 	bts r12,0
-lb_22:
 	pop rbx
-lb_20:
+lb_581:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -231,24 +324,19 @@ lb_20:
 ; emt_ptn_set_ptn 1',2'
 	bt r12,1
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r9
-	jc lb_25
-	btr r12,2
-	call inc_r
-	jmp lb_26
-lb_25:
 	bts r12,2
-lb_26:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_27
+	jc lb_588
 	push r8
 	push r10
 	mov rdi,r9
 	call dec_r
 	pop r10
 	pop r8
-lb_27:
+lb_588:
 ; 	fact 2' ⊢ 1' : r64
 
 mov r14,0
@@ -257,22 +345,17 @@ not r14
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r10
-	jc lb_29
-	btr r14,0
-	call inc_r
-	jmp lb_30
-lb_29:
 	bts r14,0
-lb_30:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_28
+	jc lb_589
 	push r8
 	mov rdi,r10
 	call dec_r
 	pop r8
-lb_28:
+lb_589:
 ; push_s  0'~r
 	mov [tmp],rbx
 	mov rbx,r8
@@ -290,16 +373,11 @@ lb_28:
 	call _fact
 	push rbx
 	mov rbx,rax
-	jc lb_31
+	jc lb_592
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_35
-	btr r12,1
-	call inc_r
-	jmp lb_36
-lb_35:
 	bts r12,1
-lb_36:
 	pop rbx
 	push r8
 	push r9
@@ -307,19 +385,14 @@ lb_36:
 	call dec_r
 	pop r9
 	pop r8
-	jmp lb_32
-lb_31:
+	jmp lb_593
+lb_592:
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_33
-	btr r12,1
-	call inc_r
-	jmp lb_34
-lb_33:
 	bts r12,1
-lb_34:
 	pop rbx
-lb_32:
+lb_593:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -337,17 +410,12 @@ lb_32:
 ; emt_ptn_set_ptn 2',3'
 	bt r12,2
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r10
-	jc lb_37
-	btr r12,3
-	call inc_r
-	jmp lb_38
-lb_37:
 	bts r12,3
-lb_38:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_39
+	jc lb_600
 	push r8
 	push r9
 	push r11
@@ -356,7 +424,7 @@ lb_38:
 	pop r11
 	pop r9
 	pop r8
-lb_39:
+lb_600:
 ; 	fib 3' ⊢ 2' : r64
 
 mov r14,0
@@ -365,24 +433,19 @@ not r14
 ; emt_ptn_set_ptn 3',0'
 	bt r12,3
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r11
-	jc lb_41
-	btr r14,0
-	call inc_r
-	jmp lb_42
-lb_41:
 	bts r14,0
-lb_42:
 ; ; emt_dec_ptn 3'
 	bt r12,3
-	jc lb_40
+	jc lb_601
 	push r8
 	push r9
 	mov rdi,r11
 	call dec_r
 	pop r9
 	pop r8
-lb_40:
+lb_601:
 ; push_s  0'~r 1'~y
 	mov [tmp],rbx
 	mov rbx,r8
@@ -402,16 +465,11 @@ lb_40:
 	call _fib
 	push rbx
 	mov rbx,rax
-	jc lb_43
+	jc lb_604
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rbx
-	jc lb_47
-	btr r12,2
-	call inc_r
-	jmp lb_48
-lb_47:
 	bts r12,2
-lb_48:
 	pop rbx
 	push r8
 	push r9
@@ -421,19 +479,14 @@ lb_48:
 	pop r10
 	pop r9
 	pop r8
-	jmp lb_44
-lb_43:
+	jmp lb_605
+lb_604:
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rbx
-	jc lb_45
-	btr r12,2
-	call inc_r
-	jmp lb_46
-lb_45:
 	bts r12,2
-lb_46:
 	pop rbx
-lb_44:
+lb_605:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -453,17 +506,12 @@ lb_44:
 ; emt_ptn_set_ptn 3',4'
 	bt r12,3
 ; emt_set_ptn 4'
+; unboxed
 	mov rcx,r11
-	jc lb_49
-	btr r12,4
-	call inc_r
-	jmp lb_50
-lb_49:
 	bts r12,4
-lb_50:
 ; ; emt_dec_ptn 3'
 	bt r12,3
-	jc lb_51
+	jc lb_612
 	push r8
 	push r9
 	push r10
@@ -474,7 +522,7 @@ lb_50:
 	pop r10
 	pop r9
 	pop r8
-lb_51:
+lb_612:
 ; 	fib 4' ⊢ 3' : r64
 
 mov r14,0
@@ -483,17 +531,12 @@ not r14
 ; emt_ptn_set_ptn 4',0'
 	bt r12,4
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],rcx
-	jc lb_53
-	btr r14,0
-	call inc_r
-	jmp lb_54
-lb_53:
 	bts r14,0
-lb_54:
 ; ; emt_dec_ptn 4'
 	bt r12,4
-	jc lb_52
+	jc lb_613
 	push r8
 	push r9
 	push r10
@@ -502,7 +545,7 @@ lb_54:
 	pop r10
 	pop r9
 	pop r8
-lb_52:
+lb_613:
 ; push_s  2'~y0 0'~r 1'~y
 	mov [tmp],rbx
 	mov rbx,r10
@@ -524,16 +567,11 @@ lb_52:
 	call _fib
 	push rbx
 	mov rbx,rax
-	jc lb_55
+	jc lb_616
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,rbx
-	jc lb_59
-	btr r12,3
-	call inc_r
-	jmp lb_60
-lb_59:
 	bts r12,3
-lb_60:
 	pop rbx
 	push r8
 	push r9
@@ -545,19 +583,14 @@ lb_60:
 	pop r10
 	pop r9
 	pop r8
-	jmp lb_56
-lb_55:
+	jmp lb_617
+lb_616:
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,rbx
-	jc lb_57
-	btr r12,3
-	call inc_r
-	jmp lb_58
-lb_57:
 	bts r12,3
-lb_58:
 	pop rbx
-lb_56:
+lb_617:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -637,7 +670,7 @@ lb_56:
 test7:
 ; 	|» {  }
 	jz _test7
-	jc emt_etr_c_lb_61
+	jc emt_etr_c_lb_2
 	push rbx
 	mov rbx,rdi
 	push rbx
@@ -647,81 +680,66 @@ test7:
 	call dec_r
 	pop rbx
 jmp _test7
-emt_etr_c_lb_61:
+emt_etr_c_lb_2:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
 	pop rbx
 _test7:
-; 	» 0xr14 |~ 0' : r64
-	mov r9,0x14
+; 	» 0xr12 |~ 0' : r64
+	mov r9,0x12
 	mov r8,r9
 	bts r12,0
 ; 	$ 0' ⊢ ,1' : ,r64
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_62
-	btr r12,1
-	call inc_r
-	jmp lb_63
-lb_62:
 	bts r12,1
-lb_63:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_64
+	jc lb_540
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-lb_64:
-; 	» 0xra |~ 0' : r64
-	mov r10,0xa
+lb_540:
+; 	» 0xrc |~ 0' : r64
+	mov r10,0xc
 	mov r8,r10
 	bts r12,0
 ; 	$ 0' ⊢ ,2' : ,r64
 ; emt_ptn_set_ptn 0',2'
 	bt r12,0
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r8
-	jc lb_65
-	btr r12,2
-	call inc_r
-	jmp lb_66
-lb_65:
 	bts r12,2
-lb_66:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_67
+	jc lb_543
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_67:
-; 	» 0xr0 |~ 0' : r64
-	mov r11,0x0
+lb_543:
+; 	» 0xr6 |~ 0' : r64
+	mov r11,0x6
 	mov r8,r11
 	bts r12,0
 ; 	$ 0' ⊢ ,3' : ,r64
 ; emt_ptn_set_ptn 0',3'
 	bt r12,0
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r8
-	jc lb_68
-	btr r12,3
-	call inc_r
-	jmp lb_69
-lb_68:
 	bts r12,3
-lb_69:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_70
+	jc lb_546
 	push r9
 	push r10
 	push r11
@@ -730,7 +748,7 @@ lb_69:
 	pop r11
 	pop r10
 	pop r9
-lb_70:
+lb_546:
 ; 	tak { 1' 2' 3' } ⊢ 0' : r64
 
 mov r14,0
@@ -740,52 +758,37 @@ not r14
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r9
-	jc lb_74
-	btr r14,0
-	call inc_r
-	jmp lb_75
-lb_74:
 	bts r14,0
-lb_75:
 ; emt_ptn_set_ptn 2',1'
 	bt r12,2
 ; emt_set_ptn 1'
+; unboxed
 	mov [st_vct_tmp+8*1],r10
-	jc lb_76
-	btr r14,1
-	call inc_r
-	jmp lb_77
-lb_76:
 	bts r14,1
-lb_77:
 ; emt_ptn_set_ptn 3',2'
 	bt r12,3
 ; emt_set_ptn 2'
+; unboxed
 	mov [st_vct_tmp+8*2],r11
-	jc lb_78
-	btr r14,2
-	call inc_r
-	jmp lb_79
-lb_78:
 	bts r14,2
-lb_79:
 ; ; emt_dec_ptn { 1' 2' 3' }
 	bt r12,3
-	jc lb_71
+	jc lb_547
 	mov rdi,r11
 	call dec_r
-lb_71:
+lb_547:
 	bt r12,2
-	jc lb_72
+	jc lb_548
 	mov rdi,r10
 	call dec_r
-lb_72:
+lb_548:
 	bt r12,1
-	jc lb_73
+	jc lb_549
 	mov rdi,r9
 	call dec_r
-lb_73:
+lb_549:
 ; push_s 
 	mov [tmp],rbx
 	push r12
@@ -805,34 +808,24 @@ lb_73:
 	call _tak
 	push rbx
 	mov rbx,rax
-	jc lb_80
+	jc lb_556
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_84
-	btr r12,0
-	call inc_r
-	jmp lb_85
-lb_84:
 	bts r12,0
-lb_85:
 	pop rbx
 	push r8
 	mov rdi,rbx
 	call dec_r
 	pop r8
-	jmp lb_81
-lb_80:
+	jmp lb_557
+lb_556:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_82
-	btr r12,0
-	call inc_r
-	jmp lb_83
-lb_82:
 	bts r12,0
-lb_83:
 	pop rbx
-lb_81:
+lb_557:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -852,7 +845,7 @@ lb_81:
 test4:
 ; 	|» {  }
 	jz _test4
-	jc emt_etr_c_lb_86
+	jc emt_etr_c_lb_3
 	push rbx
 	mov rbx,rdi
 	push rbx
@@ -862,7 +855,7 @@ test4:
 	call dec_r
 	pop rbx
 jmp _test4
-emt_etr_c_lb_86:
+emt_etr_c_lb_3:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
@@ -876,22 +869,17 @@ _test4:
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_87
-	btr r12,1
-	call inc_r
-	jmp lb_88
-lb_87:
 	bts r12,1
-lb_88:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_89
+	jc lb_528
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-lb_89:
+lb_528:
 ; 	fact 1' ⊢ 0' : r64
 
 mov r14,0
@@ -900,20 +888,15 @@ not r14
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r9
-	jc lb_91
-	btr r14,0
-	call inc_r
-	jmp lb_92
-lb_91:
 	bts r14,0
-lb_92:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_90
+	jc lb_529
 	mov rdi,r9
 	call dec_r
-lb_90:
+lb_529:
 ; push_s 
 	mov [tmp],rbx
 	push r12
@@ -929,34 +912,24 @@ lb_90:
 	call _fact
 	push rbx
 	mov rbx,rax
-	jc lb_93
+	jc lb_532
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_97
-	btr r12,0
-	call inc_r
-	jmp lb_98
-lb_97:
 	bts r12,0
-lb_98:
 	pop rbx
 	push r8
 	mov rdi,rbx
 	call dec_r
 	pop r8
-	jmp lb_94
-lb_93:
+	jmp lb_533
+lb_532:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_95
-	btr r12,0
-	call inc_r
-	jmp lb_96
-lb_95:
 	bts r12,0
-lb_96:
 	pop rbx
-lb_94:
+lb_533:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -976,7 +949,7 @@ lb_94:
 test6:
 ; 	|» {  }
 	jz _test6
-	jc emt_etr_c_lb_99
+	jc emt_etr_c_lb_4
 	push rbx
 	mov rbx,rdi
 	push rbx
@@ -986,7 +959,7 @@ test6:
 	call dec_r
 	pop rbx
 jmp _test6
-emt_etr_c_lb_99:
+emt_etr_c_lb_4:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
@@ -1000,22 +973,17 @@ _test6:
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_100
-	btr r12,1
-	call inc_r
-	jmp lb_101
-lb_100:
 	bts r12,1
-lb_101:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_102
+	jc lb_504
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-lb_102:
+lb_504:
 ; 	fib 1' ⊢ 0' : r64
 
 mov r14,0
@@ -1024,20 +992,15 @@ not r14
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r9
-	jc lb_104
-	btr r14,0
-	call inc_r
-	jmp lb_105
-lb_104:
 	bts r14,0
-lb_105:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_103
+	jc lb_505
 	mov rdi,r9
 	call dec_r
-lb_103:
+lb_505:
 ; push_s 
 	mov [tmp],rbx
 	push r12
@@ -1053,34 +1016,24 @@ lb_103:
 	call _fib
 	push rbx
 	mov rbx,rax
-	jc lb_106
+	jc lb_508
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_110
-	btr r12,0
-	call inc_r
-	jmp lb_111
-lb_110:
 	bts r12,0
-lb_111:
 	pop rbx
 	push r8
 	mov rdi,rbx
 	call dec_r
 	pop r8
-	jmp lb_107
-lb_106:
+	jmp lb_509
+lb_508:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_108
-	btr r12,0
-	call inc_r
-	jmp lb_109
-lb_108:
 	bts r12,0
-lb_109:
 	pop rbx
-lb_107:
+lb_509:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -1096,24 +1049,19 @@ lb_107:
 ; emt_ptn_set_ptn 1',2'
 	bt r12,1
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r9
-	jc lb_112
-	btr r12,2
-	call inc_r
-	jmp lb_113
-lb_112:
 	bts r12,2
-lb_113:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_114
+	jc lb_516
 	push r8
 	push r10
 	mov rdi,r9
 	call dec_r
 	pop r10
 	pop r8
-lb_114:
+lb_516:
 ; 	fib 2' ⊢ 1' : r64
 
 mov r14,0
@@ -1122,22 +1070,17 @@ not r14
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r10
-	jc lb_116
-	btr r14,0
-	call inc_r
-	jmp lb_117
-lb_116:
 	bts r14,0
-lb_117:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_115
+	jc lb_517
 	push r8
 	mov rdi,r10
 	call dec_r
 	pop r8
-lb_115:
+lb_517:
 ; push_s  0'~y0
 	mov [tmp],rbx
 	mov rbx,r8
@@ -1155,16 +1098,11 @@ lb_115:
 	call _fib
 	push rbx
 	mov rbx,rax
-	jc lb_118
+	jc lb_520
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_122
-	btr r12,1
-	call inc_r
-	jmp lb_123
-lb_122:
 	bts r12,1
-lb_123:
 	pop rbx
 	push r8
 	push r9
@@ -1172,19 +1110,14 @@ lb_123:
 	call dec_r
 	pop r9
 	pop r8
-	jmp lb_119
-lb_118:
+	jmp lb_521
+lb_520:
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_120
-	btr r12,1
-	call inc_r
-	jmp lb_121
-lb_120:
 	bts r12,1
-lb_121:
 	pop rbx
-lb_119:
+lb_521:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -1234,73 +1167,53 @@ lb_119:
 fib:
 ; 	|» 0'
 	jz _fib
-	jc emt_etr_c_lb_124
+	jc emt_etr_c_lb_5
 	push rbx
 	mov rbx,rdi
 	push rbx
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_462
-	btr r12,0
-	call inc_r
-	jmp lb_463
-lb_462:
 	bts r12,0
-lb_463:
 	pop rbx
-	push r9
+	push r8
 	mov rdi,rbx
 	call dec_r
-	pop r9
+	pop r8
 	pop rbx
 jmp _fib
-emt_etr_c_lb_124:
+emt_etr_c_lb_5:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_460
-	btr r12,0
-	call inc_r
-	jmp lb_461
-lb_460:
 	bts r12,0
-lb_461:
 	pop rbx
 _fib:
 ; 	$ 0' ⊢ ,1',2' : ,r64,r64
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_125
-	btr r12,1
-	call inc_r
-	jmp lb_126
-lb_125:
 	bts r12,1
-lb_126:
 ; emt_ptn_set_ptn 0',2'
 	bt r12,0
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r8
-	jc lb_127
-	btr r12,2
-	call inc_r
-	jmp lb_128
-lb_127:
 	bts r12,2
-lb_128:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_129
+	jc lb_399
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_129:
+lb_399:
 ; 	» 0xr0 |~ 0' : r64
 	mov r11,0x0
 	mov r8,r11
@@ -1309,17 +1222,12 @@ lb_129:
 ; emt_ptn_set_ptn 0',3'
 	bt r12,0
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r8
-	jc lb_130
-	btr r12,3
-	call inc_r
-	jmp lb_131
-lb_130:
 	bts r12,3
-lb_131:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_132
+	jc lb_402
 	push r9
 	push r10
 	push r11
@@ -1328,72 +1236,69 @@ lb_131:
 	pop r11
 	pop r10
 	pop r9
-lb_132:
+lb_402:
 ; 	cmp { 2' 3' } ⊢ { 0' -2' } : { @[0].r2 ≃ ∐[@[0] @[0] ] @[0].r2 ≃ ∐[@[0] @[0] ] }
 ; emt_ptn_set_ptn { 2' 3' },{ 0' 4' }
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unknown
 	mov r8,r10
-	jc lb_138
+	jc lb_404
 	btr r12,0
 	call inc_r
-	jmp lb_139
-lb_138:
+	jmp lb_405
+lb_404:
 	bts r12,0
-lb_139:
+lb_405:
 ; emt_ptn_set_ptn 3',4'
 	bt r12,3
 ; emt_set_ptn 4'
+; unknown
 	mov rcx,r11
-	jc lb_140
+	jc lb_406
 	btr r12,4
 	call inc_r
-	jmp lb_141
-lb_140:
+	jmp lb_407
+lb_406:
 	bts r12,4
-lb_141:
+lb_407:
 ; ; emt_dec_ptn { 2' 3' }
 	bt r12,3
-	jc lb_136
+	jc lb_410
 	push r8
 	push r9
 	mov rdi,r11
 	call dec_r
 	pop r9
 	pop r8
-lb_136:
+lb_410:
 	bt r12,2
-	jc lb_137
+	jc lb_411
 	push r8
 	push r9
 	mov rdi,r10
 	call dec_r
 	pop r9
 	pop r8
-lb_137:
+lb_411:
 	cmp r8,rcx
 	mov r10,0
 	mov r11,0
 	setz r10b
 	mov r8,1
-	jle lb_133
+	jle lb_403
 	mov r11,r8
-lb_133:
+lb_403:
 	or r12,0b100
 	or r12,0b1000
 ; emt_ptn_set_ptn { 2' 3' },{ 0' -2' }
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,r10
-	jc lb_134
-	btr r12,0
-	call inc_r
-	jmp lb_135
-lb_134:
 	bts r12,0
-lb_135:
 ; emt_ptn_set_ptn 3',-2'
 	bt r12,3
 ; emt_set_ptn -2'
@@ -1405,62 +1310,52 @@ lb_135:
 	cmp r14,0
 	push rbx
 	mov rbx,r14
-	je lb_143
+	je lb_413
 	mov rbx,0
 	stc
-	jmp agl_142_1
-lb_143:
+	jmp agl_412_1
+lb_413:
 	mov rbx,1
 	stc
-	jmp agl_142_0
+	jmp agl_412_0
 ; 	∐ -2'
-agl_142_0:
-	jc lb_144
+agl_412_0:
+	jc lb_414
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
 	push r9
 	call dec_r
 	pop r9
-	jmp lb_145
-lb_144:
+	jmp lb_415
+lb_414:
 ; emt_set_ptn -2'
-lb_145:
+lb_415:
 	pop rbx
 	pop r14
 ; 	$ 1' ⊢ ,0',2' : ,r64,r64
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,r9
-	jc lb_146
-	btr r12,0
-	call inc_r
-	jmp lb_147
-lb_146:
 	bts r12,0
-lb_147:
 ; emt_ptn_set_ptn 1',2'
 	bt r12,1
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r9
-	jc lb_148
-	btr r12,2
-	call inc_r
-	jmp lb_149
-lb_148:
 	bts r12,2
-lb_149:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_150
+	jc lb_420
 	push r8
 	push r10
 	mov rdi,r9
 	call dec_r
 	pop r10
 	pop r8
-lb_150:
+lb_420:
 ; 	» 0xr1 |~ 1' : r64
 	mov r11,0x1
 	mov r9,r11
@@ -1469,17 +1364,12 @@ lb_150:
 ; emt_ptn_set_ptn 1',3'
 	bt r12,1
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r9
-	jc lb_151
-	btr r12,3
-	call inc_r
-	jmp lb_152
-lb_151:
 	bts r12,3
-lb_152:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_153
+	jc lb_423
 	push r8
 	push r10
 	push r11
@@ -1488,72 +1378,69 @@ lb_152:
 	pop r11
 	pop r10
 	pop r8
-lb_153:
+lb_423:
 ; 	cmp { 2' 3' } ⊢ { 1' -2' } : { @[0].r2 ≃ ∐[@[0] @[0] ] @[0].r2 ≃ ∐[@[0] @[0] ] }
 ; emt_ptn_set_ptn { 2' 3' },{ 1' 4' }
 ; emt_ptn_set_ptn 2',1'
 	bt r12,2
 ; emt_set_ptn 1'
+; unknown
 	mov r9,r10
-	jc lb_159
+	jc lb_425
 	btr r12,1
 	call inc_r
-	jmp lb_160
-lb_159:
+	jmp lb_426
+lb_425:
 	bts r12,1
-lb_160:
+lb_426:
 ; emt_ptn_set_ptn 3',4'
 	bt r12,3
 ; emt_set_ptn 4'
+; unknown
 	mov rcx,r11
-	jc lb_161
+	jc lb_427
 	btr r12,4
 	call inc_r
-	jmp lb_162
-lb_161:
+	jmp lb_428
+lb_427:
 	bts r12,4
-lb_162:
+lb_428:
 ; ; emt_dec_ptn { 2' 3' }
 	bt r12,3
-	jc lb_157
+	jc lb_431
 	push r8
 	push r9
 	mov rdi,r11
 	call dec_r
 	pop r9
 	pop r8
-lb_157:
+lb_431:
 	bt r12,2
-	jc lb_158
+	jc lb_432
 	push r8
 	push r9
 	mov rdi,r10
 	call dec_r
 	pop r9
 	pop r8
-lb_158:
+lb_432:
 	cmp r9,rcx
 	mov r10,0
 	mov r11,0
 	setz r10b
 	mov r9,1
-	jle lb_154
+	jle lb_424
 	mov r11,r9
-lb_154:
+lb_424:
 	or r12,0b100
 	or r12,0b1000
 ; emt_ptn_set_ptn { 2' 3' },{ 1' -2' }
 ; emt_ptn_set_ptn 2',1'
 	bt r12,2
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r10
-	jc lb_155
-	btr r12,1
-	call inc_r
-	jmp lb_156
-lb_155:
 	bts r12,1
-lb_156:
 ; emt_ptn_set_ptn 3',-2'
 	bt r12,3
 ; emt_set_ptn -2'
@@ -1565,62 +1452,52 @@ lb_156:
 	cmp r14,0
 	push rbx
 	mov rbx,r14
-	je lb_164
+	je lb_434
 	mov rbx,0
 	stc
-	jmp agl_163_1
-lb_164:
+	jmp agl_433_1
+lb_434:
 	mov rbx,1
 	stc
-	jmp agl_163_0
+	jmp agl_433_0
 ; 	∐ -2'
-agl_163_0:
-	jc lb_165
+agl_433_0:
+	jc lb_435
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
 	push r8
 	call dec_r
 	pop r8
-	jmp lb_166
-lb_165:
+	jmp lb_436
+lb_435:
 ; emt_set_ptn -2'
-lb_166:
+lb_436:
 	pop rbx
 	pop r14
 ; 	$ 0' ⊢ ,1',2' : ,r64,r64
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_167
-	btr r12,1
-	call inc_r
-	jmp lb_168
-lb_167:
 	bts r12,1
-lb_168:
 ; emt_ptn_set_ptn 0',2'
 	bt r12,0
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r8
-	jc lb_169
-	btr r12,2
-	call inc_r
-	jmp lb_170
-lb_169:
 	bts r12,2
-lb_170:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_171
+	jc lb_441
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_171:
+lb_441:
 ; 	» 0xr1 |~ 0' : r64
 	mov r11,0x1
 	mov r8,r11
@@ -1629,17 +1506,12 @@ lb_171:
 ; emt_ptn_set_ptn 0',3'
 	bt r12,0
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r8
-	jc lb_172
-	btr r12,3
-	call inc_r
-	jmp lb_173
-lb_172:
 	bts r12,3
-lb_173:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_174
+	jc lb_444
 	push r9
 	push r10
 	push r11
@@ -1648,7 +1520,7 @@ lb_173:
 	pop r11
 	pop r10
 	pop r9
-lb_174:
+lb_444:
 ; 	» 0xr2 |~ 0' : r64
 	mov rcx,0x2
 	mov r8,rcx
@@ -1657,17 +1529,12 @@ lb_174:
 ; emt_ptn_set_ptn 0',4'
 	bt r12,0
 ; emt_set_ptn 4'
+; unboxed
 	mov rcx,r8
-	jc lb_175
-	btr r12,4
-	call inc_r
-	jmp lb_176
-lb_175:
 	bts r12,4
-lb_176:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_177
+	jc lb_447
 	push r9
 	push r10
 	push r11
@@ -1678,34 +1545,36 @@ lb_176:
 	pop r11
 	pop r10
 	pop r9
-lb_177:
+lb_447:
 ; 	sub { 1' 3' } ⊢ 0' : r64
 ; emt_ptn_set_ptn { 1' 3' },{ 5' 6' }
 ; emt_ptn_set_ptn 1',5'
 	bt r12,1
 ; emt_set_ptn 5'
+; unknown
 	mov rdx,r9
-	jc lb_182
+	jc lb_448
 	btr r12,5
 	call inc_r
-	jmp lb_183
-lb_182:
+	jmp lb_449
+lb_448:
 	bts r12,5
-lb_183:
+lb_449:
 ; emt_ptn_set_ptn 3',6'
 	bt r12,3
 ; emt_set_ptn 6'
+; unknown
 	mov rsi,r11
-	jc lb_184
+	jc lb_450
 	btr r12,6
 	call inc_r
-	jmp lb_185
-lb_184:
+	jmp lb_451
+lb_450:
 	bts r12,6
-lb_185:
+lb_451:
 ; ; emt_dec_ptn { 1' 3' }
 	bt r12,3
-	jc lb_180
+	jc lb_454
 	push r8
 	push r10
 	push rcx
@@ -1714,9 +1583,9 @@ lb_185:
 	pop rcx
 	pop r10
 	pop r8
-lb_180:
+lb_454:
 	bt r12,1
-	jc lb_181
+	jc lb_455
 	push r8
 	push r10
 	push rcx
@@ -1725,72 +1594,64 @@ lb_180:
 	pop rcx
 	pop r10
 	pop r8
-lb_181:
+lb_455:
 	sub rdx,rsi
 	stc
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rdx
-	jc lb_178
-	btr r12,0
-	call inc_r
-	jmp lb_179
-lb_178:
 	bts r12,0
-lb_179:
 ; 	sub { 2' 4' } ⊢ 1' : r64
 ; emt_ptn_set_ptn { 2' 4' },{ 3' 5' }
 ; emt_ptn_set_ptn 2',3'
 	bt r12,2
 ; emt_set_ptn 3'
+; unknown
 	mov r11,r10
-	jc lb_190
+	jc lb_456
 	btr r12,3
 	call inc_r
-	jmp lb_191
-lb_190:
+	jmp lb_457
+lb_456:
 	bts r12,3
-lb_191:
+lb_457:
 ; emt_ptn_set_ptn 4',5'
 	bt r12,4
 ; emt_set_ptn 5'
+; unknown
 	mov rdx,rcx
-	jc lb_192
+	jc lb_458
 	btr r12,5
 	call inc_r
-	jmp lb_193
-lb_192:
+	jmp lb_459
+lb_458:
 	bts r12,5
-lb_193:
+lb_459:
 ; ; emt_dec_ptn { 2' 4' }
 	bt r12,4
-	jc lb_188
+	jc lb_462
 	push r8
 	push r9
 	mov rdi,rcx
 	call dec_r
 	pop r9
 	pop r8
-lb_188:
+lb_462:
 	bt r12,2
-	jc lb_189
+	jc lb_463
 	push r8
 	push r9
 	mov rdi,r10
 	call dec_r
 	pop r9
 	pop r8
-lb_189:
+lb_463:
 	sub r11,rdx
 	stc
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r11
-	jc lb_186
-	btr r12,1
-	call inc_r
-	jmp lb_187
-lb_186:
 	bts r12,1
-lb_187:
 ; 	fib 0' ⊢ 0' : r64
 
 mov r14,0
@@ -1799,22 +1660,17 @@ not r14
 ; emt_ptn_set_ptn 0',0'
 	bt r12,0
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r8
-	jc lb_195
-	btr r14,0
-	call inc_r
-	jmp lb_196
-lb_195:
 	bts r14,0
-lb_196:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_194
+	jc lb_464
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-lb_194:
+lb_464:
 ; push_s  1'~xt1
 	mov [tmp],rbx
 	mov rbx,r9
@@ -1832,16 +1688,11 @@ lb_194:
 	call _fib
 	push rbx
 	mov rbx,rax
-	jc lb_197
+	jc lb_467
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_201
-	btr r12,0
-	call inc_r
-	jmp lb_202
-lb_201:
 	bts r12,0
-lb_202:
 	pop rbx
 	push r8
 	push r9
@@ -1849,19 +1700,14 @@ lb_202:
 	call dec_r
 	pop r9
 	pop r8
-	jmp lb_198
-lb_197:
+	jmp lb_468
+lb_467:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_199
-	btr r12,0
-	call inc_r
-	jmp lb_200
-lb_199:
 	bts r12,0
-lb_200:
 	pop rbx
-lb_198:
+lb_468:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -1879,22 +1725,17 @@ not r14
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r9
-	jc lb_204
-	btr r14,0
-	call inc_r
-	jmp lb_205
-lb_204:
 	bts r14,0
-lb_205:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_203
+	jc lb_473
 	push r8
 	mov rdi,r9
 	call dec_r
 	pop r8
-lb_203:
+lb_473:
 ; push_s  0'~y0
 	mov [tmp],rbx
 	mov rbx,r8
@@ -1912,16 +1753,11 @@ lb_203:
 	call _fib
 	push rbx
 	mov rbx,rax
-	jc lb_206
+	jc lb_476
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_210
-	btr r12,1
-	call inc_r
-	jmp lb_211
-lb_210:
 	bts r12,1
-lb_211:
 	pop rbx
 	push r8
 	push r9
@@ -1929,19 +1765,14 @@ lb_211:
 	call dec_r
 	pop r9
 	pop r8
-	jmp lb_207
-lb_206:
+	jmp lb_477
+lb_476:
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_208
-	btr r12,1
-	call inc_r
-	jmp lb_209
-lb_208:
 	bts r12,1
-lb_209:
 	pop rbx
-lb_207:
+lb_477:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -1956,40 +1787,42 @@ lb_207:
 ; emt_ptn_set_ptn 0',3'
 	bt r12,0
 ; emt_set_ptn 3'
+; unknown
 	mov r11,r8
-	jc lb_216
+	jc lb_482
 	btr r12,3
 	call inc_r
-	jmp lb_217
-lb_216:
+	jmp lb_483
+lb_482:
 	bts r12,3
-lb_217:
+lb_483:
 ; emt_ptn_set_ptn 1',4'
 	bt r12,1
 ; emt_set_ptn 4'
+; unknown
 	mov rcx,r9
-	jc lb_218
+	jc lb_484
 	btr r12,4
 	call inc_r
-	jmp lb_219
-lb_218:
+	jmp lb_485
+lb_484:
 	bts r12,4
-lb_219:
+lb_485:
 ; ; emt_dec_ptn { 0' 1' }
 	bt r12,1
-	jc lb_214
+	jc lb_488
 	push r10
 	mov rdi,r9
 	call dec_r
 	pop r10
-lb_214:
+lb_488:
 	bt r12,0
-	jc lb_215
+	jc lb_489
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
-lb_215:
+lb_489:
 	push rbx
 	push r14
 	mov rbx,r11
@@ -1998,14 +1831,9 @@ lb_215:
 	stc
 	pop r14
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rbx
-	jc lb_212
-	btr r12,2
-	call inc_r
-	jmp lb_213
-lb_212:
 	bts r12,2
-lb_213:
 	pop rbx
 ; 	∎ 2'
 ;clear 
@@ -2017,18 +1845,18 @@ lb_213:
 	pop rbx
 	ret
 ; 	∐ -2'
-agl_163_1:
-	jc lb_220
+agl_433_1:
+	jc lb_490
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
 	push r8
 	call dec_r
 	pop r8
-	jmp lb_221
-lb_220:
+	jmp lb_491
+lb_490:
 ; emt_set_ptn -2'
-lb_221:
+lb_491:
 	pop rbx
 	pop r14
 ; 	» 0xr1 |~ 1' : r64
@@ -2039,31 +1867,26 @@ lb_221:
 ; emt_ptn_set_ptn 1',2'
 	bt r12,1
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r9
-	jc lb_222
-	btr r12,2
-	call inc_r
-	jmp lb_223
-lb_222:
 	bts r12,2
-lb_223:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_224
+	jc lb_494
 	push r8
 	push r10
 	mov rdi,r9
 	call dec_r
 	pop r10
 	pop r8
-lb_224:
+lb_494:
 ; 	∎ 2'
 ;clear  0'~x
 	bt r12,0
-	jc clear_lb_225
+	jc clear_lb_495
 	mov rdi,r8
 	call dec_r
-clear_lb_225:
+clear_lb_495:
 	push rbx
 ; emt_get_ptn 2'
 	mov rbx,r10
@@ -2072,18 +1895,18 @@ clear_lb_225:
 	pop rbx
 	ret
 ; 	∐ -2'
-agl_142_1:
-	jc lb_226
+agl_412_1:
+	jc lb_496
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
 	push r9
 	call dec_r
 	pop r9
-	jmp lb_227
-lb_226:
+	jmp lb_497
+lb_496:
 ; emt_set_ptn -2'
-lb_227:
+lb_497:
 	pop rbx
 	pop r14
 ; 	» 0xr0 |~ 0' : r64
@@ -2094,31 +1917,26 @@ lb_227:
 ; emt_ptn_set_ptn 0',2'
 	bt r12,0
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r8
-	jc lb_228
-	btr r12,2
-	call inc_r
-	jmp lb_229
-lb_228:
 	bts r12,2
-lb_229:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_230
+	jc lb_500
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_230:
+lb_500:
 ; 	∎ 2'
 ;clear  1'~x
 	bt r12,1
-	jc clear_lb_231
+	jc clear_lb_501
 	mov rdi,r9
 	call dec_r
-clear_lb_231:
+clear_lb_501:
 	push rbx
 ; emt_get_ptn 2'
 	mov rbx,r10
@@ -2126,10 +1944,10 @@ clear_lb_231:
 	mov rax,rbx
 	pop rbx
 	ret
-tak:
+tak_i:
 ; 	|» { 0' 1' 2' }
-	jz _tak
-	jc emt_etr_c_lb_232
+	jz _tak_i
+	jc emt_etr_c_lb_6
 	push rbx
 	mov rbx,rdi
 	push rbx
@@ -2139,55 +1957,40 @@ tak:
 	bt rbx,0
 	mov rbx,[rbx+8*1]
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_454
-	btr r12,0
-	call inc_r
-	jmp lb_455
-lb_454:
 	bts r12,0
-lb_455:
 	pop rbx
 	push rbx
 	mov rbx,[rbx]
 	bt rbx,1
 	mov rbx,[rbx+8*2]
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_456
-	btr r12,1
-	call inc_r
-	jmp lb_457
-lb_456:
 	bts r12,1
-lb_457:
 	pop rbx
 	push rbx
 	mov rbx,[rbx]
 	bt rbx,2
 	mov rbx,[rbx+8*3]
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rbx
-	jc lb_458
-	btr r12,2
-	call inc_r
-	jmp lb_459
-lb_458:
 	bts r12,2
-lb_459:
 	pop rbx
 	pop rbx
 	push r8
+	push r9
 	push r10
-	push r11
 	mov rdi,rbx
 	call dec_r
-	pop r11
 	pop r10
+	pop r9
 	pop r8
 	pop rbx
-jmp _tak
-emt_etr_c_lb_232:
+jmp _tak_i
+emt_etr_c_lb_6:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn { 0' 1' 2' }
@@ -2196,71 +1999,46 @@ emt_etr_c_lb_232:
 	bt rbx,0
 	mov rbx,[rbx+8*1]
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_448
-	btr r12,0
-	call inc_r
-	jmp lb_449
-lb_448:
 	bts r12,0
-lb_449:
 	pop rbx
 	push rbx
 	mov rbx,[rbx]
 	bt rbx,1
 	mov rbx,[rbx+8*2]
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_450
-	btr r12,1
-	call inc_r
-	jmp lb_451
-lb_450:
 	bts r12,1
-lb_451:
 	pop rbx
 	push rbx
 	mov rbx,[rbx]
 	bt rbx,2
 	mov rbx,[rbx+8*3]
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rbx
-	jc lb_452
-	btr r12,2
-	call inc_r
-	jmp lb_453
-lb_452:
 	bts r12,2
-lb_453:
 	pop rbx
 	pop rbx
-_tak:
+_tak_i:
 ; 	$ 0' ⊢ ,3',4' : ,r64,r64
 ; emt_ptn_set_ptn 0',3'
 	bt r12,0
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r8
-	jc lb_233
-	btr r12,3
-	call inc_r
-	jmp lb_234
-lb_233:
 	bts r12,3
-lb_234:
 ; emt_ptn_set_ptn 0',4'
 	bt r12,0
 ; emt_set_ptn 4'
+; unboxed
 	mov rcx,r8
-	jc lb_235
-	btr r12,4
-	call inc_r
-	jmp lb_236
-lb_235:
 	bts r12,4
-lb_236:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_237
+	jc lb_251
 	push r9
 	push r10
 	push r11
@@ -2271,33 +2049,23 @@ lb_236:
 	pop r11
 	pop r10
 	pop r9
-lb_237:
+lb_251:
 ; 	$ 1' ⊢ ,0',5' : ,r64,r64
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,r9
-	jc lb_238
-	btr r12,0
-	call inc_r
-	jmp lb_239
-lb_238:
 	bts r12,0
-lb_239:
 ; emt_ptn_set_ptn 1',5'
 	bt r12,1
 ; emt_set_ptn 5'
+; unboxed
 	mov rdx,r9
-	jc lb_240
-	btr r12,5
-	call inc_r
-	jmp lb_241
-lb_240:
 	bts r12,5
-lb_241:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_242
+	jc lb_256
 	push r8
 	push r10
 	push r11
@@ -2310,34 +2078,36 @@ lb_241:
 	pop r11
 	pop r10
 	pop r8
-lb_242:
+lb_256:
 ; 	cmp { 4' 5' } ⊢ { -2' 1' } : { @[0].r2 ≃ ∐[@[0] @[0] ] @[0].r2 ≃ ∐[@[0] @[0] ] }
 ; emt_ptn_set_ptn { 4' 5' },{ 1' 6' }
 ; emt_ptn_set_ptn 4',1'
 	bt r12,4
 ; emt_set_ptn 1'
+; unknown
 	mov r9,rcx
-	jc lb_248
+	jc lb_258
 	btr r12,1
 	call inc_r
-	jmp lb_249
-lb_248:
+	jmp lb_259
+lb_258:
 	bts r12,1
-lb_249:
+lb_259:
 ; emt_ptn_set_ptn 5',6'
 	bt r12,5
 ; emt_set_ptn 6'
+; unknown
 	mov rsi,rdx
-	jc lb_250
+	jc lb_260
 	btr r12,6
 	call inc_r
-	jmp lb_251
-lb_250:
+	jmp lb_261
+lb_260:
 	bts r12,6
-lb_251:
+lb_261:
 ; ; emt_dec_ptn { 4' 5' }
 	bt r12,5
-	jc lb_246
+	jc lb_264
 	push r8
 	push r9
 	push r10
@@ -2348,9 +2118,9 @@ lb_251:
 	pop r10
 	pop r9
 	pop r8
-lb_246:
+lb_264:
 	bt r12,4
-	jc lb_247
+	jc lb_265
 	push r8
 	push r9
 	push r10
@@ -2361,15 +2131,15 @@ lb_246:
 	pop r10
 	pop r9
 	pop r8
-lb_247:
+lb_265:
 	cmp r9,rsi
 	mov rcx,0
 	mov rdx,0
 	setz cl
 	mov r9,1
-	jle lb_243
+	jle lb_257
 	mov rdx,r9
-lb_243:
+lb_257:
 	or r12,0b10000
 	or r12,0b100000
 ; emt_ptn_set_ptn { 4' 5' },{ -2' 1' }
@@ -2379,14 +2149,9 @@ lb_243:
 ; emt_ptn_set_ptn 5',1'
 	bt r12,5
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rdx
-	jc lb_244
-	btr r12,1
-	call inc_r
-	jmp lb_245
-lb_244:
 	bts r12,1
-lb_245:
 ; 	∠ 1'
 	push r14
 ; emt_get_ptn 1'
@@ -2395,17 +2160,17 @@ lb_245:
 	cmp r14,0
 	push rbx
 	mov rbx,r14
-	je lb_253
+	je lb_267
 	mov rbx,0
 	stc
-	jmp agl_252_1
-lb_253:
+	jmp agl_266_1
+lb_267:
 	mov rbx,1
 	stc
-	jmp agl_252_0
+	jmp agl_266_0
 ; 	∐ -2'
-agl_252_0:
-	jc lb_254
+agl_266_0:
+	jc lb_268
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
@@ -2416,26 +2181,26 @@ agl_252_0:
 	pop r11
 	pop r10
 	pop r8
-	jmp lb_255
-lb_254:
+	jmp lb_269
+lb_268:
 ; emt_set_ptn -2'
-lb_255:
+lb_269:
 	pop rbx
 	pop r14
 ; 	∎ 2'
 ;clear  3'~x 0'~y
 	bt r12,3
-	jc clear_lb_256
+	jc clear_lb_270
 	push r8
 	mov rdi,r11
 	call dec_r
 	pop r8
-clear_lb_256:
+clear_lb_270:
 	bt r12,0
-	jc clear_lb_257
+	jc clear_lb_271
 	mov rdi,r8
 	call dec_r
-clear_lb_257:
+clear_lb_271:
 	push rbx
 ; emt_get_ptn 2'
 	mov rbx,r10
@@ -2444,8 +2209,8 @@ clear_lb_257:
 	pop rbx
 	ret
 ; 	∐ -2'
-agl_252_1:
-	jc lb_258
+agl_266_1:
+	jc lb_272
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
@@ -2456,38 +2221,28 @@ agl_252_1:
 	pop r11
 	pop r10
 	pop r8
-	jmp lb_259
-lb_258:
+	jmp lb_273
+lb_272:
 ; emt_set_ptn -2'
-lb_259:
+lb_273:
 	pop rbx
 	pop r14
 ; 	$ 3' ⊢ ,1',4' : ,r64,r64
 ; emt_ptn_set_ptn 3',1'
 	bt r12,3
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r11
-	jc lb_260
-	btr r12,1
-	call inc_r
-	jmp lb_261
-lb_260:
 	bts r12,1
-lb_261:
 ; emt_ptn_set_ptn 3',4'
 	bt r12,3
 ; emt_set_ptn 4'
+; unboxed
 	mov rcx,r11
-	jc lb_262
-	btr r12,4
-	call inc_r
-	jmp lb_263
-lb_262:
 	bts r12,4
-lb_263:
 ; ; emt_dec_ptn 3'
 	bt r12,3
-	jc lb_264
+	jc lb_278
 	push r8
 	push r9
 	push r10
@@ -2498,7 +2253,7 @@ lb_263:
 	pop r10
 	pop r9
 	pop r8
-lb_264:
+lb_278:
 ; 	» 0xr1 |~ 3' : r64
 	mov rdx,0x1
 	mov r11,rdx
@@ -2507,17 +2262,12 @@ lb_264:
 ; emt_ptn_set_ptn 3',5'
 	bt r12,3
 ; emt_set_ptn 5'
+; unboxed
 	mov rdx,r11
-	jc lb_265
-	btr r12,5
-	call inc_r
-	jmp lb_266
-lb_265:
 	bts r12,5
-lb_266:
 ; ; emt_dec_ptn 3'
 	bt r12,3
-	jc lb_267
+	jc lb_281
 	push r8
 	push r9
 	push r10
@@ -2530,34 +2280,36 @@ lb_266:
 	pop r10
 	pop r9
 	pop r8
-lb_267:
+lb_281:
 ; 	sub { 4' 5' } ⊢ 3' : r64
 ; emt_ptn_set_ptn { 4' 5' },{ 6' 7' }
 ; emt_ptn_set_ptn 4',6'
 	bt r12,4
 ; emt_set_ptn 6'
+; unknown
 	mov rsi,rcx
-	jc lb_272
+	jc lb_282
 	btr r12,6
 	call inc_r
-	jmp lb_273
-lb_272:
+	jmp lb_283
+lb_282:
 	bts r12,6
-lb_273:
+lb_283:
 ; emt_ptn_set_ptn 5',7'
 	bt r12,5
 ; emt_set_ptn 7'
+; unknown
 	mov rdi,rdx
-	jc lb_274
+	jc lb_284
 	btr r12,7
 	call inc_r
-	jmp lb_275
-lb_274:
+	jmp lb_285
+lb_284:
 	bts r12,7
-lb_275:
+lb_285:
 ; ; emt_dec_ptn { 4' 5' }
 	bt r12,5
-	jc lb_270
+	jc lb_288
 	push r8
 	push r9
 	push r10
@@ -2568,9 +2320,9 @@ lb_275:
 	pop r10
 	pop r9
 	pop r8
-lb_270:
+lb_288:
 	bt r12,4
-	jc lb_271
+	jc lb_289
 	push r8
 	push r9
 	push r10
@@ -2581,44 +2333,29 @@ lb_270:
 	pop r10
 	pop r9
 	pop r8
-lb_271:
+lb_289:
 	sub rsi,rdi
 	stc
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,rsi
-	jc lb_268
-	btr r12,3
-	call inc_r
-	jmp lb_269
-lb_268:
 	bts r12,3
-lb_269:
 ; 	$ 2' ⊢ ,4',5' : ,r64,r64
 ; emt_ptn_set_ptn 2',4'
 	bt r12,2
 ; emt_set_ptn 4'
+; unboxed
 	mov rcx,r10
-	jc lb_276
-	btr r12,4
-	call inc_r
-	jmp lb_277
-lb_276:
 	bts r12,4
-lb_277:
 ; emt_ptn_set_ptn 2',5'
 	bt r12,2
 ; emt_set_ptn 5'
+; unboxed
 	mov rdx,r10
-	jc lb_278
-	btr r12,5
-	call inc_r
-	jmp lb_279
-lb_278:
 	bts r12,5
-lb_279:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_280
+	jc lb_294
 	push r8
 	push r9
 	push r11
@@ -2631,33 +2368,23 @@ lb_279:
 	pop r11
 	pop r9
 	pop r8
-lb_280:
+lb_294:
 ; 	$ 0' ⊢ ,2',6' : ,r64,r64
 ; emt_ptn_set_ptn 0',2'
 	bt r12,0
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r8
-	jc lb_281
-	btr r12,2
-	call inc_r
-	jmp lb_282
-lb_281:
 	bts r12,2
-lb_282:
 ; emt_ptn_set_ptn 0',6'
 	bt r12,0
 ; emt_set_ptn 6'
+; unboxed
 	mov rsi,r8
-	jc lb_283
-	btr r12,6
-	call inc_r
-	jmp lb_284
-lb_283:
 	bts r12,6
-lb_284:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_285
+	jc lb_299
 	push r9
 	push r10
 	push r11
@@ -2672,7 +2399,1151 @@ lb_284:
 	pop r11
 	pop r10
 	pop r9
-lb_285:
+lb_299:
+; 	tak_i { 3' 6' 5' } ⊢ 0' : r64
+
+mov r14,0
+
+not r14
+; emt_ptn_set_ptn { 3' 6' 5' },{ 0' 1' 2' }
+; emt_ptn_set_ptn 3',0'
+	bt r12,3
+; emt_set_ptn 0'
+; unboxed
+	mov [st_vct_tmp+8*0],r11
+	bts r14,0
+; emt_ptn_set_ptn 6',1'
+	bt r12,6
+; emt_set_ptn 1'
+; unboxed
+	mov [st_vct_tmp+8*1],rsi
+	bts r14,1
+; emt_ptn_set_ptn 5',2'
+	bt r12,5
+; emt_set_ptn 2'
+; unboxed
+	mov [st_vct_tmp+8*2],rdx
+	bts r14,2
+; ; emt_dec_ptn { 3' 6' 5' }
+	bt r12,5
+	jc lb_300
+	push r9
+	push r10
+	push rcx
+	mov rdi,rdx
+	call dec_r
+	pop rcx
+	pop r10
+	pop r9
+lb_300:
+	bt r12,6
+	jc lb_301
+	push r9
+	push r10
+	push rcx
+	mov rdi,rsi
+	call dec_r
+	pop rcx
+	pop r10
+	pop r9
+lb_301:
+	bt r12,3
+	jc lb_302
+	push r9
+	push r10
+	push rcx
+	mov rdi,r11
+	call dec_r
+	pop rcx
+	pop r10
+	pop r9
+lb_302:
+; push_s  2'~y 4'~z 1'~x
+	mov [tmp],rbx
+	mov rbx,r10
+	push rbx
+	mov rbx,rcx
+	push rbx
+	mov rbx,r9
+	push rbx
+	push r12
+	rcl rbx,1
+	add r15,1
+	rcr rbx,1
+	mov rbx,[tmp]
+	push rbx
+	mov rbx,[st_vct_tmp+8*2]
+	mov r10,rbx
+	mov rbx,[st_vct_tmp+8*1]
+	mov r9,rbx
+	mov rbx,[st_vct_tmp+8*0]
+	mov r8,rbx
+	pop rbx
+	mov r12,r14
+	call _tak_i
+	push rbx
+	mov rbx,rax
+	jc lb_309
+; emt_set_ptn 0'
+; unboxed
+	mov r8,rbx
+	bts r12,0
+	pop rbx
+	push r8
+	push r9
+	push r10
+	push rcx
+	mov rdi,rbx
+	call dec_r
+	pop rcx
+	pop r10
+	pop r9
+	pop r8
+	jmp lb_310
+lb_309:
+; emt_set_ptn 0'
+; unboxed
+	mov r8,rbx
+	bts r12,0
+	pop rbx
+lb_310:
+; pop_s
+	pop r12
+	mov [tmp],rbx
+	pop rbx
+	mov r9,rbx
+	pop rbx
+	mov rcx,rbx
+	pop rbx
+	mov r10,rbx
+	rcl rbx,1
+	sub r15,1
+	rcr rbx,1
+	mov rbx,[tmp]
+; 	$ 2' ⊢ ,3',5' : ,r64,r64
+; emt_ptn_set_ptn 2',3'
+	bt r12,2
+; emt_set_ptn 3'
+; unboxed
+	mov r11,r10
+	bts r12,3
+; emt_ptn_set_ptn 2',5'
+	bt r12,2
+; emt_set_ptn 5'
+; unboxed
+	mov rdx,r10
+	bts r12,5
+; ; emt_dec_ptn 2'
+	bt r12,2
+	jc lb_319
+	push r8
+	push r9
+	push r11
+	push rcx
+	push rdx
+	mov rdi,r10
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r11
+	pop r9
+	pop r8
+lb_319:
+; 	» 0xr1 |~ 2' : r64
+	mov rsi,0x1
+	mov r10,rsi
+	bts r12,2
+; 	$ 2' ⊢ ,6' : ,r64
+; emt_ptn_set_ptn 2',6'
+	bt r12,2
+; emt_set_ptn 6'
+; unboxed
+	mov rsi,r10
+	bts r12,6
+; ; emt_dec_ptn 2'
+	bt r12,2
+	jc lb_322
+	push r8
+	push r9
+	push r11
+	push rcx
+	push rdx
+	push rsi
+	mov rdi,r10
+	call dec_r
+	pop rsi
+	pop rdx
+	pop rcx
+	pop r11
+	pop r9
+	pop r8
+lb_322:
+; 	sub { 5' 6' } ⊢ 2' : r64
+; emt_ptn_set_ptn { 5' 6' },{ 7' 8' }
+; emt_ptn_set_ptn 5',7'
+	bt r12,5
+; emt_set_ptn 7'
+; unknown
+	mov rdi,rdx
+	jc lb_323
+	btr r12,7
+	call inc_r
+	jmp lb_324
+lb_323:
+	bts r12,7
+lb_324:
+; emt_ptn_set_ptn 6',8'
+	bt r12,6
+; emt_set_ptn 8'
+; unknown
+	mov rax,rsi
+	jc lb_325
+	btr r12,8
+	call inc_r
+	jmp lb_326
+lb_325:
+	bts r12,8
+lb_326:
+; ; emt_dec_ptn { 5' 6' }
+	bt r12,6
+	jc lb_329
+	push r8
+	push r9
+	push r10
+	push r11
+	push rcx
+	mov rdi,rsi
+	call dec_r
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_329:
+	bt r12,5
+	jc lb_330
+	push r8
+	push r9
+	push r10
+	push r11
+	push rcx
+	mov rdi,rdx
+	call dec_r
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_330:
+	sub rdi,rax
+	stc
+; emt_set_ptn 2'
+; unboxed
+	mov r10,rdi
+	bts r12,2
+; 	$ 4' ⊢ ,5',6' : ,r64,r64
+; emt_ptn_set_ptn 4',5'
+	bt r12,4
+; emt_set_ptn 5'
+; unboxed
+	mov rdx,rcx
+	bts r12,5
+; emt_ptn_set_ptn 4',6'
+	bt r12,4
+; emt_set_ptn 6'
+; unboxed
+	mov rsi,rcx
+	bts r12,6
+; ; emt_dec_ptn 4'
+	bt r12,4
+	jc lb_335
+	push r8
+	push r9
+	push r10
+	push r11
+	push rdx
+	push rsi
+	mov rdi,rcx
+	call dec_r
+	pop rsi
+	pop rdx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_335:
+; 	$ 1' ⊢ ,4',7' : ,r64,r64
+; emt_ptn_set_ptn 1',4'
+	bt r12,1
+; emt_set_ptn 4'
+; unboxed
+	mov rcx,r9
+	bts r12,4
+; emt_ptn_set_ptn 1',7'
+	bt r12,1
+; emt_set_ptn 7'
+; unboxed
+	mov rdi,r9
+	bts r12,7
+; ; emt_dec_ptn 1'
+	bt r12,1
+	jc lb_340
+	push r8
+	push r10
+	push r11
+	push rcx
+	push rdx
+	push rsi
+	push rdi
+	mov rdi,r9
+	call dec_r
+	pop rdi
+	pop rsi
+	pop rdx
+	pop rcx
+	pop r11
+	pop r10
+	pop r8
+lb_340:
+; 	tak_i { 2' 6' 7' } ⊢ 1' : r64
+
+mov r14,0
+
+not r14
+; emt_ptn_set_ptn { 2' 6' 7' },{ 0' 1' 2' }
+; emt_ptn_set_ptn 2',0'
+	bt r12,2
+; emt_set_ptn 0'
+; unboxed
+	mov [st_vct_tmp+8*0],r10
+	bts r14,0
+; emt_ptn_set_ptn 6',1'
+	bt r12,6
+; emt_set_ptn 1'
+; unboxed
+	mov [st_vct_tmp+8*1],rsi
+	bts r14,1
+; emt_ptn_set_ptn 7',2'
+	bt r12,7
+; emt_set_ptn 2'
+; unboxed
+	mov [st_vct_tmp+8*2],rdi
+	bts r14,2
+; ; emt_dec_ptn { 2' 6' 7' }
+	bt r12,7
+	jc lb_341
+	push r8
+	push r11
+	push rcx
+	push rdx
+	mov rdi,rdi
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r11
+	pop r8
+lb_341:
+	bt r12,6
+	jc lb_342
+	push r8
+	push r11
+	push rcx
+	push rdx
+	mov rdi,rsi
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r11
+	pop r8
+lb_342:
+	bt r12,2
+	jc lb_343
+	push r8
+	push r11
+	push rcx
+	push rdx
+	mov rdi,r10
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r11
+	pop r8
+lb_343:
+; push_s  3'~y 4'~x 5'~z 0'~r0
+	mov [tmp],rbx
+	mov rbx,r11
+	push rbx
+	mov rbx,rcx
+	push rbx
+	mov rbx,rdx
+	push rbx
+	mov rbx,r8
+	push rbx
+	push r12
+	rcl rbx,1
+	add r15,1
+	rcr rbx,1
+	mov rbx,[tmp]
+	push rbx
+	mov rbx,[st_vct_tmp+8*2]
+	mov r10,rbx
+	mov rbx,[st_vct_tmp+8*1]
+	mov r9,rbx
+	mov rbx,[st_vct_tmp+8*0]
+	mov r8,rbx
+	pop rbx
+	mov r12,r14
+	call _tak_i
+	push rbx
+	mov rbx,rax
+	jc lb_350
+; emt_set_ptn 1'
+; unboxed
+	mov r9,rbx
+	bts r12,1
+	pop rbx
+	push r8
+	push r9
+	push r11
+	push rcx
+	push rdx
+	mov rdi,rbx
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r11
+	pop r9
+	pop r8
+	jmp lb_351
+lb_350:
+; emt_set_ptn 1'
+; unboxed
+	mov r9,rbx
+	bts r12,1
+	pop rbx
+lb_351:
+; pop_s
+	pop r12
+	mov [tmp],rbx
+	pop rbx
+	mov r8,rbx
+	pop rbx
+	mov rdx,rbx
+	pop rbx
+	mov rcx,rbx
+	pop rbx
+	mov r11,rbx
+	rcl rbx,1
+	sub r15,1
+	rcr rbx,1
+	mov rbx,[tmp]
+; 	» 0xr1 |~ 2' : r64
+	mov rsi,0x1
+	mov r10,rsi
+	bts r12,2
+; 	$ 2' ⊢ ,6' : ,r64
+; emt_ptn_set_ptn 2',6'
+	bt r12,2
+; emt_set_ptn 6'
+; unboxed
+	mov rsi,r10
+	bts r12,6
+; ; emt_dec_ptn 2'
+	bt r12,2
+	jc lb_358
+	push r8
+	push r9
+	push r11
+	push rcx
+	push rdx
+	push rsi
+	mov rdi,r10
+	call dec_r
+	pop rsi
+	pop rdx
+	pop rcx
+	pop r11
+	pop r9
+	pop r8
+lb_358:
+; 	sub { 5' 6' } ⊢ 2' : r64
+; emt_ptn_set_ptn { 5' 6' },{ 7' 8' }
+; emt_ptn_set_ptn 5',7'
+	bt r12,5
+; emt_set_ptn 7'
+; unknown
+	mov rdi,rdx
+	jc lb_359
+	btr r12,7
+	call inc_r
+	jmp lb_360
+lb_359:
+	bts r12,7
+lb_360:
+; emt_ptn_set_ptn 6',8'
+	bt r12,6
+; emt_set_ptn 8'
+; unknown
+	mov rax,rsi
+	jc lb_361
+	btr r12,8
+	call inc_r
+	jmp lb_362
+lb_361:
+	bts r12,8
+lb_362:
+; ; emt_dec_ptn { 5' 6' }
+	bt r12,6
+	jc lb_365
+	push r8
+	push r9
+	push r10
+	push r11
+	push rcx
+	mov rdi,rsi
+	call dec_r
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_365:
+	bt r12,5
+	jc lb_366
+	push r8
+	push r9
+	push r10
+	push r11
+	push rcx
+	mov rdi,rdx
+	call dec_r
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_366:
+	sub rdi,rax
+	stc
+; emt_set_ptn 2'
+; unboxed
+	mov r10,rdi
+	bts r12,2
+; 	tak_i { 2' 4' 3' } ⊢ 2' : r64
+
+mov r14,0
+
+not r14
+; emt_ptn_set_ptn { 2' 4' 3' },{ 0' 1' 2' }
+; emt_ptn_set_ptn 2',0'
+	bt r12,2
+; emt_set_ptn 0'
+; unboxed
+	mov [st_vct_tmp+8*0],r10
+	bts r14,0
+; emt_ptn_set_ptn 4',1'
+	bt r12,4
+; emt_set_ptn 1'
+; unboxed
+	mov [st_vct_tmp+8*1],rcx
+	bts r14,1
+; emt_ptn_set_ptn 3',2'
+	bt r12,3
+; emt_set_ptn 2'
+; unboxed
+	mov [st_vct_tmp+8*2],r11
+	bts r14,2
+; ; emt_dec_ptn { 2' 4' 3' }
+	bt r12,3
+	jc lb_367
+	push r8
+	push r9
+	mov rdi,r11
+	call dec_r
+	pop r9
+	pop r8
+lb_367:
+	bt r12,4
+	jc lb_368
+	push r8
+	push r9
+	mov rdi,rcx
+	call dec_r
+	pop r9
+	pop r8
+lb_368:
+	bt r12,2
+	jc lb_369
+	push r8
+	push r9
+	mov rdi,r10
+	call dec_r
+	pop r9
+	pop r8
+lb_369:
+; push_s  0'~r0 1'~r1
+	mov [tmp],rbx
+	mov rbx,r8
+	push rbx
+	mov rbx,r9
+	push rbx
+	push r12
+	rcl rbx,1
+	add r15,1
+	rcr rbx,1
+	mov rbx,[tmp]
+	push rbx
+	mov rbx,[st_vct_tmp+8*2]
+	mov r10,rbx
+	mov rbx,[st_vct_tmp+8*1]
+	mov r9,rbx
+	mov rbx,[st_vct_tmp+8*0]
+	mov r8,rbx
+	pop rbx
+	mov r12,r14
+	call _tak_i
+	push rbx
+	mov rbx,rax
+	jc lb_376
+; emt_set_ptn 2'
+; unboxed
+	mov r10,rbx
+	bts r12,2
+	pop rbx
+	push r8
+	push r9
+	push r10
+	mov rdi,rbx
+	call dec_r
+	pop r10
+	pop r9
+	pop r8
+	jmp lb_377
+lb_376:
+; emt_set_ptn 2'
+; unboxed
+	mov r10,rbx
+	bts r12,2
+	pop rbx
+lb_377:
+; pop_s
+	pop r12
+	mov [tmp],rbx
+	pop rbx
+	mov r9,rbx
+	pop rbx
+	mov r8,rbx
+	rcl rbx,1
+	sub r15,1
+	rcr rbx,1
+	mov rbx,[tmp]
+; 	tak_i { 0' 1' 2' } ⊢| 
+
+mov r14,0
+
+not r14
+; emt_ptn_set_ptn { 0' 1' 2' },{ 0' 1' 2' }
+; emt_ptn_set_ptn 0',0'
+	bt r12,0
+; emt_set_ptn 0'
+; unboxed
+	mov [st_vct_tmp+8*0],r8
+	bts r14,0
+; emt_ptn_set_ptn 1',1'
+	bt r12,1
+; emt_set_ptn 1'
+; unboxed
+	mov [st_vct_tmp+8*1],r9
+	bts r14,1
+; emt_ptn_set_ptn 2',2'
+	bt r12,2
+; emt_set_ptn 2'
+; unboxed
+	mov [st_vct_tmp+8*2],r10
+	bts r14,2
+; ; emt_dec_ptn { 0' 1' 2' }
+	bt r12,2
+	jc lb_382
+	mov rdi,r10
+	call dec_r
+lb_382:
+	bt r12,1
+	jc lb_383
+	mov rdi,r9
+	call dec_r
+lb_383:
+	bt r12,0
+	jc lb_384
+	mov rdi,r8
+	call dec_r
+lb_384:
+;clear 
+	push rbx
+	mov rbx,[st_vct_tmp+8*2]
+	mov r10,rbx
+	mov rbx,[st_vct_tmp+8*1]
+	mov r9,rbx
+	mov rbx,[st_vct_tmp+8*0]
+	mov r8,rbx
+	pop rbx
+	mov r12,r14
+	jmp _tak_i
+tak:
+; 	|» { 0' 1' 2' }
+	jz _tak
+	jc emt_etr_c_lb_7
+	push rbx
+	mov rbx,rdi
+	push rbx
+; emt_set_ptn { 0' 1' 2' }
+	push rbx
+	mov rbx,[rbx]
+	bt rbx,0
+	mov rbx,[rbx+8*1]
+; emt_set_ptn 0'
+; unboxed
+	mov r8,rbx
+	bts r12,0
+	pop rbx
+	push rbx
+	mov rbx,[rbx]
+	bt rbx,1
+	mov rbx,[rbx+8*2]
+; emt_set_ptn 1'
+; unboxed
+	mov r9,rbx
+	bts r12,1
+	pop rbx
+	push rbx
+	mov rbx,[rbx]
+	bt rbx,2
+	mov rbx,[rbx+8*3]
+; emt_set_ptn 2'
+; unboxed
+	mov r10,rbx
+	bts r12,2
+	pop rbx
+	pop rbx
+	push r8
+	push r9
+	push r10
+	mov rdi,rbx
+	call dec_r
+	pop r10
+	pop r9
+	pop r8
+	pop rbx
+jmp _tak
+emt_etr_c_lb_7:
+	push rbx
+	mov rbx,rdi
+; emt_set_ptn { 0' 1' 2' }
+	push rbx
+	mov rbx,[rbx]
+	bt rbx,0
+	mov rbx,[rbx+8*1]
+; emt_set_ptn 0'
+; unboxed
+	mov r8,rbx
+	bts r12,0
+	pop rbx
+	push rbx
+	mov rbx,[rbx]
+	bt rbx,1
+	mov rbx,[rbx+8*2]
+; emt_set_ptn 1'
+; unboxed
+	mov r9,rbx
+	bts r12,1
+	pop rbx
+	push rbx
+	mov rbx,[rbx]
+	bt rbx,2
+	mov rbx,[rbx+8*3]
+; emt_set_ptn 2'
+; unboxed
+	mov r10,rbx
+	bts r12,2
+	pop rbx
+	pop rbx
+_tak:
+; 	$ 0' ⊢ ,3',4' : ,r64,r64
+; emt_ptn_set_ptn 0',3'
+	bt r12,0
+; emt_set_ptn 3'
+; unboxed
+	mov r11,r8
+	bts r12,3
+; emt_ptn_set_ptn 0',4'
+	bt r12,0
+; emt_set_ptn 4'
+; unboxed
+	mov rcx,r8
+	bts r12,4
+; ; emt_dec_ptn 0'
+	bt r12,0
+	jc lb_89
+	push r9
+	push r10
+	push r11
+	push rcx
+	mov rdi,r8
+	call dec_r
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+lb_89:
+; 	$ 1' ⊢ ,0',5' : ,r64,r64
+; emt_ptn_set_ptn 1',0'
+	bt r12,1
+; emt_set_ptn 0'
+; unboxed
+	mov r8,r9
+	bts r12,0
+; emt_ptn_set_ptn 1',5'
+	bt r12,1
+; emt_set_ptn 5'
+; unboxed
+	mov rdx,r9
+	bts r12,5
+; ; emt_dec_ptn 1'
+	bt r12,1
+	jc lb_94
+	push r8
+	push r10
+	push r11
+	push rcx
+	push rdx
+	mov rdi,r9
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r11
+	pop r10
+	pop r8
+lb_94:
+; 	cmp { 4' 5' } ⊢ { -2' 1' } : { @[0].r2 ≃ ∐[@[0] @[0] ] @[0].r2 ≃ ∐[@[0] @[0] ] }
+; emt_ptn_set_ptn { 4' 5' },{ 1' 6' }
+; emt_ptn_set_ptn 4',1'
+	bt r12,4
+; emt_set_ptn 1'
+; unknown
+	mov r9,rcx
+	jc lb_96
+	btr r12,1
+	call inc_r
+	jmp lb_97
+lb_96:
+	bts r12,1
+lb_97:
+; emt_ptn_set_ptn 5',6'
+	bt r12,5
+; emt_set_ptn 6'
+; unknown
+	mov rsi,rdx
+	jc lb_98
+	btr r12,6
+	call inc_r
+	jmp lb_99
+lb_98:
+	bts r12,6
+lb_99:
+; ; emt_dec_ptn { 4' 5' }
+	bt r12,5
+	jc lb_102
+	push r8
+	push r9
+	push r10
+	push r11
+	mov rdi,rdx
+	call dec_r
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_102:
+	bt r12,4
+	jc lb_103
+	push r8
+	push r9
+	push r10
+	push r11
+	mov rdi,rcx
+	call dec_r
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_103:
+	cmp r9,rsi
+	mov rcx,0
+	mov rdx,0
+	setz cl
+	mov r9,1
+	jle lb_95
+	mov rdx,r9
+lb_95:
+	or r12,0b10000
+	or r12,0b100000
+; emt_ptn_set_ptn { 4' 5' },{ -2' 1' }
+; emt_ptn_set_ptn 4',-2'
+	bt r12,4
+; emt_set_ptn -2'
+; emt_ptn_set_ptn 5',1'
+	bt r12,5
+; emt_set_ptn 1'
+; unboxed
+	mov r9,rdx
+	bts r12,1
+; 	∠ 1'
+	push r14
+; emt_get_ptn 1'
+	mov r14,r9
+	bt r12,1
+	cmp r14,0
+	push rbx
+	mov rbx,r14
+	je lb_105
+	mov rbx,0
+	stc
+	jmp agl_104_1
+lb_105:
+	mov rbx,1
+	stc
+	jmp agl_104_0
+; 	∐ -2'
+agl_104_0:
+	jc lb_106
+	push rbx
+; emt_set_ptn -2'
+	pop rbx
+	push r8
+	push r10
+	push r11
+	call dec_r
+	pop r11
+	pop r10
+	pop r8
+	jmp lb_107
+lb_106:
+; emt_set_ptn -2'
+lb_107:
+	pop rbx
+	pop r14
+; 	∎ 2'
+;clear  3'~x 0'~y
+	bt r12,3
+	jc clear_lb_108
+	push r8
+	mov rdi,r11
+	call dec_r
+	pop r8
+clear_lb_108:
+	bt r12,0
+	jc clear_lb_109
+	mov rdi,r8
+	call dec_r
+clear_lb_109:
+	push rbx
+; emt_get_ptn 2'
+	mov rbx,r10
+	bt r12,2
+	mov rax,rbx
+	pop rbx
+	ret
+; 	∐ -2'
+agl_104_1:
+	jc lb_110
+	push rbx
+; emt_set_ptn -2'
+	pop rbx
+	push r8
+	push r10
+	push r11
+	call dec_r
+	pop r11
+	pop r10
+	pop r8
+	jmp lb_111
+lb_110:
+; emt_set_ptn -2'
+lb_111:
+	pop rbx
+	pop r14
+; 	$ 3' ⊢ ,1',4' : ,r64,r64
+; emt_ptn_set_ptn 3',1'
+	bt r12,3
+; emt_set_ptn 1'
+; unboxed
+	mov r9,r11
+	bts r12,1
+; emt_ptn_set_ptn 3',4'
+	bt r12,3
+; emt_set_ptn 4'
+; unboxed
+	mov rcx,r11
+	bts r12,4
+; ; emt_dec_ptn 3'
+	bt r12,3
+	jc lb_116
+	push r8
+	push r9
+	push r10
+	push rcx
+	mov rdi,r11
+	call dec_r
+	pop rcx
+	pop r10
+	pop r9
+	pop r8
+lb_116:
+; 	» 0xr1 |~ 3' : r64
+	mov rdx,0x1
+	mov r11,rdx
+	bts r12,3
+; 	$ 3' ⊢ ,5' : ,r64
+; emt_ptn_set_ptn 3',5'
+	bt r12,3
+; emt_set_ptn 5'
+; unboxed
+	mov rdx,r11
+	bts r12,5
+; ; emt_dec_ptn 3'
+	bt r12,3
+	jc lb_119
+	push r8
+	push r9
+	push r10
+	push rcx
+	push rdx
+	mov rdi,r11
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r10
+	pop r9
+	pop r8
+lb_119:
+; 	sub { 4' 5' } ⊢ 3' : r64
+; emt_ptn_set_ptn { 4' 5' },{ 6' 7' }
+; emt_ptn_set_ptn 4',6'
+	bt r12,4
+; emt_set_ptn 6'
+; unknown
+	mov rsi,rcx
+	jc lb_120
+	btr r12,6
+	call inc_r
+	jmp lb_121
+lb_120:
+	bts r12,6
+lb_121:
+; emt_ptn_set_ptn 5',7'
+	bt r12,5
+; emt_set_ptn 7'
+; unknown
+	mov rdi,rdx
+	jc lb_122
+	btr r12,7
+	call inc_r
+	jmp lb_123
+lb_122:
+	bts r12,7
+lb_123:
+; ; emt_dec_ptn { 4' 5' }
+	bt r12,5
+	jc lb_126
+	push r8
+	push r9
+	push r10
+	push r11
+	mov rdi,rdx
+	call dec_r
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_126:
+	bt r12,4
+	jc lb_127
+	push r8
+	push r9
+	push r10
+	push r11
+	mov rdi,rcx
+	call dec_r
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+lb_127:
+	sub rsi,rdi
+	stc
+; emt_set_ptn 3'
+; unboxed
+	mov r11,rsi
+	bts r12,3
+; 	$ 2' ⊢ ,4',5' : ,r64,r64
+; emt_ptn_set_ptn 2',4'
+	bt r12,2
+; emt_set_ptn 4'
+; unboxed
+	mov rcx,r10
+	bts r12,4
+; emt_ptn_set_ptn 2',5'
+	bt r12,2
+; emt_set_ptn 5'
+; unboxed
+	mov rdx,r10
+	bts r12,5
+; ; emt_dec_ptn 2'
+	bt r12,2
+	jc lb_132
+	push r8
+	push r9
+	push r11
+	push rcx
+	push rdx
+	mov rdi,r10
+	call dec_r
+	pop rdx
+	pop rcx
+	pop r11
+	pop r9
+	pop r8
+lb_132:
+; 	$ 0' ⊢ ,2',6' : ,r64,r64
+; emt_ptn_set_ptn 0',2'
+	bt r12,0
+; emt_set_ptn 2'
+; unboxed
+	mov r10,r8
+	bts r12,2
+; emt_ptn_set_ptn 0',6'
+	bt r12,0
+; emt_set_ptn 6'
+; unboxed
+	mov rsi,r8
+	bts r12,6
+; ; emt_dec_ptn 0'
+	bt r12,0
+	jc lb_137
+	push r9
+	push r10
+	push r11
+	push rcx
+	push rdx
+	push rsi
+	mov rdi,r8
+	call dec_r
+	pop rsi
+	pop rdx
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+lb_137:
 ; 	tak { 3' 6' 5' } ⊢ 0' : r64
 
 mov r14,0
@@ -2682,39 +3553,24 @@ not r14
 ; emt_ptn_set_ptn 3',0'
 	bt r12,3
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r11
-	jc lb_289
-	btr r14,0
-	call inc_r
-	jmp lb_290
-lb_289:
 	bts r14,0
-lb_290:
 ; emt_ptn_set_ptn 6',1'
 	bt r12,6
 ; emt_set_ptn 1'
+; unboxed
 	mov [st_vct_tmp+8*1],rsi
-	jc lb_291
-	btr r14,1
-	call inc_r
-	jmp lb_292
-lb_291:
 	bts r14,1
-lb_292:
 ; emt_ptn_set_ptn 5',2'
 	bt r12,5
 ; emt_set_ptn 2'
+; unboxed
 	mov [st_vct_tmp+8*2],rdx
-	jc lb_293
-	btr r14,2
-	call inc_r
-	jmp lb_294
-lb_293:
 	bts r14,2
-lb_294:
 ; ; emt_dec_ptn { 3' 6' 5' }
 	bt r12,5
-	jc lb_286
+	jc lb_138
 	push r9
 	push r10
 	push rcx
@@ -2723,9 +3579,9 @@ lb_294:
 	pop rcx
 	pop r10
 	pop r9
-lb_286:
+lb_138:
 	bt r12,6
-	jc lb_287
+	jc lb_139
 	push r9
 	push r10
 	push rcx
@@ -2734,9 +3590,9 @@ lb_286:
 	pop rcx
 	pop r10
 	pop r9
-lb_287:
+lb_139:
 	bt r12,3
-	jc lb_288
+	jc lb_140
 	push r9
 	push r10
 	push rcx
@@ -2745,7 +3601,7 @@ lb_287:
 	pop rcx
 	pop r10
 	pop r9
-lb_288:
+lb_140:
 ; push_s  2'~y 4'~z 1'~x
 	mov [tmp],rbx
 	mov rbx,r10
@@ -2771,16 +3627,11 @@ lb_288:
 	call _tak
 	push rbx
 	mov rbx,rax
-	jc lb_295
+	jc lb_147
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_299
-	btr r12,0
-	call inc_r
-	jmp lb_300
-lb_299:
 	bts r12,0
-lb_300:
 	pop rbx
 	push r8
 	push r9
@@ -2792,19 +3643,14 @@ lb_300:
 	pop r10
 	pop r9
 	pop r8
-	jmp lb_296
-lb_295:
+	jmp lb_148
+lb_147:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_297
-	btr r12,0
-	call inc_r
-	jmp lb_298
-lb_297:
 	bts r12,0
-lb_298:
 	pop rbx
-lb_296:
+lb_148:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -2822,28 +3668,18 @@ lb_296:
 ; emt_ptn_set_ptn 2',3'
 	bt r12,2
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r10
-	jc lb_301
-	btr r12,3
-	call inc_r
-	jmp lb_302
-lb_301:
 	bts r12,3
-lb_302:
 ; emt_ptn_set_ptn 2',5'
 	bt r12,2
 ; emt_set_ptn 5'
+; unboxed
 	mov rdx,r10
-	jc lb_303
-	btr r12,5
-	call inc_r
-	jmp lb_304
-lb_303:
 	bts r12,5
-lb_304:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_305
+	jc lb_157
 	push r8
 	push r9
 	push r11
@@ -2856,7 +3692,7 @@ lb_304:
 	pop r11
 	pop r9
 	pop r8
-lb_305:
+lb_157:
 ; 	» 0xr1 |~ 2' : r64
 	mov rsi,0x1
 	mov r10,rsi
@@ -2865,17 +3701,12 @@ lb_305:
 ; emt_ptn_set_ptn 2',6'
 	bt r12,2
 ; emt_set_ptn 6'
+; unboxed
 	mov rsi,r10
-	jc lb_306
-	btr r12,6
-	call inc_r
-	jmp lb_307
-lb_306:
 	bts r12,6
-lb_307:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_308
+	jc lb_160
 	push r8
 	push r9
 	push r11
@@ -2890,34 +3721,36 @@ lb_307:
 	pop r11
 	pop r9
 	pop r8
-lb_308:
+lb_160:
 ; 	sub { 5' 6' } ⊢ 2' : r64
 ; emt_ptn_set_ptn { 5' 6' },{ 7' 8' }
 ; emt_ptn_set_ptn 5',7'
 	bt r12,5
 ; emt_set_ptn 7'
+; unknown
 	mov rdi,rdx
-	jc lb_313
+	jc lb_161
 	btr r12,7
 	call inc_r
-	jmp lb_314
-lb_313:
+	jmp lb_162
+lb_161:
 	bts r12,7
-lb_314:
+lb_162:
 ; emt_ptn_set_ptn 6',8'
 	bt r12,6
 ; emt_set_ptn 8'
+; unknown
 	mov rax,rsi
-	jc lb_315
+	jc lb_163
 	btr r12,8
 	call inc_r
-	jmp lb_316
-lb_315:
+	jmp lb_164
+lb_163:
 	bts r12,8
-lb_316:
+lb_164:
 ; ; emt_dec_ptn { 5' 6' }
 	bt r12,6
-	jc lb_311
+	jc lb_167
 	push r8
 	push r9
 	push r10
@@ -2930,9 +3763,9 @@ lb_316:
 	pop r10
 	pop r9
 	pop r8
-lb_311:
+lb_167:
 	bt r12,5
-	jc lb_312
+	jc lb_168
 	push r8
 	push r9
 	push r10
@@ -2945,44 +3778,29 @@ lb_311:
 	pop r10
 	pop r9
 	pop r8
-lb_312:
+lb_168:
 	sub rdi,rax
 	stc
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rdi
-	jc lb_309
-	btr r12,2
-	call inc_r
-	jmp lb_310
-lb_309:
 	bts r12,2
-lb_310:
 ; 	$ 4' ⊢ ,5',6' : ,r64,r64
 ; emt_ptn_set_ptn 4',5'
 	bt r12,4
 ; emt_set_ptn 5'
+; unboxed
 	mov rdx,rcx
-	jc lb_317
-	btr r12,5
-	call inc_r
-	jmp lb_318
-lb_317:
 	bts r12,5
-lb_318:
 ; emt_ptn_set_ptn 4',6'
 	bt r12,4
 ; emt_set_ptn 6'
+; unboxed
 	mov rsi,rcx
-	jc lb_319
-	btr r12,6
-	call inc_r
-	jmp lb_320
-lb_319:
 	bts r12,6
-lb_320:
 ; ; emt_dec_ptn 4'
 	bt r12,4
-	jc lb_321
+	jc lb_173
 	push r8
 	push r9
 	push r10
@@ -2997,33 +3815,23 @@ lb_320:
 	pop r10
 	pop r9
 	pop r8
-lb_321:
+lb_173:
 ; 	$ 1' ⊢ ,4',7' : ,r64,r64
 ; emt_ptn_set_ptn 1',4'
 	bt r12,1
 ; emt_set_ptn 4'
+; unboxed
 	mov rcx,r9
-	jc lb_322
-	btr r12,4
-	call inc_r
-	jmp lb_323
-lb_322:
 	bts r12,4
-lb_323:
 ; emt_ptn_set_ptn 1',7'
 	bt r12,1
 ; emt_set_ptn 7'
+; unboxed
 	mov rdi,r9
-	jc lb_324
-	btr r12,7
-	call inc_r
-	jmp lb_325
-lb_324:
 	bts r12,7
-lb_325:
 ; ; emt_dec_ptn 1'
 	bt r12,1
-	jc lb_326
+	jc lb_178
 	push r8
 	push r10
 	push r11
@@ -3040,7 +3848,7 @@ lb_325:
 	pop r11
 	pop r10
 	pop r8
-lb_326:
+lb_178:
 ; 	tak { 2' 6' 7' } ⊢ 1' : r64
 
 mov r14,0
@@ -3050,39 +3858,24 @@ not r14
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r10
-	jc lb_330
-	btr r14,0
-	call inc_r
-	jmp lb_331
-lb_330:
 	bts r14,0
-lb_331:
 ; emt_ptn_set_ptn 6',1'
 	bt r12,6
 ; emt_set_ptn 1'
+; unboxed
 	mov [st_vct_tmp+8*1],rsi
-	jc lb_332
-	btr r14,1
-	call inc_r
-	jmp lb_333
-lb_332:
 	bts r14,1
-lb_333:
 ; emt_ptn_set_ptn 7',2'
 	bt r12,7
 ; emt_set_ptn 2'
+; unboxed
 	mov [st_vct_tmp+8*2],rdi
-	jc lb_334
-	btr r14,2
-	call inc_r
-	jmp lb_335
-lb_334:
 	bts r14,2
-lb_335:
 ; ; emt_dec_ptn { 2' 6' 7' }
 	bt r12,7
-	jc lb_327
+	jc lb_179
 	push r8
 	push r11
 	push rcx
@@ -3093,9 +3886,9 @@ lb_335:
 	pop rcx
 	pop r11
 	pop r8
-lb_327:
+lb_179:
 	bt r12,6
-	jc lb_328
+	jc lb_180
 	push r8
 	push r11
 	push rcx
@@ -3106,9 +3899,9 @@ lb_327:
 	pop rcx
 	pop r11
 	pop r8
-lb_328:
+lb_180:
 	bt r12,2
-	jc lb_329
+	jc lb_181
 	push r8
 	push r11
 	push rcx
@@ -3119,7 +3912,7 @@ lb_328:
 	pop rcx
 	pop r11
 	pop r8
-lb_329:
+lb_181:
 ; push_s  3'~y 4'~x 5'~z 0'~r0
 	mov [tmp],rbx
 	mov rbx,r11
@@ -3147,16 +3940,11 @@ lb_329:
 	call _tak
 	push rbx
 	mov rbx,rax
-	jc lb_336
+	jc lb_188
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_340
-	btr r12,1
-	call inc_r
-	jmp lb_341
-lb_340:
 	bts r12,1
-lb_341:
 	pop rbx
 	push r8
 	push r9
@@ -3170,19 +3958,14 @@ lb_341:
 	pop r11
 	pop r9
 	pop r8
-	jmp lb_337
-lb_336:
+	jmp lb_189
+lb_188:
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_338
-	btr r12,1
-	call inc_r
-	jmp lb_339
-lb_338:
 	bts r12,1
-lb_339:
 	pop rbx
-lb_337:
+lb_189:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -3206,17 +3989,12 @@ lb_337:
 ; emt_ptn_set_ptn 2',6'
 	bt r12,2
 ; emt_set_ptn 6'
+; unboxed
 	mov rsi,r10
-	jc lb_342
-	btr r12,6
-	call inc_r
-	jmp lb_343
-lb_342:
 	bts r12,6
-lb_343:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_344
+	jc lb_196
 	push r8
 	push r9
 	push r11
@@ -3231,34 +4009,36 @@ lb_343:
 	pop r11
 	pop r9
 	pop r8
-lb_344:
+lb_196:
 ; 	sub { 5' 6' } ⊢ 2' : r64
 ; emt_ptn_set_ptn { 5' 6' },{ 7' 8' }
 ; emt_ptn_set_ptn 5',7'
 	bt r12,5
 ; emt_set_ptn 7'
+; unknown
 	mov rdi,rdx
-	jc lb_349
+	jc lb_197
 	btr r12,7
 	call inc_r
-	jmp lb_350
-lb_349:
+	jmp lb_198
+lb_197:
 	bts r12,7
-lb_350:
+lb_198:
 ; emt_ptn_set_ptn 6',8'
 	bt r12,6
 ; emt_set_ptn 8'
+; unknown
 	mov rax,rsi
-	jc lb_351
+	jc lb_199
 	btr r12,8
 	call inc_r
-	jmp lb_352
-lb_351:
+	jmp lb_200
+lb_199:
 	bts r12,8
-lb_352:
+lb_200:
 ; ; emt_dec_ptn { 5' 6' }
 	bt r12,6
-	jc lb_347
+	jc lb_203
 	push r8
 	push r9
 	push r10
@@ -3271,9 +4051,9 @@ lb_352:
 	pop r10
 	pop r9
 	pop r8
-lb_347:
+lb_203:
 	bt r12,5
-	jc lb_348
+	jc lb_204
 	push r8
 	push r9
 	push r10
@@ -3286,18 +4066,13 @@ lb_347:
 	pop r10
 	pop r9
 	pop r8
-lb_348:
+lb_204:
 	sub rdi,rax
 	stc
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rdi
-	jc lb_345
-	btr r12,2
-	call inc_r
-	jmp lb_346
-lb_345:
 	bts r12,2
-lb_346:
 ; 	tak { 2' 4' 3' } ⊢ 2' : r64
 
 mov r14,0
@@ -3307,64 +4082,49 @@ not r14
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r10
-	jc lb_356
-	btr r14,0
-	call inc_r
-	jmp lb_357
-lb_356:
 	bts r14,0
-lb_357:
 ; emt_ptn_set_ptn 4',1'
 	bt r12,4
 ; emt_set_ptn 1'
+; unboxed
 	mov [st_vct_tmp+8*1],rcx
-	jc lb_358
-	btr r14,1
-	call inc_r
-	jmp lb_359
-lb_358:
 	bts r14,1
-lb_359:
 ; emt_ptn_set_ptn 3',2'
 	bt r12,3
 ; emt_set_ptn 2'
+; unboxed
 	mov [st_vct_tmp+8*2],r11
-	jc lb_360
-	btr r14,2
-	call inc_r
-	jmp lb_361
-lb_360:
 	bts r14,2
-lb_361:
 ; ; emt_dec_ptn { 2' 4' 3' }
 	bt r12,3
-	jc lb_353
+	jc lb_205
 	push r8
 	push r9
 	mov rdi,r11
 	call dec_r
 	pop r9
 	pop r8
-lb_353:
+lb_205:
 	bt r12,4
-	jc lb_354
+	jc lb_206
 	push r8
 	push r9
 	mov rdi,rcx
 	call dec_r
 	pop r9
 	pop r8
-lb_354:
+lb_206:
 	bt r12,2
-	jc lb_355
+	jc lb_207
 	push r8
 	push r9
 	mov rdi,r10
 	call dec_r
 	pop r9
 	pop r8
-lb_355:
+lb_207:
 ; push_s  0'~r0 1'~r1
 	mov [tmp],rbx
 	mov rbx,r8
@@ -3388,16 +4148,11 @@ lb_355:
 	call _tak
 	push rbx
 	mov rbx,rax
-	jc lb_362
+	jc lb_214
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rbx
-	jc lb_366
-	btr r12,2
-	call inc_r
-	jmp lb_367
-lb_366:
 	bts r12,2
-lb_367:
 	pop rbx
 	push r8
 	push r9
@@ -3407,19 +4162,14 @@ lb_367:
 	pop r10
 	pop r9
 	pop r8
-	jmp lb_363
-lb_362:
+	jmp lb_215
+lb_214:
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rbx
-	jc lb_364
-	btr r12,2
-	call inc_r
-	jmp lb_365
-lb_364:
 	bts r12,2
-lb_365:
 	pop rbx
-lb_363:
+lb_215:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -3440,52 +4190,37 @@ not r14
 ; emt_ptn_set_ptn 0',0'
 	bt r12,0
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r8
-	jc lb_371
-	btr r14,0
-	call inc_r
-	jmp lb_372
-lb_371:
 	bts r14,0
-lb_372:
 ; emt_ptn_set_ptn 1',1'
 	bt r12,1
 ; emt_set_ptn 1'
+; unboxed
 	mov [st_vct_tmp+8*1],r9
-	jc lb_373
-	btr r14,1
-	call inc_r
-	jmp lb_374
-lb_373:
 	bts r14,1
-lb_374:
 ; emt_ptn_set_ptn 2',2'
 	bt r12,2
 ; emt_set_ptn 2'
+; unboxed
 	mov [st_vct_tmp+8*2],r10
-	jc lb_375
-	btr r14,2
-	call inc_r
-	jmp lb_376
-lb_375:
 	bts r14,2
-lb_376:
 ; ; emt_dec_ptn { 0' 1' 2' }
 	bt r12,2
-	jc lb_368
+	jc lb_220
 	mov rdi,r10
 	call dec_r
-lb_368:
+lb_220:
 	bt r12,1
-	jc lb_369
+	jc lb_221
 	mov rdi,r9
 	call dec_r
-lb_369:
+lb_221:
 	bt r12,0
-	jc lb_370
+	jc lb_222
 	mov rdi,r8
 	call dec_r
-lb_370:
+lb_222:
 ; push_s 
 	mov [tmp],rbx
 	push r12
@@ -3505,34 +4240,24 @@ lb_370:
 	call _tak
 	push rbx
 	mov rbx,rax
-	jc lb_377
+	jc lb_229
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_381
-	btr r12,0
-	call inc_r
-	jmp lb_382
-lb_381:
 	bts r12,0
-lb_382:
 	pop rbx
 	push r8
 	mov rdi,rbx
 	call dec_r
 	pop r8
-	jmp lb_378
-lb_377:
+	jmp lb_230
+lb_229:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_379
-	btr r12,0
-	call inc_r
-	jmp lb_380
-lb_379:
 	bts r12,0
-lb_380:
 	pop rbx
-lb_378:
+lb_230:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -3552,73 +4277,53 @@ lb_378:
 fact:
 ; 	|» 0'
 	jz _fact
-	jc emt_etr_c_lb_383
+	jc emt_etr_c_lb_8
 	push rbx
 	mov rbx,rdi
 	push rbx
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_446
-	btr r12,0
-	call inc_r
-	jmp lb_447
-lb_446:
 	bts r12,0
-lb_447:
 	pop rbx
-	push r10
+	push r8
 	mov rdi,rbx
 	call dec_r
-	pop r10
+	pop r8
 	pop rbx
 jmp _fact
-emt_etr_c_lb_383:
+emt_etr_c_lb_8:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_444
-	btr r12,0
-	call inc_r
-	jmp lb_445
-lb_444:
 	bts r12,0
-lb_445:
 	pop rbx
 _fact:
 ; 	$ 0' ⊢ ,1',2' : ,r64,r64
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_384
-	btr r12,1
-	call inc_r
-	jmp lb_385
-lb_384:
 	bts r12,1
-lb_385:
 ; emt_ptn_set_ptn 0',2'
 	bt r12,0
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,r8
-	jc lb_386
-	btr r12,2
-	call inc_r
-	jmp lb_387
-lb_386:
 	bts r12,2
-lb_387:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_388
+	jc lb_17
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_388:
+lb_17:
 ; 	» 0xr0 |~ 0' : r64
 	mov r11,0x0
 	mov r8,r11
@@ -3627,17 +4332,12 @@ lb_388:
 ; emt_ptn_set_ptn 0',3'
 	bt r12,0
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r8
-	jc lb_389
-	btr r12,3
-	call inc_r
-	jmp lb_390
-lb_389:
 	bts r12,3
-lb_390:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_391
+	jc lb_20
 	push r9
 	push r10
 	push r11
@@ -3646,72 +4346,69 @@ lb_390:
 	pop r11
 	pop r10
 	pop r9
-lb_391:
+lb_20:
 ; 	cmp { 1' 3' } ⊢ { 0' -2' } : { @[0].r2 ≃ ∐[@[0] @[0] ] @[0].r2 ≃ ∐[@[0] @[0] ] }
 ; emt_ptn_set_ptn { 1' 3' },{ 0' 4' }
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unknown
 	mov r8,r9
-	jc lb_397
+	jc lb_22
 	btr r12,0
 	call inc_r
-	jmp lb_398
-lb_397:
+	jmp lb_23
+lb_22:
 	bts r12,0
-lb_398:
+lb_23:
 ; emt_ptn_set_ptn 3',4'
 	bt r12,3
 ; emt_set_ptn 4'
+; unknown
 	mov rcx,r11
-	jc lb_399
+	jc lb_24
 	btr r12,4
 	call inc_r
-	jmp lb_400
-lb_399:
+	jmp lb_25
+lb_24:
 	bts r12,4
-lb_400:
+lb_25:
 ; ; emt_dec_ptn { 1' 3' }
 	bt r12,3
-	jc lb_395
+	jc lb_28
 	push r8
 	push r10
 	mov rdi,r11
 	call dec_r
 	pop r10
 	pop r8
-lb_395:
+lb_28:
 	bt r12,1
-	jc lb_396
+	jc lb_29
 	push r8
 	push r10
 	mov rdi,r9
 	call dec_r
 	pop r10
 	pop r8
-lb_396:
+lb_29:
 	cmp r8,rcx
 	mov r9,0
 	mov r11,0
 	setz r9b
 	mov r8,1
-	jle lb_392
+	jle lb_21
 	mov r11,r8
-lb_392:
+lb_21:
 	or r12,0b10
 	or r12,0b1000
 ; emt_ptn_set_ptn { 1' 3' },{ 0' -2' }
 ; emt_ptn_set_ptn 1',0'
 	bt r12,1
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,r9
-	jc lb_393
-	btr r12,0
-	call inc_r
-	jmp lb_394
-lb_393:
 	bts r12,0
-lb_394:
 ; emt_ptn_set_ptn 3',-2'
 	bt r12,3
 ; emt_set_ptn -2'
@@ -3723,27 +4420,27 @@ lb_394:
 	cmp r14,0
 	push rbx
 	mov rbx,r14
-	je lb_402
+	je lb_31
 	mov rbx,0
 	stc
-	jmp agl_401_1
-lb_402:
+	jmp agl_30_1
+lb_31:
 	mov rbx,1
 	stc
-	jmp agl_401_0
+	jmp agl_30_0
 ; 	∐ -2'
-agl_401_0:
-	jc lb_403
+agl_30_0:
+	jc lb_32
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
 	push r10
 	call dec_r
 	pop r10
-	jmp lb_404
-lb_403:
+	jmp lb_33
+lb_32:
 ; emt_set_ptn -2'
-lb_404:
+lb_33:
 	pop rbx
 	pop r14
 ; 	» 0xr1 |~ 0' : r64
@@ -3754,50 +4451,35 @@ lb_404:
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_405
-	btr r12,1
-	call inc_r
-	jmp lb_406
-lb_405:
 	bts r12,1
-lb_406:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_407
+	jc lb_36
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_407:
+lb_36:
 ; 	$ 2' ⊢ ,0',3' : ,r64,r64
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,r10
-	jc lb_408
-	btr r12,0
-	call inc_r
-	jmp lb_409
-lb_408:
 	bts r12,0
-lb_409:
 ; emt_ptn_set_ptn 2',3'
 	bt r12,2
 ; emt_set_ptn 3'
+; unboxed
 	mov r11,r10
-	jc lb_410
-	btr r12,3
-	call inc_r
-	jmp lb_411
-lb_410:
 	bts r12,3
-lb_411:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_412
+	jc lb_41
 	push r8
 	push r9
 	push r11
@@ -3806,61 +4488,58 @@ lb_411:
 	pop r11
 	pop r9
 	pop r8
-lb_412:
+lb_41:
 ; 	sub { 0' 1' } ⊢ 2' : r64
 ; emt_ptn_set_ptn { 0' 1' },{ 4' 5' }
 ; emt_ptn_set_ptn 0',4'
 	bt r12,0
 ; emt_set_ptn 4'
+; unknown
 	mov rcx,r8
-	jc lb_417
+	jc lb_42
 	btr r12,4
 	call inc_r
-	jmp lb_418
-lb_417:
+	jmp lb_43
+lb_42:
 	bts r12,4
-lb_418:
+lb_43:
 ; emt_ptn_set_ptn 1',5'
 	bt r12,1
 ; emt_set_ptn 5'
+; unknown
 	mov rdx,r9
-	jc lb_419
+	jc lb_44
 	btr r12,5
 	call inc_r
-	jmp lb_420
-lb_419:
+	jmp lb_45
+lb_44:
 	bts r12,5
-lb_420:
+lb_45:
 ; ; emt_dec_ptn { 0' 1' }
 	bt r12,1
-	jc lb_415
+	jc lb_48
 	push r10
 	push r11
 	mov rdi,r9
 	call dec_r
 	pop r11
 	pop r10
-lb_415:
+lb_48:
 	bt r12,0
-	jc lb_416
+	jc lb_49
 	push r10
 	push r11
 	mov rdi,r8
 	call dec_r
 	pop r11
 	pop r10
-lb_416:
+lb_49:
 	sub rcx,rdx
 	stc
 ; emt_set_ptn 2'
+; unboxed
 	mov r10,rcx
-	jc lb_413
-	btr r12,2
-	call inc_r
-	jmp lb_414
-lb_413:
 	bts r12,2
-lb_414:
 ; 	fact 2' ⊢ 0' : r64
 
 mov r14,0
@@ -3869,22 +4548,17 @@ not r14
 ; emt_ptn_set_ptn 2',0'
 	bt r12,2
 ; emt_set_ptn 0'
+; unboxed
 	mov [st_vct_tmp+8*0],r10
-	jc lb_422
-	btr r14,0
-	call inc_r
-	jmp lb_423
-lb_422:
 	bts r14,0
-lb_423:
 ; ; emt_dec_ptn 2'
 	bt r12,2
-	jc lb_421
+	jc lb_50
 	push r11
 	mov rdi,r10
 	call dec_r
 	pop r11
-lb_421:
+lb_50:
 ; push_s  3'~x2
 	mov [tmp],rbx
 	mov rbx,r11
@@ -3902,16 +4576,11 @@ lb_421:
 	call _fact
 	push rbx
 	mov rbx,rax
-	jc lb_424
+	jc lb_53
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_428
-	btr r12,0
-	call inc_r
-	jmp lb_429
-lb_428:
 	bts r12,0
-lb_429:
 	pop rbx
 	push r8
 	push r11
@@ -3919,19 +4588,14 @@ lb_429:
 	call dec_r
 	pop r11
 	pop r8
-	jmp lb_425
-lb_424:
+	jmp lb_54
+lb_53:
 ; emt_set_ptn 0'
+; unboxed
 	mov r8,rbx
-	jc lb_426
-	btr r12,0
-	call inc_r
-	jmp lb_427
-lb_426:
 	bts r12,0
-lb_427:
 	pop rbx
-lb_425:
+lb_54:
 ; pop_s
 	pop r12
 	mov [tmp],rbx
@@ -3946,40 +4610,42 @@ lb_425:
 ; emt_ptn_set_ptn 3',2'
 	bt r12,3
 ; emt_set_ptn 2'
+; unknown
 	mov r10,r11
-	jc lb_434
+	jc lb_59
 	btr r12,2
 	call inc_r
-	jmp lb_435
-lb_434:
+	jmp lb_60
+lb_59:
 	bts r12,2
-lb_435:
+lb_60:
 ; emt_ptn_set_ptn 0',4'
 	bt r12,0
 ; emt_set_ptn 4'
+; unknown
 	mov rcx,r8
-	jc lb_436
+	jc lb_61
 	btr r12,4
 	call inc_r
-	jmp lb_437
-lb_436:
+	jmp lb_62
+lb_61:
 	bts r12,4
-lb_437:
+lb_62:
 ; ; emt_dec_ptn { 3' 0' }
 	bt r12,0
-	jc lb_432
+	jc lb_65
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-lb_432:
+lb_65:
 	bt r12,3
-	jc lb_433
+	jc lb_66
 	push r9
 	mov rdi,r11
 	call dec_r
 	pop r9
-lb_433:
+lb_66:
 	push rbx
 	push r14
 	mov rbx,r10
@@ -3988,14 +4654,9 @@ lb_433:
 	stc
 	pop r14
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,rbx
-	jc lb_430
-	btr r12,1
-	call inc_r
-	jmp lb_431
-lb_430:
 	bts r12,1
-lb_431:
 	pop rbx
 ; 	∎ 1'
 ;clear 
@@ -4007,18 +4668,18 @@ lb_431:
 	pop rbx
 	ret
 ; 	∐ -2'
-agl_401_1:
-	jc lb_438
+agl_30_1:
+	jc lb_67
 	push rbx
 ; emt_set_ptn -2'
 	pop rbx
 	push r10
 	call dec_r
 	pop r10
-	jmp lb_439
-lb_438:
+	jmp lb_68
+lb_67:
 ; emt_set_ptn -2'
-lb_439:
+lb_68:
 	pop rbx
 	pop r14
 ; 	» 0xr1 |~ 0' : r64
@@ -4029,31 +4690,26 @@ lb_439:
 ; emt_ptn_set_ptn 0',1'
 	bt r12,0
 ; emt_set_ptn 1'
+; unboxed
 	mov r9,r8
-	jc lb_440
-	btr r12,1
-	call inc_r
-	jmp lb_441
-lb_440:
 	bts r12,1
-lb_441:
 ; ; emt_dec_ptn 0'
 	bt r12,0
-	jc lb_442
+	jc lb_71
 	push r9
 	push r10
 	mov rdi,r8
 	call dec_r
 	pop r10
 	pop r9
-lb_442:
+lb_71:
 ; 	∎ 1'
 ;clear  2'~x1
 	bt r12,2
-	jc clear_lb_443
+	jc clear_lb_72
 	mov rdi,r10
 	call dec_r
-clear_lb_443:
+clear_lb_72:
 	push rbx
 ; emt_get_ptn 1'
 	mov rbx,r9
