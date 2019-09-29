@@ -87,7 +87,36 @@
     tak { r0 r1 r2 } ⊢ rr
     ∎ rr
   ∇
-§ @.fib
+§ @.tak_i
+  |» { x y z }
+  $ x ⊢ x,x0
+  $ y ⊢ y,y0
+  cmp { x0 y0 } ⊢ { _ c }
+  ∠ c
+    ∐ _
+    ∎ z
+    ∐ _
+    $ x ⊢ x,x0
+    » 0r1 |~ {} ⊢ t
+    sub { x0 t } ⊢ xt
+    $ z ⊢ z,z0
+    $ y ⊢ y,y0
+    tak_i { xt y0 z0 } ⊢ r0
+
+    $ y ⊢ y,y0
+    » 0r1 |~ {} ⊢ t
+    sub { y0 t } ⊢ yt
+    $ z ⊢ z,z0
+    $ x ⊢ x,x0
+    tak_i { yt z0 x0 } ⊢ r1
+
+    » 0r1 |~ {} ⊢ t
+    sub { z t } ⊢ zt
+    tak_i { zt x y } ⊢ r2
+
+    tak_i { r0 r1 r2 } ⊢|
+  ∇
+ § @.fib
   |» x
   $ x ⊢ x,x0
   » 0r0 |~ {} ⊢ y
@@ -130,9 +159,9 @@
   ∎ y
 § test7
   |» {}
-  » 0r20 |~ {} ⊢ x
-  » 0r10 |~ {} ⊢ y
-  » 0r0 |~ {} ⊢ z
+  » 0r18 |~ {} ⊢ x
+  » 0r12 |~ {} ⊢ y
+  » 0r6 |~ {} ⊢ z
   tak { x y z } ⊢ r
   ∎ r
 § test5
@@ -148,6 +177,12 @@
   » 0r6 |~ {} ⊢ x
   fib x ⊢ y1
   ∎ { r y y0 y1 }
+§ test8
+  |» {}
+  » 0r20 |~ {} ⊢ x
+  » 0r10 |~ {} ⊢ y
+  » 0r0 |~ {} ⊢ z
+  tak_i { x y z } ⊢|
 [;
 § test1
   |» {}
