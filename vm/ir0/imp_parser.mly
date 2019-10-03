@@ -184,7 +184,7 @@ glb_etr_clique:
   | SLF DOT glb_etr_body_ir glb_etr_clique { [$3]@$4 }
   ;
 glb_etr_body_ir:
-  | NAM typ_def ir_code { ($1,fst $2,snd $2,$3) }
+  | NAM reg_ptn typ_def ir_lines { ($1,fst $3,snd $3,($2,ref $4)) }
   ;
 ir_code:
   | ir_etr ir_lines { ($1,ref $2) }
@@ -204,7 +204,7 @@ ir_lines:
   ;
 ir_line:
   | ROT reg_ptn SRC reg_ptn regs { IR_Id($2,[|$4|] |+| $5)  }
-  | ARR exp INI_IR reg_ptn SRC reg_ptn  { IR_Exp($2,$4,$6) }
+  | ARR exp INI_IR reg_ptn_src SRC reg_ptn  { IR_Exp($2,$4,$6) }
   | NAM reg_ptn SRC reg_ptn { IR_Glb_Call(Tkn.Etr_N $1,$2,$4) }
   | APP reg CMM reg_ptn SRC reg_ptn {
      IR_Call(($2,$4),$6) }
@@ -221,6 +221,33 @@ names_lb:
 ir_tkn:
   | INT  {}
   | NAM   {}
+  ;
+reg_src:
+  | NAM {
+     let v = newvar () in rm := ($1,v)::!rm; v }
+  ;
+reg_ptn_src:
+  | WC { Rcd_Ptn.R [||] }
+  | reg_src { Rcd_Ptn.A $1 }
+  | L_RCD reg_ptn_lst_src reg_ptn_op_src {
+    match $3 with
+    | None ->  Rcd_Ptn.R $2
+    | Some r -> Rcd_Ptn.Ro ($2,r) }
+  | L_RCD LB reg_ptn_lst_lb_src reg_ptn_op_src {
+    match $4 with
+    | None -> Rcd_Ptn.R_Lb $3
+    | Some r -> Rcd_Ptn.Ro_Lb ($3,r) }
+  ;
+reg_ptn_op_src:
+  | OP reg_src R_RCD  { Some $2 }
+  | R_RCD { None }
+reg_ptn_lst_src:
+  | { [||] }
+  | reg_ptn_src reg_ptn_lst_src { [|$1|] |+| $2 }
+  ;
+reg_ptn_lst_lb_src:
+  | { [||] }
+  | NAM LET reg_ptn_src reg_ptn_lst_lb_src { [|($1,$3)|] |+| $4 }
   ;
 reg:
   | WC { let v = newvar () in rm := ("_",v)::!rm; v}
@@ -263,7 +290,7 @@ regs:
 
 typ_def:
   | { (Var (newvar()),Var (newvar())) }
-  | CLN typ_top SRC typ_top { ($2,$4) }
+  | CLN typ SRC typ DOT { ($2,$4) }
   ;
 exp_top:
   | exp_lst { Rcd (Array.of_list $1) }

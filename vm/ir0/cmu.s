@@ -243,17 +243,15 @@ exc:
   mov rax,[rdi]
   btr rax,rsi
   mov [rdi],rax
-  lea rax,[rdi+8*rsi+8*1]
-  mov [rax],rdx
-  mov rax,[rax]
+  mov [rdi+8*rsi+8*1],rdx
+  mov rax,[rdi+8*rsi+8*1]
   ret
 exc_cf:
   mov rax,[rdi]
   bts rax,rsi
   mov [rdi],rax
-  lea rdi,[rdi+8*rsi+8*1]
-  mov rax,[rdi]
-  mov [rdi],rdx
+  mov QWORD rax,[rdi+8*rsi+8*1]
+  mov QWORD [rdi+8*rsi+8*1],rdx
   ret
 ; rdi ~ src-dta rsi~dst-str
 pnt_tkn:
