@@ -266,6 +266,7 @@ lb_16:
 ; 	∎ 1'
 	push rbx
 ; emt_get_ptn 1'
+	bt r12,1
 	jc lb_17
 ; unboxed
 	push rdi
@@ -277,9 +278,9 @@ lb_16:
 	jmp lb_18
 lb_17:
 ; boxed
-	mov rbx,r9
 	stc
 lb_18:
+	mov rbx,r9
 	push rbx
 ;clear 
 	pop rax
@@ -455,6 +456,7 @@ _f0:
 	mov rsi,0
 	call exc
 ; emt_get_ptn 3'
+	bt r12,3
 	jc lb_3
 ; unboxed
 	push rdi
@@ -466,9 +468,9 @@ _f0:
 	jmp lb_4
 lb_3:
 ; boxed
-	mov rcx,r11
 	stc
 lb_4:
+	mov rcx,r11
 	mov rdx,rcx
 	mov rdi,rbx
 	mov rsi,1
@@ -478,6 +480,24 @@ lb_4:
 	pop rbx
 	clc
 	and r12,~0b10000
+	call dbg
+	pushf
+	push r8
+	push r9
+	push r10
+	push r11
+	push rcx
+	mov rsi,str_ret
+	mov rdi,rcx
+	bt r12,4
+	call pnt
+	call pnt_str_ret
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	popf
 ; ; emt_dec_ptn { 2' 3' }
 ; unknown
 	bt r12,3
@@ -507,7 +527,8 @@ lb_5:
     push rdi
     push rsi
     push rdx
-    push r8
+    push rcx
+  push r8
     push r9
     push r10
     push r11
@@ -521,6 +542,7 @@ lb_5:
   pop r10
   pop r9
   pop r8
+  pop rcx
   pop rdx
   pop rsi
   pop rdi
@@ -537,7 +559,8 @@ lb_5:
     push rdi
     push rsi
     push rdx
-    push r8
+    push rcx
+  push r8
     push r9
     push r10
     push r11
@@ -550,6 +573,7 @@ lb_5:
   pop r10
   pop r9
   pop r8
+  pop rcx
   pop rdx
   pop rsi
   pop rdi
@@ -560,6 +584,7 @@ lb_5:
     push rdi
     push rsi
     push rdx
+  push rcx
     push r8
     push r9
     push r10
@@ -573,6 +598,7 @@ lb_5:
   pop r10
   pop r9
   pop r8
+pop rcx
   pop rdx
   pop rsi
   pop rdi
@@ -584,7 +610,8 @@ lb_5:
     push rdi
     push rsi
     push rdx
-    push r8
+    push rcx
+  push r8
     push r9
     push r10
     push r11
@@ -597,6 +624,7 @@ lb_5:
   pop r10
   pop r9
   pop r8
+  pop rcx
   pop rdx
   pop rsi
   pop rdi
@@ -612,7 +640,8 @@ lb_5:
     push rdi
     push rsi
     push rdx
-    push r8
+    push rcx
+  push r8
     push r9
     push r10
     push r11
@@ -626,6 +655,7 @@ lb_5:
   pop r10
   pop r9
   pop r8
+  pop rcx
   pop rdx
   pop rsi
   pop rdi
@@ -716,6 +746,7 @@ lb_9:
 ; 	∎ 3'
 	push rbx
 ; emt_get_ptn 3'
+	bt r12,3
 	jc lb_12
 ; unboxed
 	push rdi
@@ -727,9 +758,9 @@ lb_9:
 	jmp lb_13
 lb_12:
 ; boxed
-	mov rbx,r11
 	stc
 lb_13:
+	mov rbx,r11
 	push rbx
 ;clear  0'~_r22 1'~_r23
 	bt r12,0
