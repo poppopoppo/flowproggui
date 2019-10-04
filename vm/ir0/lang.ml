@@ -1900,13 +1900,13 @@ let push_reg s l =
        if Hashtbl.mem s i
        then
          let e0 =
-           "\tpush "^r^"\n" in
+           "\tpush QWORD "^r^"\n" in
          (e^e0,r::q)
        else (e,q))
     ("",[]) l
 let pop_reg q =
   List.fold_left
-    (fun e r -> e^"\tpop "^r^"\n" )
+    (fun e r -> e^"\tpop QWORD "^r^"\n" )
     "" q
 let emt_flg = true
 let rec emt m f =
@@ -1998,12 +1998,18 @@ and emt_get_ptn s tbv idx r dst =
             "\tstc\n"
           | Rcd _ ->
             (cmt c0)^
-            "\tpush rdi\n"^
-            "\tmov rdi,"^(idx i)^"\n"^
-            "\tcall inc_r\n"^
-            "\tmov "^(idx i)^",rdi\n"^
-            "\tpop rdi\n"^
-            "\tmov "^dst^","^(idx i)^"\n"^
+            ( if (idx i)="rdi"
+              then
+                "\tcall inc_r\n"^
+                "\tmov "^dst^",rdi\n"
+              else
+                "\tpush rdi\n"^
+                "\tmov rdi,"^(idx i)^"\n"^
+                "\tcall inc_r\n"^
+                "\tmov "^(idx i)^",rdi\n"^
+                "\tpop rdi\n"^
+                "\tmov "^dst^","^(idx i)^"\n"
+            )^
             "\tclc\n"
           | Var { contents = _ }
           | _ ->
@@ -2014,18 +2020,36 @@ and emt_get_ptn s tbv idx r dst =
             "\tjc "^l0^"\n"^
             (*"\tbtr "^tbv^","^(string_of_int i)^"\n"^ *)
             "; unboxed\n"^
-            "\tpush rdi\n"^
-            "\tmov rdi,"^(idx i)^"\n"^
-            "\tcall inc_r\n"^
-            "\tmov "^(idx i)^",rdi\n"^
-            "\tpop rdi\n"^
+            ( if (idx i)="rdi"
+              then
+                "\tcall inc_r\n"
+              else
+                "\tpush rdi\n"^
+                "\tmov rdi,"^(idx i)^"\n"^
+                "\tcall inc_r\n"^
+                "\tmov "^(idx i)^",rdi\n"^
+                "\tpop rdi\n"
+            )^
             "\tclc\n"^
             "\tjmp "^l1^"\n"^
             l0^":\n"^
             "; boxed\n"^
             "\tstc\n"^
             l1^":\n"^
-            "\tmov "^dst^","^(idx i)^"\n"
+            (if 8<i
+             then if dst!="rbx"
+               then
+                 "\tpush rbx\n"^
+                 "\tmov QWORD rbx,"^(idx i)^"\n"^
+                 "\tmov QWORD "^dst^",rbx\n"^
+                 "\tpop rbx\n"
+               else
+                 "\tpush r14\n"^
+                 "\tmov QWORD r14,"^(idx i)^"\n"^
+                 "\tmov QWORD "^dst^",r14\n"^
+                 "\tpop r14\n"
+             else
+               "\tmov "^dst^","^(idx i)^"\n")
         ) in
       tb (Var v)
     | R rs ->
@@ -2093,11 +2117,19 @@ and emt_set_ptn bt s tbv idx src r =
           | Rcd _ ->
             (cmt c0)^
             (cmt "boxed")^
-            "\tpush rdi\n"^
-            "\tmov rdi,"^src^"\n"^
-            "\tcall inc_r\n"^
-            "\tmov "^(idx i)^",rdi\n"^
-            "\tpop rdi\n"^
+            ( if (idx i)="rdi"
+              then
+                "\tmov rdi,"^src^"\n"^
+                "\tcall inc_r\n"^
+                "; test 2\n"^
+                "\tmov "^(idx i)^",rdi\n"
+              else
+                "\tpush rdi\n"^
+                "\tmov rdi,"^src^"\n"^
+                "\tcall inc_r\n"^
+                "; test 1\n"^
+                "\tmov "^(idx i)^",rdi\n"^
+                "\tpop rdi\n" )^
             (*"\tbtr "^tbv^","^(string_of_int i)^"\n"^ *)
             "\tand "^tbv^",~"^(emt_0b i)^"\n"
           | Var { contents = _ }
@@ -2107,11 +2139,18 @@ and emt_set_ptn bt s tbv idx src r =
             bt^
             "\tjc "^l0^"\n"^
             (*"\tbtr "^tbv^","^(string_of_int i)^"\n"^ *)
-            "\tpush rdi\n"^
-            "\tmov rdi,"^src^"\n"^
-            "\tcall inc_r\n"^
-            "\tmov "^(idx i)^",rdi\n"^
-            "\tpop rdi\n"^
+            ( if (idx i)="rdi"
+              then
+                "\tmov rdi,"^src^"\n"^
+                "\tcall inc_r\n"^
+                "\tmov "^(idx i)^",rdi\n"
+              else
+                "\tpush rdi\n"^
+                "\tmov rdi,"^src^"\n"^
+                "\tcall inc_r\n"^
+                "\tmov "^(idx i)^",rdi\n"^
+                "\tpop rdi\n"
+            )^
             "\tand "^tbv^",~"^(emt_0b i)^"\n"^
             "\tjmp "^l1^"\n"^
             l0^":\n"^
@@ -2445,8 +2484,9 @@ and pnt_reg s n =
   let ep = pop_reg l in
   "\tpushf\n"^
   e0^
-  "\tmov rsi,str_ret\n"^
   "\tmov rdi,"^(emt_reg_x86 n)^"\n"^
+  "\tmov rsi,str_ret\n"^
+  "; test 0\n"^
   "\tbt r12,"^(string_of_int n)^"\n"^
   "\tcall pnt\n"^
   "\tcall pnt_str_ret\n"^
@@ -2463,8 +2503,8 @@ and pnt_r_c _ r =
     push r9
     push r10
     push r11\n"^
-  "\tmov rsi,str_ret\n"^
   "\tmov rdi,"^r^"\n"^
+  "\tmov rsi,str_ret\n"^
   "\tstc\n"^
   "\tcall pnt\n"^
   "\tcall pnt_str_ret\n"^
@@ -2489,8 +2529,8 @@ and pnt_r_nc _ r =
     push r9
     push r10
     push r11\n"^
-  "\tmov rsi,str_ret\n"^
   "\tmov rdi,"^r^"\n"^
+  "\tmov rsi,str_ret\n"^
   "\tclc\n"^
   "\tcall pnt\n"^
   "\tcall pnt_str_ret\n"^
@@ -2513,8 +2553,8 @@ and emt_st s =
       (fun n _ e1 ->
          let e2 =
            e0^
-           "\tmov rsi,str_ret\n"^
            "\tmov rdi,"^(emt_reg_x86 n)^"\n"^
+           "\tmov rsi,str_ret\n"^
            "\tbt r12,"^(string_of_int n)^"\n"^
            "\tcall pnt\n"^
            "\tcall pnt_str_ret\n"^
@@ -2823,7 +2863,7 @@ and emt_ir ih s p =
         ( match n with
           | IR_Id(r,rs) ->
             let ir = idx_ptn s r in
-            let ep = emt_st s in
+            let _ = emt_st s in
             let c0 =
               cmt ("\t$ "^(emt_ptn ir)^" ⊢ "^(Array.fold_left (fun b r -> b^","^(pnt_ptn r)) "" rs)^
                    rtl^(Arr.fld_l (fun s r -> s^","^(print_ty r)) "" rs)) in
@@ -2837,7 +2877,7 @@ and emt_ir ih s p =
             let e1 =
               emt_dec_ptn s emt_reg_x86 ir in
             let _ = idx_csm_ptn s r in
-            c0^"\tcall dbg\n"^ep^e0^e1^"\tcall dbg\n"
+            c0^e0^e1
           | IR_Call((_,_),_) ->
             "; ir_call\n"
           | IR_Glb_Call(n,x,y) ->
@@ -3084,12 +3124,13 @@ and emt_ir ih s p =
                       (cmt "⟦")^
                       ep^e0^
                       "\tcall dbg\n"^
-                      ipx^ed^ipx^e1^
-                      "\tpush "^(emt_reg_x86 tx)^"\n"^
+                      (* ipx^ed^ipx^e1^ *)
+                      ipx^ed^e1^
+                      "\tpush QWORD "^(emt_reg_x86 tx)^"\n"^
                       "\tmov rdi,2\n"^
                       "\tcall mlc\n"^
                       "\tmov rdi,rax\n"^
-                      (pnt_r_nc s "rdi\n")^
+                      (* (pnt_r_nc s "rdi\n")^ *)
                       "\tmov rsi,0\n"^
                       "\tmov rdx,1\n"^
                       "\tstc\n"^
@@ -3097,15 +3138,12 @@ and emt_ir ih s p =
                       "\tmov rsi,1\n"^
                       "\tcall dbg\n"^
                       (pnt_r_nc s "rdi")^
-                      (pnt_r_c s "rdi")^
                       "\tpop rdx\n"^
-                      (pnt_r_nc s "rdx")^
                       "\tbt r12,"^(string_of_int tx)^"\n"^
                       "\tcall exc\n"^
                       "\tmov QWORD "^(emt_reg_x86 iy)^",rdi\n"^
                       "\tbtr r12,"^(string_of_int iy)^"\n"^
                       "\tcall dbg\n"^
-                      (pnt_r_nc s "rdi\n")^
                       (pnt_reg s iy)^
                       (pop_reg l) in
                     e2
@@ -3125,7 +3163,7 @@ and emt_ir ih s p =
                     let e2 =
                       (cmt "⟦⟧")^
                       e0^ed^e1^
-                      "\tpush "^(emt_reg_x86 tx)^"\n"^
+                      "\tpush QWORD "^(emt_reg_x86 tx)^"\n"^
                       "\tmov rdi,2\n"^
                       "\tcall mlc\n"^
                       "\tbtr r12,"^(string_of_int iy)^"\n"^
@@ -3210,10 +3248,10 @@ and emt_ir ih s p =
             let im = idx_min 0 s in
             let rm = emt_reg_x86 im in
             let e0 =
-              "\tmov "^rm^",0x"^(Int64.format "%x" x)^"\n"^
-              "\tmov "^(emt_reg_x86 ir)^","^rm^"\n"
+              "\tmov QWORD "^rm^",0x"^(Int64.format "%x" x)^"\n"^
+              "\tmov QWORD "^(emt_reg_x86 ir)^","^rm^"\n"
               (* "\tbts r12,"^(string_of_int ir)^"\n" *)
-              (* ^"\tor r12,"^(emt_0b ir)^"\n" *) in
+              ^"\tor r12,"^(emt_0b ir)^"\n" in
             c0^e0
           | IR_Exp(Ast.Atm(Ast.R2 x),_,Rcd_Ptn.A r) ->
             let b = if x then "1" else "0" in
@@ -3222,10 +3260,10 @@ and emt_ir ih s p =
             let im = idx_min 0 s in
             let rm = emt_reg_x86 im in
             let e0 =
-              "\tmov "^rm^",0x"^b^"\n"^
-              "\tmov "^(emt_reg ir)^","^rm^"\n"
+              "\tmov QWORD "^rm^",0x"^b^"\n"^
+              "\tmov QWORD "^(emt_reg ir)^","^rm^"\n"
               (* "\tbts r12,"^(string_of_int ir)^"\n" *)
-              (* ^"\tor r12,"^(emt_0b ir)^"\n" *) in
+              ^"\tor r12,"^(emt_0b ir)^"\n" in
             c0^e0
           | _ -> err "emt_etr 0" ) in
       s0^(emt_ir ih s p1) )
