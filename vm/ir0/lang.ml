@@ -1998,41 +1998,65 @@ and emt_get_ptn s tbv idx r dst =
             "\tstc\n"
           | Rcd _ ->
             (cmt c0)^
+            "\tpush rdi\n"^
+            "\tmov rdi,"^(idx i)^"\n"^
+            "\tcall inc_r\n"^
+            "\tmov "^(idx i)^",rdi\n"^
+            "\tpop rdi\n"^
             "\tmov "^dst^","^(idx i)^"\n"^
             "\tclc\n"
           | Var { contents = _ }
           | _ ->
+            let l0 = lb () in
+            let l1 = lb () in
             (cmt c0)^
+            "\tjc "^l0^"\n"^
+            (*"\tbtr "^tbv^","^(string_of_int i)^"\n"^ *)
+            "; unboxed\n"^
+            "\tpush rdi\n"^
+            "\tmov rdi,"^(idx i)^"\n"^
+            "\tcall inc_r\n"^
+            "\tmov "^(idx i)^",rdi\n"^
+            "\tpop rdi\n"^
+            "\tclc\n"^
+            "\tjmp "^l1^"\n"^
+            l0^":\n"^
+            "; boxed\n"^
             "\tmov "^dst^","^(idx i)^"\n"^
-            "\tbt "^tbv^","^(string_of_int i)^"\n"
+            "\tstc\n"^
+            l1^":\n"
         ) in
       tb (Var v)
     | R rs ->
       let l = Array.length rs in
       let (ea,p) = push_reg s x86_reg_lst in
       let e0 =
+        "\tpush rbx\n"^
+        "\tpush r14\n"^
         ea^
         "\tmov rdi,"^(string_of_int l)^"\n"^
         "\tcall mlc\n"^
-        "\tmov "^dst^",rax\n"^
+        "\tmov rbx,rax\n"^
         (pop_reg p) in
       let (e1,_) =
         Array.fold_left
           (fun (e1,i) r ->
              let (ep,l) = push_reg s ["rax";"rdi";"rsi";"rdx"] in
              let ei0 =
-               "\tpush "^dst^"\n"^
                (emt_get_ptn s tbv idx r dst)^
                ep^
                "\tmov rdx,"^dst^"\n"^
-               "\tpop rdi\n"^
+               "\tmov rdi,rbx\n"^
                "\tmov rsi,"^(string_of_int i)^"\n"^
                "\tcall exc\n"^
-               "\tmov "^dst^",rdi\n"^
                (pop_reg l) in
              (e1^ei0,i+1))
           (e0,0) rs in
-      (cmt c0)^e1^"\tclc\n"
+      (cmt c0)^
+      e1^
+      "\tmov "^dst^",rbx\n"^
+      "\tpop r14\n"^
+      "\tpop rbx\n"^"\tclc\n"
     | _ -> "; emt_get_ptn\n" )
 and cf_from_ty y =
   ( match y with
@@ -2070,8 +2094,8 @@ and emt_set_ptn bt s tbv idx src r =
             "\tpush rdi\n"^
             "\tmov rdi,"^src^"\n"^
             "\tcall inc_r\n"^
-            "\tpop rdi\n"^
             "\tmov "^(idx i)^",rdi\n"^
+            "\tpop rdi\n"^
             (*"\tbtr "^tbv^","^(string_of_int i)^"\n"^ *)
             "\tand "^tbv^",~"^(emt_0b i)^"\n"
           | Var { contents = _ }
@@ -2084,8 +2108,8 @@ and emt_set_ptn bt s tbv idx src r =
             "\tpush rdi\n"^
             "\tmov rdi,"^src^"\n"^
             "\tcall inc_r\n"^
-            "\tpop rdi\n"^
             "\tmov "^(idx i)^",rdi\n"^
+            "\tpop rdi\n"^
             "\tand "^tbv^",~"^(emt_0b i)^"\n"^
             "\tjmp "^l1^"\n"^
             l0^":\n"^
@@ -2414,6 +2438,86 @@ and rb r =
 and csn = "r15"
 and emt_agl = "; emt_agl\n"
 and lb () = "lb_"^(Sgn.print (sgn ()))
+and pnt_reg s n =
+  let (e0,l) = push_reg s x86_reg_lst in
+  let ep = pop_reg l in
+  "\tpushf\n"^
+  e0^
+  "\tmov rsi,str_ret\n"^
+  "\tmov rdi,"^(emt_reg_x86 n)^"\n"^
+  "\tbt r12,"^(string_of_int n)^"\n"^
+  "\tcall pnt\n"^
+  "\tcall pnt_str_ret\n"^
+  ep^
+  "\tpopf\n"
+and pnt_r_c _ r =
+  "\tpushf\n"^
+  " push rax
+    push rdi
+    push rsi
+    push rdx
+    push r8
+    push r9
+    push r10
+    push r11\n"^
+  "\tmov rsi,str_ret\n"^
+  "\tmov rdi,"^r^"\n"^
+  "\tstc\n"^
+  "\tcall pnt\n"^
+  "\tcall pnt_str_ret\n"^
+  " pop r11
+  pop r10
+  pop r9
+  pop r8
+  pop rdx
+  pop rsi
+  pop rdi
+  pop rax\n"^
+  "\tpopf\n"
+and pnt_r_nc _ r =
+  "\tpushf\n"^
+  " push rax
+    push rdi
+    push rsi
+    push rdx
+    push r8
+    push r9
+    push r10
+    push r11\n"^
+  "\tmov rsi,str_ret\n"^
+  "\tmov rdi,"^r^"\n"^
+  "\tclc\n"^
+  "\tcall pnt\n"^
+  "\tcall pnt_str_ret\n"^
+  " pop r11
+  pop r10
+  pop r9
+  pop r8
+  pop rdx
+  pop rsi
+  pop rdi
+  pop rax\n"^
+  "\tpopf\n"
+
+and emt_st s =
+  let (e0,l) = push_reg s x86_reg_lst in
+  let ep = pop_reg l in
+  let e1 =
+    Hashtbl.fold
+      (fun n _ e1 ->
+         let e2 =
+           e0^
+           "\tmov rsi,str_ret\n"^
+           "\tmov rdi,"^(emt_reg_x86 n)^"\n"^
+           "\tbt r12,"^(string_of_int n)^"\n"^
+           "\tcall pnt\n"^
+           "\tcall pnt_str_ret\n"^
+           ep in
+         e1^e2 )
+      s "" in
+  "\tpushf\n"^
+  e1^
+  "\tpopf\n"
 and emt_ir ih s p =
   pnt true ("enter emt_ir:"^(pnt_idx s)^","^(print_line p)^"\n");
   ( match p with
@@ -2423,10 +2527,11 @@ and emt_ir ih s p =
           let i0 = idx_csm_ptn s r in
           let c0 = cmt ("\t∎ "^(emt_ptn i0)) in
           c0^
-          (clear emt_reg_x86 s)^
           "\tpush rbx\n"^
           (emt_get_ptn s0 "r12" emt_reg_x86 i0 "rbx")^
-          "\tmov rax,rbx\n"^
+          "\tpush rbx\n"^
+          (clear emt_reg_x86 s)^
+          "\tpop rax\n"^
           "\tpop rbx\n"^
           "\tret\n"
         with _ -> err "emt_ir 9\n" )
@@ -2710,6 +2815,7 @@ and emt_ir ih s p =
         ( match n with
           | IR_Id(r,rs) ->
             let ir = idx_ptn s r in
+            let ep = emt_st s in
             let c0 =
               cmt ("\t$ "^(emt_ptn ir)^" ⊢ "^(Array.fold_left (fun b r -> b^","^(pnt_ptn r)) "" rs)^
                    rtl^(Arr.fld_l (fun s r -> s^","^(print_ty r)) "" rs)) in
@@ -2723,7 +2829,7 @@ and emt_ir ih s p =
             let e1 =
               emt_dec_ptn s emt_reg_x86 ir in
             let _ = idx_csm_ptn s r in
-            c0^e0^e1
+            c0^ep^e0^e1
           | IR_Call((_,_),_) ->
             "; ir_call\n"
           | IR_Glb_Call(n,x,y) ->
@@ -2954,29 +3060,43 @@ and emt_ir ih s p =
                 let open Rcd_Ptn in
                 ( match y with
                   | A v ->
+                    let ep = emt_st s in
                     let ix = idx_ptn s x in
                     let vx = (ref(Ln(inst_ptn 0 x))) in
                     let e0 = emt_ptn_crt_ptn s "r12" emt_reg_x86 ix (A vx) in
+                    let ivx = idx s vx in
+                    let _ = (pnt_reg s ivx) in
+                    let ed = emt_dec_ptn s emt_reg_x86 ix in
                     let _ = idx_csm_ptn s x in
                     let tx = idx_csm s vx in
                     let (e1,l) = push_reg s x86_reg_lst in
                     let iy = idx_crt s v in
                     let e2 =
                       (cmt "⟦")^
-                      e0^e1^
+                      ep^e0^ed^e1^
                       "\tpush "^(emt_reg_x86 tx)^"\n"^
                       "\tmov rdi,2\n"^
                       "\tcall mlc\n"^
                       "\tmov rdi,rax\n"^
+                      (pnt_r_nc s "rdi\n")^
                       "\tmov rsi,0\n"^
                       "\tmov rdx,1\n"^
                       "\tstc\n"^
                       "\tcall exc\n"^
                       "\tmov rsi,1\n"^
+                      "\tcall dbg\n"^
+                      (pnt_r_nc s "rdi")^
+                      (pnt_r_c s "rdi")^
                       "\tpop rdx\n"^
+                      (pnt_r_nc s "rdx")^
                       "\tbt r12,"^(string_of_int tx)^"\n"^
                       "\tcall exc\n"^
                       "\tmov QWORD "^(emt_reg_x86 iy)^",rdi\n"^
+                      "\tbtr r12,"^(string_of_int iy)^"\n"^
+                      "\tcall dbg\n"^
+                      (pnt_r_nc s "rdi\n")^
+
+                      (pnt_reg s iy)^
                       (pop_reg l) in
                     e2
                   |_ -> err "emt_ir ⟦⟧" )
@@ -2987,13 +3107,14 @@ and emt_ir ih s p =
                     let ix = idx_ptn s x in
                     let vx = ref(Ln(inst_ptn 0 x)) in
                     let e0 = emt_ptn_crt_ptn s "r12" emt_reg_x86 ix (A vx) in
+                    let ed = emt_dec_ptn s emt_reg_x86 ix in
                     let _ = idx_csm_ptn s x in
                     let tx = idx_csm s vx in
                     let (e1,l) = push_reg s x86_reg_lst in
                     let iy = idx_crt s v in
                     let e2 =
                       (cmt "⟦⟧")^
-                      e0^e1^
+                      e0^ed^e1^
                       "\tpush "^(emt_reg_x86 tx)^"\n"^
                       "\tmov rdi,2\n"^
                       "\tcall mlc\n"^

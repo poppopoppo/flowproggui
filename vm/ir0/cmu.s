@@ -243,8 +243,8 @@ exc:
   mov rax,[rdi]
   btr rax,rsi
   mov [rdi],rax
-  mov [rdi+8*rsi+8*1],rdx
-  mov rax,[rdi+8*rsi+8*1]
+  mov QWORD [rdi+8*rsi+8*1],rdx
+  mov QWORD rax,[rdi+8*rsi+8*1]
   ret
 exc_cf:
   mov rax,[rdi]
@@ -274,12 +274,10 @@ pnt_end:
   mov rax,0
   call sprintf
   pop rsi
-  lea rsi,[rsi+1*rax]
+  add rsi,rax
   mov rax,rsi
   ret
 pnt_r_p:
-  push rdi
-  pop rdi
   mov r10,[rdi]
   shr r10,48
   push rdi
@@ -298,14 +296,16 @@ pnt_r_p:
   pop rdx
   pop rsi
   pop rdi
-  lea rsi,[rsi+1*rax]
+  ;lea rsi,[rsi+1*rax]
+  add rsi,rax
   call pnt_str_ret
   mov r9,[rdi]
   mov r11,r9
   shl r9,16
   shr r9,48
   ; prepared for loop
-  lea rdi,[rdi+8*1]
+  ;lea rdi,[rdi+8*1]
+  add rdi,8
 pnt_r_p_lp:
   cmp r9,0
   je pnt_r_p_end
@@ -325,7 +325,8 @@ pnt_r_p_lp:
   pop r10
   pop r9
   mov rsi,rax
-  lea rdi,[rdi+8*1]
+  ;lea rdi,[rdi+8*1]
+  add rdi,8
   jmp pnt_r_p_lp
 pnt_r_p_lp_nxt:
   push rdi
@@ -347,7 +348,8 @@ pnt_r_p_lp_nxt:
   pop rsi
   pop rdi
   lea rsi,[rsi+1*rax]
-  lea rdi,[rdi+8*1]
+  ;lea rdi,[rdi+8*1]
+  add rdi,8
   jmp pnt_r_p_lp
 pnt_r_p_end:
   push rsi
