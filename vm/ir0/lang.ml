@@ -2530,11 +2530,13 @@ and emt_ir ih s p =
     | Ret r ->
       ( try
           let s0 = Hashtbl.copy s in
+          let ed = emt_dec_ptn s0 emt_reg_x86 (idx_ptn s0 r) in
           let i0 = idx_csm_ptn s r in
           let c0 = cmt ("\t∎ "^(emt_ptn i0)) in
           c0^
           "\tpush rbx\n"^
           (emt_get_ptn s0 "r12" emt_reg_x86 i0 "rbx")^
+          ed^
           "\tpush rbx\n"^
           (clear emt_reg_x86 s)^
           "\tpop rax\n"^
@@ -2835,7 +2837,7 @@ and emt_ir ih s p =
             let e1 =
               emt_dec_ptn s emt_reg_x86 ir in
             let _ = idx_csm_ptn s r in
-            c0^ep^e0^e1
+            c0^"\tcall dbg\n"^ep^e0^e1^"\tcall dbg\n"
           | IR_Call((_,_),_) ->
             "; ir_call\n"
           | IR_Glb_Call(n,x,y) ->
@@ -3073,6 +3075,7 @@ and emt_ir ih s p =
                     let ivx = idx s vx in
                     let ipx = (pnt_reg s ivx) in
                     let ed = emt_dec_ptn s emt_reg_x86 ix in
+                    let _ = emt_dec_ptn s emt_reg_x86 (A ivx) in
                     let _ = idx_csm_ptn s x in
                     let tx = idx_csm s vx in
                     let (e1,l) = push_reg s x86_reg_lst in
@@ -3081,7 +3084,7 @@ and emt_ir ih s p =
                       (cmt "⟦")^
                       ep^e0^
                       "\tcall dbg\n"^
-                      ipx^ed^e1^
+                      ipx^ed^ipx^e1^
                       "\tpush "^(emt_reg_x86 tx)^"\n"^
                       "\tmov rdi,2\n"^
                       "\tcall mlc\n"^
@@ -3103,11 +3106,10 @@ and emt_ir ih s p =
                       "\tbtr r12,"^(string_of_int iy)^"\n"^
                       "\tcall dbg\n"^
                       (pnt_r_nc s "rdi\n")^
-
                       (pnt_reg s iy)^
                       (pop_reg l) in
                     e2
-                  |_ -> err "emt_ir ⟦⟧" )
+                  |_ -> err "emt_ir ⟦" )
               | Tkn.Etr_N "⟦⟧" ->
                 let open Rcd_Ptn in
                 ( match y with
