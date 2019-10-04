@@ -40,6 +40,8 @@ dbg:
   push rdi
   push rsi
   push rdx
+  push rcx
+  push r8
   push r9
   push r10
   push r11
@@ -50,6 +52,8 @@ dbg:
   pop r11
   pop r10
   pop r9
+  pop r8
+  pop rcx
   pop rdx
   pop rsi
   pop rdi
@@ -60,6 +64,8 @@ pnt_str_ret:
   push rdi
   push rsi
   push rdx
+  push rcx
+  push r8
   push r9
   push r10
   push r11
@@ -75,6 +81,8 @@ pnt_str_ret:
   pop r11
   pop r10
   pop r9
+  pop r8
+  pop rcx
   pop rdx
   pop rsi
   pop rdi
