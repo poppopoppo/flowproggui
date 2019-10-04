@@ -37,6 +37,7 @@ emt_etr_c_lb_0:
 	pop rbx
 _f2:
 ; 	$ {  } ⊢ ,_r33,_r34 : ,{ },{ }
+	call dbg
 	pushf
 	popf
 ; emt_ptn_crt_ptn {  },_r33
@@ -66,10 +67,12 @@ _f2:
 	clc
 	and r12,~0b10
 ; ; emt_dec_ptn {  }
+	call dbg
 ; 	» 0xrff |~ 2' : r64
 	mov r11,0xff
 	mov r10,r11
 ; 	$ { 2' {  } } ⊢ ,v0 : ,{ r64 { } }
+	call dbg
 	pushf
 	push r8
 	push r9
@@ -152,6 +155,7 @@ _f2:
 	and r12,~0b1000
 ; ; emt_dec_ptn { 2' {  } }
 ; unboxed
+	call dbg
 ; 	∎ 3'
 	push rbx
 ; emt_get_ptn 3'
@@ -162,20 +166,30 @@ _f2:
 	pop rdi
 	mov rbx,r11
 	clc
+; ; emt_dec_ptn 3'
+; boxed
+	push r8
+	push r9
+	push r11
+	mov rdi,r11
+	call dec_r
+	pop r11
+	pop r9
+	pop r8
 	push rbx
 ;clear  0'~_r33 1'~_r34
 	bt r12,0
-	jc clear_lb_20
+	jc clear_lb_24
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-clear_lb_20:
+clear_lb_24:
 	bt r12,1
-	jc clear_lb_21
+	jc clear_lb_25
 	mov rdi,r9
 	call dec_r
-clear_lb_21:
+clear_lb_25:
 	pop rax
 	pop rbx
 	ret
@@ -227,6 +241,7 @@ _f3:
 	call exc
 	mov QWORD r8,rdi
 ; 	$ 0' ⊢ ,l0 : ,@[0].(⟦⟧)◂(t31'(0)) ≃ ∐[{ } { t31'(0) @[0] } ]
+	call dbg
 	pushf
 	push r8
 	mov rsi,str_ret
@@ -240,34 +255,35 @@ _f3:
 ; emt_set_ptn 1'
 ; unknown
 	bt r12,0
-	jc lb_14
+	jc lb_16
 	push rdi
 	mov rdi,r8
 	call inc_r
 	mov r9,rdi
 	pop rdi
 	and r12,~0b10
-	jmp lb_15
-lb_14:
+	jmp lb_17
+lb_16:
 	mov r9,r8
 	or r12,0b10
-lb_15:
+lb_17:
 ; ; emt_dec_ptn 0'
 ; unknown
 	bt r12,0
-	jc lb_16
+	jc lb_18
 	push r8
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
 	pop r8
-lb_16:
+lb_18:
+	call dbg
 ; 	∎ 1'
 	push rbx
 ; emt_get_ptn 1'
 	bt r12,1
-	jc lb_17
+	jc lb_20
 ; unboxed
 	push rdi
 	mov rdi,r9
@@ -275,12 +291,21 @@ lb_16:
 	mov r9,rdi
 	pop rdi
 	clc
-	jmp lb_18
-lb_17:
+	jmp lb_21
+lb_20:
 ; boxed
 	stc
-lb_18:
+lb_21:
 	mov rbx,r9
+; ; emt_dec_ptn 1'
+; unknown
+	bt r12,1
+	jc lb_19
+	push r9
+	mov rdi,r9
+	call dec_r
+	pop r9
+lb_19:
 	push rbx
 ;clear 
 	pop rax
@@ -306,6 +331,7 @@ emt_etr_c_lb_2:
 	pop rbx
 _f0:
 ; 	$ {  } ⊢ ,_r22,_r23 : ,{ },{ }
+	call dbg
 	pushf
 	popf
 ; emt_ptn_crt_ptn {  },_r22
@@ -335,6 +361,7 @@ _f0:
 	clc
 	and r12,~0b10
 ; ; emt_dec_ptn {  }
+	call dbg
 ; 	» 0xrff |~ 2' : r64
 	mov r11,0xff
 	mov r10,r11
@@ -516,6 +543,23 @@ lb_4:
 	pop r8
 lb_5:
 ; unboxed
+	pushf
+	push r8
+	push r9
+	push r10
+	push r11
+	push rcx
+	mov rsi,str_ret
+	mov rdi,rcx
+	bt r12,4
+	call pnt
+	call pnt_str_ret
+	pop rcx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	popf
 	push r8
 	push r9
 	push rcx
@@ -677,6 +721,7 @@ pop rcx
 	pop r9
 	pop r8
 ; 	$ 2' ⊢ ,l0 : ,@[0].(⟦⟧)◂(r64) ≃ ∐[{ } { r64 @[0] } ]
+	call dbg
 	pushf
 	push r8
 	push r9
@@ -716,22 +761,22 @@ pop rcx
 ; emt_set_ptn 3'
 ; unknown
 	bt r12,2
-	jc lb_7
+	jc lb_8
 	push rdi
 	mov rdi,r10
 	call inc_r
 	mov r11,rdi
 	pop rdi
 	and r12,~0b1000
-	jmp lb_8
-lb_7:
+	jmp lb_9
+lb_8:
 	mov r11,r10
 	or r12,0b1000
-lb_8:
+lb_9:
 ; ; emt_dec_ptn 2'
 ; unknown
 	bt r12,2
-	jc lb_9
+	jc lb_10
 	push r8
 	push r9
 	push r10
@@ -742,12 +787,13 @@ lb_8:
 	pop r10
 	pop r9
 	pop r8
-lb_9:
+lb_10:
+	call dbg
 ; 	∎ 3'
 	push rbx
 ; emt_get_ptn 3'
 	bt r12,3
-	jc lb_12
+	jc lb_14
 ; unboxed
 	push rdi
 	mov rdi,r11
@@ -755,26 +801,39 @@ lb_9:
 	mov r11,rdi
 	pop rdi
 	clc
-	jmp lb_13
-lb_12:
+	jmp lb_15
+lb_14:
 ; boxed
 	stc
-lb_13:
+lb_15:
 	mov rbx,r11
+; ; emt_dec_ptn 3'
+; unknown
+	bt r12,3
+	jc lb_11
+	push r8
+	push r9
+	push r11
+	mov rdi,r11
+	call dec_r
+	pop r11
+	pop r9
+	pop r8
+lb_11:
 	push rbx
 ;clear  0'~_r22 1'~_r23
 	bt r12,0
-	jc clear_lb_10
+	jc clear_lb_12
 	push r9
 	mov rdi,r8
 	call dec_r
 	pop r9
-clear_lb_10:
+clear_lb_12:
 	bt r12,1
-	jc clear_lb_11
+	jc clear_lb_13
 	mov rdi,r9
 	call dec_r
-clear_lb_11:
+clear_lb_13:
 	pop rax
 	pop rbx
 	ret

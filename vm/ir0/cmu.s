@@ -306,7 +306,7 @@ pnt_r_p:
   pop rdi
   ;lea rsi,[rsi+1*rax]
   add rsi,rax
-  call pnt_str_ret
+  ;call pnt_str_ret
   mov r9,[rdi]
   mov r11,r9
   shl r9,16
