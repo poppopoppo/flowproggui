@@ -30,6 +30,7 @@ section .data
   blk_l: db "{| ",0
   blk_r: db "|} ",0
   spc: db " ",0
+  fmt_s8: db `\"%s\"`, 0
 
 section .text
 global _start               ; _startを指名
@@ -94,17 +95,20 @@ _end:
   int 0x80
 
 mlc:
+  ; add heap counter
   add r13,rdi
   add r13,1
-  xor rax,rax
-  add rax,1
-  shl rax,16
+  ;
+  mov rax,0x00010000
+  ;xor rax,rax
+  ;add rax,1
+  ;shl rax,16
   add rax,rdi
-  shl rax,16
-  shl rax,16
+  shl rax,32
   add rax,0xffff
   add rdi,1
-  imul rdi,8
+  ;imul rdi,8
+  shr rdi,3
   push rax
   mov rax,0
   call malloc
@@ -282,11 +286,14 @@ pnt_end:
   mov rax,0
   call sprintf
   pop rsi
-  add rsi,rax
-  mov rax,rsi
+  ;add rsi,rax
+  ;mov rax,rsi
+  add rax,rsi
   ret
 pnt_r_p:
   mov r10,[rdi]
+  bt r10,16
+  jc pnt_opq
   shr r10,48
   push rdi
   push rsi
@@ -371,4 +378,12 @@ pnt_r_p_end:
   pop rsi
   lea rsi,[rsi+1*rdx]
   mov rax,rsi
+  ret
+pnt_opq:
+  mov rdx,rdi
+  add rdx,8
+  mov rdi,rsi
+  mov rsi,fmt_s8
+  mov rax,0
+  call sprintf
   ret

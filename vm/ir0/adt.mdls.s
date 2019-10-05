@@ -11,15 +11,15 @@ main:
 	mov rdi,rax
 	clc
 	cmp rdi,0
-	call f0
+	call f1
 	mov rdi,rax
 	mov rsi,str_ret
 	call pnt
 	call pnt_str_ret
 	jmp _end
-f2:
+f1:
 ; 	|» {  }
-	jz _f2
+	jz _f1
 	jc emt_etr_c_lb_0
 	push rbx
 	mov rbx,rdi
@@ -29,15 +29,110 @@ f2:
 	mov rdi,rbx
 	call dec_r
 	pop rbx
-jmp _f2
+jmp _f1
 emt_etr_c_lb_0:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
 	pop rbx
+_f1:
+; 	» "AbC dE F" |~ 0' : ℙ
+	mov rdi,2
+	call mlc
+	mov rdi,rax
+	mov rsi,[cst_stg_71+8*1]
+	mov [rdi+8*2],rsi
+	mov rsi,[cst_stg_71+8*0]
+	mov [rdi+8*1],rsi
+	mov rdx,[rdi]
+	and rdx,~0xFFFF
+	or rdx,0x10000
+	add rdx,8
+	mov [rdi],rdx
+	mov QWORD r9,rdi
+	mov QWORD r8,r9
+	and r12,~0b1
+; 	$ 0' ⊢ ,s0 : ,ℙ
+; emt_ptn_crt_ptn 0',s0
+; emt_set_ptn 1'
+; unknown
+	bt r12,0
+	jc lb_72
+	push rdi
+	mov rdi,r8
+	call inc_r
+	mov r9,rdi
+	pop rdi
+	and r12,~0b10
+	jmp lb_73
+lb_72:
+	mov r9,r8
+	or r12,0b10
+lb_73:
+; ; emt_dec_ptn 0'
+; unknown
+	bt r12,0
+	jc lb_74
+	push QWORD r8
+	push QWORD r9
+	mov rdi,r8
+	call dec_r
+	pop QWORD r9
+	pop QWORD r8
+lb_74:
+; 	∎ 1'
+	push rbx
+; emt_get_ptn 1'
+	bt r12,1
+	jc lb_76
+; boxed
+	push rdi
+	mov rdi,r9
+	call inc_r
+	mov r9,rdi
+	pop rdi
+	clc
+	jmp lb_77
+lb_76:
+; unboxed
+	stc
+lb_77:
+	mov rbx,r9
+; ; emt_dec_ptn 1'
+; unknown
+	bt r12,1
+	jc lb_75
+	push QWORD r9
+	mov rdi,r9
+	call dec_r
+	pop QWORD r9
+lb_75:
+	push rbx
+;clear 
+	pop rax
+	pop rbx
+	ret
+f2:
+; 	|» {  }
+	jz _f2
+	jc emt_etr_c_lb_1
+	push rbx
+	mov rbx,rdi
+	push rbx
+; emt_set_ptn {  }
+	pop rbx
+	mov rdi,rbx
+	call dec_r
+	pop rbx
+jmp _f2
+emt_etr_c_lb_1:
+	push rbx
+	mov rbx,rdi
+; emt_set_ptn {  }
+	pop rbx
 _f2:
-; 	$ {  } ⊢ ,_r53,_r54 : ,{ },{ }
-; emt_ptn_crt_ptn {  },_r53
+; 	$ {  } ⊢ ,_r57,_r58 : ,{ },{ }
+; emt_ptn_crt_ptn {  },_r57
 ; emt_get_ptn {  }
 	push rbx
 	push r14
@@ -49,7 +144,7 @@ _f2:
 	pop rbx
 	clc
 	and r12,~0b1
-; emt_ptn_crt_ptn {  },_r54
+; emt_ptn_crt_ptn {  },_r58
 ; emt_get_ptn {  }
 	push rbx
 	push r14
@@ -137,26 +232,26 @@ _f2:
 	pop QWORD r9
 	pop QWORD r8
 	push rbx
-;clear  0'~_r53 1'~_r54
+;clear  0'~_r57 1'~_r58
 	bt r12,0
-	jc clear_lb_68
+	jc clear_lb_69
 	push QWORD r9
 	mov rdi,r8
 	call dec_r
 	pop QWORD r9
-clear_lb_68:
+clear_lb_69:
 	bt r12,1
-	jc clear_lb_69
+	jc clear_lb_70
 	mov rdi,r9
 	call dec_r
-clear_lb_69:
+clear_lb_70:
 	pop rax
 	pop rbx
 	ret
 f3:
 ; 	|» {  }
 	jz _f3
-	jc emt_etr_c_lb_1
+	jc emt_etr_c_lb_2
 	push rbx
 	mov rbx,rdi
 	push rbx
@@ -166,14 +261,14 @@ f3:
 	call dec_r
 	pop rbx
 jmp _f3
-emt_etr_c_lb_1:
+emt_etr_c_lb_2:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
 	pop rbx
 _f3:
 ; ⟦⟧
-; emt_ptn_crt_ptn {  },_r63
+; emt_ptn_crt_ptn {  },_r68
 ; emt_get_ptn {  }
 	push rbx
 	push r14
@@ -200,39 +295,39 @@ _f3:
 	clc
 	call exc
 	mov QWORD r8,rdi
-; 	$ 0' ⊢ ,l0 : ,@[0].(⟦⟧)◂(t51'(0)) ≃ ∐[{ } { t51'(0) @[0] } ]
+; 	$ 0' ⊢ ,l0 : ,@[0].(⟦⟧)◂(t55'(0)) ≃ ∐[{ } { t55'(0) @[0] } ]
 ; emt_ptn_crt_ptn 0',l0
 ; emt_set_ptn 1'
 ; unknown
 	bt r12,0
-	jc lb_60
+	jc lb_61
 	push rdi
 	mov rdi,r8
 	call inc_r
 	mov r9,rdi
 	pop rdi
 	and r12,~0b10
-	jmp lb_61
-lb_60:
+	jmp lb_62
+lb_61:
 	mov r9,r8
 	or r12,0b10
-lb_61:
+lb_62:
 ; ; emt_dec_ptn 0'
 ; unknown
 	bt r12,0
-	jc lb_62
+	jc lb_63
 	push QWORD r8
 	push QWORD r9
 	mov rdi,r8
 	call dec_r
 	pop QWORD r9
 	pop QWORD r8
-lb_62:
+lb_63:
 ; 	∎ 1'
 	push rbx
 ; emt_get_ptn 1'
 	bt r12,1
-	jc lb_64
+	jc lb_65
 ; boxed
 	push rdi
 	mov rdi,r9
@@ -240,21 +335,21 @@ lb_62:
 	mov r9,rdi
 	pop rdi
 	clc
-	jmp lb_65
-lb_64:
+	jmp lb_66
+lb_65:
 ; unboxed
 	stc
-lb_65:
+lb_66:
 	mov rbx,r9
 ; ; emt_dec_ptn 1'
 ; unknown
 	bt r12,1
-	jc lb_63
+	jc lb_64
 	push QWORD r9
 	mov rdi,r9
 	call dec_r
 	pop QWORD r9
-lb_63:
+lb_64:
 	push rbx
 ;clear 
 	pop rax
@@ -263,7 +358,7 @@ lb_63:
 f0:
 ; 	|» {  }
 	jz _f0
-	jc emt_etr_c_lb_2
+	jc emt_etr_c_lb_3
 	push rbx
 	mov rbx,rdi
 	push rbx
@@ -273,14 +368,14 @@ f0:
 	call dec_r
 	pop rbx
 jmp _f0
-emt_etr_c_lb_2:
+emt_etr_c_lb_3:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
 	pop rbx
 _f0:
-; 	$ {  } ⊢ ,_r22,_r23 : ,{ },{ }
-; emt_ptn_crt_ptn {  },_r22
+; 	$ {  } ⊢ ,_r26,_r27 : ,{ },{ }
+; emt_ptn_crt_ptn {  },_r26
 ; emt_get_ptn {  }
 	push rbx
 	push r14
@@ -292,7 +387,7 @@ _f0:
 	pop rbx
 	clc
 	and r12,~0b1
-; emt_ptn_crt_ptn {  },_r23
+; emt_ptn_crt_ptn {  },_r27
 ; emt_get_ptn {  }
 	push rbx
 	push r14
@@ -311,8 +406,8 @@ _f0:
 	mov QWORD r11,0xff
 	mov QWORD r10,r11
 	or r12,0b100
-; 	$ 1' ⊢ ,_r26,_r27 : ,{ },{ }
-; emt_ptn_crt_ptn 1',_r26
+; 	$ 1' ⊢ ,_r30,_r31 : ,{ },{ }
+; emt_ptn_crt_ptn 1',_r30
 ; emt_set_ptn 3'
 ; boxed
 	push rdi
@@ -322,7 +417,7 @@ _f0:
 	mov r11,rdi
 	pop rdi
 	and r12,~0b1000
-; emt_ptn_crt_ptn 1',_r27
+; emt_ptn_crt_ptn 1',_r31
 ; emt_set_ptn 4'
 ; boxed
 	push rdi
@@ -350,8 +445,8 @@ _f0:
 	mov QWORD rdx,0xaa
 	mov QWORD r9,rdx
 	or r12,0b10
-; 	$ 4' ⊢ ,_r30,_r31 : ,{ },{ }
-; emt_ptn_crt_ptn 4',_r30
+; 	$ 4' ⊢ ,_r34,_r35 : ,{ },{ }
+; emt_ptn_crt_ptn 4',_r34
 ; emt_set_ptn 5'
 ; boxed
 	push rdi
@@ -361,7 +456,7 @@ _f0:
 	mov rdx,rdi
 	pop rdi
 	and r12,~0b100000
-; emt_ptn_crt_ptn 4',_r31
+; emt_ptn_crt_ptn 4',_r35
 ; emt_set_ptn 6'
 ; boxed
 	push rdi
@@ -393,8 +488,8 @@ _f0:
 	mov QWORD rdi,0x4
 	mov QWORD rcx,rdi
 	or r12,0b10000
-; 	$ 6' ⊢ ,_r34,_r35 : ,{ },{ }
-; emt_ptn_crt_ptn 6',_r34
+; 	$ 6' ⊢ ,_r38,_r39 : ,{ },{ }
+; emt_ptn_crt_ptn 6',_r38
 ; emt_set_ptn 7'
 ; boxed
 	mov rdi,rsi
@@ -402,7 +497,7 @@ _f0:
 ; test 2
 	mov rdi,rdi
 	and r12,~0b10000000
-; emt_ptn_crt_ptn 6',_r35
+; emt_ptn_crt_ptn 6',_r39
 ; emt_set_ptn 8'
 ; boxed
 	push rdi
@@ -438,8 +533,8 @@ _f0:
 	mov QWORD [st_vct+8*0],0x5
 	mov QWORD rsi,[st_vct+8*0]
 	or r12,0b1000000
-; 	$ 8' ⊢ ,_r38,_r39 : ,{ },{ }
-; emt_ptn_crt_ptn 8',_r38
+; 	$ 8' ⊢ ,_r42,_r43 : ,{ },{ }
+; emt_ptn_crt_ptn 8',_r42
 ; emt_set_ptn 9'
 ; boxed
 	push rdi
@@ -449,7 +544,7 @@ _f0:
 	mov [st_vct+8*0],rdi
 	pop rdi
 	and r12,~0b1000000000
-; emt_ptn_crt_ptn 8',_r39
+; emt_ptn_crt_ptn 8',_r43
 ; emt_set_ptn 10'
 ; boxed
 	push rdi
@@ -486,7 +581,7 @@ _f0:
 	mov QWORD rax,[st_vct+8*2]
 	or r12,0b100000000
 ; ⟦⟧
-; emt_ptn_crt_ptn {  },_r56
+; emt_ptn_crt_ptn {  },_r61
 ; emt_get_ptn {  }
 	push rbx
 	push r14
@@ -828,7 +923,7 @@ _f0:
 	pop QWORD r9
 	pop QWORD r8
 	popf
-; emt_ptn_crt_ptn { 8' 11' },_r58
+; emt_ptn_crt_ptn { 8' 11' },_r63
 ; emt_get_ptn { 8' 11' }
 	push rbx
 	push r14
@@ -870,7 +965,7 @@ _f0:
 	pop QWORD rax
 ; emt_get_ptn 11'
 	bt r12,11
-	jc lb_23
+	jc lb_24
 ; boxed
 	push rdi
 	mov rdi,[st_vct+8*2]
@@ -878,11 +973,11 @@ _f0:
 	mov [st_vct+8*2],rdi
 	pop rdi
 	clc
-	jmp lb_24
-lb_23:
+	jmp lb_25
+lb_24:
 ; unboxed
 	stc
-lb_24:
+lb_25:
 	push rbx
 	mov QWORD rbx,[st_vct+8*2]
 	mov QWORD [st_vct+8*3],rbx
@@ -934,7 +1029,7 @@ lb_24:
 ; ; emt_dec_ptn { 8' 11' }
 ; unknown
 	bt r12,11
-	jc lb_25
+	jc lb_26
 	push QWORD r8
 	push QWORD r9
 	push QWORD r10
@@ -955,7 +1050,7 @@ lb_24:
 	pop QWORD r10
 	pop QWORD r9
 	pop QWORD r8
-lb_25:
+lb_26:
 ; unboxed
 	push QWORD r8
 	push QWORD r9
@@ -1296,7 +1391,7 @@ lb_25:
 	pop QWORD r9
 	pop QWORD r8
 	popf
-; emt_ptn_crt_ptn { 6' 8' },_r59
+; emt_ptn_crt_ptn { 6' 8' },_r64
 ; emt_get_ptn { 6' 8' }
 	push rbx
 	push r14
@@ -1338,7 +1433,7 @@ lb_25:
 	pop QWORD rax
 ; emt_get_ptn 8'
 	bt r12,8
-	jc lb_28
+	jc lb_29
 ; boxed
 	push rdi
 	mov rdi,rax
@@ -1346,11 +1441,11 @@ lb_25:
 	mov rax,rdi
 	pop rdi
 	clc
-	jmp lb_29
-lb_28:
+	jmp lb_30
+lb_29:
 ; unboxed
 	stc
-lb_29:
+lb_30:
 	mov [st_vct+8*2],rax
 	push QWORD rax
 	push QWORD rdi
@@ -1399,7 +1494,7 @@ lb_29:
 ; ; emt_dec_ptn { 6' 8' }
 ; unknown
 	bt r12,8
-	jc lb_30
+	jc lb_31
 	push QWORD r8
 	push QWORD r9
 	push QWORD r10
@@ -1420,7 +1515,7 @@ lb_29:
 	pop QWORD r10
 	pop QWORD r9
 	pop QWORD r8
-lb_30:
+lb_31:
 ; unboxed
 	push QWORD r8
 	push QWORD r9
@@ -1714,7 +1809,7 @@ lb_30:
 	pop QWORD r9
 	pop QWORD r8
 	popf
-; emt_ptn_crt_ptn { 4' 6' },_r60
+; emt_ptn_crt_ptn { 4' 6' },_r65
 ; emt_get_ptn { 4' 6' }
 	push rbx
 	push r14
@@ -1752,7 +1847,7 @@ lb_30:
 	pop QWORD rdi
 ; emt_get_ptn 6'
 	bt r12,6
-	jc lb_33
+	jc lb_34
 ; boxed
 	push rdi
 	mov rdi,rsi
@@ -1760,11 +1855,11 @@ lb_30:
 	mov rsi,rdi
 	pop rdi
 	clc
-	jmp lb_34
-lb_33:
+	jmp lb_35
+lb_34:
 ; unboxed
 	stc
-lb_34:
+lb_35:
 	mov rax,rsi
 	push QWORD rdi
 	push QWORD rsi
@@ -1811,7 +1906,7 @@ lb_34:
 ; ; emt_dec_ptn { 4' 6' }
 ; unknown
 	bt r12,6
-	jc lb_35
+	jc lb_36
 	push QWORD r8
 	push QWORD r9
 	push QWORD r10
@@ -1832,7 +1927,7 @@ lb_34:
 	pop QWORD r10
 	pop QWORD r9
 	pop QWORD r8
-lb_35:
+lb_36:
 ; unboxed
 	push QWORD r8
 	push QWORD r9
@@ -2083,7 +2178,7 @@ lb_35:
 	pop QWORD r9
 	pop QWORD r8
 	popf
-; emt_ptn_crt_ptn { 1' 4' },_r61
+; emt_ptn_crt_ptn { 1' 4' },_r66
 ; emt_get_ptn { 1' 4' }
 	push rbx
 	push r14
@@ -2117,7 +2212,7 @@ lb_35:
 	pop QWORD rdi
 ; emt_get_ptn 4'
 	bt r12,4
-	jc lb_38
+	jc lb_39
 ; boxed
 	push rdi
 	mov rdi,rcx
@@ -2125,11 +2220,11 @@ lb_35:
 	mov rcx,rdi
 	pop rdi
 	clc
-	jmp lb_39
-lb_38:
+	jmp lb_40
+lb_39:
 ; unboxed
 	stc
-lb_39:
+lb_40:
 	mov rsi,rcx
 	push QWORD rdi
 	push QWORD rdx
@@ -2172,7 +2267,7 @@ lb_39:
 ; ; emt_dec_ptn { 1' 4' }
 ; unknown
 	bt r12,4
-	jc lb_40
+	jc lb_41
 	push QWORD r8
 	push QWORD r9
 	push QWORD r10
@@ -2191,7 +2286,7 @@ lb_39:
 	pop QWORD r10
 	pop QWORD r9
 	pop QWORD r8
-lb_40:
+lb_41:
 ; unboxed
 	push QWORD r8
 	push QWORD r10
@@ -2403,7 +2498,7 @@ lb_40:
 	pop QWORD r9
 	pop QWORD r8
 	popf
-; emt_ptn_crt_ptn { 2' 1' },_r62
+; emt_ptn_crt_ptn { 2' 1' },_r67
 ; emt_get_ptn { 2' 1' }
 	push rbx
 	push r14
@@ -2435,7 +2530,7 @@ lb_40:
 	pop QWORD rdi
 ; emt_get_ptn 1'
 	bt r12,1
-	jc lb_43
+	jc lb_44
 ; boxed
 	push rdi
 	mov rdi,r9
@@ -2443,11 +2538,11 @@ lb_40:
 	mov r9,rdi
 	pop rdi
 	clc
-	jmp lb_44
-lb_43:
+	jmp lb_45
+lb_44:
 ; unboxed
 	stc
-lb_44:
+lb_45:
 	mov rcx,r9
 	push QWORD rdi
 	push QWORD rdx
@@ -2488,7 +2583,7 @@ lb_44:
 ; ; emt_dec_ptn { 2' 1' }
 ; unknown
 	bt r12,1
-	jc lb_45
+	jc lb_46
 	push QWORD r8
 	push QWORD r9
 	push QWORD r10
@@ -2505,7 +2600,7 @@ lb_44:
 	pop QWORD r10
 	pop QWORD r9
 	pop QWORD r8
-lb_45:
+lb_46:
 ; unboxed
 	push QWORD r8
 	push QWORD r11
@@ -2579,22 +2674,22 @@ lb_45:
 ; emt_set_ptn 2'
 ; unknown
 	bt r12,1
-	jc lb_48
+	jc lb_49
 	push rdi
 	mov rdi,r9
 	call inc_r
 	mov r10,rdi
 	pop rdi
 	and r12,~0b100
-	jmp lb_49
-lb_48:
+	jmp lb_50
+lb_49:
 	mov r10,r9
 	or r12,0b100
-lb_49:
+lb_50:
 ; ; emt_dec_ptn 1'
 ; unknown
 	bt r12,1
-	jc lb_50
+	jc lb_51
 	push QWORD r8
 	push QWORD r9
 	push QWORD r10
@@ -2609,12 +2704,12 @@ lb_49:
 	pop QWORD r10
 	pop QWORD r9
 	pop QWORD r8
-lb_50:
+lb_51:
 ; 	∎ 2'
 	push rbx
 ; emt_get_ptn 2'
 	bt r12,2
-	jc lb_58
+	jc lb_59
 ; boxed
 	push rdi
 	mov rdi,r10
@@ -2622,16 +2717,16 @@ lb_50:
 	mov r10,rdi
 	pop rdi
 	clc
-	jmp lb_59
-lb_58:
+	jmp lb_60
+lb_59:
 ; unboxed
 	stc
-lb_59:
+lb_60:
 	mov rbx,r10
 ; ; emt_dec_ptn 2'
 ; unknown
 	bt r12,2
-	jc lb_51
+	jc lb_52
 	push QWORD r8
 	push QWORD r10
 	push QWORD r11
@@ -2644,11 +2739,11 @@ lb_59:
 	pop QWORD r11
 	pop QWORD r10
 	pop QWORD r8
-lb_51:
+lb_52:
 	push rbx
-;clear  7'~_r34 3'~_r26 5'~_r30 9'~_r38 0'~_r22 10'~_r39
+;clear  7'~_r38 3'~_r30 5'~_r34 9'~_r42 0'~_r26 10'~_r43
 	bt r12,7
-	jc clear_lb_52
+	jc clear_lb_53
 	push QWORD r8
 	push QWORD r11
 	push QWORD rdx
@@ -2657,40 +2752,42 @@ lb_51:
 	pop QWORD rdx
 	pop QWORD r11
 	pop QWORD r8
-clear_lb_52:
+clear_lb_53:
 	bt r12,3
-	jc clear_lb_53
+	jc clear_lb_54
 	push QWORD r8
 	push QWORD rdx
 	mov rdi,r11
 	call dec_r
 	pop QWORD rdx
 	pop QWORD r8
-clear_lb_53:
+clear_lb_54:
 	bt r12,5
-	jc clear_lb_54
+	jc clear_lb_55
 	push QWORD r8
 	mov rdi,rdx
 	call dec_r
 	pop QWORD r8
-clear_lb_54:
+clear_lb_55:
 	bt r12,9
-	jc clear_lb_55
+	jc clear_lb_56
 	push QWORD r8
 	mov rdi,[st_vct+8*0]
 	call dec_r
 	pop QWORD r8
-clear_lb_55:
+clear_lb_56:
 	bt r12,0
-	jc clear_lb_56
+	jc clear_lb_57
 	mov rdi,r8
 	call dec_r
-clear_lb_56:
+clear_lb_57:
 	bt r12,10
-	jc clear_lb_57
+	jc clear_lb_58
 	mov rdi,[st_vct+8*1]
 	call dec_r
-clear_lb_57:
+clear_lb_58:
 	pop rax
 	pop rbx
 	ret
+section .data
+	cst_stg_71: db "AbC dE F",0,0,0,0,0,0,0,0

@@ -1909,7 +1909,9 @@ let pop_reg q =
     (fun e r -> e^"\tpop QWORD "^r^"\n" )
     "" q
 let emt_flg = true
+let cst_stg = ref []
 let rec emt m f =
+  let em = (emt_mdl m m.ns_v) in
   "%include \"cmu.s\"\n"^
   "main:\n"^
   "\tmov r15,0\n"^
@@ -1929,8 +1931,18 @@ let rec emt m f =
   "\tcall pnt\n"^
   "\tcall pnt_str_ret\n"^
   "\tjmp _end\n"^
-  (emt_mdl m m.ns_v)
-
+  em^
+  "section .data\n"^
+  (emt_cst_stg !cst_stg)
+and emt_cst_stg cs =
+  pnt true "enter emt_cst_stg\n";
+  ( match cs with
+    | [] -> ""
+    | (p,s)::tl ->
+      let rec st i =
+        if i=0 then "" else ",0"^(st (i-1)) in
+      let mx = 8-((Bytes.length s) mod 8) in
+      "\tcst_stg_"^(Sgn.print p)^": db \""^(Bytes.to_string s)^"\""^(st mx)^"\n"^(emt_cst_stg tl) )
 and emt_pnt_ptn s r = Rcd_Ptn.print (fun v -> (string_of_int (idx s v))^"\'") r
 and emt_ptn r = Rcd_Ptn.print (fun i -> (string_of_int i)^"\'") r
 and emt_mdl m el =
@@ -3242,6 +3254,47 @@ and emt_ir ih s p =
                  (pop_s emt_reg_x86 sl)
                  with Failure s -> err ("emt_ir r0:"^s)) *)
               | _ -> "; ir_glb_call\n"  )
+          | IR_Exp(Ast.Atm(Ast.Stg c),_,Rcd_Ptn.A r) ->
+            let bs = Bytes.of_string c in
+            let p = sgn () in
+            cst_stg := (p,bs)::!cst_stg;
+            let (ep,l) = push_reg s x86_reg_lst in
+            let sl = Bytes.length bs in
+            pnt true "test s0\n";
+            let m = sl mod 8 in
+            let mx = 8-m in
+            let ir = idx_crt s r in
+            let c0 = cmt ("\t» "^(print_exp (Ast.Atm(Ast.Stg c)))^" |~ "^(emt_ptn (Rcd_Ptn.A ir))^rtl^(print_ty (Rcd_Ptn.A r))) in
+            let im = idx_min 0 s in
+            let rm = emt_reg_x86 im in
+            let rec erp i =
+              if i=0
+              then
+                "\tmov rsi,[cst_stg_"^(Sgn.print p)^"+8*"^(string_of_int i)^"]\n"^
+                "\tmov [rdi+8*"^(string_of_int (i+1))^"],rsi\n"
+              else
+              "\tmov rsi,[cst_stg_"^(Sgn.print p)^"+8*"^(string_of_int i)^"]\n"^
+              "\tmov [rdi+8*"^(string_of_int (i+1))^"],rsi\n"^
+              (erp (i-1)) in
+            pnt true "test s1\n";
+            let e0 =
+              ep^
+              "\tmov rdi,"^(string_of_int ((sl+mx)/8))^"\n"^
+              "\tcall mlc\n"^
+              "\tmov rdi,rax\n"^
+              (erp (sl/8))^
+              "\tmov rdx,[rdi]\n"^
+              "\tand rdx,~0xFFFF\n"^
+              "\tor rdx,0x10000\n"^
+              "\tadd rdx,"^(string_of_int mx)^"\n"^
+              "\tmov [rdi],rdx\n"^
+              "\tmov QWORD "^rm^",rdi\n"^
+              (pop_reg l)^
+              "\tmov QWORD "^(emt_reg_x86 ir)^","^rm^"\n"
+              (* "\tbts r12,"^(string_of_int ir)^"\n" *)
+              ^"\tand r12,~"^(emt_0b ir)^"\n" in
+            pnt true "test s2\n";
+            c0^e0
           | IR_Exp(Ast.Atm(Ast.R64 x),_,Rcd_Ptn.A r) ->
             let ir = idx_crt s r in
             let c0 = cmt ("\t» "^(print_exp (Ast.Atm(Ast.R64 x)))^" |~ "^(emt_ptn (Rcd_Ptn.A ir))^rtl^(print_ty (Rcd_Ptn.A r))) in
