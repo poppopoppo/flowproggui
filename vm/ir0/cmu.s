@@ -30,7 +30,7 @@ section .data
   blk_l: db "{| ",0
   blk_r: db "|} ",0
   spc: db " ",0
-  fmt_s8: db `\"%s\"`, 0
+  fmt_s8: db `\"%s\" `, 0
 
 section .text
 global _start               ; _startを指名
@@ -120,15 +120,19 @@ dec_r:
   push rdi
   ; decrement ref-count
   mov rax,[rdi]
+  mov rsi,0x0001000000000000
+  sub rax,rsi
   mov rsi,rax
   shr rsi,48
-  sub rsi,1
-  ror QWORD rax,48
-  sub QWORD rax,1
-  rol QWORD rax,48
+  ;sub rsi,1
+  ;ror QWORD rax,48
+  ;sub QWORD rax,1
+  ;rol QWORD rax,48
   mov [rdi],rax
   cmp rsi,0
   jne dec_r_end
+  bt rax,16
+  jc dec_r_lp_end
   ; free blk
   ; mov to temporary register
   mov rdx,rax
@@ -170,11 +174,14 @@ dec_r_end:
 inc_r:
   ; increment ref-count
   push rax
+  push rsi
   mov rax,[rdi]
-  ror QWORD rax,48
-  add QWORD rax,1
-  rol QWORD rax,48
+  ;ror QWORD rax,48
+  mov rsi,0x0001000000000000
+  add rax,rsi
+  ;rol QWORD rax,48
   mov [rdi],rax
+  pop rsi
   pop rax
   ret
 
@@ -368,22 +375,26 @@ pnt_r_p_lp_nxt:
   jmp pnt_r_p_lp
 pnt_r_p_end:
   push rsi
-  push rax
+  ;push rax
   mov rdi,rsi
   mov rsi,blk_r
   mov rax,0
   call sprintf
-  mov rdx,rax
-  pop rax
+  ;mov rdx,rax
+  ;pop rax
   pop rsi
-  lea rsi,[rsi+1*rdx]
-  mov rax,rsi
+  ;lea rsi,[rsi+1*rdx]
+  add rax,rsi
+  ;mov rax,rsi
   ret
 pnt_opq:
+  push rsi
   mov rdx,rdi
   add rdx,8
   mov rdi,rsi
   mov rsi,fmt_s8
   mov rax,0
   call sprintf
+  pop rsi
+  add rax,rsi
   ret
