@@ -2019,7 +2019,7 @@ and emt_get_ptn s tbv idx r dst =
             "\tbt r12,"^(string_of_int i)^"\n"^
             "\tjc "^l0^"\n"^
             (*"\tbtr "^tbv^","^(string_of_int i)^"\n"^ *)
-            "; unboxed\n"^
+            "; boxed\n"^
             ( if (idx i)="rdi"
               then
                 "\tcall inc_r\n"
@@ -2033,7 +2033,7 @@ and emt_get_ptn s tbv idx r dst =
             "\tclc\n"^
             "\tjmp "^l1^"\n"^
             l0^":\n"^
-            "; boxed\n"^
+            "; unboxed\n"^
             "\tstc\n"^
             l1^":\n"^
             (if 8<i
