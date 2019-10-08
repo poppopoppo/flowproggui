@@ -9,12 +9,12 @@
 %token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT VCT_INI OP LCE_IR
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
-%token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL
+%token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
-%token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH
+%token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token <string> NAM STG VAL
-%token <int> INT IN OUT ROT SLF NAT INJ IDX CHO
+%token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
 %token <bool> R2
 %nonassoc AGL_PRE
@@ -52,6 +52,14 @@ file:
 def_mdl:
   | MDL NAM gl_etr_lst MDL_END { ($2,$3) }
   ;
+nl:
+  | {}
+  | NL {}
+  ;
+nls:
+  | {}
+  | nls NL {}
+  ;
 def_arg:
   | { [] }
   | APP args { $2 }
@@ -67,7 +75,7 @@ args:
   ;
 gl_etr_lst:
   |   { [] }
-  | mdl_etr gl_etr_lst  { $1::$2 }
+  | mdl_etr nls gl_etr_lst  { $1::$3 }
   ;
 mdl_etr:
   | glb_etr { $1 }
@@ -186,20 +194,15 @@ glb_etr_clique:
 glb_etr_body_ir:
   | NAM reg_ptn typ_def ir_lines { ($1,fst $3,snd $3,($2,ref $4)) }
   ;
-ir_code:
-  | ir_etr ir_lines { ($1,ref $2) }
-  ;
-ir_etr:
-  | IN reg_ptn { $2 }
-  ;
 ir_ret:
   | EOP reg_ptn { Ret $2 }
   ;
 ir_lines:
-  | ir_ret  { $1 }
+  | ir_ret { $1 }
   | ir_line ir_lines { Seq($1,$2) }
   | AGL reg coprd_ir COPRD_END {
      Agl($2,$3) }
+  | MTC reg_ptn mtc_ir COPRD_END { Mtc($2,$3) }
   | NAM reg_ptn SRC_IL { IL_Glb_Call((Tkn.Etr_N $1),$2) }
   ;
 ir_line:
@@ -211,6 +214,53 @@ ir_line:
   | OUT_IR reg reg_ptn SRC_OUT {
     IR_Out($2,$3) }
   | NAM reg_ptn SRC_OUT { IR_Glb_Out($1,$2) }
+  ;
+ir_ptn:
+  | ir_ptn_atm { Rcd_Ptn.A $1 }
+  | L_RCD ir_ptn_lst ir_ptn_op {
+    match $3 with
+    | None ->  Rcd_Ptn.R $2
+    | Some r -> Rcd_Ptn.Ro ($2,r) }
+  | L_RCD LB ir_ptn_lst_lb ir_ptn_op {
+    match $4 with
+    | None -> Rcd_Ptn.R_Lb $3
+    | Some r -> Rcd_Ptn.Ro_Lb ($3,r) }
+  ;
+ir_ptn_op:
+  | OP ir_ptn_atm R_RCD  { Some $2 }
+  | R_RCD { None }
+ir_ptn_lst:
+  | { [||] }
+  | ir_ptn ir_ptn_lst { [|$1|] |+| $2 }
+  ;
+ir_ptn_atm:
+  | L_PRN ir_ptn_atm R_PRN { $2 }
+  | AGL_OP APP ir_ptn { P_Agl($1,$3) }
+  | NAM APP ir_ptn { P_Agl_N($1,$3) }
+  | WC { let v = newvar () in rm := ("_",v)::!rm; P_WC v}
+  | VAL {
+     let v = newvar () in rm := ($1,v)::!rm; P_Reg v }
+  | STG { P_Stg $1 }
+  | INT { P_Z $1 }
+  | R64 { P_R64 $1 }
+  | R2 { P_R2 $1 }
+  | NAM { P_N $1 }
+  | L_LST lst_list_ptn R_LST { $2 }
+  ;
+lst_list_ptn:
+  | { P_Agl_N("⟦⟧",Rcd_Ptn.R [||]) }
+  | ir_ptn OP WC {
+    let v = newvar () in rm := ("_",v)::!rm;
+    P_Agl_N("⟦",Rcd_Ptn.R [|$1;Rcd_Ptn.A(P_WC v)|]) }
+  | ir_ptn OP VAL {
+    let v = newvar () in rm := ($3,v)::!rm;
+    P_Agl_N("⟦",Rcd_Ptn.R [|$1;Rcd_Ptn.A(P_Reg v)|]) }
+  | ir_ptn lst_list_ptn {
+    P_Agl_N("⟦",Rcd_Ptn.R [|$1;Rcd_Ptn.A $2|]) }
+  ;
+ir_ptn_lst_lb:
+  | { [||] }
+  | NAM LET ir_ptn ir_ptn_lst_lb { [|($1,$3)|] |+| $4 }
   ;
 names:
   | {  }
@@ -279,6 +329,9 @@ reg_ptn_lst_lb:
 lb_let:
   | NAM LET NAM {}
   ;
+mtc_ir:
+  | COPRD_PTN ir_ptn MTC_IR ir_lines { [|($2,$4)|] }
+  | COPRD_PTN ir_ptn MTC_IR ir_lines mtc_ir {[|($2,$4)|] |+| $5 }
 coprd_ir:
   | COPRD reg_ptn ir_lines { [|($2,$3)|] }
   | COPRD reg_ptn ir_lines coprd_ir { [|($2,$3)|] |+| $4 }

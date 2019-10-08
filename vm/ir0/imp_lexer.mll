@@ -3,7 +3,7 @@
     exception Error of string
 }
 
-let space = [' ' '\t' '\n' '\r']
+let space = [' ' '\t' '\r' '\n']
 let line = [' ' '\t' '\r']
 let digit = ['0'-'9']
 let alpha = ['a'-'z' 'A'-'Z']
@@ -39,7 +39,7 @@ rule token = parse
     | "|◃"  { PRJ_IR  }
     | "◃|"  { CNS_IR  }
     | "|~"  { INI_IR }
-    | "~|"  { RM  }
+    | "~|"  { MTC_IR }
     | "≃" { ISO }
     | "~" { LET }
     | "<" { OP }
@@ -52,14 +52,16 @@ rule token = parse
     | "⊢" { SRC }
     | "|⊢"  { SRC_OUT }
     | "⊢|"  { SRC_IL }
-    | "?" { EXN }
+    | "¿" { EXN }
     | ":" { CLN }
     | "|" { SPL }
     | "∠"  { AGL }
     | "]" { R_BLK }
     | "[" { L_BLK }
     | "^" { SEQ }
+    | "?"  { MTC }
     | "∐"   { COPRD }
+    | "∐\\" { COPRD_PTN }
     | "∏"   { PRD }
     | "∎" { EOP }
     | "∇" { COPRD_END }
@@ -70,6 +72,7 @@ rule token = parse
     | "_" { WC }
     | "↑[" (digit+ as lxm) "]" { INJ(int_of_string lxm) }
     | "↓[" (digit+ as lxm) "]" { CHO(int_of_string lxm) }
+    | "∠[" (digit+ as lxm) "]" { AGL_OP(int_of_string lxm) }
     | "⊵" { VCT }
     | "{" { L_RCD }
     | "}" { R_RCD }

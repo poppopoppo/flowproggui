@@ -46,6 +46,8 @@ type token =
   | NAT of (int)
   | NAM of (string)
   | N
+  | MTC_IR
+  | MTC
   | MNS_NAT
   | MNS
   | MLT_NAT
@@ -86,6 +88,7 @@ type token =
   | DEQ
   | DEF
   | CST
+  | COPRD_PTN
   | COPRD_END
   | COPRD
   | CNS_IR
@@ -98,6 +101,7 @@ type token =
   | ARR
   | APP
   | AGL_TOP
+  | AGL_OP of (int)
   | AGL_COD
   | AGL
   | ACT
