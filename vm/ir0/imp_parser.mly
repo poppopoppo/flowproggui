@@ -225,38 +225,66 @@ ir_ptn:
     match $4 with
     | None -> Rcd_Ptn.R_Lb $3
     | Some r -> Rcd_Ptn.Ro_Lb ($3,r) }
+  (* | L_LST lst_list_ptn R_LST { $2 } *)
   ;
 ir_ptn_op:
   | OP ir_ptn_atm R_RCD  { Some $2 }
   | R_RCD { None }
+  ;
 ir_ptn_lst:
   | { [||] }
   | ir_ptn ir_ptn_lst { [|$1|] |+| $2 }
   ;
+ir_ptn_eq:
+  | { [] }
+  | CMM VAL EQ NAM APP ir_ptn ir_ptn_eq {
+    let v =
+      ( try
+        List.assoc $2 !Types.rm
+        with _ ->
+        let v = newvar () in
+        Types.rm := ($2,v)::!Types.rm;
+        v ) in
+    (v,Mtc.Eq_Agl_N($4,$6))::$7
+    }
+  | CMM VAL EQ ir_ptn_cst ir_ptn_eq {
+    let v =
+      ( try
+        List.assoc $2 !Types.rm
+        with _ ->
+        let v = newvar () in
+        Types.rm := ($2,v)::!Types.rm;
+        v ) in
+    (v,Mtc.P_Cst $4)::$5 }
+  ;
+ir_ptn_cst:
+  | STG { Mtc.P_Stg $1 }
+  | INT { Mtc.P_Z $1 }
+  | R64 { Mtc.P_R64 $1 }
+  | R2 { Mtc.P_R2 $1 }
+  | NAM { Mtc.P_N $1 }
+  ;
 ir_ptn_atm:
-  | L_PRN ir_ptn_atm R_PRN { $2 }
-  | AGL_OP APP ir_ptn { P_Agl($1,$3) }
-  | NAM APP ir_ptn { P_Agl_N($1,$3) }
-  | WC { let v = newvar () in rm := ("_",v)::!rm; P_WC v}
+  | WC {
+    let v = newvar () in rm := ("_",v)::!rm; v}
   | VAL {
-     let v = newvar () in rm := ($1,v)::!rm; P_Reg v }
-  | STG { P_Stg $1 }
-  | INT { P_Z $1 }
-  | R64 { P_R64 $1 }
-  | R2 { P_R2 $1 }
-  | NAM { P_N $1 }
-  | L_LST lst_list_ptn R_LST { $2 }
+      ( try
+        List.assoc $1 !Types.rm
+        with _ ->
+        let v = newvar () in
+        Types.rm := ($1,v)::!Types.rm;
+        v ) }
   ;
 lst_list_ptn:
-  | { P_Agl_N("⟦⟧",Rcd_Ptn.R [||]) }
+  | { P_Agl_N("nil",Rcd_Ptn.R [||]) }
   | ir_ptn OP WC {
     let v = newvar () in rm := ("_",v)::!rm;
-    P_Agl_N("⟦",Rcd_Ptn.R [|$1;Rcd_Ptn.A(P_WC v)|]) }
+    P_Agl_N("cns",Rcd_Ptn.R [|$1;Rcd_Ptn.A(P_WC v)|]) }
   | ir_ptn OP VAL {
     let v = newvar () in rm := ($3,v)::!rm;
-    P_Agl_N("⟦",Rcd_Ptn.R [|$1;Rcd_Ptn.A(P_Reg v)|]) }
+    P_Agl_N("cns",Rcd_Ptn.R [|$1;Rcd_Ptn.A(P_Reg v)|]) }
   | ir_ptn lst_list_ptn {
-    P_Agl_N("⟦",Rcd_Ptn.R [|$1;Rcd_Ptn.A $2|]) }
+    P_Agl_N("cns",Rcd_Ptn.R [|$1;Rcd_Ptn.A $2|]) }
   ;
 ir_ptn_lst_lb:
   | { [||] }
@@ -330,8 +358,8 @@ lb_let:
   | NAM LET NAM {}
   ;
 mtc_ir:
-  | COPRD_PTN ir_ptn MTC_IR ir_lines { [|($2,$4)|] }
-  | COPRD_PTN ir_ptn MTC_IR ir_lines mtc_ir {[|($2,$4)|] |+| $5 }
+  | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines { [|(($2,$3),$5)|] }
+  | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines mtc_ir {[|(($2,$3),$5)|] |+| $6 }
 coprd_ir:
   | COPRD reg_ptn ir_lines { [|($2,$3)|] }
   | COPRD reg_ptn ir_lines coprd_ir { [|($2,$3)|] |+| $4 }
@@ -395,6 +423,6 @@ exp:
   | L_LST lst_list R_LST { $2 }
   ;
 lst_list:
-  | { App(Atm (Name "⟦⟧"),Rcd [||]) }
-  | exp lst_list { App(Atm (Name "⟦"),Rcd [|$1;$2|]) }
+  | { App(Atm (Name "nil"),Rcd [||]) }
+  | exp lst_list { App(Atm (Name "cns"),Rcd [|$1;$2|]) }
   ;

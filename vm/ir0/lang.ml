@@ -97,6 +97,8 @@ module Types = struct
   and t_rcd = | Cns of t * t_rcd | Uo of v_rcd ref | U
   and t_rcd_lb = | Cns_Lb of string * t * t_rcd_lb | Uo_Lb of v_rcd_lb ref | U_Lb
   type print = { rl : (t_rec ref) list; vl : (v ref) list; }
+  type rm = (string * v ref) list ref
+  let rm:rm = ref []
   let v_vct:((v ref) list ref) = ref []
   let v_rcd_lb_vct:((v_rcd_lb ref) list ref) = ref []
   let v_wc:v ref = ref (WC ())
@@ -451,6 +453,51 @@ module Tkn = struct
       | Tkn (Zn(z0,_)) -> ((if z0=0 then 0 else 1),Rcd [||])
       | _ -> err ("err 19:"^(print k)) )
 end
+module Mtc = struct
+  type v = Types.v ref
+  type ptn = (v Rcd_Ptn.t) * (v * eq) list
+  and ptn_eq = (v Rcd_Ptn.t)
+  and eq =
+    | Eq_Agl of int * ptn_eq
+    | Eq_Agl_N of string * ptn_eq
+    | P_Cst of cst
+  and cst =
+    | P_N of string
+    | P_Z of int
+    | P_R64 of int64
+    | P_R2 of bool
+    | P_Stg of string
+  and p_sig = string
+  (* let rec unify p0 p1 =
+     let open Rcd_Ptn in
+     ( match p0,p1 with
+      | A a0,A a1 ->
+      | R r0,R r1 -> R(Array.map_i (fun i ri -> unify ri r1.(i)) r0)
+      |       ) *)
+  let print_v v =
+    ( try let (n,_) = List.find (fun (_,w) -> v==w) !Types.rm in n
+      with _ -> "_r"^(string_of_int (Types.print_v Types.v_vct v)))
+  let print p =
+    let (r,es) = p in
+    let s0 = Rcd_Ptn.print print_v r in
+    let s1 =
+      List.fold_left
+        (fun s1 (v,e) ->
+           let sv = s1^","^(print_v v)^"=" in
+           ( match e with
+             | Eq_Agl(i,r) -> sv^"∠["^(string_of_int i)^"]◂"^(Rcd_Ptn.print print_v r)
+             | Eq_Agl_N(n,r) -> sv^n^"◂"^(Rcd_Ptn.print print_v r)
+             | P_Cst c ->
+               ( match c with
+                 | P_N n -> sv^n
+                 | P_Stg s -> sv^"\""^s^"\""
+                 | P_Z z -> sv^(string_of_int z)
+                 | P_R64 x -> sv^"0xr"^(Int64.format "%x" x)
+                 | P_R2 false -> sv^"0x2r0"
+                 | P_R2 true -> sv^"0x2r1" )))
+        "" es in
+    s0^" ,"^s1
+end
 module Ast = struct
   open Types
   type name = string
@@ -481,19 +528,19 @@ module Ast = struct
     | R2 of bool
     | Fnc of (etr, r) Tkn.etr
     | Name of string | Stg of string
-  and ptn_atm =
-    | P_Agl of int * (ptn_atm Rcd_Ptn.t)
-    | P_Agl_N of string * (ptn_atm Rcd_Ptn.t)
-    | P_Reg of r
-    | P_WC of r
-    | P_N of string
-    | P_Z of int
-    | P_R64 of int64
-    | P_R2 of bool
-    | P_Stg of string
+    (* and ptn_atm =
+       | P_Agl of int * (ptn_atm Rcd_Ptn.t)
+       | P_Agl_N of string * (ptn_atm Rcd_Ptn.t)
+       | P_Reg of r
+       | P_WC of r
+       | P_N of string
+       | P_Z of int
+       | P_R64 of int64
+       | P_R2 of bool
+       | P_Stg of string *)
   and r = Types.v ref
   and fnc = (etr, r) Tkn.etr
-  and mtc = ptn_atm Rcd_Ptn.t
+  and mtc = Mtc.ptn
   and ptn = r Rcd_Ptn.t
   and tkn = (etr, r) Tkn.t
   and pt = ir_code ref
@@ -502,7 +549,7 @@ module Ast = struct
     | Seq of nd * ir_code
     | Ret of ptn
     | Agl of r * ((ptn * ir_code) array)
-    | Mtc of ptn * ((mtc * ir_code) array)
+    | Mtc of ptn * ((Mtc.ptn * ir_code) array)
     | IL_Call of r * ptn
     | IL_Glb_Call of fnc * ptn
   and nd =
@@ -527,9 +574,9 @@ module Ast = struct
   type ns_t = (string * Types.v ref) list ref
   type ns_e = (string * tkn) list ref
   type ns_grm = (string * Types.t_rec ref) list ref
-  type rm = (string * Types.v ref) list ref
+  type rm = Types.rm
   type ns_v = (string * etr) list ref
-  let rm:rm = ref []
+  let rm:rm = Types.rm
   let ns:ns = ref []
   let ns_t:ns_t = ref []
   let ns_e:(ns_e) = ref []
@@ -630,18 +677,7 @@ and print_ir_mtc ps =
     (fun s (e,p) ->
        s^"\t∐\\ "^(pnt_mtc_ptn e)^"\n"^(print_ir p))
     "" ps
-and pnt_mtc_ptn e = Rcd_Ptn.print pnt_ptn_atm e
-and pnt_ptn_atm a =
-  ( match a with
-    | P_Agl(i,r) -> "∠["^(string_of_int i)^"]◂"^(pnt_mtc_ptn r)
-    | P_Agl_N(n,r) -> n^"◂"^(pnt_mtc_ptn r)
-    | P_Reg r -> (print_reg r)^"'"
-    | P_WC _ -> "_"
-    | P_N n -> n
-    | P_Stg s -> "\""^s^"\""
-    | P_Z z -> string_of_int z
-    | P_R64 x -> "0xr"^(Int64.format "%x" x)
-    | P_R2 false -> "0x2r0" | P_R2 true -> "0x2r1" )
+and pnt_mtc_ptn e = Mtc.print e
 and print_nd o =
   ( match o with
     | IR_Clj (_,_,_) -> "||»"
@@ -1408,44 +1444,34 @@ let rec inst_ptn l (rp:ptn) : Types.t =
       let yr = rcd_cns_lb ys yt in
       Rcd_Lb yr
     | A r -> inst l (Var r) )
-and inst_mtc_ptn m l rp =
-  let open Rcd_Ptn in
-  ( match rp with
-    | R rs -> Rcd(rcd_cl (Array.to_list (Array.map (fun r -> inst_mtc_ptn m l r) rs)))
-    | Ro(rs,rt) ->
-      let yt = inst_mtc_atm m l rt in
-      unify [] yt (Rcd(Uo(ref (WC()))));
-      Rcd(rcd_cns (Array.to_list(Array.map (fun r -> inst_mtc_ptn m l r) rs)) yt)
-    | R_Lb rs ->
-      Rcd_Lb(rcd_cl_lb (Array.fold_left (fun ys (lb,r) -> ys@[(lb,inst_mtc_ptn m l r)]) [] rs))
-    | Ro_Lb (rs,rt) ->
-      let (ls,ys) =
-        Array.fold_left
-          (fun (ls,ys) (lb,r) ->
-             (StgSet.add lb ls,ys@[(lb,inst_mtc_ptn m l r)]))
-          (StgSet.empty,[]) rs in
-      let yt = inst_mtc_atm m l rt in
-      unify [] yt (Rcd_Lb(Uo_Lb(ref (V(ls,l)))));
-      let yr = rcd_cns_lb ys yt in
-      Rcd_Lb yr
-    | A r -> inst_mtc_atm m l r )
+let rec inst_mtc_ptn m l (r,es) =
+  let y0 = inst_ptn l r in
+  let _ =
+    List.fold_left
+      (fun _ (v,e) ->
+         let ye = inst_mtc_atm m l e in
+         let _ = unify [] (Var v) ye in
+         () )
+      () es in
+  y0
 and inst_mtc_atm m l e =
   let open Types in
+  let open Mtc in
   ( match e with
-    | P_Agl(_,_) -> err "inst_mtc_atm 0"
-    | P_Agl_N(n,r) ->
+    | Eq_Agl(_,_) -> err "inst_mtc_atm 0"
+    | Eq_Agl_N(n,r) ->
       let yn = inst l (Var (List.assoc n m.ns)) in
-      let yr = inst_mtc_ptn m l r in
+      let yr = inst_ptn l r in
       let v0 = newvar_l l in
       let _ = unify [] (Imp(yr,Var v0)) yn in
       (Var v0)
-    | P_Reg v -> inst l (Var v)
-    | P_WC v -> inst l (Var v)
-    | P_N _ -> err "inst_mtc_atm 1"
-    | P_Z _ -> zn (Prm Z_u)
-    | P_R64 _ -> Prm(Name "r64")
-    | P_R2 _ -> r2 ()
-    | P_Stg _ -> Prm Types.Stg )
+    | P_Cst c ->
+      ( match c with
+        | P_Z _ -> zn (Prm Z_u)
+        | P_R64 _ -> Prm(Name "r64")
+        | P_N _ -> err "inst_mtc_atm 1"
+        | P_R2 _ -> r2 ()
+        | P_Stg _ -> Prm Types.Stg ))
 and slv m l p0 =
   Util.pnt true ("enter slv:"^(print_line p0)^"\n");
   let open Rcd_Ptn in
@@ -1606,12 +1632,12 @@ let rec mk_ir_mdl el =
   m.ns_e <- ("‹",Tkn(Etr(Tkn.Inj 1)))::m.ns_e;
   let v = Var (newvar()) in
   m.ns <- ("‹",ref(Ln(Imp(v,opn v))))::m.ns;
-  m.ns_e <- ("⟦⟧",Tkn(Etr(Tkn.Inj 0)))::m.ns_e;
-  m.ns <- ("⟦⟧",ref(Ln(Imp(Rcd U,lst (Var(newvar_q (-1)))))))::m.ns;
-  m.ns_e <- ("⟦",Tkn(Etr(Tkn.Inj 1)))::m.ns_e;
+  m.ns_e <- ("nil",Tkn(Etr(Tkn.Inj 0)))::m.ns_e;
+  m.ns <- ("nil",ref(Ln(Imp(Rcd U,lst (Var(newvar_q (-1)))))))::m.ns;
+  m.ns_e <- ("cns",Tkn(Etr(Tkn.Inj 1)))::m.ns_e;
   let v = Var (newvar_q (-1)) in
   let y = lst v in
-  m.ns <- ("⟦",ref(Ln(Imp(Rcd (rcd_cl [v;y]),y))))::m.ns;
+  m.ns <- ("cns",ref(Ln(Imp(Rcd (rcd_cl [v;y]),y))))::m.ns;
   m.ns_e <- ("&",Tkn(Etr(Tkn.Etr_N "&")))::m.ns_e;
   m.ns <- ("&",ref(Ln(Imp(Rcd U,Prm Sgn))))::m.ns;
   m.ns_e <- ("⊵",Tkn(Etr(Tkn.Etr_N "⊵")))::m.ns_e;
@@ -1906,8 +1932,8 @@ and mk_ir rv p0 =
   )
 and pnt_rv rv =
   (Hashtbl.fold
-    (fun n v e -> e^" "^n^"\'~"^(Ast.print_v v))
-    rv "{> ")^" }"
+     (fun n v e -> e^" "^n^"\'~"^(Ast.print_v v))
+     rv "{> ")^" }"
 and csm_rv r rv =
   let (s,_) =
     ( try List.find (fun (_,v) -> v==r) !Ast.rm
@@ -1925,18 +1951,22 @@ and crt_rv r rv =
   if s="_" then ()
   else if Hashtbl.mem rv s then err "crt_rv 0"
   else Hashtbl.add rv s r
-and crt_mtc_rv r rv =
-  ( match r with
-    | P_Reg v0 ->
-      let (s,_) = List.find (fun (_,v) -> v==v0) !Ast.rm in
-      if s="_" then ()
-      else if Hashtbl.mem rv s then err "crt_rv 0"
-      else Hashtbl.add rv s v0
-    | P_Agl(_,r0) -> let _ = crt_mtc_ptn_rv r0 rv in ()
-    | P_Agl_N(_,r0) -> let _ = crt_mtc_ptn_rv r0 rv in ()
-    | _ -> () )
 and crt_ptn_rv r rv = Rcd_Ptn.map (fun r0 -> crt_rv r0 rv) r
-and crt_mtc_ptn_rv r rv  = Rcd_Ptn.map (fun r0 -> crt_mtc_rv r0 rv) r
+and crt_mtc_ptn_rv (r,es) rv  =
+  let open Mtc in
+  let _ = Rcd_Ptn.map (fun v -> crt_rv v rv) r in
+  let _ =
+    List.fold_left
+      (fun _ (v,e) ->
+         let _ = csm_rv v rv in
+         ( match e with
+           | Eq_Agl(_,_) -> err "crt_mtc_ptn_rv 0"
+           | Eq_Agl_N(_,r) ->
+             let _ = Rcd_Ptn.map (fun v -> crt_rv v rv) r in
+             ()
+           | P_Cst _ -> () ))
+      () es in
+  ()
 and mk_ir_etr (r0,p0) =
   let rv = Hashtbl.create 10 in
   let _ = crt_ptn_rv r0 rv in
@@ -3352,7 +3382,7 @@ and emt_ir ih s p =
                   (* ^"\tor r12,"^(emt_0b i2)^"\n"^
                      "\tor r12,"^(emt_0b i3)^"\n"^ *)
                   (emt_ptn_set_ptn s s "r12" emt_reg_x86 emt_reg_x86 py iy)
-              | Tkn.Etr_N "⟦" ->
+              | Tkn.Etr_N "cns" ->
                 let open Rcd_Ptn in
                 ( match y with
                   | A v ->
@@ -3369,7 +3399,7 @@ and emt_ir ih s p =
                     let (e1,l) = push_reg s x86_reg_lst in
                     let iy = idx_crt s v in
                     let e2 =
-                      (cmt "⟦")^
+                      (cmt "cns")^
                       ep^e0^
                       "\tcall dbg\n"^
                       (* ipx^ed^ipx^e1^ *)
@@ -3395,8 +3425,8 @@ and emt_ir ih s p =
                       (pnt_reg s iy)^
                       (pop_reg l) in
                     e2
-                  |_ -> err "emt_ir ⟦" )
-              | Tkn.Etr_N "⟦⟧" ->
+                  |_ -> err "emt_ir cns" )
+              | Tkn.Etr_N "nil" ->
                 let open Rcd_Ptn in
                 ( match y with
                   | A v ->
@@ -3409,7 +3439,7 @@ and emt_ir ih s p =
                     let (e1,l) = push_reg s x86_reg_lst in
                     let iy = idx_crt s v in
                     let e2 =
-                      (cmt "⟦⟧")^
+                      (cmt "nil")^
                       e0^ed^e1^
                       "\tpush QWORD "^(emt_reg_x86 tx)^"\n"^
                       "\tmov rdi,2\n"^
