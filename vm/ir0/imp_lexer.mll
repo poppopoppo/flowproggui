@@ -61,7 +61,9 @@ rule token = parse
     | "^" { SEQ }
     | "?"  { MTC }
     | "∐"   { COPRD }
+    | "∐." { COPRD_END }
     | "∐\\" { COPRD_PTN }
+    | "∐.\\" { COPRD_PTN_END }
     | "∏"   { PRD }
     | "∎" { EOP }
     | "∇" { COPRD_END }

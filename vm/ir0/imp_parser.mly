@@ -7,7 +7,7 @@
 
 %token SRC ARR DEF CLN L_RCD R_RCD Z ARR_END ISO DTA RM INI_IR SRC_OUT
 %token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT VCT_INI OP LCE_IR
-%token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL
+%token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL COPRD_PTN_END
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
 %token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
@@ -203,6 +203,7 @@ ir_lines:
   | AGL reg coprd_ir COPRD_END {
      Agl($2,$3) }
   | MTC reg_ptn mtc_ir COPRD_END { Mtc($2,$3) }
+  | MTC reg_ptn mtc_ir_end { Mtc($2,$3) }
   | NAM reg_ptn SRC_IL { IL_Glb_Call((Tkn.Etr_N $1),$2) }
   ;
 ir_line:
@@ -360,6 +361,11 @@ lb_let:
 mtc_ir:
   | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines { [|(($2,$3),$5)|] }
   | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines mtc_ir {[|(($2,$3),$5)|] |+| $6 }
+  ;
+mtc_ir_end:
+  | COPRD_PTN_END ir_ptn ir_ptn_eq MTC_IR ir_lines { [|(($2,$3),$5)|] }
+  | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines mtc_ir_end {[|(($2,$3),$5)|] |+| $6 }
+  ;
 coprd_ir:
   | COPRD reg_ptn ir_lines { [|($2,$3)|] }
   | COPRD reg_ptn ir_lines coprd_ir { [|($2,$3)|] |+| $4 }

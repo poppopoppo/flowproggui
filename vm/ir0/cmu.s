@@ -398,3 +398,22 @@ pnt_opq:
   pop rsi
   add rax,rsi
   ret
+eq_nc_nc: ; rdi=rsi ⊢ zf
+  cmp rdi,rsi
+  ret
+eq_c_c:
+  push rax
+  push rdx
+  mov rax,[rdi]
+  bt rax,16
+  jc eq_s8_c
+  mov rdx,[rsi]
+  bt rdx,16
+  jc neq
+  push r9
+  push r10
+  mov r9,rax
+  mov r10,rdx
+eq_s8_c:
+neq:
+  ret  
