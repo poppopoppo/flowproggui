@@ -88,6 +88,7 @@ type token =
   | DEQ
   | DEF
   | CST
+  | COPRD_PTN_END
   | COPRD_PTN
   | COPRD_END
   | COPRD
