@@ -36,6 +36,30 @@ section .text
 global _start               ; _startを指名
 _start:
   jmp main
+hw:
+  push rax
+  push rdi
+  push rsi
+  push rdx
+  push rcx
+  push r8
+  push r9
+  push r10
+  push r11
+  mov rsi,-1
+  mov rdi,str_dbg
+  mov rax,0
+  call printf
+  pop r11
+  pop r10
+  pop r9
+  pop r8
+  pop rcx
+  pop rdx
+  pop rsi
+  pop rdi
+  pop rax
+  ret
 dbg:
   push rax
   push rdi
@@ -108,7 +132,7 @@ mlc:
   add rax,0xffff
   add rdi,1
   ;imul rdi,8
-  shr rdi,3
+  shl rdi,3
   push rax
   mov rax,0
   call malloc
@@ -320,7 +344,7 @@ pnt_r_p:
   pop rdi
   ;lea rsi,[rsi+1*rax]
   add rsi,rax
-  ;call pnt_str_ret
+  call pnt_str_ret
   mov r9,[rdi]
   mov r11,r9
   shl r9,16
@@ -416,4 +440,4 @@ eq_c_c:
   mov r10,rdx
 eq_s8_c:
 neq:
-  ret  
+  ret

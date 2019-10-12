@@ -2143,7 +2143,7 @@ and emt_el ih m el =
         (emt_set_ptn "" s "r12" emt_reg_x86 "rbx" i0)^
         "\tpop rbx\n"^
         l2^":\n" in
-      let ep = emt_ir ih s !p0 in
+      let ep = emt_ir m ih s !p0 in
       e0^ep^s1 )
 and cmt s = if emt_flg then "; "^s^"\n" else ""
 and pnt_idx s = Hashtbl.fold (fun n v q -> q^" "^(string_of_int n)^"~"^(Ast.print_v v)) s ""
@@ -2181,8 +2181,8 @@ and emt_get_ptn s tbv idx r dst =
             "\tclc\n"
           | Var { contents = _ }
           | _ ->
-            let l0 = lb () in
-            let l1 = lb () in
+            let l0 = "emt_get_ptn_0_"^(lb ()) in
+            let l1 = "emt_get_ptn_1_"^(lb ()) in
             (cmt c0)^
             "\tbt r12,"^(string_of_int i)^"\n"^
             "\tjc "^l0^"\n"^
@@ -2303,8 +2303,8 @@ and emt_get_crt_ptn s _ idx r =
           | Var { contents = _ }
           | _ ->
             let m = idx_min 0 s in
-            let l0 = lb () in
-            let l1 = lb () in
+            let l0 = "emt_get_crt_ptn_0_"^(lb ()) in
+            let l1 = "emt_get_crt_ptn_1_"^(lb ()) in
             let e0 =
               (cmt c0)^
               "\tbt r12,"^(string_of_int i)^"\n"^
@@ -2339,9 +2339,10 @@ and emt_get_crt_ptn s _ idx r =
         ) in
       tb (Var v)
     | R rs ->
-      let m = idx_min 0 s in
-      let l = Array.length rs in
       let (ea,p) = push_reg s x86_reg_lst in
+      let v = newvar () in
+      let m = idx_crt s v in
+      let l = Array.length rs in
       let e0 =
         ea^
         "\tmov rdi,"^(string_of_int l)^"\n"^
@@ -2354,9 +2355,10 @@ and emt_get_crt_ptn s _ idx r =
              let (ep,l) = push_reg s ["rax";"rdi";"rsi";"rdx"] in
              let (m0,e0) = emt_get_crt_ptn s "r12" idx r in
              let ei0 =
+               ep^
                "\tpush QWORD "^(idx m)^"\n"^
                e0^
-               ep^
+               "; test x0\n"^
                "\tmov rdx,"^(idx m0)^"\n"^
                "\tpop rdi\n"^
                "\tmov rsi,"^(string_of_int i)^"\n"^
@@ -2365,6 +2367,7 @@ and emt_get_crt_ptn s _ idx r =
                (pop_reg l) in
              (e1^ei0,i+1))
           (e0,0) rs in
+      let _ = idx_csm s v in
       let e2 =
         (cmt c0)^
         e1^
@@ -2374,13 +2377,16 @@ and emt_get_crt_ptn s _ idx r =
 and emt_set_ptn bt s tbv idx src r =
   pnt true "enter emt_set_ptn \n";
   let c0 = "emt_set_ptn "^(emt_ptn r) in
+  pnt true c0;
   let open Rcd_Ptn in
   ( match r with
     | A (-2) ->
+      pnt true "dbg -2\n";
       (cmt c0)
     | A i ->
-      let l0 = lb () in
-      let l1 = lb () in
+      pnt true "dbg 1\n";
+      let l0 = "emt_set_ptn_0_"^(lb ()) in
+      let l1 = "emt_set_ptn_1_"^(lb ()) in
       let v = (try Hashtbl.find s i with _ -> err ("emt_set_ptn 0:"^(pnt_s s)^","^src^","^(emt_ptn r))) in
       let open Types in
       let rec tb y =
@@ -2601,11 +2607,12 @@ and emt_ptn_set_ptn_1p s tbv idx r0 r1 =
       | _,_ -> "; emt_ptn_set_ptn\n" ) in
   el^(lp r0 r1)
 and emt_dec_ptn s idx r =
+  pnt true "enter emt_dec_ptn \n";
   let l = Rcd_Ptn.to_list r in
   let e0 =
     List.fold_left
       (fun e0 n ->
-         let l0 = lb () in
+         let l0 = "emt_dec_ptn_0_"^(lb ()) in
          let (e2,l) = push_reg s x86_reg_lst in
          let v = Hashtbl.find s n in
          let rec tb y =
@@ -2740,6 +2747,15 @@ and pop_s idx l =
        e1^
        "\tpop QWORD "^(idx n)^"\n" ) "" l in
    c0^e0^e1 *)
+and idx_sub s1 s0 =
+  Hashtbl.iter
+    (fun k _ ->
+       if Hashtbl.mem s0 k
+       then
+         Hashtbl.remove s1 k
+       else
+         ())
+    s1
 and emt_0b n =
   let s = String.make (n+1) '0' in
   Bytes.set s 0 '1';
@@ -2759,18 +2775,32 @@ and rb r =
 and csn = "r15"
 and emt_agl = "; emt_agl\n"
 and lb () = "lb_"^(Sgn.print (sgn ()))
-and pnt_reg s n =
-  let (e0,l) = push_reg s x86_reg_lst in
-  let ep = pop_reg l in
+and pnt_reg _ n =
   "\tpushf\n"^
-  e0^
+  " push rax
+    push rdi
+    push rsi
+    push rdx
+  push rcx
+    push r8
+    push r9
+    push r10
+    push r11\n"^
   "\tmov rdi,"^(emt_reg_x86 n)^"\n"^
   "\tmov rsi,str_ret\n"^
   "; test 0\n"^
   "\tbt r12,"^(string_of_int n)^"\n"^
   "\tcall pnt\n"^
   "\tcall pnt_str_ret\n"^
-  ep^
+  " pop r11
+  pop r10
+  pop r9
+  pop r8
+pop rcx
+  pop rdx
+  pop rsi
+  pop rdi
+  pop rax\n"^
   "\tpopf\n"
 and pnt_r_c _ r =
   "\tpushf\n"^
@@ -2826,8 +2856,28 @@ and pnt_r_nc _ r =
   "\tpopf\n"
 
 and emt_st s =
-  let (e0,l) = push_reg s x86_reg_lst in
-  let ep = pop_reg l in
+  let e0 =
+  "\tpushf\n"^
+  " push rax
+    push rdi
+    push rsi
+    push rdx
+  push rcx
+    push r8
+    push r9
+    push r10
+    push r11\n" in
+  let ep =
+  " pop r11
+  pop r10
+  pop r9
+  pop r8
+  pop rcx
+  pop rdx
+  pop rsi
+  pop rdi
+  pop rax\n"^
+  "\tpopf\n" in
   let e1 =
     Hashtbl.fold
       (fun n _ e1 ->
@@ -2838,23 +2888,30 @@ and emt_st s =
            "\tbt r12,"^(string_of_int n)^"\n"^
            "\tcall pnt\n"^
            "\tcall pnt_str_ret\n"^
+           "mov rsi,"^(string_of_int n)^"\n"^
+           "
+           mov rdi,str_dbg
+           mov rax,0
+           call printf\n"^
            ep in
          e1^e2 )
       s "" in
-  "\tpushf\n"^
+e0^
   e1^
-  "\tpopf\n"
-and emt_ir ih s p =
+  ep
+and emt_ir m ih s p =
   pnt true ("enter emt_ir:"^(pnt_idx s)^","^(print_line p)^"\n");
   ( match p with
     | Ret r ->
       ( try
           let s0 = Hashtbl.copy s in
           let ed = emt_dec_ptn s0 emt_reg_x86 (idx_ptn s0 r) in
-          let i0 = idx_csm_ptn s r in
+          let i0 = idx_ptn s r in
           let (m0,eg) = emt_get_crt_ptn s0 "r12" emt_reg_x86 i0 in
-          let l0 = lb () in
           let c0 = cmt ("\t∎ "^(emt_ptn i0)) in
+          let _ = idx_csm_ptn s r in
+          let l0 = "ret_"^(lb ()) in
+          pnt true "test x9\n";
           c0^
           eg^
           "\tjc "^l0^"\n"^
@@ -2900,21 +2957,65 @@ and emt_ir ih s p =
         Array.fold_left
           (fun (i,a) ((ri,es),p) ->
              let s = Hashtbl.copy s in
+             let s0 = Hashtbl.copy s in
              let ci = cmt ("\t∐\\ "^(Mtc.print (ri,es))) in
+             pnt true ci;
              let ei = emt_ptn_crt_ptn s "r12" emt_reg_x86 i0 ri in
-             let l_f = lb () in
+             pnt true "dbg x0\n";
+             pnt true "dbg x0\n";
+
+             let l_f = "mtc_"^(string_of_int i)^"_"^(lb ()) in
              let exs =
                List.fold_left
                  (fun exs (vx,pa) ->
                     let open Mtc in
                     let c0 = cmt ((print_v vx)^"="^(print_test pa)) in
-                    let i0 = idx s vx in
-                    let l_ef = lb () in
+                    pnt true c0;
+                    let ix = idx s vx in
+                    let l_ef = "failed_"^(lb ()) in
                     ( match pa with
-                      | Eq_Agl_N(_,_) ->
-                        exs^
-                        c0
+                      | Eq_Agl_N(n,r) ->
+                        let f = List.assoc n m.ns_e in
+                        let s1 = Hashtbl.copy s in
+                        let _ = idx_sub s1 s0 in
+                        let ec = clear emt_reg_x86 s1 in
+                        let rt = idx_crt_ptn s r in
+                        let ed0 = emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A ix) in
+                        let ed1 = emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A ix) in
+                        let i1 = idx_min 0 s in
+                        let _ = idx_csm s vx in
+                        let li = "test_"^(lb ()) in
+                        ( match f with
+                          | Tkn.Tkn(Tkn.Etr(Tkn.Inj i)) ->
+                            let r1 = (emt_reg_x86 i1) in
+                            let bt =
+                              "\tbt "^r1^",1\n" in
+                            let es =
+                              (emt_set_ptn bt s "r12" emt_reg_x86 r1 rt) in
+                            pnt true "dbg 2\n";
+                            let e0 =
+                              exs^
+                              c0^
+                              "\tmov "^r1^",["^(emt_reg_x86 ix)^"+8*1]\n"^
+                              "\tcmp "^r1^","^(string_of_int i)^"\n"^
+                              "\tjnz "^l_ef^"\n"^
+                              "\tjmp "^li^"\n"^
+                              l_ef^":\n"^
+                              ";test 0\n"^
+                              ed0^
+                              ec^
+                              "\tjmp "^l_f^"\n"^
+                              li^":\n"^
+                              (* "\tmov "^r1^",["^(emt_reg_x86 ix)^"]\n"^ *)
+                              "\tmov "^r1^",["^(emt_reg_x86 ix)^"+8*2]\n"^
+                              es^
+                              ed1 in
+                            e0
+                          | _ -> err "emt_ir 15" )
                       | P_Cst c ->
+                        let s1 = Hashtbl.copy s in
+                        let _ = idx_sub s1 s0 in
+                        let ec = clear emt_reg_x86 s1 in
                         ( match c with
                           | P_Stg s0 ->
                             let bs = Bytes.of_string s0 in
@@ -2922,12 +3023,15 @@ and emt_ir ih s p =
                             let rl = (bl/8)+1 in
                             let p = sgn () in
                             cst_stg := (p,bs)::!cst_stg;
-                            let li = lb () in
+                            let li = "test_s8_"^(lb ()) in
+                            let ed =
+                              (emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A ix)) in
+                            let _ = idx_csm s vx in
                             let rec ef i =
                               if i=rl then ""
                               else
                                 "\tmov QWORD rdi,[cst_stg_"^(Sgn.print p)^"+8*"^(string_of_int i)^"]\n"^
-                                "\tmov QWORD rsi,["^(emt_reg_x86 i0)^"+8*"^(string_of_int (i+1))^"]\n"^
+                                "\tmov QWORD rsi,["^(emt_reg_x86 ix)^"+8*"^(string_of_int (i+1))^"]\n"^
                                 "\tcmp rdi,rsi\n"^
                                 "\tjnz "^l_ef^"\n"^
                                 (ef (i+1)) in
@@ -2938,31 +3042,36 @@ and emt_ir ih s p =
                               (ef 0)^
                               "\tjmp "^li^"\n"^
                               l_ef^":\n"^
-                              (emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A i0))^
+                              ed^
+                              ec^
                               "\tpop rsi\n"^
                               "\tpop rdi\n"^
                               "\tjmp "^l_f^"\n"^
                               li^":\n"^
-                              (emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A i0))^
+                              ed^
                               "\tpop rsi\n"^
                               "\tpop rdi\n"
                             in
                             exs^e0
                           | P_R64 x ->
-                            let li = lb () in
+                            let li = "test_r64_"^(lb ()) in
                             let im = idx_min 0 s in
                             let rm = emt_reg_x86 im in
+                            let ed =
+                              (emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A ix)) in
+                            let _ = idx_csm s vx in
                             let e0 =
                               c0^
                               "\tmov QWORD "^rm^",0x"^(Int64.format "%x" x)^"\n"^
-                              "\tcmp "^(emt_reg_x86 i0)^","^rm^"\n"^
+                              "\tcmp "^(emt_reg_x86 ix)^","^rm^"\n"^
                               "\tjnz "^l_ef^"\n"^
                               "\tjmp "^li^"\n"^
                               l_ef^":\n"^
-                              (emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A i0))^
+                              ed^
+                              ec^
                               "\tjmp "^l_f^"\n"^
                               li^":\n"^
-                              (emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A i0)) in
+                              ed in
                             exs^e0
                           | _ ->
                             exs^
@@ -2970,15 +3079,22 @@ and emt_ir ih s p =
                       | _ -> err "emt_ir:mtc:0" ))
                  "" es in
              let _ = idx_csm_ptn s r in
-             let e1 = emt_ir ih s p in
+             (* let ed = (emt_dec_ptn s emt_reg_x86 ii) in *)
+             let e1 = emt_ir m ih s p in
+             pnt true "test x9\n";
              let e2 =
+               a^
                ci^
                ei^
                exs^
                e1^
                l_f^":\n" in
-             (i+1,a^e2))
+             pnt true "test x9\n";
+
+             (i+1,e2))
           (0,"") ps in
+      pnt true "test x8\n";
+
       let _ = idx_csm_ptn s r in
       c0^a0
                (*
@@ -3041,7 +3157,7 @@ and emt_ir ih s p =
              let _ = idx_csm_ptn s (Rcd_Ptn.A va) in
              let e1 =
                e0^
-               (emt_ir ih s p) in
+               (emt_ir m ih s p) in
              (i+1,a^e1) )
           (0,c0^e0) ps in
       a0
@@ -3538,14 +3654,15 @@ and emt_ir ih s p =
                     let e2 =
                       (cmt "cns")^
                       ep^e0^
-                      "\tcall dbg\n"^
+                      "\tcall hw\n"^
                       (* ipx^ed^ipx^e1^ *)
                       ipx^ed^e1^
                       "\tpush QWORD "^(emt_reg_x86 tx)^"\n"^
                       "\tmov rdi,2\n"^
                       "\tcall mlc\n"^
                       "\tmov rdi,rax\n"^
-                      (* (pnt_r_nc s "rdi\n")^ *)
+                      "\tcall hw\n"^
+                      (pnt_r_nc s "rdi\n")^
                       "\tmov rsi,0\n"^
                       "\tmov rdx,1\n"^
                       "\tstc\n"^
@@ -3722,7 +3839,7 @@ and emt_ir ih s p =
               ^"\tor r12,"^(emt_0b ir)^"\n" in
             c0^e0
           | _ -> err "emt_etr 0" ) in
-      s0^(emt_ir ih s p1) )
+      s0^(emt_ir m ih s p1) )
 (*
 and emt_ir ih s p =
   pnt true ("enter emt_ir:"^(pnt_idx s)^","^(print_line p)^"\n");
