@@ -2340,6 +2340,7 @@ and emt_get_crt_ptn s _ idx r =
       tb (Var v)
     | R rs ->
       let (ea,p) = push_reg s x86_reg_lst in
+      let ep = pop_reg p in
       let v = newvar () in
       let m = idx_crt s v in
       let l = Array.length rs in
@@ -2348,14 +2349,15 @@ and emt_get_crt_ptn s _ idx r =
         "\tmov rdi,"^(string_of_int l)^"\n"^
         "\tcall mlc\n"^
         "\tmov "^(idx m)^",rax\n"^
-        (pop_reg p) in
+        ep in
       let (e1,_) =
         Array.fold_left
           (fun (e1,i) r ->
-             let (ep,l) = push_reg s ["rax";"rdi";"rsi";"rdx"] in
+             (* let (ep,l) = push_reg s ["rax";"rdi";"rsi";"rdx"] in *)
              let (m0,e0) = emt_get_crt_ptn s "r12" idx r in
              let ei0 =
-               ep^
+               "; test x1\n"^
+               ea^
                "\tpush QWORD "^(idx m)^"\n"^
                e0^
                "; test x0\n"^
@@ -2364,7 +2366,7 @@ and emt_get_crt_ptn s _ idx r =
                "\tmov rsi,"^(string_of_int i)^"\n"^
                "\tcall exc\n"^
                "\tmov "^(idx m)^",rdi\n"^
-               (pop_reg l) in
+               ep in
              (e1^ei0,i+1))
           (e0,0) rs in
       let _ = idx_csm s v in
@@ -2445,15 +2447,27 @@ and emt_set_ptn bt s tbv idx src r =
             l1^":\n" ) in
       tb (Var v)
     | R rs ->
+      let i0 = idx_min 0 s in
+      let r0 =
+        if i0<9 then idx i0 else "r14" in
       let (e0,_) =
         Array.fold_left
           (fun (e0,i) r ->
              let ei =
                (* "\tpush "^src^"\n"^ *)
-               "\tpush "^src^"\n"^
-               "\tmov "^src^",["^src^"]\n"^
-               "\tbt "^src^","^(string_of_int i)^"\n"^
-               "\tmov "^src^",["^src^"+8*"^(string_of_int (i+1))^"]\n" in
+               if i0<9 then
+                 "\tpush "^src^"\n"^
+                 "\tmov "^r0^",["^src^"]\n"^
+                 "\tbt "^r0^","^(string_of_int i)^"\n"^
+                 "\tmov "^src^",["^src^"+8*"^(string_of_int (i+1))^"]\n"
+               else
+                 "\tpush "^src^"\n"^
+                 "\tpush r14\n"^
+                 "\tmov "^r0^",["^src^"]\n"^
+                 "\tbt "^r0^","^(string_of_int i)^"\n"^
+                 "\tmov "^src^",["^src^"+8*"^(string_of_int (i+1))^"]\n"^
+                   "\tpop r14\n"
+             in
              let e1 = emt_set_ptn "" s tbv idx src r in
              let e2 =
                "\tpop "^src^"\n" in
@@ -2857,8 +2871,8 @@ and pnt_r_nc _ r =
 
 and emt_st s =
   let e0 =
-  "\tpushf\n"^
-  " push rax
+    "\tpushf\n"^
+    " push rax
     push rdi
     push rsi
     push rdx
@@ -2868,7 +2882,7 @@ and emt_st s =
     push r10
     push r11\n" in
   let ep =
-  " pop r11
+    " pop r11
   pop r10
   pop r9
   pop r8
@@ -2877,7 +2891,7 @@ and emt_st s =
   pop rsi
   pop rdi
   pop rax\n"^
-  "\tpopf\n" in
+    "\tpopf\n" in
   let e1 =
     Hashtbl.fold
       (fun n _ e1 ->
@@ -2896,7 +2910,7 @@ and emt_st s =
            ep in
          e1^e2 )
       s "" in
-e0^
+  e0^
   e1^
   ep
 and emt_ir m ih s p =
@@ -2980,18 +2994,20 @@ and emt_ir m ih s p =
                         let _ = idx_sub s1 s0 in
                         let ec = clear emt_reg_x86 s1 in
                         let rt = idx_crt_ptn s r in
-                        let ed0 = emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A ix) in
+                        let _ = emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A ix) in
                         let ed1 = emt_dec_ptn s emt_reg_x86 (Rcd_Ptn.A ix) in
-                        let i1 = idx_min 0 s in
+                        let v1 = newvar () in
+                        let i1 = idx_crt s v1 in
+                        let r1 = (emt_reg_x86 i1) in
+                        let bt =
+                          "\tbt r12,"^(string_of_int i1)^"\n" in
+                        let es =
+                          (emt_set_ptn bt s "r12" emt_reg_x86 r1 rt) in
                         let _ = idx_csm s vx in
+                        let _ = idx_csm s v1 in
                         let li = "test_"^(lb ()) in
                         ( match f with
                           | Tkn.Tkn(Tkn.Etr(Tkn.Inj i)) ->
-                            let r1 = (emt_reg_x86 i1) in
-                            let bt =
-                              "\tbt "^r1^",1\n" in
-                            let es =
-                              (emt_set_ptn bt s "r12" emt_reg_x86 r1 rt) in
                             pnt true "dbg 2\n";
                             let e0 =
                               exs^
@@ -3002,7 +3018,7 @@ and emt_ir m ih s p =
                               "\tjmp "^li^"\n"^
                               l_ef^":\n"^
                               ";test 0\n"^
-                              ed0^
+                              (* ed0^ *)
                               ec^
                               "\tjmp "^l_f^"\n"^
                               li^":\n"^
@@ -3042,7 +3058,7 @@ and emt_ir m ih s p =
                               (ef 0)^
                               "\tjmp "^li^"\n"^
                               l_ef^":\n"^
-                              ed^
+                              (* ed^ *)
                               ec^
                               "\tpop rsi\n"^
                               "\tpop rdi\n"^
@@ -3067,7 +3083,7 @@ and emt_ir m ih s p =
                               "\tjnz "^l_ef^"\n"^
                               "\tjmp "^li^"\n"^
                               l_ef^":\n"^
-                              ed^
+                              (* ed^ *)
                               ec^
                               "\tjmp "^l_f^"\n"^
                               li^":\n"^
@@ -3078,8 +3094,8 @@ and emt_ir m ih s p =
                             c0 )
                       | _ -> err "emt_ir:mtc:0" ))
                  "" es in
+             let ed = (emt_dec_ptn s emt_reg_x86 i0) in
              let _ = idx_csm_ptn s r in
-             (* let ed = (emt_dec_ptn s emt_reg_x86 ii) in *)
              let e1 = emt_ir m ih s p in
              pnt true "test x9\n";
              let e2 =
@@ -3087,6 +3103,7 @@ and emt_ir m ih s p =
                ci^
                ei^
                exs^
+               ed^
                e1^
                l_f^":\n" in
              pnt true "test x9\n";
@@ -3668,14 +3685,14 @@ and emt_ir m ih s p =
                       "\tstc\n"^
                       "\tcall exc\n"^
                       "\tmov rsi,1\n"^
-                      "\tcall dbg\n"^
+                      "\tcall hw\n"^
                       (pnt_r_nc s "rdi")^
                       "\tpop rdx\n"^
                       "\tbt r12,"^(string_of_int tx)^"\n"^
                       "\tcall exc\n"^
                       "\tmov QWORD "^(emt_reg_x86 iy)^",rdi\n"^
                       "\tbtr r12,"^(string_of_int iy)^"\n"^
-                      "\tcall dbg\n"^
+                      "\tcall hw\n"^
                       (pnt_reg s iy)^
                       (pop_reg l) in
                     e2
