@@ -80,4 +80,21 @@
 		∐.\ l0' ,l0'=cns◂{ hd' tl' } ~|
 		» "f" |~ _ ⊢ y
 		∎ tl
+§ @.lst_mov { l0 l1 }
+	? l0
+		∐\ l0' ,l0'=nil◂{} ~|
+		∎ l1
+		∐.\ l0' ,l0'=cns◂{ hd0' tl0' } ~|
+		cns { hd0 l1 } ⊢ l1
+		lst_mov { tl0 l1 } ⊢ l1
+		∎ l1
+§ rev l0
+	» ⟦⟧ |~ _ ⊢ l1
+	lst_mov { l0 l1 } ⊢ l2
+	∎ l2 
+§ test6 {}
+	» ⟦ "a" "b" "c" ⟧ |~ _ ⊢ l0
+	» ⟦⟧ |~ _ ⊢ l1
+	lst_mov { l0 l1 } ⊢ l2
+	∎ l2
 §§.
