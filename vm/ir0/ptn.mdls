@@ -50,6 +50,19 @@
 		» "c" |~ _ ⊢ s1
 		∎ s1
 ;]
+§ @.apnd { l_0 l_1 }
+ 	? l_0
+		∐\ l_0' ,l_0'=nil◂{} ~|
+		∎ l_1
+		∐.\ l_0' ,l_0'=cns◂{ hd' tl' } ~|
+		apnd { tl l_1 } ⊢ l_1
+		cns { hd l_1 } ⊢ l_1
+		∎ l_1
+§ test_a {}
+	» ⟦ 0xr0101 0xrAFFA 0xr83793 ⟧ |~ _ ⊢ l0
+	» ⟦ 0xrff 0xrFABc ⟧ |~ _ ⊢ l1
+	apnd { l0 l1 } ⊢ l2
+	∎ l2
 § test3 {}
 	» 0xrFF |~ _ ⊢ s0
 	? s0
@@ -62,6 +75,7 @@
 		∐.\ _ ~|
 		» "c" |~ _ ⊢ s1
 		∎ s1
+
 § test4 {}
 	» "a" |~ _ ⊢ s0
 	» "b" |~ _ ⊢ s1
@@ -80,23 +94,25 @@
 		∐.\ l0' ,l0'=cns◂{ hd' tl' } ~|
 		» "f" |~ _ ⊢ y
 		∎ tl
+
 § @.lst_mov { l0 l1 }
 	? l0
-		∐\ l0' ,l0'=nil◂{} ~|
-		∎ l1
-		∐.\ l0' ,l0'=cns◂{ hd0' tl0' } ~|
+		∐\ l0' ,l0'=cns◂{ hd0' tl0' } ~|
 		cns { hd0 l1 } ⊢ l1
-		lst_mov { tl0 l1 } ⊢ l1
+		lst_mov { tl0 l1 } ⊢| ; l1
+		;∎ l1
+		∐.\ l0' ,l0'=nil◂{} ~|
 		∎ l1
 § rev l0
 	» ⟦⟧ |~ _ ⊢ l1
-
-	lst_mov { l0 l1 } ⊢ l2
-	∎ l2
+	lst_mov { l0 l1 } ⊢| ; l2
+	;∎ l2
 § test6 {}
 	» ⟦ 0xr44 0xrFAAA 0xrBB 0xrBF 0xrcc ⟧ |~ _ ⊢ l0
 	;» ⟦⟧ |~ _ ⊢ l0
+	$ l0 ⊢ l0,l00
 	» ⟦⟧ |~ _ ⊢ l1
 	lst_mov { l0 l1 } ⊢ l2
+	;apnd { l2 l00 } ⊢ l2
 	∎ l2
 §§.

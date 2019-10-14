@@ -77,6 +77,7 @@ let ast_from_file (f:string) =
        Imp_parser.file Imp_lexer.token lexbuf)
 
 let mdl_from_string (s:string) =
+  Types.rm := [];
   let lexbuf = Lexing.from_string s in
   List.hd @@ Imp_parser.file Imp_lexer.token lexbuf
 exception Load

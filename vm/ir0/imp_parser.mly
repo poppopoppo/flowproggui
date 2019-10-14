@@ -239,23 +239,13 @@ ir_ptn_lst:
 ir_ptn_eq:
   | { [] }
   | CMM VAL EQ NAM APP ir_ptn ir_ptn_eq {
-    let v =
-      ( try
-        List.assoc $2 !Types.rm
-        with _ ->
         let v = newvar () in
         Types.rm := ($2,v)::!Types.rm;
-        v ) in
     (v,Mtc.Eq_Agl_N($4,$6))::$7
     }
   | CMM VAL EQ ir_ptn_cst ir_ptn_eq {
-    let v =
-      ( try
-        List.assoc $2 !Types.rm
-        with _ ->
         let v = newvar () in
         Types.rm := ($2,v)::!Types.rm;
-        v ) in
     (v,Mtc.P_Cst $4)::$5 }
   ;
 ir_ptn_cst:
@@ -267,14 +257,11 @@ ir_ptn_cst:
   ;
 ir_ptn_atm:
   | WC {
-    let v = newvar () in rm := ("_",v)::!rm; v}
+    let v = newvar () in Types.rm := ("_",v)::!Types.rm; v}
   | VAL {
-      ( try
-        List.assoc $1 !Types.rm
-        with _ ->
         let v = newvar () in
         Types.rm := ($1,v)::!Types.rm;
-        v ) }
+        v  }
   ;
 lst_list_ptn:
   | { P_Agl_N("nil",Rcd_Ptn.R [||]) }
