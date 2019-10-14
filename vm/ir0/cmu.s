@@ -15,6 +15,8 @@ section .bss
   st_vct: resb 400
   st_vct_tmp: resb 400
   tmp: resb 80
+  tmp_pop: resb 8
+  tmp_push: resb 8
   str_ret: resb 1000
 section .data
   str_tkn: db "tkn: ",0

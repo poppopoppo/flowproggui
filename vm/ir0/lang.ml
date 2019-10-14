@@ -1897,7 +1897,7 @@ and mk_ir rv p0 =
         Array.fold_left
           ( fun ps (e,p) ->
               let rv = Hashtbl.copy rv in
-              let _ = crt_mtc_ptn_rv e rv in
+              let e = crt_mtc_ptn_rv e rv in
               let pi = mk_ir rv p in
               ps |+| [|(e,pi)|] )
           [||] ps in
@@ -1958,18 +1958,18 @@ and crt_ptn_rv r rv = Rcd_Ptn.map (fun r0 -> crt_rv r0 rv) r
 and crt_mtc_ptn_rv (r,es) rv  =
   let open Mtc in
   let _ = Rcd_Ptn.map (fun v -> crt_rv v rv) r in
-  let _ =
+  let es =
     List.fold_left
-      (fun _ (v,e) ->
-         let _ = csm_rv v rv in
+      (fun es (v0,e) ->
+         let v1 = csm_rv v0 rv in
          ( match e with
            | Eq_Agl(_,_) -> err "crt_mtc_ptn_rv 0"
            | Eq_Agl_N(_,r) ->
              let _ = Rcd_Ptn.map (fun v -> crt_rv v rv) r in
-             ()
-           | P_Cst _ -> () ))
-      () es in
-  ()
+             es@[(v1,e)]
+           | P_Cst _ -> es@[(v1,e)] ))
+      [] es in
+  (r,es)
 and mk_ir_etr (r0,p0) =
   let rv = Hashtbl.create 10 in
   let _ = crt_ptn_rv r0 rv in
@@ -2544,10 +2544,10 @@ and push_ex s x =
     List.map (fun (n,_) -> Hashtbl.remove s n) l in
   (es,l)
 and pop_ex s l =
-  let c0 = cmt ("pop_s") in
+  let c0 = cmt ("pop_ex") in
   let e0 =
     "\tmov QWORD r12,[rsp]\n"^
-    "\tpush r14\n"  in
+    "\tmov QWORD [tmp_pop],r14\n" in
   let ln = List.length l in
   let (e1,_) =
     List.fold_left
@@ -2564,13 +2564,13 @@ and pop_ex s l =
       ("",0) l in
   c0^e0^e1^
   "\tadd rsp,"^(string_of_int (8*(ln+1)))^"\n"^
-  "\tpop r14\n"
+  "\tmov QWORD r14,[tmp_pop]\n"
 and push_s_ex s =
-  let c0 = cmt ("push_ex "^(pnt_s s)) in
+  let c0 = cmt ("push_s_ex "^(pnt_s s)) in
   let ln = BatHashtbl.length s in
   let ea =
     "\tsub rsp,"^(string_of_int (8*(ln+1)))^"\n"^
-    "\tpush r14\n"  in
+    "\tmov QWORD [tmp_push],r14\n"  in
   let (e0,_,l) =
     Hashtbl.fold
       (fun n v (e0,i,l) ->
@@ -2585,7 +2585,7 @@ and push_s_ex s =
       s ("",0,[]) in
   let e1 =
     "\tmov QWORD [rsp],r12\n"^
-    "\tpop r14\n" in
+    "\tmov QWORD r14,[tmp_push]\n" in
   (c0^ea^e0^e1,l)
 and emt_ptn_1p s (r0:int Rcd_Ptn.t) (r1:int Rcd_Ptn.t) =
   let l0 = Rcd_Ptn.to_list r0 in
@@ -3808,19 +3808,18 @@ and emt_ir m ih s p =
                     dec_x^
                     "\tcall _"^f^"\n"^
                     (pnt_reg s 8)^
-                    "\tpush rbx\n"^
-                    "\tmov rbx,rax\n"^
+                    "\tmov QWORD [tmp],rax\n"^
                     "\tjc "^l_0^"\n"^
                     sp^
-                    (emt_set_ptn "" s "r12" emt_reg_x86 "rbx" iy)^
-                    (emt_dec s "rbx" (inst_ptn 0 y))^
+                    "\tclc\n"^
+                    (emt_set_ptn "" s "r12" emt_reg_x86 "[tmp]" iy)^
+                    (emt_dec s "[tmp]" (inst_ptn 0 y))^
                     "\tjmp "^l_1^"\n"^
                     l_0^":\n"^
                     sp^
                     "\tstc\n"^
-                    (emt_set_ptn "" s "r12" emt_reg_x86 "rbx" iy)^
-                    l_1^":\n"^
-                    "\tpop rbx\n"
+                    (emt_set_ptn "" s "r12" emt_reg_x86 "[tmp]" iy)^
+                    l_1^":\n"
                   with Failure s -> err ("emt_ir r0:"^s))
               | _ -> "; ir_glb_call\n"  )
           | IR_Exp(Ast.Atm(Ast.Stg c),_,Rcd_Ptn.A r) ->
