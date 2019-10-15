@@ -170,7 +170,7 @@ typ:
   | typ PRJ typ { App(App(Prm Vct,$1),$3) }
   | L_OPN typ R_OPN { opn $2 }
   | L_LST typ R_LST { lst $2 }
-  | VAL { Var (newvar ()) }
+  | VAL { Prm(EqT $1) }
   | NAM { Prm (Name $1) }
   | Z { zn (Prm Z_u) }
   | N { Prm N }
@@ -186,6 +186,11 @@ rot_dsh:
 glb_etr:
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
   | LCE glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d) }
+  | LCE NAM CLN typ SRC typ {
+    let l = ref [] in
+    let ys = Types.mk_vars l $4 in
+    let yd = Types.mk_vars l $6 in
+    Ast.Etr_Abs($2,ys,yd) }
   ;
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }
@@ -361,7 +366,6 @@ regs:
   | { [||] }
   | CMM reg_ptn regs { [|$2|] |+| $3 }
   ;
-
 typ_def:
   | { (Var (newvar()),Var (newvar())) }
   | CLN typ SRC typ DOT { ($2,$4) }
