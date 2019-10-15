@@ -114,6 +114,43 @@ module Types = struct
     let v = ref (Q ((),l)) in
     v_vct := !v_vct@[v];
     v
+  let rec mk_vars l y =
+    ( match y with
+      | Prm (EqT n) ->
+        ( try
+            let v = List.assoc n !l in
+            Var v
+          with _ ->
+            let v = newvar_q (-2) in
+            l := (n,v)::!l;
+            Var v )
+      | Abs(v,y0) -> Abs(v,mk_vars l y0)
+      | Var v -> Var v
+      | App(y0,y1) -> App(mk_vars l y0,mk_vars l y1)
+      | Imp(y0,y1) -> Imp(mk_vars l y0,mk_vars l y1)
+      | Prm p -> Prm p
+      | Rcd r -> Rcd(mk_vars_rcd l r)
+      | Rcd_Lb r -> Rcd_Lb(mk_vars_rcd_lb l r)
+      | Rec r -> Rec(mk_vars_rec l r)
+    )
+  and mk_vars_rcd l r =
+    ( match r with
+      | Cns(y0,r0) -> Cns(mk_vars l y0,mk_vars_rcd l r0)
+      | Uo { contents = Ln r0 } -> Uo { contents = Ln (mk_vars_rcd l r0) }
+      | Uo v -> Uo v
+      | U -> U )
+  and mk_vars_rcd_lb l r =
+    ( match r with
+      | Cns_Lb(lb,y0,r0) -> Cns_Lb(lb,mk_vars l y0,mk_vars_rcd_lb l r0)
+      | Uo_Lb { contents = Ln r0 } -> Uo_Lb { contents = Ln (mk_vars_rcd_lb l r0) }
+      | Uo_Lb v -> Uo_Lb v
+      | U_Lb -> U_Lb )
+  and mk_vars_rec l r =
+    ( match !r with
+      | CP(y0,r0) -> r := CP(mk_vars l y0,mk_vars_rcd l r0); r
+      | P(y0,y1,r0) -> r := P(mk_vars l y0,mk_vars l y1,mk_vars_rcd l r0); r
+      | Rec_WC -> r
+    )
   let rec to_rcd_ptn y =
     ( match y with
       | Rcd r ->
@@ -509,6 +546,7 @@ module Ast = struct
   and mdl_gma = scm StgMap.t
   and glb_etr =
     | Etr of string * Types.t * Types.t * etr
+    | Etr_Abs of string * Types.t * Types.t
     | Flow of flow
     | Etr_Clq of (string * Types.t * Types.t * etr) list
     | Flow_Clq of flow list
@@ -615,6 +653,7 @@ module Ast = struct
           let s1 =
             ( match hd with
               | Etr(n,_,_,_) -> "§ .."^n^"\n"
+              | Etr_Abs(n,_,_) -> "§ "^n^" : .. ⊢ ..\n"
               | Flow f -> "¶ "^(print_flow f)
               | Etr_Clq _ -> "§ @. .. "^"\n"
               | Flow_Clq _ -> "¶ @. .."^"\n"
@@ -1686,6 +1725,9 @@ and mk_ir_mdl_etr m el =
             let _ = gen (ref []) (-1) y in
             m.ns_v <- (n,(r0,p0))::m.ns_v;
             m.ns <- (n,ref(Ln y))::m.ns
+          | Etr_Abs(n,y0,y1) ->
+            m.ns <- (n,ref(Ln(Imp(y0,y1))))::m.ns;
+            m.ns_e<-(n,Tkn.Tkn(Tkn.Etr(Tkn.Etr_N n)))::m.ns_e
           | Etr_Clq q ->
             pnt true "test x0\n";
             let l0 =
@@ -3888,12 +3930,6 @@ and emt_ir m ih s p =
               "\tmov [rdi],rdx\n"^
               "\tmov QWORD "^rm^",rdi\n"^
               (pop_reg l)^
-              (* ( if ir<9 then "\tmov QWORD "^(emt_reg_x86 ir)^","^rm^"\n"
-                 else
-                  "\tpush r14\n"^
-                  "\tmov r14,"^rm^"\n"^
-                  "\tmov QWORD "^(emt_reg_x86 ir)^",r14\n"^
-                  "\tpop r14\n" ) *)
               (mov_idx im ir)
               (* "\tbts r12,"^(string_of_int ir)^"\n" *)
               ^"\tand r12,~"^(emt_0b ir)^"\n" in
