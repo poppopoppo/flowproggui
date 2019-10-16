@@ -1,0 +1,19 @@
+§§ flw
+¶ opn ◂ a'
+  ∐ some : a'
+  ∐ none : {}
+¶ @.b_tree ◂ a'
+  ∐ brc : { b_tree◂a' a' b_tree◂a' }
+  ∐ leaf : {}
+§ f0 {}
+  none {} ⊢ a0
+  ∎ a0
+§ f1 {}
+  » 0xrF378a |~ _ ⊢ r0
+  some r0 ⊢ a1
+  some a1 ⊢ a2
+  leaf {} ⊢ l0
+  $ l0 ⊢ l0,l1
+  brc { l0 a2 l1 } ⊢ b0
+  ∎ b0 
+§§.
