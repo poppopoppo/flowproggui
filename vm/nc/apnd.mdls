@@ -1,0 +1,32 @@
+§§ def
+§ e0 : ℙ ⊢ ℤ
+§ e1 : r64 ⊢ r64
+;§ p0 : { a' b' r64 s8 & } ⊢ a'
+
+§ p1 : { a' a' } ⊢ a'
+¶ opn ◂ a'
+	∐ some : a'
+	∐ none : {}
+¶ lstA ◂ a'
+	∐ cnsA : a'
+	∐ nilA : {}
+¶ @.b_tree ◂ a'
+	∐ brc : { b_tree◂a' a' b_tree◂a' }
+	∐ lf : {}
+§ f0 {}
+	lf {} ⊢ l0
+	$ l0 ⊢ l0,l1
+	» 0xrfabc _ ⊢ x0
+	brc { l0 x0 l1 } ⊢ t0
+	$ t0 ⊢ t0,t1
+	» 0xrFACAC _ ⊢ x1
+	brc { t0 x1 t1 } ⊢ t2
+	∎ t2
+§ f1 {}
+	» cnsA◂{ 0xr7ADFD cnsA◂{ 0xrA7632 cnsA◂{ 0xr4867 nilA◂{}}}} _ ⊢ l0
+	∎ l0
+§ f2 {}
+	» some _ ⊢ p0
+	» f1 _ ⊢ p1
+	∎ { p0 p1 }
+§§.

@@ -9,7 +9,7 @@
 %token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT VCT_INI OP LCE_IR
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL COPRD_PTN_END
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
-%token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR
+%token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR CLN2
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
@@ -61,17 +61,22 @@ nls:
   | nls NL {}
   ;
 def_arg:
-  | { [] }
+  | { ([],[]) }
   | APP args { $2 }
-  | APP args_rot { BatList.init $2 (fun n -> "$"^(String.make n '\'')) }
+  | APP args_rot { ([],BatList.init $2 (fun n -> ("$"^(String.make n '\''),newvar_q (-2)))) }
   ;
 args_rot:
   | DSH { 1 }
   | DSH args_rot { 1+$2 }
   ;
 args:
-  | VAL { [$1] }
-  | VAL CMM args { $1::$3 }
+  | VAL {
+    let v = newvar_q (-1) in
+    ([v],[($1,v)]) }
+  | VAL CMM args {
+    let v = newvar_q (-1) in
+    let (vs,l) = $3 in
+    (v::vs,($1,v)::l) }
   ;
 gl_etr_lst:
   |   { [] }
@@ -133,19 +138,20 @@ def_typ_clique:
   | SLF DOT def_typ_body def_typ_clique { [$3]@$4 }
   ;
 def_typ_body:
-  | NAM def_arg  { Def_Abs ($1,$2) }
-  | NAM def_arg ISO def_coprd   { Def_CoPrd ($1,$2,$4) }
-  | NAM def_arg ISO def_prd  { Def_Prd ($1,$2,$4) }
+  | NAM def_arg  { Def_Abs ($1,snd $2) }
+  | NAM def_arg def_coprd   {
+    Def_CoPrd ($1,snd $2,$3) }
+  | NAM def_arg def_prd  { Def_Prd ($1,snd $2,$3) }
   | FNT NAM ISO name_list { Def_Fnt ($2,$4) }
-  | NAM def_arg EQ typ  { Def_EqT ($1,$2,$4) }
+  | NAM def_arg EQ typ  { Def_EqT ($1,snd $2,$4) }
   ;
 name_list:
   | NAM { [$1] }
   | NAM name_list { $1::$2 }
   ;
 def_coprd:
-  | COPRD typ_top CLN NAM  { [($2,$4)] }
-  | COPRD typ_top CLN NAM def_coprd  { ($2,$4)::$5 }
+  | COPRD NAM CLN typ { [($4,$2)] }
+  | COPRD NAM CLN typ def_coprd  { ($4,$2)::$5 }
   ;
 def_prd:
   | PRD typ_top CLN NAM  { [($2,$4)] }
@@ -187,10 +193,7 @@ glb_etr:
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
   | LCE glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d) }
   | LCE NAM CLN typ SRC typ {
-    let l = ref [] in
-    let ys = Types.mk_vars l $4 in
-    let yd = Types.mk_vars l $6 in
-    Ast.Etr_Abs($2,ys,yd) }
+    Ast.Etr_Abs($2,$4,$6) }
   ;
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }
