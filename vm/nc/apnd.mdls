@@ -13,6 +13,18 @@
 ¶ @.b_tree ◂ a'
 	∐ brc : { b_tree◂a' a' b_tree◂a' }
 	∐ lf : {}
+
+§ @.map { f l0 }
+	? l0
+	∐\ l0' ,l0'=cns◂{ hd0' tl0' } ~|
+		$ f ⊢ f,f0
+		f hd0 ⊢ hd1
+		map { f0 tl0 } ⊢ tl1
+		cns { hd1 tl1 } ⊢ l1
+		∎ l1
+	∐.\ l0'
+		∎ l0
+
 § f0 {}
 	lf {} ⊢ l0
 	$ l0 ⊢ l0,l1
