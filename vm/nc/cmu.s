@@ -17,6 +17,7 @@ section .bss
   tmp: resb 80
   tmp_pop: resb 8
   tmp_push: resb 8
+  dyn_call_vct: resb 16
   str_ret: resb 1000
 section .data
   str_tkn: db "tkn: ",0
@@ -151,10 +152,6 @@ dec_r:
   sub rax,rsi
   mov rsi,rax
   shr rsi,48
-  ;sub rsi,1
-  ;ror QWORD rax,48
-  ;sub QWORD rax,1
-  ;rol QWORD rax,48
   mov [rdi],rax
   cmp rsi,0
   jne dec_r_end
