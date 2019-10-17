@@ -10,7 +10,7 @@
 § sgn : {} ⊢ sgn 
 § eq : { a' a' } ⊢ bl
 ¶ opn ◂ a'  
-	∐ some : a' 
+	∐ some : a'  
 	∐ none : {} 
 ¶ @.b_tree ◂ a'  
 	∐ brc : { b_tree◂a' a' b_tree◂a' }
@@ -30,7 +30,8 @@
 	∎ t2
 § f1 {}
 	» f0 _ ⊢ p0
-	» some _ ⊢ p1 
+	» some _ ⊢ p1  
 	∎ { p0 p1 }
+	
 ;]
 §§.

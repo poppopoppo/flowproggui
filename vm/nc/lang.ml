@@ -1345,7 +1345,7 @@ and gen_rcd_lb rl l r =
     | Cns_Lb(_,t0,t1) -> gen rl l t0; gen_rcd_lb rl l t1 )
 let inst_ini () = { al = []; al_rcd = []; al_rcd_lb = []; rl = []; }
 let rec inst l i y =
-  pnt true "enter inst\n";
+  (* pnt true "enter inst\n"; *)
   ( match y with
     | App(Var ({contents = Ln(Abs(v,y0))} as v0),y1) ->
       pnt true ("inst "^(print_reg v0));
