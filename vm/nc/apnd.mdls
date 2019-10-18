@@ -2,8 +2,13 @@
 § e0 : ℙ ⊢ ℤ
 § e1 : r64 ⊢ r64
 ;§ p0 : { a' b' r64 s8 & } ⊢ a'
-
+¶ bl 
+	∐ t : {} 
+	∐ f : {}
+§ eq : { a' a' } ⊢ bl 
 § p1 : { a' a' } ⊢ a'
+¶ sgn 
+§ sgn : {} ⊢ sgn
 ¶ opn ◂ a'
 	∐ some : a'
 	∐ none : {}
@@ -18,12 +23,13 @@
 	? l0
 	∐\ l0' ,l0'=cns◂{ hd0' tl0' } ~|
 		$ f ⊢ f,f0
-		f hd0 ⊢ hd1
+		◂ f,hd0 ⊢ hd1
 		map { f0 tl0 } ⊢ tl1
 		cns { hd1 tl1 } ⊢ l1
 		∎ l1
-	∐.\ l0'
-		∎ l0
+	∐.\ _ ~|
+		nil {} ⊢ l1 
+		∎ l1
 
 § f0 {}
 	lf {} ⊢ l0
@@ -47,5 +53,14 @@
 	◂ p0,p1 ⊢ a0
 	» f1 _ ⊢ p1
 	◂ p1,{} ⊢ r0
-	∎ { a0 r0 }
+	∎ { a0 r0 } 
+§ f4 {} 
+	» 0xr33 _ ⊢ x0 
+	» 0xr45 _ ⊢ x1 
+	» 0xr33 _ ⊢ x2
+	» cnsA◂{ 0xr7ADFD cnsA◂{ 0xrA7632 cnsA◂{ 0xr4867 nilA◂{}}}} _ ⊢ l0
+	$ l0 ⊢ l0,l1 
+	eq { x0 x1 } ⊢ b0
+	eq { l0 l1 } ⊢ b1 
+	∎ { b0 b1 }
 §§.

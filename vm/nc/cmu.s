@@ -36,6 +36,20 @@ section .data
   fmt_s8: db `\"%s\" `, 0
 ; dynamic entries
   etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
+; global constants
+  unt: dq 0x000100000000ffff
+; global variables
+  sgn_ctr: dq 0
+  c_0:
+    dq 0x000100020000fffd
+    dq 0
+    dq c_0_unt
+  c_0_unt: dq 0x000200000000ffff
+  c_1:
+    dq 0x000100020000fffd
+    dq 1
+    dq c_1_unt
+  c_1_unt: dq 0x000200000000ffff
 section .text
 global _start               ; _startを指名
 _start:
@@ -422,22 +436,101 @@ pnt_opq:
   pop rsi
   add rax,rsi
   ret
-eq_nc_nc: ; rdi=rsi ⊢ zf
+eq: ; rdi=rsi rdx= c0 rcx = c1
+  bt rdx,0
+  jnc eq_nc_b
+  bt rcx,0
+  jnc eq_c_nc
   cmp rdi,rsi
+  mov rax,0
+  setc al
   ret
-eq_c_c:
-  push rax
-  push rdx
-  mov rax,[rdi]
-  bt rax,16
-  jc eq_s8_c
+eq_c_nc:
+  mov rax,0
+  ret
+eq_nc_b:
+  bt rcx,0
+  jnc eq_nc_nc
+  mov rax,0
+  ret
+eq_nc_nc: ; rdi=rsi ⊢ zf
+  mov r11,[rdi]
+  bt r11,16
+  jc eq_opq_nc
+  mov r10,[rsi]
+  bt r10,16
+  jc eq_blk_opq
+eq_blk_blk:
+  mov r9,r11
+  mov r10,0x0000ffff00000000
+  and r9,r10
+  shr r9,32
+  add rdi,8
+  add rsi,8
+eq_blk_blk_lp:
+  cmp r9,0
+  jz eq_opq_opq_lp_end_t
+  sub r9,1
+  mov rdx,0
+  mov rcx,0
+  rcr r11,1
+  rcl rdx,1
+  rcr r10,1
+  rcl rcx,1
+  push r10
+  push r11
+  push r9
+  push rdi
+  push rsi
+  mov rdi,[rdi]
+  mov rsi,[rsi]
+  call eq
+  pop rsi
+  pop rdi
+  pop r9
+  pop r11
+  pop r10
+  bt rax,0
+  jnc eq_blk_blk_lp_end_f
+  add rdi,8
+  add rsi,8
+  jmp eq_blk_blk_lp
+eq_blk_blk_lp_end_t:
+  mov rax,1
+  ret
+eq_blk_blk_lp_end_f:
+  mov rax,0
+  ret
+eq_blk_opq:
+  mov rax,0
+  ret
+eq_opq_nc:
   mov rdx,[rsi]
   bt rdx,16
-  jc neq
-  push r9
-  push r10
-  mov r9,rax
-  mov r10,rdx
-eq_s8_c:
+  jc eq_opq_opq
+eq_opq_opq:
+  mov rcx,rdx
+  mov r11,0x0000ffff00000000
+  and rcx,r11
+  shr rcx,32
+  add rdi,8
+  add rsi,8
+eq_opq_opq_lp:
+  cmp rcx,0
+  jz eq_opq_opq_lp_end_t
+  sub rcx,1
+  mov rax,[rdi]
+  mov rdx,[rsi]
+  cmp rax,rdx
+  jnz eq_opq_opq_lp_end_f
+  add rdi,8
+  add rsi,8
+  jmp eq_opq_opq_lp
+eq_opq_opq_lp_end_t:
+  mov rax,1
+  ret
+eq_opq_opq_lp_end_f:
+  mov rax,0
+  ret
 neq:
   ret

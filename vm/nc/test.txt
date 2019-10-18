@@ -188,7 +188,7 @@ a'→b' as a'
   $ x ⊢ x,x0
   ? x0
     ∐\ 0 | † ‡
-    » 0r1 | _ ⊢ t0
+    » 0r1 _ ⊢ t0
     $ x ⊢ x,x0
     sub { x0 t0 } ⊢ x0
     fact x0 ⊢ y1
@@ -235,13 +235,16 @@ tZ :: {> < x,y~| } → _
 ¶ @._ ◂ a'　:: ｌstNX
   ∐ cnsNX : { a' _◂{ a' a' } }
   ∐ nilNX : {}
+
 ¶ @._ ◂ a' :: lstX
   ∐ cnsX : { a' _◂a' }
   ∐ nilX : {}
-¶ @._ ◂ a',b' :: tplX
+
+¶' @._ ◂ a',b' :: tplX
   ∐ cnsTX : { a' b' }
   ∐ nilTX : {}
-¶ @._ ◂ a',b' :: CP2
+
+¶' k' ◂ a',b' :: CP2
   ∐ i_0_2 : a'
   ∐ i_1_2 : b'
 
@@ -250,4 +253,25 @@ k' :: _ → lstX ∀ (k'◂a')→z
 @.lstN :: _ → _ ◂ x' =∐[ x' lstN◂{x' x'} ]
 @.p' ◂ x' =∐[ x' p'◂{x' x'} ]
 
+@._ ∐[> x~s8 y~sgn ]
+@.r' ∐[> cns~{ sgn r' } nil~{} ]
 @.p' x'
+
+
+443244m4324
+
+
+§ ..
+  ..
+  err s0 ⊢ e0
+  ∎| e0 ; raise exception
+
+
+entr:
+  mov r0,r1
+  mov r4,r5
+  mov r9,r11
+  add r0,r1
+  mov r0,[r1+8]
+  sub r1,r15
+  jf0
