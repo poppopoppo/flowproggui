@@ -21,6 +21,7 @@ section .bss
   str_ret: resb 1000
 section .data
   str_tkn: db "tkn: ",0
+  str_err: db "err: ",0
   str_dbg: db "DBG:%d",10,0
   fmt64: db "0x%llx",0
   fmtr64: db "0xr","0x%llx",0
@@ -33,8 +34,13 @@ section .data
   blk_l: db "{| ",0
   blk_r: db "|} ",0
   spc: db " ",0
-  fmt_s8: db `\"%s\" `, 0
+  fmt_s8: db `\"%s\"`,0
+  fmt_line: db `%s\n`,0
   fmt_err: db "err",0
+  cst_stg_test: db `\194\187\194\187 Foo \226\136\128 Baa \194\167\194\182 \t \t \n`,0,0,0,0,0
+  cst_stg_test0: db `\u263a`
+  cst_stg_test1: db `\xe2\x98\xba`
+  stg0: db `\194\187`
 ; dynamic entries
   etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
 ; global constants
@@ -380,6 +386,7 @@ pnt_r_p_lp:
   push rsi
   mov rdi,[rdi]
   call pnt_r_p
+  call pnt_str_ret
   pop rsi
   pop rdi
   pop r11
@@ -535,10 +542,29 @@ eq_opq_opq_lp_end_f:
   ret
 neq:
   ret
+pp:
+
 emt: ; rdi s8
   mov rax,0
   add rdi,8
   call printf
   ret
 err:
-  ret
+  mov rdi,rbx
+  mov rsi,str_ret
+  call pnt
+  mov rdi,fmt_line
+  mov rsi,str_ret
+  mov rax,0
+  call printf
+  ;mov rdi,fmt_nl
+  ;mov rax,0
+  ;call printf
+  mov rdi,fmt_line
+  ;mov rsi,cst_stg_test1
+  mov rsi,stg0
+  mov rax,0
+  call printf
+  mov rax,1
+  mov rbx,0
+  int 0x80

@@ -16,4 +16,12 @@
 	» "Hello World!!\n" _ ⊢ s0 
 	emt s0 |⊢ 
 	∎ {}
+§ f2 {} 
+	» "»» Foo ∀ Baa §¶ \t \t \n" _ ⊢ s0 
+	emt s0 |⊢ 
+	∎ {}
+§ f3 {} 
+	» "Test xxx" _ ⊢ s0 
+	err s0 ⊢ e0 
+	∎| e0
 §§.  
