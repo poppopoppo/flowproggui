@@ -6,7 +6,8 @@
 	∐ t : {} 
 	∐ f : {}
 § eq : { a' a' } ⊢ bl 
-§ p1 : { a' a' } ⊢ a'
+§ eq_v : { a' a' } ⊢ { a' a' bl }
+§ p1 : { a' a' } ⊢ a'  
 ¶ sgn 
 § sgn : {} ⊢ sgn
 ¶ opn ◂ a'
@@ -63,4 +64,9 @@
 	eq { x0 x1 } ⊢ b0
 	eq { l0 l1 } ⊢ b1 
 	∎ { b0 b1 }
+§ f5 {} 
+	sgn {} ⊢ p0 
+	sgn {} ⊢ p1 
+	sgn {} ⊢ p2 
+	∎ { p0 p1 p2 }
 §§.

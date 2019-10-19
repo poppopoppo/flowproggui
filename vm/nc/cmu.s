@@ -34,6 +34,7 @@ section .data
   blk_r: db "|} ",0
   spc: db " ",0
   fmt_s8: db `\"%s\" `, 0
+  fmt_err: db "err",0
 ; dynamic entries
   etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
 ; global constants
@@ -533,4 +534,11 @@ eq_opq_opq_lp_end_f:
   mov rax,0
   ret
 neq:
+  ret
+emt: ; rdi s8
+  mov rax,0
+  add rdi,8
+  call printf
+  ret
+err:
   ret

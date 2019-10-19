@@ -1,0 +1,19 @@
+§§ io
+¶ exn
+¶ f64
+§ emt : ℙ |⊢ 
+§ err : ℙ ⊢ exn
+[;
+§ f0 {} 
+	» "HELLO WORLD!!" _ ⊢ s0
+	$ s0 ⊢ s0,s1 
+	emt s0 |⊢
+	» 0xrFF _ ⊢ x0  
+	err s1 ⊢ e0
+	∎| e0   
+	;]
+§ f1 {} 
+	» "Hello World!!\n" _ ⊢ s0 
+	emt s0 |⊢ 
+	∎ {}
+§§.  

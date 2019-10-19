@@ -9,7 +9,7 @@
 %token LCE EXP AGL PRD EOP VCT ARR_REV ARR_REV_IN DOT VCT_INI OP LCE_IR
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL COPRD_PTN_END
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
-%token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR CLN2
+%token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR CLN2 EOP_EXN EOP_OUT
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
@@ -195,6 +195,7 @@ glb_etr:
   | LCE NAM CLN typ SRC typ {
     Ast.Etr_Abs($2,$4,$6) }
   ;
+  | LCE NAM CLN typ SRC_OUT { Ast.Etr_Out_Abs($2,$4) }
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }
   | SLF DOT glb_etr_body_ir glb_etr_clique { [$3]@$4 }
@@ -204,6 +205,7 @@ glb_etr_body_ir:
   ;
 ir_ret:
   | EOP reg_ptn { Ret $2 }
+  | EOP_EXN reg { Exn $2 }
   ;
 ir_lines:
   | ir_ret { $1 }
