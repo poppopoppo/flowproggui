@@ -1786,12 +1786,12 @@ and mk_ir_mdl_etr m el =
             let yd = mk_vars (ref []) m `Etr l y1 in
             m.ns <- (n,ref(Ln(Imp(ys,yd))))::m.ns;
             m.ns_e<-(n,Tkn.Tkn(Tkn.Etr(Tkn.Etr_N n)))::m.ns_e
-            | Etr_Out_Abs(n,y0) ->
-              let l = ref [] in
-              let ys = mk_vars (ref []) m `Etr l y0 in
-              m.ns <- (n,ref(Ln(App(Prm(Name "-"),ys))))::m.ns;
-              m.ns_e<-(n,Tkn.Tkn(Tkn.Etr(Tkn.Etr_N n)))::m.ns_e
-            | Etr_Clq q ->
+          | Etr_Out_Abs(n,y0) ->
+            let l = ref [] in
+            let ys = mk_vars (ref []) m `Etr l y0 in
+            m.ns <- (n,ref(Ln(App(Prm(Name "-"),ys))))::m.ns;
+            m.ns_e<-(n,Tkn.Tkn(Tkn.Etr(Tkn.Etr_N n)))::m.ns_e
+          | Etr_Clq q ->
             pnt true "test x0\n";
             let l0 =
               List.fold_left
@@ -2189,6 +2189,16 @@ and emt_d m =
               "\t\tdq 0\n" in
             s0^sn )
     "" m.ns_e
+and emt_bytes s =
+  let l = Bytes.length s in
+  let rec lp i =
+    if i<(l-1)
+    then
+      (string_of_int (Char.code s.[i]))^","^(lp (i+1))
+    else if i=(l-1)
+    then (string_of_int (Char.code s.[i]))
+    else "" in
+  lp 0
 and emt_cst_stg cs =
   pnt true "enter emt_cst_stg\n";
   ( match cs with
@@ -2197,7 +2207,16 @@ and emt_cst_stg cs =
       let rec st i =
         if i=0 then "" else ",0"^(st (i-1)) in
       let mx = 8-((Bytes.length s) mod 8) in
-      "\tcst_stg_"^(Sgn.print p)^": db `"^(String.escaped (Bytes.to_string s))^"`"^(st mx)^"\n"^(emt_cst_stg tl) )
+      (*let s_0 = Bytes.to_string s in
+        let s_1 = BatUTF8.of_latin1 s_0 in
+        let s_2 = BatUTF8.escaped s_1 in
+        let s_e = s_2 in
+        let _ = BatUTF8.validate s_e in *)
+      (* (String.escaped (Bytes.to_string s)) in
+         "\tcst_stg_"^(Sgn.print p)^": db `"^s_e^"`"^(st mx)^"\n"^(emt_cst_stg tl) ) *)
+      let s_e = emt_bytes s in
+      "\tcst_stg_"^(Sgn.print p)^": db "^s_e^(st mx)^"\n"^(emt_cst_stg tl) )
+
 and emt_pnt_ptn s r = Rcd_Ptn.print (fun v -> (string_of_int (idx s v))^"\'") r
 and emt_ptn r = Rcd_Ptn.print (fun i -> (string_of_int i)^"\'") r
 and emt_mdl m el =
@@ -3110,7 +3129,7 @@ and emt_ir m ih s p =
       let i = idx s r in
       let _ = idx_csm s r in
       "\tmov rbx,"^(emt_reg_x86 i)^"\n"^
-      "\tbt r12"^(string_of_int i)^"\n"^
+      "\tbt r12,"^(string_of_int i)^"\n"^
       "\tjmp err\n"
     | Mtc(r,ps) ->
       let i0 = idx_ptn s r in
@@ -4096,6 +4115,32 @@ and emt_ir m ih s p =
                         (pop_reg l)
                       | _ -> err "emt_ir eq 1" )
                   | _ -> err "emt_ir eq 0" )
+              | Tkn.Etr_N "err" ->
+                let open Rcd_Ptn in
+                ( match x with
+                  | A vx ->
+                    ( match y with
+                      | A v ->
+                        let ix = idx s vx in
+                        let rx = emt_reg_x86 ix in
+                        let _ = idx_csm s vx in
+                        let (ep,l) = push_reg s x86_reg_lst in
+                        let iy = idx_crt s v in
+                        let e0 =
+                          ep^
+                          "\tmov rbx,"^rx^"\n"^
+                          "\tmov rdi,2\n"^
+                          "\tcall mlc\n"^
+                          "\tmov rdx,0x0001000200000001\n"^
+                          "\tmov [rax],rdx\n"^
+                          "\tmov QWORD [rax+8*1],0\n"^
+                          "\tmov [rax+8*2],rbx\n"^
+                          "\tbtr r12,"^(string_of_int iy)^"\n"^
+                          "\tmov "^(emt_reg_x86 iy)^",rax\n"^
+                          (pop_reg l) in
+                        e0
+                      |_ -> err "emt_ir err 0" )
+                  | _ -> err "emt_ir err 1" )
               | Tkn.Etr_N f ->
                 let af = (try List.assoc f m.ns_e with _ -> err "emt_ir a2") in
                 let open Rcd_Ptn in
