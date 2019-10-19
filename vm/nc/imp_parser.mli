@@ -79,6 +79,8 @@ type token =
   | EXP
   | EXN
   | EQ
+  | EOP_OUT
+  | EOP_EXN
   | EOP
   | EOF
   | DTA_GRM

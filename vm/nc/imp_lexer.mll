@@ -67,6 +67,8 @@ rule token = parse
     | "∐.\\" { COPRD_PTN_END }
     | "∏"   { PRD }
     | "∎" { EOP }
+    | "∎|" { EOP_EXN }
+    | "|∎" { EOP_OUT }
     | "∇" { COPRD_END }
     | "∆" { PRD_END }
     | "≒" { DEF }

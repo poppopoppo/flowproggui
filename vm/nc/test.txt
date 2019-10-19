@@ -275,3 +275,8 @@ entr:
   mov r0,[r1+8]
   sub r1,r15
   jf0
+
+
+  ◂* f,x ⊢ f,fx
+  scc_v { s0 s1 } ⊢ { s0 s1 s2 }
+  eq_v { x0 x1 } ⊢ { _ _ b } 
