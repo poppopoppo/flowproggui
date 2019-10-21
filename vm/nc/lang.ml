@@ -515,7 +515,7 @@ module Grm = struct
     | Name of name
   and name = string
   (* { s8 r64 } ⊢ { s8 r64 ast } *)
-(* { rdi rsi } ⊢ { rdi rsi rax } *)
+  (* { rdi rsi } ⊢ { rdi rsi rax } *)
   (* { rdi rsi rdx } ⊢ *)
   let rec print g =
     List.fold_left (fun s e -> s^(print_etr e)) "" g
@@ -675,17 +675,58 @@ module Grm = struct
                   "\tadd rsi,"^(string_of_int lbs)^"\n"
                 | Name n ->
                   let e0 =
-                    "\tcall "^"_"^n^"_etr_tbl\n"^
-                    "; "^n^"\n" in
+                    "\tcall "^"_"^n^"_etr_tbl\n" in
                   e0 )
             | Lst a ->
+              let l0 = "_grm_lst_"^(Sgn.print (sgn ())) in
+              let l1 = "_grm_lst_"^(Sgn.print (sgn ())) in
               ( match a with
-                | Txt s -> "; ⟦\""^s^"\"⟧\n"
-                | Name n -> "; ⟦"^n^"⟧\n" )
+                | Txt s ->
+                  let bs = Bytes.of_string s in
+                  let lbs = Bytes.length bs in
+                  let rec e_lp0 i =
+                    if i<lbs
+                    then
+                      "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int i)^"]\n"^
+                      "\tcmp r11,"^(string_of_int (Char.code bs.[i]))^"\n"^
+                      "\tjnz "^l1^"\n"^
+                      (e_lp0 (i+1))
+                    else "" in
+                  l0^":\n"^
+                  (e_lp0 0)^
+                  "\tadd rsi,"^(string_of_int lbs)^"\n"^
+                  "\tjmp "^l0^"\n"^
+                  l1^":\n"
+                | Name n ->
+                  l0^":\n"^
+                  "\tcall "^"_"^n^"_etr_tbl\n"^
+                  "\tcmp rax,0\n"^
+                  "\tjz "^l1^"\n"^
+                  "\tjmp "^l0^"\n"^
+                  l1^":\n" )
             | Opn a ->
+              let l0 = "_grm_lst_"^(Sgn.print (sgn ())) in
+            let l1 = "_grm_lst_"^(Sgn.print (sgn ())) in
               ( match a with
-                | Txt s -> "; ‹\""^s^"\"›\n"
-                | Name n -> "; ‹"^n^"›") ) in
+                | Txt s ->
+                  let bs = Bytes.of_string s in
+                  let lbs = Bytes.length bs in
+                  let rec e_lp0 i =
+                    if i<lbs
+                    then
+                      "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int i)^"]\n"^
+                      "\tcmp r11,"^(string_of_int (Char.code bs.[i]))^"\n"^
+                      "\tjnz "^l1^"\n"^
+                      (e_lp0 (i+1))
+                    else "" in
+                  l0^":\n"^
+                  (e_lp0 0)^
+                  "\tadd rsi,"^(string_of_int lbs)^"\n"^
+                  l1^":\n"
+                | Name n ->
+                  l0^":\n"^
+                  "\tcall "^"_"^n^"_etr_tbl\n"^
+                  l1^":\n" ) ) in
         ep^(emt_ptn_lex en rn tl)
       | [] -> "" )
 end
@@ -2386,32 +2427,26 @@ and emt_d m =
     "" m.ns_e
 and emt_bytes s =
   let l = Bytes.length s in
-  let rec lp i =
-    if i<(l-1)
-    then
-      (string_of_int (Char.code s.[i]))^","^(lp (i+1))
-    else if i=(l-1)
-    then (string_of_int (Char.code s.[i]))
-    else "" in
-  lp 0
+  if l=0 then ""
+  else
+    let rec lp i =
+      if i<l
+      then
+        (string_of_int (Char.code s.[i]))^","^(lp (i+1))
+      else "" in
+    lp 0
 and emt_cst_stg cs =
   pnt true "enter emt_cst_stg\n";
   ( match cs with
     | [] -> ""
     | (p,s)::tl ->
       let rec st i =
-        if i=0 then "" else ",0"^(st (i-1)) in
+        if i=0 then ""
+        else if i=1 then "0"
+        else "0,"^(st (i-1)) in
       let mx = 8-((Bytes.length s) mod 8) in
-      (*let s_0 = Bytes.to_string s in
-        let s_1 = BatUTF8.of_latin1 s_0 in
-        let s_2 = BatUTF8.escaped s_1 in
-        let s_e = s_2 in
-        let _ = BatUTF8.validate s_e in *)
-      (* (String.escaped (Bytes.to_string s)) in
-         "\tcst_stg_"^(Sgn.print p)^": db `"^s_e^"`"^(st mx)^"\n"^(emt_cst_stg tl) ) *)
       let s_e = emt_bytes s in
       "\tcst_stg_"^(Sgn.print p)^": db "^s_e^(st mx)^"\n"^(emt_cst_stg tl) )
-
 and emt_pnt_ptn s r = Rcd_Ptn.print (fun v -> (string_of_int (idx s v))^"\'") r
 and emt_ptn r = Rcd_Ptn.print (fun i -> (string_of_int i)^"\'") r
 and emt_mdl m el =
