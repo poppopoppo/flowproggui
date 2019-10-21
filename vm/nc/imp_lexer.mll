@@ -33,6 +33,7 @@ rule token = parse
     | "¬|"  { NOT_SPL }
     | "\\"  { SLH }
     | "∀" { FOR_ALL }
+    | "%" (name as lxm) { REG(lxm) }
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
     | "|◂"  { OUT_IR }

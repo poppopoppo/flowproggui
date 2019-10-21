@@ -501,6 +501,194 @@ module Mtc = struct
         "" es in
     s0^" ,"^s1
 end
+module Grm = struct
+  type rle_flg = Synt | Lex
+  type t = etr list
+  and etr = name * ((name * rle_flg * rle) list)
+  and rle = ptn list
+  and ptn =
+    | Lst of atm
+    | Opn of atm
+    | Atm of atm
+  and atm =
+    | Txt of string
+    | Name of name
+  and name = string
+  (* { s8 r64 } ⊢ { s8 r64 ast } *)
+(* { rdi rsi } ⊢ { rdi rsi rax } *)
+  (* { rdi rsi rdx } ⊢ *)
+  let rec print g =
+    List.fold_left (fun s e -> s^(print_etr e)) "" g
+  and print_etr (n,rs) =
+    "\t@."^n^"\n"^
+    (List.fold_left
+       (fun s (rn,f,r) ->
+          s^"\t"^(print_rle_flg f)^rn^" : "^(print_rle r)^"\n" )
+       "" rs )
+  and print_rle_flg = ( function
+      | Synt -> "\t∐ "
+      | Lex -> "\t∐* " )
+  and print_rle r =
+    List.fold_left
+      (fun s p ->
+         let s0 =
+           match p with
+           | Atm Txt x -> "\""^(String.escaped x)^"\""
+           | Atm Name n -> n
+           | Lst Txt x -> "⟦\""^(String.escaped x)^"\"⟧"
+           | Lst Name n -> "⟦"^n^"⟧"
+           | Opn Txt x -> "‹\""^(String.escaped x)^"\"›"
+           | Opn Name n -> "‹"^n^"›" in
+         s^" "^s0      )
+      "" r
+  let rec emt g =
+    let gv = Array.of_list g in
+    let gn = Array.length gv in
+    let e0 =
+      "_grm_init_tbl:\n"^
+      "\tmov rbx,rdi\n"^
+      "\tmov r14,rsi\n"^
+      "\tmov rdx,[rdi]\n"^
+      "\tmov rcx,rdx\n"^
+      "\tshl rcx,16\n"^
+      "\tshr rcx,48\n"^
+      "\tshl rcx,3\n"^
+      "\tand rdx,0xf\n"^
+      "\tsub rcx,rdx\n"^
+      "\tshl rcx,1\n"^
+      "\timul rcx,"^(string_of_int gn)^"\n"^
+      "\tmov rdi,rcx\n"^
+      "\tmov rax,0\n"^
+      "\tcall malloc\n"^
+      "\tmov rdi,rbx\n"^
+      "\tmov rsi,r14\n"^
+      "\tmov rdx,rax\n"^
+      "\tmov rcx,rsi\n"^
+      "\tret\n" in
+    e0^(emt_etr gv 0)
+  and emt_etr gv i =
+    let gl = Array.length gv in
+    if i<gl
+    then
+      let (n,l) = gv.(i) in
+      let en =
+        "_"^n^"_etr_tbl:\n"^
+        "\tpush QWORD 1\n"^
+        "\tjmp _"^n^"_tbl\n"^
+        n^":\n"^
+        "_"^n^":\n"^
+        "\tmov rdi,r8\n"^
+        "\tmov rsi,r9\n"^
+        "\tcall _grm_init_tbl\n"^
+        "\tpush QWORD 0\n"^
+        "_"^n^"_tbl:\n"^
+        (emt_rle n l)^
+        "_"^n^"_succeed:\n"^
+        "\tpop rbx\n"^
+        "\tpush rsi\n"^
+        "\tpush rdi\n"^
+        "\tmov rdi,rdx\n"^
+        "\tmov rax,0\n"^
+        "\tcall free\n"^
+        "\tcmp rbx,0\n"^
+        "\tjnz _"^n^"_succeed_tbl\n"^
+        "\tmov rdi,3\n"^
+        "\tcall mlc\n"^
+        "\tmov rsi,[rax]\n"^
+        "\tbtr rsi,0\n"^
+        "\tmov [rax],rsi\n"^
+        "\tmov QWORD [rax+8*3],1\n"^
+        "\tpop rdi\n"^
+        "\tpop rsi\n"^
+        "\tmov QWORD [rax+8*1],rdi\n"^
+        "\tmov QWORD [rax+8*2],rsi\n"^
+        "\tclc\n"^
+        "\tret\n"^
+        "_"^n^"_succeed_tbl:\n"^
+        "\tpop rdi\n"^
+        "\tpop rsi\n"^
+        "\tmov rax,1\n"^
+        "\tret\n"^
+        "_"^n^"_failed:\n"^
+        "\tpop rbx\n"^
+        "\tpush rsi\n"^
+        "\tpush rdi\n"^
+        "\tmov rdi,rdx\n"^
+        "\tmov rax,0\n"^
+        "\tcall free\n"^
+        "\tcmp rbx,0\n"^
+        "\tjnz _"^n^"_failed_tbl\n"^
+        "\tmov rdi,3\n"^
+        "\tcall mlc\n"^
+        "\tmov rsi,[rax]\n"^
+        "\tbtr rsi,0\n"^
+        "\tmov [rax],rsi\n"^
+        "\tmov QWORD [rax+8*3],0\n"^
+        "\tpop rdi\n"^
+        "\tpop rsi\n"^
+        "\tmov QWORD [rax+8*1],rdi\n"^
+        "\tmov QWORD [rax+8*2],rsi\n"^
+        "\tclc\n"^
+        "\tret\n"^
+        "_"^n^"_failed_tbl:\n"^
+        "\tpop rdi\n"^
+        "\tpop rsi\n"^
+        "\tmov rax,0\n"^
+        "\tret\n"
+      in
+      en^(emt_etr gv (i+1))
+    else ""
+  and emt_rle en l =
+    ( match l with
+      | (n,Lex,r)::tl ->
+        "_"^en^"_"^n^":\n"^
+        "\tpush rsi\n"^
+        (emt_ptn_lex en n r)^
+        "_"^en^"_"^n^"_succeed:\n"^
+        "\tpop r8\n"^
+        "\tjmp "^"_"^en^"_succeed\n"^
+        "_"^en^"_"^n^"_failed:\n"^
+        "\tpop rsi\n"^
+        (emt_rle en tl)
+      | (n,Synt,_)::_ -> "; "^n^"\n"
+      | [] ->
+        "\tjmp "^"_"^en^"_failed\n" )
+  and emt_ptn_lex en rn r =
+    ( match r with
+      | p::tl ->
+        let ep =
+          ( match p with
+            | Atm a ->
+              ( match a with
+                | Txt s ->
+                  let bs = Bytes.of_string s in
+                  let lbs = Bytes.length bs in
+                  let rec e_lp0 i =
+                    if i<lbs
+                    then
+                      "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int i)^"]\n"^
+                      "\tcmp r11,"^(string_of_int (Char.code bs.[i]))^"\n"^
+                      "\tjnz _"^en^"_"^rn^"_failed\n"^
+                      (e_lp0 (i+1))
+                    else "" in
+                  (e_lp0 0)^
+                  "\tadd rsi,"^(string_of_int lbs)^"\n"
+                | Name n ->
+                  let e0 =
+                    "\tcall "^"_"^n^"_etr_tbl\n"^
+                    "; "^n^"\n" in
+                  e0 )
+            | Lst a ->
+              ( match a with
+                | Txt s -> "; ⟦\""^s^"\"⟧\n"
+                | Name n -> "; ⟦"^n^"⟧\n" )
+            | Opn a ->
+              ( match a with
+                | Txt s -> "; ‹\""^s^"\"›\n"
+                | Name n -> "; ‹"^n^"›") ) in
+        ep^(emt_ptn_lex en rn tl)
+      | [] -> "" )
+end
 module Ast = struct
   open Types
   type name = string
@@ -514,7 +702,7 @@ module Ast = struct
     | Flow of flow
     | Etr_Clq of (string * Types.t * Types.t * etr) list
     | Flow_Clq of flow list
-    | Gram of Peg.grammar
+    | Gram of Grm.t
   and flow =
     | Def_Abs of name * args
     | Def_Prd of name * args * ((Types.t * name) list)
@@ -588,6 +776,7 @@ module Ast = struct
     mutable ns_e : (string * tkn) list;
     mutable ns_t : (string * Types.v ref) list;
     mutable ns_d : ns_d;
+    mutable ns_g : Grm.etr list;
   }
   type et = ir_mdl * tkn
   type inst = {
@@ -618,7 +807,7 @@ module Ast = struct
               | Flow f -> "¶ "^(print_flow f)
               | Etr_Clq _ -> "§ @. .. "^"\n"
               | Flow_Clq _ -> "¶ @. .."^"\n"
-              | Gram g -> "¶+ℙ "^"\n"^(Peg.print g) ) in
+              | Gram g -> "¶+ℙ "^"\n"^(Grm.print g) ) in
           s1^(lp tl)) in
     s0^(lp g)
   and print_flow f =
@@ -1716,7 +1905,7 @@ and mk_vars_rec rl m f l r =
     | Rec_WC -> r )
 let rec mk_ir_mdl el =
   let open Tkn in
-  let m = { ns_v =[]; ns = []; ns_e = []; ns_t = []; ns_d = [] } in
+  let m = { ns_v =[]; ns = []; ns_e = []; ns_t = []; ns_d = []; ns_g=[] } in
   m.ns_t <- ("r64",ref(Ln(Prm(Name "r64"))))::m.ns_t;
   m.ns_t <- ("ℤ",ref(Ln(Prm(Name "ℤ"))))::m.ns_t;
   m.ns_t <- ("ℙ",ref(Ln(Prm(Name "ℙ"))))::m.ns_t;
@@ -1902,17 +2091,21 @@ and mk_ir_mdl_etr m el =
           | Gram g ->
             let _  =
               List.fold_left
-                (fun _ (n,_,_) ->
+                (fun _ (n,_) ->
                    m.ns_t <- (n,newvar ())::m.ns_t;
-                   m.ns_e <- (n,Tkn.Tkn(Tkn.Etr(Tkn.Grm(g,n))))::m.ns_e )
+                   m.ns_e <- (n,Tkn.Tkn(Tkn.Etr(Tkn.Etr_N n)))::m.ns_e )
                 () g in
             let _ =
               List.fold_left
-                (fun _ (n,_,rs) ->
-                   let y = coprd_cl (App(Prm Grm,Prm (Name n))) (List.map (fun (r,_) -> slv_rule m r) rs) in
+                (fun _ (n,rs) ->
+                   (* let y = coprd_cl (App(Prm Grm,Prm (Name n))) (List.map (fun (r,_) -> slv_rule m r) rs) in *)
+                   m.ns_g <- (n,rs)::m.ns_g;
+                   let y = Prm(Name n) in
                    let v = List.assoc n m.ns_t in
-                   v := Ln (Rec (ref y));
-                   m.ns <- (n,ref (Ln(Imp(Prm Stg,Rcd(rcd_cl [Var v;(Prm Stg)])))))::m.ns
+                   v := Ln y;
+                   (* m.ns <- (n,ref (Ln(Imp(Prm Stg,Rcd(rcd_cl [Var v;(Prm Stg)])))))::m.ns *)
+                   let yp = Imp(Rcd(rcd_cl [Prm Stg;Prm(Name "r64")]),Rcd(rcd_cl [Prm Stg;Prm(Name "r64");Prm(Name n)])) in
+                   m.ns <- (n,ref(Ln yp))::m.ns
                 ) () g in
             ()
         ) in
@@ -2140,6 +2333,7 @@ let emt_flg = true
 let cst_stg = ref []
 let rec emt m f =
   let (se,em) = (emt_mdl m m.ns_v) in
+  let eg = Grm.emt m.ns_g in
   let ef = emt_d m in
   "%include \"cmu.s\"\n"^
   "main:\n"^
@@ -2161,6 +2355,7 @@ let rec emt m f =
   "\tcall pnt_str_ret\n"^
   "\tjmp _end\n"^
   em^
+  eg^
   "section .data\n"^
   se^
   ef^
@@ -2220,6 +2415,7 @@ and emt_cst_stg cs =
 and emt_pnt_ptn s r = Rcd_Ptn.print (fun v -> (string_of_int (idx s v))^"\'") r
 and emt_ptn r = Rcd_Ptn.print (fun i -> (string_of_int i)^"\'") r
 and emt_mdl m el =
+  let open Rcd_Ptn in
   let ih =
     List.fold_left
       (fun ih (n,(r0,_)) ->
@@ -2228,6 +2424,17 @@ and emt_mdl m el =
          pnt true ("emt_mdl p0:"^n^","^(pnt_s s)^","^(emt_ptn i0)^"\n");
          (n,(i0,s))::ih )
       [] el in
+  let ih =
+    List.fold_left
+      (fun ih (n,_) ->
+         let s = Hashtbl.create 10 in
+         let v0 = (ref(Ln(Prm Stg))) in
+         let v1 = (ref(Ln(Prm(Name "r64")))) in
+         let _ = R[|A v0;A v1|] in
+         Hashtbl.add s 0 v0; Hashtbl.add s 1 v1;
+         let i0 = R[|A 0;A 1|] in
+         (n,(i0,s))::ih )
+      ih m.ns_g in
   emt_el ih m el
 and emt_el ih m el =
   ( match el with
@@ -4203,18 +4410,20 @@ and emt_ir m ih s p =
                     ex0^
                     dec_x^
                     "\tcall _"^f^"\n"^
-                    (pnt_reg s 8)^
+                    (*(pnt_reg s 8)^ *)
                     "\tmov QWORD [tmp],rax\n"^
                     "\tjc "^l_0^"\n"^
-                    sp^
                     "\tclc\n"^
-                    (emt_set_ptn "" s "r12" emt_reg_x86 "[tmp]" iy)^
-                    (emt_dec s "[tmp]" (inst_ptn 0 y))^
+                    sp^
+                    "\tmov rbx,[tmp]\n"^
+                    (emt_set_ptn "" s "r12" emt_reg_x86 "rbx" iy)^
+                    (emt_dec s "rbx" (inst_ptn 0 y))^
                     "\tjmp "^l_1^"\n"^
                     l_0^":\n"^
                     sp^
+                    "\tmov rbx,[tmp]\n"^
                     "\tstc\n"^
-                    (emt_set_ptn "" s "r12" emt_reg_x86 "[tmp]" iy)^
+                    (emt_set_ptn "" s "r12" emt_reg_x86 "rbx" iy)^
                     l_1^":\n"
                 )
               | _ -> err "emt_ir etr 0"

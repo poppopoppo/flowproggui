@@ -13,7 +13,7 @@
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
-%token <string> NAM STG VAL
+%token <string> NAM STG VAL REG
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
 %token <bool> R2
@@ -33,7 +33,7 @@
 
 %type <Lang.Ast.mdl list> file
 %type <Lang.Ast.line> buffer
-%type <Peg.grammar> dta_grm
+%type <Lang.Grm.t> dta_grm
 %type <Lang.Types.t> typ
 %%
 buffer:
@@ -99,31 +99,30 @@ grm_clq:
   | grm_etr grm_clq { $1::$2 }
   ;
 grm_etr:
-  | SLF DOT NAM ISO grm_ord   { ($3,[],$5) }
+  | SLF DOT NAM grm_ord   { ($3,$4) }
   ;
 grm_ord:
-  | grm_rule { [($1,None)] }
-  | grm_ord grm_rule  { $1@[($2,None)] }
+  | grm_rule { [$1] }
+  | grm_ord grm_rule  { $1@[$2] }
 grm_rule:
-  | ord grm_ptns grm_prd { ($1,$2,$3) }
+  | ord NAM CLN grm_ptns grm_prd { ($2,$1,$4) }
   ;
 ord:
-  | COPRD { Peg.Synt }
-  | ORD_LEX_COPRD { Peg.Lex }
+  | COPRD { Grm.Lex }
+  | ORD_LEX_COPRD { Grm.Synt }
   ;
 grm_ptns:
   | { [] }
   | grm_ptns grm_ptn  { $1@[$2] }
   ;
 grm_ptn:
-  | WC  { Peg.Atm Peg.Any }
-  | grm_atom { Peg.Atm $1 }
-  | L_LST grm_atom R_LST { Peg.List $2 }
-  | L_OPN grm_atom R_OPN { Peg.Option $2 }
+  | grm_atom { Grm.Atm $1 }
+  | L_LST grm_atom R_LST { Grm.Lst $2 }
+  | L_OPN grm_atom R_OPN { Grm.Opn $2 }
   ;
 grm_atom:
-  | STG { (Peg.Text $1) }
-  | NAM { Peg.Name $1 }
+  | STG { Grm.Txt $1 }
+  | NAM { Grm.Name $1 }
   ;
 grm_prd:
   | { None }
@@ -302,6 +301,8 @@ ir_tkn:
 reg_src:
   | NAM {
      let v = newvar () in rm := ($1,v)::!rm; v }
+  | REG {
+      let v = newvar () in rm := ($1,v)::!rm; v }
   ;
 reg_ptn_src:
   | WC { Rcd_Ptn.R [||] }
@@ -330,6 +331,7 @@ reg:
   | WC { let v = newvar () in rm := ("_",v)::!rm; v}
   | NAM {
      let v = newvar () in rm := ($1,v)::!rm; v }
+  | REG { let v = newvar () in rm := ($1,v)::!rm; v }
   ;
 reg_ptn:
   | reg { Rcd_Ptn.A $1 }
