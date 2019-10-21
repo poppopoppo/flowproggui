@@ -5,7 +5,7 @@ type t = et * Types.t
 type st = ir_mdl * Ast.st * ir_code
 let print ((_,k),y) = (Tkn.print k)^" : "^(Types.print (ref []) y)
 let init_st () : t =
-  ({ ns_v = []; ns =[]; ns_e = []; ns_t = []; ns_d = [] },Tkn.Rcd [||])
+  ({ ns_v = []; ns =[]; ns_e = []; ns_t = []; ns_d = []; ns_g=[] },Tkn.Rcd [||])
 ,Types.Rcd Types.U
 let mk_st g =
   let m0 = Lang.mk_ir_mdl g in

@@ -11,7 +11,7 @@ main:
 	mov rdi,rax
 	clc
 	cmp rdi,0
-	call f2
+	call f3
 	mov rdi,rax
 	mov rsi,str_ret
 	call pnt

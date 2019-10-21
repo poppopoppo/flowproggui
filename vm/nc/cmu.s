@@ -36,6 +36,7 @@ section .data
   spc: db " ",0
   fmt_s8: db `\"%s\"`,0
   fmt_line: db `%s\n`,0
+  fmt_err_line: db `err:%s\n`,0
   fmt_err: db "err",0
   cst_stg_test: db `\194\187\194\187 Foo \226\136\128 Baa \194\167\194\182 \t \t \n`,0,0,0,0,0
   cst_stg_test0: db `\u263a`
@@ -553,18 +554,15 @@ err:
   mov rdi,rbx
   mov rsi,str_ret
   call pnt
-  mov rdi,fmt_line
+  mov rdi,fmt_err_line
   mov rsi,str_ret
   mov rax,0
   call printf
   ;mov rdi,fmt_nl
   ;mov rax,0
   ;call printf
-  mov rdi,fmt_line
+  ;mov rdi,fmt_line
   ;mov rsi,cst_stg_test1
-  mov rsi,stg0
-  mov rax,0
-  call printf
   mov rax,1
   mov rbx,0
   int 0x80

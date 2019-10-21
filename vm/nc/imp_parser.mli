@@ -27,6 +27,7 @@ type token =
   | R_BLK
   | ROT of (int)
   | RM
+  | REG of (string)
   | R64 of (int64)
   | R2 of (bool)
   | PRJ_IR
