@@ -335,3 +335,14 @@ let s0 = "ABC"
 
 ¶ g0 :: grm
 ¶ g1 :: grm
+¶ chr :: grm
+¶ dgt :: grm
+¶ u_al :: grm
+¶ l_al :: grm
+
+
+  » _ { %s0 %s1 } ⊢ s2
+    "A" "B" " C\n"
+    "\tmov r//..\n"
+    "\tmov r9,3\n"
+    s0' " ⊢ " s1' "," s1' //

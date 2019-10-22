@@ -698,22 +698,37 @@ module Grm = struct
     else ""
   and emt_rle en l =
     ( match l with
-      | (n,Lex,r)::tl ->
+      | (n,f,r)::tl ->
         "_"^en^"_"^n^":\n"^
         "\tpush rsi\n"^
-        (emt_ptn_lex en n r)^
+        (emt_ptn f en n r)^
         "_"^en^"_"^n^"_succeed:\n"^
         "\tpop r8\n"^
         "\tjmp "^"_"^en^"_succeed\n"^
         "_"^en^"_"^n^"_failed:\n"^
         "\tpop rsi\n"^
         (emt_rle en tl)
-      | (n,Synt,_)::_ -> "; "^n^"\n"
       | [] ->
         "\tjmp "^"_"^en^"_failed\n" )
-  and emt_ptn_lex en rn r =
+  and emt_ptn f en rn r =
     ( match r with
       | p::tl ->
+        let l0 = "_grm_ptn_"^(Sgn.print (sgn ())) in
+        let l1 = "_grm_ptn_"^(Sgn.print (sgn ())) in
+        let es =
+          if f=Lex then ""
+          else
+            "\tjmp "^l1^"\n"^
+            l0^":\n"^
+            "\tadd rsi,1\n"^
+            l1^":\n"^
+            "\tmov r11b,[rdi+rsi+8*1]\n"^
+            "\tcmp r11,9\n"^
+            "\tjz "^l0^"\n"^
+            "\tcmp r11,10\n"^
+            "\tjz "^l0^"\n"^
+            "\tcmp r11,32\n"^
+            "\tjz "^l0^"\n" in
         let ep =
           ( match p with
             | Atm a ->
@@ -729,9 +744,11 @@ module Grm = struct
                       "\tjnz _"^en^"_"^rn^"_failed\n"^
                       (e_lp0 (i+1))
                     else "" in
+                  es^
                   (e_lp0 0)^
                   "\tadd rsi,"^(string_of_int lbs)^"\n"
                 | Name n ->
+                  es^
                   "\tcall "^"_"^n^"_etr_tbl\n"^
                   "\tcmp rax,0\n"^
                   "\tjz _"^en^"_"^rn^"_failed\n"
@@ -752,12 +769,14 @@ module Grm = struct
                       (e_lp0 (i+1))
                     else "" in
                   l0^":\n"^
+                  es^
                   (e_lp0 0)^
                   "\tadd rsi,"^(string_of_int lbs)^"\n"^
                   "\tjmp "^l0^"\n"^
                   l1^":\n"
                 | Name n ->
                   l0^":\n"^
+                  es^
                   "\tcall "^"_"^n^"_etr_tbl\n"^
                   "\tcmp rax,0\n"^
                   "\tjz "^l1^"\n"^
@@ -780,15 +799,17 @@ module Grm = struct
                       (e_lp0 (i+1))
                     else "" in
                   l0^":\n"^
+                  es^
                   (e_lp0 0)^
                   "\tadd rsi,"^(string_of_int lbs)^"\n"^
                   l1^":\n"
                 | Name n ->
                   l0^":\n"^
+                  es^
                   "\tcall "^"_"^n^"_etr_tbl\n"^
                   l1^":\n"^
                   "\tmov rax,1\n" ) ) in
-        ep^(emt_ptn_lex en rn tl)
+        ep^(emt_ptn f en rn tl)
       | [] -> "" )
 end
 module Ast = struct
