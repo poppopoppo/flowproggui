@@ -571,70 +571,128 @@ module Grm = struct
     if i<gl
     then
       let (n,l) = gv.(i) in
+      let l0 = "_grm_lb_"^n^"_"^(Sgn.print (sgn ())) in
       let en =
-        "_"^n^"_etr_tbl:\n"^
-        "\tpush QWORD 1\n"^
-        "\tjmp _"^n^"_tbl\n"^
-        n^":\n"^
-        "_"^n^":\n"^
-        "\tmov rdi,r8\n"^
-        "\tmov rsi,r9\n"^
-        "\tcall _grm_init_tbl\n"^
-        "\tpush QWORD 0\n"^
-        "_"^n^"_tbl:\n"^
-        (emt_rle n l)^
-        "_"^n^"_succeed:\n"^
-        "\tpop rbx\n"^
-        "\tpush rsi\n"^
-        "\tpush rdi\n"^
-        "\tmov rdi,rdx\n"^
-        "\tmov rax,0\n"^
-        "\tcall free\n"^
-        "\tcmp rbx,0\n"^
-        "\tjnz _"^n^"_succeed_tbl\n"^
-        "\tmov rdi,3\n"^
-        "\tcall mlc\n"^
-        "\tmov rsi,[rax]\n"^
-        "\tbtr rsi,0\n"^
-        "\tmov [rax],rsi\n"^
-        "\tmov QWORD [rax+8*3],1\n"^
-        "\tpop rdi\n"^
-        "\tpop rsi\n"^
-        "\tmov QWORD [rax+8*1],rdi\n"^
-        "\tmov QWORD [rax+8*2],rsi\n"^
-        "\tclc\n"^
-        "\tret\n"^
-        "_"^n^"_succeed_tbl:\n"^
-        "\tpop rdi\n"^
-        "\tpop rsi\n"^
-        "\tmov rax,1\n"^
-        "\tret\n"^
-        "_"^n^"_failed:\n"^
-        "\tpop rbx\n"^
-        "\tpush rsi\n"^
-        "\tpush rdi\n"^
-        "\tmov rdi,rdx\n"^
-        "\tmov rax,0\n"^
-        "\tcall free\n"^
-        "\tcmp rbx,0\n"^
-        "\tjnz _"^n^"_failed_tbl\n"^
-        "\tmov rdi,3\n"^
-        "\tcall mlc\n"^
-        "\tmov rsi,[rax]\n"^
-        "\tbtr rsi,0\n"^
-        "\tmov [rax],rsi\n"^
-        "\tmov QWORD [rax+8*3],0\n"^
-        "\tpop rdi\n"^
-        "\tpop rsi\n"^
-        "\tmov QWORD [rax+8*1],rdi\n"^
-        "\tmov QWORD [rax+8*2],rsi\n"^
-        "\tclc\n"^
-        "\tret\n"^
-        "_"^n^"_failed_tbl:\n"^
-        "\tpop rdi\n"^
-        "\tpop rsi\n"^
-        "\tmov rax,0\n"^
-        "\tret\n"
+        if n="dgt" then
+          "_"^n^"_etr_tbl:\n"^
+          "\tmov r11b,[rdi+rsi+8*1]\n"^
+          "\tcmp r11,48\n"^
+          "\tjb "^l0^"\n"^
+          "\tcmp r11,57\n"^
+          "\tja "^l0^"\n"^
+          "\tadd rsi,1\n"^
+          "\tmov rax,1\n"^
+          "\tret\n"^
+          l0^":\n"^
+          "\tmov rax,0\n"^
+          "\tret\n"
+        else if n="u_al"
+        then
+          "_"^n^"_etr_tbl:\n"^
+          "\tmov r11b,[rdi+rsi+8*1]\n"^
+          "\tcmp r11,65\n"^
+          "\tjb "^l0^"\n"^
+          "\tcmp r11,90\n"^
+          "\tja "^l0^"\n"^
+          "\tadd rsi,1\n"^
+          "\tmov rax,1\n"^
+          "\tret\n"^
+          l0^":\n"^
+          "\tmov rax,0\n"^
+          "\tret\n"
+        else if n="l_al"
+        then
+          "_"^n^"_etr_tbl:\n"^
+          "\tmov r11b,[rdi+rsi+8*1]\n"^
+          "\tcmp r11,97\n"^
+          "\tjb "^l0^"\n"^
+          "\tcmp r11,122\n"^
+          "\tja "^l0^"\n"^
+          "\tadd rsi,1\n"^
+          "\tmov rax,1\n"^
+          "\tret\n"^
+          l0^":\n"^
+          "\tmov rax,0\n"^
+          "\tret\n"
+        else if n="chr"
+        then
+          "_"^n^"_etr_tbl:\n"^
+          "\tmov r11b,[rdi+rsi+8*1]\n"^
+          "\tadd rsi,1\n"^
+          "\tbt r11,7\n"^
+          "\tjnc "^l0^"\n"^
+          "\tadd rsi,1\n"^
+          "\tbt r11,6\n"^
+          "\tjnc "^l0^"\n"^
+          "\tadd rsi,1\n"^
+          "\tbt r11,5\n"^
+          "\tjnc "^l0^"\n"^
+          "\tadd rsi,1\n"^
+          "\tmov rax,1\n"^
+          "\tret\n"^
+          l0^":\n"^
+          "\tmov rax,0\n"^
+          "\tret\n"
+        else
+          "_"^n^"_etr_tbl:\n"^
+          "\tpush QWORD 1\n"^
+          "\tjmp _"^n^"_tbl\n"^
+          n^":\n"^
+          "_"^n^":\n"^
+          "\tmov rdi,r8\n"^
+          "\tmov rsi,r9\n"^
+          "\tcall _grm_init_tbl\n"^
+          "\tpush QWORD 0\n"^
+          "_"^n^"_tbl:\n"^
+          (emt_rle n l)^
+          "_"^n^"_succeed:\n"^
+          "\tpop rbx\n"^
+          "\tcmp rbx,0\n"^
+          "\tjnz _"^n^"_succeed_tbl\n"^
+          "\tpush rsi\n"^
+          "\tpush rdi\n"^
+          "\tmov rdi,rdx\n"^
+          "\tmov rax,0\n"^
+          "\tcall free\n"^
+          "\tmov rdi,3\n"^
+          "\tcall mlc\n"^
+          "\tmov rsi,[rax]\n"^
+          "\tbtr rsi,0\n"^
+          "\tmov [rax],rsi\n"^
+          "\tmov QWORD [rax+8*3],1\n"^
+          "\tpop rdi\n"^
+          "\tpop rsi\n"^
+          "\tmov QWORD [rax+8*1],rdi\n"^
+          "\tmov QWORD [rax+8*2],rsi\n"^
+          "\tclc\n"^
+          "\tret\n"^
+          "_"^n^"_succeed_tbl:\n"^
+          "\tmov rax,1\n"^
+          "\tret\n"^
+          "_"^n^"_failed:\n"^
+          "\tpop rbx\n"^
+          "\tcmp rbx,0\n"^
+          "\tjnz _"^n^"_failed_tbl\n"^
+          "\tpush rsi\n"^
+          "\tpush rdi\n"^
+          "\tmov rdi,rdx\n"^
+          "\tmov rax,0\n"^
+          "\tcall free\n"^
+          "\tmov rdi,3\n"^
+          "\tcall mlc\n"^
+          "\tmov rsi,[rax]\n"^
+          "\tbtr rsi,0\n"^
+          "\tmov [rax],rsi\n"^
+          "\tmov QWORD [rax+8*3],0\n"^
+          "\tpop rdi\n"^
+          "\tpop rsi\n"^
+          "\tmov QWORD [rax+8*1],rdi\n"^
+          "\tmov QWORD [rax+8*2],rsi\n"^
+          "\tclc\n"^
+          "\tret\n"^
+          "_"^n^"_failed_tbl:\n"^
+          "\tmov rax,0\n"^
+          "\tret\n"
       in
       en^(emt_etr gv (i+1))
     else ""
@@ -674,9 +732,10 @@ module Grm = struct
                   (e_lp0 0)^
                   "\tadd rsi,"^(string_of_int lbs)^"\n"
                 | Name n ->
-                  let e0 =
-                    "\tcall "^"_"^n^"_etr_tbl\n" in
-                  e0 )
+                  "\tcall "^"_"^n^"_etr_tbl\n"^
+                  "\tcmp rax,0\n"^
+                  "\tjz _"^en^"_"^rn^"_failed\n"
+              )
             | Lst a ->
               let l0 = "_grm_lst_"^(Sgn.print (sgn ())) in
               let l1 = "_grm_lst_"^(Sgn.print (sgn ())) in
@@ -703,10 +762,11 @@ module Grm = struct
                   "\tcmp rax,0\n"^
                   "\tjz "^l1^"\n"^
                   "\tjmp "^l0^"\n"^
-                  l1^":\n" )
+                  l1^":\n"^
+                  "\tmov rax,1\n" )
             | Opn a ->
               let l0 = "_grm_lst_"^(Sgn.print (sgn ())) in
-            let l1 = "_grm_lst_"^(Sgn.print (sgn ())) in
+              let l1 = "_grm_lst_"^(Sgn.print (sgn ())) in
               ( match a with
                 | Txt s ->
                   let bs = Bytes.of_string s in
@@ -726,7 +786,8 @@ module Grm = struct
                 | Name n ->
                   l0^":\n"^
                   "\tcall "^"_"^n^"_etr_tbl\n"^
-                  l1^":\n" ) ) in
+                  l1^":\n"^
+                  "\tmov rax,1\n" ) ) in
         ep^(emt_ptn_lex en rn tl)
       | [] -> "" )
 end
@@ -876,7 +937,6 @@ module Ast = struct
     let a = lp Rcd_Ptn.End a in
     if !b then (!i,a) else err "tk_agl:0"
 end
-
 let rtl = " : "
 let op0 = " \\ "
 open Ast
@@ -1993,6 +2053,10 @@ let rec mk_ir_mdl el =
   m.ns <- ("mul",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Types.Prm(Types.Name "r64")))))::m.ns;
   m.ns_e<-("cmp",Tkn(Etr(Tkn.Etr_N "cmp")))::m.ns_e;
   m.ns <- ("cmp",ref(Ln(Imp(Rcd(rcd_cl [Types.Prm(Types.Name "r64");Types.Prm(Types.Name "r64")]),Rcd(rcd_cl [r2 ();r2 ()])))))::m.ns;
+  m.ns_g <- ("chr",[])::m.ns_g;
+  m.ns_g <- ("dgt",[])::m.ns_g;
+  m.ns_g <- ("u_al",[])::m.ns_g;
+  m.ns_g <- ("l_al",[])::m.ns_g;
   mk_ir_mdl_etr m el
 and mk_ir_mdl_etr m el =
   ( match el with

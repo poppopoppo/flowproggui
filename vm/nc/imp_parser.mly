@@ -10,7 +10,7 @@
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL COPRD_PTN_END
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
 %token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR CLN2 EOP_EXN EOP_OUT
-%token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT
+%token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token <string> NAM STG VAL REG
@@ -26,7 +26,7 @@
 %left APP
 %left CST
 %left PRJ
-%right IO
+%right IO IMP
 
 %start buffer
 %start file
@@ -99,13 +99,21 @@ grm_clq:
   | grm_etr grm_clq { $1::$2 }
   ;
 grm_etr:
-  | SLF DOT NAM grm_ord   { ($3,$4) }
+  | SLF DOT NAM grm_ord   {
+    let (_,go) =
+    List.fold_left
+    (fun (i,go) (cn,f,r) ->
+      if cn="_" then (i+1,go@[($3^"_"^(string_of_int i),f,r)])
+      else (i+1,go@[(cn,f,r)]))
+      (0,[]) $4 in
+    ($3,go) }
   ;
 grm_ord:
   | grm_rule { [$1] }
   | grm_ord grm_rule  { $1@[$2] }
 grm_rule:
   | ord NAM CLN grm_ptns grm_prd { ($2,$1,$4) }
+  | ord grm_ptns grm_prd { ("_",$1,$2) }
   ;
 ord:
   | COPRD { Grm.Lex }
@@ -113,7 +121,7 @@ ord:
   ;
 grm_ptns:
   | { [] }
-  | grm_ptns grm_ptn  { $1@[$2] }
+  | grm_ptn grm_ptns { $1::$2 }
   ;
 grm_ptn:
   | grm_atom { Grm.Atm $1 }
@@ -180,7 +188,7 @@ typ:
   | Z { zn (Prm Z_u) }
   | N { Prm N }
   | ROT rot_dsh { Var (newvar_q (-($2+2))) }
-  | typ IO typ  { Imp($1,$3) }
+  | typ IMP typ  { Imp($1,$3) }
   | SGN { Prm Sgn }
   | TYP_STG { Prm Stg }
   ;

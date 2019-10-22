@@ -1,0 +1,145 @@
+§§ lng
+¶+ℙ
+	@.str
+	∐ "\"" str_in
+	@.str_in
+	∐ "\\" str_sp str_in
+	∐ "\""
+	∐ chr str_in
+	@.str_sp
+	∐ "\\"
+	∐ "\""
+	∐ "t"
+	∐ "n"
+	@.name
+	∐ c_al ⟦al_us⟧ ⟦dgt⟧
+	@.num
+	∐ dgt ⟦dgt⟧
+	@.al_us
+	∐ c_al
+	∐ "_"
+	@.c_al
+	∐ l_al
+	∐ u_al
+	@.nl
+	∐ "\n"
+¶+ℙ
+  @.def_mdl
+  ∐ "§§" name ⟦mdl_etr⟧ "§§."
+	@.def_arg
+	∐ "◂" var ⟦args⟧
+	∐ "◂" "'" ⟦"'"⟧
+	@.args
+	∐ "," var
+	@.var
+	∐ name "'"
+	@.mdl_etr
+  ∐ glb_etr
+  ∐ def_typ
+	@.def_typ
+  ∐ "¶" def_typ_body_clq ⟦def_typ_body_clq⟧
+  ∐ "¶" def_typ_body
+  ∐ "¶+ℙ" grm_body ⟦grm_body⟧
+	@.def_typ_body_clq
+	∐ "@" "." def_typ_body
+  @.def_typ_body
+  ∐ name ‹def_arg› def_coprd ⟦def_coprd⟧
+  ∐ name ‹def_arg›
+  @.def_coprd
+  ∐ "∐" name ":" typ
+  @.grm_body
+  ∐ "@" "." name grm_ord
+	@.grm_ord
+	∐ grm_rule ⟦grm_rule⟧
+	@.grm_rule
+	∐ ord ⟦grm_ptn⟧
+	@.ord
+	∐ "∐*"
+	∐ "∐"
+	@.grm_ptn
+  ∐ grm_atom
+  ∐ "⟦" grm_atom "⟧"
+	∐ "‹" grm_atom "›"
+	@.grm_atom
+	∐ str
+	∐ name
+	@.typ
+	∐ typ_imp
+	@.typ_imp
+	∐ typ_vct ⟦typ_imp_tl⟧
+	@.typ_imp_tl
+	∐ "→" typ_vct
+	@.typ_vct
+	∐ typ_app ⟦typ_vct_tl⟧
+	@.typ_vct_tl
+	∐ "◃" typ_app
+	@.typ_app
+	∐ typ_atm ⟦typ_app_tl⟧
+	@.typ_app_tl
+	∐ "◂" typ_atm
+	@.typ_atm
+  ∐ "(" typ ")"
+  ∐ "{" ⟦typ⟧ "}"
+  ∐ "‹" typ "›"
+  ∐ "⟦" typ "⟧"
+  ∐ var
+  ∐ name
+  ∐ "_"
+	@.glb_etr
+  ∐ "§" name reg_ptn ir_lines
+  ∐ "§" glb_etr_clq ⟦glb_etr_clq⟧
+	@.glb_etr_clq
+	∐ "@" "." name ir_lines
+  @.ir_lines
+  ∐ ir_line ir_lines
+	∐ "?" reg_ptn ir_mtcs
+	∐ name reg_ptn "⊢|"
+	∐ "◂" reg "," reg_ptn "⊢|"
+  ∐ "∎" reg_ptn
+	@.ir_mtcs
+	∐ "∐.\\" mtc_ptn ⟦mtc_eq⟧ "⊢" ir_lines
+	∐ "∐\\" mtc_ptn ⟦mtc_eq⟧ ir_lines ir_mtcs
+	@.mtc_eq
+	∐ "," var "=" name "◂" mtc_ptn
+	∐ "," var "=" cst
+	@.mtc_ptn
+	∐ var
+	∐ "_"
+	∐ "{" ⟦mtc_ptn⟧ "}"
+	@.cst
+	∐ str
+	∐ name
+	@.ir_line
+	∐ name reg_ptn "⊢" reg_ptn
+	∐ name reg_ptn "|⊢"
+	∐ "»" exp reg_ptn "⊢" reg_ptn
+	∐ "◂" reg "," reg_ptn "⊢" reg_ptn
+	∐ "|◂" reg "," reg_ptn "|⊢"
+	∐ "$" reg_ptn "⊢" reg_ptn ⟦reg_ptn_tl⟧
+	@.reg_ptn_tl
+	∐ "," reg_ptn reg_ptn_tl
+  @.reg_ptn
+  ∐ reg
+  ∐ "_"
+  ∐ "{" ⟦reg_ptn⟧ "}"
+  ∐ "{" ⟦reg_ptn⟧ "<" reg "}"
+	@.reg
+	∐ "%" name
+	∐ name
+	@.exp
+	∐ cst
+	∐ "⟦" ⟦exp⟧ "⟧"
+	∐ "‹" ‹exp› "›"
+§ open_in : { ℙ (ℙ→{}) } |⊢
+§ t0 {} 
+	» "hhof_ff33"  _ ⊢ s0 
+	» 0xr0 _ ⊢ r0 
+	name { s0 r0 } ⊢ { s0 r1 a0 } 
+	∎ { s0 r1 a0 } 
+§ f0 {}
+	» "§§ test §§." _ ⊢ i0
+	» 0xr0 _ ⊢ r0
+	def_mdl { i0 r0 } ⊢ { i0 r1 a0 }
+	∎ { i0 r1 a0 }
+
+§§.
