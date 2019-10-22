@@ -1455,7 +1455,7 @@ _grm_init_tbl:
 	and rdx,0xf
 	sub rcx,rdx
 	shl rcx,1
-	imul rcx,6
+	imul rcx,8
 	mov rdi,rcx
 	mov rax,0
 	call malloc
@@ -2011,6 +2011,132 @@ _g0_failed:
 	clc
 	ret
 _g0_failed_tbl:
+	pop rdi
+	pop rsi
+	mov rax,0
+	ret
+_dgt_etr_tbl:
+	push QWORD 1
+	jmp _dgt_tbl
+dgt:
+_dgt:
+	mov rdi,r8
+	mov rsi,r9
+	call _grm_init_tbl
+	push QWORD 0
+_dgt_tbl:
+	jmp _dgt_failed
+_dgt_succeed:
+	pop rbx
+	push rsi
+	push rdi
+	mov rdi,rdx
+	mov rax,0
+	call free
+	cmp rbx,0
+	jnz _dgt_succeed_tbl
+	mov rdi,3
+	call mlc
+	mov rsi,[rax]
+	btr rsi,0
+	mov [rax],rsi
+	mov QWORD [rax+8*3],1
+	pop rdi
+	pop rsi
+	mov QWORD [rax+8*1],rdi
+	mov QWORD [rax+8*2],rsi
+	clc
+	ret
+_dgt_succeed_tbl:
+	pop rdi
+	pop rsi
+	mov rax,1
+	ret
+_dgt_failed:
+	pop rbx
+	push rsi
+	push rdi
+	mov rdi,rdx
+	mov rax,0
+	call free
+	cmp rbx,0
+	jnz _dgt_failed_tbl
+	mov rdi,3
+	call mlc
+	mov rsi,[rax]
+	btr rsi,0
+	mov [rax],rsi
+	mov QWORD [rax+8*3],0
+	pop rdi
+	pop rsi
+	mov QWORD [rax+8*1],rdi
+	mov QWORD [rax+8*2],rsi
+	clc
+	ret
+_dgt_failed_tbl:
+	pop rdi
+	pop rsi
+	mov rax,0
+	ret
+_chr_etr_tbl:
+	push QWORD 1
+	jmp _chr_tbl
+chr:
+_chr:
+	mov rdi,r8
+	mov rsi,r9
+	call _grm_init_tbl
+	push QWORD 0
+_chr_tbl:
+	jmp _chr_failed
+_chr_succeed:
+	pop rbx
+	push rsi
+	push rdi
+	mov rdi,rdx
+	mov rax,0
+	call free
+	cmp rbx,0
+	jnz _chr_succeed_tbl
+	mov rdi,3
+	call mlc
+	mov rsi,[rax]
+	btr rsi,0
+	mov [rax],rsi
+	mov QWORD [rax+8*3],1
+	pop rdi
+	pop rsi
+	mov QWORD [rax+8*1],rdi
+	mov QWORD [rax+8*2],rsi
+	clc
+	ret
+_chr_succeed_tbl:
+	pop rdi
+	pop rsi
+	mov rax,1
+	ret
+_chr_failed:
+	pop rbx
+	push rsi
+	push rdi
+	mov rdi,rdx
+	mov rax,0
+	call free
+	cmp rbx,0
+	jnz _chr_failed_tbl
+	mov rdi,3
+	call mlc
+	mov rsi,[rax]
+	btr rsi,0
+	mov [rax],rsi
+	mov QWORD [rax+8*3],0
+	pop rdi
+	pop rsi
+	mov QWORD [rax+8*1],rdi
+	mov QWORD [rax+8*2],rsi
+	clc
+	ret
+_chr_failed_tbl:
 	pop rdi
 	pop rsi
 	mov rax,0
