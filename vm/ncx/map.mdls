@@ -1,0 +1,22 @@
+§§ Map
+§ @.map { f l0 }
+	? l0
+	∐\ l0' ,l0'=cns◂{ hd0' tl0' } ~|
+		$ f ⊢ f,f0
+		◂ f,hd0 ⊢ hd1   
+		map { f0 tl0 } ⊢ tl1  
+		cns { hd1 tl1 } ⊢ l1
+		∎ l1
+	∐.\ _ ~| 
+		nil {} ⊢ l1 
+		∎ l1 
+§ g0 x 
+	$ x ⊢ x,x0 
+	add { x x0 } ⊢ y 
+	∎ y 
+§ f0 {}
+	» ⟦ 0xr0 0xr1 0xr2 0xrFF 0xrAbc ⟧ _ ⊢ l0 
+	» g0 _ ⊢ p0 
+	map { p0 l0 } ⊢ l1 
+	∎ l1
+§§.
