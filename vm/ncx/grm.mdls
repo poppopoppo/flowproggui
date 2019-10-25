@@ -1,0 +1,51 @@
+§§ grm 
+¶ chr 
+§ chr : ℙ ⊢ chr 
+¶+ℙ 
+	@.g0 
+	∐ r0 : "Hello" "World" "!!"
+	∐ r1 : "Hoo" " " "Baa" 
+	∐ r2 : "Rrr" g0
+	@.g1 
+	∐ r3 : "X" g0 
+	@.g3     
+	∐ r4 : "J" g3
+	∐ r5 : 
+	@.g4 
+	∐ nl : "\n"
+	@.g5 
+	∐ u0 : "§"  
+	@.g6 
+	∐ r6 : ‹"AA"› ⟦g5⟧
+§ f0 {} 
+	» 0xr00 _ ⊢ r0 
+	;» "HelloWorld!!" _ ⊢ s0 
+	;» "XRrrHoo BaaYaa" _ ⊢ s0 
+	;» "JJJJJ" _ ⊢ s0 
+	» "§" _ ⊢ s0 
+	g5 { s0 r0 } ⊢ { s0 r1 a0 } 
+	∎ { s0 r1 a0 } 
+§ f1 {} 
+	» 0xr0 _ ⊢ r0 
+	» "\n" _ ⊢ s0 
+	g4 { s0 r0 } ⊢ { s0 r1 a0 } 
+	∎ { s0 r1 a0 }
+§ f2 {} 
+	» 0xr0 _ ⊢ r0 
+	» "AA§§§" _ ⊢ s0 
+	g6 { s0 r0 } ⊢ { s0 r1 a0 } 
+	∎ { s0 r1 a0 } 
+[;
+¶+ℙ 
+	@.g0 
+	∐ r0 : "hoo" g0 
+	∐ r1 : "aoo" 
+	@.g1 
+	∐ r2 : ⟦g0⟧ "Go" ‹g1› "iV"  ;]
+[;§ f0 {} 
+	» "hooGo VV" _ ⊢ %s0 
+	» 0xr0 _ ⊢ %x0 
+	g1 { s0 x0 } ⊢ { s0 x1 a0 } 
+	∎ { x1 a0 }
+	;]
+§§. 

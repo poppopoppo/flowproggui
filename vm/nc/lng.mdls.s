@@ -38,11 +38,13 @@ emt_etr_c_lb_0:
 ; emt_set_ptn {  }
 	pop rbx
 _f0:
-; 	» "\194\167\194\167 test \194\167\194\167." |~ 0' : ℙ
+; 	» "\194\167\194\167 test \194\167\194\167.\n" |~ 0' : ℙ
 ;push_reg
-	mov rdi,2
+	mov rdi,3
 	call mlc
 	mov rdi,rax
+	mov rsi,[cst_stg_1+8*2]
+	mov [rdi+8*3],rsi
 	mov rsi,[cst_stg_1+8*1]
 	mov [rdi+8*2],rsi
 	mov rsi,[cst_stg_1+8*0]
@@ -50,7 +52,7 @@ _f0:
 	mov rdx,[rdi]
 	and rdx,~0xFFFF
 	or rdx,0x10000
-	add rdx,1
+	add rdx,8
 	mov [rdi],rdx
 	mov QWORD r9,rdi
 ;pop_reg
@@ -5020,4 +5022,4 @@ section .data
 	_dyn_nil:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	cst_stg_1: db 194,167,194,167,32,116,101,115,116,32,194,167,194,167,46,0
+	cst_stg_1: db 194,167,194,167,32,116,101,115,116,32,194,167,194,167,46,10,0,0,0,0,0,0,0,0
