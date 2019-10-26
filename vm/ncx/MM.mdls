@@ -3,17 +3,21 @@
 ¶ r32
 ¶ r16
 ¶ r8
-¶ s8
-¶ f64 
+¶ s8 
+¶ f64  
 ¶ f32 
 ¶ sgn 
 ¶ out ◂ o' 
-¶ Zp ◂ m'
+¶ Zp ◂ m' 
 ¶ bl ; /= f t 
 ¶ S8 
 ¶ HSH 
 ¶ ARR 
 ¶ SPC 
+¶¶+ℙ l_al 
+¶¶+ℙ u_al 
+¶¶+ℙ dgt 
+¶¶+ℙ chr
 ¶ pt ◂ p' 
 ¶ vct ◂ v',b',k' 
 ¶ @.lst ◂ a'
@@ -22,18 +26,21 @@
 ¶ opn ◂ a'
 	∐ some : a'
 	∐ none : {}
-¶+ℙ 
+¶ d 
+	∐ c0 : r64 
+	∐ c1 : l_al.t
+¶¶+ℙ 
 	@.c_al 
 	∐ l_al 
 	∐ u_al 
-¶+ℙ
+¶¶+ℙ
 	@.name 
 	∐ c_al ⟦name_tl⟧
 	@.name_tl 
 	∐ c_al 
 	∐ "_" 
 	∐ dgt 
-¶+ℙ 
+¶¶+ℙ 
 	@.prm_name 
 	∐ "_" name
 §§ gen_asm
@@ -54,8 +61,8 @@
 		∎ {}
 	§§ T1
 		§ f0 {}
-		g0 {} ⊢ _ 
-		∎ {}
+			g0 {} ⊢ _ 
+			∎ {}
 	§§.
 	§ h0 {} 
 		T1.f0 {} ⊢ {} 

@@ -102,6 +102,7 @@ def_typ:
   | DTA def_typ_clique { Flow_Clq $2 }
   | DTA def_typ_body { Flow $2 }
   | dta_grm { Gram $1 }
+  | DTA_GRM NAM { Grm_Abs $2 }
   ;
 dta_grm:
   | DTA_GRM grm_clq { $2 }
