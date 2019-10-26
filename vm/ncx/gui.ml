@@ -202,6 +202,24 @@ let main () =
       print_string ("\'"^file^"\' is saved\n");flush stdout
     with _ -> prerr_endline "Save failed" in
 
+    let navi_view =
+      let buffer = GSourceView2.source_buffer ~text:"navigate view \n" ~style_scheme:theme () in
+      let source_view = GSourceView2.source_view
+          ~source_buffer:buffer ~tab_width:2
+          ~indent_width:2 ~editable:false ~cursor_visible:false
+          ~width:300
+          () in
+      source_view#misc#modify_font_by_name font_name;
+      buffer#set_language lang;
+      buffer#set_highlight_syntax true;
+      source_view#misc#modify_font_by_name font_name;
+      (* let iter_global = source_view#source_buffer#get_iter_at_char 0 in *)
+      let _ = global_signal#connect ~after:false
+          ~callback:(fun s ->
+              match s with
+              | `MODULE_IMPORT ->
+                (* buffer#insert ~iter:iter_global "MODULE_IMPORT"*) () ) in
+      source_view in
   let create_code_view f =
     let code_signal = new GUtil.signal () in
     let file_name = ref f in
@@ -311,18 +329,28 @@ let main () =
                   let (_,el) = mdl0 in
                   mdl := mdl0;
                   let _ =
-                    ( match o with
-                      | Some (lm0,f) ->
-                        let a = Lang.emt_exe el lm0 f in
+                    ( match o,!file_name with
+                      | Some (lm0,f),Some _ ->
+                        let (a,pp) = Lang.emt_exe el lm0 f in
                         (* pnt true a; *)
-                        let d = open_out (Sys.argv.(1)^".s") in
+                        navi_view#source_buffer#set_text pp;
+                        let ssp = (Lang.emt_name (lm0,f)) in
+                        let ss = ssp^".s" in
+                        let d = open_out ss in
                         let _ = output_string d a in
                         flush_all ();
                         let _ = close_out d in
+                        pnt "module is imported\n";
+                        let cd =
+                        "nasm -F dwarf -g -f elf64 "^ss^" -o "^ssp^".o\n"^
+                        "gcc "^ssp^".o -nostartfiles -no-pie -pg -g -o "^ssp^".exe\n"^
+                        "time ./"^ssp^".exe\n" in
+                        let _ = Sys.command cd in
                         ()
-                      | None -> ()) in
-                  Util.pnt dbg text;
-                  pnt "module is imported\n";
+                      | _,_ ->
+                        pnt "module is imported\n" )
+                  in
+                  (*Util.pnt dbg text;*)
                   engine_signal#call `MODULE_IMPORT;
                   ()
                 with | Failure s -> pnt ("error:module import:"^s^"\n")
@@ -407,24 +435,7 @@ let main () =
             false) in
     source_view#misc#modify_font_by_name font_name;
     source_view in
-  let navi_view =
-    let buffer = GSourceView2.source_buffer ~text:"navigate view \n" ~style_scheme:theme () in
-    let source_view = GSourceView2.source_view
-        ~source_buffer:buffer ~tab_width:2
-        ~indent_width:2 ~editable:false ~cursor_visible:false
-        ~width:300
-        () in
-    source_view#misc#modify_font_by_name font_name;
-    buffer#set_language lang;
-    buffer#set_highlight_syntax true;
-    source_view#misc#modify_font_by_name font_name;
-    let iter_global = source_view#source_buffer#get_iter_at_char 0 in
-    let _ = global_signal#connect ~after:false
-        ~callback:(fun s ->
-            match s with
-            | `MODULE_IMPORT ->
-              buffer#insert ~iter:iter_global "MODULE_IMPORT" ) in
-    source_view in
+
 
   let global_view =
     let buffer = GSourceView2.source_buffer ~style_scheme:theme () in
@@ -435,12 +446,13 @@ let main () =
     buffer#set_language lang;
     buffer#set_highlight_syntax true;
     source_view#misc#modify_font_by_name font_name;
-    let iter_global = source_view#source_buffer#get_iter_at_char 0 in
+    (*let iter_global = source_view#source_buffer#get_iter_at_char 0 in *)
     let _ = global_signal#connect ~after:false
         ~callback:(fun s ->
             match s with
             | `MODULE_IMPORT ->
-              buffer#insert ~iter:iter_global "global_view:MODULE_IMPORT"
+              (* buffer#insert ~iter:iter_global "global_view:MODULE_IMPORT" *)
+              ()
           ) in
     source_view in
 

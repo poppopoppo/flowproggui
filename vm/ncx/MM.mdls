@@ -1,12 +1,65 @@
-§§ prm 
+§§ prm
+¶ r64
+¶ r32
+¶ r16
+¶ r8
+¶ s8
+¶ f64 
+¶ f32 
+¶ sgn 
+¶ out ◂ o' 
+¶ Zp ◂ m'
+¶ bl ; /= f t 
+¶ S8 
+¶ HSH 
+¶ ARR 
+¶ SPC 
+¶ pt ◂ p' 
+¶ vct ◂ v',b',k' 
+¶ @.lst ◂ a'
+	∐ cns : { a' lst◂a' }
+	∐ nil : {}
+¶ opn ◂ a'
+	∐ some : a'
+	∐ none : {}
+¶+ℙ 
+	@.c_al 
+	∐ l_al 
+	∐ u_al 
+¶+ℙ
+	@.name 
+	∐ c_al ⟦name_tl⟧
+	@.name_tl 
+	∐ c_al 
+	∐ "_" 
+	∐ dgt 
+¶+ℙ 
+	@.prm_name 
+	∐ "_" name
+§§ gen_asm
+	§ mov : { r64 r64 } ⊢ { r64 r64 } 
+	§ add : { r64 r64 } ⊢ { r64 r64 }
+	§ or : { r64 r64 } ⊢ { r64 r64 }
+	§ and : { r64 r64 } ⊢ { r64 r64 }
+	§ not : r64 ⊢ r64
+	§ shl_1 : r64 ⊢ r64
+	§ shr_1 : r64 ⊢ r64
+§§.
+§ eq : { a' a' } ⊢ bl
 
 §§.
 
-§§ test
-
-§ f0 {}  
-	∎ {}
-
+§§ T0
+	§ g0 {} 
+		∎ {}
+	§§ T1
+		§ f0 {}
+		g0 {} ⊢ _ 
+		∎ {}
+	§§.
+	§ h0 {} 
+		T1.f0 {} ⊢ {} 
+		∎ {} 
 §§.
 
-§ _ = test.f0
+§ _ = T0.T1.f0

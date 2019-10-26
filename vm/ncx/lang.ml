@@ -185,6 +185,7 @@ module Types = struct
         let i =fst @@ (BatList.findi (fun _ vi -> vi==v) !v_vct)in
         "∀["^(string_of_int i)^"]."^(print rl y)
     )
+  and print_t y = print (ref []) y
   and print_rec_a rl r =
     ( match !r with
       | CP(t0,_) -> "@."^(print rl t0)
@@ -818,9 +819,9 @@ module Ast = struct
           with _ -> find_ir_mdl m tl f ) )
   let rec find_ns ns l0 l1 n =
     ( match l0 with
-      | [] -> Hashtbl.find ns (l1,n)
-      | hd::tl ->
-        try Hashtbl.find ns (l1@(hd::tl),n)
+      | [] -> (l0,Hashtbl.find ns (l1,n))
+      | _::tl ->
+        try (l0,Hashtbl.find ns (l1@l0,n))
         with Not_found -> find_ns ns tl l1 n )
   let print_v v =
     ( try let (n,_) = List.find (fun (_,w) -> v==w) !rm in n
@@ -1364,7 +1365,7 @@ and inst_mtc_atm (ns:ns_emt) l0 l e =
   ( match e with
     | Eq_Agl(_,_) -> err "inst_mtc_atm 0"
     | Eq_Agl_N((l1,n),r) ->
-      let yn = inst l (Var (try find_ns ns.ns l0 l1 n with _ -> err "inst_mtc_atm 3")) in
+      let yn = inst l (Var (try let (_,y) = find_ns ns.ns l0 l1 n in y with _ -> err "inst_mtc_atm 3")) in
       let yr = inst_ptn l r in
       let v0 = newvar_l l in
       let _ = unify [] (Imp(yr,Var v0)) yn in
@@ -1444,7 +1445,7 @@ and slv (ns:ns_emt) l0 l p0 =
             unify [] tf (Imp(tx,ty));
             gen (ref []) l ty
           | IR_Glb_Call((l1,n),x,y) ->
-            let tf = inst (l+1) (Var( try find_ns ns.ns l0 l1 n with _ -> err "slv_exp_atm 6")) in
+            let tf = inst (l+1) (Var( try let (_,y) = find_ns ns.ns l0 l1 n in y with _ -> err "slv_exp_atm 6")) in
             let tx = inst_ptn (l+1) x in
             let ty = inst_ptn (l+1) y in
             unify [] tf (Imp(tx,ty));
@@ -1452,7 +1453,7 @@ and slv (ns:ns_emt) l0 l p0 =
           | IR_Out (_,_) -> err "slv x1"
           | IR_Glb_Out ((l1,o),x) ->
             let tx = inst_ptn (l+1) x in
-            let yo = find_ns ns.ns l0 l1 o in
+            let (_,yo) = find_ns ns.ns l0 l1 o in
             let _ = unify [] (inst (l+1) (Var yo)) (App(Prm(Name ([],"-")),tx)) in
             gen (ref []) l tx
           | IR_Exp(a,_,r1) ->
@@ -1474,7 +1475,7 @@ and slv_exp_atm (ns:ns_emt) l0 a =
         | Z _ -> zn (Prm Z_u)
         | Zn(_,_) -> zn (Var (newvar()))
         | Name (l1,n) ->
-          ( try Var(find_ns ns.ns l0 l1 n)
+          ( try Var(let (_,y) = find_ns ns.ns l0 l1 n in y)
             with _ -> err ("slv_exp_atm 3:"^n) ))
     | _ -> err "slv_exp_atm 1" )
 
@@ -2013,21 +2014,36 @@ let emt_name (ps,f) =
   (List.fold_left (fun s p -> p^"_"^s ) "" ps)^"_"^f
 
 let init_ns () = { ns=Hashtbl.create 10; ns_e=Hashtbl.create 10; ns_t=Hashtbl.create 10; }
+let rec pnt_args f l =
+  ( match f,l with
+    | `Hd,hd::tl -> " ◂ "^hd^"\'"^(pnt_args `Tl tl)
+    | `Tl,hd::tl -> ","^hd^"\'"^(pnt_args `Tl tl)
+    | _,[] -> "" )
+let rec pnt_vs f l =
+  ( match f,l with
+    | `Hd,hd::tl -> " ◂ "^(Types.print_t (Var hd))^(pnt_vs `Tl tl)
+    | `Tl,hd::tl -> ","^(Types.print_t (Var hd))^(pnt_vs `Tl tl)
+    | _,[] -> "" )
+let pnt_vs = pnt_vs `Hd
 let rec emt_m (ns:ns_emt) (l0:string list) el =
+  let ld = List.length l0 in
+  let tbs = String.make ld '\t' in
   ( match el with
-    | [] -> ("","","")
+    | [] -> ("","","","")
     | e::tl ->
-      let (e0,e1,e2) =
+      let (e0,e1,e2,pp) =
         ( match e with
           | Mdl(n,el0) ->
-            let (e0,e1,e2) = emt_m ns (n::l0) el0 in
-            (e0,e1,e2)
+            let (e0,e1,e2,pp) = emt_m ns (n::l0) el0 in
+            (e0,e1,e2,tbs^"§§ "^n^"\n"^pp^tbs^"§§.\n")
           | Etr(n,_,_,(r0,p0)) ->
             let (r0,p0) = mk_ir_etr (r0,p0) in
             let y0 = inst_ptn 0 r0 in
             let y1 = slv ns l0 0 !p0 in
             let y = Imp(y0,y1) in
             let _ = gen (ref []) (-1) y in
+            let pp =
+              tbs^"§ "^n^" : "^(Types.print_t y0)^" ⊢ "^(Types.print_t y1)^"\n" in
             let s = Hashtbl.create 10 in
             let i0 = idx_crt_ptn s r0 in
             let iv0 = Rcd_Ptn.map (fun v -> (idx s v,v)) r0 in
@@ -2064,7 +2080,7 @@ let rec emt_m (ns:ns_emt) (l0:string list) el =
               (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
               "\t\tdq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001\n"^
               "\t\tdq "^(emt_name (l0,n))^"\n" in
-            (se,e0^ep,"")
+            (se,e0^ep,"",pp)
           | Etr_Abs(n,y0,y1) ->
             let l = ref [] in
             let ys = mk_vars (ref []) ns l0 `Etr l y0 in
@@ -2072,14 +2088,18 @@ let rec emt_m (ns:ns_emt) (l0:string list) el =
             let v = ref(Ln(Imp(ys,yd))) in
             Hashtbl.add ns.ns (l0,n) v;
             Hashtbl.add ns.ns_e (l0,n) (Etr_V (Rcd_Ptn.A (0,v)));
-            ("","","")
+            let pp =
+              tbs^"§ "^n^" : "^(Types.print_t ys)^" ⊢ "^(Types.print_t yd)^"\n" in
+            ("","","",pp)
           | Etr_Out_Abs(n,y0) ->
             let l = ref [] in
             let ys = mk_vars (ref []) ns l0 `Etr l y0 in
             let v = ref(Ln(App(Prm(Name ([],"-")),ys))) in
             Hashtbl.add ns.ns (l0,n) v;
             Hashtbl.add ns.ns_e (l0,n) (Etr_V (Rcd_Ptn.A (0,v)));
-            ("","","")
+            let pp =
+              tbs^"§ "^n^" : "^(Types.print_t ys)^" |⊢ \n" in
+            ("","","",pp)
           | Etr_Clq q ->
             let l_0 =
               List.fold_left
@@ -2102,16 +2122,17 @@ let rec emt_m (ns:ns_emt) (l0:string list) el =
                    let y1 = slv ns l0 0 !p0 in
                    (n,y2,y0,y1,p0,iv0)::l )
                 [] l_0 in
-            let _ =
+            let pp =
               List.fold_left
-                ( fun _ (_,y2,y0,y1,_,_) ->
+                ( fun pp (n,y2,y0,y1,_,_) ->
                     ( try
                         let _ = unify [] (Var y0) (inst 0 y1) in
-                        gen (ref []) (-1) (Var y2)
+                        gen (ref []) (-1) (Var y2);
+                        pp^tbs^"\t@."^n^" : "^(Types.print_t (Var y0))^" ⊢ "^(Types.print_t y1)^"\n"
                       with _ -> err "y1:" ))
-                () l_1 in
+                "" l_1 in
             List.fold_left
-              (fun (e_0,e_1,e_2) (n,_,_,_,p0,iv0) ->
+              (fun (e_0,e_1,e_2,pp) (n,_,_,_,p0,iv0) ->
                  let s = Hashtbl.create 10 in
                  let i0 = Rcd_Ptn.map (fun (i,v) -> Hashtbl.add s i v; i) iv0 in
                  let c0 = cmt ("\t|» "^(emt_ptn i0)) in
@@ -2145,31 +2166,35 @@ let rec emt_m (ns:ns_emt) (l0:string list) el =
                    (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
                    "\t\tdq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001\n"^
                    "\t\tdq "^(emt_name (l0,n))^"\n" in
-                 (e_0^se,e_1^e0^ep,e_2^"")) ("","","") l_1
+                 (e_0^se,e_1^e0^ep,e_2^"",pp)) ("","","",tbs^"§ \n"^pp) l_1
           | Flow f ->
             ( match f with
               | Ast.Def_CoPrd (n,a,ds) ->
+                let (_,vs) = List.split a in
                 let ds = List.map (fun (y,c) -> (mk_vars (ref []) ns l0  `Abs (ref a) y,c)) ds in
                 Hashtbl.add ns.ns_t (l0,n) (T_CP(a,ds));
                 let ya = List.fold_left (fun ya (_,v) -> App(ya,Var v)) (Prm(Name ([],n))) a in
-                let (_,es) =
+                let (_,es,pp0) =
                   List.fold_left
-                    ( fun (i,s) (t,n) ->
+                    ( fun (i,s,pp0) (t,n) ->
                         let tc = Imp(t,ya) in
                         Hashtbl.add ns.ns (l0,n) (ref (Ln tc));
                         Hashtbl.add ns.ns_e (l0,n) (Ctr i);
+                        let ppi =
+                          tbs^"\t∐ "^n^" : "^(Types.print_t t)^"\n" in
                         let sn =
                           "\t_dyn_"^(emt_name (l0,n))^":\n"^
                           (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
                           "\t\tdq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001\n"^
                           "\t\tdq "^(string_of_int i)^"\n" in
-                        (i+1,s^sn) )
-                    (0,"") ds in
-                ("","",es)
-              | Ast.Def_Abs (n,_) ->
+                        (i+1,s^sn,pp0^ppi) )
+                    (0,"","") ds in
+                ("","",es,tbs^"¶ "^n^(pnt_vs vs)^"\n"^pp0)
+              | Ast.Def_Abs (n,a) ->
+                let (a0,_) = List.split a in
                 Hashtbl.add ns.ns_t (l0,n) (T_Prm);
-                ("","","")
-              | Ast.Def_EqT (_,_,_) -> ("","","")
+                ("","","",tbs^"¶ "^n^(pnt_args `Hd a0)^"\n")
+              | Ast.Def_EqT (_,_,_) -> ("","","","")
               | _ -> err "slv_flows 1" )
           | Flow_Clq q ->
             let _ =
@@ -2183,81 +2208,90 @@ let rec emt_m (ns:ns_emt) (l0:string list) el =
                       | _ -> err "slv_flows 1" )
                 )
                 () q in
-            let es =
+            let (es,pp) =
               List.fold_left
-                ( fun es f ->
+                ( fun (es,pp) f ->
                     ( match f with
                       | Ast.Def_CoPrd (n,a,ds) ->
+                        let (_,vs) = List.split a in
                         let ds = List.map (fun (y,c) -> (mk_vars (ref []) ns l0 `Abs (ref a) y,c)) ds in
                         let ya = List.fold_left (fun ya (_,v) -> App(ya,Var v)) (Prm(Name ([],n))) a in
                         Hashtbl.add ns.ns_t (l0,n) (T_CP(a,ds));
-                        let (_,eq) =
+                        let (_,eq,pp0) =
                           List.fold_left
-                            (fun (i,eq) (t,n) ->
+                            (fun (i,eq,pp0) (t,n) ->
                                let tc = Imp(t,ya) in
                                Hashtbl.add ns.ns (l0,n) (ref (Ln tc));
                                Hashtbl.add ns.ns_e (l0,n) (Ctr i);
+                               let ppi =
+                                 tbs^"\t∐ "^n^" : "^(Types.print_t t)^"\n" in
                                let sn =
                                  "\t_dyn_"^(emt_name (l0,n))^":\n"^
                                  (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
                                  "\t\tdq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001\n"^
                                  "\t\tdq "^(string_of_int i)^"\n" in
-                               (i+1,eq^sn))
-                            (0,"") ds in
-                        es^eq
-                      | Ast.Def_Abs _ -> ""
-                      | Ast.Def_EqT (_,_,_) -> ""
+                               (i+1,eq^sn,pp0^ppi))
+                            (0,"","") ds in
+                        (es^eq,pp^tbs^"\t@."^n^(pnt_vs vs)^"\n"^pp0)
+                      | Ast.Def_Abs (n,a) ->
+                        let (a,_) = List.split a in
+                        ("",pp^tbs^"\t@."^n^(pnt_args `Hd a)^"\n")
+                      | Ast.Def_EqT (_,_,_) -> ("",pp)
                       | _ -> err "slv_flows 1" )
                 )
-                "" q in
-            ("","",es)
+                ("","") q in
+            ("","",es,tbs^"¶\n"^pp)
           | Gram g ->
             let _  =
               List.fold_left
                 ( fun _ (n,_) ->
                     Hashtbl.add ns.ns_t (l0,n) T_Prm )
                 () g in
-            let _ =
+            let pp =
               List.fold_left
-                (fun _ (n,rs) ->
+                ( fun pp (n,rs) ->
                    Hashtbl.add ns.ns_e (l0,n) (Prs (n,rs));
                    let y = Prm(Name ([],n)) in
                    let v = newvar () in
                    v := Ln y;
                    let yp = Imp(Rcd(rcd_cl [Prm Stg;Prm(Name ([],"r64"))]),Rcd(rcd_cl [Prm Stg;Prm(Name ([],"r64"));Prm(Name ([],n))])) in
-                   Hashtbl.add ns.ns (l0,n) (ref(Ln yp))
-                ) () g in
-            ("","","")
+                   Hashtbl.add ns.ns (l0,n) (ref(Ln yp));
+                   let ppi = Grm.print_etr (n,rs) in
+                   pp^ppi
+                ) "" g in
+            ("","","",tbs^"¶+ℙ \n"^pp)
         ) in
-      let (et0,et1,et2) = emt_m ns l0 tl in
-      (e0^et0,e1^et1,e2^et2)
+      let (et0,et1,et2,ppt) = emt_m ns l0 tl in
+      (e0^et0,e1^et1,e2^et2,pp^ppt)
   )
 and emt_exe m l0 f =
   let ns = init_ns () in
-  let (se,em,_) = (emt_m ns [] m) in
-  "%include \"cmu.s\"\n"^
-  "main:\n"^
-  "\tmov r15,0\n"^
-  "\tmov r14,0\n"^
-  "\tmov r13,0\n"^
-  "\tmov r12,0\n"^
-  "\tnot r12\n"^
-  "\txor rax,rax\n"^
-  "\tmov rdi,0\n"^
-  "\tcall mlc\n"^
-  "\tmov rdi,rax\n"^
-  "\tclc\n"^
-  "\tcmp rdi,0\n"^
-  "\tcall "^(emt_name (l0,f))^"\n"^
-  "\tmov rdi,rax\n"^
-  "\tmov rsi,str_ret\n"^
-  "\tcall pnt\n"^
-  "\tcall pnt_str_ret\n"^
-  "\tjmp _end\n"^
-  em^
-  "section .data\n"^
-  se^
-  (emt_cst_stg !cst_stg)
+  let (se,em,_,pp) = (emt_m ns [] m) in
+  let ex =
+    "%include \"cmu.s\"\n"^
+    "main:\n"^
+    "\tmov r15,0\n"^
+    "\tmov r14,0\n"^
+    "\tmov r13,0\n"^
+    "\tmov r12,0\n"^
+    "\tnot r12\n"^
+    "\txor rax,rax\n"^
+    "\tmov rdi,0\n"^
+    "\tcall mlc\n"^
+    "\tmov rdi,rax\n"^
+    "\tclc\n"^
+    "\tcmp rdi,0\n"^
+    "\tcall "^(emt_name (l0,f))^"\n"^
+    "\tmov rdi,rax\n"^
+    "\tmov rsi,str_ret\n"^
+    "\tcall pnt\n"^
+    "\tcall pnt_str_ret\n"^
+    "\tjmp _end\n"^
+    em^
+    "section .data\n"^
+    se^
+    (emt_cst_stg !cst_stg) in
+  (ex,pp)
 (*
 and emt m (ps,f) =
   let (se,em) = (emt_mdl m m.ns_v) in
@@ -3281,7 +3315,7 @@ and emt_ir  ns lm0 s p =
                     let l_ef = "failed_"^(lb ()) in
                     ( match pa with
                       | Eq_Agl_N((lm1,n),r) ->
-                        let f = try find_ns ns.ns_e lm0 lm1 n with _ -> err "emt_ir a0" in
+                        let (_,f) = try find_ns ns.ns_e lm0 lm1 n with _ -> err "emt_ir a0" in
                         let s1 = Hashtbl.copy s in
                         let _ = idx_sub s1 s0 in
                         let ec = clear emt_reg_x86 s1 in
@@ -3578,7 +3612,7 @@ and emt_ir  ns lm0 s p =
             "\tclc\n"^
             "\tret\n"
         | (lm1,f) ->
-          let af = ( try find_ns ns.ns_e lm0 lm1 f with _ -> err "emt_ir a1") in
+          let (_,af) = ( try find_ns ns.ns_e lm0 lm1 f with _ -> err "emt_ir a1") in
           let open Rcd_Ptn in
           ( match af with
             | Ctr j ->
@@ -4238,7 +4272,7 @@ and emt_ir  ns lm0 s p =
                       |_ -> err "emt_ir err 0" )
                   | _ -> err "emt_ir err 1" )
               | (lm1,f) ->
-                let af = (try find_ns ns.ns_e lm0 lm1 f with _ -> err "emt_ir a2") in
+                let (lr0,af) = (try find_ns ns.ns_e lm0 lm1 f with _ -> err "emt_ir a2") in
                 let open Rcd_Ptn in
                 ( match af with
                   | Ctr j ->
@@ -4296,7 +4330,7 @@ and emt_ir  ns lm0 s p =
                     c0^es0^e1^em^
                     ex0^
                     dec_x^
-                    "\tcall _"^f^"\n"^
+                    "\tcall _"^(emt_name (lm1@lr0,f))^"\n"^
                     (*(pnt_reg s 8)^ *)
                     "\tmov QWORD [tmp],rax\n"^
                     "\tjc "^l_0^"\n"^
