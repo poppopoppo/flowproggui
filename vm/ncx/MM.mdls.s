@@ -11,15 +11,15 @@ main:
 	mov rdi,rax
 	clc
 	cmp rdi,0
-	call test__f0
+	call T0_T1__f0
 	mov rdi,rax
 	mov rsi,str_ret
 	call pnt
 	call pnt_str_ret
 	jmp _end
-test__f0:
+T0_T1__f0:
 ; 	|» {  }
-	jz _test__f0
+	jz _T0_T1__f0
 	jc emt_etr_c_lb_0
 	push rbx
 	mov rbx,rdi
@@ -31,13 +31,13 @@ test__f0:
 	call dec_r
 ;pop_reg
 	pop rbx
-jmp _test__f0
+jmp _T0_T1__f0
 emt_etr_c_lb_0:
 	push rbx
 	mov rbx,rdi
 ; emt_set_ptn {  }
 	pop rbx
-_test__f0:
+_T0_T1__f0:
 ; 	∎ {  }
 ; emt_get_crt_ptn {  }
 ;push_reg
@@ -60,6 +60,6 @@ ret_lb_1:
 	stc
 	ret
 section .data
-	_dyn_test__f0:
+	_dyn_T0_T1__f0:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq test__f0
+		dq T0_T1__f0
