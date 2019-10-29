@@ -126,7 +126,7 @@ let main () =
           | None -> (fn,Implib.init_st ())
           | Some f ->
             pnt ("loading "^f);
-            (fn,((),Lang.Types.Prm(Name ([],"_"))) (* Implib.load_from_file "default.st") *) )
+            (fn,((),Lang.Types.Axm(Util.sgn ()))) (* Implib.load_from_file "default.st") *)
         )
       with _ -> pnt "failed to load default.st\n";init_ide
     ) in
@@ -330,11 +330,11 @@ let main () =
                   mdl := mdl0;
                   let _ =
                     ( match o,!file_name with
-                      | Some (lm0,f),Some _ ->
-                        let (a,pp) = Lang.emt_exe el lm0 f in
+                      | Some f,Some _ ->
+                        let (a,pp) = Lang.emt_exe el f in
                         (* pnt true a; *)
                         navi_view#source_buffer#set_text pp;
-                        let ssp = (Lang.emt_name (lm0,f)) in
+                        let ssp = (Lang.emt_name f) in
                         let ss = ssp^".s" in
                         let d = open_out ss in
                         let _ = output_string d a in

@@ -20,6 +20,8 @@ type token =
   | SLF of (int)
   | SGN
   | SEQ
+  | S8_STT
+  | S8_END
   | R_RCD
   | R_PRN
   | R_OPN

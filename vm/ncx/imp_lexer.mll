@@ -94,6 +94,8 @@ rule token = parse
     | "\'" { DSH }
     | "=" { EQ }
     | "!" { EXP }
+    | "[^" { S8_STT }
+    | "^]" { S8_END }
     | "◂" { APP }
     | "◃" { PRJ }
     | "ℤ" { Z }

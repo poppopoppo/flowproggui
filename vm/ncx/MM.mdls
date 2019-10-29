@@ -1,61 +1,60 @@
 §§ prm
-¶ r64
-¶ r32
-¶ r16
-¶ r8
-¶ s8 
-¶ f64  
-¶ f32 
-¶ sgn 
-¶ out ◂ o' 
-¶ Zp ◂ m' 
-¶ bl ; /= f t 
-¶ S8 
-¶ HSH 
-¶ ARR 
-¶ SPC 
-¶¶+ℙ l_al 
-¶¶+ℙ u_al 
-¶¶+ℙ dgt 
-¶¶+ℙ chr
-¶ pt ◂ p' 
-¶ vct ◂ v',b',k' 
-¶ @.lst ◂ a'
-	∐ cns : { a' lst◂a' }
-	∐ nil : {}
-¶ opn ◂ a'
-	∐ some : a'
-	∐ none : {}
-¶ d 
-	∐ c0 : r64 
-	∐ c1 : l_al.t
-¶¶+ℙ 
-	@.c_al 
-	∐ l_al 
-	∐ u_al 
-¶¶+ℙ
-	@.name 
-	∐ c_al ⟦name_tl⟧
-	@.name_tl 
-	∐ c_al 
-	∐ "_" 
-	∐ dgt 
-¶¶+ℙ 
-	@.prm_name 
-	∐ "_" name
-§§ gen_asm
-	§ mov : { r64 r64 } ⊢ { r64 r64 } 
-	§ add : { r64 r64 } ⊢ { r64 r64 }
-	§ or : { r64 r64 } ⊢ { r64 r64 }
-	§ and : { r64 r64 } ⊢ { r64 r64 }
-	§ not : r64 ⊢ r64
-	§ shl_1 : r64 ⊢ r64
-	§ shr_1 : r64 ⊢ r64
+	¶ r64 ; = _.r64
+	¶ r32
+	¶ r16
+	¶ r8
+	¶ s8 
+	¶ f64  
+	¶ f32 
+	¶ sgn 
+	¶ out ◂ o' 
+	¶ Zp ◂ m' 
+	¶ bl ; /= f t 
+	¶ S8 
+	¶ HSH 
+	¶ ARR 
+	¶ SPC 
+	¶¶+ℙ l_al ; = _.l_al
+	¶¶+ℙ u_al ; = _.u_al
+	¶¶+ℙ dgt 
+	¶¶+ℙ chr
+	¶ pt ◂ p' 
+	¶ vct ◂ v',b',k' 
+	¶ @.lst ◂ a'
+		∐ cns : { a' lst◂a' }
+		∐ nil : {}
+	¶ opn ◂ a'
+		∐ some : a'
+		∐ none : {}
+	¶ d 
+		∐ c0 : r64 
+		∐ c1 : l_al.t
+	¶¶+ℙ 
+		@.c_al 
+		∐ l_al 
+		∐ u_al 
+	¶¶+ℙ
+		@.name 
+		∐ c_al ⟦name_tl⟧
+		@.name_tl 
+		∐ c_al 
+		∐ "_" 
+		∐ dgt 
+	¶¶+ℙ 
+		@.prm_name 
+		∐ "_" name
+	§§ gen_asm
+		§ mov : { r64 r64 } ⊢ { r64 r64 } 
+		§ add : { r64 r64 } ⊢ { r64 r64 }
+		§ or : { r64 r64 } ⊢ { r64 r64 }
+		§ and : { r64 r64 } ⊢ { r64 r64 }
+		§ not : r64 ⊢ r64
+		§ shl_1 : r64 ⊢ r64
+		§ shr_1 : r64 ⊢ r64
+	§§. 
+	§ eq : { a' a' } ⊢ bl 
 §§.
-§ eq : { a' a' } ⊢ bl
-
-§§.
-
+;§ ! prm._
 §§ T0
 	§ g0 {} 
 		∎ {}
@@ -67,6 +66,9 @@
 	§ h0 {} 
 		T1.f0 {} ⊢ {} 
 		∎ {} 
+	§ f0 {}
+	» prm.name.prs _ ⊢ p
+	∎ p
 §§.
 
 § _ = T0.T1.f0
