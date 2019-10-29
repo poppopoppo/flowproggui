@@ -370,8 +370,10 @@ S8◂LNK ⊵ { r64 r8 }
 S8◂OCP ⊵ { r64 r8 } = s8
 exc : { v'⊵{b' k'} b' k' } ⊢ { v'⊵{b' k'} b' k' }
 Ocp
+
 ¶ HSH :: VCT_T
 ¶ ARR :: ARR_T → VCT_T
+spc◂k' = SPC ⊵ { pt◂k' k' }
 
 f64
 f32
@@ -464,7 +466,24 @@ _ : _ : → : { _ _ } → _
 § g1.c_1
 § g1.prs
 
+
 module class
 §§ m : C
 § f : m:C ∀ m ⊢ a
   m
+.prm.ad.efds fd oijf oijejf
+ls
+
+§~ c0
+  sgn {} ⊢ p0
+  ∎ p0
+
+§~ c0,c1,c2,c3,c4,c5,c6 ; compile time computation
+  » { & & & & & & & } _ ⊢ { p0 p1 p2 p3 p4 p5 p6 }
+  ∎ p0,p1,p2,p3,p4,p5,p6
+  
+§§§ C0 { %%arg0 %%arg1 .. %%argN } ; compile time computations
+  sgn {} ⊢ %p0
+  §' f ~ %p0
+
+§§§.

@@ -13,6 +13,7 @@
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
+%token S8_STT S8_END
 %token <string> NAM STG VAL REG
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
@@ -47,10 +48,8 @@ name_eof:
   | name EOF { $1 }
   ;
 name:
-  | NAM { ([],$1) }
-  | NAM DOT name {
-    let (lm0,n) = $3 in
-    (lm0@[$1],n) }
+  | NAM { (EndN $1) }
+  | NAM DOT name { DotN($1,$3) }
   ;
 file:
   | EOF { (None,[]) }
@@ -91,6 +90,10 @@ args:
 gl_etr_lst:
   |   { [] }
   | mdl_etr nls gl_etr_lst  { $1::$3 }
+  ;
+pvt:
+  | EXP { true }
+  | { false }
   ;
 mdl_etr:
   | glb_etr { $1 }
@@ -174,12 +177,8 @@ def_coprd:
   | COPRD NAM CLN typ def_coprd  { ($4,$2)::$5 }
   ;
 def_prd:
-  | PRD typ_top CLN NAM  { [($2,$4)] }
-  | PRD typ_top CLN NAM def_prd  { ($2,$4)::$5 }
-  ;
-typ_top:
-  | typs { Rcd(rcd_cl $1) }
-  | EXP typ { $2 }
+  | PRD NAM CLN typ  { [($4,$2)] }
+  | PRD NAM CLN typ def_prd  { ($4,$2)::$5 }
   ;
 typ_top_lb:
   | { U_Lb }
@@ -190,26 +189,28 @@ typs:
   ;
 typ:
   | L_PRN typ R_PRN { $2 }
-  | L_RCD typ_top R_RCD { $2 }
+  | L_RCD typs R_RCD { Rcd(rcd_cl $2) }
   | L_RCD LB typ_top_lb R_RCD { Rcd_Lb $3 }
   | typ APP typ { Types.App($1,$3) }
-  | typ PRJ typ { App(App(Prm Vct,$1),$3) }
+(*  | typ PRJ typ { App(App(Prm Vct,$1),$3) } *)
   | L_OPN typ R_OPN { opn $2 }
   | L_LST typ R_LST { lst $2 }
-  | VAL { Prm(EqT $1) }
-  | name { Prm (Name $1) }
-  | Z { zn (Prm Z_u) }
-  | N { Prm N }
+  | VAL { Var(ref(N_Ln (EndN $1,Axm Lang.Types.Axm.v))) }
+  | name { Var(ref(N $1)) }
+  | Z { zn (Lang.Types.Axm.z_u) }
+  | N { Axm Lang.Types.Axm.nat }
   | ROT rot_dsh { Var (newvar_q (-($2+2))) }
   | typ IMP typ  { Imp($1,$3) }
-  | SGN { Prm Sgn }
-  | TYP_STG { Prm Stg }
+  | SGN { Axm Lang.Types.Axm.sgn_p }
+  | TYP_STG { Axm Lang.Types.Axm.stg }
   ;
 rot_dsh:
   | { 0 }
   | rot_dsh DSH { $1+1 }
   ;
 glb_etr:
+  | LCE EXP NAM DOT WC { Mdl_Ln(false,$3) }
+  | LCE NAM DOT WC { Mdl_Ln(true,$2) }
   | LCE glb_etr_clique { Ast.Etr_Clq  $2 }
   | LCE glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d) }
   | LCE NAM CLN typ SRC typ {
@@ -238,12 +239,27 @@ ir_line:
   | ROT reg_ptn SRC reg_ptn regs { IR_Id($2,[|$4|] |+| $5)  }
   | ARR exp INI_IR reg_ptn_src SRC reg_ptn  { IR_Exp($2,$4,$6) }
   | ARR exp reg_ptn_src SRC reg_ptn { IR_Exp($2,$3,$5) }
+  | ARR WC src_par_p S8_STT s8_ptn S8_END {
+      let (l0,l1) = $3 in
+      IR_S8($5,l0,l1) }
   | name reg_ptn SRC reg_ptn { IR_Glb_Call($1,$2,$4) }
   | APP reg CMM reg_ptn SRC reg_ptn {
      IR_Call(($2,$4),$6) }
   | OUT_IR reg reg_ptn SRC_OUT {
     IR_Out($2,$3) }
   | name reg_ptn SRC_OUT { IR_Glb_Out($1,$2) }
+  ;
+src_par_p:
+  | reg SRC reg CMM reg { ([|$1|],[|$3;$5|]) }
+  | reg CMM src_par_p CMM reg {
+      let (l0,l1) = $3 in
+      ([|$1|] |+| l0,l1 |+| [|$5|]) }
+  ;
+s8_ptn:
+  | { [] }
+  | STG s8_ptn { (S8_Txt $1)::$2 }
+  | IDX s8_ptn { (S8_Var $1)::$2 }
+  | name s8_ptn { (S8_Name $1)::$2 }
   ;
 ir_ptn:
   | ir_ptn_atm { Rcd_Ptn.A $1 }
@@ -416,8 +432,8 @@ exp:
   | ROT { Rot }
   | IDX { Prj(Rot,Rcd_Ptn.Idx($1,Rcd_Ptn.End)) }
   | VAL { Prj(Rot,Rcd_Ptn.Lb($1,Rcd_Ptn.End)) }
-  | VCT_INI { App(Atm (Name ([],"#")),Rcd [||])  }
-  | exp VCT exp { App(Atm (Name ([],"⊵")),Rcd [|$1;$3|]) }
+(*  | VCT_INI { App(Atm (Name ([],"#")),Rcd [||])  } *)
+(*  | exp VCT exp { App(Atm (Name ([],"⊵")),Rcd [|$1;$3|]) } *)
   | name  { Atm (Name $1) }
   | STG { Atm (Stg $1) }
   | L_PRN exp R_PRN { $2 }
@@ -430,11 +446,11 @@ exp:
   | L_RCD exp_lst OP exp R_RCD { Rcd (Array.of_list $2) }
   | L_RCD LB exp_lst_lb R_RCD { Rcd_Lb (None,Array.of_list $3) }
   | L_RCD LB exp_lst_lb OP exp R_RCD { Rcd_Lb (Some $5,Array.of_list $3) }
-  | L_OPN R_OPN { App(Atm(Name ([],"none")),Rcd [||]) }
-  | L_OPN exp R_OPN { App(Atm (Name ([],"some")),$2) }
+  | L_OPN R_OPN { App(Atm(Name (EndN "none")),Rcd [||]) }
+  | L_OPN exp R_OPN { App(Atm (Name (EndN "some")),$2) }
   | L_LST lst_list R_LST { $2 }
   ;
 lst_list:
-  | { App(Atm (Name ([],"nil")),Rcd [||]) }
-  | exp lst_list { App(Atm (Name ([],"cns")),Rcd [|$1;$2|]) }
+  | { App(Atm (Name (EndN "nil")),Rcd [||]) }
+  | exp lst_list { App(Atm (Name (EndN "cns")),Rcd [|$1;$2|]) }
   ;
