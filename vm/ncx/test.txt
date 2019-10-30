@@ -495,7 +495,15 @@ _env.
   pnt p0 |⊢
   » _env.args _ ⊢ a0
   pp a0 ⊢ p1
-  pnt p1 |⊢ 
+  pnt p1 |⊢
   ∎ {}
 
 execution \= compile time computation
+
+§ @.nc %n
+  » nc_0 _ ⊢ p0
+  rd { %n %p0 {} } |⊢
+  ∎ {}
+
+  @.nc_0 { %s {} }
+    
