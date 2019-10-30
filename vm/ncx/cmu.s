@@ -146,8 +146,8 @@ _end:
 
 mlc:
   ; add heap counter
-  add r13,rdi
-  add r13,1
+  ;add r13,rdi
+  ;add r13,1
   ;
   mov rax,0x00010000
   ;xor rax,rax
@@ -188,8 +188,8 @@ dec_r:
   shl rdx,16
   shr rdx,48
   ;pushf
-  sub r13,r10
-  sub r13,1
+  ;sub r13,r10
+  ;sub r13,1
   ;popf
 dec_r_lp:
   cmp rdx,0

@@ -5,7 +5,7 @@
 	¶ r8
 	¶ s8 
 	¶ f64  
-	¶ f32 
+	¶ f32  
 	¶ sgn 
 	¶ out ◂ o' 
 	¶ Zp ◂ m' 
@@ -53,22 +53,38 @@
 		§ shr_1 : r64 ⊢ r64
 	§§. 
 	§ eq : { a' a' } ⊢ bl 
+	§ pnt : ℙ |⊢
 §§.
-;§ ! prm._
 §§ T0
+	§ prm._ 
 	§ g0 {} 
 		∎ {}
 	§§ T1
 		§ f0 {}
 			g0 {} ⊢ _ 
+			» "Hello World!!\n" _ ⊢ s0  
+			» "Foo Baoo" _ ⊢ s1
+			» _^ s0,s1 ⊢ sr,s0,s1 
+				"Ab" 0' "B" 1' 1' "\n"
+				"\tmov r0,r1\n"
+				"\tadd r3,r5\n" // 
+			emt s0 |⊢
+			emt s1 |⊢
+			emt sr |⊢ 
 			∎ {}
 	§§.
 	§ h0 {} 
-		T1.f0 {} ⊢ {} 
+		T1.f0 {} ⊢ {} 	
 		∎ {} 
 	§ f0 {}
-	» prm.name.prs _ ⊢ p
-	∎ p
+		» prm.name.prs _ ⊢ p
+		∎ p
+	§ f1 {} 
+		» "FOO" _ ⊢ s0
+		» _^ s0 ⊢ s1,s0
+			//;"A" "B" 0' "C\n" 
+			;"a b c\n" // 
+		∎ s1
 §§.
 
 § _ = T0.T1.f0

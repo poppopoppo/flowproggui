@@ -478,12 +478,24 @@ ls
   sgn {} ⊢ p0
   ∎ p0
 
-§~ c0,c1,c2,c3,c4,c5,c6 ; compile time computation
+§~ c0,c1,c2,c3,c4,c5,c6 ; execution \ compile time computation
   » { & & & & & & & } _ ⊢ { p0 p1 p2 p3 p4 p5 p6 }
   ∎ p0,p1,p2,p3,p4,p5,p6
-  
+
 §§§ C0 { %%arg0 %%arg1 .. %%argN } ; compile time computations
   sgn {} ⊢ %p0
   §' f ~ %p0
 
 §§§.
+
+_env.
+
+§~ _
+  » "Hello World!!" _ ⊢ s0
+  pnt p0 |⊢
+  » _env.args _ ⊢ a0
+  pp a0 ⊢ p1
+  pnt p1 |⊢ 
+  ∎ {}
+
+execution \= compile time computation
