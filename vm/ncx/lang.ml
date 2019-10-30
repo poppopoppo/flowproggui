@@ -2329,9 +2329,18 @@ and init_prm () =
   !ns.ns <- ("emt",v)::!ns.ns;
   !ns.ns_e <- ("emt",ref(Ast.Axm._emt,Etr_V(Rcd_Ptn.A (0,v))))::!ns.ns_e;
 
-  ns
+  let se_p = "" in
+  let em_p =
+    "NS_E_"^(Sgn.print Ast.Axm._emt)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._emt)^":\n"^
+    "\tmov rbx,rdi\n"^
+    "\tcall emt\n"^
+    "\tmov rdi,rbx\n"^
+    "\tcall dec_r\n"^
+    "\tret\n" in
+  (se_p,em_p,ns)
 and emt_exe m f =
-  let ns = (init_prm () ) in
+  let (se_p,em_p,ns) = (init_prm () ) in
   let (se,em,_,pp) = (emt_m ns 0 m) in
   let epf = get_ep !ns f in
   let ex =
@@ -2353,9 +2362,12 @@ and emt_exe m f =
     "\tmov rsi,str_ret\n"^
     "\tcall pnt\n"^
     "\tcall pnt_str_ret\n"^
+    "\tcall exec_out\n"^
     "\tjmp _end\n"^
+    em_p^
     em^
     "section .data\n"^
+    se_p^
     se^
     (emt_cst_stg !cst_stg) in
   (ex,pp)
@@ -4297,9 +4309,37 @@ and emt_ir  ns s p =
                 )
             )
           | IR_Glb_Out(o,x) ->
-            let open Rcd_Ptn in
             let (ep,_) = !(get_ns_e !ns o) in
-            ( match ep with
+            let i = idx_min 0 s in
+            let ix = idx_ptn s x in
+            let e_0 = emt_get_ptn s "r12" emt_reg_x86 ix i in
+            let e_1 = emt_dec_ptn s emt_reg_x86 ix in
+            let _ = idx_csm_ptn s x in
+            let (ep0,l) = push_reg s x86_reg_lst in
+            let ep1 = pop_reg l in
+            let lb0 = "LB_"^(Sgn.print (sgn ())) in
+            e_0^
+            "\tmov rbx,0\n"^
+            "\tsetc bl\n"^
+            "\tmov r14,QWORD [out_tp_p]\n"^
+            "\tshl r14,3\n"^
+            "\tmov QWORD [out_vct+r14+2*r14],rbx\n"^
+            "\tmov rbx,"^(emt_reg_x86 i)^"\n"^
+            "\tmov QWORD [out_vct+r14+2*r14+8*1],rbx\n"^
+            "\tmov rbx,QWORD NS_E_RDI_"^(Sgn.print ep)^"\n"^
+            "\tmov QWORD [out_vct+r14+2*r14+8*2],rbx\n"^
+            "\tadd QWORD [out_tp_p],1\n"^
+            "\tand QWORD [out_tp_p],0xff\n"^
+            "\tadd QWORD [out_n],1\n"^
+            e_1^
+            "\tmov rbx,QWORD [out_n]\n"^
+            "\tcmp rbx,128\n"^
+            "\tjnz "^lb0^"\n"^
+            ep0^
+            "\tcall exec_out\n"^
+            ep1^
+            lb0^":\n"
+            (* match ep with
               | a when a=Ast.Axm._emt ->
                 ( match x with
                   | A vx ->
@@ -4307,18 +4347,16 @@ and emt_ir  ns s p =
                     let rx = emt_reg_x86 ix in
                     let _ = idx_csm s vx in
                     let (ep,l) = push_reg s x86_reg_lst in
-                    let e0 =
-                      ep^
-                      "\tmov rbx,"^rx^"\n"^
-                      "\tmov rdi,rbx\n"^
-                      "\tcall emt\n"^
-                      "\tmov rdi,rbx\n"^
-                      "\tcall dec_r\n"^
-                      (pop_reg l) in
-                    e0
+                    ep^
+                    "\tmov rbx,"^rx^"\n"^
+                    "\tmov rdi,rbx\n"^
+                    "\tcall emt\n"^
+                    "\tmov rdi,rbx\n"^
+                    "\tcall dec_r\n"^
+                    (pop_reg l)
                   | _ -> err "emt_ir emt 0" )
               | _ -> err "emt_ir emt 1"
-            )
+               ) *)
           | IR_Exp(Ast.Atm(Ast.Stg c),_,Rcd_Ptn.A r) ->
             let bs = Bytes.of_string c in
             let p = sgn () in

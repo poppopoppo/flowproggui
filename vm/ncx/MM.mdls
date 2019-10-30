@@ -62,9 +62,9 @@
 	§§ T1
 		§ f0 {}
 			g0 {} ⊢ _ 
-			» "Hello World!!\n" _ ⊢ s0  
-			» "Foo Baoo" _ ⊢ s1
-			» _^ s0,s1 ⊢ sr,s0,s1 
+			» "Hello World!!\n" _ ⊢ %s0  
+			» "Foo Baoo" _ ⊢ %s1
+			» _^ %s0,%s1 ⊢ %sr,%s0,%s1 
 				"Ab" 0' "B" 1' 1' "\n"
 				"\tmov r0,r1\n"
 				"\tadd r3,r5\n" // 
@@ -72,6 +72,7 @@
 			emt s1 |⊢
 			emt sr |⊢ 
 			∎ {}
+		
 	§§.
 	§ h0 {} 
 		T1.f0 {} ⊢ {} 	

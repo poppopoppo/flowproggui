@@ -19,7 +19,11 @@ section .bss
   tmp_push: resb 8
   dyn_call_vct: resb 16
   str_ret: resb 1000
+  out_vct: resb (8+8+8)*256
 section .data
+  out_n: dq 0
+  out_bs_p: dq 0
+  out_tp_p: dq 0
   str_tkn: db "tkn: ",0
   str_err: db "err: ",0
   str_dbg: db "DBG:%d",10,0
@@ -566,3 +570,24 @@ err:
   mov rax,1
   mov rbx,0
   int 0x80
+exec_out:
+exec_out_lp:
+  mov rbx,QWORD [out_n]
+  cmp rbx,0
+  jz exec_out_end
+  sub rbx,1
+  mov QWORD [out_n],rbx
+  mov r14,QWORD [out_bs_p]
+  mov rax,r14
+  shl rax,3
+  mov rdx,QWORD [out_vct+rax+2*rax]
+  mov rdi,QWORD [out_vct+rax+2*rax+8*1]
+  mov rsi,QWORD [out_vct+rax+2*rax+8*2]
+  add r14,1
+  and r14,0xff
+  mov QWORD [out_bs_p],r14
+  bt rdx,0
+  call rsi
+  jmp exec_out_lp
+exec_out_end:
+  ret
