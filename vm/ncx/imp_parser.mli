@@ -21,7 +21,9 @@ type token =
   | SGN
   | SEQ
   | S8_STT
+  | S8_P
   | S8_END
+  | S8_E
   | R_RCD
   | R_PRN
   | R_OPN

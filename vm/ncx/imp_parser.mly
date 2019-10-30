@@ -13,7 +13,7 @@
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
-%token S8_STT S8_END
+%token S8_STT S8_END S8_E S8_P
 %token <string> NAM STG VAL REG
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
@@ -239,9 +239,9 @@ ir_line:
   | ROT reg_ptn SRC reg_ptn regs { IR_Id($2,[|$4|] |+| $5)  }
   | ARR exp INI_IR reg_ptn_src SRC reg_ptn  { IR_Exp($2,$4,$6) }
   | ARR exp reg_ptn_src SRC reg_ptn { IR_Exp($2,$3,$5) }
-  | ARR WC src_par_p S8_STT s8_ptn S8_END {
+  | ARR S8_E src_par_p (*S8_STT*) s8_ptn S8_P {
       let (l0,l1) = $3 in
-      IR_S8($5,l0,l1) }
+      IR_S8($4,l0,l1) }
   | name reg_ptn SRC reg_ptn { IR_Glb_Call($1,$2,$4) }
   | APP reg CMM reg_ptn SRC reg_ptn {
      IR_Call(($2,$4),$6) }

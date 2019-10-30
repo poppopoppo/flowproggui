@@ -74,7 +74,7 @@ rule token = parse
     | "∆" { PRD_END }
     | "≒" { DEF }
     | "`" { ACT }
-    | "//"  { CST }
+  (*  | "//"  { CST } *)
     | "_" { WC }
     | "↑[" (digit+ as lxm) "]" { INJ(int_of_string lxm) }
     | "↓[" (digit+ as lxm) "]" { CHO(int_of_string lxm) }
@@ -106,6 +106,8 @@ rule token = parse
     | "-" { MNS }
     | "⅁" { GRM }
     | "¬" { NOT }
+    | "_^" { S8_E }
+    | "//" { S8_P }
     | "∐*"  { ORD_LEX_COPRD }
     | "," { CMM }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
