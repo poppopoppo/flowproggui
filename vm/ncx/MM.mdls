@@ -17,15 +17,22 @@
 	¶¶+ℙ l_al ; = _.l_al
 	¶¶+ℙ u_al ; = _.u_al
 	¶¶+ℙ dgt 
-	¶¶+ℙ chr
+	¶¶+ℙ chr 
 	¶ pt ◂ p' 
 	¶ vct ◂ v',b',k' 
 	¶ @.lst ◂ a'
 		∐ cns : { a' lst◂a' }
 		∐ nil : {}
+	[;
 	¶ opn ◂ a'
 		∐ some : a'
 		∐ none : {}
+	;]
+	
+	¶ opn◂a' = _opn◂a'
+	§ none = _none 
+	§ some = _some 
+	
 	¶ d 
 		∐ c0 : r64 
 		∐ c1 : l_al.t
@@ -51,29 +58,51 @@
 		§ not : r64 ⊢ r64
 		§ shl_1 : r64 ⊢ r64
 		§ shr_1 : r64 ⊢ r64
-	§§. 
+	∎∎
 	§ eq : { a' a' } ⊢ bl 
 	§ pnt : ℙ |⊢
-§§.
+	§ emt = _emt
+∎∎
 §§ T0
+[;
+	§= CST0 "CST0" 
+	§= CST1 "CST1" 
+	§= R0 0xr0 
+	§= R1 0xr1 
+	§= S0 _^
+		"HOGE\n"
+		"HOO\n" 
+		"END\n" // 
+;]	
 	§ prm._ 
 	§ g0 {} 
 		∎ {}
+	¶¶+ℙ 
+		@.g0 
+		∐ "A" _chr "B" ⊢ { _ c _ }
+			? c 
+			∐\ c' ,c'="x" ⊢ 
+				_none {} ⊢ r 
+				∎ r 
+			∐.\ c' ⊢ 
+				» "chr" _ ⊢ s0 
+				_some s0 ⊢ r 
+				∎ r
+;]		 
 	§§ T1
 		§ f0 {}
 			g0 {} ⊢ _ 
 			» "Hello World!!\n" _ ⊢ %s0  
 			» "Foo Baoo" _ ⊢ %s1
 			» _^ %s0,%s1 ⊢ %sr,%s0,%s1 
-				"Ab" 0' "B" 1' 1' "\n"
+				"Ab" 0' "B" 1' 1' "\n" 
 				"\tmov r0,r1\n"
 				"\tadd r3,r5\n" // 
 			emt s0 |⊢
 			emt s1 |⊢
 			emt sr |⊢ 
-			∎ {}
-		
-	§§.
+			∎ {}		
+	∎∎
 	§ h0 {} 
 		T1.f0 {} ⊢ {} 	
 		∎ {} 
@@ -86,6 +115,5 @@
 			//;"A" "B" 0' "C\n" 
 			;"a b c\n" // 
 		∎ s1
-§§.
-
+∎∎
 § _ = T0.T1.f0

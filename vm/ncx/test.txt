@@ -506,4 +506,29 @@ execution \= compile time computation
   ∎ {}
 
   @.nc_0 { %s {} }
-    
+
+°L0
+Lx°
+ºB
+ºC
+@.a' =∐[> L0~s8 B~{} ]
+
+§= S0 _^
+  ` mov r0,r1
+  ` mov r2,0x0f
+  ` mov r3,r4
+  ` and r2,r3
+  ` sub r10,34
+  //
+§ C0,C1,C2 «
+  » "FOO" _ ⊢ s0
+  » "Baa" _ ⊢ s1
+  » " X Y Z " _ ⊢ s2
+  ∎ s0,s1,s2
+
+§ F0 «
+  ¿ { x0 x1 x2 }
+    ..
+    ∎ { r0 r1 }
+
+  f { y z } . { x +y +z } ⊢ p_f

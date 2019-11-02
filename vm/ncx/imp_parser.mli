@@ -34,6 +34,7 @@ type token =
   | REG of (string)
   | R64 of (int64)
   | R2 of (bool)
+  | PRM of (string)
   | PRJ_IR
   | PRJ
   | PRD_END
@@ -57,6 +58,7 @@ type token =
   | MNS
   | MLT_NAT
   | MLT
+  | MDL_EOP
   | MDL_END
   | MDL
   | MCR
@@ -69,6 +71,8 @@ type token =
   | L_BLK
   | LET
   | LCE_IR
+  | LCE_EXEC
+  | LCE_EQ
   | LCE
   | LB
   | ISO
