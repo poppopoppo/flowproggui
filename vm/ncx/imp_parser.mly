@@ -235,6 +235,7 @@ glb_etr:
     Ast.Etr_Abs($2,$4,$6) }
   | LCE NAM CLN typ SRC_OUT { Ast.Etr_Out_Abs($2,$4) }
   | LCE NAM EQ name { Ast.Etr_Eq($2,$4) }
+  | LCE NAM ARR_REV ir_lines { Ast.Etr_Glb($2,ref $4) } 
   ;
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }

@@ -480,6 +480,7 @@ module Ast = struct
     | Etr_Eq of string * abs_name
     | Etr_Clq of (string * Types.t * Types.t * etr) list
     | Etr_Out_Abs of string * Types.t
+    | Etr_Glb of string * pt
     | Flow of flow
     | Flow_Clq of flow list
     | Gram of etr Grm.t
@@ -567,7 +568,8 @@ module Ast = struct
     | Etr_V of (int * r) Rcd_Ptn.t
     | Ctr of int
     | Prs
-    | E_K_Prm
+    | Cst_Stt of Cst.t
+    | Cst_Dyn
   type ns_t_k =
     | T_CP of args * ((Types.t * string) list)
     | T_V of Types.v ref
@@ -674,6 +676,7 @@ module Ast = struct
               | Etr_Abs(n,_,_) -> "§ "^n^" : .. ⊢ ..\n"
               | Etr_Out_Abs(n,_) -> "§ "^n^" : .. ⊢| \n"
               | Etr_Eq(n0,n1) -> "§ "^n0^" = "^(pnt_name n1)^"\n"
+              | Etr_Glb(n,_) -> "§ "^n^" « \n"^"\t..\n"
               | Flow f -> "¶ "^(print_flow f)
               | Etr_Clq _ -> "§ @. .. "^"\n"
               | Flow_Clq _ -> "¶ @. .."^"\n"
@@ -2066,6 +2069,34 @@ let rec emt_m (ns:ns_v ref) ld el =
             let pp =
               tbs^"§ "^n^" : "^(Types.print_t ys)^" |⊢ \n" in
             ("","","",pp)
+          | Etr_Glb(n,p) ->
+            let rv0 = Hashtbl.create 10 in
+            let p0 = mk_ir rv0 !p in
+            let y1 = slv !ns 0 p0 in
+            let _ = gen (ref []) (-1) y1 in
+            let pp =
+              tbs^"§ "^n^(Types.print_t y1)^"\n" in
+            let ep = sgn () in
+            !ns.ns_e <- (n,ref(ep,Cst_Dyn))::!ns.ns_e;
+            !ns.ns <- (n,ref(Ln y1))::!ns.ns;
+            let s = Hashtbl.create 10 in
+            let e_p =
+              "NS_E_"^(Sgn.print ep)^":\n"^
+              "NS_E_RDI_"^(Sgn.print ep)^":\n"^
+              (emt_ir ns s p0) in
+            let se =
+              (*"\t_dyn_"^(emt_name (l0,n))^":\n"^ *)
+              "\tCST_DYN_"^(Sgn.print ep)^":\n"^
+              (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
+              "\t\tdq 1\n"^
+              "\t\tdq 1\n" in
+            let sx =
+              "\tcall NS_E_"^(Sgn.print ep)^"\n"^
+              "\tmov QWORD [CST_DYN_"^(Sgn.print ep)^"+8*1],rax\n"^
+              "\tmov rbx,0\n"^
+              "\tsetc bl\n"^
+              "\tmov QWORD [CST_DYN_"^(Sgn.print ep)^"],rbx\n" in
+            (se,e_p,sx,pp)
           | Etr_Clq q ->
             let l_0 =
               List.fold_left
@@ -2231,7 +2262,7 @@ let rec emt_m (ns:ns_v ref) ld el =
             let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;Axm p_t])) in
             !ns_g.ns <- ("prs",ref(Ln yp))::!ns_g.ns;
             let epf = sgn () in
-            !ns_g.ns_e <- ("prs",ref(epf,Ast.E_K_Prm))::!ns_g.ns_e;
+            !ns_g.ns_e <- ("prs",ref(epf,Ast.Cst_Dyn))::!ns_g.ns_e;
             let eq0 =
               "\tNS_E_DYN_"^(Sgn.print epf)^":\n"^
               (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
@@ -2455,7 +2486,7 @@ and init_prm () =
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;Axm Axm.stg])) in
   !ns_g.ns <- ("prs",ref(Ln yp))::!ns_g.ns;
   let epf = sgn () in
-  !ns_g.ns_e <- ("prs",ref(epf,Ast.E_K_Prm))::!ns_g.ns_e;
+  !ns_g.ns_e <- ("prs",ref(epf,Ast.Cst_Dyn))::!ns_g.ns_e;
   let se_chr =
     "\tNS_E_DYN_"^(Sgn.print epf)^":\n"^
     (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
@@ -2514,17 +2545,14 @@ and init_prm () =
   (se_chr^se_emt,em_chr^em_emt,ns)
 and emt_exe m f =
   let (se_p,em_p,ns) = (init_prm ()) in
-  let (se,em,_,pp) = (emt_m ns 0 m) in
+  let (se,em,sx,pp) = (emt_m ns 0 m) in
   let epf = get_ep !ns f in
   let ex =
     "%include \"cmu.s\"\n"^
     "main:\n"^
-    "\tmov r15,0\n"^
-    "\tmov r14,0\n"^
-    "\tmov r13,0\n"^
     "\tmov r12,0\n"^
     "\tnot r12\n"^
-    "\txor rax,rax\n"^
+    sx^
     "\tmov rdi,0\n"^
     "\tcall mlc\n"^
     "\tmov rdi,rax\n"^
