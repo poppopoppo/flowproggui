@@ -85,9 +85,12 @@
 				_none {} ⊢ r 
 				∎ r 
 			∐.\ c' ⊢ 
-				» "chr" _ ⊢ s0 
+				» 0xr0 _ ⊢ s0 
 				_some s0 ⊢ r 
 				∎ r
+	§ g0_0 {} 
+		» g0.prs _ ⊢ p0
+		∎ p0
 ;]		 
 	§§ T1
 		§ f0 {}
@@ -98,9 +101,9 @@
 				"Ab" 0' "B" 1' 1' "\n" 
 				"\tmov r0,r1\n"
 				"\tadd r3,r5\n" // 
-			emt s0 |⊢
-			emt s1 |⊢
-			emt sr |⊢ 
+			emt %s0 |⊢
+			emt %s1 |⊢
+			emt %sr |⊢ 
 			∎ {}		
 	∎∎
 	§ h0 {} 
@@ -115,5 +118,15 @@
 			//;"A" "B" 0' "C\n" 
 			;"a b c\n" // 
 		∎ s1
+	§ P0 «
+		sgn {} ⊢ p0
+		∎ p0 
+	§ C0 « 
+		» "HELLOOOO!!\n" _ ⊢ s0 
+		∎ s0
+	§ C1 « 
+		» "HOOO BOOO\n" _ ⊢ s0 
+		emt s0 |⊢ 
+		∎ {}
 ∎∎
 § _ = T0.T1.f0
