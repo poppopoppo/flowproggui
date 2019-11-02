@@ -25,6 +25,8 @@ rule token = parse
     | "0x2r0" { R2(false) }
     | "0x2r1" { R2(true) }
     | "§"  { LCE }
+    | "§=" { LCE_EQ }
+    | "§~" { LCE_EXEC }
     | "§+0" { LCE_IR  }
     | "§§"  { MDL }
     | "§§." { MDL_END }
@@ -36,6 +38,7 @@ rule token = parse
     | "%" (name as lxm) { REG(lxm) }
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
+    | ("_" name) as lxm { PRM(lxm) }
     | "|◂"  { OUT_IR }
     | "|◃"  { PRJ_IR  }
     | "◃|"  { CNS_IR  }
@@ -70,6 +73,7 @@ rule token = parse
     | "∎" { EOP }
     | "∎|" { EOP_EXN }
     | "|∎" { EOP_OUT }
+    | "∎∎" { MDL_EOP }
     | "∇" { COPRD_END }
     | "∆" { PRD_END }
     | "≒" { DEF }

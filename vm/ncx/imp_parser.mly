@@ -13,8 +13,8 @@
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
-%token S8_STT S8_END S8_E S8_P
-%token <string> NAM STG VAL REG
+%token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC
+%token <string> NAM STG VAL REG PRM
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
 %token <bool> R2
@@ -35,7 +35,7 @@
 %type <Lang.name> name_eof
 %type <Lang.name option * Lang.Ast.mdl list> file
 %type <Lang.Ast.line> buffer
-%type <Lang.Grm.t> dta_grm
+%type <Lang.Ast.grm> dta_grm
 %type <Lang.Types.t> typ
 %%
 buffer:
@@ -49,6 +49,7 @@ name_eof:
   ;
 name:
   | NAM { (EndN $1) }
+  | PRM { EndN $1 }
   | NAM DOT name { DotN($1,$3) }
   ;
 file:
@@ -59,7 +60,11 @@ file:
     (o,$1::ms) }
   ;
 def_mdl:
-  | MDL NAM gl_etr_lst MDL_END { ($2,$3) }
+  | MDL NAM gl_etr_lst mdl_end { ($2,$3) }
+  ;
+mdl_end:
+  | MDL_END {}
+  | MDL_EOP {}
   ;
 nl:
   | {}
@@ -115,14 +120,27 @@ grm_clq:
   | grm_etr grm_clq { $1::$2 }
   ;
 grm_etr:
-  | SLF DOT NAM grm_ord   {
+  | SLF DOT NAM grm_ord_act {
+    Lang.Grm.Act($3,$4)
+  }
+  | SLF DOT NAM grm_ord {
     let (_,go) =
     List.fold_left
-    (fun (i,go) (cn,f,r) ->
+    ( fun (i,go) (cn,f,r) ->
       if cn="_" then (i+1,go@[($3^"_"^(string_of_int i),f,r)])
       else (i+1,go@[(cn,f,r)]))
       (0,[]) $4 in
-    ($3,go) }
+    Lang.Grm.Cnc($3,go) }
+  ;
+grm_ord_act:
+  | grm_rule_act { [$1] }
+  | grm_ord_act grm_rule_act { $1@[$2] }
+  ;
+grm_rule_act:
+  | ord grm_ptns grm_prd grm_act { ($4,$1,$2) }
+  ;
+grm_act:
+  | SRC reg_ptn_src ir_lines { ($2,ref $3) }
   ;
 grm_ord:
   | grm_rule { [$1] }
@@ -215,8 +233,9 @@ glb_etr:
   | LCE glb_etr_body_ir  { let (a,b,c,d) = $2 in Ast.Etr(a,b,c,d) }
   | LCE NAM CLN typ SRC typ {
     Ast.Etr_Abs($2,$4,$6) }
-  ;
   | LCE NAM CLN typ SRC_OUT { Ast.Etr_Out_Abs($2,$4) }
+  | LCE NAM EQ name { Ast.Etr_Eq($2,$4) }
+  ;
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }
   | SLF DOT glb_etr_body_ir glb_etr_clique { [$3]@$4 }
@@ -394,12 +413,12 @@ lb_let:
   | NAM LET NAM {}
   ;
 mtc_ir:
-  | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines { [|(($2,$3),$5)|] }
-  | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines mtc_ir {[|(($2,$3),$5)|] |+| $6 }
+  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3),$5)|] }
+  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir {[|(($2,$3),$5)|] |+| $6 }
   ;
 mtc_ir_end:
-  | COPRD_PTN_END ir_ptn ir_ptn_eq MTC_IR ir_lines { [|(($2,$3),$5)|] }
-  | COPRD_PTN ir_ptn ir_ptn_eq MTC_IR ir_lines mtc_ir_end {[|(($2,$3),$5)|] |+| $6 }
+  | COPRD_PTN_END ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3),$5)|] }
+  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir_end {[|(($2,$3),$5)|] |+| $6 }
   ;
 coprd_ir:
   | COPRD reg_ptn ir_lines { [|($2,$3)|] }
