@@ -1,19 +1,18 @@
-
 §§ T0
-		§ f0 {}
-			» "Hello World!!\n" _ ⊢ %s0  
-			» "Foo Baoo" _ ⊢ %s1
-			» _^ %s0,%s1 ⊢ %sr,%s0,%s1 
-				"Ab" 0' "B" 1' 1' "\n" 
-				"\tmov r0,r1\n"
-				"\tadd r3,r5\n" // 
-			_emt %s0 |⊢
-			_emt %s1 |⊢
-			_emt %sr |⊢ 
-			∎ {}		
+	¶¶+ℙ 
+		@.g0 
+		∐ _chr "A" _chr
 	§ C1 « 
-		» "HOOO BOOO\n" _ ⊢ s0 
-		_emt s0 |⊢ 
+		» "xAg" _ ⊢ s0 
+		;_emt s0 |⊢ 
+		» 0xr0 _ ⊢ x0 
+		g0.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+		_pp_v a0 ⊢ { a0 p0 }
+		_emt p0 |⊢
 		∎ {}  	
+	§ tt0 {} 
+		» "\n~~~\n" _ ⊢ s0 
+		_emt s0 |⊢ 
+		∎ {}
 ∎∎
-§ _ = T0.f0
+§ _ = T0.tt0

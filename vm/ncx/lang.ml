@@ -1823,7 +1823,7 @@ and prs_dec_i i =
   if i<0 then ""
   else
     "\tmov rsi,QWORD [prs_vct+16*"^(string_of_int i)^"]\n"^
-    "\tbt rdi,0\n"^
+    "\tbt rsi,0\n"^
     "\tjc "^lb0^"\n"^
     "\tmov rdi,QWORD [prs_vct+16*"^(string_of_int i)^"+8*1]\n"^
     "\tcall dec_r\n"^
@@ -1834,7 +1834,7 @@ and prs_set_i i =
   if i<0 then ""
   else
     "\tmov rsi,QWORD [prs_vct+16*"^(string_of_int i)^"]\n"^
-    "\tbt rdi,0\n"^
+    "\tbt rsi,0\n"^
     "\tjc "^lb0^"\n"^
     "\tbtr QWORD [rdi],"^(string_of_int i)^"\n"^
     lb0^":\n"^
@@ -1858,7 +1858,7 @@ and emt_rle ns ep l =
             "\tmov rdi,"^(string_of_int rn)^"\n"^
             "\tcall mlc\n"^
             "\tmov rdi,rax\n"^
-            (prs_set_i (i-1))^
+            (prs_set_i (rn-1))^
             "\tmov r10,rdi\n"^
             "\tmov r11,0\n"^
             "\tpop rdx\n"^
@@ -1914,11 +1914,11 @@ and emt_ptn i ns ep f r j =
               | Grm.Txt s ->
                 let bs = Bytes.of_string s in
                 let lbs = Bytes.length bs in
-                let rec e_lp0 i =
-                  if i<lbs
+                let rec e_lp0 ib =
+                  if ib<lbs
                   then
-                    "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int i)^"]\n"^
-                    "\tcmp r11,"^(string_of_int (Char.code bs.[i]))^"\n"^
+                    "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int ib)^"]\n"^
+                    "\tcmp r11,"^(string_of_int (Char.code bs.[ib]))^"\n"^
                     "\tjz "^lb0^"\n"^
                     "\tpush rdi\n"^
                     "\tpush rdx\n"^
@@ -1927,15 +1927,15 @@ and emt_ptn i ns ep f r j =
                     "\tpop rdi\n"^
                     "\tjmp NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed\n"^
                     lb0^":\n"^
-                    (e_lp0 (i+1))
+                    (e_lp0 (ib+1))
                   else "" in
                 es^
                 (e_lp0 0)^
                 "\tadd rsi,"^(string_of_int lbs)^"\n"^
                 "\tmov rbx,0x0001_0000_0000_0000\n"^
                 "\tadd QWORD [unt],rbx\n"^
-                "\tmov QWORD [prs_vct+16*"^(string_of_int i)^"],0\n"^
-                "\tmov QWORD [prs_vct+8*1+16*"^(string_of_int i)^"],unt\n"
+                "\tmov QWORD [prs_vct+16*"^(string_of_int j)^"],0\n"^
+                "\tmov QWORD [prs_vct+8*1+16*"^(string_of_int j)^"],unt\n"
               | Grm.Name f ->
                 let mf = get_ns_m_t ns f in
                 let mp = get_ns_m ns f in
@@ -1954,8 +1954,8 @@ and emt_ptn i ns ep f r j =
                     "\tpop rdi\n"^
                     "\tjmp NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed\n"^
                     lb0^":\n"^
-                    "\tmov QWORD [prs_vct+16*"^(string_of_int i)^"],r11\n"^
-                    "\tmov QWORD [prs_vct+8*1+16*"^(string_of_int i)^"],r10\n"
+                    "\tmov QWORD [prs_vct+16*"^(string_of_int j)^"],r11\n"^
+                    "\tmov QWORD [prs_vct+8*1+16*"^(string_of_int j)^"],r10\n"
                   | _ -> err "emt_ptn 1" )
             )
           | Grm.Lst a ->
@@ -1965,13 +1965,13 @@ and emt_ptn i ns ep f r j =
               | Grm.Txt s ->
                 let bs = Bytes.of_string s in
                 let lbs = Bytes.length bs in
-                let rec e_lp0 i =
-                  if i<lbs
+                let rec e_lp0 ib =
+                  if ib<lbs
                   then
-                    "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int i)^"]\n"^
-                    "\tcmp r11,"^(string_of_int (Char.code bs.[i]))^"\n"^
+                    "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int ib)^"]\n"^
+                    "\tcmp r11,"^(string_of_int (Char.code bs.[ib]))^"\n"^
                     "\tjnz "^l1^"\n"^
-                    (e_lp0 (i+1))
+                    (e_lp0 (ib+1))
                   else "" in
                 l0^":\n"^
                 es^
@@ -2003,11 +2003,11 @@ and emt_ptn i ns ep f r j =
               | Grm.Txt s ->
                 let bs = Bytes.of_string s in
                 let lbs = Bytes.length bs in
-                let rec e_lp0 i =
-                  if i<lbs
+                let rec e_lp0 ib =
+                  if ib<lbs
                   then
-                    "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int i)^"]\n"^
-                    "\tcmp r11,"^(string_of_int (Char.code bs.[i]))^"\n"^
+                    "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int ib)^"]\n"^
+                    "\tcmp r11,"^(string_of_int (Char.code bs.[ib]))^"\n"^
                     "\tjnz "^l1^"\n"^
                     (e_lp0 (i+1))
                   else "" in
@@ -2031,7 +2031,8 @@ and emt_ptn i ns ep f r j =
                   | _ -> err "emt_ptn 5" )
             ) ) in
       e_p^(emt_ptn i ns ep f tl (j+1))
-    | [] -> "" )
+    | [] ->
+      "" )
 let rec emt_m (ns:ns_v ref) ld el =
   let tbs = String.make ld '\t' in
   ( match el with
@@ -3038,7 +3039,7 @@ and emt_set_ptn d bt s tbv idx r =
             (cmt "unboxed")^
             "\tmov rbx,"^src^"\n"^
             "\tmov "^(idx i)^",rbx\n"
-          (* ^"\tbts "^tbv^","^(string_of_int i)^ *)
+            ^"\tbts "^tbv^","^(string_of_int i)^"\n"
           (* ^"\tor r12,"^(emt_0b i)^"\n"^"\n" *)
           | Rcd _ ->
             (cmt c0)^
