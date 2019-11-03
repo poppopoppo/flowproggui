@@ -7,6 +7,7 @@
 ; r13 heap
 ; r14 tmp-tbv
 bits 64
+
 extern free
 extern printf
 extern malloc
@@ -20,6 +21,8 @@ section .bss
   dyn_call_vct: resb 16
   str_ret: resb 1000
   out_vct: resb (8+8+8)*256
+  prs_vct: resb (8+8) * 64
+  set_ptn_vct: resb (8+8) * 16
 section .data
   out_n: dq 0
   out_bs_p: dq 0
@@ -332,7 +335,57 @@ pnt_tkn:
   pop rdi
   popf
   ret
+
+pnt_v: ; rdi=value ⊢ rax=ret_stg
+  push rdi
+  mov rsi,str_ret
+  call pnt
+  sub rax,str_ret
+  push rax
+  mov rdi,rax
+  call mlc_s8
+  pop rdi
+  mov rdx,rdi
+  shr rdi,3
+  xor rsi,rsi
+pnt_v_lp:
+  mov r8,QWORD [str_ret+8*rsi]
+  mov QWORD [rax+8*1+8*rsi],r8
+  cmp rsi,rdi
+  jz pnt_v_tl
+  add rsi,1
+  jmp pnt_v_lp
+pnt_v_tl:
+  and rdx,0b0111
+  mov rcx,0b1000
+  sub rcx,rdx
+  shl rcx,3
+  mov r8,~0
+  shl r8,cl
+  and QWORD [rax+8*1+8*rsi],r8
+  pop rdi
+  ret
+mlc_s8: ; rdi=size of bytes
+  push rdi
+  add rdi,8
+  xor rax,rax
+  call malloc
+  pop rdi
+  mov rsi,rdi
+  mov rdx,0b1000
+  and rsi,0b0111
+  sub rdx,rsi
+  and rdi,~0b0111
+  add rdi,0b1000
+  shl rdi,29
+  add rdx,rdi
+  bts rdx,16
+  mov rdi,0x0001_0000_0000_0000
+  add rdx,rdi
+  mov QWORD [rax],rdx
+  ret
 pnt:
+  mov rdx,0
   jc pnt_end
   jmp pnt_r_p
 pnt_end:
@@ -346,6 +399,7 @@ pnt_end:
   ;add rsi,rax
   ;mov rax,rsi
   add rax,rsi
+  mov rdx,rsi
   ret
 pnt_r_p:
   mov r10,[rdi]
@@ -356,6 +410,7 @@ pnt_r_p:
   push rsi
   push rdx
   push r10
+  push rdx
   mov rdi,rsi
   mov rsi,fmt_ref
   mov rdx,r10
@@ -364,13 +419,15 @@ pnt_r_p:
   ;mov rsi,r10
   ;call printf
   call sprintf
+  pop rdx
+  add rdx,rax
   pop r10
   pop rdx
   pop rsi
   pop rdi
   ;lea rsi,[rsi+1*rax]
   add rsi,rax
-  call pnt_str_ret
+  ;call pnt_str_ret
   mov r9,[rdi]
   mov r11,r9
   shl r9,16
