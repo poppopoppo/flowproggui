@@ -361,10 +361,11 @@ pnt_v_tl:
   sub rcx,rdx
   shl rcx,3
   mov r8,~0
-  shl r8,cl
+  shr r8,cl
   and QWORD [rax+8*1+8*rsi],r8
   pop rdi
   ret
+
 mlc_s8: ; rdi=size of bytes
   push rdi
   add rdi,8
