@@ -124,7 +124,6 @@
 		» "HOOO BOOO\n" _ ⊢ s0 
 		_emt s0 |⊢ 
 		∎ {}  
-	[;
 	¶¶+ℙ 
 		@.g0 
 		∐ _chr "A" _chr 
@@ -133,10 +132,9 @@
 		» "ABC" _ ⊢ s0 
 		_pp_v x0 ⊢ { x0 sp0 } 
 		_emt sp0 |⊢ 
-		_pp_v s0 ⊢ { s0 sp1 }
-		_emt sp1 |⊢
-		∎ { x0 s0 }
-
+		;_pp_v s0 ⊢ { s0 sp1 }
+		;_emt sp1 |⊢
+		∎ {  }
 	§ C2 «
 		» "xAw" _ ⊢ s0 
 		» 0xr0 _ ⊢ r0 
@@ -144,6 +142,5 @@
 		_pp_v a0 ⊢ { a0 s1 }
 		_emt s1 |⊢
 		∎ { s0 r1 a0 } 	
-		;]	
 ∎∎
 § _ = T0.T1.f0
