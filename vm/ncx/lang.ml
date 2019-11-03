@@ -1859,7 +1859,14 @@ and emt_rle ns ep l =
             "\tcall mlc\n"^
             "\tmov rdi,rax\n"^
             (prs_set_i (rn-1))^
-            "\tmov r10,rdi\n"^
+            "\tpush rdi\n"^
+            "\tmov rdi,2\n"^
+            "\tcall mlc\n"^
+            "\tbtr QWORD [rax],1\n"^
+            "\tmov r10,rax\n"^
+            "\tpop rax\n"^
+            "\tmov QWORD [r10+8*1],"^(string_of_int i)^"\n"^
+            "\tmov QWORD [r10+8*2],rax\n"^
             "\tmov r11,0\n"^
             "\tpop rdx\n"^
             "\tpop rdi\n"^
@@ -1917,8 +1924,9 @@ and emt_ptn i ns ep f r j =
                 let rec e_lp0 ib =
                   if ib<lbs
                   then
-                    "\tmov r11b,[rdi+rsi+8*1+"^(string_of_int ib)^"]\n"^
-                    "\tcmp r11,"^(string_of_int (Char.code bs.[ib]))^"\n"^
+                    "\tmov r11,0\n"^
+                    "\tmov r11b,BYTE [rdi+rsi+8*1+"^(string_of_int ib)^"]\n"^
+                    "\tcmp r11b,"^(string_of_int (Char.code bs.[ib]))^"\n"^
                     "\tjz "^lb0^"\n"^
                     "\tpush rdi\n"^
                     "\tpush rdx\n"^
@@ -1929,6 +1937,7 @@ and emt_ptn i ns ep f r j =
                     lb0^":\n"^
                     (e_lp0 (ib+1))
                   else "" in
+                "; \""^(String.escaped s)^"\"\n"^
                 es^
                 (e_lp0 0)^
                 "\tadd rsi,"^(string_of_int lbs)^"\n"^
@@ -1943,6 +1952,7 @@ and emt_ptn i ns ep f r j =
                   | M_Prm "grm" ->
                     let ma = List.assoc "prs" !mp.ns_e in
                     let (epf,_) = !ma in
+                    "; "^(pnt_name f)^"\n"^
                     es^
                     "\tcall NS_E_"^(Sgn.print epf)^"_ETR_TBL\n"^
                     "\tcmp rax,0\n"^
