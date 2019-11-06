@@ -14,7 +14,7 @@
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
 %token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC
-%token <string> NAM STG VAL REG PRM
+%token <string> NAM STG VAL REG PRM LINE
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
 %token <bool> R2
@@ -235,7 +235,7 @@ glb_etr:
     Ast.Etr_Abs($2,$4,$6) }
   | LCE NAM CLN typ SRC_OUT { Ast.Etr_Out_Abs($2,$4) }
   | LCE NAM EQ name { Ast.Etr_Eq($2,$4) }
-  | LCE NAM ARR_REV ir_lines { Ast.Etr_Glb($2,ref $4) } 
+  | LCE NAM ARR_REV ir_lines { Ast.Etr_Glb($2,ref $4) }
   ;
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }
@@ -277,6 +277,7 @@ src_par_p:
   ;
 s8_ptn:
   | { [] }
+  | LINE s8_ptn { (S8_Txt $1)::$2 }
   | STG s8_ptn { (S8_Txt $1)::$2 }
   | IDX s8_ptn { (S8_Var $1)::$2 }
   | name s8_ptn { (S8_Name $1)::$2 }

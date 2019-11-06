@@ -15,6 +15,7 @@ extern sprintf
 section .bss
   st_vct: resb 400
   st_vct_tmp: resb 400
+  regs_vct: resb 8*10
   tmp: resb 80
   tmp_pop: resb 8
   tmp_push: resb 8
@@ -23,6 +24,19 @@ section .bss
   out_vct: resb (8+8+8)*256
   prs_vct: resb (8+8) * 64
   set_ptn_vct: resb (8+8) * 16
+  mtc_vct_0: resb (8+8) * 32
+  mtc_vct_1: resb (8+8) * 32
+  mtc_vct_2: resb (8+8) * 32
+  mtc_vct_3: resb (8+8) * 32
+  mtc_vct_4: resb (8+8) * 32
+  mtc_vct_5: resb (8+8) * 32
+  mtc_vct_6: resb (8+8) * 32
+  mtc_vct_7: resb (8+8) * 32
+  mtc_vct_8: resb (8+8) * 32
+  mtc_vct_9: resb (8+8) * 32
+  mtc_vct_10: resb (8+8) * 32
+  mtc_vct_11: resb (8+8) * 32
+
 section .data
   out_n: dq 0
   out_bs_p: dq 0
@@ -40,7 +54,10 @@ section .data
 ;  fmt: db "%d",10,0
   blk_l: db "{| ",0
   blk_r: db "|} ",0
+  ln_l: db "[| ",0
+  ln_r: db "|] ",0
   spc: db " ",0
+  agl_fmt: db "°%d◂",0
   fmt_s8: db `\"%s\"`,0
   fmt_line: db `%s\n`,0
   fmt_err_line: db `err:%s\n`,0
@@ -69,111 +86,32 @@ section .text
 global _start               ; _startを指名
 _start:
   jmp main
-hw:
-  push rax
-  push rdi
-  push rsi
-  push rdx
-  push rcx
-  push r8
-  push r9
-  push r10
-  push r11
-  mov rsi,-1
-  mov rdi,str_dbg
-  mov rax,0
-  call printf
-  pop r11
-  pop r10
-  pop r9
-  pop r8
-  pop rcx
-  pop rdx
-  pop rsi
-  pop rdi
-  pop rax
-  ret
-dbg:
-  push rax
-  push rdi
-  push rsi
-  push rdx
-  push rcx
-  push r8
-  push r9
-  push r10
-  push r11
-  mov rsi,rdi
-  mov rdi,str_dbg
-  mov rax,0
-  call printf
-  pop r11
-  pop r10
-  pop r9
-  pop r8
-  pop rcx
-  pop rdx
-  pop rsi
-  pop rdi
-  pop rax
-  ret
-pnt_str_ret:
-  push rax
-  push rdi
-  push rsi
-  push rdx
-  push rcx
-  push r8
-  push r9
-  push r10
-  push r11
-  mov rdi,str_tkn
-  mov rax,0
-  call printf
-  mov rdi,str_ret
-  mov rax,0
-  call printf
-  mov rdi,fmt_nl
-  mov rax,0
-  call printf
-  pop r11
-  pop r10
-  pop r9
-  pop r8
-  pop rcx
-  pop rdx
-  pop rsi
-  pop rdi
-  pop rax
-  ret
+
 _end:
   mov rax,1
   mov rbx,0
   int 0x80
 
 mlc:
-  ; add heap counter
-  ;add r13,rdi
-  ;add r13,1
-  ;
   mov rax,0x00010000
-  ;xor rax,rax
-  ;add rax,1
-  ;shl rax,16
   add rax,rdi
   shl rax,32
   add rax,0xffff
-  add rdi,1
-  ;imul rdi,8
-  shl rdi,3
   push rax
   mov rax,0
+  add rdi,1
+  shl rdi,3
   call malloc
   pop rdi
   mov [rax],rdi
   ret
 
 dec_r:
+  bt rdi,0
+  jnc dec_r_blk
+  mov rax,0x00ff_ffff_ffff_fffc
+  and rdi,rax
+dec_r_blk:
   push rdi
   ; decrement ref-count
   mov rax,[rdi]
@@ -186,18 +124,11 @@ dec_r:
   jne dec_r_end
   bt rax,16
   jc dec_r_lp_end
-  ; free blk
-  ; mov to temporary register
   mov rdx,rax
   mov rsi,rax
-  ; prepared for loop
   lea rax,[rdi+8*1]
   shl rdx,16
   shr rdx,48
-  ;pushf
-  ;sub r13,r10
-  ;sub r13,1
-  ;popf
 dec_r_lp:
   cmp rdx,0
   je dec_r_lp_end
@@ -226,16 +157,13 @@ dec_r_end:
 
 inc_r:
   ; increment ref-count
-  push rax
-  push rsi
-  mov rax,[rdi]
-  ;ror QWORD rax,48
-  mov rsi,0x0001000000000000
-  add rax,rsi
-  ;rol QWORD rax,48
-  mov [rdi],rax
-  pop rsi
-  pop rax
+  bt rdi,0
+  jnc inc_r_blk
+  mov rsi,0x00ff_ffff_ffff_fffc
+  and rdi,rsi
+inc_r_blk:
+  mov rsi,0x0001_0000_0000_0000
+  add QWORD [rdi],rsi
   ret
 
 ; rdi ~ src cf~tag
@@ -243,7 +171,6 @@ inc_r:
 dcp:
   push rdi
   mov rdi,0
-  call dbg
   pop rdi
   jc dcp_r64
 dcp_blk:
@@ -269,7 +196,6 @@ dcp_blk:
 dcp_blk_lp:
   push rdi
   mov rdi,2
-  call dbg
   pop rdi
   cmp rsi,r10
   je dcp_end
@@ -295,7 +221,6 @@ dcp_blk_lp:
 dcp_blk_lp_nxt:
   push rdi
   mov rdi,4
-  call dbg
   pop rdi
   mov rdx,[rdi+8*rsi+8*1]
   mov [rax+8*rsi+8*1],rdx
@@ -308,32 +233,18 @@ dcp_r64:
   mov rax,rdi
   stc
   ret
+
 ; rdi ~ src-blk rsi~idx rdx~dst-dta cf~tag-of-dta
 ; rax ~ src.(idx)
 exc:
-  jc exc_cf
-  mov rax,[rdi]
-  btr rax,rsi
-  mov [rdi],rax
-  mov QWORD [rdi+8*rsi+8*1],rdx
-  mov QWORD rax,[rdi+8*rsi+8*1]
-  ret
-exc_cf:
-  mov rax,[rdi]
-  bts rax,rsi
-  mov [rdi],rax
-  mov QWORD rax,[rdi+8*rsi+8*1]
-  mov QWORD [rdi+8*rsi+8*1],rdx
-  ret
-; rdi ~ src-dta rsi~dst-str
-pnt_tkn:
-  pushf
-  push rdi
-  mov rsi,str_ret
-  call pnt
-  call pnt_str_ret
-  pop rdi
-  popf
+  jc exc_c
+  btr QWORD [rdi],rsi
+  jmp exc_nc
+exc_c:
+  bts QWORD [rdi],rsi
+exc_nc:
+  mov QWORD rax,[rdi+8*1+8*rsi+8*1]
+  mov QWORD [rdi+8*1+8*rsi],rdx
   ret
 
 pnt_v: ; rdi=value ⊢ rax=ret_stg
@@ -366,6 +277,20 @@ pnt_v_tl:
   pop rdi
   ret
 
+pp_v: ; rdi=value ⊢ rax=ret_stg
+  push rdi
+  mov rsi,str_ret
+  call pp
+  sub rax,str_ret
+  push rax
+  mov rdi,rax
+  call mlc_s8
+  pop rdi
+  mov rdx,rdi
+  shr rdi,3
+  xor rsi,rsi
+  jmp pnt_v_lp
+
 mlc_s8: ; rdi=size of bytes
   push rdi
   add rdi,8
@@ -385,6 +310,190 @@ mlc_s8: ; rdi=size of bytes
   add rdx,rdi
   mov QWORD [rax],rdx
   ret
+
+pp: ; rdi=tkn rsi=dst
+  jc pnt_end
+  jmp pnt_r_p
+pp_end:
+  push rsi
+  mov rdx,rdi
+  mov rdi,rsi
+  mov rsi,fmt64
+  mov rax,0
+  call sprintf
+  pop rsi
+  add rax,rsi
+  ret
+pp_r_p:
+  bt rdi,0
+  jnc pp_r_p_blk
+  mov rdx,rdi
+  shr rdx,56
+  push rdi
+  push rsi
+  mov rdi,rsi
+  mov rsi,agl_fmt
+  xor rax,rax
+  call sprintf
+  pop rsi
+  pop rdi
+  add rsi,rax
+  mov r10,0x00ff_ffff_ffff_fffc
+  and rdi,r10
+pp_r_p_blk:
+  mov r10,[rdi]
+  shr r10,48
+  push rdi
+  push rsi
+  mov rdi,rsi
+  mov rsi,fmt_ref
+  mov rdx,r10
+  xor rax,rax
+  call sprintf
+  pop rsi
+  pop rdi
+  add rsi,rax
+pp_r_p_n_agl:
+  mov r10,[rdi]
+  bt r10,16
+  jc pp_opq
+  bt r10,17
+  jc pp_ln
+  mov r9,r10
+  shr r9,32
+  and r9,0xffff
+  add rdi,8
+pp_r_p_lp:
+  cmp r9,0
+  je pp_r_p_end
+  sub r9,1
+  rcr r10,1
+  jc pp_r_p_lp_nxt
+  push r9
+  push r10
+  push rdi
+  mov rdi,[rdi]
+  call pp_r_p
+  pop rdi
+  pop r10
+  pop r9
+  mov rsi,rax
+  add rdi,8
+  jmp pp_r_p_lp
+pp_r_p_lp_nxt:
+  push rdi
+  push rsi
+  push r9
+  push r10
+  mov rdx,[rdi]
+  mov rdi,rsi
+  mov rsi,fmt64_spc
+  mov rax,0
+  call sprintf
+  pop r10
+  pop r9
+  pop rsi
+  pop rdi
+  add rsi,rax
+  add rdi,8
+  jmp pp_r_p_lp
+pp_r_p_end:
+  push rsi
+  mov rdi,rsi
+  mov rsi,blk_r
+  mov rax,0
+  call sprintf
+  pop rsi
+  add rax,rsi
+  ret
+pp_opq:
+  push rsi
+  mov rdx,rdi
+  add rdx,8
+  mov rdi,rsi
+  mov rsi,fmt_s8
+  mov rax,0
+  call sprintf
+  pop rsi
+  add rax,rsi
+  ret
+pp_ln:
+  push rdi
+  push rsi
+  mov rdi,rsi
+  mov rsi,ln_l
+  xor rax,rax
+  call sprintf
+  pop rsi
+  add rsi,rax
+  pop rdi
+  call pp
+  push rax
+  mov rdi,rax
+  mov rsi,ln_r
+  mov rax,0
+  call sprintf
+  pop rsi
+  add rax,rsi
+  ret
+
+rpc_ref: ; rdi=ref ⊢ rax=dst-ref
+  mov rsi,[rdi]
+  shr rsi,32
+  and rsi,0xffff
+  push rdi
+  push rsi
+  mov rdi,rsi
+  call mlc
+  pop rsi
+  pop rdi
+  bt QWORD [rdi],16
+  jc rpc_ref_s8
+  mov rdx,[rdi]
+  mov rcx,~0xffff_0000_0000_0000
+  and rdx,rcx
+  mov rcx,0x0001_0000_0000_0000
+  add rdx,rcx
+  mov QWORD [rax],rdx
+  mov rdx,[rdi]
+rpc_ref_lp:
+  cmp rsi,0
+  jz rpc_ref_end
+  mov rcx,[rdi+8*rsi]
+  mov [rax+8*rsi],rcx
+  rcr rdx,1
+  sub rsi,1
+  jc rpc_ref_lp
+  mov r11,[rcx]
+  mov r10,0x0001_0000_0000_0000
+  add r11,r10
+  mov [rcx],r11
+  jmp rpc_ref_lp
+rpc_ref_end:
+  ret
+rpc_ref_s8:
+  mov rdx,[rdi]
+  mov rcx,~0xffff_0000_0000_0000
+  and rdx,rcx
+  mov rcx,0x0001_0000_0000_0000
+  add rdx,rcx
+  mov QWORD [rax],rdx
+rpc_ref_lp_s8:
+  cmp rsi,0
+  jz rpc_ref_end
+  mov rcx,[rdi+8*rsi]
+  mov [rax+8*rsi],rcx
+  sub rsi,1
+  jmp rpc_ref_lp_s8
+
+mlc_ln:
+  mov rdi,1
+  call mlc
+  mov rdi,[rax]
+  bts rdi,17
+  mov [rax],rdi
+  ret
+
 pnt:
   mov rdx,0
   jc pnt_end
@@ -428,7 +537,6 @@ pnt_r_p:
   pop rdi
   ;lea rsi,[rsi+1*rax]
   add rsi,rax
-  ;call pnt_str_ret
   mov r9,[rdi]
   mov r11,r9
   shl r9,16
@@ -449,7 +557,6 @@ pnt_r_p_lp:
   push rsi
   mov rdi,[rdi]
   call pnt_r_p
-  call pnt_str_ret
   pop rsi
   pop rdi
   pop r11
@@ -605,7 +712,6 @@ eq_opq_opq_lp_end_f:
   ret
 neq:
   ret
-pp:
 
 emt: ; rdi s8
   mov rax,0
