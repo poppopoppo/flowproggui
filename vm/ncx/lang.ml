@@ -3706,7 +3706,7 @@ and emt_ir  ns s p =
                      "\tand r13,r14\n"^
                      lb_inc_r_blk^":\n"^
                      "\tmov r14,0x0001_0000_0000_0000\n"^
-                     "\tadd QWORD [r13],r14\t"^
+                     "\tadd QWORD [r13],r14\n"^
                      "\tjmp "^lb_i_c^"\n"^
                      lb_i^":\n"^
                      "\tbts r12,"^(string_of_int i_s)^"\n"^
@@ -3728,7 +3728,7 @@ and emt_ir  ns s p =
                       let lb0 = lb () in
                       Hashtbl.remove s i;
                       e_d^
-                      "\tbt r12"^(string_of_int i)^"\n"^
+                      "\tbt r12,"^(string_of_int i)^"\n"^
                       "\tjc "^lb0^"\n"^
                       "\tmov rdi,QWORD [regs_vct+8*"^(string_of_int i)^"]\n"^
                       "\tcall dec_r\n"^
