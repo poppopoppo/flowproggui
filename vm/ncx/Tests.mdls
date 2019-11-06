@@ -29,7 +29,6 @@
 		∎ {}	
 	§ E0 «
 		» 0xrf _ ⊢ x0 
-		;∎ {} 
 		? x0 
 		∐\ x0' ,x0'=0xr0 ⊢ 
 			» "A\n" _ ⊢ s0 
@@ -44,6 +43,21 @@
 			» _^ s0 ⊢ sr,s0 
 				"x0 = " 0' "\n" //
 			_emt sr |⊢ 
-			∎ {}
+			∎ {} 
+	§ E1 « 
+		» "ABCDefgefefef" _ ⊢ %s0 
+		» 0xrff _ ⊢ %x0 
+		? { %x0 %s0 } 
+		∐\ { x0' s0' } ,s0'="ABCDefgefefef",x0'=0xrf9 ⊢ 
+			» "X\n" _ ⊢ sr 
+			_emt %sr |⊢ 
+			∎ {} 
+		∐.\ p0' ⊢
+			_pp_v p0 ⊢ { %p0 %sp }
+			» _^ sp ⊢ sr,sp 
+				"p0=" 0' "\n" //
+			_emt sp |⊢ 
+			_emt sr |⊢
+			∎ {}	
 	∎∎
 § _ = T0.f1
