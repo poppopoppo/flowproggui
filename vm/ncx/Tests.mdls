@@ -20,11 +20,12 @@
 		» "Foo Baoo" _ ⊢ %s1
 		» _^ %s0,%s1 ⊢ %sr,%s0,%s1 
 			"Ab" 0' "B" 1' 1' "\n" 
-			"\tmov r0,r1\n"
-			"\tadd r3,r5\n" // 
+			` mov r0,r1
+			` add r3,r5 
+			// 
 			;_emt %s0 |⊢
 			;_emt %s1 |⊢
 			;_emt %sr |⊢ 
 		∎ {}	
-∎∎
+	∎∎
 § _ = T0.f1

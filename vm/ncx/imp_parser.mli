@@ -69,6 +69,7 @@ type token =
   | L_LST_PLS
   | L_LST
   | L_BLK
+  | LINE of (string)
   | LET
   | LCE_IR
   | LCE_EXEC

@@ -532,3 +532,45 @@ Lx°
     ∎ { r0 r1 }
 
   f { y z } . { x +y +z } ⊢ p_f
+
+
+  ? %p
+  ∐\ p' ,p'=
+
+    p'=..
+    p'==q'
+    p'~=..
+    ~== ==~ ~==~
+
+§ map { f l0 }
+  ? l0
+  ∐\ l0' ,l0'=_cns◂{ hd0' tl0' } ⊢
+    $ f ⊢ f0,f1
+    ◂ f0,hd0 ⊢ hd1
+    map { f1 tl0 } ⊢ tl1
+    _cns { hd1 tl1 } ⊢ l1
+    ∎ l1
+  ∐.\ l0' ,l0'=_nil◂{} ⊢
+    _nil {} ⊢ l1
+    ∎ l1
+§§ map
+  ¶ @.a
+    @.b
+  § @.FUN : a ⊢ b
+  ⊢⊢
+  § @.f l0
+  ? l0
+  ∐\ l0' ,l0'=_cns◂{ hd0' tl0' } ⊢
+    FUN hd0 ⊢ hd1
+    f tl0 ⊢ tl1
+    _cns { hd1 tl1 } ⊢ l1
+    ∎ l1
+  ∐.\ l0' ,l0'=_nil◂{} ⊢
+    _nil {} ⊢ l1
+    ∎ l1
+  ∎∎
+§§ map0 = map ◂◂
+  ¶ @.a = r64
+    @.b = s8
+  § @.FUN = id
+  ∎∎
