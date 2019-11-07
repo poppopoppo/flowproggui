@@ -2825,10 +2825,10 @@ and init_prm () =
   !ns.ns_e <- ("_some",ref(Ast.Axm._some,Ctr 0))::!ns.ns_e;
 
   (se_chr^se_emt^se_pp_v,em_chr^em_emt^em_pp_v,ns)
-and emt_exe m f =
+and emt_exe m =
   let (se_p,em_p,ns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m ns 0 m) in
-  let epf = get_ep !ns f in
+  (*let epf = get_ep !ns f in*)
   let ex =
     "%include \"cmu.s\"\n"^
     "main:\n"^
@@ -2840,7 +2840,7 @@ and emt_exe m f =
     "\tmov rdi,rax\n"^
     "\tclc\n"^
     "\tcmp rdi,0\n"^
-    "\tcall NS_E_RDI_"^(Sgn.print epf)^"\n"^
+    (*"\tcall NS_E_RDI_"^(Sgn.print epf)^"\n"^ *)
     "\tcall exec_out\n"^
     "\tjmp _end\n"^
     em_p^

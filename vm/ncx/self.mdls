@@ -1,0 +1,6 @@
+§§ Self 
+	§ E0 « 
+		» "Hello World!!\n" _ ⊢ s0 
+		_emt s0 |⊢ 
+		∎ {} 
+	∎∎
