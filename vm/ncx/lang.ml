@@ -118,6 +118,7 @@ module Types = struct
     let nat = sgn ()
     let v = sgn ()
     let z_n = sgn ()
+    let fd = sgn ()
     let z_u = sgn ()
     let r64 = sgn ()
     let r2 = sgn ()
@@ -156,7 +157,7 @@ module Types = struct
       | Axm p when p=Axm.out_p -> "_out"
       | Axm p when p=Axm.exn_p -> "_exn"
       | Axm p when p=Axm.v -> "_v"
-
+      | Axm p when p=Axm.fd -> "_fd"
       | Axm p -> "_p"^(Sgn.print p)
       | Var v ->
         let i = print_v v_vct v in
@@ -483,7 +484,7 @@ module Ast = struct
   and glb_etr =
     | Etr of string * Types.t * Types.t * etr
     | Etr_Abs of string * Types.t * Types.t
-    | Etr_Eq of string * abs_name
+    | Etr_Eq of string * eq_def
     | Etr_Clq of (string * Types.t * Types.t * etr) list
     | Etr_Out_Abs of string * Types.t
     | Etr_Glb of string * pt
@@ -500,6 +501,10 @@ module Ast = struct
     | Def_Fnt of name * (name list)
     | Def_EqT of string * args * Types.t
   and args = (name * r) list
+  and eq_def =
+    | Cst of Cst.t
+    | ExStg of string | EqLn of abs_name
+    | SttArg of int | ExStgArg of int
   and exp_rcd =
     | Rot | Rcd of exp_rcd array
     | Rcd_Lb of (exp_rcd option) * (string * (exp_rcd option)) array
@@ -590,6 +595,9 @@ module Ast = struct
   let init_ns () = { root=None; ns=[]; ns_e=[]; ns_t=[]; ns_m=[]; ns_m_t=[] }
   module Axm = struct
     let _emt = sgn ()
+    let _fop = sgn ()
+    let _frd = sgn ()
+    let _fwt = sgn ()
     let _pp_v = sgn ()
     let _wt = sgn ()
     let _rd = sgn ()
@@ -680,7 +688,7 @@ module Ast = struct
               | Etr(n,_,_,_) -> "§ .."^n^"\n"
               | Etr_Abs(n,_,_) -> "§ "^n^" : .. ⊢ ..\n"
               | Etr_Out_Abs(n,_) -> "§ "^n^" : .. ⊢| \n"
-              | Etr_Eq(n0,n1) -> "§ "^n0^" = "^(pnt_name n1)^"\n"
+              | Etr_Eq(n0,_) -> "§ "^n0^" = ..\n"
               | Etr_Glb(n,_) -> "§ "^n^" « \n"^"\t..\n"
               | Flow f -> "¶ "^(print_flow f)
               | Etr_Clq _ -> "§ @. .. "^"\n"
@@ -2152,13 +2160,48 @@ let rec emt_m (ns:ns_v ref) ld el =
               tbs^"§ "^n^" : "^(Types.print_t ys)^" ⊢ "^(Types.print_t yd)^"\n" in
             ("","","",pp)
           | Etr_Eq(n0,n1) ->
-            let v = get_ns !ns n1 in
-            let ep = (get_ns_e !ns n1) in
-            !ns.ns <- (n0,v)::!ns.ns;
-            !ns.ns_e <- (n0,ep)::!ns.ns_e;
-            let pp =
-              tbs^"§ "^n0^" = "^(pnt_name n1)^"\n" in
-            ("","","",pp)
+            ( match n1 with
+              | Cst(Cst.R64 r0) ->
+                !ns.ns <- (n0,ref(Ln(Axm Axm.r64)))::!ns.ns;
+                !ns.ns_e <- (n0,ref(sgn (),Cst_Stt(Cst.R64 r0)))::!ns.ns_e;
+                let pp =
+                  tbs^"§ "^n0^" = "^"0xr"^(Int64.format "%x" r0)^"\n" in
+                ("","","",pp)
+              | Cst(Cst.S8 s0) ->
+                !ns.ns <- (n0,ref(Ln(Axm Axm.stg)))::!ns.ns;
+                !ns.ns_e <- (n0,ref(sgn (),Cst_Stt(Cst.S8 s0)))::!ns.ns_e;
+                let pp =
+                  tbs^"§ "^n0^" = "^"\""^(String.escaped s0)^"\""^"\n" in
+                ("","","",pp)
+              | ExStg f0 ->
+                let s0 = Util.load_file f0 in
+                !ns.ns <- (n0,ref(Ln(Axm Axm.stg)))::!ns.ns;
+                !ns.ns_e <- (n0,ref(sgn (),Cst_Stt(Cst.S8 s0)))::!ns.ns_e;
+                let pp =
+                  tbs^"§ "^n0^" = "^"\""^(String.escaped s0)^"\""^"\n" in
+                ("","","",pp)
+              | EqLn nl ->
+                let v = get_ns !ns nl in
+                let ep = get_ns_e !ns nl in
+                !ns.ns <- (n0,v)::!ns.ns;
+                !ns.ns_e <- (n0,ep)::!ns.ns_e;
+                let pp =
+                  tbs^"§ "^n0^" = "^(pnt_name nl)^"\n" in
+                ("","","",pp)
+              | SttArg i ->
+                let s0 = Sys.argv.(i) in
+                !ns.ns <- (n0,ref(Ln(Axm Axm.stg)))::!ns.ns;
+                !ns.ns_e <- (n0,ref(sgn (),Cst_Stt(Cst.S8 s0)))::!ns.ns_e;
+                let pp =
+                  tbs^"§ "^n0^" = "^"\""^(String.escaped s0)^"\""^"\n" in
+                ("","","",pp)
+              | ExStgArg i ->
+                let s0 = Util.load_file (Sys.argv.(i)) in
+                !ns.ns <- (n0,ref(Ln(Axm Axm.stg)))::!ns.ns;
+                !ns.ns_e <- (n0,ref(sgn (),Cst_Stt(Cst.S8 s0)))::!ns.ns_e;
+                let pp =
+                  tbs^"§ "^n0^" = "^"\""^(String.escaped s0)^"\""^"\n" in
+                ("","","",pp))
           | Etr_Out_Abs(n,y0) ->
             let l = ref [] in
             let ys = mk_vars (ref []) !ns `Etr l y0 in
@@ -2730,6 +2773,19 @@ and init_prm () =
     "\tmov rdi,rbx\n"^
     "\tcall dec_r\n"^
     "\tret\n" in
+  (*let vr = Rcd(rcd_cl [Axm Axm.stg;(Imp(Axm Axm.stg,unt ()))]) in
+  let v = ref(Ln(App(Axm Axm.out_p,vr))) in
+  !ns.ns <- ("_frd",v)::!ns.ns;
+  !ns.ns_e <- ("_frd",ref(Ast.Axm._frd,Etr_V(Rcd_Ptn.A (0,ref(Ln(vr))))))::!ns.ns_e;
+  let se_emt = "" in
+  let em_emt =
+    "NS_E_"^(Sgn.print Ast.Axm._emt)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._emt)^":\n"^
+    "\tmov rbx,rdi\n"^
+    "\tcall emt\n"^
+    "\tmov rdi,rbx\n"^
+    "\tcall dec_r\n"^
+    "\tret\n" in *)
 
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Rcd(rcd_cl [Var v_q;Axm Axm.stg])))) in
@@ -3962,11 +4018,6 @@ and emt_ir  ns s p =
               let _ = Rcd_Ptn.map (fun n -> Hashtbl.add sf n (Hashtbl.find s n)) ixa in
               let dec_x = emt_dec_ptn sf emt_reg_x86 ixa in
               let _ = Rcd_Ptn.map (fun n -> Hashtbl.remove s n) ixa in
-              (* let e0 =
-                 "\nmov r14,0\n"^
-                 "\nnot r14\n"^
-                 (emt_ptn_set_ptn s sf "r14" emt_reg_x86 emt_reg_tmp ix i0)^
-                 dec_x in *)
               let c0 = cmt ("\t"^(pnt_name  n)^" "^cx^" ⊢| ") in
               c0^e1^em^
               (emt_ptn_set_ptn sf sf "r12" emt_reg_x86 emt_reg_x86 ixa i0)^
@@ -4369,7 +4420,7 @@ and emt_ir  ns s p =
                             "\tadd rbx,r13\n"^
                             "\tmov "^(emt_reg_x86 iy)^",rbx\n"^
                             "\tjmp "^lb_ctr2^"\n"^
-                              lb_ctr0^":\n"^
+                            lb_ctr0^":\n"^
                             er0^
                             "\tmov rdi,1\n"^
                             "\tcall mlc\n"^
@@ -4603,7 +4654,11 @@ and emt_ir  ns s p =
                   let n_hd =
                     ( match hd with
                       | S8_Txt s -> String.length s
-                      | S8_Name _ -> err "emt_etr x8"
+                      | S8_Name n ->
+                        let e = get_ns_e !ns n in
+                        ( match !e with
+                          | (_,Cst_Stt(Cst.S8 s0)) -> String.length s0
+                          | _ -> err "emt_ir _^ 0" )
                       | S8_Var i -> rc0.(i) <- rc0.(i)+1; 0 ) in
                   n_hd+(len tl)
               ) in
@@ -4677,7 +4732,22 @@ and emt_ir  ns s p =
                       "\tadd r15,1\n"^
                       "\tjmp "^lb_0^"\n"^
                       lb_1^":\n"
-                    |_ -> err "emt_ir s8 0" )
+                    | Ast.S8_Name n ->
+                      let e = get_ns_e !ns n in
+                      ( match !e with
+                        | (_,Cst_Stt(Cst.S8 s)) ->
+                          let l_s = String.length s in
+                          let rec lp i =
+                            if i<l_s
+                            then
+                              "\tmov BYTE [r13+8*1+r14],"^(string_of_int(Char.code s.[i]))^"\n"^
+                              "\tadd r14,1\n"^
+                              (lp (i+1))
+                            else "" in
+                          e_p^
+                          "; \""^(String.escaped s)^"\"\n"^
+                          (lp 0)
+                        | _ -> err "emt_ir _^ 0" ) )
                  "" pl
               )^
               "; //\n"^

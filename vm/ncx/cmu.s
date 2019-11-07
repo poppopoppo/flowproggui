@@ -8,6 +8,7 @@
 ; r14 tmp-tbv
 bits 64
 
+extern exit
 extern free
 extern printf
 extern malloc
@@ -89,10 +90,11 @@ _start:
   jmp main
 
 _end:
-  mov rax,1
-  mov rbx,0
-  int 0x80
-
+  ;mov rax,1
+  ;mov rbx,0
+  ;int 0x80
+  mov rdi,0
+  call exit
 mlc:
   mov rax,0x00010000
   add rax,rdi

@@ -94,6 +94,7 @@ type token =
   | EOP_EXN
   | EOP
   | EOF
+  | ENV
   | DTA_GRM
   | DTA
   | DSH
