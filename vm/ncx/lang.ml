@@ -2762,11 +2762,11 @@ and init_prm () =
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(unt (),App(Axm Axm.opn,Var q0)))) in
   !ns.ns <- ("_none",v)::!ns.ns;
-  !ns.ns_e <- ("_none",ref(Ast.Axm._nil,Ctr 0))::!ns.ns_e;
+  !ns.ns_e <- ("_none",ref(Ast.Axm._none,Ctr 1))::!ns.ns_e;
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(Var q0,App(Axm Axm.opn,Var q0)))) in
   !ns.ns <- ("_some",v)::!ns.ns;
-  !ns.ns_e <- ("_some",ref(Ast.Axm._nil,Ctr 1))::!ns.ns_e;
+  !ns.ns_e <- ("_some",ref(Ast.Axm._some,Ctr 0))::!ns.ns_e;
 
   (se_chr^se_emt^se_pp_v,em_chr^em_emt^em_pp_v,ns)
 and emt_exe m f =
@@ -3086,8 +3086,10 @@ and emt_set_ptn d s r =
             "\tjc "^l0^"\n"^
             (*"\tbtr "^tbv^","^(string_of_int i)^"\n"^ *)
             "\tmov rbx,"^(src d)^"\n"^
-            "\tmov r13,0x0001_0000_0000_0000\n"^
-            "\tadd [rbx],r13\n"^
+            (mov_regs s)^
+            "\tmov rdi,rbx\n"^
+            "\tcall inc_r\n"^
+            (set_regs s)^
             "\tmov "^(emt_reg_x86 i)^",rbx\n"^
             "\tand r12,~"^(emt_0b i)^"\n"^
             "\tjmp "^l1^"\n"^
@@ -3270,7 +3272,7 @@ and emt_ptn_mov s idx al =
            el^
            "\tbts r12,"^(string_of_int i1)^"\n"^
            "\tmov "^(idx i1)^","^(idx i0)^"\n"^
-           "\tbt "^(idx i0)^","^(string_of_int i0)^"\n"^
+           "\tbt r12,"^(string_of_int i0)^"\n"^
            "\tjc "^l0^"\n"^
            "\tand r12,~"^(emt_0b i1)^"\n"^
            l0^":\n" ) )
@@ -3634,12 +3636,12 @@ and emt_ir  ns s p =
                              exs^
                              c0^
                              "\tmov rbx,"^(idx ix)^"\n"^
-                             "\tmov r13,rbx"^
+                             "\tmov r13,rbx\n"^
                              "\tshr r13,56\n"^
                              "\tcmp r13,"^(string_of_int i)^"\n"^
-                             "\tjnz "^l_f^
+                             "\tjnz "^l_f^"\n"^
                              "\tmov r13,rbx\n"^
-                             "\tmov r14,0x00ff_ffff_ffff_fffc\n"^
+                             "\tmov r14,0x00ff_ffff_ffff_fffe\n"^
                              "\tand r13,r14\n"^
                              "\tbt QWORD [r13],16\n"^
                              "\tjc "^lb_c0^"\n"^
@@ -3647,8 +3649,8 @@ and emt_ir  ns s p =
                              "\tjnc "^lb_c0^"\n"^
                              "\tmov r13,QWORD [r13+8*1]\n"^
                              lb_c0^":\n"^
-                             "\tmov [set_ptn_vct],0\n"^
-                             "\tmov [set_ptn_vct+8*1],r13\n"^
+                             "\tmov QWORD [set_ptn_vct],0\n"^
+                             "\tmov QWORD [set_ptn_vct+8*1],r13\n"^
                              (emt_mtc_set_ptn 0 s_i ir)
                            | _ -> err "emt_ir f" )
                        | P_Cst c ->
@@ -3710,7 +3712,7 @@ and emt_ir  ns s p =
                      "\tbtr r12,"^(string_of_int i_s)^"\n"^
                      "\tbt r13,0\n"^
                      "\tjnc "^lb_inc_r_blk^"\n"^
-                     "\tmov r14,0x00ff_ffff_ffff_fffc\n"^
+                     "\tmov r14,0x00ff_ffff_ffff_fffe\n"^
                      "\tand r13,r14\n"^
                      lb_inc_r_blk^":\n"^
                      "\tmov r14,0x0001_0000_0000_0000\n"^
@@ -4155,6 +4157,7 @@ and emt_ir  ns s p =
                     (* let v_a = newvar () in
                        let vx = (ref(Ln(inst_ptn 0 x))) in *)
                     let e0 =
+                      "; cns \n"^
                       "\tmov QWORD "^(emt_reg_x86 i_i)^",1\n"^
                       "\tbts r12,"^(string_of_int i_i)^"\n"^
                       (emt_ptn_crt_ptn s (R [|A i_i;ix|]) (A v)) in
@@ -4171,6 +4174,7 @@ and emt_ir  ns s p =
                     let i_i = idx_crt s v_i in
                     let ix = idx_ptn s x in
                     let e0 =
+                      "; nil \n"^
                       "\tmov QWORD "^(emt_reg_x86 i_i)^",0\n"^
                       "\tbts r12,"^(string_of_int i_i)^"\n"^
                       (emt_ptn_crt_ptn s (R [|A i_i;ix|]) (A v)) in
@@ -4361,7 +4365,7 @@ and emt_ir  ns s p =
                             "\tjc "^lb_ctr0^"\n"^
                             "\tbt rbx,0\n"^
                             "\tjc "^lb_ctr1^"\n"^
-                            "\tmov r13,0x"^(Printf.sprintf "%04x" j)^"_0000_0000_0001\n"^
+                            "\tmov r13,0x"^(Printf.sprintf "%02x" j)^"00_0000_0000_0001\n"^
                             "\tadd rbx,r13\n"^
                             "\tmov "^(emt_reg_x86 iy)^",rbx\n"^
                             "\tjmp "^lb_ctr2^"\n"^
@@ -4371,7 +4375,7 @@ and emt_ir  ns s p =
                             "\tcall mlc\n"^
                             "\tmov QWORD [rax+8*1],rbx\n"^
                             "\tbts QWORD [rax],17\n"^
-                            "\tmov r13,0x"^(Printf.sprintf "%04x" j)^"_0000_0000_0001\n"^
+                            "\tmov r13,0x"^(Printf.sprintf "%02x" j)^"00_0000_0000_0001\n"^
                             "\tadd rax,r13\n"^
                             "\tmov "^(emt_reg_x86 iy)^",rax\n"^
                             er1^
@@ -4383,11 +4387,21 @@ and emt_ir  ns s p =
                             "\tmov QWORD [rax+8*1],rbx\n"^
                             "\tbts QWORD [rax],17\n"^
                             "\tbtr QWORD [rax],0\n"^
-                            "\tmov r13,0x"^(Printf.sprintf "%04x" j)^"_0000_0000_0001\n"^
+                            "\tmov r13,0x"^(Printf.sprintf "%02x" j)^"00_0000_0000_0001\n"^
                             "\tadd rax,r13\n"^
                             "\tmov "^(emt_reg_x86 iy)^",rax\n"^
                             er1^
                             lb_ctr2^":\n"
+                          | R [||] ->
+                            let iy = idx_crt s v in
+                            "\tbtr r12,"^(string_of_int iy)^"\n"^
+                            "\tmov rbx,0x0001_0000_0000_0000\n"^
+                            "\tadd QWORD [unt],rbx\n"^
+                            "\tlea QWORD rbx,[unt]\n"^
+                            "\tmov "^(emt_reg_x86 iy)^",rbx\n"^
+                            "\tmov rbx,0x"^(Printf.sprintf "%02x" j)^"00_0000_0000_0001\n"^
+                            "\tadd "^(emt_reg_x86 iy)^",rbx\n"
+
                           | _ ->
                             let (iy,e0) = emt_get_crt_ptn s "r12" emt_reg_x86 (idx_ptn s x) in
                             Hashtbl.add s iy v;
@@ -4395,7 +4409,7 @@ and emt_ir  ns s p =
                             let _ = idx_csm_ptn s x in
                             "\tbtr r12,"^(string_of_int iy)^"\n"^
                             e0^
-                            "\tmov r13,0x"^(Printf.sprintf "%04x" j)^"_0000_0000_0001\n"^
+                            "\tmov r13,0x"^(Printf.sprintf "%02x" j)^"00_0000_0000_0001\n"^
                             "\tadd "^(emt_reg_x86 iy)^",r13\n"^
                             ed )
                       |_ -> err "emt_ir inj" )
