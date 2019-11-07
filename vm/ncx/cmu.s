@@ -61,6 +61,7 @@ section .data
   fmt_s8: db `\"%s\"`,0
   fmt_line: db `%s\n`,0
   fmt_err_line: db `err:%s\n`,0
+  fmt_dbg: db `dbg:%s\n`,0
   fmt_err: db "err",0
   cst_stg_test: db `\194\187\194\187 Foo \226\136\128 Baa \194\167\194\182 \t \t \n`,0,0,0,0,0
   cst_stg_test0: db `\u263a`
@@ -69,7 +70,7 @@ section .data
 ; dynamic entries
   etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
 ; global constants
-  unt: dq 0x000100000000ffff
+  unt: dq 0x0001_0000_0000_ffff
 ; global variables
   sgn_ctr: dq 0
   c_0:
@@ -109,7 +110,7 @@ mlc:
 dec_r:
   bt rdi,0
   jnc dec_r_blk
-  mov rax,0x00ff_ffff_ffff_fffc
+  mov rax,0x00ff_ffff_ffff_fffe
   and rdi,rax
 dec_r_blk:
   push rdi
@@ -159,7 +160,7 @@ inc_r:
   ; increment ref-count
   bt rdi,0
   jnc inc_r_blk
-  mov rsi,0x00ff_ffff_ffff_fffc
+  mov rsi,0x00ff_ffff_ffff_fffe
   and rdi,rsi
 inc_r_blk:
   mov rsi,0x0001_0000_0000_0000
@@ -281,6 +282,12 @@ pp_v: ; rdi=value ⊢ rax=ret_stg
   push rdi
   mov rsi,str_ret
   call pp
+  ;push rax
+  ;mov rdi,fmt_dbg
+  ;mov rsi,str_ret
+  ;mov rax,0
+  ;call printf
+  ;pop rax
   sub rax,str_ret
   push rax
   mov rdi,rax
@@ -289,11 +296,40 @@ pp_v: ; rdi=value ⊢ rax=ret_stg
   mov rdx,rdi
   shr rdi,3
   xor rsi,rsi
-  jmp pnt_v_lp
+pp_v_lp:
+  mov r8,QWORD [str_ret+8*rsi]
+  mov QWORD [rax+8*1+8*rsi],r8
+  cmp rsi,rdi
+  jz pp_v_tl
+  add rsi,1
+  jmp pp_v_lp
+pp_v_tl:
+  mov r8,0
+  and rdx,0b0111
+  cmp rdx,0
+  jz pp_v_tl_0
+  mov rcx,0b1000
+  sub rcx,rdx
+  shl rcx,3
+  mov r8,~0
+  shr r8,cl
+pp_v_tl_0:
+  and QWORD [rax+8*1+8*rsi],r8
+  push rax
+  mov rdi,fmt_dbg
+  lea rsi,[rax+8*1]
+  mov rax,0
+  call printf
+  pop rax
+  pop rdi
+  ret
 
 mlc_s8: ; rdi=size of bytes
+  mov rsi,rdi
+  and rsi,~0b0111
+  add rsi,16
   push rdi
-  add rdi,8
+  mov rdi,rsi
   xor rax,rax
   call malloc
   pop rdi
@@ -312,8 +348,8 @@ mlc_s8: ; rdi=size of bytes
   ret
 
 pp: ; rdi=tkn rsi=dst
-  jc pnt_end
-  jmp pnt_r_p
+  jc pp_end
+  jmp pp_r_p
 pp_end:
   push rsi
   mov rdx,rdi
@@ -338,7 +374,7 @@ pp_r_p:
   pop rsi
   pop rdi
   add rsi,rax
-  mov r10,0x00ff_ffff_ffff_fffc
+  mov r10,0x00ff_ffff_ffff_fffe
   and rdi,r10
 pp_r_p_blk:
   mov r10,[rdi]
@@ -427,6 +463,8 @@ pp_ln:
   pop rsi
   add rsi,rax
   pop rdi
+  bt QWORD [rdi],0
+  mov rdi,QWORD [rdi+8]
   call pp
   push rax
   mov rdi,rax

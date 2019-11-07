@@ -1,0 +1,14 @@
+§§ M0 
+	§ E0 «
+		_none {} ⊢ %o0 
+		;_some o0 ⊢ o0 
+		;_some o0 ⊢ o0 
+		_pp_v %o0 ⊢ { %o1 %s0 }
+		_emt s0 |⊢
+		» "\n" _ ⊢ s_nl 
+		_emt s_nl |⊢
+		∎ {}
+	§ f0 {} 
+		∎ {} 
+	∎∎ 
+§ _ = M0.f0

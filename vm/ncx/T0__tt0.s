@@ -509,8 +509,12 @@ NS_E_RDI_85:
 	bt QWORD [set_ptn_vct+16*0],0
 	jc emt_set_ptn_0_LB_86
 	mov rbx,QWORD [set_ptn_vct+8*1+16*0]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r9,rbx
 	and r12,~0b10
 	jmp emt_set_ptn_1_LB_87
@@ -560,7 +564,7 @@ emt_dec_ptn_0_LB_88:
 ; emt_ptn_mov
 	bts r12,3
 	mov r11,r9
-	bt r9,1
+	bt r12,1
 	jc LB_92
 	and r12,~0b1000
 LB_92:
@@ -577,8 +581,16 @@ LB_92:
 	bt QWORD [set_ptn_vct+16*0],0
 	jc emt_set_ptn_0_LB_93
 	mov rbx,QWORD [set_ptn_vct+8*1+16*0]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*3],r11
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r11,QWORD [regs_vct+8*3]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r8,rbx
 	and r12,~0b1
 	jmp emt_set_ptn_1_LB_94
@@ -643,8 +655,14 @@ emt_dec_ptn_0_LB_98:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_107
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r8,rbx
 	and r12,~0b1
 	jmp emt_set_ptn_1_LB_108
@@ -677,8 +695,14 @@ emt_set_ptn_1_LB_108:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_111
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r10,rbx
 	and r12,~0b100
 	jmp emt_set_ptn_1_LB_112
@@ -719,8 +743,14 @@ call_c_LB_99:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_101
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r8,rbx
 	and r12,~0b1
 	jmp emt_set_ptn_1_LB_102
@@ -753,8 +783,14 @@ emt_set_ptn_1_LB_102:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_105
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r10,rbx
 	and r12,~0b100
 	jmp emt_set_ptn_1_LB_106
@@ -785,8 +821,12 @@ call_nc_LB_100:
 	bt QWORD [set_ptn_vct+16*0],0
 	jc emt_set_ptn_0_LB_113
 	mov rbx,QWORD [set_ptn_vct+8*1+16*0]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*0],r8
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r8,QWORD [regs_vct+8*0]
 	mov r8,rbx
 	and r12,~0b1
 	jmp emt_set_ptn_1_LB_114
@@ -836,8 +876,16 @@ emt_dec_ptn_0_LB_115:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_122
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*3],r11
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r11,QWORD [regs_vct+8*3]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r10,rbx
 	and r12,~0b100
 	jmp emt_set_ptn_1_LB_123
@@ -858,8 +906,16 @@ emt_set_ptn_1_LB_123:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_124
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*3],r11
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r11,QWORD [regs_vct+8*3]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r11,rbx
 	and r12,~0b1000
 	jmp emt_set_ptn_1_LB_125
@@ -904,8 +960,16 @@ call_c_LB_116:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_118
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*3],r11
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r11,QWORD [regs_vct+8*3]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r10,rbx
 	and r12,~0b100
 	jmp emt_set_ptn_1_LB_119
@@ -926,8 +990,16 @@ emt_set_ptn_1_LB_119:
 	bt QWORD [set_ptn_vct+16*1],0
 	jc emt_set_ptn_0_LB_120
 	mov rbx,QWORD [set_ptn_vct+8*1+16*1]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*2],r10
+	mov QWORD [regs_vct+8*3],r11
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r10,QWORD [regs_vct+8*2]
+	mov r11,QWORD [regs_vct+8*3]
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r11,rbx
 	and r12,~0b1000
 	jmp emt_set_ptn_1_LB_121
@@ -1107,8 +1179,12 @@ NS_E_RDI_134:
 	bt QWORD [set_ptn_vct+16*0],0
 	jc emt_set_ptn_0_LB_136
 	mov rbx,QWORD [set_ptn_vct+8*1+16*0]
-	mov r13,0x0001_0000_0000_0000
-	add [rbx],r13
+	mov QWORD [regs_vct+8*0],r8
+	mov QWORD [regs_vct+8*1],r9
+	mov rdi,rbx
+	call inc_r
+	mov r8,QWORD [regs_vct+8*0]
+	mov r9,QWORD [regs_vct+8*1]
 	mov r9,rbx
 	and r12,~0b10
 	jmp emt_set_ptn_1_LB_137
