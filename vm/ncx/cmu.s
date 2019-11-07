@@ -315,12 +315,6 @@ pp_v_tl:
   shr r8,cl
 pp_v_tl_0:
   and QWORD [rax+8*1+8*rsi],r8
-  push rax
-  mov rdi,fmt_dbg
-  lea rsi,[rax+8*1]
-  mov rax,0
-  call printf
-  pop rax
   pop rdi
   ret
 
