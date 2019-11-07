@@ -574,3 +574,7 @@ Lx°
     @.b = s8
   § @.FUN = id
   ∎∎
+
+§ A0 = _arg0
+§ A1 = .. _arg2
+§ F0 = .. "\fileX.mdls"
