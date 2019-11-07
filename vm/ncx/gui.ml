@@ -330,11 +330,11 @@ let main () =
                   mdl := mdl0;
                   let _ =
                     ( match o,!file_name with
-                      | Some f,Some _ ->
-                        let (a,pp) = Lang.emt_exe el f in
+                      | _,Some fn ->
+                        let (a,pp) = Lang.emt_exe el in
                         (* pnt true a; *)
                         navi_view#source_buffer#set_text pp;
-                        let ssp = (Lang.emt_name f) in
+                        let ssp = Filename.basename fn in
                         let ss = ssp^".s" in
                         let d = open_out ss in
                         let _ = output_string d a in
