@@ -14,6 +14,8 @@ extern printf
 extern malloc
 extern sprintf
 section .bss
+  ir_s8_len_vct: resb 8*32
+  ir_s8_vct: resb 8*32
   st_vct: resb 400
   st_vct_tmp: resb 400
   regs_vct: resb 8*10
@@ -116,6 +118,10 @@ dec_r:
   and rdi,rax
 dec_r_blk:
   push rdi
+  mov rsi,0x0000_ffff_0000_0000
+  and rsi,QWORD [rdi]
+  cmp rsi,0
+  jz dec_r_end
   ; decrement ref-count
   mov rax,[rdi]
   mov rsi,0x0001000000000000
@@ -165,8 +171,13 @@ inc_r:
   mov rsi,0x00ff_ffff_ffff_fffe
   and rdi,rsi
 inc_r_blk:
+  mov rsi,0x0000_ffff_0000_0000
+  and rsi,QWORD [rdi]
+  cmp rsi,0
+  jz inc_r_unt
   mov rsi,0x0001_0000_0000_0000
   add QWORD [rdi],rsi
+inc_r_unt:
   ret
 
 ; rdi ~ src cf~tag

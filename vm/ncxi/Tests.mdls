@@ -1,0 +1,77 @@
+§§ T0 
+	§ C0 « 
+		» 0xrff _ ⊢ x0 
+		» "ABCDfokfkfkf\t" _ ⊢ s0 
+		_pp_v x0 ⊢ { x0 sp0 } 
+		;_emt s0 |⊢
+		_emt sp0 |⊢ 
+		» "\nHOO\n" _ ⊢ s1 
+		_emt s1 |⊢
+		;_pp_v s0 ⊢ { s0 sp1 }
+		;_emt sp1 |⊢
+		∎ {}
+	§ f0 {}  
+		» "xyz" _ ⊢ s0 
+		;_emt s0 |⊢
+		∎ s0
+	§ f1 {}
+		f0 {} ⊢ _ 
+		» "Hello World!!\n" _ ⊢ %s0  
+		» "Foo Baoo" _ ⊢ %s1
+		» _^ %s0,%s1 ⊢ %sr,%s0,%s1 
+			"Ab" 0' "B" 1' 1' "\n" 
+			` mov r0,r1
+			` add r3,r5 
+			// 
+			;_emt %s0 |⊢
+			;_emt %s1 |⊢
+			;_emt %sr |⊢ 
+		∎ {}	
+	§ E0 «
+		» 0xrf _ ⊢ x0 
+		? x0 
+		∐\ x0' ,x0'=0xr0 ⊢ 
+			» "A\n" _ ⊢ s0 
+			_emt s0 |⊢ 
+			∎ {}
+		∐\ x0' ,x0'=0xr1 ⊢ 
+			» "B\n" _ ⊢ s0 
+			_emt s0 |⊢ 
+			∎ {}
+		∐.\ x0' ⊢ 
+			_pp_v x0 ⊢ { x0 s0 } 
+			» _^ s0 ⊢ sr,s0 
+				"x0 = " 0' "\n" //
+			_emt sr |⊢ 
+			∎ {} 
+	§ E1 « 
+		» "ABCDefgefefef" _ ⊢ %s0 
+		» 0xrff _ ⊢ %x0 
+		? { %x0 %s0 } 
+		∐\ { x0' s0' } ,s0'="ABCDefgefefef",x0'=0xrf9 ⊢ 
+			» "X\n" _ ⊢ sr 
+			_emt %sr |⊢ 
+			∎ {} 
+		∐.\ p0' ⊢
+			_pp_v p0 ⊢ { %p0 %sp }
+			» _^ sp ⊢ sr,sp 
+				"p0=" 0' "\n" //
+			_emt sp |⊢ 
+			_emt sr |⊢
+			∎ {}
+	§ E2 « 
+		_none {} ⊢ o0 
+		_none {} ⊢ o1 
+		_some o1 ⊢ o1 
+		_some o1 ⊢ o1
+		_pp_v o1 ⊢ { o1 p0 } 
+		_emt p0 |⊢
+		? o0 
+		∐\ o0' ,o0'=_none◂{} ⊢ 
+			» "t\n" _ ⊢ s0 
+			_emt s0 |⊢
+			∎ {}
+		∐.\ o0' ⊢ 
+			∎ {}
+	∎∎
+§ _ = T0.f1

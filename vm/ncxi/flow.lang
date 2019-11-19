@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vim: set sts=2 sw=2: -->
+<!-- Author: Eric Cooper <ecc@cmu.edu> Copyright (C) 2007 Eric Cooper <ecc@cmu.edu> Copyright (C) 2007 Eric Norige <thelema314@gmail.com> Copyright (C) 2009 Alexandr Kuleshov <sterh@live.ru> This library is free software; you can redistribute it
+and/or modify it under the terms of the GNU Library General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. This library is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more details. You should have received a copy of the GNU Library General Public
+License along with this library; if not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!DOCTYPE language SYSTEM "language.dtd">
+<language id="flow" _name="flow" version="2.0" _section="Sources">
+  <metadata>
+    <property name="globs">*.ml;*.mli;*.mll;*.mly</property>
+    <property name="block-comment-start">\.\;</property>
+    <property name="block-comment-end">\;\.</property>
+    <property name="line-comment-start">\;</property>
+  </metadata>
+
+  <styles>
+    <style id="comment" _name="Comment" map-to="def:comment"/>
+    <style id="ocamldoc" _name="Ocamldoc Comments" map-to="def:note"/>
+    <style id="base-n-integer" _name="Base-N Integer" map-to="def:base-n-integer"/>
+    <style id="floating-point" _name="Floating Point number" map-to="def:floating-point"/>
+    <style id="decimal" _name="Decimal number" map-to="def:decimal"/>
+    <style id="string" _name="String" map-to="def:string"/>
+    <style id="keyword" _name="Keyword" map-to="def:keyword"/>
+    <style id="meta-keyword" _name="Type, module or object keyword" map-to="def:keyword"/>
+    <style id="fun-keyword" _name="Builtin-function keyword" map-to="def:keyword"/>
+    <style id="type" _name="Data Type" map-to="def:type"/>
+    <style id="label" _name="Labeled argument" map-to="def:type"/>
+    <style id="poly-variant" _name="Polymorphic Variant" map-to="def:type"/>
+    <style id="variant" _name="Variant Constructor" map-to="def:type"/>
+    <style id="type-var" _name="Type Variable" map-to="def:type"/>
+    <style id="module" _name="Module Path" map-to="def:type"/>
+    <style id="escape" _name="Escaped Character" map-to="def:special-char"/>
+    <style id="boolean" _name="Boolean value" map-to="def:boolean"/>
+    <style id="error" _name="Error" map-to="def:error"/>
+    <style id="std-modules" _name="Standart Modules" map-to="def:type"/>
+    <style id="constant" _name="Constant" map-to="def:constant"/>
+    <style id="operator" _name="Operator" map-to="def:operator"/>
+    <style id="function" _name="Function" map-to="def:function"/>
+    <style id="identifier" _name="Identifier" map-to="def:identifier"/>
+    <style id="preprocessor" _name="Preprocessor" map-to="def:preprocessor"/>
+    <style id="statement" _name="Statement" map-to="def:statement"/>
+    <style id="specials" _name="Specials" map-to="def:specials"/>
+    <style id="number" _name="Number" map-to="def:number"/>
+    <style id="code-symbol" _name="Code symbol" map-to="flow:keyword"/>
+    <style id="exp-opr" _name="Exp operator" map-to="flow:type"/>
+    <style id="exp-atom" name="Exp atom" map-to="flow:number"/>
+ </styles>
+
+  <definitions>
+    <define-regex id="cap-ident">\b[A-Z][A-Za-z0-9_']*</define-regex>
+    <define-regex id="low-ident">\b[a-z][A-Za-z0-9_']*</define-regex>
+    <define-regex id="char-esc">\\((\\|"|'|n|t|b|r)|[0-9]{3}|x[0-9a-fA-F]{2})</define-regex>
+
+    <define-regex id="word">\b[A-Za-z][A-Za-z0-9_]*</define-regex>
+
+    <context id="escape-seq" style-ref="escape">
+      <match>\%{char-esc}</match>
+    </context>
+
+    <!-- here's the main context -->
+    <context id="flow" class="no-spell-check">
+      <include>
+        <context id="ocamldoc" style-ref="ocamldoc">
+          <start>\(\*\*</start>
+          <end>\*\)</end>
+          <include>
+            <context id="comment-in-comment" style-ref="comment" class="comment" class-disabled="no-spell-check">
+              <start>\(\*</start>
+              <end>\*\)</end>
+              <include>
+                <context ref="string"/>
+                <context ref="comment-in-comment"/>
+                <context ref="def:in-comment:*"/>
+              </include>
+            </context>
+            <context ref="string"/>
+            <context ref="def:in-comment:*"/>
+          </include>
+        </context>
+        <context id="comment" style-ref="comment" class="comment" class-disabled="no-spell-check">
+          <start>\.\;</start>
+          <end>\;\.</end>
+          <include>
+            <context ref="string"/>
+            <context ref="comment-in-comment"/>
+            <context ref="def:in-comment:*"/>
+          </include>
+        </context>
+        <context id="line-comment" style-ref="comment" end-at-line-end="true" class="comment" class-disabled="no-spell-check">
+          <start>\;</start>
+          <include>
+            <context ref="def:in-line-comment"/>
+          </include>
+        </context>
+
+        <context id="string" style-ref="string">
+          <start>"</start>
+          <end>"</end>
+          <include>
+            <context ref="escape-seq"/>
+          </include>
+        </context>
+        <context id="character-constant" style-ref="string">
+          <match>('\%{char-esc}')|('[^\\']')</match>
+        </context>
+
+        <context id="forall" style-ref="exp-atom">
+          <match>\%{word}&#x2200;</match>
+        </context>
+
+        <context id="meta-word" style-ref="exp-atom">
+          <match>\%{word}'</match>
+        </context>
+
+        <context id="word">
+          <match>\%{word}</match>
+        </context>
+
+        <context id="decimal">
+          <match>[-]?[0-9][0-9_]*[lLn]?</match>
+        </context>
+
+        <context id="arraylit">
+          <start>\[\|</start>
+          <end>\|\]</end>
+          <include>
+            <context ref="flow"/>
+          </include>
+        </context>
+
+        <context id="code-symbol-0" style-ref="code-symbol">
+          <match>((&#x00A7;&#x00A7;\.)|(&#x00A7;&#x00A7;)|&#x00A7;|(\.&#x00BB;)|(&#x00BB;\.)|&#x00BB;|&#x2243;|&#x2252;)</match>
+        </context>
+
+        <context id="code-symbol-1" style-ref="code-symbol">
+          <match>(\^|&#x00A6;|&#x00B6;|&#x00AB;|&#x2045;|&#x2046;|&#x2206;|&#x2207;|&#x220F;|&#x2210;|&#x22A2;|(\|&#x00BB;)|&#x220E;)</match>
+        </context>
+
+        <context id="angle" style-ref="exp-opr">
+          <match>&#x2220;</match>
+        </context>
+
+        <context id="projection" style-ref="exp-opr">
+          <match>&#x25C3;</match>
+        </context>
+
+        <context id="application" style-ref="exp-opr">
+          <match>&#x25C2;</match>
+        </context>
+
+        <context id="exp-special" style-ref="exp-opr">
+          <match>(\!|\:|\`|\_|\?)</match>
+        </context>
+
+        <context id="root-symbol" style-ref="exp-atom">
+          <match>(\$|\@)</match>
+        </context>
+
+        <context id="exp-cmp">
+          <match>(\=|\+|\*|\-|&#x22CE;|&#x22CF;)</match>
+        </context>
+
+        <context id="type-cmp">
+          <match>(&#x229E;|&#x27E6;|&#x27E7;|&#x2039;|&#x203A;|&#x2192;)</match>
+        </context>
+
+        <context id="type-atom">
+          <match>(&#x2124;|&#x2115;|&#x0026;|&#x2299;)</match>
+        </context>
+
+        <context id="badtype">
+          <match>(&#x2200;|\')</match>
+        </context>
+
+        <context id="badarray" style-ref="error" extend-parent="false">
+          <match>\|\]</match>
+        </context>
+
+        <context id="listlit">
+          <start>\[</start>
+          <end>(?&lt;!\|)\]</end>
+          <include>
+            <context ref="flow"/>
+          </include>
+        </context>
+
+        <context id="badlist" style-ref="error" extend-parent="false">
+          <match>\]</match>
+        </context>
+        <context id="boolean-constant" style-ref="boolean">
+          <keyword>true</keyword>
+          <keyword>false</keyword>
+        </context>
+
+      </include>
+    </context>
+  </definitions>
+</language>

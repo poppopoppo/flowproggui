@@ -33,7 +33,7 @@ rule token = parse
     | "§§"  { MDL }
     | "§§." { MDL_END }
     | "¶" { DTA }
-    | "¶¶+ℙ" { DTA_GRM }
+    | "§§+s8" { DTA_GRM }
     | "¬|"  { NOT_SPL }
     | "\\"  { SLH }
     | "∀" { FOR_ALL }
