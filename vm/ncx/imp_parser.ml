@@ -431,7 +431,7 @@ let rec _menhir_goto_grm_ord : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_
     let (_,go) =
     List.fold_left
     ( fun (i,go) (cn,f,r) ->
-      if cn="_" then (i+1,go@[(_3^"_"^(string_of_int i),f,r)])
+      if cn="_" then (i+1,go@[("c"^(string_of_int i),f,r)])
       else (i+1,go@[(cn,f,r)]))
       (0,[]) _4 in
     Lang.Grm.Cnc(_3,go) )

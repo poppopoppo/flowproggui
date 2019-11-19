@@ -1,0 +1,146 @@
+[;
+§§ prm
+	¶ r64 
+	¶ r32
+	¶ r16
+	¶ r8
+	¶ s8 
+	¶ f64  
+	¶ f32  
+	¶ sgn 
+	¶ out ◂ o' 
+	¶ Zp ◂ m' 
+	¶ bl
+	¶ S8 
+	¶ HSH 
+	¶ ARR 
+	¶ SPC 
+	¶¶+ℙ l_al
+	¶¶+ℙ u_al
+	¶¶+ℙ dgt 
+	¶ pt ◂ p' 
+	¶ vct ◂ v',b',k' 
+	¶ @.lst ◂ a'
+		∐ cns : { a' lst◂a' }
+		∐ nil : {}
+	¶ opn◂a' = _opn◂a'
+	§ none = _none 
+	§ some = _some 
+	¶¶+ℙ 
+		@.c_al 
+		∐ l_al 
+		∐ u_al 
+	¶¶+ℙ
+		@.name 
+		∐ c_al ⟦name_tl⟧
+		@.name_tl 
+		∐ c_al 
+		∐ "_" 
+		∐ dgt 
+	¶¶+ℙ 
+		@.prm_name 
+		∐ "_" name
+	§§ gen_asm
+		§ mov : { r64 r64 } ⊢ { r64 r64 } 
+		§ add : { r64 r64 } ⊢ { r64 r64 }
+		§ or : { r64 r64 } ⊢ { r64 r64 }
+		§ and : { r64 r64 } ⊢ { r64 r64 }
+		§ not : r64 ⊢ r64
+		§ shl_1 : r64 ⊢ r64
+		§ shr_1 : r64 ⊢ r64
+	∎∎
+	§ eq : { a' a' } ⊢ bl 
+	§ pnt : ℙ |⊢
+	§ emt = _emt
+∎∎
+;]
+§§ T0
+[;
+	§= CST0 "CST0" 
+	§= CST1 "CST1" 
+	§= R0 0xr0 
+	§= R1 0xr1 
+	§= S0 _^
+		"HOGE\n"
+		"HOO\n" 
+		"END\n" // 
+;]	
+	;§ prm._ 
+	[;
+	§ g0 {} 
+		∎ {}
+	¶¶+ℙ 
+		@.g0 
+		∐ "A" _chr "B" ⊢ { _ c _ }
+			? c 
+			∐\ c' ,c'="x" ⊢ 
+				_none {} ⊢ r 
+				∎ r 
+			∐.\ c' ⊢ ; c'
+				» 0xr0 _ ⊢ s0 
+				_some s0 ⊢ r 
+				∎ r
+	§ g0_0 {} 
+		» g0.prs _ ⊢ p0
+		∎ p0
+;]		 
+	§§ T1
+		§ f0 {}
+			;g0 {} ⊢ _ 
+			» "Hello World!!\n" _ ⊢ %s0  
+			» "Foo Baoo" _ ⊢ %s1
+			» _^ %s0,%s1 ⊢ %sr,%s0,%s1 
+				"Ab" 0' "B" 1' 1' "\n" 
+				"\tmov r0,r1\n"
+				"\tadd r3,r5\n" // 
+			_emt %s0 |⊢
+			_emt %s1 |⊢
+			_emt %sr |⊢ 
+			∎ {}		
+	∎∎
+	[;
+	§ h0 {} 
+		T1.f0 {} ⊢ {} 	
+		∎ {} 
+	§ f0 {}
+		» prm.name.prs _ ⊢ p
+		∎ p
+	§ f1 {} 
+		» "FOO" _ ⊢ s0
+		» _^ s0 ⊢ s1,s0
+			"A" "B" 0' "C\n" 
+			"a b c\n" // 
+		∎ s1
+	;]
+	[;
+	§ P0 «
+		sgn {} ⊢ p0
+		∎ p0 
+	§ C0 « 
+		» "HELLOOOO!!\n" _ ⊢ s0 
+		∎ s0
+	;]
+	§ C1 « 
+		» "HOOO BOOO\n" _ ⊢ s0 
+		_emt s0 |⊢ 
+		∎ {}  
+	¶¶+ℙ 
+		@.g0 
+		∐ _chr "A" _chr 
+	§ T0 « 
+		» 0xrff _ ⊢ x0 
+		» "ABC" _ ⊢ s0 
+		_pp_v x0 ⊢ { x0 sp0 } 
+		_emt sp0 |⊢ 
+		;_pp_v s0 ⊢ { s0 sp1 }
+		;_emt sp1 |⊢
+		∎ {  }
+	§ C2 «
+		» "xAw" _ ⊢ s0 
+		» 0xr0 _ ⊢ r0 
+		g0.prs { s0 r0 } ⊢ { s0 r1 a0 }
+		_pp_v a0 ⊢ { a0 s1 }
+		_emt s1 |⊢
+		∎ { s0 r1 a0 } 	
+∎∎
+§ _ = T0.T1.f0

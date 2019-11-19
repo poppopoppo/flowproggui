@@ -1,0 +1,127 @@
+§§ p0
+[;
+§ f0 x
+	? x
+		∐\ x' ,x'=0 ~|
+		» "0" |~ _ ⊢ y
+		∎ y
+		∐.\ x',x'=1 ~|
+		» "1" |~ _ ⊢ y
+		∎ y
+§ if_nil l
+	? l
+		∐\ l', l'=nil◂{} ~|
+		» 0 |~ _ ⊢ b
+		∎ b
+		∐.\ _ ~|
+		» 1 |~ _ ⊢ b
+		∎ b
+§ @.map { f l }
+	? l
+		∐\ l' ,l'=nil◂{} ~|
+		» ⟦⟧ |~ _ ⊢ y
+		∎ y
+		∐.\ l' ,l'=cns◂{ l_hd' l_tl' } ~|
+		$ f ⊢ f0,f
+		◂ f0,l_hd ⊢ l_hd0
+		map { f l_tl } ⊢ l_tl0
+		cns { l_hd0 l_tl0 } ⊢ l0
+		∎ l0
+§ f2 _
+	∎ {}
+;]
+[;
+§ test0 {}
+	» ⟦ "A" "B" "C" ⟧ |~ _ ⊢ l
+	» f0 |~ _ ⊢ f
+	map { f l } ⊢ l0
+	∎ l0
+;]
+[;
+§ test1 {}
+	» "Xyz" |~ _ ⊢ s0
+	? s0
+		∐\ s0' ,s0'="Y" ~|
+		» "a" |~ _ ⊢ s1
+		∎ s1
+		∐\ s0' ,s0'="Xy" ~|
+		» "b" |~ _ ⊢ s1
+		∎ s1
+		∐.\ _ ~|
+		» "c" |~ _ ⊢ s1
+		∎ s1
+;]
+§ @.apnd { l_0 l_1 }
+ 	? l_0
+		∐\ l_0' ,l_0'=nil◂{} ~|
+		∎ l_1
+		∐.\ l_0' ,l_0'=cns◂{ hd' tl' } ~|
+		apnd { tl l_1 } ⊢ l_1
+		cns { hd l_1 } ⊢ l_1
+		∎ l_1
+§ test_a {}
+	» ⟦ 0xr0101 0xrAFFA 0xr83793 ⟧ |~ _ ⊢ l0
+	» ⟦ 0xrff 0xrFABc ⟧ |~ _ ⊢ l1
+	apnd { l0 l1 } ⊢ l2
+	∎ l2
+§ test3 {}
+	» 0xrFF |~ _ ⊢ s0
+	? s0
+		∐\ s0' ,s0'=0xrA4 ~|
+		» "a" |~ _ ⊢ s1
+		∎ s1
+		∐\ s0' ,s0'=0xrFF ~|
+		» "b" |~ _ ⊢ s1
+		∎ s1
+		∐.\ _ ~|
+		» "c" |~ _ ⊢ s1
+		∎ s1
+
+§ test4 {}
+	» "a" |~ _ ⊢ s0
+	» "b" |~ _ ⊢ s1
+	$ { s0 s1 } ⊢ { s0 _ }
+	∎ s0
+§ test5 {}
+	» ⟦ 0xr45 0xrff 0xr233 0xrFaa 0xr5324 0xr3344444 0xrFFFF ⟧ |~ _ ⊢ l
+	∎ l
+§ test2 {}
+	» ⟦ "X" "Y" ⟧ |~ _ ⊢ l0
+	$ l0 ⊢ l0,l1
+	? l0
+		∐\ l0' ,l0'=nil◂{} ~|
+		» "t" |~ _ ⊢ y
+		∎ l1
+		∐.\ l0' ,l0'=cns◂{ hd' tl' } ~|
+		» "f" |~ _ ⊢ y
+		∎ tl
+
+§ @.lst_mov { l0 l1 }
+	? l0
+		∐\ l0' ,l0'=cns◂{ hd0' tl0' } ~|
+		cns { hd0 l1 } ⊢ l1
+		lst_mov { tl0 l1 } ⊢| ; l1
+		;∎ l1
+		∐.\ l0' ,l0'=nil◂{} ~|
+		∎ l1
+§ rev l0
+	» ⟦⟧ |~ _ ⊢ l1
+	lst_mov { l0 l1 } ⊢| ; l2
+	;∎ l2
+§ test6 {}
+	» ⟦ 0xr44 0xrFAAA 0xrBB 0xrBF 0xrcc ⟧ |~ _ ⊢ l0
+	;» ⟦⟧ |~ _ ⊢ l0
+	$ l0 ⊢ l0,l00
+	» ⟦⟧ |~ _ ⊢ l1
+	lst_mov { l0 l1 } ⊢ l2
+	;apnd { l2 l00 } ⊢ l2
+	∎ l2
+§ test7 {}
+	» "ABDs" |~ _ ⊢ s0
+	» "oijfe33" |~ _ ⊢ s1
+	scc { s0 s1 } ⊢ s2
+	» "FJiefojef" |~ _ ⊢ s3
+	scc { s2 s3 } ⊢ s4
+	$ s4 ⊢ s4,s4_0
+	∎ { s4 s4_0 }
+§§.
