@@ -1,4 +1,8 @@
 §§ MX 
+§ f0 x 
+	_mov_x x ⊢ { x0 x1 } 
+	_add { x0 x1 } ⊢ { x0 _ } 
+	∎ x0
 § C « 
 	» 0xrFF _ ⊢ x0
 	» 0xrAA _ ⊢ x1
@@ -17,7 +21,19 @@
 	_add { x1 x2 } ⊢ { x1 x2 } 
 	_emt_q { x1 x2 } ⊢ { x1 x2 }
 	_mov { x0 x1 } ⊢ { x0 x1 }
-	_mov_x x0 ⊢ { x0 x3 }  
+	_mov_x x0 ⊢ { x0 _ }  
+	» 0xr1 _ ⊢ x3 
+	f0 x3 ⊢ x3
+	f0 x3 ⊢ x3 
 	_emt_q { x0 x1 x3 } ⊢ { x0 x1 x3 } 
+	» "Hello World !!" _ ⊢ s0
+	_emt_q s0 ⊢ s0 
 	∎ {}
+§ C2 « 
+	_none {} ⊢ d0
+	_emt_q d0 ⊢ d0
+	» "Hoo Baa" _ ⊢ s0 
+	_emt_q s0 ⊢ s0
+	∎ {} 
+	
 §§.

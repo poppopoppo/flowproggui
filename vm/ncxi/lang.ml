@@ -2835,7 +2835,7 @@ and emt_mov_ptn_to_ptn (s0:RSet.t) (i0:R.t) (i1:R.t) =
   let rec lp i0 i1 =
     ( match i0,i1 with
       | RP.A(R.Idx _),RP.A(R.Idx i1) -> ([],[(i0,i1)])
-      | RP.R _,RP.A(R.Idx i1) -> ([],[(i0,i1)])
+      | _,RP.A(R.Idx i1) -> ([],[(i0,i1)])
       | RP.A(R.Idx i0),_ -> ([(i0,i1)],[])
       | RP.R rs0,RP.R rs1 ->
         let (_,l0,l1) =
@@ -2845,6 +2845,9 @@ and emt_mov_ptn_to_ptn (s0:RSet.t) (i0:R.t) (i1:R.t) =
                 (i+1,l0@l0_0,l1@l1_0) )
             (0,[],[]) rs0 in
         (l0,l1)
+      | RP.A(R.Agl(ia0,ra0)),RP.A(R.Agl(ia1,ra1)) ->
+        let (l0,l1) = lp ra0 ra1 in
+        (l0,(RP.A(R.Idx ia0),ia1)::l1)
       | _ -> err "emt_mov_ptn_to_ptn 0" ) in
   let (l1,l0) = lp i0 i1 in
   (*let s0 = RSet.ini () in
@@ -2973,7 +2976,7 @@ and mov_rl_ptn s0 i1 p0 =
           "\tbtr r12,"^(string_of_int i1)^"\n"^
           l0^":\n"^
           "\tmov rdi,0x"^(Printf.sprintf "%02x" ia)^"00_0000_0000_0001\n"^
-          "\tadd "^(emt_reg_x86 i1)^"rdi\n"
+          "\tadd "^(emt_reg_x86 i1)^",rdi\n"
         else err "mov_rl_ptn 0"
       | RP.R rs ->
         let e0 =
@@ -3621,7 +3624,7 @@ and emt_ir i1 gns ns iv p =
                     let e1 =
                       c_l^
                       c0^
-                      "\tmov "^(emt_reg_x86 im)^","^(string_of_int j)^
+                      "\tmov "^(emt_reg_x86 im)^","^(string_of_int j)^"\n"^
                       "\tbts r12,"^(string_of_int im)^"\n" in
                     e1
                   | Etr_V(f_i0,f_i1) ->
@@ -3762,36 +3765,34 @@ and emt_ir i1 gns ns iv p =
             "\tcall exec_out\n"^
             ep1^
             lb0^":\n" *)
-          | IR_Exp(Ast.ExpCst(Cst.S8 _),_,Rcd_Ptn.A _) -> err "emt_ir T0"
-          (*let bs = Bytes.of_string c in
-            let (ep,l) = push_reg s x86_reg_lst in
+          | IR_Exp(Ast.ExpCst(Cst.S8 c),RP.R [||],RP.A y) ->
+          let im = RSet.min_0 (rset_iv iv) in
+          let iy = RP.A(R.Idx im) in
+          let _ = mk_idx_iv iv iy (mk_idx_ptn (RP.A y)) in
+          let bs = Bytes.of_string c in
             let sl = Bytes.length bs in
-            let ir = idx_crt s r in
-            let c0 = cmt ("\t» "^(print_exp (Ast.Atm(Ast.Stg c)))^" |~ "^(emt_ptn (Rcd_Ptn.A ir))^rtl^(pnt_ptn (Rcd_Ptn.A r))) in
+          let c0 = cmt ("\t» "^(print_exp (Ast.ExpCst(Cst.S8 c)))^" _ ⊢ "^(R.print (RP.A(R.Idx im)))^rtl^(pnt_ptn (RP.A y))) in
             let lc = Util.fmt_of_string c in
             let (_,e_l) =
             List.fold_left
               (fun (i,e_l) si ->
                  let e_i =
-                   "\tmov rbx,"^si^"\n"^
-                   "\tmov QWORD [rdi+8*1+8*"^(string_of_int i)^"],rbx\n" in
+                   "\tmov rax,"^si^"\n"^
+                   "\tmov QWORD [rdi+8*1+8*"^(string_of_int i)^"],rax\n" in
                  (i+1,e_l^e_i))
               (0,"") lc in
 
             let e0 =
-            ep^
-            (*"\tmov rdi,"^(string_of_int ((sl+mx)/8))^"\n"^ *)
+              c0^
+              push_all^
             "\tmov rdi,"^(string_of_int sl)^"\n"^
             "\tcall mlc_s8\n"^
+            pop_all^
             "\tmov rdi,rax\n"^
-            "\tmov rsi,0\n"^
-            (*(lp 0)^ *) e_l^
-            "\tmov rbx,rdi\n"^
-            (pop_reg l)^
-            "\tmov "^(emt_reg_x86 ir)^",rbx\n"^
-            (* "\tbts r12,"^(string_of_int ir)^"\n" *)
-            "\tand r12,~"^(emt_0b ir)^"\n" in
-            c0^e0 *)
+            e_l^
+            "\tmov "^(emt_reg_x86 im)^",rdi\n"^
+            "\tbtr r12,"^(string_of_int im)^"\n" in
+            e0
           | IR_Exp(Ast.ExpCst(Cst.R64 x),RP.R[||],RP.A y) ->
             let im = RSet.min_0 (rset_iv iv) in
             let iy = RP.A(R.Idx im) in
@@ -3799,8 +3800,11 @@ and emt_ir i1 gns ns iv p =
             let c0 = cmt ("\t» "^(print_exp (ExpCst(Cst.R64 x)))^" _ ⊢ "^(emt_ptn iy)^rtl^(pnt_ptn (RP.A y))) in
             c_l^
             c0^
-            "\tmov rdi,0x"^(Int64.format "%x" x)^"\n"^
-            "\tmov "^(emt_reg_x86 im)^",rdi\n"^
+            ( if im<9 then
+                "\tmov rdi,0x"^(Int64.format "%x" x)^"\n"^
+                "\tmov "^(emt_reg_x86 im)^",rdi\n"
+              else
+                "\tmov "^(emt_reg_x86 im)^",0x"^(Int64.format "%x" x)^"\n" )^
             "\tbts r12,"^(string_of_int im)^"\n"
           (*let ir = idx_crt s r in
             let im = idx_min 0 s in
