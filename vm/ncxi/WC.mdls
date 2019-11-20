@@ -15,6 +15,9 @@
 	» 0xrFFF _ ⊢ x1 
 	» 0xrAfA _ ⊢ x2 
 	_add { x1 x2 } ⊢ { x1 x2 } 
-	_emt_q { x1 x2 } ⊢ { x1 x2 } 
+	_emt_q { x1 x2 } ⊢ { x1 x2 }
+	_mov { x0 x1 } ⊢ { x0 x1 }
+	_mov_x x0 ⊢ { x0 x3 }  
+	_emt_q { x0 x1 x3 } ⊢ { x0 x1 x3 } 
 	∎ {}
 §§.
