@@ -10,4 +10,11 @@
 	_emt_q { x0 x1 } ⊢ p0
 	;_emt_q r2 ⊢ _ 
 	∎ {}
+§ C1 « 
+	» 0xr89873 _ ⊢ x0 
+	» 0xrFFF _ ⊢ x1 
+	» 0xrAfA _ ⊢ x2 
+	_add { x1 x2 } ⊢ { x1 x2 } 
+	_emt_q { x1 x2 } ⊢ { x1 x2 } 
+	∎ {}
 §§.

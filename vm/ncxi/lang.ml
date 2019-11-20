@@ -2035,12 +2035,7 @@ let rec emt_m gns (ns:ns_v ref) ld el =
               "\t\tdq 0x0001_0001_00_82_ffff\n"^
               "\t\tdq 1\n" in
             let sx =
-              "\tcall NS_E_"^(Sgn.print ep)^"\n"^
-              "\tmov QWORD [CST_DYN_"^(Sgn.print ep)^"+8*1],rax\n"^
-              "\tmov rbx,0\n"^
-              "\tsetc bl\n"^
-              "\tnot rbx\n"^
-              "\tand QWORD [CST_DYN_"^(Sgn.print ep)^"],rbx\n" in
+              "\tcall NS_E_"^(Sgn.print ep)^"\n" in
             (se,e_p,sx,pp)
           | Etr_Clq q ->
             let l_0 =
@@ -2657,6 +2652,11 @@ and init_prm () =
   !ns.ns_p <- ("_some",Ast.Axm._some)::!ns.ns_p;
   gns.ns_e <- (Ast.Axm._some,ref(Ctr 0))::gns.ns_e;
   gns.ns <- (Ast.Axm._some,v)::gns.ns;
+
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64])))) in
+  !ns.ns_p <- ("_add",Ast.Axm._add)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._add,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._add,ref(E_K_WC))::gns.ns_e;
 
   (se_emt_q^se_chr^se_dgt^se_u_al^se_l_al^se_emt^se_pp_v,em_emt_q^em_chr^em_dgt^em_l_al^em_u_al^em_emt^em_pp_v,ns,gns)
 and emt_exe m =
@@ -3610,8 +3610,7 @@ and emt_ir i1 gns ns iv p =
                       c_l^
                       c0^
                       "\tmov "^(emt_reg_x86 im)^","^(string_of_int j)^
-                      "\tbts r12,"^(string_of_int im)^"\n"^
-                      "\tret\n" in
+                      "\tbts r12,"^(string_of_int im)^"\n" in
                     e1
                   | Etr_V(f_i0,f_i1) ->
                     let y0_p = inst_ptn gns 0 y in
@@ -3638,6 +3637,37 @@ and emt_ir i1 gns ns iv p =
                       e_1
                     in
                     e1
+                  | E_K_WC ->
+                    ( match ep with
+                      | ep when ep=Ast.Axm._add ->
+                        let ix = csm_ptn_iv (mk_idx_ptn x) iv in
+                        ( match ix with
+                          | RP.R[|RP.A(R.Idx x0);RP.A(R.Idx x1)|] ->
+                            let _ = mk_idx_iv iv ix (mk_idx_ptn y) in
+                            if x1<9 then
+                              c_l^
+                              "\tadd "^(emt_reg_x86 x0)^","^(emt_reg_x86 x1)^"\n"
+                            else
+                              c_l^
+                              "\tmov rdi,"^(emt_reg_x86 x1)^"\n"^
+                              "\tadd "^(emt_reg_x86 x0)^",rdi\n"
+                          | RP.A(R.Idx xp) ->
+                            let im = RSet.min_0 (rset_iv iv) in
+                            let iy = RP.R [|RP.A(R.Idx xp);RP.A(R.Idx im)|] in
+                            let _ = mk_idx_iv iv iy (mk_idx_ptn y) in
+                            c_l^
+                            "\tmov rax,"^(emt_reg_x86 xp)^"\n"^
+                            "\tmov QWORD [rax],rbx\n"^
+                            "\tmov rbx,rax\n"^
+                            "\tmov rax,QWORD [rbx+8*1]\n"^
+                            "\tmov rdi,QWORD [rbx+8*2]\n"^
+                            "\tadd rdi,rax\n"^
+                            "\tmov "^(emt_reg_x86 xp)^",rdi\n"^
+                            "\tmov "^(emt_reg_x86 im)^",rax\n"^
+                            "\tbts r12,"^(string_of_int xp)^"\n"^
+                            "\tbts r12,"^(string_of_int im)^"\n"
+                          | _ -> err "emt_ir _add 0" )
+                      | _ -> err "emt_ir _prm 0" )
                   | _ -> err "met_ir etr 3"
                 )
             )
