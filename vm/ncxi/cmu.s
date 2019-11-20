@@ -55,6 +55,7 @@ section .data
   fmt64: db "0x%llx",0
   fmtr64: db "0xr","0x%llx",0
   str_r64: db "0x%llx FEFEF",0
+  fmt_emt_q: db "_emt_q:%s",10,0
   fmt64_spc: db "0x%llx ",0
   fmt32: db "%d",0
   fmt_nl: db 10,0
