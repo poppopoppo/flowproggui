@@ -3,12 +3,12 @@ main:
 	mov r12,0
 	not r12
 	call SFLS_init
-	call NS_E_110
-	mov QWORD [CST_DYN_110+8*1],rax
+	call NS_E_76
+	mov QWORD [CST_DYN_76+8*1],rax
 	mov rbx,0
 	setc bl
 	not rbx
-	and QWORD [CST_DYN_110],rbx
+	and QWORD [CST_DYN_76],rbx
 	call exec_out
 	jmp _end
 NS_E_14:
@@ -45,14 +45,14 @@ NS_E_RDI_14:
 	pop r15
 	pop r14
 	ret
-NS_E_102:
-NS_E_RDI_102:
-NS_E_102_ETR_TBL:
+NS_E_69:
+NS_E_RDI_69:
+NS_E_69_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,0
-	jz NS_E_102_LB_0
+	jz NS_E_69_LB_0
 	bt r11,7
-	jc LB_103
+	jc LB_70
 	push rdi
 	push rsi
 	push rdx
@@ -70,10 +70,10 @@ NS_E_102_ETR_TBL:
 	add rsi,1
 	mov rax,1
 	ret
-LB_103:
+LB_70:
 	add rsi,1
 	bt r11,6
-	jc LB_104
+	jc LB_71
 	push rdi
 	push rsi
 	push rdx
@@ -93,10 +93,10 @@ LB_103:
 	add rsi,1
 	mov rax,1
 	ret
-LB_104:
+LB_71:
 	add rsi,1
 	bt r11,5
-	jc LB_105
+	jc LB_72
 	push rdi
 	push rsi
 	push rdx
@@ -118,10 +118,10 @@ LB_104:
 	add rsi,1
 	mov rax,1
 	ret
-LB_105:
+LB_72:
 	add rsi,1
 	bt r11,5
-	jc LB_105
+	jc LB_72
 	push rdi
 	push rsi
 	push rdx
@@ -148,49 +148,49 @@ LB_105:
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_102_LB_0:
+NS_E_69_LB_0:
 	mov rax,0
 	ret
-NS_E_106:
-NS_E_RDI_106:
-NS_E_106_ETR_TBL:
+NS_E_73:
+NS_E_RDI_73:
+NS_E_73_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,48
-	jb NS_E_106_LB_0
+	jb NS_E_73_LB_0
 	cmp r11,57
-	ja NS_E_106_LB_0
+	ja NS_E_73_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_106_LB_0:
+NS_E_73_LB_0:
 	mov rax,0
 	ret
-NS_E_108:
-NS_E_RDI_108:
-NS_E_108_ETR_TBL:
+NS_E_75:
+NS_E_RDI_75:
+NS_E_75_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,97
-	jb NS_E_108_LB_0
+	jb NS_E_75_LB_0
 	cmp r11,122
-	ja NS_E_108_LB_0
+	ja NS_E_75_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_108_LB_0:
+NS_E_75_LB_0:
 	mov rax,0
 	ret
-NS_E_107:
-NS_E_RDI_107:
-NS_E_107_ETR_TBL:
+NS_E_74:
+NS_E_RDI_74:
+NS_E_74_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,65
-	jb NS_E_107_LB_0
+	jb NS_E_74_LB_0
 	cmp r11,90
-	ja NS_E_107_LB_0
+	ja NS_E_74_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_107_LB_0:
+NS_E_74_LB_0:
 	mov rax,0
 	ret
 NS_E_17:
@@ -220,8 +220,8 @@ NS_E_RDI_21:
 	or QWORD [rax],rsi
 	clc
 	ret
-NS_E_110:
-NS_E_RDI_110:
+NS_E_76:
+NS_E_RDI_76:
 	sub rsp,8
 	mov QWORD [rsp],r12
 	mov rax,rbx
@@ -245,21 +245,21 @@ NS_E_RDI_110:
 	mov rdi,r14
 	mov QWORD [rdi+8*1+8*0],r15
 	bt r12,2
-	jc LB_113
+	jc LB_79
 	btr QWORD [rdi],0
-	jmp LB_114
-LB_113:
+	jmp LB_80
+LB_79:
 	bts QWORD [rdi],0
-LB_114:
+LB_80:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*0],r14
 	bt r12,1
-	jc LB_111
+	jc LB_77
 	btr QWORD [rdi],0
-	jmp LB_112
-LB_111:
+	jmp LB_78
+LB_77:
 	bts QWORD [rdi],0
-LB_112:
+LB_78:
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
 	mov rdi,0x0001_0000_0000_ffff
@@ -269,12 +269,12 @@ LB_112:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*1],r14
 	bt r12,1
-	jc LB_115
+	jc LB_81
 	btr QWORD [rdi],1
-	jmp LB_116
-LB_115:
+	jmp LB_82
+LB_81:
 	bts QWORD [rdi],1
-LB_116:
+LB_82:
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
 	mov rdi,0x0001_0001_0000_ffff
@@ -290,40 +290,40 @@ LB_116:
 	mov rdi,r14
 	mov QWORD [rdi+8*1+8*0],r15
 	bt r12,2
-	jc LB_119
+	jc LB_85
 	btr QWORD [rdi],0
-	jmp LB_120
-LB_119:
+	jmp LB_86
+LB_85:
 	bts QWORD [rdi],0
-LB_120:
+LB_86:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*2],r14
 	bt r12,1
-	jc LB_117
+	jc LB_83
 	btr QWORD [rdi],2
-	jmp LB_118
-LB_117:
+	jmp LB_84
+LB_83:
 	bts QWORD [rdi],2
-LB_118:
+LB_84:
 	call NS_E_14
 	mov rdi,r13
 	mov r14,QWORD [rdi+8*1+8*0]
 	bt QWORD [rdi],0
-	jc LB_123
+	jc LB_89
 	btr r12,1
-	jmp LB_124
-LB_123:
+	jmp LB_90
+LB_89:
 	bts r12,1
-LB_124:
+LB_90:
 	mov rdi,r14
 	mov r15,QWORD [rdi+8*1+8*0]
 	bt QWORD [rdi],0
-	jc LB_121
+	jc LB_87
 	btr r12,2
-	jmp LB_122
-LB_121:
+	jmp LB_88
+LB_87:
 	bts r12,2
-LB_122:
+LB_88:
 	mov rdi,r15
 	mov QWORD [rdi],rbx
 	mov rbx,rdi
@@ -333,33 +333,33 @@ LB_122:
 	mov rdi,r13
 	mov r14,QWORD [rdi+8*1+8*1]
 	bt QWORD [rdi],1
-	jc LB_125
+	jc LB_91
 	btr r12,1
-	jmp LB_126
-LB_125:
+	jmp LB_92
+LB_91:
 	bts r12,1
-LB_126:
+LB_92:
 	mov rdi,r14
 	mov QWORD [rdi],rbx
 	mov rbx,rdi
 	mov rdi,r13
 	mov r14,QWORD [rdi+8*1+8*2]
 	bt QWORD [rdi],2
-	jc LB_129
+	jc LB_95
 	btr r12,1
-	jmp LB_130
-LB_129:
+	jmp LB_96
+LB_95:
 	bts r12,1
-LB_130:
+LB_96:
 	mov rdi,r14
 	mov r15,QWORD [rdi+8*1+8*0]
 	bt QWORD [rdi],0
-	jc LB_127
+	jc LB_93
 	btr r12,2
-	jmp LB_128
-LB_127:
+	jmp LB_94
+LB_93:
 	bts r12,2
-LB_128:
+LB_94:
 	mov rdi,r15
 	mov QWORD [rdi],rbx
 	mov rbx,rdi
@@ -374,18 +374,18 @@ LB_128:
 ; 	∎ {  }
 	ret
 section .data
-	NS_E_DYN_102:
+	NS_E_DYN_69:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_102
-	NS_E_DYN_106:
+		dq NS_E_69
+	NS_E_DYN_73:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_106
-	NS_E_DYN_107:
+		dq NS_E_73
+	NS_E_DYN_74:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_107
-	NS_E_DYN_108:
+		dq NS_E_74
+	NS_E_DYN_75:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_108
-	CST_DYN_110:
+		dq NS_E_75
+	CST_DYN_76:
 		dq 0x0001_0001_00_82_ffff
 		dq 1

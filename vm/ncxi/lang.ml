@@ -1271,6 +1271,8 @@ and crt_rv r rv =
       Hashtbl.add rv n r0;
       r := r0;
       r
+    | R_Ax(R_WC _) ->
+      r
     | _ -> err "crt_rv 0" )
 and crt_ptn_rv r rv = Rcd_Ptn.map (fun r0 -> crt_rv r0 rv) r
 and crt_mtc_ptn_rv (r,es) rv  =
@@ -2936,12 +2938,12 @@ and mov_rl_ptn s0 i1 p0 =
           e0^
           "\tbt "^(string_of_int i1)^"\n"^
           "\tjnc "^l0^"\n"^
-          "\tmov rdi,rbx\n"^
+          "\tmov rax,rbx\n"^
           "\tmov rbx,QWORD [rbx]\n"^
-          "\tmov rax,0x0001_0001_0000_0001\n"^
-          "\tmov QWORD [rdi],rax\n"^
-          "\tmov QWORD [rdi+8*1],"^(emt_reg_x86 i1)^"\n"^
-          "\tmov "^(emt_reg_x86 i1)^",rdi\n"^
+          "\tmov rdi,0x0001_0001_0000_0001\n"^
+          "\tmov QWORD [rax],rdi\n"^
+          "\tmov QWORD [rax+8*1],"^(emt_reg_x86 i1)^"\n"^
+          "\tmov "^(emt_reg_x86 i1)^",rax\n"^
           "\tbtr "^(string_of_int i1)^"\n"^
           l0^":\n"^
           "\tmov rdi,0x"^(Printf.sprintf "%02x" ia)^"00_0000_0000_0001\n"^
