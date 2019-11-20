@@ -1,11 +1,13 @@
 §§ MX 
 § C « 
 	» 0xrFF _ ⊢ x0
+	» 0xrAA _ ⊢ x1
 	_emt_q {{{} {}} {} {{}}} ⊢ { r0 r1 r2 }
 	_emt_q r0 ⊢ r0 
 	_emt_q r1 ⊢ r1
 	_emt_q r2 ⊢ _ 
 	_emt_q x0 ⊢ x0
+	_emt_q { x0 x1 } ⊢ p0
 	;_emt_q r2 ⊢ _ 
 	∎ {}
 §§.

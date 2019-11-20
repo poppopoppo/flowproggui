@@ -2819,6 +2819,7 @@ and dlt_ptn s0 i0 =
            (dlt_ptn s0 ri))
         "" rs )
 and emt_mov_ptn_to_ptn (s0:RSet.t) (i0:R.t) (i1:R.t) =
+  let c_l = "; _emt_mov_ptn_to_ptn "^(R.print i0)^" ⊢ "^(R.print i1)^"\n" in
   let rec lp i0 i1 =
     ( match i0,i1 with
       | RP.A(R.Idx _),RP.A(R.Idx i1) -> ([],[(i0,i1)])
@@ -2858,7 +2859,7 @@ and emt_mov_ptn_to_ptn (s0:RSet.t) (i0:R.t) (i1:R.t) =
           let lt = (i1,i2)::lt in
           let e1 =
             em^
-            (mov_rl_ptn s0 i2 (subst_ptn lt p0)) in
+            (mov_rl_ptn s0 i1 (subst_ptn lt p0)) in
           (lt,[],e0^e1)
         else
           let e1 =
@@ -2926,7 +2927,7 @@ and emt_mov_ptn_to_ptn (s0:RSet.t) (i0:R.t) (i1:R.t) =
       | _ -> err "emt_mov_ptn_to_ptn 1" ) in
   let (lt,e_rl) = lp_0 [] l0 "" in
   let (_,e_unrl) = lp_1 lt l1 "" in
-  e_rl^e_unrl
+  c_l^e_rl^e_unrl
 and subst (lt:R.subst) (i0:int) =
   ( try List.assoc i0 lt with _ -> i0 )
 and subst_ptn lt (p0:R.r_atm RP.t) = RP.map (subst_ptn_atm lt) p0
