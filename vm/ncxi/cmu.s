@@ -188,6 +188,9 @@ dlt_opq:
   pop r10
   pop r9
   pop r8
+  pop rcx
+  pop rdx
+  pop rsi 
   ret
 
 dec_r:
