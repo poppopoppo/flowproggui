@@ -60,6 +60,8 @@ section .data
   fmt32: db "%d",0
   fmt_nl: db 10,0
   fmt_ref: db "(%d)*{| ",0
+  vct_l: db "|{",0
+  vct_r: db "}|",0
 ;  fmt: db "%d",10,0
   blk_l: db "{| ",0
   blk_r: db "|} ",0
