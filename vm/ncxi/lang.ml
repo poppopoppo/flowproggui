@@ -62,6 +62,18 @@ module Types = struct
     | WC of 'k | V of 'k * level | Q of 'k * level | Ln of 'y
     | N of name | N_Ln of name * 'y
   and v = (t, unit) v_t
+  and k =
+    | K1 of {
+        hd : Sgn.t;
+        mutable ps : int;
+        mutable tl : k array;
+      }
+    | Q1 of Sgn.t
+  and k_e =
+    | Ax1 of k
+    | App1 of k_e * k_e
+    | Abs1 of Sgn.t * k_e
+    | A1 of Sgn.t
   and t =
     | Abs of v ref * t
     | Var of v ref | App of t * t
@@ -2595,6 +2607,7 @@ and init_prm () =
   gns.ns_e <- (Ast.Axm._emt_q,ref(Etr_V(RP.A(R.Idx 0),RP.A(R.Idx 0))))::gns.ns_e;
   let se_emt_q = "" in
   let em_emt_q =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._emt_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._emt_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._emt_q)^":\n"^
     push_all^
@@ -2654,6 +2667,18 @@ and init_prm () =
   !ns.ns_p <- ("_some",Ast.Axm._some)::!ns.ns_p;
   gns.ns_e <- (Ast.Axm._some,ref(Ctr 0))::gns.ns_e;
   gns.ns <- (Ast.Axm._some,v)::gns.ns;
+
+  !ns.ns_t <- ("_lst",ref(Ln(Axm Axm.lst)))::!ns.ns_t;
+  let q0 = newvar_q (-1) in
+  let v = ref(Ln(Imp(unt (),App(Axm Axm.lst,Var q0)))) in
+  !ns.ns_p <- ("_nil",Ast.Axm._nil)::!ns.ns_p;
+  gns.ns_e <- (Ast.Axm._nil,ref(Ctr 1))::gns.ns_e;
+  gns.ns <- (Ast.Axm._nil,v)::gns.ns;
+  let q0 = newvar_q (-1) in
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Var q0;App(Axm Axm.lst,Var q0)]),App(Axm Axm.lst,Var q0)))) in
+  !ns.ns_p <- ("_cns",Ast.Axm._cns)::!ns.ns_p;
+  gns.ns_e <- (Ast.Axm._cns,ref(Ctr 0))::gns.ns_e;
+  gns.ns <- (Ast.Axm._cns,v)::gns.ns;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64])))) in
   !ns.ns_p <- ("_add",Ast.Axm._add)::!ns.ns_p;
