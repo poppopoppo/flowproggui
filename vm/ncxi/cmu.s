@@ -152,7 +152,6 @@ dlt_blk:
 dlt_lp:
   cmp rdx,rax
   je dlt_lp_end
-  add rdx,1
   rcr rsi,1
   jc dlt_lp_nxt
   push rdi
@@ -190,7 +189,7 @@ dlt_opq:
   pop r8
   pop rcx
   pop rdx
-  pop rsi 
+  pop rsi
   ret
 
 dec_r:

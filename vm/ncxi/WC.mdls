@@ -31,9 +31,10 @@
 	∎ {}
 § C2 « 
 	_none {} ⊢ d0
+	_some d0 ⊢ d0
 	_emt_q d0 ⊢ d0
-	» "Hoo Baa" _ ⊢ s0 
-	_emt_q s0 ⊢ s0
+	;» "Hoo Baa" _ ⊢ s0 
+	;_emt_q s0 ⊢ s0
 	∎ {} 
 	
 §§.
