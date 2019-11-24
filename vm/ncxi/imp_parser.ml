@@ -2452,7 +2452,7 @@ and _menhir_goto_ir_ptn_eq : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_ir
         let _v : 'tv_ir_ptn_eq = 
 # 317 "imp_parser.mly"
                                          (
-    (ref(R_N _2),Eq_Agl_N(ref(Ast.Stt_Name _4),_6))::_7
+    (ref(R_N _2),ref(Eq_Agl_N(ref(Ast.Stt_Name _4),_6)))::_7
     )
 # 2458 "imp_parser.ml"
          in
@@ -2480,7 +2480,7 @@ and _menhir_goto_ir_ptn_eq : _menhir_env -> 'ttv_tail -> _menhir_state -> 'tv_ir
         let _v : 'tv_ir_ptn_eq = 
 # 320 "imp_parser.mly"
                                     (
-    (ref(R_N _2),P_Cst _4)::_5 )
+    (ref(R_N _2),ref(P_Cst _4))::_5 )
 # 2485 "imp_parser.ml"
          in
         _menhir_goto_ir_ptn_eq _menhir_env _menhir_stack _menhir_s _v) : 'freshtv906)) : 'freshtv908)
@@ -5621,7 +5621,7 @@ and _menhir_run96 : _menhir_env -> 'ttv_tail -> _menhir_state -> (
     )) = _v in
     ((let _v : 'tv_ir_ptn_atm = 
 # 332 "imp_parser.mly"
-        ( ref(R_Ax(R_WC (sgn ()))) )
+        ( ref(R_N(_1)) )
 # 5626 "imp_parser.ml"
      in
     _menhir_goto_ir_ptn_atm _menhir_env _menhir_stack _menhir_s _v) : 'freshtv506)

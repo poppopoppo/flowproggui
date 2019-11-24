@@ -27,7 +27,7 @@
 	f0 x3 ⊢ x3 
 	_emt_q { x0 x1 x3 } ⊢ { x0 x1 x3 } 
 	» "Hello World !!" _ ⊢ s0
-	_emt_q s0 ⊢ s0 
+	_emt_q { s0 x0 { x1 }} ⊢ _ 
 	∎ {}
 § C2 « 
 	_none {} ⊢ d0
@@ -38,5 +38,11 @@
 	;» "Hoo Baa" _ ⊢ s0 
 	;_emt_q s0 ⊢ s0
 	∎ {} 
-	
+§ C3 « 
+	» 0xrAA _ ⊢ x0 
+	? x0 
+	∐\ x0' ,x0'=0xr0 ⊢
+		∎ {} 
+	∐.\ x0' ⊢ 
+		∎ {}
 §§.
