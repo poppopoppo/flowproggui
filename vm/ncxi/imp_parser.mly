@@ -315,10 +315,10 @@ ir_ptn_lst:
 ir_ptn_eq:
   | { [] }
   | CMM VAL EQ name APP ir_ptn ir_ptn_eq {
-    (ref(R_N $2),Eq_Agl_N(ref(Ast.Stt_Name $4),$6))::$7
+    (ref(R_N $2),ref(Eq_Agl_N(ref(Ast.Stt_Name $4),$6)))::$7
     }
   | CMM VAL EQ ir_ptn_cst ir_ptn_eq {
-    (ref(R_N $2),P_Cst $4)::$5 }
+    (ref(R_N $2),ref(P_Cst $4))::$5 }
   ;
 ir_ptn_cst:
   | STG { P_Stg $1 }
@@ -329,7 +329,7 @@ ir_ptn_cst:
   ;
 ir_ptn_atm:
   | WC { ref(R_Ax(R_WC (sgn ()))) }
-  | VAL { ref(R_Ax(R_WC (sgn ()))) }
+  | VAL { ref(R_N($1)) }
   ;
 lst_list_ptn:
   | { P_Agl_N("nil",Rcd_Ptn.R [||]) }

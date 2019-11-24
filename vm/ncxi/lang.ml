@@ -327,12 +327,25 @@ module Ast = struct
   and ptn = r_n_v RP.t
   and pt = ir_code ref
   and etr = ptn * pt
-  and mtc_ptn = ptn * (r_n_v * eq) list
+  and mtc_ptn = ptn * (r_n_v * eq ref) list
   and ptn_eq = ptn
   and eq =
-    | Eq_Agl of int * ptn_eq
-    | Eq_Agl_N of axm0 * ptn_eq
+    | Eq_Agl of Sgn.t * int * int * ptn
+    | Eq_Agl_N of axm0 * ptn
     | P_Cst of cst
+  and mtc_v_k = (r_a * mtc_v_k_atm) RP.t
+  and mtc_v_k_atm =
+    | Mtc_R of mtc_v_k
+    | Mtc_R_Top
+    | Mtc_R_Cst of cst
+    | Mtc_R_Agl of int * int * mtc_v_k
+
+  and mtc_v_set = mtc_v_set_ptn list
+  and mtc_v_set_ptn = mtc_v_set_atm RP.t
+  and mtc_v_set_atm =
+    | Mtc_Agl of int * int * mtc_v_set_ptn
+    | Mtc_Cst
+    | Mtc_Top
   and cst =
     | P_N of axm0
     | P_Z of int
@@ -386,7 +399,7 @@ module Ast = struct
   type e_k = Sgn.t * e_k_v
   and e_k_v =
     | Etr_V of R.t * R.t
-    | Ctr of int
+    | Ctr of int * int
     | Prs
     | Cst_Stt of Cst.t
     | Cst_Dyn
@@ -472,18 +485,19 @@ let print_v v =
     ( try let (n,_) = List.find (fun (_,w) -> v==w) !Types.rm in n
       with _ -> "_r"^(string_of_int (Types.print_v Types.v_vct v)))
 *)
-  let print_test e =
+  let rec print_test e =
     ( match e with
-      | Eq_Agl(i,r) -> "°"^(string_of_int i)^"◂"^(pnt_ptn r)
+      | Eq_Agl(p,i,i_n,r) -> "_c"^(Sgn.print p)^"(°"^(string_of_int i)^"<"^(string_of_int i_n)^")◂"^(pnt_ptn r)
       | Eq_Agl_N(n,r) -> (pnt_stt_name !n)^"◂"^(pnt_ptn r)
-      | P_Cst c ->
-        ( match c with
-          | P_N n -> pnt_stt_name !n
-          | P_Stg s -> "\""^s^"\""
-          | P_Z z -> (string_of_int z)
-          | P_R64 x -> "0xr"^(Int64.format "%x" x)
-          | P_R2 false -> "0x2r0"
-          | P_R2 true -> "0x2r1" ))
+      | P_Cst c -> pnt_cst c )
+  and pnt_cst c =
+    ( match c with
+      | P_N n -> pnt_stt_name !n
+      | P_Stg s -> "\""^s^"\""
+      | P_Z z -> (string_of_int z)
+      | P_R64 x -> "0xr"^(Int64.format "%x" x)
+      | P_R2 false -> "0x2r0"
+      | P_R2 true -> "0x2r1" )
   let print_mtc p =
     let (r,es) = p in
     let s0 = pnt_ptn r in
@@ -491,10 +505,233 @@ let print_v v =
       List.fold_left
         ( fun s1 (v,e) ->
             let sv = s1^","^(pnt_r v)^"=" in
-            let st = print_test e in
+            let st = print_test !e in
             sv^st )
         "" es in
     s0^" ,"^s1
+  let rec print_mtc_v_k p =
+    RP.print
+      ( fun (n,a) ->
+         ( match a with
+           | Mtc_R r -> (pnt_r_a n)^"(="^(print_mtc_v_k r)^")"
+           | Mtc_R_Top -> (pnt_r_a n)
+           | Mtc_R_Cst c -> (pnt_r_a n)^"(="^(pnt_cst c)^")"
+           | Mtc_R_Agl(i0,_,r) -> (pnt_r_a n)^"(=°"^(string_of_int i0)^"◂"^(print_mtc_v_k r)^")"
+         ))
+      p
+  let rec print_mtc_set p =
+    RP.print
+      ( fun a ->
+         match a with
+         | Mtc_Cst -> "_*"
+         | Mtc_Top -> "_"
+         | Mtc_Agl(i0,_,r) -> "°"^(string_of_int i0)^"◂"^(print_mtc_set r) )
+      p
+
+  let mk_idx r =
+    ( match !r with
+      | R_Ax p -> p
+      | _ -> err "mk_idx 0" )
+  let rec mk_idx_ptn r =
+    ( match r with
+      | RP.A { contents=R_Ax p } -> RP.A p
+      | RP.R rs -> RP.R (Array.map mk_idx_ptn rs)
+      | _ -> err "mk_idx_ptn 0" )
+  let mtc_is_empty ms =
+    ( match ms with
+      | [] -> true
+      | _ -> false )
+  let rec mk_mtc_v_k_ptn p0 p1 =
+    ( match p0,p1 with
+      | _,RP.A a ->
+        ( match a with
+          | R_A p
+          | R_WC p -> ([(p0,a)],RP.A(p,Mtc_R_Top)) )
+      | RP.A a0,RP.R rs1 ->
+        ( match a0 with
+          | R_A p -> ([],RP.A(p,Mtc_R(RP.R(Array.map mk_mtc_v_k rs1))))
+          | R_WC _ -> err "mk_mtc_v_k 0" )
+      | RP.R rs0,RP.R rs1 ->
+        let (_,l0,rsp) =
+          Array.fold_left
+            ( fun (i,l0,rsp) ri0 ->
+                let ri1 = rs1.(i) in
+                let (l1,ri_k) = mk_mtc_v_k_ptn ri0 ri1 in
+                (i+1,l0@l1,rsp |+| [|ri_k|]))
+            (0,[],[||]) rs0 in
+        (l0,RP.R rsp) )
+  and mk_mtc_v_k p0 =
+    ( match p0 with
+      | RP.R rs -> RP.R (Array.map mk_mtc_v_k rs)
+      | RP.A p -> RP.A(p,Mtc_R_Top) )
+  and mk_mtc_v_k_eq p0 v0 e0 =
+    Util.pnt true ("enter mk_mtc_v_k_eq:"^(print_mtc_v_k p0)^","^(pnt_r_a v0)^","^(print_test e0)^"\n");
+    ( match p0 with
+      | RP.R rs -> RP.R(Array.map (fun r -> mk_mtc_v_k_eq r v0 e0) rs)
+      | RP.A(q0,ra) ->
+        if q0=v0 then
+          let ra0 =
+            ( match ra,e0 with
+              | Mtc_R_Top,_ ->
+                ( match e0 with
+                  | Eq_Agl(_,i0,i_n,ra) ->
+                    Mtc_R_Agl(i0,i_n,mk_mtc_v_k(mk_idx_ptn ra))
+                  | P_Cst c0 -> Mtc_R_Cst c0
+                  | _ -> err "mk_mtc_v_k_eq 3" )
+              | Mtc_R_Cst c0,P_Cst c1 ->
+                if c0=c1 then Mtc_R_Cst c0
+                else err "mk_mtc_v_k_eq 4"
+              | Mtc_R_Agl(i0,i_n,ra0),Eq_Agl(_,i1,i_n1,ra1) ->
+                if i0=i1&&i_n=i_n1 then
+                  Mtc_R_Agl(i0,i_n,mk_mtc_v_k_eq_and ra0 ra1)
+                else err "mk_mtc_v_k_eq 5"
+              | _ -> err "mk_mtc_v_k_eq 6"
+            ) in
+          RP.A(q0,ra0)
+        else
+          ( match ra with
+            | Mtc_R r0 -> RP.A(q0,Mtc_R(mk_mtc_v_k_eq r0 v0 e0))
+            | Mtc_R_Agl(i0,i_n,r0) -> RP.A(q0,Mtc_R_Agl(i0,i_n,mk_mtc_v_k_eq r0 v0 e0))
+            | _ -> p0 ) )
+  and mk_mtc_v_k_eq_and ra e0 =
+    Util.pnt true ("enter mk_mtc_v_k_eq_and:"^(print_mtc_v_k ra)^","^(pnt_ptn e0)^"\n");
+    ( match ra,e0 with
+      | RP.R rs0,RP.R rs1 ->
+        let (_,a) =
+          Array.fold_left
+            ( fun (i,a) ri0 ->
+                let ri1 = rs1.(i) in
+                let p1 = mk_mtc_v_k_eq_and ri0 ri1 in
+                (i+1,a |+| [|p1|]) )
+            (0,[||]) rs0 in
+        RP.R a
+      | RP.A(q0,Mtc_R r),_ -> RP.A(q0,Mtc_R(mk_mtc_v_k_eq_and r e0))
+      | RP.A(q0,Mtc_R_Top),_ -> RP.A(q0,Mtc_R(mk_mtc_v_k(mk_idx_ptn e0)))
+      | RP.A(q0,Mtc_R_Cst c),RP.A a -> RP.A(q0,Mtc_R(RP.A(mk_idx a,Mtc_R_Cst c)))
+      | RP.A(q0,Mtc_R_Agl(i0,i_n,ra)),RP.A a -> RP.A(q0,Mtc_R(RP.A(mk_idx a,Mtc_R_Agl(i0,i_n,ra))))
+      | _ -> err "mk_mtc_v_k_eq_and 2"
+    )
+  let rec mtc_and ms0 ms1 =
+    ( match ms0 with
+      | ms0_hd::ms0_tl ->
+        let l0 = mtc_and_ptn_lst ms0_hd ms1 in
+        let l1 = mtc_and ms0_tl ms1 in
+        l0@l1
+      | [] -> [] )
+  and mtc_and_ptn_lst p0 ms1 =
+    ( match ms1 with
+      | ms1_hd::ms1_tl ->
+        let l1 = mtc_and_ptn_lst p0 ms1_tl in
+        ( match mtc_and_ptn_ptn p0 ms1_hd with
+          | Some a0 -> a0::l1
+          | None -> l1 )
+      | [] -> [] )
+  and mtc_and_ptn_ptn p0 p1 =
+    ( match p0,p1 with
+      | RP.A(Mtc_Top),p1
+      | p1,RP.A(Mtc_Top) -> Some p1
+      | RP.A(Mtc_Agl(_,_,_)),RP.R _
+      | RP.R _,RP.A(Mtc_Agl(_,_,_)) -> None
+      | RP.A(Mtc_Agl(ia0,ian0,ra0)),RP.A(Mtc_Agl(ia1,ian1,ra1)) ->
+        if ia0=ia1&&ian0=ian1 then
+          ( match mtc_and_ptn_ptn ra0 ra1 with
+            | Some a0 ->  Some(RP.A(Mtc_Agl(ia0,ian1,a0)))
+            | None -> None )
+        else None
+      | RP.R rs0,RP.R rs1 ->
+        let (_,a) =
+          Array.fold_left
+            ( fun (i,a) ri0 ->
+                ( match a with
+                  | Some a0 ->
+                    let ri1 = rs1.(i) in
+                    ( match mtc_and_ptn_ptn ri0 ri1 with
+                      | Some p1 ->
+                        (i+1,Some(a0 |+| [|p1|]))
+                      | None -> (i+1,None) )
+                  | None -> (i+1,None) ))
+            (0,Some [||]) rs0 in
+        ( match a with
+          | Some a0 -> Some (RP.R a0)
+          | None -> None )
+      | _ -> err "mtc_and_ptn_ptn 1"     )
+  let rec mk_mtc_set p =
+    ( match p with
+      | RP.A(_,Mtc_R_Top) -> RP.A Mtc_Top
+      | RP.A(_,Mtc_R_Cst _) -> RP.A Mtc_Cst
+      | RP.A(_,Mtc_R r) -> mk_mtc_set r
+      | RP.A(_,Mtc_R_Agl(i0,i_n,r)) -> RP.A(Mtc_Agl(i0,i_n,mk_mtc_set r))
+      | RP.R rs -> RP.R(Array.map mk_mtc_set rs)
+    )
+  let rec mtc_sub_ms ms0 ms1 =
+    List.fold_left
+      ( fun ms2 p1 -> mtc_sub_ms_ptn ms2 p1)
+      ms0 ms1
+  and mtc_sub_ms_ptn ms0 p1 =
+    List.fold_left
+      (fun ms2 p0 -> ms2@(mtc_sub_ptn_ptn p0 p1))
+      [] ms0
+
+  and mtc_sub ms0 ms1 =
+    ( match ms0,ms1 with
+      | [],_ -> []
+      | ms0_hd::ms0_tl,_ ->
+        let l0 = mtc_sub_ptn_lst ms0_hd ms1 in
+        let l1 = mtc_sub ms0_tl ms1 in
+        l0@l1 )
+  and mtc_sub_ptn_lst p0 ms1 =
+    ( match ms1 with
+      | [] -> [p0]
+      | ms1_hd::ms1_tl ->
+        let l0 = mtc_sub_ptn_ptn p0 ms1_hd in
+        let l1 = mtc_sub l0 ms1_tl in
+        l1
+    )
+  and mtc_sub_ptn_ptn p0 p1 =
+    let c0 = (print_mtc_set p0)^","^(print_mtc_set p1)^"\n" in
+    ( match p0,p1 with
+      | _,RP.A Mtc_Top -> []
+      | RP.A Mtc_Top,RP.A(Mtc_Agl(i0,i_n,pa)) ->
+        let rec l0 i =
+          if i<i_n then
+            if i=i0 then l0 (i+1)
+            else
+              let a_i = RP.A(Mtc_Agl(i,i_n,RP.A Mtc_Top)) in
+              a_i::(l0 (i+1))
+          else [] in
+        let l0 = l0 0 in
+        let l1 = mtc_sub_ptn_ptn (RP.A Mtc_Top) pa in
+        let l1 = List.map (fun a -> RP.A(Mtc_Agl(i0,i_n,a))) l1 in
+        l0@l1
+      | RP.A(Mtc_Agl(i0,i0_n,pa0)),RP.A(Mtc_Agl(i1,i1_n,pa1)) ->
+        if i0_n=i1_n then
+          if i0=i1 then
+            let l0 = mtc_sub_ptn_ptn pa0 pa1 in
+            let l0 = List.map (fun a -> RP.A(Mtc_Agl(i0,i0_n,a))) l0 in
+            l0
+          else
+            [p0]
+        else err "mtc_sub_ptn_ptn 0"
+      | RP.R _,RP.A(Mtc_Agl _) -> err "mtc_sub_ptn_ptn 5"
+      | _,RP.A(Mtc_Cst) -> [p0]
+      | RP.A(Mtc_Top),RP.R rs1 ->
+        let rs0 = Array.map (fun _ -> RP.A Mtc_Top) rs1 in
+        mtc_sub_ptn_ptn (RP.R rs0) (RP.R rs1)
+      | RP.A(Mtc_Agl _),RP.R _ -> err "mtc_sub_ptn_ptn 6"
+      | RP.R rs0,RP.R rs1 ->
+        let rs_b = Array.mapi (fun i r -> mtc_sub_ptn_ptn r rs1.(i)) rs0 in
+        let n = Array.length rs_b in
+        let (_,l0) =
+          Array.fold_left
+            ( fun (i,l0) li ->
+                let ai =
+                  List.map
+                    (fun a -> RP.R(Array.init n (fun j -> if i=j then a else RP.A Mtc_Top)))
+                    li in
+                (i+1,l0@ai) )
+            (0,[]) rs_b in
+        l0
+      | _ -> err ("mtc_sub_ptn_ptn 7:"^c0) )
   let rec find_ns f ns n g =
     ( match n with
       | EndN n0 ->
@@ -878,15 +1115,20 @@ let rec inst_mtc_ptn gns ns l (r,es) =
   y0
 and inst_mtc_atm gns (ns:ns_v) l e =
   let open Types in
-  ( match e with
-    | Eq_Agl(_,_) -> err "inst_mtc_atm 0"
+  ( match !e with
+    | Eq_Agl(_,_,_,_) -> err "inst_mtc_atm 0"
     | Eq_Agl_N(n,r) ->
       let p = slv_ns0 ns n in
-      let yn = inst l (Var (get_ns gns p)) in
-      let yr = inst_ptn gns l r in
-      let v0 = newvar_l l in
-      let _ = unify [] (Imp(yr,Var v0)) yn in
-      (Var v0)
+      let f = List.assoc p gns.ns_e in
+      ( match !f with
+        | Ctr(i0,i_n) ->
+          e := Eq_Agl(p,i0,i_n,r);
+          let yn = inst l (Var (get_ns gns p)) in
+          let yr = inst_ptn gns l r in
+          let v0 = newvar_l l in
+          let _ = unify [] (Imp(yr,Var v0)) yn in
+          (Var v0)
+        | _ -> err "inst_mtc_atm 2" )
     | P_Cst c ->
       ( match c with
         | P_Z _ -> App(Axm Axm.z_n,(Axm Axm.z_u))
@@ -1164,15 +1406,8 @@ let rec ir_of_exp r0 r1 e =
           ([],0,[||]) es in
       (n0::ns)@[IR_Id(ref(IR_Id_C(R rs1,[|r1|])))]
   )
-and mk_idx_ptn r =
-  ( match r with
-    | RP.A { contents=R_Ax p } -> RP.A p
-    | RP.R rs -> RP.R (Array.map mk_idx_ptn rs)
-    | _ -> err "mk_idx_ptn 0" )
-and mk_idx r =
-  ( match !r with
-    | R_Ax p -> p
-    | _ -> err "mk_idx 0" )
+
+
 and mrg_idx_ptn r0 r1 =
   ( match r0,r1 with
     | _,RP.A(R_WC _) -> mrg_idx_ptn_wc r0
@@ -1203,6 +1438,8 @@ and ir_of_id r rs =
   Array.fold_left ( fun rr rii -> mrg_idx_ptn rr rii) rp rsi
 
 and slv_r rv p0 =
+  let c_l = "enter slv_r:"^(print_line p0) in
+  Util.pnt true c_l;
   ( match p0 with
     | Ret r ->
       let r = csm_ptn_rv r rv in
@@ -1285,15 +1522,16 @@ and crt_rv r rv =
     | _ -> err "crt_rv 0" )
 and crt_ptn_rv r rv = Rcd_Ptn.map (fun r0 -> crt_rv r0 rv) r
 and crt_mtc_ptn_rv (r,es) rv  =
-  let _ = Rcd_Ptn.map (fun v -> crt_rv v rv) r in
+  Util.pnt true "enter crt_mtc_ptn_rv \n";
+  let _ = crt_ptn_rv r rv in
   let es =
     List.fold_left
       (fun es (v0,e) ->
          let v1 = csm_rv v0 rv in
-         ( match e with
-           | Eq_Agl(_,_) -> err "crt_mtc_ptn_rv 0"
+         ( match !e with
+           | Eq_Agl(_,_,_,_) -> err "crt_mtc_ptn_rv 0"
            | Eq_Agl_N(_,r) ->
-             let _ = Rcd_Ptn.map (fun v -> crt_rv v rv) r in
+             let _ = crt_ptn_rv r rv in
              es@[(v1,e)]
            | P_Cst _ -> es@[(v1,e)] ))
       [] es in
@@ -1403,8 +1641,8 @@ and crt_mtc_ptn_iv gns (r,es) rv  =
     List.fold_left
       (fun es (v0,e) ->
          let v1 = csm_iv (mk_idx v0) rv in
-         ( match e with
-           | Eq_Agl(_,_) -> err "crt_mtc_ptn_rv 0"
+         ( match !e with
+           | Eq_Agl(_,_,_,r)
            | Eq_Agl_N(_,r) ->
              let _ = crt_ptn_iv gns (mk_idx_ptn r) rv in
              es@[(v1,e)]
@@ -2113,13 +2351,14 @@ let rec emt_m gns (ns:ns_v ref) ld el =
                 let ya = List.fold_left (fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
                 let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
                 !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;
+                let dl = List.length ds in
                 let (_,es,pp0) =
                   List.fold_left
                     ( fun (i,s,pp0) (t,n) ->
                         let tc = Imp(t,ya) in
                         let epi = sgn () in
                         !ns.ns_p <- (n,epi)::!ns.ns_p;
-                        gns.ns_e <- (epi,ref(Ctr i))::gns.ns_e;
+                        gns.ns_e <- (epi,ref(Ctr(i,dl)))::gns.ns_e;
                         gns.ns <- (epi,ref (Ln tc))::gns.ns;
                         let ppi =
                           tbs^"\t∐ "^n^" : "^(Types.print_t t)^"\n" in
@@ -2165,13 +2404,14 @@ let rec emt_m gns (ns:ns_v ref) ld el =
                       | `CP (n,a,ds,yt) ->
                         let (_,vs) = List.split a in
                         let ds = List.map (fun (y,c) -> (mk_vars (ref []) !ns `Abs (ref a) y,c)) ds in
+                        let dl = List.length ds in
                         let (_,eq,pp0) =
                           List.fold_left
                             (fun (i,eq,pp0) (t,n) ->
                                let tc = Imp(t,yt) in
                                let epi = sgn () in
                                !ns.ns_p <- (n,epi)::!ns.ns_p;
-                               gns.ns_e <- (epi,ref(Ctr i))::gns.ns_e;
+                               gns.ns_e <- (epi,ref(Ctr(i,dl)))::gns.ns_e;
                                gns.ns <- (epi,ref (Ln tc))::gns.ns;
                                let ppi =
                                  tbs^"\t∐ "^n^" : "^(Types.print_t t)^"\n" in
@@ -2252,6 +2492,7 @@ let rec emt_m gns (ns:ns_v ref) ld el =
                 ( fun gv_0 rsi ->
                     match rsi with
                     | `P(n,rs,t_p,epv,ns_g) ->
+                      let rsl = List.length rs in
                       let ya = Axm t_p in
                       let (_,rts) =
                         List.fold_left
@@ -2261,7 +2502,7 @@ let rec emt_m gns (ns:ns_v ref) ld el =
                              let epv_i = sgn () in
                              !ns_g.ns_p <- (nc,epv_i)::!ns_g.ns_p;
                              gns.ns <- (epv_i,ref (Ln tc))::gns.ns;
-                             gns.ns_e <-  (epv_i,ref(Ctr i))::gns.ns_e;
+                             gns.ns_e <-  (epv_i,ref(Ctr(i,rsl)))::gns.ns_e;
                              (i+1,rts@[(t,epv_i)]))
                           (0,[]) rs in
                       gv_0@[`P(n,rs,rts,t_p,epv,ns_g)]
@@ -2660,24 +2901,24 @@ and init_prm () =
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(unt (),App(Axm Axm.opn,Var q0)))) in
   !ns.ns_p <- ("_none",Ast.Axm._none)::!ns.ns_p;
-  gns.ns_e <- (Ast.Axm._none,ref(Ctr 1))::gns.ns_e;
+  gns.ns_e <- (Ast.Axm._none,ref(Ctr(1,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._none,v)::gns.ns;
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(Var q0,App(Axm Axm.opn,Var q0)))) in
   !ns.ns_p <- ("_some",Ast.Axm._some)::!ns.ns_p;
-  gns.ns_e <- (Ast.Axm._some,ref(Ctr 0))::gns.ns_e;
+  gns.ns_e <- (Ast.Axm._some,ref(Ctr(0,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._some,v)::gns.ns;
 
   !ns.ns_t <- ("_lst",ref(Ln(Axm Axm.lst)))::!ns.ns_t;
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(unt (),App(Axm Axm.lst,Var q0)))) in
   !ns.ns_p <- ("_nil",Ast.Axm._nil)::!ns.ns_p;
-  gns.ns_e <- (Ast.Axm._nil,ref(Ctr 1))::gns.ns_e;
+  gns.ns_e <- (Ast.Axm._nil,ref(Ctr(1,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._nil,v)::gns.ns;
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(Rcd(rcd_cl [Var q0;App(Axm Axm.lst,Var q0)]),App(Axm Axm.lst,Var q0)))) in
   !ns.ns_p <- ("_cns",Ast.Axm._cns)::!ns.ns_p;
-  gns.ns_e <- (Ast.Axm._cns,ref(Ctr 0))::gns.ns_e;
+  gns.ns_e <- (Ast.Axm._cns,ref(Ctr(0,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._cns,v)::gns.ns;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64])))) in
@@ -3118,8 +3359,257 @@ and emt_ir i1 gns ns iv p =
       "\tmov rbx,"^(emt_reg_x86 i)^"\n"^
       "\tbt r12,"^(string_of_int i)^"\n"^
       "\tjmp err\n" *)
-    | Mtc(_,_) -> err "emt_ir Mtc 0"
-    (* let s1 = Array.copy s0 in
+    | Mtc(r,ps) ->
+      (* let s1 = Array.copy s0 in
+         let i0 = csm_ptn_iv r s1 in
+         let c0 = cmt ("\t? "^(emt_ptn i0)) in
+         let src i = "QWORD [set_ptn_vct+8*1+16*"^(string_of_int i)^"]" in
+         let bt i = "\tbt QWORD [set_ptn_vct+16*"^(string_of_int i)^"],0\n" in
+         let idx i = "QWORD [mtc_vct_0+8*1+16*"^(string_of_int i)^"]" in
+         let r12 i = "QWORD [mtc_vct_0+16*"^(string_of_int i)^"]" in
+         let rec emt_mtc_set s r0 r1 =
+         let c0 = "; emt_mtc_set\n" in
+         ( match r0,r1 with
+          | RP.A i,_ ->
+            let i1 = idx_crt_ptn s r1 in
+            let e0 =
+              c0^
+              "\tmov rbx,"^(emt_reg_x86 i)^"\n"^
+              "\tmov QWORD [set_ptn_vct+8*1],rbx\n"^
+              "\tbt r12,"^(string_of_int i)^"\n"^
+              "\tmov rbx,0\n"^
+              "\tsetc bl\n"^
+              "\tmov QWORD [set_ptn_vct],rbx\n"^
+              (emt_mtc_set_ptn 0 s i1) in
+            (e0,[])
+          | RP.R rs,RP.A v ->
+            if List.exists (fun (s,w) -> w==v&&s="_") !Ast.rm
+            then (cmt c0,[])
+            else (cmt c0,[(rs,v)])
+          | RP.R rs0,RP.R rs1 ->
+            let (_,e0,gl0) =
+              Array.fold_left
+                (fun (i,e0,gl0) ri ->
+                   let (e1,gl) =
+                     emt_mtc_set s ri rs1.(i) in
+                   (i+1,e0^e1,gl0@gl) )
+                (0,"",[]) rs0 in
+            ((cmt c0)^e0,gl0)
+          | _,_ -> err "emt_mtc_set 0 " )
+         and emt_mtc_set_ptn d s r =
+         let open Rcd_Ptn in
+         ( match r with
+          | A (-2) -> "; _\n"
+          | A i ->
+            let l0 = lb () in
+            let l1 = lb () in
+            (bt d)^
+            "\tjc "^l0^"\n"^
+            "\tmov rbx,"^(src d)^"\n"^
+            "\tmov "^(idx i)^",rbx\n"^
+            "\tmov "^(r12 i)^",0\n"^
+            "\tjmp "^l1^"\n"^
+            l0^":\n"^
+            "\tmov rbx,"^(src d)^"\n"^
+            "\tmov "^(idx i)^",rbx\n"^
+            "\tmov "^(r12 i)^",1\n"^
+            l1^":\n"
+          | R rs ->
+            let (e0,_) =
+              Array.fold_left
+                ( fun (e0,i) r ->
+                    let ei =
+                      "\tmov rbx,"^(src d)^"\n"^
+                      "\tbt QWORD [rbx],"^(string_of_int i)^"\n"^
+                      "\tmov r13,[rbx+8*"^(string_of_int (i+1))^"]\n"^
+                      "\tmov [set_ptn_vct+8*1+16*"^(string_of_int (d+1))^"],r13\n"^
+                      "\tmov r13,0\n"^
+                      "\tsetc r13b\n"^
+                      "\tmov [set_ptn_vct+16*"^(string_of_int (d+1))^"],r13\n"
+                    in
+                    let e1 = emt_mtc_set_ptn (d+1) s r in
+                    (e0^ei^e1,i+1))
+                ("",0) rs in
+            (cmt c0)^e0
+          | _ -> ";emt_set_ptn\n" ) in *)
+      let psl = Array.to_list ps in
+      let rec emt_mtc h0 s0 k0 l0 psl =
+        let e_cv = print_mtc_v_k k0 in
+        Util.pnt true (e_cv^"\n");
+        ( match psl with
+          | ((ri,es),p)::psl_tl ->
+            let e_c0 = "; "^(List.fold_left (fun s i -> s^"/"^(string_of_int i)) "" h0)^"/\n" in
+            Util.pnt true e_c0;
+            let k1 = mk_mtc_v_k_eq_and k0 ri in
+            emt_mtc_eq h0 0 s0 k1 l0 es p psl_tl
+          | [] ->
+            if l0=[] then "; mtc x 1"
+            else err "emt_mtc 0" )
+      and emt_mtc_eq h0 i s0 k1 l0 es p psl_tl =
+        ( match es with
+          | (vx,pa)::[] ->
+            let k2 = mk_mtc_v_k_eq k1 (mk_idx vx) !pa in
+            let e0 = "; "^(List.fold_left (fun s i -> s^"/"^(string_of_int i)) "" (i::h0))^"\n" in
+            let ms0 = mk_mtc_set k2 in
+            let l1 = mtc_sub l0 [ms0] in
+            let e2 = emt_mtc (i::h0) s0 k1 l1 psl_tl in
+          e0^e2
+        | (vx,pa)::es_tl ->
+          let k2 = mk_mtc_v_k_eq k1 (mk_idx vx) !pa in
+          let e0 = "; "^(List.fold_left (fun s i -> s^"/"^(string_of_int i)) "" (i::h0))^"\n" in
+          let ms0 = mk_mtc_set k2 in
+          let l1 = mtc_sub l0 [ms0] in
+          let l2 = mtc_and l0 [ms0] in
+          let e1 = emt_mtc_eq h0 (i+1) s0 k2 l2 es_tl p psl_tl in
+          let e2 = emt_mtc (i::h0) s0 k1 l1 psl_tl in
+          e0^e1^e2
+        | [] -> "; mtc x 0" ) in
+      let s0 = rset_iv iv in
+      emt_mtc [] s0 (mk_mtc_v_k (mk_idx_ptn r)) [RP.A Mtc_Top] psl
+    (*let (_,a0) =
+         Array.fold_left
+          ( fun (i,a) ((ri,es),p) ->
+              let s = Hashtbl.copy s in
+              let s_i = Hashtbl.create 10 in
+              let ci = cmt ("\t∐\\ "^(Mtc.print (ri,es))) in
+              let (ei,gl) = emt_mtc_set s_i i0 ri in
+              let l_f = lb () in
+              let exs =
+                List.fold_left
+                  (fun exs (vx,pa) ->
+                     let c0 = cmt ((print_v vx)^"="^(print_test pa)) in
+                     let ix = idx_csm s_i vx in
+                     ( match pa with
+                       | Eq_Agl_N(n,r) ->
+                         let f = try get_ns_e !ns n with _ -> err "emt_ir a0" in
+                         let ir = idx_crt_ptn s_i r in
+                         ( match !f with
+                           | (_,Ast.Ctr i) ->
+                             let lb_c0 = lb () in
+                             exs^
+                             c0^
+                             "\tmov rbx,"^(idx ix)^"\n"^
+                             "\tmov r13,rbx\n"^
+                             "\tshr r13,56\n"^
+                             "\tcmp r13,"^(string_of_int i)^"\n"^
+                             "\tjnz "^l_f^"\n"^
+                             "\tmov r13,rbx\n"^
+                             "\tmov r14,0x00ff_ffff_ffff_fffe\n"^
+                             "\tand r13,r14\n"^
+                             "\tbt QWORD [r13],16\n"^
+                             "\tjc "^lb_c0^"\n"^
+                             "\tbt QWORD [r13],17\n"^
+                             "\tjnc "^lb_c0^"\n"^
+                             "\tmov r13,QWORD [r13+8*1]\n"^
+                             lb_c0^":\n"^
+                             "\tmov QWORD [set_ptn_vct],0\n"^
+                             "\tmov QWORD [set_ptn_vct+8*1],r13\n"^
+                             (emt_mtc_set_ptn 0 s_i ir)
+                           | _ -> err "emt_ir f" )
+                       | P_Cst c ->
+                         ( match c with
+                           | P_Stg s0 ->
+                             let bs = Bytes.of_string s0 in
+                             let sl = Bytes.length bs in
+                             let bl = sl / 8 in
+                             let rl = bl+1 in
+                             let m = sl mod 8 in
+                             let rec lp i =
+                               if i=bl
+                               then
+                                 let s_i = String.sub s0 (8*i) m in
+                                 "\tmov rbx,`"^(String.escaped s_i)^"`\n"^
+                                 "\tmov QWORD r13,[r14+8*"^(string_of_int (i+1))^"]\n"^
+                                 "\tcmp rbx,r13\n"^
+                                 "\tjnz "^l_f^"\n"
+                               else
+                                 let s_i = String.sub s0 (8*i) 8 in
+                                 "\tmov rbx,`"^(String.escaped s_i)^"`\n"^
+                                 "\tmov QWORD r13,[r14+8*"^(string_of_int (i+1))^"]\n"^
+                                 "\tcmp rbx,r13\n"^
+                                 "\tjnz "^l_f^"\n"^
+                                 (lp (i+1)) in
+                             exs^
+                             c0^
+                             "\tmov r14,"^(idx ix)^"\n"^
+                             "\tmov rbx,[r14]\n"^
+                             "\tshr rbx,32\n"^
+                             "\tand rbx,0xffff\n"^
+                             "\tcmp rbx,"^(string_of_int rl)^"\n"^
+                             "\tjnz "^l_f^"\n"^
+                             (lp 0)
+                           | P_R64 x ->
+                             exs^
+                             c0^
+                             "\tmov r14,"^(idx ix)^"\n"^
+                             "\tmov QWORD rbx,0x"^(Int64.format "%x" x)^"\n"^
+                             "\tcmp r14,rbx\n"^
+                             "\tjnz "^l_f^"\n"
+                           | _ -> err "emt_ir mtc 1"
+                         )
+                       | _ -> err "emt_ir:mtc:0" ))
+                  (a^ci^ei) es in
+              let e_t =
+                Hashtbl.fold
+                  (fun i v e_t ->
+                     let lb_i = lb () in
+                     let lb_i_c = lb () in
+                     let lb_inc_r_blk = lb () in
+                     let i_s = idx_crt s v in
+                     e_t^
+                     "\tmov r13,"^(idx i)^"\n"^
+                     "\tmov "^(emt_reg_x86 i_s)^",r13\n"^
+                     "\tmov rbx,"^(r12 i)^"\n"^
+                     "\tbt rbx,0\n"^
+                     "\tjc "^lb_i^"\n"^
+                     "\tbtr r12,"^(string_of_int i_s)^"\n"^
+                     "\tbt r13,0\n"^
+                     "\tjnc "^lb_inc_r_blk^"\n"^
+                     "\tmov r14,0x00ff_ffff_ffff_fffe\n"^
+                     "\tand r13,r14\n"^
+                     lb_inc_r_blk^":\n"^
+                     "\tmov r14,0x0001_0000_0000_0000\n"^
+                     "\tadd QWORD [r13],r14\n"^
+                     "\tjmp "^lb_i_c^"\n"^
+                     lb_i^":\n"^
+                     "\tbts r12,"^(string_of_int i_s)^"\n"^
+                     lb_i_c^":\n" )
+                  s_i exs in
+              let e_gl =
+                List.fold_left
+                  (fun e_gl (rs,v) ->
+                     let (i,eg) = emt_get_crt_ptn s "r12" emt_reg_x86 (Rcd_Ptn.R rs) in
+                     Hashtbl.add s i v;
+                     e_gl^
+                     eg^
+                     "\tand r12,~"^(emt_0b i)^"\n" )
+                  e_t gl in
+              let e_d0 = mov_regs s in
+              let e_d =
+                List.fold_left
+                  ( fun e_d i ->
+                      let lb0 = lb () in
+                      Hashtbl.remove s i;
+                      e_d^
+                      "\tbt r12,"^(string_of_int i)^"\n"^
+                      "\tjc "^lb0^"\n"^
+                      "\tmov rdi,QWORD [regs_vct+8*"^(string_of_int i)^"]\n"^
+                      "\tcall dec_r\n"^
+                      lb0^":\n" )
+                  (e_gl^e_d0) (Rcd_Ptn.to_list i0) in
+              let e_d1 = set_regs s in
+              let e1 = emt_ir ns s p in
+              let e2 =
+                e_d^
+                e_d1^
+                e1^
+                l_f^":\n" in
+              (i+1,e2))
+          (0,"") ps in
+         let _ = idx_csm_ptn s r in
+         c0^a0^
+         "\tjmp err\n" *)
+    (*let s1 = Array.copy s0 in
        let i0 = csm_ptn_iv r s1 in
        let c0 = cmt ("\t? "^(emt_ptn i0)) in
        let src i = "QWORD [set_ptn_vct+8*1+16*"^(string_of_int i)^"]" in
@@ -3128,9 +3618,8 @@ and emt_ir i1 gns ns iv p =
        let r12 i = "QWORD [mtc_vct_0+16*"^(string_of_int i)^"]" in
        let rec emt_mtc_set s r0 r1 =
        let c0 = "; emt_mtc_set\n" in
-       let open Rcd_Ptn in
        ( match r0,r1 with
-        | A i,_ ->
+        | RP.A i,_ ->
           let i1 = idx_crt_ptn s r1 in
           let e0 =
             c0^
@@ -3142,11 +3631,11 @@ and emt_ir i1 gns ns iv p =
             "\tmov QWORD [set_ptn_vct],rbx\n"^
             (emt_mtc_set_ptn 0 s i1) in
           (e0,[])
-        | R rs,A v ->
+        | RP.R rs,RP.A v ->
           if List.exists (fun (s,w) -> w==v&&s="_") !Ast.rm
           then (cmt c0,[])
           else (cmt c0,[(rs,v)])
-        | R rs0,R rs1 ->
+        | RP.R rs0,RP.R rs1 ->
           let (_,e0,gl0) =
             Array.fold_left
               (fun (i,e0,gl0) ri ->
@@ -3342,7 +3831,7 @@ and emt_ir i1 gns ns iv p =
       let fp = slv_ns0 !ns n in
       let f = get_ns_e gns fp in
       ( match !f with
-        | Ctr j ->
+        | Ctr(j,_) ->
           let e0 = dlt_iv iv in
           let s1 = RSet.ini () in
           let _ = rset_ptn s1 ix in
@@ -3651,7 +4140,7 @@ and emt_ir i1 gns ns iv p =
                   | _ -> err "emt_ir err 1" ) *)
               | af ->
                 ( match af with
-                  | Ctr j ->
+                  | Ctr(j,_) ->
                     let im = RSet.min_0 (rset_iv iv) in
                     let ix = csm_ptn_iv (mk_idx_ptn x) iv in
                     let icx = RP.A(R.Agl(im,ix)) in

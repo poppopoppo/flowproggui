@@ -624,3 +624,8 @@ Lx°
 § str.b.a : str.t ⊢ { str.t r8 }
 § str.b.b : str.t ⊢ { str.t r32 }
 § str.cst : S8◂s' ⊢ str.t
+
+§ f0 {= &a0 &a1 &a2 < { %x %y } =}
+  g0 {= &a0 < x =} ⊢ {= &a0 < y =}
+  g1 { x y } ⊢ { x y z }
+  ∎ {= &a0 &a1 &a2 < { x y z } =}
