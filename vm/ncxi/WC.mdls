@@ -37,13 +37,48 @@
 	_emt_q l0 ⊢ l0
 	∎ {} 
 ;]
+§ @.tak { x y z }
+	_setge { y x } ⊢ { y x b } 
+	? b 
+	∐\ b' ,b'=0xr0 ⊢ 
+		_mov_x x ⊢ { x x0 }
+		_mov_x y ⊢ { y y0 } 
+		_mov_x z ⊢ { z z0 }
+		_dec x0 ⊢ x0 
+		tak { x0 y0 z0 } ⊢ rx 
+		_mov_x x ⊢ { x x0 }
+		_mov_x y ⊢ { y y0 } 
+		_mov_x z ⊢ { z z0 }
+		_dec y0 ⊢ y0 
+		tak { y0 z0 x0 } ⊢ ry 		
+		_dec z ⊢ z 
+		tak { z x y } ⊢ rz 
+		tak { rx ry rz } ⊢ rr 
+		∎ rr 
+	∐.\ b' ⊢  
+		∎ z 
 § C3 « 
 	» 0xrAA _ ⊢ x0 
+	» 0xr87 _ ⊢ x1 
+	_setge { x0 x1 } ⊢ { x0 x1 b0 }
 	? x0 
 	∐\ x0' ,x0'=0xr0 ⊢
 		;_emt_q x0 ⊢ x0 
 		∎ {} 
+	∐\ x0' ,x0'=0xrAB ⊢ 
+		∎ {}
+	∐\ x0' ,x0'=0xrAA ⊢ 
+		» "AA" _ ⊢ s0 
+		_emt_q s0 ⊢ s0
+		∎ {}
 	∐.\ x0' ⊢ 
 		_emt_q x0 ⊢ x0 
 		∎ {}
-§§.
+§ C4 « 
+	» 0xr14 _ ⊢ x0 
+	» 0xra _ ⊢ x1 
+	» 0xr0 _ ⊢ x2 
+	tak { x0 x1 x2 } ⊢ y 
+	_emt_q y ⊢ y 
+	∎ {}
+∎∎
