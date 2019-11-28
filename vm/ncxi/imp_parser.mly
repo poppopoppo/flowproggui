@@ -414,12 +414,12 @@ lb_let:
   | NAM LET NAM {}
   ;
 mtc_ir:
-  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3),$5)|] }
-  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir {[|(($2,$3),$5)|] |+| $6 }
+  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3,None),$5)|] }
+  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir {[|(($2,$3,None),$5)|] |+| $6 }
   ;
 mtc_ir_end:
-  | COPRD_PTN_END ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3),$5)|] }
-  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir_end {[|(($2,$3),$5)|] |+| $6 }
+  | COPRD_PTN_END ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3,None),$5)|] }
+  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir_end {[|(($2,$3,None),$5)|] |+| $6 }
   ;
 coprd_ir:
   | COPRD reg_ptn ir_lines { [|($2,$3)|] }
