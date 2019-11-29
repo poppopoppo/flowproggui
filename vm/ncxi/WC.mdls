@@ -55,7 +55,7 @@
 		tak { z x y } ⊢ rz 
 		tak { rx ry rz } ⊢ rr 
 		∎ rr 
-	∐.\ b' ⊢  
+	∐. b' ⊢  
 		∎ z 
 § C3 « 
 	» 0xrAA _ ⊢ x0 
@@ -71,7 +71,7 @@
 		» "AA" _ ⊢ s0 
 		_emt_q s0 ⊢ s0
 		∎ {}
-	∐.\ x0' ⊢ 
+	∐. x0' ⊢ 
 		_emt_q x0 ⊢ x0 
 		∎ {}
 § C4 « 

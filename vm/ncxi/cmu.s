@@ -106,6 +106,12 @@ _end:
   mov rdi,0
   call exit
 mlc:
+  push rdx
+  push rcx
+  push r8
+  push r9
+  push r10
+  push r11
   mov rax,0x00010000
   add rax,rdi
   shl rax,32
@@ -117,6 +123,12 @@ mlc:
   call malloc
   pop rdi
   mov [rax],rdi
+  pop r11
+  pop r10
+  pop r9
+  pop r8
+  pop rcx
+  pop rdx
   ret
 
 SFLS_init:
@@ -444,26 +456,35 @@ pp_v_tl_0:
   ret
 
 mlc_s8: ; rdi=size of bytes
+  push rdx
+  push rcx
+  push r8
+  push r9
+  push r10
+  push r11
   mov rsi,rdi
-  and rsi,~0b0111
-  add rsi,16
+  mov rax,rdi
+  and rdi,~0b0111
+  add rdi,16
+  and rsi,0b0111
+  shr rax,3
+  add rax,0x1_0000
+  shl rax,32
+  bts rax,16
+  add rax,rsi
+  push rax
   push rdi
-  mov rdi,rsi
   xor rax,rax
   call malloc
   pop rdi
-  mov rsi,rdi
-  mov rdx,0b1000
-  and rsi,0b0111
-  sub rdx,rsi
-  and rdi,~0b0111
-  add rdi,0b1000
-  shl rdi,29
-  add rdx,rdi
-  bts rdx,16
-  mov rdi,0x0001_0000_0000_0000
-  add rdx,rdi
-  mov QWORD [rax],rdx
+  pop QWORD [rax]
+  mov QWORD [rax-8*1+rdi],0
+  pop r11
+  pop r10
+  pop r9
+  pop r8
+  pop rcx
+  pop rdx
   ret
 
 pp: ; rdi=tkn rsi=dst
