@@ -72,9 +72,12 @@
 			"AA" 
 			//
 		» _^ s0 ⊢ s0,sr 
-			0' 0' "Qjjjjj" 0' // 
+			"§" 0' 0' "Qjjjjj" 0' // 
 		_emt_q s0 ⊢ s0
 		_emt_q sr ⊢ sr
+		» 0xr0 _ ⊢ o0 
+		_chr.prs { sr o0 } ⊢ { sr o0 c0 }
+		_emt_q { o0 c0 } ⊢ { o0 c0 } 
 		∎ {}
 	∐. x0' ⊢ 
 		_emt_q x0 ⊢ x0 
