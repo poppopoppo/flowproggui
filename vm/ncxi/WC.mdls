@@ -68,12 +68,18 @@
 	∐\ x0' ,x0'=0xrAB ⊢ 
 		∎ {}
 	∐\ x0' ,x0'=0xrAA ⊢ 
-		» "AA" _ ⊢ s0 
+		» _^ _ ⊢ s0
+			"AA" 
+			//
+		» _^ s0 ⊢ s0,sr 
+			0' 0' "Qjjjjj" 0' // 
 		_emt_q s0 ⊢ s0
+		_emt_q sr ⊢ sr
 		∎ {}
 	∐. x0' ⊢ 
 		_emt_q x0 ⊢ x0 
 		∎ {}
+[;
 § C4 « 
 	» 0xr14 _ ⊢ x0 
 	» 0xra _ ⊢ x1 
@@ -81,4 +87,5 @@
 	tak { x0 x1 x2 } ⊢ y 
 	_emt_q y ⊢ y 
 	∎ {}
+;]
 ∎∎

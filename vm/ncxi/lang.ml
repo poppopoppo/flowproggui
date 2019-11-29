@@ -2625,10 +2625,6 @@ and init_prm () =
     "\t\tdq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001\n"^
     "\t\tdq NS_E_"^(Sgn.print epf)^"\n" in
   let l0 = "NS_E_"^(Sgn.print epf)^"_LB_0" in
-  let lb1 = "LB_"^(Sgn.print (sgn ())) in
-  let lb2 = "LB_"^(Sgn.print (sgn ())) in
-  let lb3 = "LB_"^(Sgn.print (sgn ())) in
-
   let l_e = "NS_E_"^(Sgn.print epf) in
   let l_e_rdi = "NS_E_RDI_"^(Sgn.print epf) in
   let l_e_tbl = "NS_E_"^(Sgn.print epf)^"_ETR_TBL" in
@@ -2636,108 +2632,23 @@ and init_prm () =
     l_e^":\n"^
     l_e_rdi^":\n"^
     l_e_tbl^":\n"^
-    "\tmov r11b,[rdi+rsi+8*1]\n"^
-    "\tcmp r11,0\n"^
-    "\tjz "^l0^"\n"^
-    "\tbt r11,7\n"^
-    "\tjc "^lb1^"\n"^
-    "\tpush rdi\n"^
-    "\tpush rsi\n"^
-    "\tpush rdx\n"^
-    "\tpush r11\n"^
-    "\tmov rdi,1\n"^
-    "\tcall mlc_s8\n"^
-    "\tmov r10,rax\n"^
-    "\tpop r11\n"^
-    "\tpop rdx\n"^
-    "\tpop rsi\n"^
-    "\tpop rdi\n"^
-    "\tmov QWORD [r10+8*1],0\n"^
-    "\tmov BYTE [r10+8*1],r11b\n"^
-    "\tmov r11,0\n"^
-    "\tadd rsi,1\n"^
-    "\tmov rax,1\n"^
-    "\tret\n"^
-    lb1^":\n"^
-    "\tadd rsi,1\n"^
-    "\tbt r11,6\n"^
-    "\tjc "^lb2^"\n"^
-    "\tpush rdi\n"^
-    "\tpush rsi\n"^
-    "\tpush rdx\n"^
-    "\tpush r11\n"^
-    "\tmov rdi,2\n"^
-    "\tcall mlc_s8\n"^
-    "\tmov r10,rax\n"^
-    "\tpop r11\n"^
-    "\tpop rdx\n"^
-    "\tpop rsi\n"^
-    "\tpop rdi\n"^
-    "\tmov QWORD [r10+8*1],0\n"^
-    "\tmov BYTE [r10+8*1],r11b\n"^
-    "\tmov r11b,[rdi+rsi+8*1+1]\n"^
-    "\tmov BYTE [r10+8*1+1],r11b\n"^
-    "\tmov r11,0\n"^
-    "\tadd rsi,1\n"^
-    "\tmov rax,1\n"^
-    "\tret\n"^
-    lb2^":\n"^
-    "\tadd rsi,1\n"^
-    "\tbt r11,5\n"^
-    "\tjc "^lb3^"\n"^
-    "\tpush rdi\n"^
-    "\tpush rsi\n"^
-    "\tpush rdx\n"^
-    "\tpush r11\n"^
-    "\tmov rdi,3\n"^
-    "\tcall mlc_s8\n"^
-    "\tmov r10,rax\n"^
-    "\tpop r11\n"^
-    "\tpop rdx\n"^
-    "\tpop rsi\n"^
-    "\tpop rdi\n"^
-    "\tmov QWORD [r10+8*1],0\n"^
-    "\tmov BYTE [r10+8*1],r11b\n"^
-    "\tmov r11b,[rdi+rsi+8*1+1]\n"^
-    "\tmov BYTE [r10+8*1+1],r11b\n"^
-    "\tmov r11b,[rdi+rsi+8*1+2]\n"^
-    "\tmov BYTE [r10+8*1+2],r11b\n"^
-    "\tmov r11,0\n"^
-    "\tadd rsi,1\n"^
-    "\tmov rax,1\n"^
-    "\tret\n"^
-    lb3^":\n"^
-    "\tadd rsi,1\n"^
-    "\tbt r11,5\n"^
-    "\tjc "^lb3^"\n"^
-    "\tpush rdi\n"^
-    "\tpush rsi\n"^
-    "\tpush rdx\n"^
-    "\tpush r11\n"^
-    "\tmov rdi,4\n"^
-    "\tcall mlc_s8\n"^
-    "\tmov r10,rax\n"^
-    "\tpop r11\n"^
-    "\tpop rdx\n"^
-    "\tpop rsi\n"^
-    "\tpop rdi\n"^
-    "\tmov QWORD [r10+8*1],0\n"^
-    "\tmov BYTE [r10+8*1],r11b\n"^
-    "\tmov r11b,[rdi+rsi+8*1+1]\n"^
-    "\tmov BYTE [r10+8*1+1],r11b\n"^
-    "\tmov r11b,[rdi+rsi+8*1+2]\n"^
-    "\tmov BYTE [r10+8*1+2],r11b\n"^
-    "\tmov r11b,[rdi+rsi+8*1+3]\n"^
-    "\tmov BYTE [r10+8*1+3],r11b\n"^
-    "\tmov r11,0\n"^
-    "\tadd rsi,1\n"^
-    "\tmov rax,1\n"^
-    "\tret\n"^
-    "\tadd rsi,1\n"^
-    "\tmov rax,1\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+    "\tcall prs_chr\n"^
+    "\tmov "^(emt_reg_x86 0)^",rdi\n"^
+    "\tmov "^(emt_reg_x86 1)^",rsi\n"^
+    "\tbt rax,63\n"^
+    "\tjc "^l0^"\n"^
+    "\tmov "^(emt_reg_x86 2)^",0\n"^
+    "\tmov "^(emt_reg_x86 3)^",rax\n"^
     "\tret\n"^
     l0^":\n"^
-    "\tmov rax,0\n"^
+    "\tmov "^(emt_reg_x86 2)^",1\n"^
+    "\tmov rdi,rbx\n"^
+    "\tmov rbx,QWORD [rbx]\n"^
+    "\tmov rsi,0x0001_0000_0000_ffff\n"^
+    "\tmov QWORD [rdi],rsi\n"^
+    "\tmov "^(emt_reg_x86 3)^",rdi\n"^
     "\tret\n" in
 
   !ns.ns_m_t <- ("_dgt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
@@ -4236,10 +4147,12 @@ and emt_ir i1 gns ns iv p =
               (fun (i,e_a) c ->
                  let e_i =
                    "\tmov rdi,"^(emt_reg_x86 ir0.(i))^"\n"^
-                   "\tmov rdi,QWOWRD [rdi]\n"^
+                   "\tmov rdi,QWORD [rdi]\n"^
                    "\tmov rsi,rdi\n"^
-                   "\tshr rdi,29\n"^
-                   "\tand rdi,~0b1111\n"^
+                   "\tshr rdi,32\n"^
+                   "\tand rdi,0xffff\n"^
+                   "\tsub rdi,1\n"^
+                   "\tshl rdi,3\n"^
                    "\tand rsi,0b0111\n"^
                    "\tadd rdi,rsi\n"^
                    "\tmov QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"],rdi\n"^
