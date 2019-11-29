@@ -52,6 +52,7 @@ name:
   | NAM { (EndN $1) }
   | PRM { EndN $1 }
   | NAM DOT name { DotN($1,$3) }
+  | PRM DOT name { DotN($1,$3) }
   ;
 file:
   | EOF { (None,[]) }

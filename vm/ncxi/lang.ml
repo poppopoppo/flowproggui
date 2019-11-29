@@ -2616,7 +2616,7 @@ and init_prm () =
   !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
-  !ns.ns_p <- ("prs",epf)::!ns.ns_p;
+  !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
   gns.ns <- (epf,ref(Ln yp))::gns.ns;
   gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|])))::gns.ns_e;
   let se_chr =
@@ -2658,7 +2658,7 @@ and init_prm () =
   !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
-  !ns.ns_p <- ("prs",epf)::!ns.ns_p;
+  !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
   gns.ns <- (epf,ref(Ln yp))::gns.ns;
   gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|])))::gns.ns_e;
   let se_dgt =
@@ -2686,14 +2686,14 @@ and init_prm () =
     "\tmov rax,0\n"^
     "\tret\n" in
 
-  !ns.ns_m_t <- ("_dgt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  !ns.ns_m_t <- ("_u_al",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   !ns.ns_m <- ("_u_al",ns_g)::!ns.ns_m;
   !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
-  !ns.ns_p <- ("prs",epf)::!ns.ns_p;
+  !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
   gns.ns <- (epf,ref(Ln yp))::gns.ns;
   gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|])))::gns.ns_e;
   let se_u_al =
@@ -2721,14 +2721,14 @@ and init_prm () =
     "\tmov rax,0\n"^
     "\tret\n" in
 
-  !ns.ns_m_t <- ("_dgt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  !ns.ns_m_t <- ("_l_al",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   !ns.ns_m <- ("_l_al",ns_g)::!ns.ns_m;
   !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
-  !ns.ns_p <- ("prs",epf)::!ns.ns_p;
+  !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
   gns.ns <- (epf,ref(Ln yp))::gns.ns;
   gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|])))::gns.ns_e;
   let se_l_al =

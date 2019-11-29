@@ -938,10 +938,8 @@ exec_out_end:
 prs_chr: ; rdi=dst_stg rsi=offset ⊢ rdi rsi rax= chr | ~0x0
   push rdx
   mov dl,[rdi+rsi+8*1]
-  cmp dl,0
-  jz prs_chr_null
   bt rdx,7
-  jc prs_chr_1
+  jc prs_chr_2
   push rdi
   push rsi
   push rdx
@@ -955,9 +953,11 @@ prs_chr: ; rdi=dst_stg rsi=offset ⊢ rdi rsi rax= chr | ~0x0
   stc
   pop rdx
   ret
-prs_chr_1:
+prs_chr_2:
   bt rdx,6
-  jc prs_chr_2
+  jnc prs_chr_null
+  bt rdx,5
+  jc prs_chr_3
   push rdi
   push rsi
   push rdx
@@ -974,9 +974,9 @@ prs_chr_1:
   stc
   pop rdx
   ret
-prs_chr_2:
-  bt rdx,5
-  jc prs_chr_3
+prs_chr_3:
+  bt rdx,4
+  jc prs_chr_4
   push rdi
   push rsi
   push rdx
@@ -989,13 +989,13 @@ prs_chr_2:
   mov BYTE [rax+8*1],dl
   mov dl,[rdi+rsi+8*1+1]
   mov BYTE [rax+8*1+1],dl
-  mov r11b,[rdi+rsi+8*1+2]
+  mov dl,[rdi+rsi+8*1+2]
   mov BYTE [rax+8*1+2],dl
   add rsi,3
   pop rdx
   stc
   ret
-prs_chr_3:
+prs_chr_4:
   push rdi
   push rsi
   push rdx
