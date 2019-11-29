@@ -261,7 +261,7 @@ ir_ret:
 ir_lines:
   | ir_ret { $1 }
   | ir_line ir_lines { Seq($1,$2) }
-  | MTC reg_ptn mtc_ir COPRD_END { Mtc($2,$3) }
+(*  | MTC reg_ptn mtc_ir COPRD_END { Mtc($2,$3) } *)
   | MTC reg_ptn mtc_ir_end { Mtc($2,$3) }
   | name reg_ptn SRC_IL { IL_Glb_Call(ref(Ast.Stt_Name $1),$2) }
   ;
@@ -269,6 +269,8 @@ ir_line:
   | ROT reg_ptn SRC reg_ptn regs { IR_Id(ref(IR_Id_C($2,[|$4|] |+| $5)))  }
   | ARR exp INI_IR reg_ptn_src SRC reg_ptn  { IR_Exp($2,$4,$6) }
   | ARR exp reg_ptn_src SRC reg_ptn { IR_Exp($2,$3,$5) }
+  | ARR S8_E WC SRC reg s8_ptn S8_P {
+    IR_S8(ref(IR_S8_C($6,[||],[|$5|]))) }
   | ARR S8_E src_par_p (*S8_STT*) s8_ptn S8_P {
       let (l0,l1) = $3 in
       IR_S8(ref(IR_S8_C($4,l0,l1))) }
@@ -280,8 +282,8 @@ ir_line:
   | name reg_ptn SRC_OUT { IR_Glb_Out(ref(Ast.Stt_Name $1),$2) }
   ;
 src_par_p:
-  | reg SRC reg CMM reg { ([|$1|],[|$3;$5|]) }
-  | reg CMM src_par_p CMM reg {
+  | reg_dst SRC reg CMM reg { ([|$1|],[|$3;$5|]) }
+  | reg_dst CMM src_par_p CMM reg {
       let (l0,l1) = $3 in
       ([|$1|] |+| l0,l1 |+| [|$5|]) }
   ;
@@ -385,6 +387,9 @@ reg_ptn_lst_lb_src:
   ;
 reg:
   | WC { ref(R_Ax(R_WC (sgn ()))) }
+  | reg_dst { $1 }
+  ;
+reg_dst:
   | NAM { ref(R_N $1) }
   | REG { ref(R_N $1) }
   ;
@@ -413,10 +418,12 @@ reg_ptn_lst_lb:
 lb_let:
   | NAM LET NAM {}
   ;
+  (*
 mtc_ir:
   | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3,None),$5)|] }
   | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir {[|(($2,$3,None),$5)|] |+| $6 }
   ;
+  *)
 mtc_ir_end:
   | coprd_ptn_end ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3,None),$5)|] }
   | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir_end {[|(($2,$3,None),$5)|] |+| $6 }

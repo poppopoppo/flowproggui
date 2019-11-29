@@ -468,7 +468,7 @@ mlc_s8: ; rdi=size of bytes
   add rdi,16
   and rsi,0b0111
   shr rax,3
-  add rax,0x1_0000
+  add rax,0x1_0001
   shl rax,32
   bts rax,16
   add rax,rsi
@@ -933,4 +933,87 @@ exec_out_lp:
   call rsi
   jmp exec_out_lp
 exec_out_end:
+  ret
+
+prs_chr: ; rdi=dst_stg rsi=offset ⊢ rdi rsi rax= chr | ~0x0
+  push rdx
+  mov dl,[rdi+rsi+8*1]
+  cmp dl,0
+  jz prs_chr_null
+  bt rdx,7
+  jc prs_chr_1
+  push rdi
+  push rsi
+  push rdx
+  mov rdi,1
+  call mlc_s8
+  pop rdx
+  pop rsi
+  pop rdi
+  mov BYTE [rax+8*1],dl
+  add rsi,1
+  stc
+  pop rdx
+  ret
+prs_chr_1:
+  bt rdx,6
+  jc prs_chr_2
+  push rdi
+  push rsi
+  push rdx
+  mov rdi,2
+  call mlc_s8
+  pop rdx
+  pop rsi
+  pop rdi
+  mov QWORD [rax+8*1],0
+  mov BYTE [rax+8*1],dl
+  mov dl,[rdi+rsi+8*1+1]
+  mov BYTE [rax+8*1+1],dl
+  add rsi,2
+  stc
+  pop rdx
+  ret
+prs_chr_2:
+  bt rdx,5
+  jc prs_chr_3
+  push rdi
+  push rsi
+  push rdx
+  mov rdi,3
+  call mlc_s8
+  pop rdx
+  pop rsi
+  pop rdi
+  mov QWORD [rax+8*1],0
+  mov BYTE [rax+8*1],dl
+  mov dl,[rdi+rsi+8*1+1]
+  mov BYTE [rax+8*1+1],dl
+  mov r11b,[rdi+rsi+8*1+2]
+  mov BYTE [rax+8*1+2],dl
+  add rsi,3
+  pop rdx
+  stc
+  ret
+prs_chr_3:
+  push rdi
+  push rsi
+  push rdx
+  mov rdi,4
+  call mlc_s8
+  pop rdx
+  pop rsi
+  pop rdi
+  mov QWORD [rax+8*1],0
+  mov BYTE [rax+8*1],dl
+  mov dl,[rdi+rsi+8*1+1]
+  mov BYTE [rax+8*1+1],dl
+  mov dl,[rdi+rsi+8*1+2]
+  mov BYTE [rax+8*1+2],dl
+  mov dl,[rdi+rsi+8*1+3]
+  mov BYTE [rax+8*1+3],dl
+  add rsi,4
+  ret
+prs_chr_null:
+  mov rax,~0
   ret
