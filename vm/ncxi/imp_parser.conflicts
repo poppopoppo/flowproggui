@@ -1,0 +1,32 @@
+
+** Conflict (shift/reduce) in state 184.
+** Token involved: COPRD_END
+** This state is reached from file after reading:
+
+MDL NAM LCE NAM ARR_REV MTC reg_ptn COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines 
+
+** The derivations that appear below have the following common factor:
+** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
+
+file 
+def_mdl file 
+MDL NAM gl_etr_lst mdl_end 
+        mdl_etr nls gl_etr_lst 
+        glb_etr 
+        LCE NAM ARR_REV ir_lines 
+                        (?)
+
+** In state 184, looking ahead at COPRD_END, shifting is permitted
+** because of the following sub-derivation:
+
+MTC reg_ptn mtc_ir_end 
+            COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir_end 
+                                                    coprd_ptn_end ir_ptn ir_ptn_eq SRC ir_lines 
+                                                    . COPRD_END 
+
+** In state 184, looking ahead at COPRD_END, reducing production
+** mtc_ir -> COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines 
+** is permitted because of the following sub-derivation:
+
+MTC reg_ptn mtc_ir COPRD_END // lookahead token appears
+            COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines . 

@@ -3522,9 +3522,9 @@ and emt_ir i1 gns ns iv p =
             e_d_l^e_dl^
             e_c0^
             "\tjmp "^lbi^"\n"
-(*let k1 = mk_mtc_v_k_eq_and k0 ri in
-            pnt true "X4\n";
-            emt_mtc_eq iv0 h0 0 s0 k1 l0  p psl_tl dl d_l lbi*)
+          (*let k1 = mk_mtc_v_k_eq_and k0 ri in
+                      pnt true "X4\n";
+                      emt_mtc_eq iv0 h0 0 s0 k1 l0  p psl_tl dl d_l lbi*)
           | (ri,es,dl,d_l,lbi)::psl_tl ->
             let _ = mk_idx_iv iv0 ir (mk_idx_ptn ri) in
             let e_c0 = "; "^(List.fold_left ( fun s i -> s^"/"^(string_of_int i)) "" h0)^"/\n" in
@@ -3999,8 +3999,8 @@ and emt_ir i1 gns ns iv p =
                         ( match ix with
                           | RP.A(R.Idx x0) ->
                             let _ = mk_idx_iv iv ix (mk_idx_ptn y) in
-                              c_l^
-                              "\tadd "^(emt_reg_x86 x0)^",1\n"
+                            c_l^
+                            "\tadd "^(emt_reg_x86 x0)^",1\n"
                           | _ -> err "emt_ir _inc 0" )
                       | ep when ep=Ast.Axm._dec ->
                         let ix = csm_ptn_iv (mk_idx_ptn x) iv in
@@ -4017,7 +4017,7 @@ and emt_ir i1 gns ns iv p =
                         ( match ix with
                           | RP.R[|RP.A(R.Idx x0);RP.A(R.Idx x1)|] ->
                             let iy = RP.R [|RP.A(R.Idx x0);RP.A(R.Idx x1);RP.A(R.Idx im)|] in
-                        let _ = mk_idx_iv iv iy (mk_idx_ptn y) in
+                            let _ = mk_idx_iv iv iy (mk_idx_ptn y) in
                             if x1<9 then
                               c_l^
                               "\tcmp "^(emt_reg_x86 x0)^","^(emt_reg_x86 x1)^"\n"^
@@ -4149,19 +4149,17 @@ and emt_ir i1 gns ns iv p =
             let lc = Util.fmt_of_string c in
             let (_,e_l) =
               List.fold_left
-                (fun (i,e_l) si ->
-                   let e_i =
-                     "\tmov rax,"^si^"\n"^
-                     "\tmov QWORD [rdi+8*1+8*"^(string_of_int i)^"],rax\n" in
-                   (i+1,e_l^e_i))
+                ( fun (i,e_l) si ->
+                    let e_i =
+                      "\tmov rax,"^si^"\n"^
+                      "\tmov QWORD [rdi+8*1+8*"^(string_of_int i)^"],rax\n" in
+                    (i+1,e_l^e_i))
                 (0,"") lc in
 
             let e0 =
               c0^
-              push_all^
               "\tmov rdi,"^(string_of_int sl)^"\n"^
               "\tcall mlc_s8\n"^
-              pop_all^
               "\tmov rdi,rax\n"^
               e_l^
               "\tmov "^(emt_reg_x86 im)^",rdi\n"^
@@ -4180,17 +4178,6 @@ and emt_ir i1 gns ns iv p =
               else
                 "\tmov "^(emt_reg_x86 im)^",0x"^(Int64.format "%x" x)^"\n" )^
             "\tbts r12,"^(string_of_int im)^"\n"
-          (*let ir = idx_crt s r in
-            let im = idx_min 0 s in
-            let rm = emt_reg_x86 im in
-            let e0 =
-            "\tmov QWORD "^rm^",0x"^(Int64.format "%x" x)^"\n"^
-            (*"\tmov QWORD "^(emt_reg_x86 ir)^","^rm^"\n"*)
-            (mov_idx im ir)
-            (* "\tbts r12,"^(string_of_int ir)^"\n" *)
-            ^"\tor r12,"^(emt_0b ir)^"\n" in
-            c0^e0
-          *)
           | IR_Exp(Ast.Name _,_,Rcd_Ptn.A _) -> err "emt_ir T2"
           (*let (epf,_) = (try !(get_ns_e !ns f) with _ -> err "emt_ir a2") in
             let ir = idx_crt s r in
@@ -4207,171 +4194,120 @@ and emt_ir i1 gns ns iv p =
             (* "\tbts r12,"^(string_of_int ir)^"\n" *)
             ^"\tand r12,~"^(emt_0b ir)^"\n" in
             c0^e0 *)
-          | IR_S8 { contents=IR_S8_C(_,_,_) } -> err "emt_ir T3"
-          (* let lb_x = lb () in
-             let lb_m = lb () in
-             let c0 = cmt ("» _^ ..") in
-             let rc0 = Array.map (fun _ -> 0) rs0 in
-             let (ep0,l) = push_reg s x86_reg_lst in
-             let ep1 = pop_reg l in
-             let ir = idx_crt s rs1.(0) in
-             let is0 = Array.map (fun v -> idx_csm s v) rs0 in
-             let ir1 =
-             Array.mapi
-              (fun i v ->
-                 if i=0 then ir
-                 else
-                   let i0 = is0.(i-1) in
-                   Hashtbl.add s i0 v; i0 ) rs1 in
-             let rec len l =
-             ( match l with
+          | IR_S8 { contents=IR_S8_C(pl,rs0,rs1) } ->
+          let ls0 = Array.length rs0 in
+          let im = RSet.min_0 (rset_iv iv) in
+          let c0 = cmt ("» _^ ..") in
+          let rc0 = Array.map (fun _ -> 0) rs0 in
+          let ir0 =
+            Array.mapi
+              ( fun i v ->
+                  let j = csm_iv (mk_idx v) iv in
+                  let _ = mk_idx_iv iv j (RP.A(mk_idx rs1.(i))) in
+                  ( match j with
+                    | RP.A(R.Idx i) -> i
+                    | _ -> err "emt_ir S8 x0" )                  )
+              rs0 in
+          let _ = mk_idx_iv iv (RP.A(R.Idx im)) (RP.A(mk_idx rs1.(ls0))) in
+          let rec len l =
+            ( match l with
               | [] -> 0
               | hd::tl ->
                 let n_hd =
                   ( match hd with
                     | S8_Txt s -> String.length s
                     | S8_Name n ->
-                      let e = get_ns_e !ns n in
+                      let p = slv_ns0 !ns n in
+                      let e = get_ns_e gns p in
                       ( match !e with
-                        | (_,Cst_Stt(Cst.S8 s0)) -> String.length s0
+                        | Cst_Stt(Cst.S8 s0) -> String.length s0
                         | _ -> err "emt_ir _^ 0" )
                     | S8_Var i -> rc0.(i) <- rc0.(i)+1; 0 ) in
                 n_hd+(len tl)
-             ) in
-             let len0 = len pl in
-             let e0 =
-             c0^
-             ep0^
-             "\tmov rbx,"^(string_of_int len0)^"\n"^
-             "\tmov r15,0\n"^
-             "\tmov r13,0\n" in
-             let (_,e_a) =
-             Array.fold_left
+            ) in
+          let len0 = len pl in
+          let e0 =
+            c0^
+            "\tmov rax,"^(string_of_int len0)^"\n"^
+            "\tmov rdi,0\n"^
+            "\tmov rsi,0\n" in
+          let (_,e_a) =
+            Array.fold_left
               (fun (i,e_a) c ->
-                 let lb_c0 = lb () in
                  let e_i =
-                   "\tmov r14,"^(emt_reg_x86 is0.(i))^"\n"^
-                   "\tmov QWORD [ir_s8_vct+8*"^(string_of_int i)^"],r14\n"^
-                   "\tmov r14,[r14]\n"^
-                   "\tmov r15,r14\n"^
-                   "\tshl r14,16\n"^
-                   "\tshr r14,48\n"^
-                   "\tshl r14,3\n"^
-                   "\tand r15,0b111\n"^
-                   "\tcmp r15,0\n"^
-                   "\tjnz "^lb_c0^"\n"^
-                   "\tmov r15,0b1000\n"^
-                   lb_c0^":\n"^
-                   "\tsub r14,r15\n"^
-                   "\tmov QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"],r14\n"^
-                   "\timul r14,"^(string_of_int c)^"\n"^
-                   "\tadd rbx,r14\n" in
+                   "\tmov rdi,"^(emt_reg_x86 ir0.(i))^"\n"^
+                   "\tmov rdi,QWOWRD [rdi]\n"^
+                   "\tmov rsi,rdi\n"^
+                   "\tshr rdi,29\n"^
+                   "\tand rdi,~0b1111\n"^
+                   "\tand rsi,0b0111\n"^
+                   "\tadd rdi,rsi\n"^
+                   "\tmov QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"],rdi\n"^
+                   "\timul rdi,"^(string_of_int c)^"\n"^
+                   "\tadd rax,rdi\n" in
                  (i+1,e_a^e_i)) (0,"") rc0 in
-             let e_1 =
-             "\tmov r14,rbx\n"^
-             "\tand r14,0b111\n"^
-             "\tmov r15,0b1000\n"^
-             "\tsub r15,r14\n"^
-             "\tmov rdi,rbx\n"^
-             "\tshr rdi,3\n"^
-             "\tadd rdi,1\n"^
-             "\tcall mlc\n"^
-             "\tmov r13,[rax]\n"^
-             "\tand r13,~0xffff\n"^
-             "\tadd r13,r15\n"^
-             "\tbts r13,16\n"^
-             "\tmov [rax],r13\n"^
-             "\tmov r13,rax\n"^
-             ep1^
-             "\tmov r14,0\n"^
-             (List.fold_left
+          let e_1 =
+            "\tmov rdi,rax\n"^
+            "\tcall mlc_s8\n"^
+            "\tmov rdi,rax\n"^
+            "\tadd rdi,8\n"^
+            (List.fold_left
                ( fun e_p p ->
                    match p with
                    | Ast.S8_Txt s ->
                      let l_s = String.length s in
-                     let rec lp i =
-                       if i<l_s
-                       then
-                         "\tmov BYTE [r13+8*1+r14],"^(string_of_int(Char.code s.[i]))^"\n"^
-                         "\tadd r14,1\n"^
-                         (lp (i+1))
-                       else "" in
+                     let lc = Util.fmt_of_string s in
+                     let (_,e_l) =
+                       List.fold_left
+                         ( fun (i,e_l) si ->
+                             let e_i =
+                               "\tmov rsi,"^si^"\n"^
+                               "\tmov QWORD [rdi+8*"^(string_of_int i)^"],rsi\n" in
+                             (i+1,e_l^e_i))
+                         (0,"") lc in
                      e_p^
                      "; \""^(String.escaped s)^"\"\n"^
-                     (lp 0)
+                     e_l^
+                     "\tadd rdi,"^(string_of_int l_s)^"\n"
                    | Ast.S8_Var i ->
-                     let lb_0 = "LB_"^(Sgn.print (sgn ())) in
-                     let lb_1 = "LB_"^(Sgn.print (sgn ())) in
                      e_p^
                      "; "^(string_of_int i)^"\'\n"^
-                     "\tmov r15,"^(emt_reg_x86 is0.(i))^"\n"^
-                     "\tmov rbx,QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"]\n"^
-                     "\tadd r15,8\n"^
-                     "\tpush rax\n"^
-                     lb_0^":\n"^
-                     "\tmov al,BYTE [r15]\n"^
-                     "\tcmp rbx,0\n"^
-                     "\tjz "^lb_1^"\n"^
-                     "\tmov BYTE [r13+8*1+r14],al\n"^
-                     "\tadd r14,1\n"^
-                     "\tadd r15,1\n"^
-                     "\tsub rbx,1\n"^
-                     "\tjmp "^lb_0^"\n"^
-                     lb_1^":\n"^
-                     "\tpop rax\n"
+                     "\tpush rcx\n"^
+                     "\tmov rsi,"^(emt_reg_x86 ir0.(i))^"\n"^
+                     "\tadd rsi,8\n"^
+                     "\tmov rcx,QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"]\n"^
+                     "\trep movsb\n"^
+                     "\tpop rcx\n"
                    | Ast.S8_Name n ->
-                     let e = get_ns_e !ns n in
+                   let p = slv_ns0 !ns n in
+                   let e = get_ns_e gns p in
                      ( match !e with
-                       | (_,Cst_Stt(Cst.S8 s)) ->
+                       | Cst_Stt(Cst.S8 s) ->
                          let l_s = String.length s in
-                         let bl = l_s / 8 in
-                         (*let m = l_s mod 8 in*)
-                         let (lc,ml) = Util.fmt_of_string_m s in
+                         let lc = Util.fmt_of_string s in
                          let (_,e_l) =
                            List.fold_left
-                             (fun (i,e_l) si ->
-                                let e_i =
-                                  "\tmov rbx,"^si^"\n"^
-                                  "\tmov QWORD [r13+r14+8*1+8*"^(string_of_int i)^"],rbx\n" in
-                                (i+1,e_l^e_i))
+                             ( fun (i,e_l) si ->
+                                 let e_i =
+                                   "\tmov rsi,"^si^"\n"^
+                                   "\tmov QWORD [rdi+8*"^(string_of_int i)^"],rsi\n" in
+                                 (i+1,e_l^e_i))
                              (0,"") lc in
-                         let (_,e_m) =
-                           List.fold_left
-                             (fun (i,e_m) sj ->
-                                let e_i =
-                                  "\tmov rbx,0x"^sj^"\n"^
-                                  "\tmov BYTE [r13+r14+8*1+8*"^(string_of_int bl)^"+"^(string_of_int i)^"],bl\n" in
-                                (i+1,e_m^e_i))
-                             (0,"") ml in
                          e_p^
-                         "; \""^(pnt_name n)^"\"\n"^
-                         (*(lp 0)*)
+                         "; \""^(String.escaped s)^"\"\n"^
                          e_l^
-                         e_m^
-                         "\tadd r14,"^(string_of_int l_s)^"\n"
+                         "\tadd rdi,"^(string_of_int l_s)^"\n"
                        | _ -> err "emt_ir _^ 0" ) )
                "" pl
-             )^
-             "; //\n"^
-             "\tmov rbx,QWORD [r13]\n"^
-             "\tand rbx,0b111\n"^
-             "\tcmp rbx,0\n"^
-             "\tjnz "^lb_m^"\n"^
-             "\tmov rbx,0b1000\n"^
-             lb_m^":\n"^
-             lb_x^":\n"^
-             "\tmov BYTE [r13+8*1+r14],0\n"^
-             "\tsub rbx,1\n"^
-             "\tadd r14,1\n"^
-             "\tcmp rbx,0\n"^
-             "\tjnz "^lb_x^"\n"^
-             "\tmov "^(emt_reg_x86 ir1.(0))^",r13\n"^
-             "\tbtr r12,"^(string_of_int ir1.(0))^"\n" in
-             e0^e_a^e_1 *)
-          | _ -> err "emt_etr 0" ) in
-      s0^(emt_ir i1 gns ns iv p1)
-    | _ -> err "emt_ir T4"
-  )
+            )^
+            "; //\n"^
+            "\tmov "^(emt_reg_x86 im)^",rax\n"^
+            "\tbtr r12,"^(string_of_int im)^"\n" in
+          e0^e_a^e_1
+    | _ -> err "emt_etr 0" ) in
+s0^(emt_ir i1 gns ns iv p1)
+| _ -> err "emt_ir T4"
+)
 and emt_ptn r = R.print r (*
 and pnt_idx s = Hashtbl.fold (fun n v q -> q^" "^(string_of_int n)^"~"^(Ast.print_v v)) s ""
 and mov_idx i0 i1 =
