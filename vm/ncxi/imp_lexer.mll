@@ -28,7 +28,7 @@ rule token = parse
     | "§"  { LCE }
     | "§=" { LCE_EQ }
     | "§~" { LCE_EXEC }
-    | ".." { ENV }
+    | "##" { ENV }
     | "§+0" { LCE_IR  }
     | "§§"  { MDL }
     | "§§." { MDL_END }
@@ -47,6 +47,7 @@ rule token = parse
     | "◃|"  { CNS_IR  }
     | "|~"  { INI_IR }
     | "~|"  { MTC_IR }
+    | "∐#" { SYNT_COPRD }
     | "≃" { ISO }
     | "~" { LET }
     | "<" { OP }
@@ -111,6 +112,7 @@ rule token = parse
     | "+" { PLS }
     | "*" { MLT }
     | "-" { MNS }
+    | ".." { BYTE }
     | "⅁" { GRM }
     | "¬" { NOT }
     | "_^" { S8_E }

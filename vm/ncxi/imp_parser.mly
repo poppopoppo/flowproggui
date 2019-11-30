@@ -13,7 +13,7 @@
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
-%token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV
+%token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE
 %token <string> NAM STG VAL REG PRM LINE
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
@@ -154,6 +154,7 @@ grm_rule:
 ord:
   | COPRD { Grm.Lex }
   | ORD_LEX_COPRD { Grm.Synt }
+  | SYNT_COPRD { Grm.Synt }
   ;
 grm_ptns:
   | { [] }
@@ -167,6 +168,8 @@ grm_ptn:
 grm_atom:
   | STG { Grm.Txt $1 }
   | name { Grm.Name $1 }
+  | MLT { Grm.Name(EndN "_byt") }
+  | BYTE { Grm.Name(EndN "_byt") }
   ;
 grm_prd:
   | { None }
