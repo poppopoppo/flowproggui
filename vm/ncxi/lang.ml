@@ -2538,7 +2538,7 @@ and init_prm () =
   let ns = ref (init_ns ()) in
   let gns = init_gns () in
 
-  (*!ns.ns_m_t <- ("_byt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  !ns.ns_m_t <- ("_byt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   !ns.ns_m <- ("_byt",ns_g)::!ns.ns_m;
@@ -2553,38 +2553,36 @@ and init_prm () =
     (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
     "\t\tdq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001\n"^
     "\t\tdq NS_E_"^(Sgn.print epf)^"\n" in
-  let l0 = "NS_E_"^(Sgn.print epf)^"_LB_0" in
   let l_e = "NS_E_"^(Sgn.print epf) in
   let l_e_rdi = "NS_E_RDI_"^(Sgn.print epf) in
   let l_e_tbl = "NS_E_"^(Sgn.print epf)^"_ETR_TBL" in
+  let l0 = lb () in
   let emt_byt =
     l_e^":\n"^
     l_e_rdi^":\n"^
     l_e_tbl^":\n"^
     "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
     "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
-    "\txor rax,rax\n"^
-    "\tmov al,BYTE [rdi+8+rsi]\n"^
-    "\tcall prs_chr\n"^
-    "\tmov "^(emt_reg_x86 0)^",rdi\n"^
-    "\tmov "^(emt_reg_x86 1)^",rsi\n"^
-    "\tbt rax,63\n"^
-    "\tjc "^l0^"\n"^
+    "\tcall byt\n"^
+    "\tjnc "^l0^"\n"^
+    "\tadd "^(emt_reg_x86 1)^",1\n"^
     "\tmov "^(emt_reg_x86 2)^",0\n"^
     "\tmov "^(emt_reg_x86 3)^",rax\n"^
-    "\tbtr r12,3\n"^
+    "\tbts r12,3\n"^
     "\tbts r12,2\n"^
     "\tret\n"^
     l0^":\n"^
     "\tmov "^(emt_reg_x86 2)^",1\n"^
     "\tmov rdi,rbx\n"^
     "\tmov rbx,QWORD [rbx]\n"^
-    "\tmov rsi,0x0001_0000_0000_ffff\n"^
-    "\tmov QWORD [rdi],rsi\n"^
+    "\tmov rax,0x0000_0000_0000_ffff\n"^
+    "\tmov QWORD [rdi],rax\n"^
     "\tmov "^(emt_reg_x86 3)^",rdi\n"^
     "\tbtr r12,3\n"^
     "\tbts r12,2\n"^
-    "\tret\n" in*)
+    "\tret\n"
+  in
+
   !ns.ns_m_t <- ("_chr",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
@@ -2872,7 +2870,7 @@ and init_prm () =
   gns.ns <- (Ast.Axm._mov_x,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._mov_x,ref(E_K_WC))::gns.ns_e;
 
-  (se_emt_q^se_chr^se_dgt^se_u_al^se_l_al^se_emt^se_pp_v,em_emt_q^em_chr^em_dgt^em_l_al^em_u_al^em_emt^em_pp_v,ns,gns)
+  (se_emt_q^se_byt^se_chr^se_dgt^se_u_al^se_l_al^se_emt^se_pp_v,em_emt_q^emt_byt^em_chr^em_dgt^em_l_al^em_u_al^em_emt^em_pp_v,ns,gns)
 and emt_exe m =
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in

@@ -1015,5 +1015,12 @@ prs_chr_null:
 byt: ; rdi=stg rsi=offset
   mov rax,QWORD [rdi]
   shr rax,32
-  and rax,0xffff
-  shl rax,3
+  cmp rsi,rax
+  jge byt_bound_err
+  xor rax,rax
+  mov al,BYTE [rdi+8*1+rsi]
+  stc
+  ret
+byt_bound_err:
+  clc
+  ret
