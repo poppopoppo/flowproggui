@@ -1,4 +1,8 @@
 §§ OpADL 
+§§ type 
+∎∎ 
+§§ ast 
+∎∎
 §§ syntax 
 §§+s8 
 	@.glb_etr_lst
@@ -75,5 +79,7 @@
 	;syntax.word.prs { sa x0 } ⊢ { sa x0 a0 } 
 	syntax.mdl_etr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	_emt_q { sa x0 a0 } ⊢ { sa x0 a0 } 
+	_in0 {} ⊢ s_in0 
+	_emt_q s_in0 ⊢ s_in0 
 	∎ {}
 ∎∎

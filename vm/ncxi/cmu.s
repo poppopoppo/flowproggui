@@ -44,6 +44,30 @@ section .bss
   mtc_vct_9: resb (8+8) * 32
   mtc_vct_10: resb (8+8) * 32
   mtc_vct_11: resb (8+8) * 32
+  in0: resq 1
+  stat: resb 144
+  struc STAT
+    .st_dev         resq 1
+    .st_ino         resq 1
+    .st_mode        resd 1
+    .st_nlink       resd 1
+    .st_uid         resd 1
+    .st_gid         resd 1
+    .st_rdev        resq 1
+    .pad1           resq 1
+    .st_size        resq 1
+    .st_blksize     resd 1
+    .pad2 resd 1
+    .st_blocks      resq 1
+    .st_atime       resq 1
+    .st_atime_nsec  resq 1
+    .st_mtime       resq 1
+    .st_mtime_nsec  resq 1
+    .st_ctime       resq 1
+    .st_ctime_nsec  resq 1
+    .__unused4  resd 1
+    .__unused5  resd 1
+  endstruc
 
 section .data
   out_n: dq 0
@@ -1023,4 +1047,42 @@ byt: ; rdi=stg rsi=offset
   ret
 byt_bound_err:
   clc
+  ret
+
+in0_init:
+  mov rax,5
+  mov rsi,stat
+  mov rdi,0
+  syscall
+  mov rdi,[stat + STAT.st_size]
+  push rdi
+  call mlc_s8
+  pop rdx
+  push rax
+  mov rsi,rax
+  add rsi,8
+  mov rax,0
+  mov rdi,0
+  syscall
+  pop rdi
+  mov QWORD [in0],rdi
+  add rdi,8
+  mov rax,0
+  call printf
+  ret
+rpc_s8: ; rdi=src
+  push rcx
+  mov rsi,[rdi]
+  shr rsi,32
+  push rdi
+  push rsi
+  mov rdi,rsi
+  call mlc_s8
+  pop rcx
+  pop rsi
+  mov rdi,rax
+  add rdi,8
+  add rsi,8
+  rep movsb
+  pop rcx
   ret
