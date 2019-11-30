@@ -7,9 +7,9 @@ License along with this library; if not, write to the Free Software Foundation, 
 <!DOCTYPE language SYSTEM "language.dtd">
 <language id="flow" _name="flow" version="2.0" _section="Sources">
   <metadata>
-    <property name="globs">*.ml;*.mli;*.mll;*.mly</property>
-    <property name="block-comment-start">\.\;</property>
-    <property name="block-comment-end">\;\.</property>
+    <property name="globs">*.ml;*.mli;*.mll;*.mly;*.mdls</property>
+    <property name="block-comment-start">\[\;</property>
+    <property name="block-comment-end">\;\]</property>
     <property name="line-comment-start">\;</property>
   </metadata>
 
@@ -100,6 +100,11 @@ License along with this library; if not, write to the Free Software Foundation, 
             <context ref="escape-seq"/>
           </include>
         </context>
+
+        <context id="line_string" style-ref="string" end-at-line-end="true">
+          <start>`</start>
+        </context>
+
         <context id="character-constant" style-ref="string">
           <match>('\%{char-esc}')|('[^\\']')</match>
         </context>
