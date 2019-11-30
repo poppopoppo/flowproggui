@@ -425,6 +425,7 @@ module Ast = struct
   let init_gns () =
     { ns=[]; ns_e=[]; ns_r_t=[]; ns_r_i=[]  }
   module Axm = struct
+    let _in0 = sgn ()
     let _emt_q = sgn ()
     let _app = sgn ()
     let _out = sgn ()
@@ -2763,6 +2764,20 @@ and init_prm () =
     "\tmov rdi,rbx\n"^
     "\tcall dec_r\n"^
     "\tret\n" in *)
+  let v = ref(Ln(Imp(Types.Rcd(rcd_cl []),Types.Axm Types.Axm.stg))) in
+  !ns.ns_p <- ("_in0",Ast.Axm._in0)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._in0,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._in0,ref(Etr_V(RP.R[||],RP.A(R.Idx 0))))::gns.ns_e;
+  let se_in0 = "" in
+  let em_in0 =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._in0)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._in0)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._in0)^":\n"^
+    "\tmov rdi,[in0]\n"^
+    "\tcall rpc_s8\n"^
+    "\tmov "^(emt_reg_x86 0)^",rax\n"^
+    "\tbtr r12,0\n"^
+    "\tret\n" in
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
   !ns.ns_p <- ("_emt_q",Ast.Axm._emt_q)::!ns.ns_p;
@@ -2873,7 +2888,7 @@ and init_prm () =
   gns.ns <- (Ast.Axm._mov_x,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._mov_x,ref(E_K_WC))::gns.ns_e;
 
-  (se_emt_q^se_byt^se_chr^se_dgt^se_u_al^se_l_al^se_emt^se_pp_v,em_emt_q^emt_byt^em_chr^em_dgt^em_l_al^em_u_al^em_emt^em_pp_v,ns,gns)
+  (se_in0^se_emt_q^se_byt^se_chr^se_dgt^se_u_al^se_l_al^se_emt^se_pp_v,em_in0^em_emt_q^emt_byt^em_chr^em_dgt^em_l_al^em_u_al^em_emt^em_pp_v,ns,gns)
 and emt_exe m =
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
@@ -2883,6 +2898,7 @@ and emt_exe m =
     "main:\n"^
     "\tmov r12,~0\n"^
     "\tcall SFLS_init\n"^
+    "\tcall in0_init\n"^
     sx^
     (*"\tmov rdi,0\n"^
       "\tcall mlc\n"^
@@ -3341,28 +3357,7 @@ and mov_unrl_ptn s0 p1 i0 =
               (mov_unrl_ptn s0 pa i0) in
             e0 )
         else err "mov_unrl_ptn 0"
-        | RP.A(R.Agl(ia,_,pa)) ->
-          if (not s0.(ia)) then
-            let l0 = lb () in
-            ( s0.(ia)<-true;
-              let e0 =
-                "\tmov "^(emt_reg_x86 ia)^","^(emt_reg_x86 i0)^"\n"^
-                "\tshr "^(emt_reg_x86 ia)^",56\n"^
-                "\tbts r12,"^(string_of_int ia)^"\n"^
-                "\tmov rax,0x00ff_ffff_ffff_fffe\n"^
-                "\tand rax,"^(emt_reg_x86 i0)^"\n"^
-                "\tbt rax,17\n"^
-                "\tjnc "^l0^"\n"^
-                "\tbt QWORD [rax],0\n"^
-                (cf_set i0)^
-                "\tmov "^(emt_reg_x86 i0)^",QWORD [rax+8*1]\n"^
-                "\tmov QWORD [rax],rbx\n"^
-                "\tmov rbx,rax\n"^
-                l0^":\n"^
-                (mov_unrl_ptn s0 pa i0) in
-              e0 )
-          else err "mov_unrl_ptn 0"
-        | RP.R rs ->
+      | RP.R rs ->
         let s1 = Array.copy s0 in
         let _ = rset_ptn s1 p1 in
         let im = RSet.min_0 s1 in
@@ -4140,6 +4135,7 @@ and emt_ir i1 gns ns iv p =
               "\tmov "^(emt_reg_x86 im)^",rdi\n"^
               "\tbtr r12,"^(string_of_int im)^"\n" in
             e0
+
           | IR_Exp(Ast.ExpCst(Cst.R64 x),RP.R[||],RP.A y) ->
             let im = RSet.min_0 (rset_iv iv) in
             let iy = RP.A(R.Idx im) in
