@@ -2004,9 +2004,10 @@ and emt_ptn_grm i ns ep f r j =
                 "\tmov QWORD [prs_vct+8*1+16*"^(string_of_int j)^"],rax\n"
               | Grm.Name f ->
                 let mf = get_ns_m_t ns f in
+                let m_ns = get_ns_m ns f in
                 ( match !mf with
                   | M_Prm "grm" ->
-                    let epf = List.assoc "prs" ns.ns_p in
+                    let epf = List.assoc "prs" !m_ns.ns_p in
                     "; "^(pnt_name f)^"\n"^
                     es^
                     "\tcall NS_E_"^(Sgn.print epf)^"_ETR_TBL\n"^
@@ -2536,6 +2537,54 @@ let rec emt_m gns (ns:ns_v ref) ld el =
 and init_prm () =
   let ns = ref (init_ns ()) in
   let gns = init_gns () in
+
+  (*!ns.ns_m_t <- ("_byt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  let ns_g = ref(init_ns ()) in
+  !ns_g.root <- (Some ns);
+  !ns.ns_m <- ("_byt",ns_g)::!ns.ns_m;
+  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.r64)))::!ns_g.ns_t;
+  let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.r64)])) in
+  let epf = sgn () in
+  !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
+  gns.ns <- (epf,ref(Ln yp))::gns.ns;
+  gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|])))::gns.ns_e;
+  let se_byt =
+    "\tNS_E_DYN_"^(Sgn.print epf)^":\n"^
+    (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
+    "\t\tdq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001\n"^
+    "\t\tdq NS_E_"^(Sgn.print epf)^"\n" in
+  let l0 = "NS_E_"^(Sgn.print epf)^"_LB_0" in
+  let l_e = "NS_E_"^(Sgn.print epf) in
+  let l_e_rdi = "NS_E_RDI_"^(Sgn.print epf) in
+  let l_e_tbl = "NS_E_"^(Sgn.print epf)^"_ETR_TBL" in
+  let emt_byt =
+    l_e^":\n"^
+    l_e_rdi^":\n"^
+    l_e_tbl^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+    "\txor rax,rax\n"^
+    "\tmov al,BYTE [rdi+8+rsi]\n"^
+    "\tcall prs_chr\n"^
+    "\tmov "^(emt_reg_x86 0)^",rdi\n"^
+    "\tmov "^(emt_reg_x86 1)^",rsi\n"^
+    "\tbt rax,63\n"^
+    "\tjc "^l0^"\n"^
+    "\tmov "^(emt_reg_x86 2)^",0\n"^
+    "\tmov "^(emt_reg_x86 3)^",rax\n"^
+    "\tbtr r12,3\n"^
+    "\tbts r12,2\n"^
+    "\tret\n"^
+    l0^":\n"^
+    "\tmov "^(emt_reg_x86 2)^",1\n"^
+    "\tmov rdi,rbx\n"^
+    "\tmov rbx,QWORD [rbx]\n"^
+    "\tmov rsi,0x0001_0000_0000_ffff\n"^
+    "\tmov QWORD [rdi],rsi\n"^
+    "\tmov "^(emt_reg_x86 3)^",rdi\n"^
+    "\tbtr r12,3\n"^
+    "\tbts r12,2\n"^
+    "\tret\n" in*)
   !ns.ns_m_t <- ("_chr",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
@@ -2831,8 +2880,7 @@ and emt_exe m =
   let ex =
     "%include \"cmu.s\"\n"^
     "main:\n"^
-    "\tmov r12,0\n"^
-    "\tnot r12\n"^
+    "\tmov r12,~0\n"^
     "\tcall SFLS_init\n"^
     sx^
     (*"\tmov rdi,0\n"^
@@ -4079,13 +4127,7 @@ and emt_ir i1 gns ns iv p =
                  let e_i =
                    "\tmov rdi,"^(emt_reg_x86 ir0.(i))^"\n"^
                    "\tmov rdi,QWORD [rdi]\n"^
-                   "\tmov rsi,rdi\n"^
                    "\tshr rdi,32\n"^
-                   "\tand rdi,0xffff\n"^
-                   "\tsub rdi,1\n"^
-                   "\tshl rdi,3\n"^
-                   "\tand rsi,0b0111\n"^
-                   "\tadd rdi,rsi\n"^
                    "\tmov QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"],rdi\n"^
                    "\timul rdi,"^(string_of_int c)^"\n"^
                    "\tadd rax,rdi\n" in

@@ -1,9 +1,8 @@
 %include "cmu.s"
 main:
-	mov r12,0
-	not r12
+	mov r12,~0
 	call SFLS_init
-	call NS_E_5177
+	call NS_E_1250
 	call exec_out
 	jmp _end
 NS_E_ID_14: dq 0
@@ -43,22 +42,22 @@ NS_E_RDI_14:
 	pop r15
 	pop r14
 	ret
-NS_E_4375:
-NS_E_RDI_4375:
-NS_E_4375_ETR_TBL:
+NS_E_448:
+NS_E_RDI_448:
+NS_E_448_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	call prs_chr
 	mov r13,rdi
 	mov r14,rsi
 	bt rax,63
-	jc NS_E_4375_LB_0
+	jc NS_E_448_LB_0
 	mov r15,0
 	mov r8,rax
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4375_LB_0:
+NS_E_448_LB_0:
 	mov r15,1
 	mov rdi,rbx
 	mov rbx,QWORD [rbx]
@@ -68,46 +67,46 @@ NS_E_4375_LB_0:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4376:
-NS_E_RDI_4376:
-NS_E_4376_ETR_TBL:
+NS_E_449:
+NS_E_RDI_449:
+NS_E_449_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,48
-	jb NS_E_4376_LB_0
+	jb NS_E_449_LB_0
 	cmp r11,57
-	ja NS_E_4376_LB_0
+	ja NS_E_449_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_4376_LB_0:
+NS_E_449_LB_0:
 	mov rax,0
 	ret
-NS_E_4378:
-NS_E_RDI_4378:
-NS_E_4378_ETR_TBL:
+NS_E_451:
+NS_E_RDI_451:
+NS_E_451_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,97
-	jb NS_E_4378_LB_0
+	jb NS_E_451_LB_0
 	cmp r11,122
-	ja NS_E_4378_LB_0
+	ja NS_E_451_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_4378_LB_0:
+NS_E_451_LB_0:
 	mov rax,0
 	ret
-NS_E_4377:
-NS_E_RDI_4377:
-NS_E_4377_ETR_TBL:
+NS_E_450:
+NS_E_RDI_450:
+NS_E_450_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,65
-	jb NS_E_4377_LB_0
+	jb NS_E_450_LB_0
 	cmp r11,90
-	ja NS_E_4377_LB_0
+	ja NS_E_450_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_4377_LB_0:
+NS_E_450_LB_0:
 	mov rax,0
 	ret
 NS_E_17:
@@ -137,34 +136,34 @@ NS_E_RDI_21:
 	or QWORD [rax],rsi
 	clc
 	ret
-NS_E_4380:
-NS_E_RDI_4380:
-NS_E_4380_ETR_TBL:
-NS_E_4380_TBL:
+NS_E_453:
+NS_E_RDI_453:
+NS_E_453_ETR_TBL:
+NS_E_453_TBL:
 	push r14
 ; glb_etr
-	call NS_E_4380_ETR_TBL
+	call NS_E_455_ETR_TBL
 	cmp r15,0
-	jz LB_4469
-	jmp NS_E_4380_MTC_0_failed
-LB_4469:
+	jz LB_542
+	jmp NS_E_453_MTC_0_failed
+LB_542:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*0],rax
 	mov QWORD [prs_vct+8*1+16*0],r8
 ; glb_etr_lst
-	call NS_E_4380_ETR_TBL
+	call NS_E_453_ETR_TBL
 	cmp r15,0
-	jz LB_4473
+	jz LB_546
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4474
+	jc LB_547
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4474:
-	jmp NS_E_4380_MTC_0_failed
-LB_4473:
+LB_547:
+	jmp NS_E_453_MTC_0_failed
+LB_546:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -177,16 +176,16 @@ LB_4473:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4464
+	jc LB_537
 	btr QWORD [rdi],1
-LB_4464:
+LB_537:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4465
+	jc LB_538
 	btr QWORD [rdi],0
-LB_4465:
+LB_538:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -196,7 +195,7 @@ LB_4465:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4380_MTC_0_failed:
+NS_E_453_MTC_0_failed:
 	pop r14
 	push r14
 	pop rdi
@@ -211,7 +210,7 @@ NS_E_4380_MTC_0_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4380_MTC_1_failed:
+NS_E_453_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -221,17 +220,17 @@ NS_E_4380_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4382:
-NS_E_RDI_4382:
-NS_E_4382_ETR_TBL:
-NS_E_4382_TBL:
+NS_E_455:
+NS_E_RDI_455:
+NS_E_455_ETR_TBL:
+NS_E_455_TBL:
 	push r14
 ; mdl_etr
-	call NS_E_4382_ETR_TBL
+	call NS_E_457_ETR_TBL
 	cmp r15,0
-	jz LB_4498
-	jmp NS_E_4382_MTC_0_failed
-LB_4498:
+	jz LB_571
+	jmp NS_E_455_MTC_0_failed
+LB_571:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -244,9 +243,9 @@ LB_4498:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4494
+	jc LB_567
 	btr QWORD [rdi],0
-LB_4494:
+LB_567:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -256,15 +255,15 @@ LB_4494:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4382_MTC_0_failed:
+NS_E_455_MTC_0_failed:
 	pop r14
 	push r14
 ; cst_etr
-	call NS_E_4382_ETR_TBL
+	call NS_E_459_ETR_TBL
 	cmp r15,0
-	jz LB_4492
-	jmp NS_E_4382_MTC_1_failed
-LB_4492:
+	jz LB_565
+	jmp NS_E_455_MTC_1_failed
+LB_565:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -277,9 +276,9 @@ LB_4492:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4488
+	jc LB_561
 	btr QWORD [rdi],0
-LB_4488:
+LB_561:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -289,15 +288,15 @@ LB_4488:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4382_MTC_1_failed:
+NS_E_455_MTC_1_failed:
 	pop r14
 	push r14
 ; op_etr
-	call NS_E_4382_ETR_TBL
+	call NS_E_461_ETR_TBL
 	cmp r15,0
-	jz LB_4486
-	jmp NS_E_4382_MTC_2_failed
-LB_4486:
+	jz LB_559
+	jmp NS_E_455_MTC_2_failed
+LB_559:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -310,9 +309,9 @@ LB_4486:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4482
+	jc LB_555
 	btr QWORD [rdi],0
-LB_4482:
+LB_555:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0200_0000_0000_0001
@@ -322,15 +321,15 @@ LB_4482:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4382_MTC_2_failed:
+NS_E_455_MTC_2_failed:
 	pop r14
 	push r14
 ; dta_etr
-	call NS_E_4382_ETR_TBL
+	call NS_E_463_ETR_TBL
 	cmp r15,0
-	jz LB_4480
-	jmp NS_E_4382_MTC_3_failed
-LB_4480:
+	jz LB_553
+	jmp NS_E_455_MTC_3_failed
+LB_553:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -343,9 +342,9 @@ LB_4480:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4476
+	jc LB_549
 	btr QWORD [rdi],0
-LB_4476:
+LB_549:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0300_0000_0000_0001
@@ -355,7 +354,7 @@ LB_4476:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4382_MTC_3_failed:
+NS_E_455_MTC_3_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -365,48 +364,48 @@ NS_E_4382_MTC_3_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4384:
-NS_E_RDI_4384:
-NS_E_4384_ETR_TBL:
-NS_E_4384_TBL:
+NS_E_457:
+NS_E_RDI_457:
+NS_E_457_ETR_TBL:
+NS_E_457_TBL:
 	push r14
 ; "\194\167\194\167"
-	jmp LB_4543
-LB_4542:
+	jmp LB_616
+LB_615:
 	add r14,1
-LB_4543:
+LB_616:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4542
+	jz LB_615
 	cmp rax,10
-	jz LB_4542
+	jz LB_615
 	cmp rax,32
-	jz LB_4542
+	jz LB_615
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4545
-	jmp NS_E_4384_MTC_0_failed
-LB_4545:
+	jz LB_618
+	jmp NS_E_457_MTC_0_failed
+LB_618:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,167
-	jz LB_4546
-	jmp NS_E_4384_MTC_0_failed
-LB_4546:
+	jz LB_619
+	jmp NS_E_457_MTC_0_failed
+LB_619:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,194
-	jz LB_4547
-	jmp NS_E_4384_MTC_0_failed
-LB_4547:
+	jz LB_620
+	jmp NS_E_457_MTC_0_failed
+LB_620:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+3]
 	cmp al,167
-	jz LB_4548
-	jmp NS_E_4384_MTC_0_failed
-LB_4548:
+	jz LB_621
+	jmp NS_E_457_MTC_0_failed
+LB_621:
 	add r14,4
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -415,226 +414,226 @@ LB_4548:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4555
-LB_4554:
+	jmp LB_628
+LB_627:
 	add r14,1
-LB_4555:
+LB_628:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4554
+	jz LB_627
 	cmp rax,10
-	jz LB_4554
+	jz LB_627
 	cmp rax,32
-	jz LB_4554
-	call NS_E_4384_ETR_TBL
+	jz LB_627
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4556
+	jz LB_629
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4557
+	jc LB_630
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4557:
-	jmp NS_E_4384_MTC_0_failed
-LB_4556:
+LB_630:
+	jmp NS_E_457_MTC_0_failed
+LB_629:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; glb_etr_lst
-	jmp LB_4560
-LB_4559:
+	jmp LB_633
+LB_632:
 	add r14,1
-LB_4560:
+LB_633:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4559
+	jz LB_632
 	cmp rax,10
-	jz LB_4559
+	jz LB_632
 	cmp rax,32
-	jz LB_4559
-	call NS_E_4384_ETR_TBL
+	jz LB_632
+	call NS_E_453_ETR_TBL
 	cmp r15,0
-	jz LB_4561
+	jz LB_634
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4562
+	jc LB_635
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4562:
+LB_635:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4563
+	jc LB_636
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4563:
-	jmp NS_E_4384_MTC_0_failed
-LB_4561:
+LB_636:
+	jmp NS_E_457_MTC_0_failed
+LB_634:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*2],rax
 	mov QWORD [prs_vct+8*1+16*2],r8
 ; "\226\136\142\226\136\142"
-	jmp LB_4566
-LB_4565:
+	jmp LB_639
+LB_638:
 	add r14,1
-LB_4566:
+LB_639:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4565
+	jz LB_638
 	cmp rax,10
-	jz LB_4565
+	jz LB_638
 	cmp rax,32
-	jz LB_4565
+	jz LB_638
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,226
-	jz LB_4568
+	jz LB_641
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4595
+	jc LB_668
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4595:
+LB_668:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4596
+	jc LB_669
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4596:
+LB_669:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4597
+	jc LB_670
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4597:
-	jmp NS_E_4384_MTC_0_failed
-LB_4568:
+LB_670:
+	jmp NS_E_457_MTC_0_failed
+LB_641:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,136
-	jz LB_4569
+	jz LB_642
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4591
+	jc LB_664
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4591:
+LB_664:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4592
+	jc LB_665
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4592:
+LB_665:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4593
+	jc LB_666
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4593:
-	jmp NS_E_4384_MTC_0_failed
-LB_4569:
+LB_666:
+	jmp NS_E_457_MTC_0_failed
+LB_642:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,142
-	jz LB_4570
+	jz LB_643
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4587
+	jc LB_660
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4587:
+LB_660:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4588
+	jc LB_661
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4588:
+LB_661:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4589
+	jc LB_662
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4589:
-	jmp NS_E_4384_MTC_0_failed
-LB_4570:
+LB_662:
+	jmp NS_E_457_MTC_0_failed
+LB_643:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+3]
 	cmp al,226
-	jz LB_4571
+	jz LB_644
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4583
+	jc LB_656
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4583:
+LB_656:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4584
+	jc LB_657
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4584:
+LB_657:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4585
+	jc LB_658
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4585:
-	jmp NS_E_4384_MTC_0_failed
-LB_4571:
+LB_658:
+	jmp NS_E_457_MTC_0_failed
+LB_644:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+4]
 	cmp al,136
-	jz LB_4572
+	jz LB_645
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4579
+	jc LB_652
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4579:
+LB_652:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4580
+	jc LB_653
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4580:
+LB_653:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4581
+	jc LB_654
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4581:
-	jmp NS_E_4384_MTC_0_failed
-LB_4572:
+LB_654:
+	jmp NS_E_457_MTC_0_failed
+LB_645:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+5]
 	cmp al,142
-	jz LB_4573
+	jz LB_646
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4575
+	jc LB_648
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4575:
+LB_648:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4576
+	jc LB_649
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4576:
+LB_649:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4577
+	jc LB_650
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4577:
-	jmp NS_E_4384_MTC_0_failed
-LB_4573:
+LB_650:
+	jmp NS_E_457_MTC_0_failed
+LB_646:
 	add r14,6
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -649,30 +648,30 @@ LB_4573:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4537
+	jc LB_610
 	btr QWORD [rdi],3
-LB_4537:
+LB_610:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4538
+	jc LB_611
 	btr QWORD [rdi],2
-LB_4538:
+LB_611:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4539
+	jc LB_612
 	btr QWORD [rdi],1
-LB_4539:
+LB_612:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4540
+	jc LB_613
 	btr QWORD [rdi],0
-LB_4540:
+LB_613:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -682,46 +681,46 @@ LB_4540:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4384_MTC_0_failed:
+NS_E_457_MTC_0_failed:
 	pop r14
 	push r14
 ; "\194\167\194\167"
-	jmp LB_4506
-LB_4505:
+	jmp LB_579
+LB_578:
 	add r14,1
-LB_4506:
+LB_579:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4505
+	jz LB_578
 	cmp rax,10
-	jz LB_4505
+	jz LB_578
 	cmp rax,32
-	jz LB_4505
+	jz LB_578
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4508
-	jmp NS_E_4384_MTC_1_failed
-LB_4508:
+	jz LB_581
+	jmp NS_E_457_MTC_1_failed
+LB_581:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,167
-	jz LB_4509
-	jmp NS_E_4384_MTC_1_failed
-LB_4509:
+	jz LB_582
+	jmp NS_E_457_MTC_1_failed
+LB_582:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,194
-	jz LB_4510
-	jmp NS_E_4384_MTC_1_failed
-LB_4510:
+	jz LB_583
+	jmp NS_E_457_MTC_1_failed
+LB_583:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+3]
 	cmp al,167
-	jz LB_4511
-	jmp NS_E_4384_MTC_1_failed
-LB_4511:
+	jz LB_584
+	jmp NS_E_457_MTC_1_failed
+LB_584:
 	add r14,4
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -730,65 +729,65 @@ LB_4511:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4518
-LB_4517:
+	jmp LB_591
+LB_590:
 	add r14,1
-LB_4518:
+LB_591:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4517
+	jz LB_590
 	cmp rax,10
-	jz LB_4517
+	jz LB_590
 	cmp rax,32
-	jz LB_4517
-	call NS_E_4384_ETR_TBL
+	jz LB_590
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4519
+	jz LB_592
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4520
+	jc LB_593
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4520:
-	jmp NS_E_4384_MTC_1_failed
-LB_4519:
+LB_593:
+	jmp NS_E_457_MTC_1_failed
+LB_592:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; "="
-	jmp LB_4523
-LB_4522:
+	jmp LB_596
+LB_595:
 	add r14,1
-LB_4523:
+LB_596:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4522
+	jz LB_595
 	cmp rax,10
-	jz LB_4522
+	jz LB_595
 	cmp rax,32
-	jz LB_4522
+	jz LB_595
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,61
-	jz LB_4525
+	jz LB_598
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4527
+	jc LB_600
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4527:
+LB_600:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4528
+	jc LB_601
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4528:
-	jmp NS_E_4384_MTC_1_failed
-LB_4525:
+LB_601:
+	jmp NS_E_457_MTC_1_failed
+LB_598:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -797,41 +796,41 @@ LB_4525:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; name
-	jmp LB_4531
-LB_4530:
+	jmp LB_604
+LB_603:
 	add r14,1
-LB_4531:
+LB_604:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4530
+	jz LB_603
 	cmp rax,10
-	jz LB_4530
+	jz LB_603
 	cmp rax,32
-	jz LB_4530
-	call NS_E_4384_ETR_TBL
+	jz LB_603
+	call NS_E_471_ETR_TBL
 	cmp r15,0
-	jz LB_4532
+	jz LB_605
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4533
+	jc LB_606
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4533:
+LB_606:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4534
+	jc LB_607
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4534:
+LB_607:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4535
+	jc LB_608
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4535:
-	jmp NS_E_4384_MTC_1_failed
-LB_4532:
+LB_608:
+	jmp NS_E_457_MTC_1_failed
+LB_605:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -844,30 +843,30 @@ LB_4532:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4500
+	jc LB_573
 	btr QWORD [rdi],3
-LB_4500:
+LB_573:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4501
+	jc LB_574
 	btr QWORD [rdi],2
-LB_4501:
+LB_574:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4502
+	jc LB_575
 	btr QWORD [rdi],1
-LB_4502:
+LB_575:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4503
+	jc LB_576
 	btr QWORD [rdi],0
-LB_4503:
+LB_576:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -877,7 +876,7 @@ LB_4503:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4384_MTC_1_failed:
+NS_E_457_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -887,36 +886,36 @@ NS_E_4384_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4386:
-NS_E_RDI_4386:
-NS_E_4386_ETR_TBL:
-NS_E_4386_TBL:
+NS_E_459:
+NS_E_RDI_459:
+NS_E_459_ETR_TBL:
+NS_E_459_TBL:
 	push r14
 ; "\194\167"
-	jmp LB_4638
-LB_4637:
+	jmp LB_711
+LB_710:
 	add r14,1
-LB_4638:
+LB_711:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4637
+	jz LB_710
 	cmp rax,10
-	jz LB_4637
+	jz LB_710
 	cmp rax,32
-	jz LB_4637
+	jz LB_710
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4640
-	jmp NS_E_4386_MTC_0_failed
-LB_4640:
+	jz LB_713
+	jmp NS_E_459_MTC_0_failed
+LB_713:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,167
-	jz LB_4641
-	jmp NS_E_4386_MTC_0_failed
-LB_4641:
+	jz LB_714
+	jmp NS_E_459_MTC_0_failed
+LB_714:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -925,83 +924,83 @@ LB_4641:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4646
-LB_4645:
+	jmp LB_719
+LB_718:
 	add r14,1
-LB_4646:
+LB_719:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4645
+	jz LB_718
 	cmp rax,10
-	jz LB_4645
+	jz LB_718
 	cmp rax,32
-	jz LB_4645
-	call NS_E_4386_ETR_TBL
+	jz LB_718
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4647
+	jz LB_720
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4648
+	jc LB_721
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4648:
-	jmp NS_E_4386_MTC_0_failed
-LB_4647:
+LB_721:
+	jmp NS_E_459_MTC_0_failed
+LB_720:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; "\194\171"
-	jmp LB_4651
-LB_4650:
+	jmp LB_724
+LB_723:
 	add r14,1
-LB_4651:
+LB_724:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4650
+	jz LB_723
 	cmp rax,10
-	jz LB_4650
+	jz LB_723
 	cmp rax,32
-	jz LB_4650
+	jz LB_723
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4653
+	jz LB_726
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4659
+	jc LB_732
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4659:
+LB_732:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4660
+	jc LB_733
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4660:
-	jmp NS_E_4386_MTC_0_failed
-LB_4653:
+LB_733:
+	jmp NS_E_459_MTC_0_failed
+LB_726:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,171
-	jz LB_4654
+	jz LB_727
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4656
+	jc LB_729
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4656:
+LB_729:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4657
+	jc LB_730
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4657:
-	jmp NS_E_4386_MTC_0_failed
-LB_4654:
+LB_730:
+	jmp NS_E_459_MTC_0_failed
+LB_727:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1010,41 +1009,41 @@ LB_4654:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; op_lines
-	jmp LB_4663
-LB_4662:
+	jmp LB_736
+LB_735:
 	add r14,1
-LB_4663:
+LB_736:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4662
+	jz LB_735
 	cmp rax,10
-	jz LB_4662
+	jz LB_735
 	cmp rax,32
-	jz LB_4662
-	call NS_E_4386_ETR_TBL
+	jz LB_735
+	call NS_E_477_ETR_TBL
 	cmp r15,0
-	jz LB_4664
+	jz LB_737
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4665
+	jc LB_738
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4665:
+LB_738:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4666
+	jc LB_739
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4666:
+LB_739:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4667
+	jc LB_740
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4667:
-	jmp NS_E_4386_MTC_0_failed
-LB_4664:
+LB_740:
+	jmp NS_E_459_MTC_0_failed
+LB_737:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -1057,30 +1056,30 @@ LB_4664:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4632
+	jc LB_705
 	btr QWORD [rdi],3
-LB_4632:
+LB_705:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4633
+	jc LB_706
 	btr QWORD [rdi],2
-LB_4633:
+LB_706:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4634
+	jc LB_707
 	btr QWORD [rdi],1
-LB_4634:
+LB_707:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4635
+	jc LB_708
 	btr QWORD [rdi],0
-LB_4635:
+LB_708:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -1090,34 +1089,34 @@ LB_4635:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4386_MTC_0_failed:
+NS_E_459_MTC_0_failed:
 	pop r14
 	push r14
 ; "\194\167"
-	jmp LB_4605
-LB_4604:
+	jmp LB_678
+LB_677:
 	add r14,1
-LB_4605:
+LB_678:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4604
+	jz LB_677
 	cmp rax,10
-	jz LB_4604
+	jz LB_677
 	cmp rax,32
-	jz LB_4604
+	jz LB_677
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4607
-	jmp NS_E_4386_MTC_1_failed
-LB_4607:
+	jz LB_680
+	jmp NS_E_459_MTC_1_failed
+LB_680:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,167
-	jz LB_4608
-	jmp NS_E_4386_MTC_1_failed
-LB_4608:
+	jz LB_681
+	jmp NS_E_459_MTC_1_failed
+LB_681:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1126,65 +1125,65 @@ LB_4608:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4613
-LB_4612:
+	jmp LB_686
+LB_685:
 	add r14,1
-LB_4613:
+LB_686:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4612
+	jz LB_685
 	cmp rax,10
-	jz LB_4612
+	jz LB_685
 	cmp rax,32
-	jz LB_4612
-	call NS_E_4386_ETR_TBL
+	jz LB_685
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4614
+	jz LB_687
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4615
+	jc LB_688
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4615:
-	jmp NS_E_4386_MTC_1_failed
-LB_4614:
+LB_688:
+	jmp NS_E_459_MTC_1_failed
+LB_687:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; "="
-	jmp LB_4618
-LB_4617:
+	jmp LB_691
+LB_690:
 	add r14,1
-LB_4618:
+LB_691:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4617
+	jz LB_690
 	cmp rax,10
-	jz LB_4617
+	jz LB_690
 	cmp rax,32
-	jz LB_4617
+	jz LB_690
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,61
-	jz LB_4620
+	jz LB_693
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4622
+	jc LB_695
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4622:
+LB_695:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4623
+	jc LB_696
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4623:
-	jmp NS_E_4386_MTC_1_failed
-LB_4620:
+LB_696:
+	jmp NS_E_459_MTC_1_failed
+LB_693:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1193,41 +1192,41 @@ LB_4620:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; cst
-	jmp LB_4626
-LB_4625:
+	jmp LB_699
+LB_698:
 	add r14,1
-LB_4626:
+LB_699:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4625
+	jz LB_698
 	cmp rax,10
-	jz LB_4625
+	jz LB_698
 	cmp rax,32
-	jz LB_4625
-	call NS_E_4386_ETR_TBL
+	jz LB_698
+	call NS_E_465_ETR_TBL
 	cmp r15,0
-	jz LB_4627
+	jz LB_700
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4628
+	jc LB_701
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4628:
+LB_701:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4629
+	jc LB_702
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4629:
+LB_702:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4630
+	jc LB_703
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4630:
-	jmp NS_E_4386_MTC_1_failed
-LB_4627:
+LB_703:
+	jmp NS_E_459_MTC_1_failed
+LB_700:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -1240,30 +1239,30 @@ LB_4627:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4599
+	jc LB_672
 	btr QWORD [rdi],3
-LB_4599:
+LB_672:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4600
+	jc LB_673
 	btr QWORD [rdi],2
-LB_4600:
+LB_673:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4601
+	jc LB_674
 	btr QWORD [rdi],1
-LB_4601:
+LB_674:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4602
+	jc LB_675
 	btr QWORD [rdi],0
-LB_4602:
+LB_675:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -1273,7 +1272,7 @@ LB_4602:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4386_MTC_1_failed:
+NS_E_459_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -1283,36 +1282,36 @@ NS_E_4386_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4388:
-NS_E_RDI_4388:
-NS_E_4388_ETR_TBL:
-NS_E_4388_TBL:
+NS_E_461:
+NS_E_RDI_461:
+NS_E_461_ETR_TBL:
+NS_E_461_TBL:
 	push r14
 ; "\194\167"
-	jmp LB_4708
-LB_4707:
+	jmp LB_781
+LB_780:
 	add r14,1
-LB_4708:
+LB_781:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4707
+	jz LB_780
 	cmp rax,10
-	jz LB_4707
+	jz LB_780
 	cmp rax,32
-	jz LB_4707
+	jz LB_780
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4710
-	jmp NS_E_4388_MTC_0_failed
-LB_4710:
+	jz LB_783
+	jmp NS_E_461_MTC_0_failed
+LB_783:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,167
-	jz LB_4711
-	jmp NS_E_4388_MTC_0_failed
-LB_4711:
+	jz LB_784
+	jmp NS_E_461_MTC_0_failed
+LB_784:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1321,105 +1320,105 @@ LB_4711:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4716
-LB_4715:
+	jmp LB_789
+LB_788:
 	add r14,1
-LB_4716:
+LB_789:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4715
+	jz LB_788
 	cmp rax,10
-	jz LB_4715
+	jz LB_788
 	cmp rax,32
-	jz LB_4715
-	call NS_E_4388_ETR_TBL
+	jz LB_788
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4717
+	jz LB_790
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4718
+	jc LB_791
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4718:
-	jmp NS_E_4388_MTC_0_failed
-LB_4717:
+LB_791:
+	jmp NS_E_461_MTC_0_failed
+LB_790:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; reg_ptn
-	jmp LB_4721
-LB_4720:
+	jmp LB_794
+LB_793:
 	add r14,1
-LB_4721:
+LB_794:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4720
+	jz LB_793
 	cmp rax,10
-	jz LB_4720
+	jz LB_793
 	cmp rax,32
-	jz LB_4720
-	call NS_E_4388_ETR_TBL
+	jz LB_793
+	call NS_E_489_ETR_TBL
 	cmp r15,0
-	jz LB_4722
+	jz LB_795
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4723
+	jc LB_796
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4723:
+LB_796:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4724
+	jc LB_797
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4724:
-	jmp NS_E_4388_MTC_0_failed
-LB_4722:
+LB_797:
+	jmp NS_E_461_MTC_0_failed
+LB_795:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*2],rax
 	mov QWORD [prs_vct+8*1+16*2],r8
 ; op_lines
-	jmp LB_4727
-LB_4726:
+	jmp LB_800
+LB_799:
 	add r14,1
-LB_4727:
+LB_800:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4726
+	jz LB_799
 	cmp rax,10
-	jz LB_4726
+	jz LB_799
 	cmp rax,32
-	jz LB_4726
-	call NS_E_4388_ETR_TBL
+	jz LB_799
+	call NS_E_477_ETR_TBL
 	cmp r15,0
-	jz LB_4728
+	jz LB_801
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4729
+	jc LB_802
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4729:
+LB_802:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4730
+	jc LB_803
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4730:
+LB_803:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4731
+	jc LB_804
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4731:
-	jmp NS_E_4388_MTC_0_failed
-LB_4728:
+LB_804:
+	jmp NS_E_461_MTC_0_failed
+LB_801:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -1432,30 +1431,30 @@ LB_4728:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4702
+	jc LB_775
 	btr QWORD [rdi],3
-LB_4702:
+LB_775:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4703
+	jc LB_776
 	btr QWORD [rdi],2
-LB_4703:
+LB_776:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4704
+	jc LB_777
 	btr QWORD [rdi],1
-LB_4704:
+LB_777:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4705
+	jc LB_778
 	btr QWORD [rdi],0
-LB_4705:
+LB_778:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -1465,34 +1464,34 @@ LB_4705:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4388_MTC_0_failed:
+NS_E_461_MTC_0_failed:
 	pop r14
 	push r14
 ; "\194\167"
-	jmp LB_4675
-LB_4674:
+	jmp LB_748
+LB_747:
 	add r14,1
-LB_4675:
+LB_748:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4674
+	jz LB_747
 	cmp rax,10
-	jz LB_4674
+	jz LB_747
 	cmp rax,32
-	jz LB_4674
+	jz LB_747
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4677
-	jmp NS_E_4388_MTC_1_failed
-LB_4677:
+	jz LB_750
+	jmp NS_E_461_MTC_1_failed
+LB_750:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,167
-	jz LB_4678
-	jmp NS_E_4388_MTC_1_failed
-LB_4678:
+	jz LB_751
+	jmp NS_E_461_MTC_1_failed
+LB_751:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1501,65 +1500,65 @@ LB_4678:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4683
-LB_4682:
+	jmp LB_756
+LB_755:
 	add r14,1
-LB_4683:
+LB_756:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4682
+	jz LB_755
 	cmp rax,10
-	jz LB_4682
+	jz LB_755
 	cmp rax,32
-	jz LB_4682
-	call NS_E_4388_ETR_TBL
+	jz LB_755
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4684
+	jz LB_757
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4685
+	jc LB_758
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4685:
-	jmp NS_E_4388_MTC_1_failed
-LB_4684:
+LB_758:
+	jmp NS_E_461_MTC_1_failed
+LB_757:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; "="
-	jmp LB_4688
-LB_4687:
+	jmp LB_761
+LB_760:
 	add r14,1
-LB_4688:
+LB_761:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4687
+	jz LB_760
 	cmp rax,10
-	jz LB_4687
+	jz LB_760
 	cmp rax,32
-	jz LB_4687
+	jz LB_760
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,61
-	jz LB_4690
+	jz LB_763
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4692
+	jc LB_765
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4692:
+LB_765:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4693
+	jc LB_766
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4693:
-	jmp NS_E_4388_MTC_1_failed
-LB_4690:
+LB_766:
+	jmp NS_E_461_MTC_1_failed
+LB_763:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1568,41 +1567,41 @@ LB_4690:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; name
-	jmp LB_4696
-LB_4695:
+	jmp LB_769
+LB_768:
 	add r14,1
-LB_4696:
+LB_769:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4695
+	jz LB_768
 	cmp rax,10
-	jz LB_4695
+	jz LB_768
 	cmp rax,32
-	jz LB_4695
-	call NS_E_4388_ETR_TBL
+	jz LB_768
+	call NS_E_471_ETR_TBL
 	cmp r15,0
-	jz LB_4697
+	jz LB_770
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4698
+	jc LB_771
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4698:
+LB_771:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4699
+	jc LB_772
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4699:
+LB_772:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4700
+	jc LB_773
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4700:
-	jmp NS_E_4388_MTC_1_failed
-LB_4697:
+LB_773:
+	jmp NS_E_461_MTC_1_failed
+LB_770:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -1615,30 +1614,30 @@ LB_4697:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4669
+	jc LB_742
 	btr QWORD [rdi],3
-LB_4669:
+LB_742:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4670
+	jc LB_743
 	btr QWORD [rdi],2
-LB_4670:
+LB_743:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4671
+	jc LB_744
 	btr QWORD [rdi],1
-LB_4671:
+LB_744:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4672
+	jc LB_745
 	btr QWORD [rdi],0
-LB_4672:
+LB_745:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -1648,7 +1647,7 @@ LB_4672:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4388_MTC_1_failed:
+NS_E_461_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -1658,36 +1657,36 @@ NS_E_4388_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4390:
-NS_E_RDI_4390:
-NS_E_4390_ETR_TBL:
-NS_E_4390_TBL:
+NS_E_463:
+NS_E_RDI_463:
+NS_E_463_ETR_TBL:
+NS_E_463_TBL:
 	push r14
 ; "\194\182"
-	jmp LB_4771
-LB_4770:
+	jmp LB_844
+LB_843:
 	add r14,1
-LB_4771:
+LB_844:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4770
+	jz LB_843
 	cmp rax,10
-	jz LB_4770
+	jz LB_843
 	cmp rax,32
-	jz LB_4770
+	jz LB_843
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4773
-	jmp NS_E_4390_MTC_0_failed
-LB_4773:
+	jz LB_846
+	jmp NS_E_463_MTC_0_failed
+LB_846:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,182
-	jz LB_4774
-	jmp NS_E_4390_MTC_0_failed
-LB_4774:
+	jz LB_847
+	jmp NS_E_463_MTC_0_failed
+LB_847:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1696,64 +1695,64 @@ LB_4774:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4779
-LB_4778:
+	jmp LB_852
+LB_851:
 	add r14,1
-LB_4779:
+LB_852:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4778
+	jz LB_851
 	cmp rax,10
-	jz LB_4778
+	jz LB_851
 	cmp rax,32
-	jz LB_4778
-	call NS_E_4390_ETR_TBL
+	jz LB_851
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4780
+	jz LB_853
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4781
+	jc LB_854
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4781:
-	jmp NS_E_4390_MTC_0_failed
-LB_4780:
+LB_854:
+	jmp NS_E_463_MTC_0_failed
+LB_853:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; dta_def
-	jmp LB_4784
-LB_4783:
+	jmp LB_857
+LB_856:
 	add r14,1
-LB_4784:
+LB_857:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4783
+	jz LB_856
 	cmp rax,10
-	jz LB_4783
+	jz LB_856
 	cmp rax,32
-	jz LB_4783
-	call NS_E_4390_ETR_TBL
+	jz LB_856
+	call NS_E_473_ETR_TBL
 	cmp r15,0
-	jz LB_4785
+	jz LB_858
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4786
+	jc LB_859
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4786:
+LB_859:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4787
+	jc LB_860
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4787:
-	jmp NS_E_4390_MTC_0_failed
-LB_4785:
+LB_860:
+	jmp NS_E_463_MTC_0_failed
+LB_858:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -1766,23 +1765,23 @@ LB_4785:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4766
+	jc LB_839
 	btr QWORD [rdi],2
-LB_4766:
+LB_839:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4767
+	jc LB_840
 	btr QWORD [rdi],1
-LB_4767:
+LB_840:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4768
+	jc LB_841
 	btr QWORD [rdi],0
-LB_4768:
+LB_841:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -1792,34 +1791,34 @@ LB_4768:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4390_MTC_0_failed:
+NS_E_463_MTC_0_failed:
 	pop r14
 	push r14
 ; "\194\182"
-	jmp LB_4739
-LB_4738:
+	jmp LB_812
+LB_811:
 	add r14,1
-LB_4739:
+LB_812:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4738
+	jz LB_811
 	cmp rax,10
-	jz LB_4738
+	jz LB_811
 	cmp rax,32
-	jz LB_4738
+	jz LB_811
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_4741
-	jmp NS_E_4390_MTC_1_failed
-LB_4741:
+	jz LB_814
+	jmp NS_E_463_MTC_1_failed
+LB_814:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,182
-	jz LB_4742
-	jmp NS_E_4390_MTC_1_failed
-LB_4742:
+	jz LB_815
+	jmp NS_E_463_MTC_1_failed
+LB_815:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1828,65 +1827,65 @@ LB_4742:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4747
-LB_4746:
+	jmp LB_820
+LB_819:
 	add r14,1
-LB_4747:
+LB_820:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4746
+	jz LB_819
 	cmp rax,10
-	jz LB_4746
+	jz LB_819
 	cmp rax,32
-	jz LB_4746
-	call NS_E_4390_ETR_TBL
+	jz LB_819
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4748
+	jz LB_821
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4749
+	jc LB_822
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4749:
-	jmp NS_E_4390_MTC_1_failed
-LB_4748:
+LB_822:
+	jmp NS_E_463_MTC_1_failed
+LB_821:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; "="
-	jmp LB_4752
-LB_4751:
+	jmp LB_825
+LB_824:
 	add r14,1
-LB_4752:
+LB_825:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4751
+	jz LB_824
 	cmp rax,10
-	jz LB_4751
+	jz LB_824
 	cmp rax,32
-	jz LB_4751
+	jz LB_824
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,61
-	jz LB_4754
+	jz LB_827
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4756
+	jc LB_829
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4756:
+LB_829:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4757
+	jc LB_830
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4757:
-	jmp NS_E_4390_MTC_1_failed
-LB_4754:
+LB_830:
+	jmp NS_E_463_MTC_1_failed
+LB_827:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -1895,41 +1894,41 @@ LB_4754:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; name
-	jmp LB_4760
-LB_4759:
+	jmp LB_833
+LB_832:
 	add r14,1
-LB_4760:
+LB_833:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4759
+	jz LB_832
 	cmp rax,10
-	jz LB_4759
+	jz LB_832
 	cmp rax,32
-	jz LB_4759
-	call NS_E_4390_ETR_TBL
+	jz LB_832
+	call NS_E_471_ETR_TBL
 	cmp r15,0
-	jz LB_4761
+	jz LB_834
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4762
+	jc LB_835
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4762:
+LB_835:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4763
+	jc LB_836
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4763:
+LB_836:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4764
+	jc LB_837
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4764:
-	jmp NS_E_4390_MTC_1_failed
-LB_4761:
+LB_837:
+	jmp NS_E_463_MTC_1_failed
+LB_834:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -1942,30 +1941,30 @@ LB_4761:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4733
+	jc LB_806
 	btr QWORD [rdi],3
-LB_4733:
+LB_806:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4734
+	jc LB_807
 	btr QWORD [rdi],2
-LB_4734:
+LB_807:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4735
+	jc LB_808
 	btr QWORD [rdi],1
-LB_4735:
+LB_808:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4736
+	jc LB_809
 	btr QWORD [rdi],0
-LB_4736:
+LB_809:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -1975,7 +1974,7 @@ LB_4736:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4390_MTC_1_failed:
+NS_E_463_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -1985,36 +1984,36 @@ NS_E_4390_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4392:
-NS_E_RDI_4392:
-NS_E_4392_ETR_TBL:
-NS_E_4392_TBL:
+NS_E_465:
+NS_E_RDI_465:
+NS_E_465_ETR_TBL:
+NS_E_465_TBL:
 	push r14
 ; "0xr0"
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,48
-	jz LB_4794
-	jmp NS_E_4392_MTC_0_failed
-LB_4794:
+	jz LB_867
+	jmp NS_E_465_MTC_0_failed
+LB_867:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,120
-	jz LB_4795
-	jmp NS_E_4392_MTC_0_failed
-LB_4795:
+	jz LB_868
+	jmp NS_E_465_MTC_0_failed
+LB_868:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,114
-	jz LB_4796
-	jmp NS_E_4392_MTC_0_failed
-LB_4796:
+	jz LB_869
+	jmp NS_E_465_MTC_0_failed
+LB_869:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+3]
 	cmp al,48
-	jz LB_4797
-	jmp NS_E_4392_MTC_0_failed
-LB_4797:
+	jz LB_870
+	jmp NS_E_465_MTC_0_failed
+LB_870:
 	add r14,4
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2029,9 +2028,9 @@ LB_4797:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4789
+	jc LB_862
 	btr QWORD [rdi],0
-LB_4789:
+LB_862:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -2041,7 +2040,7 @@ LB_4789:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4392_MTC_0_failed:
+NS_E_465_MTC_0_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -2051,34 +2050,34 @@ NS_E_4392_MTC_0_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4394:
-NS_E_RDI_4394:
-NS_E_4394_ETR_TBL:
-NS_E_4394_TBL:
+NS_E_467:
+NS_E_RDI_467:
+NS_E_467_ETR_TBL:
+NS_E_467_TBL:
 	push r14
 ; cha
-	call NS_E_4394_ETR_TBL
+	call NS_E_469_ETR_TBL
 	cmp r15,0
-	jz LB_4809
-	jmp NS_E_4394_MTC_0_failed
-LB_4809:
+	jz LB_882
+	jmp NS_E_467_MTC_0_failed
+LB_882:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*0],rax
 	mov QWORD [prs_vct+8*1+16*0],r8
 ; word
-	call NS_E_4394_ETR_TBL
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4813
+	jz LB_886
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4814
+	jc LB_887
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4814:
-	jmp NS_E_4394_MTC_0_failed
-LB_4813:
+LB_887:
+	jmp NS_E_467_MTC_0_failed
+LB_886:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -2091,16 +2090,16 @@ LB_4813:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4804
+	jc LB_877
 	btr QWORD [rdi],1
-LB_4804:
+LB_877:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4805
+	jc LB_878
 	btr QWORD [rdi],0
-LB_4805:
+LB_878:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -2110,7 +2109,7 @@ LB_4805:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4394_MTC_0_failed:
+NS_E_467_MTC_0_failed:
 	pop r14
 	push r14
 	pop rdi
@@ -2125,7 +2124,7 @@ NS_E_4394_MTC_0_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4394_MTC_1_failed:
+NS_E_467_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -2135,18 +2134,18 @@ NS_E_4394_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4396:
-NS_E_RDI_4396:
-NS_E_4396_ETR_TBL:
-NS_E_4396_TBL:
+NS_E_469:
+NS_E_RDI_469:
+NS_E_469_ETR_TBL:
+NS_E_469_TBL:
 	push r14
 ; "a"
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,97
-	jz LB_4837
-	jmp NS_E_4396_MTC_0_failed
-LB_4837:
+	jz LB_910
+	jmp NS_E_469_MTC_0_failed
+LB_910:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2161,9 +2160,9 @@ LB_4837:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4832
+	jc LB_905
 	btr QWORD [rdi],0
-LB_4832:
+LB_905:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -2173,16 +2172,16 @@ LB_4832:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4396_MTC_0_failed:
+NS_E_469_MTC_0_failed:
 	pop r14
 	push r14
 ; "b"
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,98
-	jz LB_4829
-	jmp NS_E_4396_MTC_1_failed
-LB_4829:
+	jz LB_902
+	jmp NS_E_469_MTC_1_failed
+LB_902:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2197,9 +2196,9 @@ LB_4829:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4824
+	jc LB_897
 	btr QWORD [rdi],0
-LB_4824:
+LB_897:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -2209,16 +2208,16 @@ LB_4824:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4396_MTC_1_failed:
+NS_E_469_MTC_1_failed:
 	pop r14
 	push r14
 ; "c"
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,99
-	jz LB_4821
-	jmp NS_E_4396_MTC_2_failed
-LB_4821:
+	jz LB_894
+	jmp NS_E_469_MTC_2_failed
+LB_894:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2233,9 +2232,9 @@ LB_4821:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4816
+	jc LB_889
 	btr QWORD [rdi],0
-LB_4816:
+LB_889:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0200_0000_0000_0001
@@ -2245,7 +2244,7 @@ LB_4816:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4396_MTC_2_failed:
+NS_E_469_MTC_2_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -2255,17 +2254,17 @@ NS_E_4396_MTC_2_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4398:
-NS_E_RDI_4398:
-NS_E_4398_ETR_TBL:
-NS_E_4398_TBL:
+NS_E_471:
+NS_E_RDI_471:
+NS_E_471_ETR_TBL:
+NS_E_471_TBL:
 	push r14
 ; word
-	call NS_E_4398_ETR_TBL
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4852
-	jmp NS_E_4398_MTC_0_failed
-LB_4852:
+	jz LB_925
+	jmp NS_E_471_MTC_0_failed
+LB_925:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -2275,15 +2274,15 @@ LB_4852:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,46
-	jz LB_4857
+	jz LB_930
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4859
+	jc LB_932
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4859:
-	jmp NS_E_4398_MTC_0_failed
-LB_4857:
+LB_932:
+	jmp NS_E_471_MTC_0_failed
+LB_930:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2292,23 +2291,23 @@ LB_4857:
 	mov QWORD [prs_vct+16*1],0
 	mov QWORD [prs_vct+8*1+16*1],rax
 ; name
-	call NS_E_4398_ETR_TBL
+	call NS_E_471_ETR_TBL
 	cmp r15,0
-	jz LB_4863
+	jz LB_936
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4864
+	jc LB_937
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4864:
+LB_937:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4865
+	jc LB_938
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4865:
-	jmp NS_E_4398_MTC_0_failed
-LB_4863:
+LB_938:
+	jmp NS_E_471_MTC_0_failed
+LB_936:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -2321,23 +2320,23 @@ LB_4863:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4846
+	jc LB_919
 	btr QWORD [rdi],2
-LB_4846:
+LB_919:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4847
+	jc LB_920
 	btr QWORD [rdi],1
-LB_4847:
+LB_920:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4848
+	jc LB_921
 	btr QWORD [rdi],0
-LB_4848:
+LB_921:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -2347,15 +2346,15 @@ LB_4848:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4398_MTC_0_failed:
+NS_E_471_MTC_0_failed:
 	pop r14
 	push r14
 ; word
-	call NS_E_4398_ETR_TBL
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4844
-	jmp NS_E_4398_MTC_1_failed
-LB_4844:
+	jz LB_917
+	jmp NS_E_471_MTC_1_failed
+LB_917:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -2368,9 +2367,9 @@ LB_4844:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4840
+	jc LB_913
 	btr QWORD [rdi],0
-LB_4840:
+LB_913:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -2380,7 +2379,7 @@ LB_4840:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4398_MTC_1_failed:
+NS_E_471_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -2390,17 +2389,17 @@ NS_E_4398_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4400:
-NS_E_RDI_4400:
-NS_E_4400_ETR_TBL:
-NS_E_4400_TBL:
+NS_E_473:
+NS_E_RDI_473:
+NS_E_473_ETR_TBL:
+NS_E_473_TBL:
 	push r14
 ; dta_def_coprd
-	call NS_E_4400_ETR_TBL
+	call NS_E_475_ETR_TBL
 	cmp r15,0
-	jz LB_4871
-	jmp NS_E_4400_MTC_0_failed
-LB_4871:
+	jz LB_944
+	jmp NS_E_473_MTC_0_failed
+LB_944:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -2413,9 +2412,9 @@ LB_4871:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4867
+	jc LB_940
 	btr QWORD [rdi],0
-LB_4867:
+LB_940:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -2425,7 +2424,7 @@ LB_4867:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4400_MTC_0_failed:
+NS_E_473_MTC_0_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -2435,42 +2434,42 @@ NS_E_4400_MTC_0_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4402:
-NS_E_RDI_4402:
-NS_E_4402_ETR_TBL:
-NS_E_4402_TBL:
+NS_E_475:
+NS_E_RDI_475:
+NS_E_475_ETR_TBL:
+NS_E_475_TBL:
 	push r14
 ; "\226\136\144"
-	jmp LB_4914
-LB_4913:
+	jmp LB_987
+LB_986:
 	add r14,1
-LB_4914:
+LB_987:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4913
+	jz LB_986
 	cmp rax,10
-	jz LB_4913
+	jz LB_986
 	cmp rax,32
-	jz LB_4913
+	jz LB_986
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,226
-	jz LB_4916
-	jmp NS_E_4402_MTC_0_failed
-LB_4916:
+	jz LB_989
+	jmp NS_E_475_MTC_0_failed
+LB_989:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,136
-	jz LB_4917
-	jmp NS_E_4402_MTC_0_failed
-LB_4917:
+	jz LB_990
+	jmp NS_E_475_MTC_0_failed
+LB_990:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,144
-	jz LB_4918
-	jmp NS_E_4402_MTC_0_failed
-LB_4918:
+	jz LB_991
+	jmp NS_E_475_MTC_0_failed
+LB_991:
 	add r14,3
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2479,65 +2478,65 @@ LB_4918:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4924
-LB_4923:
+	jmp LB_997
+LB_996:
 	add r14,1
-LB_4924:
+LB_997:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4923
+	jz LB_996
 	cmp rax,10
-	jz LB_4923
+	jz LB_996
 	cmp rax,32
-	jz LB_4923
-	call NS_E_4402_ETR_TBL
+	jz LB_996
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4925
+	jz LB_998
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4926
+	jc LB_999
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4926:
-	jmp NS_E_4402_MTC_0_failed
-LB_4925:
+LB_999:
+	jmp NS_E_475_MTC_0_failed
+LB_998:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; ":"
-	jmp LB_4929
-LB_4928:
+	jmp LB_1002
+LB_1001:
 	add r14,1
-LB_4929:
+LB_1002:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4928
+	jz LB_1001
 	cmp rax,10
-	jz LB_4928
+	jz LB_1001
 	cmp rax,32
-	jz LB_4928
+	jz LB_1001
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,58
-	jz LB_4931
+	jz LB_1004
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4933
+	jc LB_1006
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4933:
+LB_1006:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4934
+	jc LB_1007
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4934:
-	jmp NS_E_4402_MTC_0_failed
-LB_4931:
+LB_1007:
+	jmp NS_E_475_MTC_0_failed
+LB_1004:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2546,41 +2545,41 @@ LB_4931:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; type
-	jmp LB_4937
-LB_4936:
+	jmp LB_1010
+LB_1009:
 	add r14,1
-LB_4937:
+LB_1010:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4936
+	jz LB_1009
 	cmp rax,10
-	jz LB_4936
+	jz LB_1009
 	cmp rax,32
-	jz LB_4936
-	call NS_E_4402_ETR_TBL
+	jz LB_1009
+	call NS_E_481_ETR_TBL
 	cmp r15,0
-	jz LB_4938
+	jz LB_1011
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4939
+	jc LB_1012
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4939:
+LB_1012:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4940
+	jc LB_1013
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4940:
+LB_1013:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4941
+	jc LB_1014
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4941:
-	jmp NS_E_4402_MTC_0_failed
-LB_4938:
+LB_1014:
+	jmp NS_E_475_MTC_0_failed
+LB_1011:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -2593,30 +2592,30 @@ LB_4938:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4908
+	jc LB_981
 	btr QWORD [rdi],3
-LB_4908:
+LB_981:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4909
+	jc LB_982
 	btr QWORD [rdi],2
-LB_4909:
+LB_982:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4910
+	jc LB_983
 	btr QWORD [rdi],1
-LB_4910:
+LB_983:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4911
+	jc LB_984
 	btr QWORD [rdi],0
-LB_4911:
+LB_984:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -2626,40 +2625,40 @@ LB_4911:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4402_MTC_0_failed:
+NS_E_475_MTC_0_failed:
 	pop r14
 	push r14
 ; "\226\136\144"
-	jmp LB_4879
-LB_4878:
+	jmp LB_952
+LB_951:
 	add r14,1
-LB_4879:
+LB_952:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4878
+	jz LB_951
 	cmp rax,10
-	jz LB_4878
+	jz LB_951
 	cmp rax,32
-	jz LB_4878
+	jz LB_951
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,226
-	jz LB_4881
-	jmp NS_E_4402_MTC_1_failed
-LB_4881:
+	jz LB_954
+	jmp NS_E_475_MTC_1_failed
+LB_954:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,136
-	jz LB_4882
-	jmp NS_E_4402_MTC_1_failed
-LB_4882:
+	jz LB_955
+	jmp NS_E_475_MTC_1_failed
+LB_955:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,144
-	jz LB_4883
-	jmp NS_E_4402_MTC_1_failed
-LB_4883:
+	jz LB_956
+	jmp NS_E_475_MTC_1_failed
+LB_956:
 	add r14,3
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2668,65 +2667,65 @@ LB_4883:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	jmp LB_4889
-LB_4888:
+	jmp LB_962
+LB_961:
 	add r14,1
-LB_4889:
+LB_962:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4888
+	jz LB_961
 	cmp rax,10
-	jz LB_4888
+	jz LB_961
 	cmp rax,32
-	jz LB_4888
-	call NS_E_4402_ETR_TBL
+	jz LB_961
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_4890
+	jz LB_963
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4891
+	jc LB_964
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4891:
-	jmp NS_E_4402_MTC_1_failed
-LB_4890:
+LB_964:
+	jmp NS_E_475_MTC_1_failed
+LB_963:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; ":"
-	jmp LB_4894
-LB_4893:
+	jmp LB_967
+LB_966:
 	add r14,1
-LB_4894:
+LB_967:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4893
+	jz LB_966
 	cmp rax,10
-	jz LB_4893
+	jz LB_966
 	cmp rax,32
-	jz LB_4893
+	jz LB_966
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,58
-	jz LB_4896
+	jz LB_969
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4898
+	jc LB_971
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4898:
+LB_971:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4899
+	jc LB_972
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4899:
-	jmp NS_E_4402_MTC_1_failed
-LB_4896:
+LB_972:
+	jmp NS_E_475_MTC_1_failed
+LB_969:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2735,41 +2734,41 @@ LB_4896:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; type
-	jmp LB_4902
-LB_4901:
+	jmp LB_975
+LB_974:
 	add r14,1
-LB_4902:
+LB_975:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4901
+	jz LB_974
 	cmp rax,10
-	jz LB_4901
+	jz LB_974
 	cmp rax,32
-	jz LB_4901
-	call NS_E_4402_ETR_TBL
+	jz LB_974
+	call NS_E_481_ETR_TBL
 	cmp r15,0
-	jz LB_4903
+	jz LB_976
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4904
+	jc LB_977
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4904:
+LB_977:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4905
+	jc LB_978
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4905:
+LB_978:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4906
+	jc LB_979
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4906:
-	jmp NS_E_4402_MTC_1_failed
-LB_4903:
+LB_979:
+	jmp NS_E_475_MTC_1_failed
+LB_976:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -2782,30 +2781,30 @@ LB_4903:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4873
+	jc LB_946
 	btr QWORD [rdi],3
-LB_4873:
+LB_946:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4874
+	jc LB_947
 	btr QWORD [rdi],2
-LB_4874:
+LB_947:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4875
+	jc LB_948
 	btr QWORD [rdi],1
-LB_4875:
+LB_948:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4876
+	jc LB_949
 	btr QWORD [rdi],0
-LB_4876:
+LB_949:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -2815,7 +2814,7 @@ LB_4876:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4402_MTC_1_failed:
+NS_E_475_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -2825,130 +2824,130 @@ NS_E_4402_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4404:
-NS_E_RDI_4404:
-NS_E_4404_ETR_TBL:
-NS_E_4404_TBL:
+NS_E_477:
+NS_E_RDI_477:
+NS_E_477_ETR_TBL:
+NS_E_477_TBL:
 	push r14
 ; op
-	jmp LB_4967
-LB_4966:
+	jmp LB_1040
+LB_1039:
 	add r14,1
-LB_4967:
+LB_1040:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4966
+	jz LB_1039
 	cmp rax,10
-	jz LB_4966
+	jz LB_1039
 	cmp rax,32
-	jz LB_4966
-	call NS_E_4404_ETR_TBL
+	jz LB_1039
+	call NS_E_479_ETR_TBL
 	cmp r15,0
-	jz LB_4968
-	jmp NS_E_4404_MTC_0_failed
-LB_4968:
+	jz LB_1041
+	jmp NS_E_477_MTC_0_failed
+LB_1041:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*0],rax
 	mov QWORD [prs_vct+8*1+16*0],r8
 ; reg_ptn
-	jmp LB_4971
-LB_4970:
+	jmp LB_1044
+LB_1043:
 	add r14,1
-LB_4971:
+LB_1044:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4970
+	jz LB_1043
 	cmp rax,10
-	jz LB_4970
+	jz LB_1043
 	cmp rax,32
-	jz LB_4970
-	call NS_E_4404_ETR_TBL
+	jz LB_1043
+	call NS_E_489_ETR_TBL
 	cmp r15,0
-	jz LB_4972
+	jz LB_1045
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4973
+	jc LB_1046
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4973:
-	jmp NS_E_4404_MTC_0_failed
-LB_4972:
+LB_1046:
+	jmp NS_E_477_MTC_0_failed
+LB_1045:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; "\226\138\162"
-	jmp LB_4976
-LB_4975:
+	jmp LB_1049
+LB_1048:
 	add r14,1
-LB_4976:
+LB_1049:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4975
+	jz LB_1048
 	cmp rax,10
-	jz LB_4975
+	jz LB_1048
 	cmp rax,32
-	jz LB_4975
+	jz LB_1048
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,226
-	jz LB_4978
+	jz LB_1051
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4988
+	jc LB_1061
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4988:
+LB_1061:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4989
+	jc LB_1062
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4989:
-	jmp NS_E_4404_MTC_0_failed
-LB_4978:
+LB_1062:
+	jmp NS_E_477_MTC_0_failed
+LB_1051:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,138
-	jz LB_4979
+	jz LB_1052
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4985
+	jc LB_1058
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4985:
+LB_1058:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4986
+	jc LB_1059
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4986:
-	jmp NS_E_4404_MTC_0_failed
-LB_4979:
+LB_1059:
+	jmp NS_E_477_MTC_0_failed
+LB_1052:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,162
-	jz LB_4980
+	jz LB_1053
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4982
+	jc LB_1055
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4982:
+LB_1055:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4983
+	jc LB_1056
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4983:
-	jmp NS_E_4404_MTC_0_failed
-LB_4980:
+LB_1056:
+	jmp NS_E_477_MTC_0_failed
+LB_1053:
 	add r14,3
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -2957,41 +2956,41 @@ LB_4980:
 	mov QWORD [prs_vct+16*2],0
 	mov QWORD [prs_vct+8*1+16*2],rax
 ; reg_ptn
-	jmp LB_4992
-LB_4991:
+	jmp LB_1065
+LB_1064:
 	add r14,1
-LB_4992:
+LB_1065:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4991
+	jz LB_1064
 	cmp rax,10
-	jz LB_4991
+	jz LB_1064
 	cmp rax,32
-	jz LB_4991
-	call NS_E_4404_ETR_TBL
+	jz LB_1064
+	call NS_E_489_ETR_TBL
 	cmp r15,0
-	jz LB_4993
+	jz LB_1066
 	mov rsi,QWORD [prs_vct+16*2]
 	bt rsi,0
-	jc LB_4994
+	jc LB_1067
 	mov rdi,QWORD [prs_vct+16*2+8*1]
 	call dlt
-LB_4994:
+LB_1067:
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_4995
+	jc LB_1068
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_4995:
+LB_1068:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4996
+	jc LB_1069
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4996:
-	jmp NS_E_4404_MTC_0_failed
-LB_4993:
+LB_1069:
+	jmp NS_E_477_MTC_0_failed
+LB_1066:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3004,30 +3003,30 @@ LB_4993:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*3]
 	bt rax,0
-	jc LB_4961
+	jc LB_1034
 	btr QWORD [rdi],3
-LB_4961:
+LB_1034:
 	mov rax,QWORD [prs_vct+16*3+8*1]
 	mov [rdi+8*1+8*3],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_4962
+	jc LB_1035
 	btr QWORD [rdi],2
-LB_4962:
+LB_1035:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4963
+	jc LB_1036
 	btr QWORD [rdi],1
-LB_4963:
+LB_1036:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4964
+	jc LB_1037
 	btr QWORD [rdi],0
-LB_4964:
+LB_1037:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -3037,40 +3036,40 @@ LB_4964:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4404_MTC_0_failed:
+NS_E_477_MTC_0_failed:
 	pop r14
 	push r14
 ; "\226\136\142"
-	jmp LB_4947
-LB_4946:
+	jmp LB_1020
+LB_1019:
 	add r14,1
-LB_4947:
+LB_1020:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4946
+	jz LB_1019
 	cmp rax,10
-	jz LB_4946
+	jz LB_1019
 	cmp rax,32
-	jz LB_4946
+	jz LB_1019
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,226
-	jz LB_4949
-	jmp NS_E_4404_MTC_1_failed
-LB_4949:
+	jz LB_1022
+	jmp NS_E_477_MTC_1_failed
+LB_1022:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,136
-	jz LB_4950
-	jmp NS_E_4404_MTC_1_failed
-LB_4950:
+	jz LB_1023
+	jmp NS_E_477_MTC_1_failed
+LB_1023:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,142
-	jz LB_4951
-	jmp NS_E_4404_MTC_1_failed
-LB_4951:
+	jz LB_1024
+	jmp NS_E_477_MTC_1_failed
+LB_1024:
 	add r14,3
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -3079,29 +3078,29 @@ LB_4951:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; reg_ptn
-	jmp LB_4957
-LB_4956:
+	jmp LB_1030
+LB_1029:
 	add r14,1
-LB_4957:
+LB_1030:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_4956
+	jz LB_1029
 	cmp rax,10
-	jz LB_4956
+	jz LB_1029
 	cmp rax,32
-	jz LB_4956
-	call NS_E_4404_ETR_TBL
+	jz LB_1029
+	call NS_E_489_ETR_TBL
 	cmp r15,0
-	jz LB_4958
+	jz LB_1031
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_4959
+	jc LB_1032
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_4959:
-	jmp NS_E_4404_MTC_1_failed
-LB_4958:
+LB_1032:
+	jmp NS_E_477_MTC_1_failed
+LB_1031:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3114,16 +3113,16 @@ LB_4958:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4943
+	jc LB_1016
 	btr QWORD [rdi],1
-LB_4943:
+LB_1016:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4944
+	jc LB_1017
 	btr QWORD [rdi],0
-LB_4944:
+LB_1017:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -3133,7 +3132,7 @@ LB_4944:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4404_MTC_1_failed:
+NS_E_477_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -3143,29 +3142,29 @@ NS_E_4404_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4406:
-NS_E_RDI_4406:
-NS_E_4406_ETR_TBL:
-NS_E_4406_TBL:
+NS_E_479:
+NS_E_RDI_479:
+NS_E_479_ETR_TBL:
+NS_E_479_TBL:
 	push r14
 ; name
-	jmp LB_5017
-LB_5016:
+	jmp LB_1090
+LB_1089:
 	add r14,1
-LB_5017:
+LB_1090:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5016
+	jz LB_1089
 	cmp rax,10
-	jz LB_5016
+	jz LB_1089
 	cmp rax,32
-	jz LB_5016
-	call NS_E_4406_ETR_TBL
+	jz LB_1089
+	call NS_E_471_ETR_TBL
 	cmp r15,0
-	jz LB_5018
-	jmp NS_E_4406_MTC_0_failed
-LB_5018:
+	jz LB_1091
+	jmp NS_E_479_MTC_0_failed
+LB_1091:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3178,9 +3177,9 @@ LB_5018:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5014
+	jc LB_1087
 	btr QWORD [rdi],0
-LB_5014:
+LB_1087:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -3190,34 +3189,34 @@ LB_5014:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4406_MTC_0_failed:
+NS_E_479_MTC_0_failed:
 	pop r14
 	push r14
 ; "\194\187"
-	jmp LB_5002
-LB_5001:
+	jmp LB_1075
+LB_1074:
 	add r14,1
-LB_5002:
+LB_1075:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5001
+	jz LB_1074
 	cmp rax,10
-	jz LB_5001
+	jz LB_1074
 	cmp rax,32
-	jz LB_5001
+	jz LB_1074
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,194
-	jz LB_5004
-	jmp NS_E_4406_MTC_1_failed
-LB_5004:
+	jz LB_1077
+	jmp NS_E_479_MTC_1_failed
+LB_1077:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,187
-	jz LB_5005
-	jmp NS_E_4406_MTC_1_failed
-LB_5005:
+	jz LB_1078
+	jmp NS_E_479_MTC_1_failed
+LB_1078:
 	add r14,2
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -3226,29 +3225,29 @@ LB_5005:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; cst
-	jmp LB_5010
-LB_5009:
+	jmp LB_1083
+LB_1082:
 	add r14,1
-LB_5010:
+LB_1083:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5009
+	jz LB_1082
 	cmp rax,10
-	jz LB_5009
+	jz LB_1082
 	cmp rax,32
-	jz LB_5009
-	call NS_E_4406_ETR_TBL
+	jz LB_1082
+	call NS_E_465_ETR_TBL
 	cmp r15,0
-	jz LB_5011
+	jz LB_1084
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5012
+	jc LB_1085
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5012:
-	jmp NS_E_4406_MTC_1_failed
-LB_5011:
+LB_1085:
+	jmp NS_E_479_MTC_1_failed
+LB_1084:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3261,16 +3260,16 @@ LB_5011:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_4998
+	jc LB_1071
 	btr QWORD [rdi],1
-LB_4998:
+LB_1071:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_4999
+	jc LB_1072
 	btr QWORD [rdi],0
-LB_4999:
+LB_1072:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -3280,7 +3279,7 @@ LB_4999:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4406_MTC_1_failed:
+NS_E_479_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -3290,17 +3289,17 @@ NS_E_4406_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4408:
-NS_E_RDI_4408:
-NS_E_4408_ETR_TBL:
-NS_E_4408_TBL:
+NS_E_481:
+NS_E_RDI_481:
+NS_E_481_ETR_TBL:
+NS_E_481_TBL:
 	push r14
 ; type_imp
-	call NS_E_4408_ETR_TBL
+	call NS_E_483_ETR_TBL
 	cmp r15,0
-	jz LB_5024
-	jmp NS_E_4408_MTC_0_failed
-LB_5024:
+	jz LB_1097
+	jmp NS_E_481_MTC_0_failed
+LB_1097:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3313,9 +3312,9 @@ LB_5024:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5020
+	jc LB_1093
 	btr QWORD [rdi],0
-LB_5020:
+LB_1093:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -3325,7 +3324,7 @@ LB_5020:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4408_MTC_0_failed:
+NS_E_481_MTC_0_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -3335,83 +3334,83 @@ NS_E_4408_MTC_0_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4410:
-NS_E_RDI_4410:
-NS_E_4410_ETR_TBL:
-NS_E_4410_TBL:
+NS_E_483:
+NS_E_RDI_483:
+NS_E_483_ETR_TBL:
+NS_E_483_TBL:
 	push r14
 ; type_app
-	jmp LB_5037
-LB_5036:
+	jmp LB_1110
+LB_1109:
 	add r14,1
-LB_5037:
+LB_1110:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5036
+	jz LB_1109
 	cmp rax,10
-	jz LB_5036
+	jz LB_1109
 	cmp rax,32
-	jz LB_5036
-	call NS_E_4410_ETR_TBL
+	jz LB_1109
+	call NS_E_485_ETR_TBL
 	cmp r15,0
-	jz LB_5038
-	jmp NS_E_4410_MTC_0_failed
-LB_5038:
+	jz LB_1111
+	jmp NS_E_483_MTC_0_failed
+LB_1111:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*0],rax
 	mov QWORD [prs_vct+8*1+16*0],r8
 ; "\226\134\146"
-	jmp LB_5041
-LB_5040:
+	jmp LB_1114
+LB_1113:
 	add r14,1
-LB_5041:
+LB_1114:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5040
+	jz LB_1113
 	cmp rax,10
-	jz LB_5040
+	jz LB_1113
 	cmp rax,32
-	jz LB_5040
+	jz LB_1113
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,226
-	jz LB_5043
+	jz LB_1116
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5051
+	jc LB_1124
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5051:
-	jmp NS_E_4410_MTC_0_failed
-LB_5043:
+LB_1124:
+	jmp NS_E_483_MTC_0_failed
+LB_1116:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,134
-	jz LB_5044
+	jz LB_1117
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5049
+	jc LB_1122
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5049:
-	jmp NS_E_4410_MTC_0_failed
-LB_5044:
+LB_1122:
+	jmp NS_E_483_MTC_0_failed
+LB_1117:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,146
-	jz LB_5045
+	jz LB_1118
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5047
+	jc LB_1120
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5047:
-	jmp NS_E_4410_MTC_0_failed
-LB_5045:
+LB_1120:
+	jmp NS_E_483_MTC_0_failed
+LB_1118:
 	add r14,3
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -3420,35 +3419,35 @@ LB_5045:
 	mov QWORD [prs_vct+16*1],0
 	mov QWORD [prs_vct+8*1+16*1],rax
 ; type_imp
-	jmp LB_5054
-LB_5053:
+	jmp LB_1127
+LB_1126:
 	add r14,1
-LB_5054:
+LB_1127:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5053
+	jz LB_1126
 	cmp rax,10
-	jz LB_5053
+	jz LB_1126
 	cmp rax,32
-	jz LB_5053
-	call NS_E_4410_ETR_TBL
+	jz LB_1126
+	call NS_E_483_ETR_TBL
 	cmp r15,0
-	jz LB_5055
+	jz LB_1128
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_5056
+	jc LB_1129
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_5056:
+LB_1129:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5057
+	jc LB_1130
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5057:
-	jmp NS_E_4410_MTC_0_failed
-LB_5055:
+LB_1130:
+	jmp NS_E_483_MTC_0_failed
+LB_1128:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3461,23 +3460,23 @@ LB_5055:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_5032
+	jc LB_1105
 	btr QWORD [rdi],2
-LB_5032:
+LB_1105:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_5033
+	jc LB_1106
 	btr QWORD [rdi],1
-LB_5033:
+LB_1106:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5034
+	jc LB_1107
 	btr QWORD [rdi],0
-LB_5034:
+LB_1107:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -3487,27 +3486,27 @@ LB_5034:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4410_MTC_0_failed:
+NS_E_483_MTC_0_failed:
 	pop r14
 	push r14
 ; type_app
-	jmp LB_5029
-LB_5028:
+	jmp LB_1102
+LB_1101:
 	add r14,1
-LB_5029:
+LB_1102:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5028
+	jz LB_1101
 	cmp rax,10
-	jz LB_5028
+	jz LB_1101
 	cmp rax,32
-	jz LB_5028
-	call NS_E_4410_ETR_TBL
+	jz LB_1101
+	call NS_E_485_ETR_TBL
 	cmp r15,0
-	jz LB_5030
-	jmp NS_E_4410_MTC_1_failed
-LB_5030:
+	jz LB_1103
+	jmp NS_E_483_MTC_1_failed
+LB_1103:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3520,9 +3519,9 @@ LB_5030:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5026
+	jc LB_1099
 	btr QWORD [rdi],0
-LB_5026:
+LB_1099:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -3532,7 +3531,7 @@ LB_5026:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4410_MTC_1_failed:
+NS_E_483_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -3542,83 +3541,83 @@ NS_E_4410_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4412:
-NS_E_RDI_4412:
-NS_E_4412_ETR_TBL:
-NS_E_4412_TBL:
+NS_E_485:
+NS_E_RDI_485:
+NS_E_485_ETR_TBL:
+NS_E_485_TBL:
 	push r14
 ; type_atm
-	jmp LB_5070
-LB_5069:
+	jmp LB_1143
+LB_1142:
 	add r14,1
-LB_5070:
+LB_1143:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5069
+	jz LB_1142
 	cmp rax,10
-	jz LB_5069
+	jz LB_1142
 	cmp rax,32
-	jz LB_5069
-	call NS_E_4412_ETR_TBL
+	jz LB_1142
+	call NS_E_487_ETR_TBL
 	cmp r15,0
-	jz LB_5071
-	jmp NS_E_4412_MTC_0_failed
-LB_5071:
+	jz LB_1144
+	jmp NS_E_485_MTC_0_failed
+LB_1144:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*0],rax
 	mov QWORD [prs_vct+8*1+16*0],r8
 ; "\226\151\130"
-	jmp LB_5074
-LB_5073:
+	jmp LB_1147
+LB_1146:
 	add r14,1
-LB_5074:
+LB_1147:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5073
+	jz LB_1146
 	cmp rax,10
-	jz LB_5073
+	jz LB_1146
 	cmp rax,32
-	jz LB_5073
+	jz LB_1146
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,226
-	jz LB_5076
+	jz LB_1149
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5084
+	jc LB_1157
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5084:
-	jmp NS_E_4412_MTC_0_failed
-LB_5076:
+LB_1157:
+	jmp NS_E_485_MTC_0_failed
+LB_1149:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+1]
 	cmp al,151
-	jz LB_5077
+	jz LB_1150
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5082
+	jc LB_1155
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5082:
-	jmp NS_E_4412_MTC_0_failed
-LB_5077:
+LB_1155:
+	jmp NS_E_485_MTC_0_failed
+LB_1150:
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+2]
 	cmp al,130
-	jz LB_5078
+	jz LB_1151
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5080
+	jc LB_1153
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5080:
-	jmp NS_E_4412_MTC_0_failed
-LB_5078:
+LB_1153:
+	jmp NS_E_485_MTC_0_failed
+LB_1151:
 	add r14,3
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -3627,35 +3626,35 @@ LB_5078:
 	mov QWORD [prs_vct+16*1],0
 	mov QWORD [prs_vct+8*1+16*1],rax
 ; type_atm
-	jmp LB_5087
-LB_5086:
+	jmp LB_1160
+LB_1159:
 	add r14,1
-LB_5087:
+LB_1160:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5086
+	jz LB_1159
 	cmp rax,10
-	jz LB_5086
+	jz LB_1159
 	cmp rax,32
-	jz LB_5086
-	call NS_E_4412_ETR_TBL
+	jz LB_1159
+	call NS_E_487_ETR_TBL
 	cmp r15,0
-	jz LB_5088
+	jz LB_1161
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_5089
+	jc LB_1162
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_5089:
+LB_1162:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5090
+	jc LB_1163
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5090:
-	jmp NS_E_4412_MTC_0_failed
-LB_5088:
+LB_1163:
+	jmp NS_E_485_MTC_0_failed
+LB_1161:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3668,23 +3667,23 @@ LB_5088:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_5065
+	jc LB_1138
 	btr QWORD [rdi],2
-LB_5065:
+LB_1138:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_5066
+	jc LB_1139
 	btr QWORD [rdi],1
-LB_5066:
+LB_1139:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5067
+	jc LB_1140
 	btr QWORD [rdi],0
-LB_5067:
+LB_1140:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -3694,27 +3693,27 @@ LB_5067:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4412_MTC_0_failed:
+NS_E_485_MTC_0_failed:
 	pop r14
 	push r14
 ; type_atm
-	jmp LB_5062
-LB_5061:
+	jmp LB_1135
+LB_1134:
 	add r14,1
-LB_5062:
+LB_1135:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5061
+	jz LB_1134
 	cmp rax,10
-	jz LB_5061
+	jz LB_1134
 	cmp rax,32
-	jz LB_5061
-	call NS_E_4412_ETR_TBL
+	jz LB_1134
+	call NS_E_487_ETR_TBL
 	cmp r15,0
-	jz LB_5063
-	jmp NS_E_4412_MTC_1_failed
-LB_5063:
+	jz LB_1136
+	jmp NS_E_485_MTC_1_failed
+LB_1136:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3727,9 +3726,9 @@ LB_5063:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5059
+	jc LB_1132
 	btr QWORD [rdi],0
-LB_5059:
+LB_1132:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -3739,7 +3738,7 @@ LB_5059:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4412_MTC_1_failed:
+NS_E_485_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -3749,17 +3748,17 @@ NS_E_4412_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4414:
-NS_E_RDI_4414:
-NS_E_4414_ETR_TBL:
-NS_E_4414_TBL:
+NS_E_487:
+NS_E_RDI_487:
+NS_E_487_ETR_TBL:
+NS_E_487_TBL:
 	push r14
 ; word
-	call NS_E_4414_ETR_TBL
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_5096
-	jmp NS_E_4414_MTC_0_failed
-LB_5096:
+	jz LB_1169
+	jmp NS_E_487_MTC_0_failed
+LB_1169:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3772,9 +3771,9 @@ LB_5096:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5092
+	jc LB_1165
 	btr QWORD [rdi],0
-LB_5092:
+LB_1165:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -3784,7 +3783,7 @@ LB_5092:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4414_MTC_0_failed:
+NS_E_487_MTC_0_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -3794,30 +3793,30 @@ NS_E_4414_MTC_0_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4416:
-NS_E_RDI_4416:
-NS_E_4416_ETR_TBL:
-NS_E_4416_TBL:
+NS_E_489:
+NS_E_RDI_489:
+NS_E_489_ETR_TBL:
+NS_E_489_TBL:
 	push r14
 ; "{"
-	jmp LB_5109
-LB_5108:
+	jmp LB_1182
+LB_1181:
 	add r14,1
-LB_5109:
+LB_1182:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5108
+	jz LB_1181
 	cmp rax,10
-	jz LB_5108
+	jz LB_1181
 	cmp rax,32
-	jz LB_5108
+	jz LB_1181
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,123
-	jz LB_5111
-	jmp NS_E_4416_MTC_0_failed
-LB_5111:
+	jz LB_1184
+	jmp NS_E_489_MTC_0_failed
+LB_1184:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -3826,65 +3825,65 @@ LB_5111:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; reg_ptn_lst
-	jmp LB_5115
-LB_5114:
+	jmp LB_1188
+LB_1187:
 	add r14,1
-LB_5115:
+LB_1188:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5114
+	jz LB_1187
 	cmp rax,10
-	jz LB_5114
+	jz LB_1187
 	cmp rax,32
-	jz LB_5114
-	call NS_E_4416_ETR_TBL
+	jz LB_1187
+	call NS_E_491_ETR_TBL
 	cmp r15,0
-	jz LB_5116
+	jz LB_1189
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5117
+	jc LB_1190
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5117:
-	jmp NS_E_4416_MTC_0_failed
-LB_5116:
+LB_1190:
+	jmp NS_E_489_MTC_0_failed
+LB_1189:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*1],rax
 	mov QWORD [prs_vct+8*1+16*1],r8
 ; "}"
-	jmp LB_5120
-LB_5119:
+	jmp LB_1193
+LB_1192:
 	add r14,1
-LB_5120:
+LB_1193:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5119
+	jz LB_1192
 	cmp rax,10
-	jz LB_5119
+	jz LB_1192
 	cmp rax,32
-	jz LB_5119
+	jz LB_1192
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,125
-	jz LB_5122
+	jz LB_1195
 	mov rsi,QWORD [prs_vct+16*1]
 	bt rsi,0
-	jc LB_5124
+	jc LB_1197
 	mov rdi,QWORD [prs_vct+16*1+8*1]
 	call dlt
-LB_5124:
+LB_1197:
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5125
+	jc LB_1198
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5125:
-	jmp NS_E_4416_MTC_0_failed
-LB_5122:
+LB_1198:
+	jmp NS_E_489_MTC_0_failed
+LB_1195:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -3899,23 +3898,23 @@ LB_5122:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*2]
 	bt rax,0
-	jc LB_5104
+	jc LB_1177
 	btr QWORD [rdi],2
-LB_5104:
+LB_1177:
 	mov rax,QWORD [prs_vct+16*2+8*1]
 	mov [rdi+8*1+8*2],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_5105
+	jc LB_1178
 	btr QWORD [rdi],1
-LB_5105:
+LB_1178:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5106
+	jc LB_1179
 	btr QWORD [rdi],0
-LB_5106:
+LB_1179:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -3925,27 +3924,27 @@ LB_5106:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4416_MTC_0_failed:
+NS_E_489_MTC_0_failed:
 	pop r14
 	push r14
 ; reg
-	jmp LB_5101
-LB_5100:
+	jmp LB_1174
+LB_1173:
 	add r14,1
-LB_5101:
+LB_1174:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5100
+	jz LB_1173
 	cmp rax,10
-	jz LB_5100
+	jz LB_1173
 	cmp rax,32
-	jz LB_5100
-	call NS_E_4416_ETR_TBL
+	jz LB_1173
+	call NS_E_493_ETR_TBL
 	cmp r15,0
-	jz LB_5102
-	jmp NS_E_4416_MTC_1_failed
-LB_5102:
+	jz LB_1175
+	jmp NS_E_489_MTC_1_failed
+LB_1175:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -3958,9 +3957,9 @@ LB_5102:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5098
+	jc LB_1171
 	btr QWORD [rdi],0
-LB_5098:
+LB_1171:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -3970,7 +3969,7 @@ LB_5098:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4416_MTC_1_failed:
+NS_E_489_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -3980,58 +3979,58 @@ NS_E_4416_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4418:
-NS_E_RDI_4418:
-NS_E_4418_ETR_TBL:
-NS_E_4418_TBL:
+NS_E_491:
+NS_E_RDI_491:
+NS_E_491_ETR_TBL:
+NS_E_491_TBL:
 	push r14
 ; reg
-	jmp LB_5132
-LB_5131:
+	jmp LB_1205
+LB_1204:
 	add r14,1
-LB_5132:
+LB_1205:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5131
+	jz LB_1204
 	cmp rax,10
-	jz LB_5131
+	jz LB_1204
 	cmp rax,32
-	jz LB_5131
-	call NS_E_4418_ETR_TBL
+	jz LB_1204
+	call NS_E_493_ETR_TBL
 	cmp r15,0
-	jz LB_5133
-	jmp NS_E_4418_MTC_0_failed
-LB_5133:
+	jz LB_1206
+	jmp NS_E_491_MTC_0_failed
+LB_1206:
 	mov rax,0
 	bt r12,3
 	setc al
 	mov QWORD [prs_vct+16*0],rax
 	mov QWORD [prs_vct+8*1+16*0],r8
 ; reg_ptn_lst
-	jmp LB_5136
-LB_5135:
+	jmp LB_1209
+LB_1208:
 	add r14,1
-LB_5136:
+LB_1209:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5135
+	jz LB_1208
 	cmp rax,10
-	jz LB_5135
+	jz LB_1208
 	cmp rax,32
-	jz LB_5135
-	call NS_E_4418_ETR_TBL
+	jz LB_1208
+	call NS_E_491_ETR_TBL
 	cmp r15,0
-	jz LB_5137
+	jz LB_1210
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5138
+	jc LB_1211
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5138:
-	jmp NS_E_4418_MTC_0_failed
-LB_5137:
+LB_1211:
+	jmp NS_E_491_MTC_0_failed
+LB_1210:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -4044,16 +4043,16 @@ LB_5137:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_5128
+	jc LB_1201
 	btr QWORD [rdi],1
-LB_5128:
+LB_1201:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5129
+	jc LB_1202
 	btr QWORD [rdi],0
-LB_5129:
+LB_1202:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -4063,7 +4062,7 @@ LB_5129:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4418_MTC_0_failed:
+NS_E_491_MTC_0_failed:
 	pop r14
 	push r14
 	pop rdi
@@ -4078,7 +4077,7 @@ NS_E_4418_MTC_0_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4418_MTC_1_failed:
+NS_E_491_MTC_1_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -4088,18 +4087,18 @@ NS_E_4418_MTC_1_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4420:
-NS_E_RDI_4420:
-NS_E_4420_ETR_TBL:
-NS_E_4420_TBL:
+NS_E_493:
+NS_E_RDI_493:
+NS_E_493_ETR_TBL:
+NS_E_493_TBL:
 	push r14
 ; "%"
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,37
-	jz LB_5160
-	jmp NS_E_4420_MTC_0_failed
-LB_5160:
+	jz LB_1233
+	jmp NS_E_493_MTC_0_failed
+LB_1233:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -4108,17 +4107,17 @@ LB_5160:
 	mov QWORD [prs_vct+16*0],0
 	mov QWORD [prs_vct+8*1+16*0],rax
 ; word
-	call NS_E_4420_ETR_TBL
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_5165
+	jz LB_1238
 	mov rsi,QWORD [prs_vct+16*0]
 	bt rsi,0
-	jc LB_5166
+	jc LB_1239
 	mov rdi,QWORD [prs_vct+16*0+8*1]
 	call dlt
-LB_5166:
-	jmp NS_E_4420_MTC_0_failed
-LB_5165:
+LB_1239:
+	jmp NS_E_493_MTC_0_failed
+LB_1238:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -4131,16 +4130,16 @@ LB_5165:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*1]
 	bt rax,0
-	jc LB_5154
+	jc LB_1227
 	btr QWORD [rdi],1
-LB_5154:
+LB_1227:
 	mov rax,QWORD [prs_vct+16*1+8*1]
 	mov [rdi+8*1+8*1],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5155
+	jc LB_1228
 	btr QWORD [rdi],0
-LB_5155:
+LB_1228:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0000_0000_0000_0001
@@ -4150,27 +4149,27 @@ LB_5155:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4420_MTC_0_failed:
+NS_E_493_MTC_0_failed:
 	pop r14
 	push r14
 ; word
-	jmp LB_5151
-LB_5150:
+	jmp LB_1224
+LB_1223:
 	add r14,1
-LB_5151:
+LB_1224:
 	mov rax,0
 	mov al,[r13+r14+8*1]
 	cmp rax,9
-	jz LB_5150
+	jz LB_1223
 	cmp rax,10
-	jz LB_5150
+	jz LB_1223
 	cmp rax,32
-	jz LB_5150
-	call NS_E_4420_ETR_TBL
+	jz LB_1223
+	call NS_E_467_ETR_TBL
 	cmp r15,0
-	jz LB_5152
-	jmp NS_E_4420_MTC_1_failed
-LB_5152:
+	jz LB_1225
+	jmp NS_E_493_MTC_1_failed
+LB_1225:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -4183,9 +4182,9 @@ LB_5152:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5148
+	jc LB_1221
 	btr QWORD [rdi],0
-LB_5148:
+LB_1221:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0100_0000_0000_0001
@@ -4195,16 +4194,16 @@ LB_5148:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4420_MTC_1_failed:
+NS_E_493_MTC_1_failed:
 	pop r14
 	push r14
 ; "_"
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1+0]
 	cmp al,95
-	jz LB_5145
-	jmp NS_E_4420_MTC_2_failed
-LB_5145:
+	jz LB_1218
+	jmp NS_E_493_MTC_2_failed
+LB_1218:
 	add r14,1
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
@@ -4219,9 +4218,9 @@ LB_5145:
 	mov QWORD [rdi],rax
 	mov rax,QWORD [prs_vct+16*0]
 	bt rax,0
-	jc LB_5140
+	jc LB_1213
 	btr QWORD [rdi],0
-LB_5140:
+LB_1213:
 	mov rax,QWORD [prs_vct+16*0+8*1]
 	mov [rdi+8*1+8*0],rax
 	mov rax,0x0200_0000_0000_0001
@@ -4231,7 +4230,7 @@ LB_5140:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_4420_MTC_2_failed:
+NS_E_493_MTC_2_failed:
 	pop r14
 	mov rax,0x0001_0000_0000_ffff
 	mov r8,rbx
@@ -4241,8 +4240,8 @@ NS_E_4420_MTC_2_failed:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_5177:
-NS_E_RDI_5177:
+NS_E_1250:
+NS_E_RDI_1250:
 ; » _^ ..
 	mov rax,16
 	mov rdi,0
@@ -4266,7 +4265,7 @@ NS_E_RDI_5177:
 ; //
 	mov r13,rax
 	btr r12,0
-; 	» "a" _ ⊢ 1' : %_5169
+; 	» "a" _ ⊢ 1' : %_1242
 	mov rdi,1
 	call mlc_s8
 	mov rdi,rax
@@ -4274,62 +4273,54 @@ NS_E_RDI_5177:
 	mov QWORD [rdi+8*1+8*0],rax
 	mov r14,rdi
 	btr r12,1
-; » 0xr0 |~ {  } ⊢ %_5170 : %_5170
- ; {>  %_5168~0':_stg %_5169~1':_stg }
-; 	» 0xr0 _ ⊢ 2' : %_5170
+; » 0xr0 |~ {  } ⊢ %_1243 : %_1243
+ ; {>  %_1242~1':_stg %_1241~0':_stg }
+; 	» 0xr0 _ ⊢ 2' : %_1243
 	mov rdi,0x0
 	mov r15,rdi
 	bts r12,2
-; _f4394 { %_5169 %_5170 } ⊢ { %_5171 %_5172 %_5173 } : { %_5171 %_5172 %_5173 }
- ; {>  %_5168~0':_stg %_5169~1':_stg %_5170~2':_r64 }
-; _f4394 { 1' 2' } ⊢ { 1' 2' 3' }
+; _f457 { %_1241 %_1243 } ⊢ { %_1244 %_1245 %_1246 } : { %_1244 %_1245 %_1246 }
+ ; {>  %_1242~1':_stg %_1243~2':_r64 %_1241~0':_stg }
+; _f457 { 0' 2' } ⊢ { 0' 2' 3' }
 ; push_iv 
 	sub rsp,16
-	mov QWORD [rsp+8+8*0],r13
+	mov QWORD [rsp+8+8*0],r14
 	mov QWORD [rsp],r12
-; _emt_mov_ptn_to_ptn { 1' 2' } ⊢ { 0' 1' }
-	mov r13,r14
-	bt r12,1
-	jc LB_5180
-	btr r12,0
-	jmp LB_5181
-LB_5180:
-	bts r12,0
-LB_5181:
+; _emt_mov_ptn_to_ptn { 0' 2' } ⊢ { 0' 1' }
 	mov r14,r15
 	bt r12,2
-	jc LB_5182
+	jc LB_1253
 	btr r12,1
-	jmp LB_5183
-LB_5182:
+	jmp LB_1254
+LB_1253:
 	bts r12,1
-LB_5183:
-	call NS_E_4394
-; _emt_mov_ptn_to_ptn { 0' 1' 2'◂3' } ⊢ { 1' 2' 3' }
+LB_1254:
+	call NS_E_457
+; _emt_mov_ptn_to_ptn { 0' 1' 2'◂3' } ⊢ { 0' 2' 3' }
 	mov r9,r8
 	bt r12,3
-	jc LB_5184
+	jc LB_1255
 	btr r12,4
-	jmp LB_5185
-LB_5184:
+	jmp LB_1256
+LB_1255:
 	bts r12,4
-LB_5185:
+LB_1256:
 	mov r8,r9
 	bt r12,4
-	jc LB_5188
+	jc LB_1259
 	btr r12,3
-	jmp LB_5189
-LB_5188:
+	jmp LB_1260
+LB_1259:
 	bts r12,3
-LB_5189:
+LB_1260:
 	mov rsi,0
 	bt r12,3
-	jc LB_5186
+	jc LB_1257
 	bts rsi,17
 	bt r8,0
-	jc LB_5186
-	jmp LB_5187
-LB_5186:
+	jc LB_1257
+	jmp LB_1258
+LB_1257:
 	mov rax,rbx
 	mov rbx,QWORD [rbx]
 	mov rdi,0x0001_0001_0000_fffe
@@ -4338,7 +4329,7 @@ LB_5186:
 	mov QWORD [rax+8*1],r8
 	mov r8,rax
 	btr r12,3
-LB_5187:
+LB_1258:
 	mov rax,r15
 	shl rax,56
 	or rax,1
@@ -4346,32 +4337,24 @@ LB_5187:
 	or r8,rdi
 	mov r15,r14
 	bt r12,1
-	jc LB_5190
+	jc LB_1261
 	btr r12,2
-	jmp LB_5191
-LB_5190:
+	jmp LB_1262
+LB_1261:
 	bts r12,2
-LB_5191:
-	mov r14,r13
-	bt r12,0
-	jc LB_5192
-	btr r12,1
-	jmp LB_5193
-LB_5192:
-	bts r12,1
-LB_5193:
+LB_1262:
 ; pop_iv
-	mov r13,QWORD [rsp+8+8*0]
-	bt QWORD [rsp],0
-	jc LB_5178
-	btr r12,0
-	jmp LB_5179
-LB_5178:
-	bts r12,0
-LB_5179:
+	mov r14,QWORD [rsp+8+8*0]
+	bt QWORD [rsp],1
+	jc LB_1251
+	btr r12,1
+	jmp LB_1252
+LB_1251:
+	bts r12,1
+LB_1252:
 	add rsp,16
-; _f14 { %_5171 %_5172 %_5173 } ⊢ { %_5174 %_5175 %_5176 } : { %_5174 %_5175 %_5176 }
- ; {>  %_5172~2':_r64 %_5168~0':_stg %_5171~1':_stg %_5173~3':(_opn)◂(_p4393) }
+; _f14 { %_1242 %_1245 %_1246 } ⊢ { %_1247 %_1248 %_1249 } : { %_1247 %_1248 %_1249 }
+ ; {>  %_1242~1':_stg %_1245~2':_r64 %_1244~0':_stg %_1246~3':(_opn)◂(_p456) }
 ; _f14 { 1' 2' 3' } ⊢ { 1' 2' 3' }
 ; push_iv 
 	sub rsp,16
@@ -4386,348 +4369,348 @@ LB_5179:
 	btr r12,0
 	mov r9,r14
 	bt r12,1
-	jc LB_5198
+	jc LB_1267
 	btr r12,4
-	jmp LB_5199
-LB_5198:
+	jmp LB_1268
+LB_1267:
 	bts r12,4
-LB_5199:
+LB_1268:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*0],r9
 	bt r12,4
-	jc LB_5196
+	jc LB_1265
 	btr QWORD [rdi],0
-	jmp LB_5197
-LB_5196:
+	jmp LB_1266
+LB_1265:
 	bts QWORD [rdi],0
-LB_5197:
+LB_1266:
 	mov r9,r15
 	bt r12,2
-	jc LB_5202
+	jc LB_1271
 	btr r12,4
-	jmp LB_5203
-LB_5202:
+	jmp LB_1272
+LB_1271:
 	bts r12,4
-LB_5203:
+LB_1272:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*1],r9
 	bt r12,4
-	jc LB_5200
+	jc LB_1269
 	btr QWORD [rdi],1
-	jmp LB_5201
-LB_5200:
+	jmp LB_1270
+LB_1269:
 	bts QWORD [rdi],1
-LB_5201:
+LB_1270:
 	mov r9,r8
 	bt r12,3
-	jc LB_5206
+	jc LB_1275
 	btr r12,4
-	jmp LB_5207
-LB_5206:
+	jmp LB_1276
+LB_1275:
 	bts r12,4
-LB_5207:
+LB_1276:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*2],r9
 	bt r12,4
-	jc LB_5204
+	jc LB_1273
 	btr QWORD [rdi],2
-	jmp LB_5205
-LB_5204:
+	jmp LB_1274
+LB_1273:
 	bts QWORD [rdi],2
-LB_5205:
+LB_1274:
 	call NS_E_14
 ; _emt_mov_ptn_to_ptn 0' ⊢ { 1' 2' 3' }
 	mov rdi,r13
 	mov r9,QWORD [rdi+8*1+8*0]
 	bt QWORD [rdi],0
-	jc LB_5210
+	jc LB_1279
 	btr r12,4
-	jmp LB_5211
-LB_5210:
+	jmp LB_1280
+LB_1279:
 	bts r12,4
-LB_5211:
+LB_1280:
 	mov r14,r9
 	bt r12,4
-	jc LB_5208
+	jc LB_1277
 	btr r12,1
-	jmp LB_5209
-LB_5208:
+	jmp LB_1278
+LB_1277:
 	bts r12,1
-LB_5209:
+LB_1278:
 	mov rdi,r13
 	mov r9,QWORD [rdi+8*1+8*1]
 	bt QWORD [rdi],1
-	jc LB_5214
+	jc LB_1283
 	btr r12,4
-	jmp LB_5215
-LB_5214:
+	jmp LB_1284
+LB_1283:
 	bts r12,4
-LB_5215:
+LB_1284:
 	mov r15,r9
 	bt r12,4
-	jc LB_5212
+	jc LB_1281
 	btr r12,2
-	jmp LB_5213
-LB_5212:
+	jmp LB_1282
+LB_1281:
 	bts r12,2
-LB_5213:
+LB_1282:
 	mov rdi,r13
 	mov r9,QWORD [rdi+8*1+8*2]
 	bt QWORD [rdi],2
-	jc LB_5218
+	jc LB_1287
 	btr r12,4
-	jmp LB_5219
-LB_5218:
+	jmp LB_1288
+LB_1287:
 	bts r12,4
-LB_5219:
+LB_1288:
 	mov r8,r9
 	bt r12,4
-	jc LB_5216
+	jc LB_1285
 	btr r12,3
-	jmp LB_5217
-LB_5216:
+	jmp LB_1286
+LB_1285:
 	bts r12,3
-LB_5217:
+LB_1286:
 	mov rdi,r13
 	mov QWORD [rdi],rbx
 	mov rbx,rdi
 ; pop_iv
 	mov r13,QWORD [rsp+8+8*0]
 	bt QWORD [rsp],0
-	jc LB_5194
+	jc LB_1263
 	btr r12,0
-	jmp LB_5195
-LB_5194:
+	jmp LB_1264
+LB_1263:
 	bts r12,0
-LB_5195:
+LB_1264:
 	add rsp,16
 ; ∎ {  }
- ; {>  %_5176~3':(_opn)◂(_p4393) %_5168~0':_stg %_5174~1':_stg %_5175~2':_r64 }
+ ; {>  %_1248~2':_r64 %_1244~0':_stg %_1249~3':(_opn)◂(_p456) %_1247~1':_stg }
 ; 	∎ {  }
-	bt r12,3
-	jc LB_5220
-	mov rdi,r8
-	call dlt
-LB_5220:
-	bt r12,0
-	jc LB_5221
-	mov rdi,r13
-	call dlt
-LB_5221:
-	bt r12,1
-	jc LB_5222
-	mov rdi,r14
-	call dlt
-LB_5222:
 	bt r12,2
-	jc LB_5223
+	jc LB_1289
 	mov rdi,r15
 	call dlt
-LB_5223:
+LB_1289:
+	bt r12,0
+	jc LB_1290
+	mov rdi,r13
+	call dlt
+LB_1290:
+	bt r12,3
+	jc LB_1291
+	mov rdi,r8
+	call dlt
+LB_1291:
+	bt r12,1
+	jc LB_1292
+	mov rdi,r14
+	call dlt
+LB_1292:
 ; _emt_mov_ptn_to_ptn {  } ⊢ {  }
 	ret
 section .data
-	NS_E_DYN_4375:
+	NS_E_DYN_448:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4375
-	NS_E_DYN_4376:
+		dq NS_E_448
+	NS_E_DYN_449:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4376
-	NS_E_DYN_4377:
+		dq NS_E_449
+	NS_E_DYN_450:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4377
-	NS_E_DYN_4378:
+		dq NS_E_450
+	NS_E_DYN_451:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4378
-	NS_E_DYN_4421:
+		dq NS_E_451
+	NS_E_DYN_494:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4422:
+	NS_E_DYN_495:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4380:
+	NS_E_DYN_453:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4380
-	NS_E_DYN_4423:
+		dq NS_E_453
+	NS_E_DYN_496:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4424:
+	NS_E_DYN_497:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4425:
+	NS_E_DYN_498:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 2
-	NS_E_DYN_4426:
+	NS_E_DYN_499:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 3
-	NS_E_DYN_4382:
+	NS_E_DYN_455:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4382
-	NS_E_DYN_4427:
+		dq NS_E_455
+	NS_E_DYN_500:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4428:
+	NS_E_DYN_501:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4384:
+	NS_E_DYN_457:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4384
-	NS_E_DYN_4429:
+		dq NS_E_457
+	NS_E_DYN_502:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4430:
+	NS_E_DYN_503:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4386:
+	NS_E_DYN_459:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4386
-	NS_E_DYN_4431:
+		dq NS_E_459
+	NS_E_DYN_504:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4432:
+	NS_E_DYN_505:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4388:
+	NS_E_DYN_461:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4388
-	NS_E_DYN_4433:
+		dq NS_E_461
+	NS_E_DYN_506:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4434:
+	NS_E_DYN_507:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4390:
+	NS_E_DYN_463:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4390
-	NS_E_DYN_4435:
+		dq NS_E_463
+	NS_E_DYN_508:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4392:
+	NS_E_DYN_465:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4392
-	NS_E_DYN_4436:
+		dq NS_E_465
+	NS_E_DYN_509:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4437:
+	NS_E_DYN_510:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4394:
+	NS_E_DYN_467:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4394
-	NS_E_DYN_4438:
+		dq NS_E_467
+	NS_E_DYN_511:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4439:
+	NS_E_DYN_512:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4440:
+	NS_E_DYN_513:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 2
-	NS_E_DYN_4396:
+	NS_E_DYN_469:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4396
-	NS_E_DYN_4441:
+		dq NS_E_469
+	NS_E_DYN_514:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4442:
+	NS_E_DYN_515:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4398:
+	NS_E_DYN_471:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4398
-	NS_E_DYN_4443:
+		dq NS_E_471
+	NS_E_DYN_516:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4400:
+	NS_E_DYN_473:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4400
-	NS_E_DYN_4444:
+		dq NS_E_473
+	NS_E_DYN_517:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4445:
+	NS_E_DYN_518:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4402:
+	NS_E_DYN_475:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4402
-	NS_E_DYN_4446:
+		dq NS_E_475
+	NS_E_DYN_519:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4447:
+	NS_E_DYN_520:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4404:
+	NS_E_DYN_477:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4404
-	NS_E_DYN_4448:
+		dq NS_E_477
+	NS_E_DYN_521:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4449:
+	NS_E_DYN_522:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4406:
+	NS_E_DYN_479:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4406
-	NS_E_DYN_4450:
+		dq NS_E_479
+	NS_E_DYN_523:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4408:
+	NS_E_DYN_481:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4408
-	NS_E_DYN_4451:
+		dq NS_E_481
+	NS_E_DYN_524:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4452:
+	NS_E_DYN_525:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4410:
+	NS_E_DYN_483:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4410
-	NS_E_DYN_4453:
+		dq NS_E_483
+	NS_E_DYN_526:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4454:
+	NS_E_DYN_527:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4412:
+	NS_E_DYN_485:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4412
-	NS_E_DYN_4455:
+		dq NS_E_485
+	NS_E_DYN_528:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4414:
+	NS_E_DYN_487:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4414
-	NS_E_DYN_4456:
+		dq NS_E_487
+	NS_E_DYN_529:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4457:
+	NS_E_DYN_530:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4416:
+	NS_E_DYN_489:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4416
-	NS_E_DYN_4458:
+		dq NS_E_489
+	NS_E_DYN_531:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4459:
+	NS_E_DYN_532:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4418:
+	NS_E_DYN_491:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4418
-	NS_E_DYN_4460:
+		dq NS_E_491
+	NS_E_DYN_533:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_4461:
+	NS_E_DYN_534:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_4462:
+	NS_E_DYN_535:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 2
-	NS_E_DYN_4420:
+	NS_E_DYN_493:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_4420
-	CST_DYN_5177:
+		dq NS_E_493
+	CST_DYN_1250:
 		dq 0x0001_0001_00_82_ffff
 		dq 1

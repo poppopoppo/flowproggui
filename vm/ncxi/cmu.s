@@ -463,18 +463,13 @@ mlc_s8: ; rdi=size of bytes
   push r10
   push r11
   mov rsi,rdi
-  mov rax,rdi
+  shl rsi,32
+  bts rsi,16
+  push rsi
   and rdi,~0b0111
   add rdi,16
-  and rsi,0b0111
-  shr rax,3
-  add rax,0x1_0001
-  shl rax,32
-  bts rax,16
-  add rax,rsi
-  push rax
-  push rdi
   xor rax,rax
+  push rdi
   call malloc
   pop rdi
   pop QWORD [rax]
@@ -1017,3 +1012,8 @@ prs_chr_4:
 prs_chr_null:
   mov rax,~0
   ret
+byt: ; rdi=stg rsi=offset
+  mov rax,QWORD [rdi]
+  shr rax,32
+  and rax,0xffff
+  shl rax,3

@@ -11,6 +11,7 @@ type token =
   | TYP_STG
   | TYP_SGN
   | TYP_OPN_VCT
+  | SYNT_COPRD
   | STG of (string)
   | SRC_OUT
   | SRC_IL
@@ -111,6 +112,7 @@ type token =
   | CLN2
   | CLN
   | CHO of (int)
+  | BYTE
   | ARR_REV_IN
   | ARR_REV
   | ARR_END

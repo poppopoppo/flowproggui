@@ -72,7 +72,8 @@
 		//
 	» "a" _ ⊢ sa
 	» 0xr0 _ ⊢ x0
-	syntax.word.prs { sa x0 } ⊢ { sa x0 a0 } 
+	;syntax.word.prs { sa x0 } ⊢ { sa x0 a0 } 
+	syntax.mdl_etr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	_emt_q { sa x0 a0 } ⊢ { sa x0 a0 } 
 	∎ {}
 ∎∎
