@@ -141,6 +141,10 @@ License along with this library; if not, write to the Free Software Foundation, 
           <match>(\^|&#x00A6;|&#x00B6;|&#x00AB;|&#x2045;|&#x2046;|&#x2206;|&#x2207;|&#x220F;|&#x2210;|&#x22A2;|(\|&#x00BB;)|&#x220E;)</match>
         </context>
 
+        <context id="code-symbol-2" style-ref="code-symbol">
+          <match>//|\?</match>
+        </context>
+
         <context id="angle" style-ref="exp-opr">
           <match>&#x2220;</match>
         </context>
@@ -154,7 +158,7 @@ License along with this library; if not, write to the Free Software Foundation, 
         </context>
 
         <context id="exp-special" style-ref="exp-opr">
-          <match>(\!|\:|\`|\_|\?)</match>
+          <match>(\!|\:|\`|\_)</match>
         </context>
 
         <context id="root-symbol" style-ref="exp-atom">
