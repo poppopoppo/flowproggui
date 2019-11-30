@@ -1963,7 +1963,7 @@ and emt_ptn_grm i ns ep f r j =
           "\tadd r14,1\n"^
           l1^":\n"^
           "\tmov rax,0\n"^
-          "\tmov al,[rdi+rsi+8*1]\n"^
+          "\tmov al,[r13+r14+8*1]\n"^
           "\tcmp rax,9\n"^
           "\tjz "^l0^"\n"^
           "\tcmp rax,10\n"^

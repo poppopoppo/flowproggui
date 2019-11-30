@@ -1,2 +1,15 @@
 §§ OpADL 
+§§ syntax 
+§§+s8 
+	@.buffer 
+		∐ glb_etr buffer 
+		∐ 
+	@.glb_etr 
+		∐ mdl_etr 
+		∐ cst_etr 
+		∐ op_etr 
+		∐ dta_etr 
+	@.mdl_etr 
+		∐* "§§" "∎∎"
+∎∎ 
 ∎∎
