@@ -3,7 +3,7 @@ main:
 	mov r12,~0
 	call SFLS_init
 	call in0_init
-	call NS_E_2954
+	call NS_E_55
 	call exec_out
 	jmp _end
 NS_E_ID_14: dq 0
@@ -51,20 +51,20 @@ NS_E_RDI_16:
 	pop r15
 	pop r14
 	ret
-NS_E_2944:
-NS_E_RDI_2944:
-NS_E_2944_ETR_TBL:
+NS_E_45:
+NS_E_RDI_45:
+NS_E_45_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	call byt
-	jnc LB_2945
+	jnc LB_46
 	add r14,1
 	mov r15,0
 	mov r8,rax
 	bts r12,3
 	bts r12,2
 	ret
-LB_2945:
+LB_46:
 	mov r15,1
 	mov rdi,rbx
 	mov rbx,QWORD [rbx]
@@ -74,22 +74,22 @@ LB_2945:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_2946:
-NS_E_RDI_2946:
-NS_E_2946_ETR_TBL:
+NS_E_47:
+NS_E_RDI_47:
+NS_E_47_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	call prs_chr
 	mov r13,rdi
 	mov r14,rsi
 	bt rax,63
-	jc NS_E_2946_LB_0
+	jc NS_E_47_LB_0
 	mov r15,0
 	mov r8,rax
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_2946_LB_0:
+NS_E_47_LB_0:
 	mov r15,1
 	mov rdi,rbx
 	mov rbx,QWORD [rbx]
@@ -99,46 +99,46 @@ NS_E_2946_LB_0:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_2947:
-NS_E_RDI_2947:
-NS_E_2947_ETR_TBL:
+NS_E_48:
+NS_E_RDI_48:
+NS_E_48_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,48
-	jb NS_E_2947_LB_0
+	jb NS_E_48_LB_0
 	cmp r11,57
-	ja NS_E_2947_LB_0
+	ja NS_E_48_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_2947_LB_0:
+NS_E_48_LB_0:
 	mov rax,0
 	ret
-NS_E_2949:
-NS_E_RDI_2949:
-NS_E_2949_ETR_TBL:
+NS_E_50:
+NS_E_RDI_50:
+NS_E_50_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,97
-	jb NS_E_2949_LB_0
+	jb NS_E_50_LB_0
 	cmp r11,122
-	ja NS_E_2949_LB_0
+	ja NS_E_50_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_2949_LB_0:
+NS_E_50_LB_0:
 	mov rax,0
 	ret
-NS_E_2948:
-NS_E_RDI_2948:
-NS_E_2948_ETR_TBL:
+NS_E_49:
+NS_E_RDI_49:
+NS_E_49_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,65
-	jb NS_E_2948_LB_0
+	jb NS_E_49_LB_0
 	cmp r11,90
-	ja NS_E_2948_LB_0
+	ja NS_E_49_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_2948_LB_0:
+NS_E_49_LB_0:
 	mov rax,0
 	ret
 NS_E_19:
@@ -171,31 +171,16 @@ NS_E_RDI_23:
 NS_E_ID_15: dq 0
 NS_E_15:
 NS_E_RDI_15:
-	push r14
-	push r15
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	mov rdi,r13
 	push r13
 	call in_fn
-	pop r13
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
-	pop r15
-	pop r14
 	mov r14,rax
+	pop r13
 	btr r12,1
 	ret
-NS_E_2954:
-NS_E_RDI_2954:
-; 	» "OpADL.mdls" _ ⊢ 0' : %_2950
+NS_E_55:
+NS_E_RDI_55:
+; 	» "OpADL.mdls" _ ⊢ 0' : %_51
 	mov rdi,10
 	call mlc_s8
 	mov rdi,rax
@@ -205,8 +190,8 @@ NS_E_RDI_2954:
 	mov QWORD [rdi+8*1+8*1],rax
 	mov r13,rdi
 	btr r12,0
-; _f15 %_2950 ⊢ { %_2951 %_2952 } : { %_2951 %_2952 }
- ; {>  %_2950~0':_stg }
+; _f15 %_51 ⊢ { %_52 %_53 } : { %_52 %_53 }
+ ; {>  %_51~0':_stg }
 ; _f15 0' ⊢ { 0' 1' }
 ; push_iv 
 	sub rsp,8
@@ -216,8 +201,8 @@ NS_E_RDI_2954:
 ; _emt_mov_ptn_to_ptn { 0' 1' } ⊢ { 0' 1' }
 ; pop_iv
 	add rsp,8
-; _f16 %_2952 ⊢ %_2953 : %_2953
- ; {>  %_2952~1':_stg %_2951~0':_stg }
+; _f16 %_53 ⊢ %_54 : %_54
+ ; {>  %_53~1':_stg %_52~0':_stg }
 ; _f16 1' ⊢ 1'
 ; push_iv 
 	sub rsp,16
@@ -226,63 +211,63 @@ NS_E_RDI_2954:
 ; _emt_mov_ptn_to_ptn 1' ⊢ 0'
 	mov r13,r14
 	bt r12,1
-	jc LB_2957
+	jc LB_58
 	btr r12,0
-	jmp LB_2958
-LB_2957:
+	jmp LB_59
+LB_58:
 	bts r12,0
-LB_2958:
+LB_59:
 	call NS_E_16
 ; _emt_mov_ptn_to_ptn 0' ⊢ 1'
 	mov r14,r13
 	bt r12,0
-	jc LB_2959
+	jc LB_60
 	btr r12,1
-	jmp LB_2960
-LB_2959:
+	jmp LB_61
+LB_60:
 	bts r12,1
-LB_2960:
+LB_61:
 ; pop_iv
 	mov r13,QWORD [rsp+8+8*0]
 	bt QWORD [rsp],0
-	jc LB_2955
+	jc LB_56
 	btr r12,0
-	jmp LB_2956
-LB_2955:
+	jmp LB_57
+LB_56:
 	bts r12,0
-LB_2956:
+LB_57:
 	add rsp,16
 ; ∎ {  }
- ; {>  %_2953~1':_stg %_2951~0':_stg }
+ ; {>  %_54~1':_stg %_52~0':_stg }
 ; 	∎ {  }
 	bt r12,1
-	jc LB_2961
+	jc LB_62
 	mov rdi,r14
 	call dlt
-LB_2961:
+LB_62:
 	bt r12,0
-	jc LB_2962
+	jc LB_63
 	mov rdi,r13
 	call dlt
-LB_2962:
+LB_63:
 ; _emt_mov_ptn_to_ptn {  } ⊢ {  }
 	ret
 section .data
-	NS_E_DYN_2944:
+	NS_E_DYN_45:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_2944
-	NS_E_DYN_2946:
+		dq NS_E_45
+	NS_E_DYN_47:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_2946
-	NS_E_DYN_2947:
+		dq NS_E_47
+	NS_E_DYN_48:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_2947
-	NS_E_DYN_2948:
+		dq NS_E_48
+	NS_E_DYN_49:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_2948
-	NS_E_DYN_2949:
+		dq NS_E_49
+	NS_E_DYN_50:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_2949
-	CST_DYN_2954:
+		dq NS_E_50
+	CST_DYN_55:
 		dq 0x0001_0001_00_82_ffff
 		dq 1

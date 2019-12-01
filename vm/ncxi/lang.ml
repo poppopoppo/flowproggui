@@ -2792,11 +2792,11 @@ and init_prm () =
     "NS_E_ID_"^(Sgn.print Ast.Axm._in_fn)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._in_fn)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._in_fn)^":\n"^
-    push_all^
     "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tpush "^(emt_reg_x86 0)^"\n"^
     "\tcall in_fn\n"^
-    pop_all^
     "\tmov "^(emt_reg_x86 1)^",rax\n"^
+    "\tpop "^(emt_reg_x86 0)^"\n"^
     "\tbtr r12,1\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._in_fn,em_in_fn)::gns.ns_c;
