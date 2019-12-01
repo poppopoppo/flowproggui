@@ -325,12 +325,12 @@ let main () =
               ( try
                   pnt "import button pressed\n";
                   let text = buffer#get_text () in
-                  let (o,mdl0) = Implib.mdl_from_string text in
+                  let mdl0 = Implib.mdl_from_string text in
                   let (_,el) = mdl0 in
                   mdl := mdl0;
                   let _ =
-                    ( match o,!file_name with
-                      | _,Some fn ->
+                    ( match !file_name with
+                      | Some fn ->
                         let (a,pp) = Lang.emt_exe el in
                         (* pnt true a; *)
                         navi_view#source_buffer#set_text pp;
@@ -347,7 +347,7 @@ let main () =
                         "time ./"^ssp^".exe\n" in
                         let _ = Sys.command cd in
                         ()
-                      | _,_ ->
+                      | _ ->
                         pnt "module is imported\n" )
                   in
                   (*Util.pnt dbg text;*)

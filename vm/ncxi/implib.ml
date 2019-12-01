@@ -1,6 +1,5 @@
 
 open Lang
-open Ast
 type t = unit * Types.t
 (* type st = ir_mdl * unit * ir_code *)
 (*let print ((_,_),y) = "_ : "^(Types.print (ref []) y) *)
@@ -78,8 +77,10 @@ let ast_from_file (f:string) =
 let mdl_from_string (s:string) =
   Types.rm := [];
   let lexbuf = Lexing.from_string s in
-  let (o,ms) = Imp_parser.file Imp_lexer.token lexbuf in
-  (o,("_",List.map (fun (n,el) -> Mdl(n,el)) ms))
+  (*let ms = Imp_parser.file Imp_lexer.token lexbuf in
+    ("_",List.map (fun (n,el) -> Mdl(n,el)) ms) *)
+  let ms = Imp_parser.file_top Imp_lexer.token lexbuf in
+  ("_",ms)
 exception Load
 let name_from_string s =
   let lexbuf = Lexing.from_string s in

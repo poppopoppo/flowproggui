@@ -132,6 +132,8 @@ exception Error
 
 val name_eof: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.name)
 
-val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.name option * Lang.Ast.mdl list)
+val file_top: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.glb_etr list)
+
+val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.mdl list)
 
 val buffer: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Lang.Ast.line)
