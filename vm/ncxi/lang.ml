@@ -248,8 +248,7 @@ module Grm = struct
     "\t@."^n^" : _ \n"^
     (List.fold_left
        (fun s (_,f,r) ->
-          s^"\t"^(print_rle_flg f)^" "^(print_rle r)^"\n"^
-          " ⊢ ..\n"^
+          s^"\t"^(print_rle_flg f)^" "^(print_rle r)^" ⊢ ..\n"^
           "..\n\t∎\n" )
        "" rs )
   and print_rle_flg = ( function
@@ -1960,37 +1959,42 @@ and emt_rle gns ns ep l =
               if i<0 then ""
               else
                 ( s_e_s.(i)<-true;
-              "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"]\n"^
-              "\tbt rax,0\n"^
-              (cf_set i)^
-              "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"+8*1]\n"^
-              "\tmov "^(emt_reg_x86 i)^",rax\n"^
-              (prs_set_i (i-1)) ) in
+                  "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"]\n"^
+                  "\tbt rax,0\n"^
+                  (cf_set i)^
+                  "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"+8*1]\n"^
+                  "\tmov "^(emt_reg_x86 i)^",rax\n"^
+                  (prs_set_i (i-1)) ) in
             let i_e_s = RP.R(Array.init rn (fun i -> RP.A(R.Idx i))) in
-            "\tpush r14\n"^
-            (emt_ptn_grm i ns ep f r 0)^
-            "\tadd rsp,8\n"^
-            "\tpush "^(emt_reg_x86 0)^"\n"^
-            "\tpush "^(emt_reg_x86 1)^"\n"^
-            "\tpush "^lb1^"\n"^
-            (e_s (rn-1))^
-            (emt_mov_ptn_to_ptn s_e_s i_e_s i0)^
-            e_pi^
-            lb1^":\n"^
-            "\tpop "^(emt_reg_x86 1)^"\n"^
-            "\tpop "^(emt_reg_x86 0)^"\n"^
-            "\tbts r12,1\n"^
-            "\tbtr r12,0\n"^
-            "\tcmp r15,0\n"^
-            "\tjz "^lb1_1^"\n"^
-            "\tmov QWORD [r8],rbx\n"^
-            "\tmov rbx,r8\n"^
-            "\tjmp "^lb1_0^"\n"^
-            lb1_1^"\n"^
-            "\tret\n"^
-            "NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed:\n"^
-            "\tpop r14\n"^
-            lb1_0^"\n"^
+            let e0 =
+              "\tpush r14\n"^
+              (emt_ptn_grm i ns ep f r 0)^
+              "\tpush "^(emt_reg_x86 0)^"\n"^
+              "\tpush "^(emt_reg_x86 1)^"\n"^
+              "\tpush "^lb1^"\n"^
+              (e_s (rn-1)) in
+            let e1 =
+              e0^
+              (emt_mov_ptn_to_ptn s_e_s i_e_s i0)^
+              e_pi^
+              lb1^":\n"^
+              "\tpop "^(emt_reg_x86 1)^"\n"^
+              "\tpop "^(emt_reg_x86 0)^"\n"^
+              "\tbts r12,1\n"^
+              "\tbtr r12,0\n"^
+              "\tcmp r15,0\n"^
+              "\tjz "^lb1_1^"\n"^
+              "\tpop r14\n"^
+              "\tmov QWORD [r8],rbx\n"^
+              "\tmov rbx,r8\n"^
+              "\tjmp "^lb1_0^"\n"^
+              lb1_1^":\n"^
+              "\tadd rsp,8\n"^
+              "\tret\n"^
+              "NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed:\n"^
+              "\tpop r14\n"^
+              lb1_0^":\n" in
+            e1^
             (lp (i+1) tl)
           | [] ->
             "\tmov rax,0x0001_0000_0000_ffff\n"^
@@ -3405,6 +3409,7 @@ and mov_rl_ptn s0 i1 p0 =
         e1
       | _ -> err "mov_rl_ptn 2" )
 and mov_unrl_ptn s0 p1 i0 =
+  let c0 = (string_of_int i0)^" ⊢ "^(R.print p1) in
   if s0.(i0) then
     ( match p1 with
       | RP.A(R.Idx i1) -> (mov_r s0 i1 i0)
@@ -3452,8 +3457,8 @@ and mov_unrl_ptn s0 p1 i0 =
         "\tmov rdi,"^(emt_reg_x86 i0)^"\n"^
         "\tmov QWORD [rdi],rbx\n"^
         "\tmov rbx,rdi\n"
-      | _ -> err "mov_rl_ptn 2" )
-  else err "mov_unrl_ptn 2"
+      | _ -> err @@ "mov_unrl_ptn 3:"^c0 )
+  else err @@ "mov_unrl_ptn 2:"^c0
 
 and mk_idx_k iv p =
   ( match p with
