@@ -1,0 +1,7 @@
+§§ In0 
+§ C0 « 
+	» "OpADL.mdls" _ ⊢ fn0 
+	_in_fn fn0 ⊢ { fn0 fn0_c }  
+	_emt_q fn0_c ⊢ fn0_c
+	∎ {}
+∎∎

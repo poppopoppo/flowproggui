@@ -102,6 +102,8 @@ section .data
   cst_stg_test0: db `\u263a`
   cst_stg_test1: db `\xe2\x98\xba`
   stg0: db `\194\187`
+  test_fn: db "OpADL.mdls",0
+
 ; dynamic entries
   etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
 ; global constants
@@ -1049,6 +1051,33 @@ byt_bound_err:
   clc
   ret
 
+in_fn: ; rdi=filename
+  mov rax,2
+  mov rsi,2
+  add rdi,8
+  mov rdi,test_fn
+  syscall
+  push rax ; [rsp]=fd
+  mov rdi,rax
+  mov rax,5
+  mov rsi,stat
+  syscall
+  mov rdi,[stat + STAT.st_size]
+  call mlc_s8
+  mov rdi,QWORD [rsp]
+  push rax ; [rsp]=buf
+  mov rsi,rax
+  add rsi,8
+  mov rax,0
+  mov rdx,[stat+STAT.st_size]
+  syscall
+  mov rax,3
+  mov rdi,QWORD [rsp+8]
+  syscall
+  mov rax,QWORD [rsp]
+  add rsp,16
+  ret
+
 in0_init:
   mov rax,5
   mov rsi,stat
@@ -1068,7 +1097,7 @@ in0_init:
   mov QWORD [in0],rdi
   add rdi,8
   mov rax,0
-  call printf
+  ;call printf
   ret
 rpc_s8: ; rdi=src
   push rcx

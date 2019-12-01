@@ -412,8 +412,11 @@ module Ast = struct
       mutable ns_m_t : (string * ns_m_k ref) list;
     }
   type g_ns_v = {
+    mutable ns_vct_n : int;
+    mutable ns_vct : Sgn.t array;
     mutable ns : (Sgn.t * Types.v ref) list;
     mutable ns_e : (Sgn.t * e_k_v ref) list;
+    mutable ns_c : (Sgn.t * string) list;
     mutable ns_r_t : (Sgn.t * Types.v ref) list;
     mutable ns_r_i : (Sgn.t * v_r) list;
   }
@@ -423,9 +426,10 @@ module Ast = struct
   let init_ns () =
     { root=None; ns_p=[];  ns_t=[]; ns_m=[]; ns_m_t=[];  }
   let init_gns () =
-    { ns=[]; ns_e=[]; ns_r_t=[]; ns_r_i=[]  }
+    { ns_vct_n=0; ns_vct=Array.make 256 (sgn ()); ns=[]; ns_e=[]; ns_c=[]; ns_r_t=[]; ns_r_i=[]  }
   module Axm = struct
     let _in0 = sgn ()
+    let _in_fn = sgn ()
     let _emt_q = sgn ()
     let _app = sgn ()
     let _out = sgn ()
@@ -2778,6 +2782,27 @@ and init_prm () =
     "\tmov "^(emt_reg_x86 0)^",rax\n"^
     "\tbtr r12,0\n"^
     "\tret\n" in
+
+  let v = ref(Ln(Imp(Types.Axm Types.Axm.stg,Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.stg])))) in
+  !ns.ns_p <- ("_in_fn",Ast.Axm._in_fn)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._in_fn,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._in_fn,ref(Etr_V(RP.A(R.Idx 0),RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|])))::gns.ns_e;
+  let _ = "" in
+  let em_in_fn =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._in_fn)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._in_fn)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._in_fn)^":\n"^
+    push_all^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tcall in_fn\n"^
+    pop_all^
+    "\tmov "^(emt_reg_x86 1)^",rax\n"^
+    "\tbtr r12,1\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._in_fn,em_in_fn)::gns.ns_c;
+  gns.ns_vct.(gns.ns_vct_n)<-Ast.Axm._in_fn;
+  gns.ns_vct_n<-gns.ns_vct_n+1;
+
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
   !ns.ns_p <- ("_emt_q",Ast.Axm._emt_q)::!ns.ns_p;
@@ -2909,6 +2934,7 @@ and emt_exe m =
     "\tcall exec_out\n"^
     "\tjmp _end\n"^
     em_p^
+    (List.fold_right (fun (_,e) s -> e^s) gns.ns_c "")^
     em^
     "section .data\n"^
     se_p^
