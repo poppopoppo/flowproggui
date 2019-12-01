@@ -1,3 +1,7 @@
+§§+s8 
+	@.t 
+		∐ "J" 
+		∐  
 §§ OpADL 
 §§ type 
 ∎∎ 
@@ -81,8 +85,8 @@
 	_emt_q { sa x0 a0 } ⊢ { sa x0 a0 } 
 	_in0 {} ⊢ s_in0 
 	_emt_q s_in0 ⊢ s_in0 
-	» "OpADL.mdls" _ ⊢ fn0 
-	_in_fn fn0 ⊢ { fn0 fn0_c }  
-	_emt_q fn0_c ⊢ fn0_c
+	;» "OpADL.mdls" _ ⊢ fn0 
+	;_in_fn fn0 ⊢ { fn0 fn0_c }  
+	;_emt_q fn0_c ⊢ fn0_c
 	∎ {}
 ∎∎

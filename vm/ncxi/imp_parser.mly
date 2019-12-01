@@ -31,10 +31,12 @@
 
 %start buffer
 %start file
+%start file_top
 %start name_eof
 %type <Lang.name> name_eof
 %type <Lang.Ast.abs_name> name
-%type <Lang.name option * Lang.Ast.mdl list> file
+%type <Lang.Ast.mdl list> file
+%type <Lang.Ast.glb_etr list> file_top
 %type <Lang.Ast.line> buffer
 %type <Lang.Ast.grm> dta_grm
 %type <Lang.Types.t> typ
@@ -55,11 +57,14 @@ name:
   | PRM DOT name { DotN($1,$3) }
   ;
 file:
-  | EOF { (None,[]) }
+  | EOF { [] }
 (*  | LCE WC EQ name EOF { (Some $4,[]) } *)
   | def_mdl file {
-    let (o,ms) = $2 in
-    (o,$1::ms) }
+    let ms = $2 in
+    $1::ms }
+  ;
+file_top:
+  | gl_etr_lst EOF { $1 }
   ;
 def_mdl:
   | MDL NAM gl_etr_lst mdl_end { ($2,$3) }

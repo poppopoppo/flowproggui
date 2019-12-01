@@ -17,7 +17,7 @@ open Lang
     exit 0 *)
 let _ =
     let s = Util.load_file Sys.argv.(1) in
-    let (_,(_,el)) = Implib.mdl_from_string s in
+    let (_,el) = Implib.mdl_from_string s in
     let (a,_) = emt_exe el in
     let d = open_out (Sys.argv.(1)^".s") in
     let _ = output_string d a in
