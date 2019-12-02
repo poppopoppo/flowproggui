@@ -2669,8 +2669,9 @@ and init_prm () =
     push_all^
     "\tcall scf_d\n"^
     pop_all^
-    "\tcmp rsi,"^(emt_reg_x86 1)^"\n"^
+    "\tcmp rdi,0\n"^
     "\tjz "^l0^"\n"^
+    "\tmov "^(emt_reg_x86 1)^",rsi\n"^
     "\tmov "^(emt_reg_x86 2)^",0\n"^
     "\tmov "^(emt_reg_x86 3)^",rax\n"^
     "\tbts r12,3\n"^
