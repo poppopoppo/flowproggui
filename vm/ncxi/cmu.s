@@ -15,6 +15,9 @@ extern printf
 extern malloc
 extern sprintf
 extern sscanf
+extern strtol
+extern strtoul
+extern isspace
 section .bss
   SFLS_TOP: resb 8*1
   SFLS_BTM: resb 8*1
@@ -1160,12 +1163,49 @@ rpc_s8: ; rdi=src
 
 ; rdi=stg rsi=offset0 ⊢ rdi rsi=offset1 rax=dst
 scf_d:
+  push rsi
+  lea rdi,[rdi+8+rsi]
+  push rdi
+  mov dil,BYTE [rdi]
+  and rdi,0xff
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call isspace
+  mov rsp,QWORD [rsp_tmp]
+  cmp rax,0
+  jz scf_d_scf
+  add rsp,16
+  mov rdi,0
+  ret
+scf_d_scf:
+  mov rdi,QWORD [rsp]
+  sub rsp,8
+  mov rsi,rsp
+  mov rdx,10
+  mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call strtoul
+  mov rsp,QWORD [rsp_tmp]
+  pop rdx
+  pop rdi
+  pop rsi
+  sub rdx,rdi
+  jz scf_d_err
+  add rsi,rdx
+  mov rdi,1
+  ret
+scf_d_err:
+  mov rdi,0
+  ret
+scf_x:
+  ;
   push rdi
   push rsi
   mov QWORD [rsp_tmp],rsp
   lea rdi,[rdi+8+rsi]
-  mov rsi,fmt_d
-  mov rdx,fmt_d_r0
+  mov rsi,fmt_x
+  mov rdx,fmt_x_r0
   mov rax,0
   and rsp,~0xf
   call sscanf
@@ -1173,20 +1213,7 @@ scf_d:
   pop rsi
   pop rdi
   add rsi,rax
-  mov rax,QWORD [fmt_d_r0]
-  ret
-scf_x:
-  push rdi
-  push rsi
-  lea rdi,[rdi+8+rsi]
-  mov rsi,fmt_x
-  mov rdx,fmt_x_r0
-  mov rax,0
-  call sscanf
-  pop rsi
-  pop rdi
-  add rsi,rax
-  mov rax,[fmt_x_r0]
+  mov rax,QWORD [fmt_x_r0]
   ret
 scf_o:
   push rdi
