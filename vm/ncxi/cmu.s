@@ -652,6 +652,8 @@ pp_opq:
   ;mov rsp,QWORD [rsp_tmp]
   ;pop rsi
   ;add rax,rsi
+  mov BYTE [rsi],34
+  add rsi,1
   mov rdx,QWORD [rdi]
   shr rdx,32
   mov rax,0
@@ -672,6 +674,8 @@ pp_opq_lp_null:
   add rax,1
   jmp pp_opq_lp
 pp_opq_lp_end:
+  mov BYTE [rsi],34
+  add rsi,1
   mov BYTE [rsi],0
   mov rax,rsi
   ret
