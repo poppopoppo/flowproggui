@@ -5,10 +5,12 @@
 	;_emt_q fn0_c ⊢ fn0_c 
 ;	∎ {}
 § C1 « 
-	» "2" _ ⊢ s0 
-	» 0r _ ⊢ x0 
+	;» "-27686gg" _ ⊢ s0 
+	» 6r _ ⊢ x0 
 	;_emt_q s0 ⊢ s0
-	_scf_d.prs { s0 x0 } ⊢ { s0 x0 a0 } 
-	_emt_q { x0 a0 } ⊢ { x0 a0 }  
+	;_scf_d.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	;_emt_q { x0 a0 } ⊢ { x0 a0 }  
+	_mlc_s8 x0 ⊢ { x0 sx } 
+	_emt_q sx ⊢ sx 
 	∎ {}
 ∎∎

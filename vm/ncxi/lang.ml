@@ -427,6 +427,9 @@ module Ast = struct
   let init_gns () =
     { ns_vct_n=0; ns_vct=Array.make 256 (sgn ()); ns=[]; ns_e=[]; ns_c=[]; ns_r_t=[]; ns_r_i=[]  }
   module Axm = struct
+    let _mlc_s8 = sgn ()
+    let _lds = sgn ()
+    let _sts = sgn ()
     let _in0 = sgn ()
     let _in_fn = sgn ()
     let _emt_q = sgn ()
@@ -2900,6 +2903,24 @@ and init_prm () =
   gns.ns_c <- (Ast.Axm._in_fn,em_in_fn)::gns.ns_c;
   gns.ns_vct.(gns.ns_vct_n)<-Ast.Axm._in_fn;
   gns.ns_vct_n<-gns.ns_vct_n+1;
+
+  let v = ref(Ln(Imp(Types.Axm Types.Axm.r64,Rcd(rcd_cl [Types.Axm Types.Axm.r64;Types.Axm Types.Axm.stg])))) in
+  !ns.ns_p <- ("_mlc_s8",Ast.Axm._mlc_s8)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._mlc_s8,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._mlc_s8,ref(Etr_V(RP.A(R.Idx 0),RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|])))::gns.ns_e;
+  let _ = "" in
+  let em =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._mlc_s8)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._mlc_s8)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._mlc_s8)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tpush "^(emt_reg_x86 0)^"\n"^
+    "\tcall mlc_s8\n"^
+    "\tmov "^(emt_reg_x86 1)^",rax\n"^
+    "\tpop "^(emt_reg_x86 0)^"\n"^
+    "\tbtr r12,1\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._mlc_s8,em)::gns.ns_c;
 
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
