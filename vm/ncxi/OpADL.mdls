@@ -1,4 +1,8 @@
 §§+s8 
+	@.cha 
+		∐ .. ⊢ { b0 } 
+			_some b0 ⊢ o0 
+			∎ o0
 	@.t 
 		∐ "J"  ⊢ { %p0 } 
 			_none {} ⊢ a0 
@@ -95,8 +99,8 @@
 	;syntax.word.prs { sa x0 } ⊢ { sa x0 a0 } 
 	syntax.mdl_etr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
-	_in0 {} ⊢ s_in0 
-	_emt_q s_in0 ⊢ s_in0 
+	;_in0 {} ⊢ s_in0 
+	;_emt_q s_in0 ⊢ s_in0 
 	;» "OpADL.mdls" _ ⊢ fn0 
 	;_in_fn fn0 ⊢ { fn0 fn0_c }  
 	;_emt_q fn0_c ⊢ fn0_c

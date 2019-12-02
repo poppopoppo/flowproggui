@@ -2641,6 +2641,53 @@ and init_prm () =
     "\tret\n"
   in
 
+  !ns.ns_m_t <- ("_scf_d",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  let ns_g = ref(init_ns ()) in
+  !ns_g.root <- (Some ns);
+  !ns.ns_m <- ("_scf_d",ns_g)::!ns.ns_m;
+  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.r64)))::!ns_g.ns_t;
+  let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.r64)])) in
+  let epf = sgn () in
+  !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
+  gns.ns <- (epf,ref(Ln yp))::gns.ns;
+  gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|])))::gns.ns_e;
+  let _ =
+    "\tNS_E_DYN_"^(Sgn.print epf)^":\n"^
+    (*"\t\tdb 0,0b1,0,0b1,0b10000000,0,0,0b1\n"^ *)
+    "\t\tdq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001\n"^
+    "\t\tdq NS_E_"^(Sgn.print epf)^"\n" in
+  let l0 = "NS_E_"^(Sgn.print epf)^"_LB_0" in
+  let l_e = "NS_E_"^(Sgn.print epf) in
+  let l_e_rdi = "NS_E_RDI_"^(Sgn.print epf) in
+  let l_e_tbl = "NS_E_"^(Sgn.print epf)^"_ETR_TBL" in
+  let em =
+    l_e^":\n"^
+    l_e_rdi^":\n"^
+    l_e_tbl^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+    push_all^
+    "\tcall scf_d\n"^
+    pop_all^
+    "\tcmp rsi,"^(emt_reg_x86 1)^"\n"^
+    "\tjz "^l0^"\n"^
+    "\tmov "^(emt_reg_x86 2)^",0\n"^
+    "\tmov "^(emt_reg_x86 3)^",rax\n"^
+    "\tbts r12,3\n"^
+    "\tbts r12,2\n"^
+    "\tret\n"^
+    l0^":\n"^
+    "\tmov "^(emt_reg_x86 2)^",1\n"^
+    "\tmov rdi,rbx\n"^
+    "\tmov rbx,QWORD [rbx]\n"^
+    "\tmov rsi,0x0001_0000_0000_ffff\n"^
+    "\tmov QWORD [rdi],rsi\n"^
+    "\tmov "^(emt_reg_x86 3)^",rdi\n"^
+    "\tbtr r12,3\n"^
+    "\tbts r12,2\n"^
+    "\tret\n" in
+  gns.ns_c<-(epf,em)::gns.ns_c;
+
   !ns.ns_m_t <- ("_chr",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
@@ -2973,7 +3020,7 @@ and emt_exe m =
     "main:\n"^
     "\tmov r12,~0\n"^
     "\tcall SFLS_init\n"^
-    "\tcall in0_init\n"^
+    (*"\tcall in0_init\n"^ *)
     sx^
     (*"\tmov rdi,0\n"^
       "\tcall mlc\n"^
@@ -3080,17 +3127,31 @@ and push_iv iv =
              (i+1,n+1,e0,e1)
          else (i+1,n,e0,e1) )
       (0,0,"","") s0 in
-  let e_0 =
+  let n_s = 8*(n+1) in
+  if (n_s mod 16)=0 then
+    let e_0 =
     "; push_iv \n"^
-    "\tsub rsp,"^(string_of_int (8*(n+1)))^"\n"^
+    "\tsub rsp,"^(string_of_int n_s)^"\n"^
     e0^
     "\tmov QWORD [rsp],r12\n" in
   let e_1 =
     "; pop_iv\n"^
     (*"\tmov r12,QWORD [rsp]\n"^ *)
     e1^
-    "\tadd rsp,"^(string_of_int (8*(n+1)))^"\n" in
-  (e_0,e_1)
+    "\tadd rsp,"^(string_of_int n_s)^"\n" in
+    (e_0,e_1)
+  else
+    let e_0 =
+      "; push_iv \n"^
+      "\tsub rsp,"^(string_of_int (n_s+1))^"\n"^
+      e0^
+      "\tmov QWORD [rsp],r12\n" in
+    let e_1 =
+      "; pop_iv\n"^
+      (*"\tmov r12,QWORD [rsp]\n"^ *)
+      e1^
+      "\tadd rsp,"^(string_of_int (n_s+1))^"\n" in
+    (e_0,e_1)
 and dlt_iv iv =
   let s0 = rset_iv iv in
   let e0 =
