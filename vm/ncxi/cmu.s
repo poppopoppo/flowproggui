@@ -640,19 +640,42 @@ pp_r_p_end:
   add rax,rsi
   ret
 pp_opq:
-  push rsi
-  mov rdx,rdi
-  add rdx,8
-  mov rdi,rsi
-  mov rsi,fmt_s8
+  ;push rsi
+  ;mov rdx,rdi
+  ;add rdx,8
+  ;mov rdi,rsi
+  ;mov rsi,fmt_s8
+  ;mov rax,0
+  ;mov QWORD [rsp_tmp],rsp
+  ;and rsp,~0xf
+  ;call sprintf
+  ;mov rsp,QWORD [rsp_tmp]
+  ;pop rsi
+  ;add rax,rsi
+  mov rdx,QWORD [rdi]
+  shr rdx,32
   mov rax,0
-  mov QWORD [rsp_tmp],rsp
-  and rsp,~0xf
-  call sprintf
-  mov rsp,QWORD [rsp_tmp]
-  pop rsi
-  add rax,rsi
+pp_opq_lp:
+  cmp rax,rdx
+  jz pp_opq_lp_end
+  mov cl,[rdi+8+rax]
+  cmp cl,0
+  jz pp_opq_lp_null
+  mov BYTE [rsi],cl
+  add rsi,1
+  add rax,1
+  jmp pp_opq_lp
+pp_opq_lp_null:
+  mov BYTE [rsi],92
+  mov BYTE [rsi+1],48
+  add rsi,2
+  add rax,1
+  jmp pp_opq_lp
+pp_opq_lp_end:
+  mov BYTE [rsi],0
+  mov rax,rsi
   ret
+
 pp_ln:
   push rdi
   push rsi
@@ -1254,19 +1277,19 @@ scf_s:
   add rsi,rax
   mov rax,fmt_s_r0
   ret
+
 scf_sl:
-  push rdi
-  push rsi
   mov rax,[rdi]
-  shr rax,32
+  lea rdi,[rdi+8+rsi]
+  push rdi
+  shr rax,31
   mov rdi,rax
-  shl rdi,1
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call malloc
-  pop rsi
+  mov rsp,QWORD [rsp_tmp]
   pop rdi
   mov rdx,rax
-  mov rcx,0
-  lea rdi,[rdi+8+rsi]
   mov al,BYTE [rdi]
   cmp al,34
   jnz scf_sl_err
