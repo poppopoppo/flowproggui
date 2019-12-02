@@ -2915,17 +2915,7 @@ and init_prm () =
     "\tmov rsi,0\n"^
     "\tbt r12,0\n"^
     "\tsetc sil\n"^
-    "\tcall pp_v\n"^
-    "\tpush rax\n"^
-    "\tmov rdi,rax\n"^
-    "\tmov rax,0\n"^
-    "\tadd rdi,8\n"^
-    "\tmov rsi,rdi\n"^
-    "\tmov rdi,fmt_emt_q\n"^
-    "\tcall printf\n"^
-    "\tpop rdi\n"^
-    "\tmov rax,0\n"^
-    "\tcall free\n"^
+    "\tcall emt_q\n"^
     pop_all^
     "\tret\n" in
   let v_q = newvar_q (-1) in
@@ -3128,7 +3118,7 @@ and push_iv iv =
          else (i+1,n,e0,e1) )
       (0,0,"","") s0 in
   let n_s = 8*(n+1) in
-  if (n_s mod 16)=0 then
+  (*if (n_s mod 16)=0 then*)
     let e_0 =
     "; push_iv \n"^
     "\tsub rsp,"^(string_of_int n_s)^"\n"^
@@ -3140,18 +3130,18 @@ and push_iv iv =
     e1^
     "\tadd rsp,"^(string_of_int n_s)^"\n" in
     (e_0,e_1)
-  else
+  (*else
     let e_0 =
       "; push_iv \n"^
-      "\tsub rsp,"^(string_of_int (n_s+1))^"\n"^
+      "\tsub rsp,"^(string_of_int (n_s+8))^"\n"^
       e0^
       "\tmov QWORD [rsp],r12\n" in
     let e_1 =
       "; pop_iv\n"^
       (*"\tmov r12,QWORD [rsp]\n"^ *)
       e1^
-      "\tadd rsp,"^(string_of_int (n_s+1))^"\n" in
-    (e_0,e_1)
+      "\tadd rsp,"^(string_of_int (n_s+8))^"\n" in
+    (e_0,e_1) *)
 and dlt_iv iv =
   let s0 = rset_iv iv in
   let e0 =
@@ -3362,17 +3352,17 @@ and mov_rl_ptn s0 i1 p0 =
           s0.(ia)<-false;
           s0.(i1)<-true;
           e0^
-          "\tmov rsi,0\n"^
+          "\tmov rsi,1\n"^
           "\tbt r12,"^(string_of_int i1)^"\n"^
           "\tjc "^l0^"\n"^
-          "\tbts rsi,17\n"^
+          "\tmov rsi,0\n"^
           "\tbt "^(emt_reg_x86 i1)^",0\n"^
           "\tjc "^l0^"\n"^
           "\tjmp "^l1^"\n"^
           l0^":\n"^
           "\tmov rax,rbx\n"^
           "\tmov rbx,QWORD [rbx]\n"^
-          "\tmov rdi,0x0000_0001_0000_fffe\n"^
+          "\tmov rdi,0x0000_0001_0002_fffe\n"^
           "\tor rdi,rsi\n"^
           "\tmov QWORD [rax],rdi\n"^
           "\tmov QWORD [rax+8*1],"^(emt_reg_x86 i1)^"\n"^
@@ -3411,17 +3401,17 @@ and mov_rl_ptn s0 i1 p0 =
           e0^
           e1^
           es^
-          "\tmov rsi,0\n"^
+          "\tmov rsi,1\n"^
           "\tbt r12,"^(string_of_int i1)^"\n"^
           "\tjc "^l0^"\n"^
-          "\tbts rsi,17\n"^
+          "\tmov rsi,0\n"^
           "\tbt "^(emt_reg_x86 i1)^",0\n"^
           "\tjc "^l0^"\n"^
           "\tjmp "^l1^"\n"^
           l0^":\n"^
           "\tmov rax,rbx\n"^
           "\tmov rbx,QWORD [rbx]\n"^
-          "\tmov rdi,0x0001_0001_0000_fffe\n"^
+          "\tmov rdi,0x0000_0001_0002_fffe\n"^
           "\tor rdi,rsi\n"^
           "\tmov QWORD [rax],rdi\n"^
           "\tmov QWORD [rax+8*1],"^(emt_reg_x86 i1)^"\n"^
