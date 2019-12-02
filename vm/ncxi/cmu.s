@@ -112,7 +112,7 @@ section .data
   cst_stg_test0: db `\u263a`
   cst_stg_test1: db `\xe2\x98\xba`
   stg0: db `\194\187`
-  s8_0: db `43444`,0
+  s8_0: db "43444",0
   test_fn: db "OpADL.mdls",0
 
   rsp_tmp: dq 0
@@ -234,7 +234,10 @@ dlt_opq:
   push r9
   push r10
   push r11
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call free
+  mov rsp,QWORD [rsp_tmp]
   pop r11
   pop r10
   pop r9
@@ -508,7 +511,10 @@ mlc_s8: ; rdi=size of bytes
   add rdi,16
   xor rax,rax
   push rdi
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call malloc
+  mov rsp,QWORD [rsp_tmp]
   pop rdi
   pop QWORD [rax]
   mov QWORD [rax-8*1+rdi],0
@@ -564,7 +570,10 @@ pp_r_p_blk:
   mov rsi,fmt_ref
   mov rdx,r10
   xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop rsi
   pop rdi
   add rsi,rax
@@ -604,7 +613,10 @@ pp_r_p_lp_nxt:
   mov rdi,rsi
   mov rsi,fmt64_spc
   mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop r10
   pop r9
   pop rsi
@@ -617,7 +629,10 @@ pp_r_p_end:
   mov rdi,rsi
   mov rsi,blk_r
   mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop rsi
   add rax,rsi
   ret
@@ -628,7 +643,10 @@ pp_opq:
   mov rdi,rsi
   mov rsi,fmt_s8
   mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop rsi
   add rax,rsi
   ret
@@ -638,7 +656,10 @@ pp_ln:
   mov rdi,rsi
   mov rsi,ln_l
   xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop rsi
   add rsi,rax
   pop rdi
@@ -649,7 +670,10 @@ pp_ln:
   mov rdi,rax
   mov rsi,ln_r
   mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop rsi
   add rax,rsi
   ret
@@ -1139,19 +1163,17 @@ scf_d:
   push rdi
   push rsi
   mov QWORD [rsp_tmp],rsp
-  mov rdi,s8_0
+  lea rdi,[rdi+8+rsi]
   mov rsi,fmt_d
   mov rdx,fmt_d_r0
   mov rax,0
   and rsp,~0xf
   call sscanf
   mov rsp,QWORD [rsp_tmp]
-  pop rdx
-  sub rsp,8
   pop rsi
   pop rdi
   add rsi,rax
-  mov rax,rdx
+  mov rax,QWORD [fmt_d_r0]
   ret
 scf_x:
   push rdi
@@ -1303,3 +1325,23 @@ scf_wd_A:
 
 ;scf_lwd:
 ;scf_uwd:
+
+emt_q:
+  call pp_v
+  push rax
+  mov rdi,rax
+  mov rax,0
+  add rdi,8
+  mov rsi,rdi
+  mov rdi,fmt_emt_q
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call free
+  mov rsp,QWORD [rsp_tmp]
+  ret
