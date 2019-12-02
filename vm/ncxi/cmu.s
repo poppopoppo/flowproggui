@@ -14,6 +14,7 @@ extern free
 extern printf
 extern malloc
 extern sprintf
+extern sscanf
 section .bss
   SFLS_TOP: resb 8*1
   SFLS_BTM: resb 8*1
@@ -44,6 +45,8 @@ section .bss
   mtc_vct_9: resb (8+8) * 32
   mtc_vct_10: resb (8+8) * 32
   mtc_vct_11: resb (8+8) * 32
+  fmt_s_r0: resb 256
+  fmt_d_r0: resb 4
   in0: resq 1
   stat: resb 144
   struc STAT
@@ -81,7 +84,14 @@ section .data
   str_r64: db "0x%llx FEFEF",0
   fmt_emt_q: db "_emt_q:%s",10,0
   fmt64_spc: db "0x%llx ",0
-  fmt32: db "%d",0
+  fmt_d: db "%d",0
+  fmt_x: db "%x",0
+  fmt_x_r0: dq 0
+  fmt_o: db "%o",0
+  fmt_o_r0: dq 0
+  fmt_c: db "%c",0
+  fmt_c_r0: dq 0
+  fmt_s: db "%s",0
   fmt_nl: db 10,0
   fmt_ref: db "(%d)*{| ",0
   vct_l: db "|{",0
@@ -102,8 +112,10 @@ section .data
   cst_stg_test0: db `\u263a`
   cst_stg_test1: db `\xe2\x98\xba`
   stg0: db `\194\187`
+  s8_0: db `43444`,0
   test_fn: db "OpADL.mdls",0
 
+  rsp_tmp: dq 0
 ; dynamic entries
   etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
 ; global constants
@@ -517,7 +529,10 @@ pp_end:
   mov rdi,rsi
   mov rsi,fmt64
   mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop rsi
   add rax,rsi
   ret
@@ -531,7 +546,10 @@ pp_r_p:
   mov rdi,rsi
   mov rsi,agl_fmt
   xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call sprintf
+  mov rsp,QWORD [rsp_tmp]
   pop rsi
   pop rdi
   add rsi,rax
@@ -1115,3 +1133,173 @@ rpc_s8: ; rdi=src
   rep movsb
   pop rcx
   ret
+
+; rdi=stg rsi=offset0 ⊢ rdi rsi=offset1 rax=dst
+scf_d:
+  push rdi
+  push rsi
+  mov QWORD [rsp_tmp],rsp
+  mov rdi,s8_0
+  mov rsi,fmt_d
+  mov rdx,fmt_d_r0
+  mov rax,0
+  and rsp,~0xf
+  call sscanf
+  mov rsp,QWORD [rsp_tmp]
+  pop rdx
+  sub rsp,8
+  pop rsi
+  pop rdi
+  add rsi,rax
+  mov rax,rdx
+  ret
+scf_x:
+  push rdi
+  push rsi
+  lea rdi,[rdi+8+rsi]
+  mov rsi,fmt_x
+  mov rdx,fmt_x_r0
+  mov rax,0
+  call sscanf
+  pop rsi
+  pop rdi
+  add rsi,rax
+  mov rax,[fmt_x_r0]
+  ret
+scf_o:
+  push rdi
+  push rsi
+  lea rdi,[rdi+8+rsi]
+  mov rsi,fmt_o
+  mov rdx,fmt_o_r0
+  mov rax,0
+  call sscanf
+  pop rsi
+  pop rdi
+  add rsi,rax
+  mov rax,[fmt_o_r0]
+  ret
+scf_c:
+  push rdi
+  push rsi
+  lea rdi,[rdi+8+rsi]
+  mov rsi,fmt_c
+  mov rdx,fmt_c_r0
+  mov rax,0
+  call sscanf
+  pop rsi
+  pop rdi
+  add rsi,rax
+  mov rax,[fmt_c_r0]
+  ret
+scf_s:
+  push rdi
+  push rsi
+  lea rdi,[rdi+8+rsi]
+  mov rsi,fmt_s
+  mov rdx,fmt_s_r0
+  mov rax,0
+  call sscanf
+  pop rsi
+  pop rdi
+  add rsi,rax
+  mov rax,fmt_s_r0
+  ret
+scf_sl:
+  push rdi
+  push rsi
+  mov rax,[rdi]
+  shr rax,32
+  mov rdi,rax
+  shl rdi,1
+  call malloc
+  pop rsi
+  pop rdi
+  mov rdx,rax
+  mov rcx,0
+  lea rdi,[rdi+8+rsi]
+  mov al,BYTE [rdi]
+  cmp al,34
+  jnz scf_sl_err
+scf_sl_lp:
+  mov al,[rdi+1+rcx]
+  cmp al,34
+  jz scf_sl_lp_end
+  cmp al,92
+  jz scf_sl_lp_esc
+  mov BYTE [rdx+rcx],al
+  add rcx,1
+  jmp scf_sl_lp
+scf_sl_lp_esc:
+  mov al,[rdi+2+rcx]
+  cmp al,92
+  jz scf_sl_lp_esc_esc
+  cmp al,34
+  jz scf_sl_lp_esc_dqt
+  cmp al,78
+  jz scf_sl_lp_esc_n
+  cmp al,116
+  jz scf_sl_lp_esc_t
+  cmp al,48
+  jz scf_sl_lp_esc_null
+  jmp scf_sl_err
+scf_sl_lp_esc_esc:
+  mov BYTE [rdx+rcx],92
+  add rcx,2
+  jmp scf_sl_lp
+scf_sl_lp_esc_dqt:
+  mov BYTE [rdx+rcx],34
+  add rcx,2
+  jmp scf_sl_lp
+scf_sl_lp_esc_n:
+  mov BYTE [rdx+rcx],10
+  add rcx,2
+  jmp scf_sl_lp
+scf_sl_lp_esc_t:
+  mov BYTE [rdx+rcx],9
+  add rcx,2
+  jmp scf_sl_lp
+scf_sl_lp_esc_null:
+  mov BYTE [rdx+rcx],0
+  add rcx,2
+  jmp scf_sl_lp
+scf_sl_lp_end:
+  mov rdi,rcx
+  add rsi,rcx
+  push rsi
+  push rcx
+  push rdx
+  call mlc_s8
+  pop rdx
+  pop rcx
+  mov rsi,rdx
+  lea rdi,[rax+8]
+  rep movsb
+  push rax
+  mov rdi,rsi
+  call free
+  pop rax
+  pop rsi
+  ret
+scf_sl_err:
+  mov rax,~0
+  ret
+
+scf_wd:
+  mov rdx,0
+  mov rcx,0
+  mov al,[rdi+8+rsi]
+  cmp al,65
+  setge cl
+  cmp al,90
+  setle dl
+  and cl,dl
+  cmp al,97
+  setge dl
+  ;jmp scf_wd_err
+scf_wd_A:
+  cmp al,90
+  ;jle scf_wd_Z
+
+;scf_lwd:
+;scf_uwd:
