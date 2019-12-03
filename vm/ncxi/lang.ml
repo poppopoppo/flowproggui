@@ -430,6 +430,7 @@ module Ast = struct
     let _mlc_s8 = sgn ()
     let _lds = sgn ()
     let _sts = sgn ()
+    let _ecs = sgn ()
     let _in0 = sgn ()
     let _in_fn = sgn ()
     let _emt_q = sgn ()
@@ -1656,7 +1657,7 @@ let mk_idx_iv iv i0 p0 =
 let rec csm_iv r iv =
   ( match r with
     | R_A p ->
-      let i0 = (try Hashtbl.find iv p with _ -> err "csm_iv 2" ) in
+      let i0 = (try Hashtbl.find iv p with _ -> err @@ "csm_iv 2:%"^(Sgn.print p) ) in
       Hashtbl.remove iv p;
       i0
     | _ -> err "csm_rv 0" )
@@ -2922,6 +2923,69 @@ and init_prm () =
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._mlc_s8,em)::gns.ns_c;
 
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64])))) in
+  !ns.ns_p <- ("_lds",Ast.Axm._lds)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._lds,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._lds,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|])))::gns.ns_e;
+  let _ = "" in
+  let em =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._lds)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._lds)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._lds)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+    "\tmov rax,QWORD [rdi]\n"^
+    "\tshr rax,32\n"^
+    "\tcmp rsi,rax\n"^
+    "\tjge err\n"^
+    "\tmov rax,QWORD [rdi+8+rsi]\n"^
+    "\tand rax,0xff\n"^
+    "\tmov "^(emt_reg_x86 2)^",rax\n"^
+    "\tbts r12,2\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._lds,em)::gns.ns_c;
+
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64])))) in
+  !ns.ns_p <- ("_sts",Ast.Axm._sts)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._sts,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._sts,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|])))::gns.ns_e;
+  let _ = "" in
+  let em =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._sts)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._sts)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._sts)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+    "\tmov rax,QWORD [rdi]\n"^
+    "\tshr rax,32\n"^
+    "\tcmp rsi,rax\n"^
+    "\tjge err\n"^
+    "\tmov rax,"^(emt_reg_x86 2)^"\n"^
+    "\tmov BYTE [rdi+8+rsi],al\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._sts,em)::gns.ns_c;
+
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64])))) in
+  !ns.ns_p <- ("_ecs",Ast.Axm._sts)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._ecs,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._ecs,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|])))::gns.ns_e;
+  let _ = "" in
+  let em =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._ecs)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._ecs)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._ecs)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+    "\tmov rax,QWORD [rdi]\n"^
+    "\tshr rax,32\n"^
+    "\tcmp rsi,rax\n"^
+    "\tjge err\n"^
+    "\tmov rax,"^(emt_reg_x86 2)^"\n"^
+    "\txchg al,BYTE [rdi+8+rsi]\n"^
+    "\tand rax,0xff\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._ecs,em)::gns.ns_c;
+
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
   !ns.ns_p <- ("_emt_q",Ast.Axm._emt_q)::!ns.ns_p;
@@ -3141,7 +3205,7 @@ and push_iv iv =
       (0,0,"","") s0 in
   let n_s = 8*(n+1) in
   (*if (n_s mod 16)=0 then*)
-    let e_0 =
+  let e_0 =
     "; push_iv \n"^
     "\tsub rsp,"^(string_of_int n_s)^"\n"^
     e0^
@@ -3151,19 +3215,19 @@ and push_iv iv =
     (*"\tmov r12,QWORD [rsp]\n"^ *)
     e1^
     "\tadd rsp,"^(string_of_int n_s)^"\n" in
-    (e_0,e_1)
-  (*else
-    let e_0 =
-      "; push_iv \n"^
-      "\tsub rsp,"^(string_of_int (n_s+8))^"\n"^
-      e0^
-      "\tmov QWORD [rsp],r12\n" in
-    let e_1 =
-      "; pop_iv\n"^
-      (*"\tmov r12,QWORD [rsp]\n"^ *)
-      e1^
-      "\tadd rsp,"^(string_of_int (n_s+8))^"\n" in
-    (e_0,e_1) *)
+  (e_0,e_1)
+(*else
+  let e_0 =
+    "; push_iv \n"^
+    "\tsub rsp,"^(string_of_int (n_s+8))^"\n"^
+    e0^
+    "\tmov QWORD [rsp],r12\n" in
+  let e_1 =
+    "; pop_iv\n"^
+    (*"\tmov r12,QWORD [rsp]\n"^ *)
+    e1^
+    "\tadd rsp,"^(string_of_int (n_s+8))^"\n" in
+  (e_0,e_1) *)
 and dlt_iv iv =
   let s0 = rset_iv iv in
   let e0 =
@@ -3622,21 +3686,21 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             let _ = mk_idx_iv iv0 ir (mk_idx_ptn ri) in
             let e_c0 = "; "^(List.fold_left ( fun s i -> s^"/"^(string_of_int i)) "" h0)^"/\n" in
             let s1 = rset_iv iv0 in
-            let e_d_l =
-              List.fold_left
-                ( fun e_d_l p ->
-                    let ii = csm_iv (R_A p) iv0 in
-                    let ei = dlt_ptn s1 ii in
-                    e_d_l^ei )
-                "" dl in
             let e_dl =
               List.fold_left
-                ( fun e_dl (p,ip) ->
+                ( fun e_dl p ->
+                    let ii = csm_iv (R_A p) iv0 in
+                    let ei = dlt_ptn s1 ii in
+                    e_dl^ei )
+                "" dl in
+            let e_d_l =
+              List.fold_left
+                ( fun e_d_l (p,ip) ->
                     let s0 = rset_iv iv0 in
                     let ii = csm_iv (R_A p) iv0 in
                     let ei = emt_mov_ptn_to_ptn s0 ii ip in
                     Hashtbl.add iv0 p ip;
-                    e_dl^ei)
+                    e_d_l^ei)
                 "" d_l in
             Util.pnt true e_c0;
             e_d_l^e_dl^
@@ -3656,34 +3720,38 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             if l0=[] then "; mtc x 1"
             else err "emt_mtc 0" )
       and emt_mtc_eq iv0 h0 i s0 k1 l0 es p psl_tl dl d_l lbi =
-        Util.pnt true "enter emt_mtc_eq:\n";
+        Util.pnt true @@ "enter emt_mtc_eq:"^(pnt_iv gns iv0)^"\n";
         ( match es with
           | (vx,pa)::[] ->
             Util.pnt true "E 0:\n";
             let k2 = mk_mtc_v_k_eq k1 (mk_idx vx) !pa in
             let iv_t = Hashtbl.copy iv0 in
+            Util.pnt true "E 1:\n";
             let ix = csm_iv (mk_idx vx) iv_t in
+            Util.pnt true "E 2:\n";
             let ik = mk_idx_k iv0 k1 in
             let s1 = rset_iv iv0 in
-            let e_d_l =
-              List.fold_left
-                ( fun e_d_l p ->
-                    let ii = csm_iv (R_A p) iv0 in
-                    let ei = dlt_ptn s1 ii in
-                    e_d_l^ei )
-                "" dl in
             let e_dl =
               List.fold_left
-                ( fun e_dl (p,ip) ->
-                    let s0 = rset_iv iv0 in
+                ( fun e_dl p ->
                     let ii = csm_iv (R_A p) iv0 in
-                    let ei = emt_mov_ptn_to_ptn s0 ii ip in
-                    (*Hashtbl.add iv0 p ip;*)
+                    let ei = dlt_ptn s1 ii in
                     e_dl^ei )
-                "" d_l in
+                "" dl in
+            Util.pnt true "E 2:\n";
             let lb0 = lb () in
             ( match !pa with
-              | Eq_Agl(_,_,_,_) -> ";Eq_Agl\n"
+              | Eq_Agl(_,_,_,_) ->
+                let _ =
+                  List.fold_left
+                    ( fun e_d_l (p,ip) ->
+                        let s0 = rset_iv iv0 in
+                        let ii = csm_iv (R_A p) iv0 in
+                        let ei = emt_mov_ptn_to_ptn s0 ii ip in
+                        (*Hashtbl.add iv0 p ip;*)
+                        e_d_l^ei )
+                    "" d_l in
+                ";Eq_Agl\n"
               (*let ya = inst_idx_ptn gns 0 (mk_idx_ptn ra) in
                 let _ = gen (ref []) (-1) ya in
                 let iya = alc_idx_ty (rset_iv iv0) ya in
@@ -3694,6 +3762,16 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                   | P_R64 x0 ->
                     ( match ix with
                       | RP.A(R.Idx ix0) ->
+
+                        let e_d_l =
+                          List.fold_left
+                            ( fun e_d_l (p,ip) ->
+                                let s0 = rset_iv iv0 in
+                                let ii = csm_iv (R_A p) iv0 in
+                                let ei = emt_mov_ptn_to_ptn s0 ii ip in
+                                (*Hashtbl.add iv0 p ip;*)
+                                e_d_l^ei )
+                            "" d_l in
                         let ec =
                           "\tmov QWORD rax,0x"^(Int64.format "%x" x0)^"\n"^
                           "\tcmp rax,"^(emt_reg_x86 ix0)^"\n"^

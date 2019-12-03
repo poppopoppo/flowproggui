@@ -99,6 +99,7 @@ type token =
   | DTA_GRM
   | DTA
   | DSH
+  | DOT_END
   | DOT
   | DEQ
   | DEF
