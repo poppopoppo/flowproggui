@@ -17,6 +17,7 @@ let r64 = "0r" digit+
 let hr64 = "0xr" hex+
 let z = (('-' digit+)|digit+)
 rule token = parse
+    | "." space* "\n" { DOT_END }
     | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n"|"\\\'")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | '`' (([^ '\n']* '\n') as lxm) { LINE(lxm) }
     | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }

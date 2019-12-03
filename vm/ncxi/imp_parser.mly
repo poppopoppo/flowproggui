@@ -12,7 +12,7 @@
 %token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR CLN2 EOP_EXN EOP_OUT
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
-%token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD
+%token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD DOT_END
 %token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE
 %token <string> NAM STG VAL REG PRM LINE
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
@@ -325,7 +325,7 @@ ir_ptn_lst:
   ;
 ir_ptn_eq:
   | { [] }
-  | CMM VAL EQ name APP ir_ptn ir_ptn_eq {
+  | CMM NAM SRC name APP reg_ptn ir_ptn_eq {
     (ref(R_N $2),ref(Eq_Agl_N(ref(Ast.Stt_Name $4),$6)))::$7
     }
   | CMM VAL EQ ir_ptn_cst ir_ptn_eq {
@@ -434,8 +434,17 @@ mtc_ir:
   ;
   *)
 mtc_ir_end:
-  | coprd_ptn_end ir_ptn ir_ptn_eq SRC ir_lines { [|(($2,$3,None),$5)|] }
-  | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir_end {[|(($2,$3,None),$5)|] |+| $6 }
+  | coprd_ptn_end reg_ptn ir_ptn_eq mtc_ir_suc ir_lines { [|(($2,$3,None),$5)|] }
+  | coprd_ptn reg_ptn ir_ptn_eq mtc_ir_suc ir_lines mtc_ir_end {[|(($2,$3,None),$5)|] |+| $6 }
+  ;
+mtc_ir_suc:
+  (*| SRC {} *)
+  | SPL {}
+  | DOT_END {}
+  ;
+coprd_ptn:
+  | COPRD_PTN {}
+  | COPRD {}
   ;
 coprd_ptn_end:
   | COPRD_PTN_END {}
