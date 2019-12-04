@@ -78,8 +78,8 @@ License along with this library; if not, write to the Free Software Foundation, 
           </include>
         </context>
         <context id="comment" style-ref="comment" class="comment" class-disabled="no-spell-check">
-          <start>\.\;</start>
-          <end>\;\.</end>
+          <start>\[\#</start>
+          <end>\#\]</end>
           <include>
             <context ref="string"/>
             <context ref="comment-in-comment"/>
@@ -87,7 +87,7 @@ License along with this library; if not, write to the Free Software Foundation, 
           </include>
         </context>
         <context id="line-comment" style-ref="comment" end-at-line-end="true" class="comment" class-disabled="no-spell-check">
-          <start>\;</start>
+          <start>\#\#</start>
           <include>
             <context ref="def:in-line-comment"/>
           </include>
@@ -138,11 +138,11 @@ License along with this library; if not, write to the Free Software Foundation, 
         </context>
 
         <context id="code-symbol-1" style-ref="code-symbol">
-          <match>(\^|&#x00A6;|&#x00B6;|&#x00AB;|&#x2045;|&#x2046;|&#x2206;|&#x2207;|&#x220F;|(&#x2210;\\)|&#x2210;|&#x22A2;|(\|&#x00BB;)|&#x220E;)</match>
+          <match>(\^|&#x00A6;|&#x00B6;|&#x00AB;|&#x2045;|&#x2046;|&#x2206;|&#x2207;|&#x220F;|(&#x2210;\.)|(&#x2210;\\)|&#x2210;|&#x22A2;|(\|&#x00BB;)|&#x220E;)</match>
         </context>
 
         <context id="code-symbol-2" style-ref="code-symbol">
-          <match>//|\?</match>
+          <match>//|\?|\;</match>
         </context>
 
         <context id="angle" style-ref="exp-opr">
