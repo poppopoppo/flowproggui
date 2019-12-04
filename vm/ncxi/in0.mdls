@@ -28,6 +28,7 @@
 		∎ {}
 	∐. x ⊢ _nil◂{} . 
 		∎ {}
+[#
 § @.s8_of_r64_lst_i { i rl }  
 	∐ rl ⊢ _cns◂{ ri rl_tl } . 
 		_mov_x i ⊢ { i i0 } 
@@ -38,4 +39,5 @@
 	∐. rl ⊢ _nil◂{} . 
 		_mlc_s8 i ⊢ { i s0 }
 		∎ s0 
+#]
 ∎∎
