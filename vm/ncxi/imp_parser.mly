@@ -13,7 +13,7 @@
 %token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD DOT_END
-%token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE
+%token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE SCL
 %token <string> NAM STG VAL REG PRM LINE
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
@@ -271,7 +271,7 @@ ir_lines:
   | ir_ret { $1 }
   | ir_line ir_lines { Seq($1,$2) }
 (*  | MTC reg_ptn mtc_ir COPRD_END { Mtc($2,$3) } *)
-  | MTC reg_ptn mtc_ir_end { Mtc($2,$3) }
+  | mtc_ir_end { Mtc($1) }
   | name reg_ptn SRC_IL { IL_Glb_Call(ref(Ast.Stt_Name $1),$2) }
   ;
 ir_line:
@@ -324,12 +324,19 @@ ir_ptn_lst:
   | ir_ptn ir_ptn_lst { [|$1|] |+| $2 }
   ;
 ir_ptn_eq:
-  | { [] }
-  | CMM NAM SRC name APP reg_ptn ir_ptn_eq {
-    (ref(R_N $2),ref(Eq_Agl_N(ref(Ast.Stt_Name $4),$6)))::$7
+  | mtc_ir_suc { [] }
+  | mtc_ir_test mtc_ir_tail { $1::$2 }
+  ;
+mtc_ir_tail:
+  | mtc_ir_suc { [] }
+  | SCL mtc_ir_test mtc_ir_tail { $2::$3 }
+  ;
+mtc_ir_test:
+  | NAM SRC name APP reg_ptn {
+    (ref(R_N $1),ref(Eq_Agl_N(ref(Ast.Stt_Name $3),$5)))
     }
-  | CMM VAL EQ ir_ptn_cst ir_ptn_eq {
-    (ref(R_N $2),ref(P_Cst $4))::$5 }
+  | VAL EQ ir_ptn_cst {
+    (ref(R_N $1),ref(P_Cst $3)) }
   ;
 ir_ptn_cst:
   | STG { P_Stg $1 }
@@ -434,8 +441,8 @@ mtc_ir:
   ;
   *)
 mtc_ir_end:
-  | coprd_ptn_end reg_ptn ir_ptn_eq mtc_ir_suc ir_lines { [|(($2,$3,None),$5)|] }
-  | coprd_ptn reg_ptn ir_ptn_eq mtc_ir_suc ir_lines mtc_ir_end {[|(($2,$3,None),$5)|] |+| $6 }
+  | coprd_ptn_end ir_ptn_eq ir_lines { [|(($2,None),$3)|] }
+  | coprd_ptn ir_ptn_eq ir_lines mtc_ir_end {[|(($2,None),$3)|] |+| $4 }
   ;
 mtc_ir_suc:
   (*| SRC {} *)

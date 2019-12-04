@@ -20,8 +20,9 @@ rule token = parse
     | "." space* "\n" { DOT_END }
     | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n"|"\\\'")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | '`' (([^ '\n']* '\n') as lxm) { LINE(lxm) }
-    | ";" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
-    | "[;" [^ ';']* ";]"  { token lexbuf }
+    | "##" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
+    | "[#"  _* "#]"  { token lexbuf }
+    | ";" { SCL }
     | "0r" (digit+ as lxm) { R64(Int64.of_string lxm) }
     | "0xr" (hex+ as lxm) { R64(Int64.of_string ("0x"^lxm)) }
     | (digit+ as lxm) "r" { R64(Int64.of_string lxm) }
