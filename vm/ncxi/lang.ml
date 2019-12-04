@@ -3812,21 +3812,20 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             Util.pnt true "E 0:\n";
             let (_,k2_f) = evo_env_set k1 (mk_r_p (mk_idx vx)) !pa in
             (*let k2 = mk_mtc_v_k_eq k1 (mk_idx vx) !pa in*)
-            let iv_t = Hashtbl.copy iv0 in
+            (*let iv_t = Hashtbl.copy iv0 in*)
             Util.pnt true "E 1:\n";
-            let ix = csm_iv (mk_idx vx) iv_t in
+            (*let ix = csm_iv (mk_idx vx) iv_t in*)
             Util.pnt true "E 2:\n";
             (*let ik = mk_idx_k iv0 k1 in*)
-            let s1 = rset_iv iv0 in
-            let e_dl =
+            (*let s1 = rset_iv iv0 in*)
+            (*let e_dl =
               List.fold_left
                 ( fun e_dl p ->
                     let ii = csm_iv (R_A p) iv0 in
                     let ei = dlt_ptn s1 ii in
                     e_dl^ei )
-                "" dl in
+                "" dl in*)
             Util.pnt true "E 2:\n";
-            let lb0 = lb () in
             ( match !pa with
               | Eq_Agl(_,_,_,_) ->
                 (*let _ =
@@ -3848,10 +3847,11 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                   let*)
               | P_Cst c0 ->
                 ( match c0 with
-                  | P_R64 x0 ->
+                  (* | P_R64 x0 ->
+            let lb0 = lb () in
                     ( match ix with
                       | RP.A(R.Idx ix0) ->
-                        let e_d_l =
+                        (*let e_d_l =
                           List.fold_left
                             ( fun e_d_l (p,ip) ->
                                 let s0 = rset_iv iv0 in
@@ -3859,12 +3859,12 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                                 let ei = emt_mov_ptn_to_ptn s0 ii ip in
                                 (*Hashtbl.add iv0 p ip;*)
                                 e_d_l^ei )
-                            "" d_l in
+                            "" d_l in*)
                         let ec =
                           "\tmov QWORD rax,0x"^(Int64.format "%x" x0)^"\n"^
                           "\tcmp rax,"^(emt_reg_x86 ix0)^"\n"^
                           "\tjnz "^lb0^"\n"^
-                          e_d_l^e_dl^
+                          (*e_d_l^e_dl^*)
                           "\tjmp "^lbi^"\n"^
                           lb0^":\n"
                         in
@@ -3875,7 +3875,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                           let l1 = mtc_sub l0 [ms0] in*)
                         let e2 = emt_mtc iv0 (i::h0) s0 k2_f psl_tl in
                         e0^ec^e2
-                      | _ -> err "emt_mtc_eq 4" )
+                      | _ -> err "emt_mtc_eq 4" ) *)
                   | _ -> err "emt_mtc_eq 5" )
               | _ -> err "emt_mtc_eq 1" )
           | (vx,pa)::es_tl ->
