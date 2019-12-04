@@ -22,7 +22,9 @@
 	∎ {} 
 #] 
 § f0 x 
-	∐ x ⊢ _cns◂{ h t } . 
+	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 } . 
+		∎ {}
+	∐ x ⊢ _cns◂{ h t }; t ⊢ _nil◂{} .
 		∎ {}
 	∐. x ⊢ _nil◂{} . 
 		∎ {}
