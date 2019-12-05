@@ -27,8 +27,7 @@
 		tak { rx ry rz } ⊢ rr 
 		∎ rr 
 	∐. .
-		∎ z 
-[#		
+		∎ z 		
 § C4 « 
 	» 20r _ ⊢ x0 
 	» 10r _ ⊢ x1 
@@ -36,7 +35,8 @@
 	tak { x0 x1 x2 } ⊢ y 
 	_emt_q y ⊢ y 
 	∎ {}
-#]
+
+[#
 § @.tak_x { x y z } 
 	_setge { y x } ⊢ { y x b } 
 	∐ b'=0r . 
@@ -54,6 +54,8 @@
 	∐. . 
 		_mov_x z ⊢ { z z0 }
 		∎ { x y z z0 }
+#]
+[#
 § @.fact x 
 	∐ x'=0r .
 		» 1r _ ⊢ y 
@@ -67,6 +69,14 @@
 		fact x0 ⊢ y0 
 		_imul { x y0 } ⊢ { x y0 } 
 		∎ x
+§ C2 « 
+	» 0r _ ⊢ x0 
+	» 4r _ ⊢ x1 
+	fact x1 ⊢ y1 
+	_emt_q y1 ⊢ y1 
+	∎ {}
+#]
+[#
 § C5 « 
 	» 20r _ ⊢ x0 
 	» 10r _ ⊢ x1 
@@ -74,3 +84,4 @@
 	tak_x { x0 x1 x2 } ⊢ { x0 x1 x2 y } 
 	_emt_q y ⊢ y 
 	∎ {}
+	#]
