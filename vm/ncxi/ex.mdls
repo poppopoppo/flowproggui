@@ -28,7 +28,7 @@
 		∎ rr 
 	∐. .
 		∎ z 
-		
+[#		
 § C4 « 
 	» 20r _ ⊢ x0 
 	» 10r _ ⊢ x1 
@@ -36,7 +36,7 @@
 	tak { x0 x1 x2 } ⊢ y 
 	_emt_q y ⊢ y 
 	∎ {}
-
+#]
 § @.tak_x { x y z } 
 	_setge { y x } ⊢ { y x b } 
 	∐ b'=0r . 
@@ -44,17 +44,17 @@
 		tak_x { x0 y z } ⊢ { x0 y z rx }
 		_inc x0 ⊢ x
 		_dec y ⊢ y0 
-		tak_x { x y0 z } ⊢ { x y0 z ry } 
+		tak_x { y0 z x } ⊢ { y0 z x ry } 
 		_inc y0 ⊢ y 
 		_dec z ⊢ z0 
-		tak_x { x y z0 } ⊢ { x y z0 rz }
+		tak_x { z0 x y } ⊢ { z0 x y rz }
 		_inc z0 ⊢ z 
 		tak_x { rx ry rz } ⊢ { rx ry rz rr } 
 		∎ { x y z rr } 
 	∐. . 
 		_mov_x z ⊢ { z z0 }
 		∎ { x y z z0 } 
-[#
+
 § C5 « 
 	» 20r _ ⊢ x0 
 	» 10r _ ⊢ x1 
@@ -62,4 +62,3 @@
 	tak_x { x0 x1 x2 } ⊢ { x0 x1 x2 y } 
 	_emt_q y ⊢ y 
 	∎ {}
-#]
