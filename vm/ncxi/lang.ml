@@ -3812,11 +3812,11 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                 let _ = set_mk_mtc_ptn iv0 iya rm in
 
             )) *)
-      let rec emt_mtc_ps psl =
+      let rec emt_mtc_ps iv psl =
         ( match psl with
-          | ((es,Some (dl,d)),p)::psl_tl ->
+          | ((es,Some (dl,_)),p)::psl_tl ->
             let ivi = Hashtbl.copy iv in
-            let d_l =
+            (*let d_l =
               List.fold_left
                 ( fun dl p ->
                     let y = inst_idx_ptn gns 0 (R_A p) in
@@ -3825,17 +3825,17 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                     Hashtbl.add ivi p iy;
                     (p,iy)::dl )
                 [] d in
-            let d_l = List.rev d_l in
+              let d_l = List.rev d_l in *)
             let e0 = emt_ir i1 gns ns ivi p in
-            let (q0,er) = emt_mtc_ps psl_tl in
+            let (q0,er) = emt_mtc_ps iv psl_tl in
             let lbi = "MTC_"^(lb ()) in
             let e1 =
               lbi^":\n"^
               e0 in
-            ((es,dl,d_l,lbi)::q0,e1^er)
+            ((es,dl,[],lbi)::q0,e1^er)
           | [] -> ([],"")
           | _ -> err "emt_mtc_ps 0"        ) in
-      let (psl,e_s) = emt_mtc_ps psl in
+      let (psl,e_s) = emt_mtc_ps iv psl in
       let rec emt_mtc pv0 iv0 h0 k0 psl =
         Util.pnt true ("enter emt_mtc:"^(pnt_m_set k0)^"\n");
         ( match psl with
@@ -3862,7 +3862,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                     let ei = dlt_ptn s1 ii in
                     e_dl^ei )
                 "" dl in *)
-            let e_d_l =
+            (*let e_d_l =
               List.fold_left
                 ( fun e_d_l (p,ip) ->
                     Util.pnt true "e_d_l\n";
@@ -3871,10 +3871,10 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                     let ei = emt_mov_ptn_to_ptn s0 ii ip in
                     Hashtbl.add iv0 p ip;
                     e_d_l^ei )
-                "" d_l in
+                "" d_l in *)
             Util.pnt true e_c0;
             (*e_d_l^e_dl^*)
-            e_c0^e_d_l^
+            e_c0^(*e_d_l^*)
             "\tjmp "^lbi^"\n"
           (*let k1 = mk_mtc_v_k_eq_and k0 ri in
                       pnt true "X4\n";

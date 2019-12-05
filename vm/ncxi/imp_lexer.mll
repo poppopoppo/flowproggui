@@ -1,8 +1,9 @@
 {
     open Imp_parser
+    let cmt_n = ref 0
     exception Error of string
-}
 
+}
 let space = [' ' '\t' '\r' '\n']
 let line = [' ' '\t' '\r']
 let digit = ['0'-'9']
@@ -21,7 +22,7 @@ rule token = parse
     | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n"|"\\\'")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | '`' (([^ '\n']* '\n') as lxm) { LINE(lxm) }
     | "##" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
-    | "[#"  _* "#]"  { token lexbuf }
+    | "[#"   { cmt_n := !cmt_n +1; blk_cmt lexbuf }
     | ";" { SCL }
     | "0r" (digit+ as lxm) { R64(Int64.of_string lxm) }
     | "0xr" (hex+ as lxm) { R64(Int64.of_string ("0x"^lxm)) }
@@ -135,6 +136,10 @@ rule token = parse
     | _             { raise (Error (Printf.sprintf
                       "At offset %d: unexpected character.\n"
                       (Lexing.lexeme_start lexbuf))) }
+and blk_cmt = parse
+  | "#]" { cmt_n := !cmt_n-1; if !cmt_n=0 then token lexbuf else blk_cmt lexbuf }
+  | "[#" { cmt_n := !cmt_n+1; blk_cmt lexbuf }
+  | _ { blk_cmt lexbuf }
 and line_comment = parse
   | "\n"  { Util.pnt true "end line comment\n"; token lexbuf }
   | _ { line_comment lexbuf }
