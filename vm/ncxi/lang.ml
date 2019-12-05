@@ -455,7 +455,7 @@ module Ast = struct
     let _sub = sgn ()
     let _dec = sgn ()
     let _inc = sgn ()
-    let _mul = sgn ()
+    let _imul = sgn ()
     let _cmp = sgn ()
     let _eq = sgn ()
     let _scc = sgn ()
@@ -3224,6 +3224,11 @@ and init_prm () =
   gns.ns <- (Ast.Axm._add,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._add,ref(E_K_WC))::gns.ns_e;
 
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64])))) in
+  !ns.ns_p <- ("_imul",Ast.Axm._imul)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._imul,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._imul,ref(E_K_WC))::gns.ns_e;
+
   let v = ref(Ln(Imp(Axm Axm.r64,Axm Axm.r64))) in
   !ns.ns_p <- ("_inc",Ast.Axm._inc)::!ns.ns_p;
   gns.ns <- (Ast.Axm._inc,v)::gns.ns;
@@ -4400,6 +4405,36 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                             "\tbts r12,"^(string_of_int xp)^"\n"^
                             "\tbts r12,"^(string_of_int im)^"\n"
                           | _ -> err "emt_ir _add 0" )
+                      | ep when ep=Ast.Axm._imul ->
+                        let ix = csm_ptn_iv (mk_idx_ptn x) iv in
+                        ( match ix with
+                          | RP.R[|RP.A(R.Idx x0);RP.A(R.Idx x1)|] ->
+                            let _ = mk_idx_iv iv ix (mk_idx_ptn y) in
+                            if x1<9 then
+                              c_l^
+                              "\timul "^(emt_reg_x86 x0)^","^(emt_reg_x86 x1)^"\n"
+                            else
+                              c_l^
+                              "\tmov rdi,"^(emt_reg_x86 x1)^"\n"^
+                              "\tadd "^(emt_reg_x86 x0)^",rdi\n"
+                          | RP.A(R.Idx xp) ->
+                            let s0 = rset_iv iv in
+                            s0.(xp)<-true;
+                            let im = RSet.min_0 s0 in
+                            let iy = RP.R [|RP.A(R.Idx xp);RP.A(R.Idx im)|] in
+                            let _ = mk_idx_iv iv iy (mk_idx_ptn y) in
+                            c_l^
+                            "\tmov rax,"^(emt_reg_x86 xp)^"\n"^
+                            "\tmov QWORD [rax],rbx\n"^
+                            "\tmov rbx,rax\n"^
+                            "\tmov rax,QWORD [rbx+8*1]\n"^
+                            "\tmov rdi,QWORD [rbx+8*2]\n"^
+                            "\timul rdi,rax\n"^
+                            "\tmov "^(emt_reg_x86 xp)^",rdi\n"^
+                            "\tmov "^(emt_reg_x86 im)^",rax\n"^
+                            "\tbts r12,"^(string_of_int xp)^"\n"^
+                            "\tbts r12,"^(string_of_int im)^"\n"
+                          | _ -> err "emt_ir _imul 0" )
                       | ep when ep=Ast.Axm._inc ->
                         let ix = csm_ptn_iv (mk_idx_ptn x) iv in
                         ( match ix with

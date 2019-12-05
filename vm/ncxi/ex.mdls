@@ -53,8 +53,20 @@
 		∎ { x y z rr } 
 	∐. . 
 		_mov_x z ⊢ { z z0 }
-		∎ { x y z z0 } 
-
+		∎ { x y z z0 }
+§ @.fact x 
+	∐ x'=0r .
+		» 1r _ ⊢ y 
+		∎ y 
+	∐ x'=1r .
+		» 1r _ ⊢ y 
+		∎ y  
+	∐. . 
+		_mov_x x ⊢ { x x0 } 
+		_dec x0 ⊢ x0 
+		fact x0 ⊢ y0 
+		_imul { x y0 } ⊢ { x y0 } 
+		∎ x
 § C5 « 
 	» 20r _ ⊢ x0 
 	» 10r _ ⊢ x1 
