@@ -2189,13 +2189,18 @@ and emt_ptn_grm i ns ep f r j =
     | p::tl ->
       let l0 = lb () in
       let l1 = lb () in
+      let l2 = lb () in
       let es =
         if f=Grm.Lex then ""
         else
+          "\tmov r10,QWORD [r13]\n"^
+          "\tshr r10,32\n"^
           "\tjmp "^l1^"\n"^
           l0^":\n"^
           "\tadd "^(emt_reg_x86 1)^",1\n"^
           l1^":\n"^
+          "\tcmp r14,r10\n"^
+          "\tjge "^l2^"\n"^
           "\tmov rax,0\n"^
           "\tmov al,[r13+r14+8*1]\n"^
           "\tcmp rax,9\n"^
@@ -2203,7 +2208,8 @@ and emt_ptn_grm i ns ep f r j =
           "\tcmp rax,10\n"^
           "\tjz "^l0^"\n"^
           "\tcmp rax,32\n"^
-          "\tjz "^l0^"\n" in
+          "\tjz "^l0^"\n"^
+          l2^":\n" in
       let e_p =
         ( match p with
           | Grm.Atm a ->
@@ -2213,14 +2219,16 @@ and emt_ptn_grm i ns ep f r j =
               | Grm.Txt s ->
                 let bs = Bytes.of_string s in
                 let lbs = Bytes.length bs in
+                let lb_f = lb () in
                 let rec e_lp0 ib =
                   let lb_c = lb () in
                   if ib<lbs
                   then
                     "\tmov rax,0\n"^
-                    "\tmov al,BYTE [r13+r14+8*1+"^(string_of_int ib)^"]\n"^
+                    "\tmov al,BYTE [r13+r14+8*1-"^(string_of_int lbs)^"+"^(string_of_int ib)^"]\n"^
                     "\tcmp al,"^(string_of_int (Char.code bs.[ib]))^"\n"^
                     "\tjz "^lb_c^"\n"^
+                    lb_f^":\n"^
                     (prs_dec_i (j-1))^
                     "\tjmp NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed\n"^
                     lb_c^":\n"^
@@ -2228,8 +2236,10 @@ and emt_ptn_grm i ns ep f r j =
                   else "" in
                 "; \""^(String.escaped s)^"\"\n"^
                 es^
-                (e_lp0 0)^
                 "\tadd r14,"^(string_of_int lbs)^"\n"^
+                "\tcmp r14,r10\n"^
+                "\tjge "^lb_f^"\n"^
+                (e_lp0 0)^
                 "\tmov rax,rbx\n"^
                 "\tmov rbx,QWORD [rbx]\n"^
                 "\tmov rdi,0x0000_0000_0000_ffff\n"^

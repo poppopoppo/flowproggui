@@ -33,9 +33,42 @@
 	s8_of_r64_lst_i { i cl } ⊢ { i s } 
 	∎ s
 §§+s8 
+	@.dgt
+	∐ _byt ⊢ { c } 
+		» 48r _ ⊢ c0 
+		» 57r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a  
+§§+s8 
+	@.ch_l 
+	∐ _byt ⊢ { c } 
+		» 97r _ ⊢ c0 
+		» 122r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a  
+			 	
+§ T0 « 
+	» "a04" _ ⊢ s0 
+	» 0r _ ⊢ x0 
+	dgt.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+	∎ {}
+§§+s8 
 	@.stg_ltr
 	∐ "\"" stg_ltr_seq ⊢ { {} cl } 
-		s8_of_r64_lst_i cl ⊢ s
+		s8_of_r64_lst cl ⊢ s
 		_some s ⊢ a 
 		∎ a
 	@.stg_ltr_seq 
