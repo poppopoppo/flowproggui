@@ -2053,10 +2053,10 @@ and prs_dec_i i =
   let lb0 = lb () in
   if i<0 then ""
   else
-    "\tmov rsi,QWORD [prs_vct+16*"^(string_of_int i)^"]\n"^
+    "\tmov rsi,QWORD [rsp+16*"^(string_of_int i)^"]\n"^
     "\tbt rsi,0\n"^
     "\tjc "^lb0^"\n"^
-    "\tmov rdi,QWORD [prs_vct+16*"^(string_of_int i)^"+8*1]\n"^
+    "\tmov rdi,QWORD [rsp+16*"^(string_of_int i)^"+8*1]\n"^
     "\tcall dlt\n"^
     lb0^":\n"^
     (prs_dec_i (i-1))
@@ -2064,12 +2064,12 @@ and prs_set_i i =
   let lb0 = lb () in
   if i<0 then ""
   else
-    "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"]\n"^
+    "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"]\n"^
     "\tbt rax,0\n"^
     "\tjc "^lb0^"\n"^
     "\tbtr QWORD [rdi],"^(string_of_int i)^"\n"^
     lb0^":\n"^
-    "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"+8*1]\n"^
+    "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"+8*1]\n"^
     "\tmov [rdi+8*1+8*"^(string_of_int i)^"],rax\n"^
     (prs_set_i (i-1))
 and emt_rle gns ns ep l =
@@ -2082,14 +2082,15 @@ and emt_rle gns ns ep l =
             (*"_"^mn^"_"^n^":\n"^ *)
             "; "^cn^"\n"^
             "\tpush "^(emt_reg_x86 1)^"\n"^
+            "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
             (emt_ptn_grm i ns ep f r 0)^
-            (*"NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_succeed:\n"^*)
-            "\tadd rsp,8\n"^
             "\tmov rdi,rbx\n"^
             "\tmov rbx,QWORD [rbx]\n"^
             "\tmov rax,0x0000_"^(Printf.sprintf "%04x" rn)^"_0000_ffff\n"^
             "\tmov QWORD [rdi],rax\n"^
             (prs_set_i (rn-1))^
+            "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
+            "\tadd rsp,8\n"^
             "\tmov rax,0x"^(Printf.sprintf "%02x" i)^"00_0000_0000_0001\n"^
             "\tor rdi,rax\n"^
             "\tmov "^(emt_reg_x86 2)^",0\n"^
@@ -2098,6 +2099,7 @@ and emt_rle gns ns ep l =
             "\tbts r12,2\n"^
             "\tret\n"^
             "NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed:\n"^
+            "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
             "\tpop "^(emt_reg_x86 1)^"\n"^
             (lp (i+1) tl)
           | [] ->
@@ -2105,7 +2107,7 @@ and emt_rle gns ns ep l =
             "\tmov rdi,rbx\n"^
             "\tmov rbx,QWORD [rbx]\n"^
             "\tmov QWORD [rdi],rax\n"^
-            "\tmov "^(emt_reg_x86 3)^"rdi\n"^
+            "\tmov "^(emt_reg_x86 3)^",rdi\n"^
             "\tmov "^(emt_reg_x86 2)^",1\n"^
             "\tbtr r12,3\n"^
             "\tbts r12,2\n"^
@@ -2124,24 +2126,28 @@ and emt_rle gns ns ep l =
             let lb1_0 = lb () in
             let lb1_1 = lb () in
             let s_e_s = RSet.ini () in
-            let e_s i =
+            let rec e_s i =
               if i<0 then ""
               else
                 ( s_e_s.(i)<-true;
-                  "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"]\n"^
+                  "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"]\n"^
                   "\tbt rax,0\n"^
                   (cf_set i)^
-                  "\tmov rax,QWORD [prs_vct+16*"^(string_of_int i)^"+8*1]\n"^
+                  "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"+8*1]\n"^
                   "\tmov "^(emt_reg_x86 i)^",rax\n"^
-                  (prs_set_i (i-1)) ) in
+                  (e_s (i-1)) ) in
             let i_e_s = RP.R(Array.init rn (fun i -> RP.A(R.Idx i))) in
             let e0 =
               "\tpush "^(emt_reg_x86 1)^"\n"^
+              "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
               (emt_ptn_grm i ns ep f r 0)^
-              "\tpush "^(emt_reg_x86 0)^"\n"^
-              "\tpush "^(emt_reg_x86 1)^"\n"^
-              "\tpush "^lb1^"\n"^
-              (e_s (rn-1)) in
+              "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+              "\tmov rsi"^(emt_reg_x86 1)^"\n"^
+              (e_s (rn-1))^
+              "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
+              "\tpush rdi\n"^
+              "\tpush rsi\n"^
+              "\tpush "^lb1^"\n" in
             let e1 =
               e0^
               (emt_mov_ptn_to_ptn R.M_Dlt s_e_s i_e_s i0)^
@@ -2162,6 +2168,7 @@ and emt_rle gns ns ep l =
               "\tadd rsp,8\n"^
               "\tret\n"^
               "NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed:\n"^
+              "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
               "\tpop r14\n"^
               lb1_0^":\n" in
             e1^
@@ -2227,8 +2234,8 @@ and emt_ptn_grm i ns ep f r j =
                 "\tmov rbx,QWORD [rbx]\n"^
                 "\tmov rdi,0x0000_0000_0000_ffff\n"^
                 "\tmov QWORD [rax],rdi\n"^
-                "\tmov QWORD [prs_vct+16*"^(string_of_int j)^"],0\n"^
-                "\tmov QWORD [prs_vct+8*1+16*"^(string_of_int j)^"],rax\n"
+                "\tmov QWORD [rsp+16*"^(string_of_int j)^"],0\n"^
+                "\tmov QWORD [rsp+8*1+16*"^(string_of_int j)^"],rax\n"
               | Grm.Name f ->
                 let mf = get_ns_m_t !ns f in
                 let m_ns = get_ns_m !ns f in
@@ -2249,8 +2256,8 @@ and emt_ptn_grm i ns ep f r j =
                     "\tmov rax,0\n"^
                     "\tbt r12,3\n"^
                     "\tsetc al\n"^
-                    "\tmov QWORD [prs_vct+16*"^(string_of_int j)^"],rax\n"^
-                    "\tmov QWORD [prs_vct+8*1+16*"^(string_of_int j)^"],"^(emt_reg_x86 3)^"\n"
+                    "\tmov QWORD [rsp+16*"^(string_of_int j)^"],rax\n"^
+                    "\tmov QWORD [rsp+8*1+16*"^(string_of_int j)^"],"^(emt_reg_x86 3)^"\n"
                   | _ -> err "emt_ptn 1" )
             )
           | Grm.Lst a ->

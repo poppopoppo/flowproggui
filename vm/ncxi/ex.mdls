@@ -17,6 +17,7 @@
 		_emt_q x0 ⊢ x0 
 		∎ {}	
 #]		
+
 § @.s8_of_r64_lst_i { i rl }  
 	∐ rl ⊢ _cns◂{ ri rl_tl } . 
 		_inc i ⊢ i 
@@ -27,13 +28,34 @@
 	∐. rl ⊢ _nil◂{} . 
 		_mlc_s8 i ⊢ { i s0 }
 		∎ { i s0 } 
-	 
+		
+§§+s8 
+	@.stg_ltr
+	∐ "\"" stg_ltr_seq 
+	@.stg_ltr_seq 
+	∐ "\\" stg_ltr_sp stg_ltr_seq 
+	∐ "\"" 
+	∐ _byt stg_ltr_seq 
+	@.stg_ltr_sp 
+	∐ "\\" 
+	∐ "\"" 
+	∐ "n" 
+	∐ "t" 
+	∐ "0" 
+	
+§ C2 « 
+	» "\"Hello World!!\"" _ ⊢ s0 
+	» 0r _ ⊢ x0 
+	stg_ltr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+	∎ {}
+[#
 § C1 « 
 	» 65r _ ⊢ x0 
 	» 66r _ ⊢ x1 
 	» 67r _ ⊢ x2 
 	» 68r _ ⊢ x3
-	» 69r _ ⊢ i0
+	» 0r _ ⊢ i0
 	_nil {} ⊢ l0  
 	_cns { x0 l0 } ⊢ l0 
 	_cns { x1 l0 } ⊢ l0 
@@ -43,6 +65,7 @@
 	_emt_q s0 ⊢ s0 
 	##f0 l0 ⊢ {} 
 	∎ {} 
+	#]
 	[#
 	
 § @.tak { x y z }
