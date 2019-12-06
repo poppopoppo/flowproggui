@@ -191,6 +191,39 @@ SFLS_end:
   mov QWORD [SFLS_BTM],rdx
   ret
 
+dlt_gbg:
+  bt rdi,0
+  jnc dlt_gbg_blk
+  mov rax,0x00ff_ffff_ffff_fffe
+  and rdi,rax
+dlt_gbg_blk:
+  bt QWORD [rdi],16
+  jc dlt_gbg_opq
+  mov [rdi],rbx
+  mov rbx,rdi
+  ret
+dlt_gbg_opq:
+  mov rax,0
+  push rsi
+  push rdx
+  push rcx
+  push r8
+  push r9
+  push r10
+  push r11
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call free
+  mov rsp,QWORD [rsp_tmp]
+  pop r11
+  pop r10
+  pop r9
+  pop r8
+  pop rcx
+  pop rdx
+  pop rsi
+  ret
+
 dlt: ; rdi=src
   bt rdi,0
   jnc dlt_blk
