@@ -2140,9 +2140,9 @@ and emt_rle gns ns ep l =
                   (e_s (i-1)) ) in
             let i_e_s = RP.R(Array.init rn (fun i -> RP.A(R.Idx i))) in
             let e0 =
-            "\tmov r10,QWORD [r13]\n"^
-            "\tshr r10,32\n"^
-            "\tpush "^(emt_reg_x86 1)^"\n"^
+              "\tmov r10,QWORD [r13]\n"^
+              "\tshr r10,32\n"^
+              "\tpush "^(emt_reg_x86 1)^"\n"^
               "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
               (emt_ptn_grm i ns ep f r 0)^
               "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
@@ -2221,19 +2221,16 @@ and emt_ptn_grm i ns ep f r j =
               | Grm.Txt s ->
                 let bs = Bytes.of_string s in
                 let lbs = Bytes.length bs in
+                let e_d = prs_dec_i (j-1) in
                 let lb_f = lb () in
+                let lb_t = lb () in
                 let rec e_lp0 ib =
-                  let lb_c = lb () in
                   if ib<lbs
                   then
                     "\tmov rax,0\n"^
                     "\tmov al,BYTE [r13+r14+8*1-"^(string_of_int lbs)^"+"^(string_of_int ib)^"]\n"^
                     "\tcmp al,"^(string_of_int (Char.code bs.[ib]))^"\n"^
-                    "\tjz "^lb_c^"\n"^
-                    lb_f^":\n"^
-                    (prs_dec_i (j-1))^
-                    "\tjmp NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed\n"^
-                    lb_c^":\n"^
+                    "\tjnz "^lb_f^"\n"^
                     (e_lp0 (ib+1))
                   else "" in
                 "; \""^(String.escaped s)^"\"\n"^
@@ -2242,6 +2239,11 @@ and emt_ptn_grm i ns ep f r j =
                 "\tcmp r14,r10\n"^
                 "\tjge "^lb_f^"\n"^
                 (e_lp0 0)^
+                "\tjmp "^lb_t^"\n"^
+                lb_f^":\n"^
+                e_d^
+                "\tjmp NS_E_"^(Sgn.print ep)^"_MTC_"^(string_of_int i)^"_failed\n"^
+                lb_t^":\n"^
                 "\tmov rax,rbx\n"^
                 "\tmov rbx,QWORD [rbx]\n"^
                 "\tmov rdi,0x0000_0000_0000_ffff\n"^
