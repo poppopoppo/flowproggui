@@ -28,23 +28,55 @@
 	∐. rl ⊢ _nil◂{} . 
 		_mlc_s8 i ⊢ { i s0 }
 		∎ { i s0 } 
-		
+§ s8_of_r64_lst cl 
+	» 0r _ ⊢ i 
+	s8_of_r64_lst_i { i cl } ⊢ { i s } 
+	∎ s
 §§+s8 
 	@.stg_ltr
-	∐ "\"" stg_ltr_seq 
+	∐ "\"" stg_ltr_seq ⊢ { {} cl } 
+		s8_of_r64_lst_i cl ⊢ s
+		_some s ⊢ a 
+		∎ a
 	@.stg_ltr_seq 
-	∐ "\\" stg_ltr_sp stg_ltr_seq 
-	∐ "\"" 
-	∐ _byt stg_ltr_seq 
+	∐ "\\" stg_ltr_sp stg_ltr_seq ⊢ { {} c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		_some cl ⊢ a 
+		∎ a  
+	∐ "\"" ⊢ { {} }
+		_nil {} ⊢ cl 
+		_some cl ⊢ a 
+		∎ a 
+	∐ _byt stg_ltr_seq ⊢ { c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		_some cl ⊢ a 
+		∎ a
 	@.stg_ltr_sp 
-	∐ "\\" 
-	∐ "\"" 
-	∐ "n" 
-	∐ "t" 
-	∐ "0" 
+	∐ "\\" ⊢ { {} }
+		» 92r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "\"" ⊢ { {} }
+		» 34r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "n" ⊢ { {} }
+		» 10r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "t" ⊢ { {} }
+		» 9r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "0" ⊢ { {} }
+		» 0r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
 	
 § C2 « 
-	» "\"Hello World!!\"" _ ⊢ s0 
+	» _^ _ ⊢ s0 
+		`"Hello\tWorld !!" 
+		//
 	» 0r _ ⊢ x0 
 	stg_ltr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
