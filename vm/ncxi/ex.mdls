@@ -57,12 +57,64 @@
 			∎ a 
 		∐. . 
 			_none {} ⊢ a 
+			∎ a
+			  
+§§+s8 
+	@.ch_u
+	∐ _byt ⊢ { c } 
+		» 65r _ ⊢ c0 
+		» 90r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
 			∎ a  
-			 	
+§§+s8 
+	@.ch_a 
+	∐ ch_u ⊢ { c } 
+		_some c ⊢ a 
+		∎ a  
+	∐ ch_l ⊢ { c } 
+		_some c ⊢ a 
+		∎ a 		 	
+§§+s8 
+	@.word 
+	∐ ch_a word_tl ⊢ { c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		s8_of_r64_lst cl ⊢ s 
+		_some s ⊢ a 
+		∎ a
+	@.word_tl 
+	∐ word_hd word_tl ⊢ { c tl } 
+		_cns { c tl } ⊢ l 
+		_some l ⊢ a 
+		∎ a 
+	∐ ⊢ { } 
+		_nil {} ⊢ l 
+		_some l ⊢ a 
+		∎ a
+	@.word_hd 
+	∐ ch_a ⊢ { c } 
+		_some c ⊢ a 
+		∎ a 
+	∐ dgt ⊢ { c } 
+		» "P0" _ ⊢ s0 
+		_emt_q s0 ⊢ s0 
+		_some c ⊢ a 
+		∎ a  
+	∐ "_" ⊢ { {} } 
+		» "P1" _ ⊢ s0 
+		_emt_q s0 ⊢ s0 
+		» 95r _ ⊢ c 
+		_some c ⊢ a 
+		∎ a 			 	
 § T0 « 
-	» "a04" _ ⊢ s0 
+	» "aSk7_dD0_4" _ ⊢ s0 
 	» 0r _ ⊢ x0 
-	dgt.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	word.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
 	∎ {}
 §§+s8 
