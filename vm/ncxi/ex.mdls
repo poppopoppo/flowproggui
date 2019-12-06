@@ -1,14 +1,32 @@
-[#
 § @.f0 x 
 	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 }; t0 ⊢ _cns◂{ h1 t1 } . 
+		» 0r _ ⊢ x0 
+		_emt_q { x0 h1 } ⊢ { x0 h1 } 
 		∎ {}
-	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 }; h0'=0x0r; h0'=0x1r .
+	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 } .
+		» 1r _ ⊢ x0 
+		_emt_q { x0 h0 } ⊢ { x0 h0 } 
 		∎ {}
 	∐ x ⊢ _cns◂p . 
+		» 2r _ ⊢ x0 
+		_emt_q x0 ⊢ x0 
 		∎ {}
 	∐. x ⊢ _nil◂{} . 
-		∎ {}		
-#]
+		» 3r _ ⊢ x0 
+		_emt_q x0 ⊢ x0 
+		∎ {}	
+			 
+§ C1 « 
+	_nil {} ⊢ l0 
+	» 0r _ ⊢ x0 
+	» 1r _ ⊢ x1 
+	» 2r _ ⊢ x2
+	_cns { x0 l0 } ⊢ l0 
+	_cns { x1 l0 } ⊢ l0 
+	f0 l0 ⊢ {} 
+	∎ {} 
+	[#
+	
 § @.tak { x y z }
 	_setge { y x } ⊢ { y x b }  
 	∐ b'=0x0r . 
@@ -28,6 +46,7 @@
 		∎ rr 
 	∐. .
 		∎ z 		
+
 § C4 « 
 	» 20r _ ⊢ x0 
 	» 10r _ ⊢ x1 
@@ -36,7 +55,6 @@
 	_emt_q y ⊢ y 
 	∎ {}
 
-[#
 § @.tak_x { x y z } 
 	_setge { y x } ⊢ { y x b } 
 	∐ b'=0r . 
@@ -54,8 +72,7 @@
 	∐. . 
 		_mov_x z ⊢ { z z0 }
 		∎ { x y z z0 }
-#]
-[#
+
 § @.fact x 
 	∐ x'=0r .
 		» 1r _ ⊢ y 
@@ -69,14 +86,14 @@
 		fact x0 ⊢ y0 
 		_imul { x y0 } ⊢ { x y0 } 
 		∎ x
+		
 § C2 « 
 	» 0r _ ⊢ x0 
 	» 4r _ ⊢ x1 
 	fact x1 ⊢ y1 
 	_emt_q y1 ⊢ y1 
 	∎ {}
-#]
-[#
+
 § C5 « 
 	» 20r _ ⊢ x0 
 	» 10r _ ⊢ x1 
