@@ -3358,7 +3358,7 @@ and push_iv iv =
                "\tmov QWORD [rsp+8+8*"^(string_of_int n)^"],"^(emt_reg_x86 i)^"\n" in
              let e1 =
                "\tmov "^(emt_reg_x86 i)^",QWORD [rsp+8+8*"^(string_of_int n)^"]\n"^
-               "\tbt QWORD [rsp],"^(string_of_int i)^"\n"^
+               "\tbt QWORD rax,"^(string_of_int i)^"\n"^
                (cf_set i)^
                e1 in
              (i+1,n+1,e0,e1)
@@ -3370,7 +3370,7 @@ and push_iv iv =
              let e1 =
                "\tmov rdi,QWORD [rsp+8+8*"^(string_of_int n)^"]\n"^
                "\tmov "^(emt_reg_x86 i)^",rdi\n"^
-               "\tbt QWORD [rsp],"^(string_of_int i)^"\n"^
+               "\tbt rax,"^(string_of_int i)^"\n"^
                (cf_set i)^
                e1 in
              (i+1,n+1,e0,e1)
@@ -3386,6 +3386,7 @@ and push_iv iv =
   let e_1 =
     "; pop_iv\n"^
     (*"\tmov r12,QWORD [rsp]\n"^ *)
+    "\tmov rax,QWORD [rsp]\n"^
     e1^
     "\tadd rsp,"^(string_of_int n_s)^"\n" in
   (e_0,e_1)
@@ -3420,7 +3421,7 @@ and dlt_gbg () =
   "\tcmp r15,0\n"^
   "\tjz "^lb1^"\n"^
   "\tmov rdi,QWORD [gbg_vct-8+8*r15],\n"^
-  "\tcall dlt\n"^
+  "\tcall dlt_gbg\n"^
   "\tsub r15,1\n"^
   "\tjmp "^lb0^"\n"^
   lb1^":\n"
@@ -4474,11 +4475,13 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                             let _ = mk_idx_iv iv iy (mk_idx_ptn y) in
                             if x0<9&&im<9 then
                               c_l^
-                              "\tmov "^(emt_reg_x86 im)^","^(emt_reg_x86 x0)^"\n"
+                              "\tmov "^(emt_reg_x86 im)^","^(emt_reg_x86 x0)^"\n"^
+                              "\tbts r12,"^(string_of_int im)^"\n"
                             else
                               c_l^
                               "\tmov rdi,"^(emt_reg_x86 x0)^"\n"^
-                              "\tmov "^(emt_reg_x86 im)^",rdi\n"
+                              "\tmov "^(emt_reg_x86 im)^",rdi\n"^
+                              "\tbts r12,"^(string_of_int im)^"\n"
                           | _ -> err "emt_ir _mov_x 0" )
                       | _ -> err "emt_ir _prm 0" )
                   | _ -> err "met_ir etr 3"

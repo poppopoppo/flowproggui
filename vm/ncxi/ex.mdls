@@ -15,15 +15,28 @@
 		» 3r _ ⊢ x0 
 		_emt_q x0 ⊢ x0 
 		∎ {}	
-			 
+		
+§ @.s8_of_r64_lst_i { i rl }  
+	∐ rl ⊢ _cns◂{ ri rl_tl } . 
+		_mov_x i ⊢ { i i0 } 
+		_inc i0 ⊢ i0 
+		s8_of_r64_lst_i { i0 rl_tl } ⊢ s0 
+		_sts { s0 i ri } ⊢ { s0 i ri } 
+		∎ s0  
+	∐. rl ⊢ _nil◂{} . 
+		_mlc_s8 i ⊢ { i s0 }
+		∎ s0 
+	 
 § C1 « 
-	_nil {} ⊢ l0 
 	» 0r _ ⊢ x0 
 	» 1r _ ⊢ x1 
-	» 2r _ ⊢ x2
+	» 0r _ ⊢ i0
+	_nil {} ⊢ l0  
 	_cns { x0 l0 } ⊢ l0 
 	_cns { x1 l0 } ⊢ l0 
-	f0 l0 ⊢ {} 
+	s8_of_r64_lst_i { i0 l0 } ⊢ s0 
+	_emt_q s0 ⊢ s0 
+	##f0 l0 ⊢ {} 
 	∎ {} 
 	[#
 	
