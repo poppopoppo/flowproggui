@@ -110,9 +110,15 @@
 		_emt_q s0 ⊢ s0 
 		» 95r _ ⊢ c 
 		_some c ⊢ a 
-		∎ a 			 	
+		∎ a 
+			
+§§+s8 
+	@.prm_word 
+	∐ "_" word 
+	∐ word  
+	 	
 § T0 « 
-	» "aSk7_dD0_4" _ ⊢ s0 
+	» "aSk7_dD0_4$ jj " _ ⊢ s0 
 	» 0r _ ⊢ x0 
 	word.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
