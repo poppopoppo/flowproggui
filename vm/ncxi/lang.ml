@@ -2081,6 +2081,8 @@ and emt_rle gns ns ep l =
             let rn = List.length r in
             (*"_"^mn^"_"^n^":\n"^ *)
             "; "^cn^"\n"^
+            "\tmov r10,QWORD [r13]\n"^
+            "\tshr r10,32\n"^
             "\tpush "^(emt_reg_x86 1)^"\n"^
             "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
             (emt_ptn_grm i ns ep f r 0)^
@@ -2138,7 +2140,9 @@ and emt_rle gns ns ep l =
                   (e_s (i-1)) ) in
             let i_e_s = RP.R(Array.init rn (fun i -> RP.A(R.Idx i))) in
             let e0 =
-              "\tpush "^(emt_reg_x86 1)^"\n"^
+            "\tmov r10,QWORD [r13]\n"^
+            "\tshr r10,32\n"^
+            "\tpush "^(emt_reg_x86 1)^"\n"^
               "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
               (emt_ptn_grm i ns ep f r 0)^
               "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
@@ -2193,8 +2197,6 @@ and emt_ptn_grm i ns ep f r j =
       let es =
         if f=Grm.Lex then ""
         else
-          "\tmov r10,QWORD [r13]\n"^
-          "\tshr r10,32\n"^
           "\tjmp "^l1^"\n"^
           l0^":\n"^
           "\tadd "^(emt_reg_x86 1)^",1\n"^
@@ -2254,7 +2256,9 @@ and emt_ptn_grm i ns ep f r j =
                     let epf = List.assoc "prs" !m_ns.ns_p in
                     "; "^(pnt_name f)^"\n"^
                     es^
+                    "\tpush r10\n"^
                     "\tcall NS_E_"^(Sgn.print epf)^"_ETR_TBL\n"^
+                    "\tpop r10\n"^
                     "\tcmp "^(emt_reg_x86 2)^",0\n"^
                     "\tjz "^lb0^"\n"^
                     "\tmov rdi,"^(emt_reg_x86 3)^"\n"^
