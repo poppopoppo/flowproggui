@@ -2,7 +2,7 @@
 ; r9 = tmp0  r10 = tmp1 r11 = tmp2
 ; [r9] = 32,32 ref-count,len
 ; [r9+1] = tag_bit list ; right to left
-; r15 call stack depth
+; r15 gbg_n
 ; r12 tbv
 ; r13 heap
 ; r14 tmp-tbv
@@ -52,6 +52,7 @@ section .bss
   fmt_d_r0: resb 4
   in0: resq 1
   stat: resb 144
+  gbg_vct: resq 64
   struc STAT
     .st_dev         resq 1
     .st_ino         resq 1
@@ -119,6 +120,7 @@ section .data
   test_fn: db "OpADL.mdls",0
 
   rsp_tmp: dq 0
+  gbg_ptr: dq gbg_vct
 ; dynamic entries
   etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
 ; global constants

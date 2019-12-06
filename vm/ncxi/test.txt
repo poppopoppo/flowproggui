@@ -676,3 +676,27 @@ Lx°
     ∐ .. .
     ∐. .
   ∐.
+  _C.lds {= %& < { o r } =} ⊢ {= m < { o r } =}
+  _get { v o } ⊢ { v o a }
+  _add { x y } ⊢ { z w }
+  v,o !⊵ a ⊢ v,o
+  v,o ⊵ a ⊢ v,o ⊵ b
+  ∐ v,o ⊢ v,o ⊵ cy◂{ x _ _ }; x ⊢ cx◂{ p q } .
+    _add { x %[ 0r ] } ⊢ { x _ }
+    $ %[ "HELLO" ] ⊢ %s0
+    » _^ s0,s1 ⊢ s0,s1,sr
+      "HELLO" 0' 1' "WORLD" //
+    ◂ %[ _emt_q ],x ⊢ y
+  ∐ v,o ⊢ v,o !⊵ a .
+
+§ f { x y }
+  _add { x y } ⊢ { x y }
+  ?.e0 { x y z }
+    _g0 ..
+    ..
+    ∎ ..
+  ?.e1 q
+      ..
+  ?..e2
+
+  ◂ %c.e1,x ⊢ c,y
