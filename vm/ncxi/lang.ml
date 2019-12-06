@@ -2142,7 +2142,7 @@ and emt_rle gns ns ep l =
               "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
               (emt_ptn_grm i ns ep f r 0)^
               "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
-              "\tmov rsi"^(emt_reg_x86 1)^"\n"^
+              "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
               (e_s (rn-1))^
               "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
               "\tpush rdi\n"^
@@ -3506,22 +3506,29 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
   let rec lp i0 i1 =
     ( match i0,i1 with
       | RP.A(R.Idx i_0),RP.A(R.Idx i1) ->
-        if i_0=i1 then ([],[]) else ([],[(i0,i1)])
-      | _,RP.A(R.Idx i1) -> ([],[(i0,i1)])
-      | RP.A(R.Idx i0),_ -> ([(i0,i1)],[])
+        if i_0=i1 then ([],[],[]) else ([],[(i0,i1)],[])
+      | _,RP.A(R.Idx i1) -> ([],[(i0,i1)],[])
+      | RP.A(R.Idx i0),_ -> ([(i0,i1)],[],[])
       | RP.R rs0,RP.R rs1 ->
-        let (_,l0,l1) =
+        let (_,l0,l1,l2) =
           Array.fold_left
-            ( fun (i,l0,l1) ri0 ->
-                let (l0_0,l1_0) = lp ri0 rs1.(i) in
-                (i+1,l0@l0_0,l1@l1_0) )
-            (0,[],[]) rs0 in
-        (l0,l1)
-      | RP.A(R.Agl(ia0,_,ra0)),RP.A(R.Agl(ia1,_,ra1)) ->
-        let (l0,l1) = lp ra0 ra1 in
-        (l0,(RP.A(R.Idx ia0),ia1)::l1)
-      | _ -> err "emt_mov_ptn_to_ptn 0" ) in
-  let (l1,l0) = lp i0 i1 in
+            ( fun (i,l0,l1,l2) ri0 ->
+                let (l0_0,l1_0,l2_0) = lp ri0 rs1.(i) in
+                (i+1,l0@l0_0,l1@l1_0,l2@l2_0) )
+            (0,[],[],[]) rs0 in
+        (l0,l1,l2)
+      | RP.A(R.Agl(ia0,i_n0,ra0)),RP.A(R.Agl(ia1,i_n1,ra1)) ->
+        if i_n0=i_n1 then
+          let (l0,l1,l2) = lp ra0 ra1 in
+          (l0,(RP.A(R.Idx ia0),ia1)::l1,l2)
+        else err "emt_mov_ptn_to_ptn lp 1"
+      | RP.A(R.AglStt(ii0,i_n0,ra0)),RP.A(R.Agl(ia1,i_n1,ra1)) ->
+        if i_n0=i_n1 then
+          let (l0,l1,l2) = lp ra0 ra1 in
+          (l0,l1,(ii0,ia1)::l2)
+        else err "emt_mov_ptn_to_ptn lp 2"
+      | _ -> err "emt_mov_ptn_to_ptn lp 0" ) in
+  let (l1,l0,l2) = lp i0 i1 in
   (*let s0 = RSet.ini () in
     let _ = rset_ptn s0 i0 in*)
   let s1 = RSet.ini () in
@@ -3612,9 +3619,20 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
             (mov_unrl_ptn m s0 p1 (subst lt i0)) in
           (lt,tl,e0^e1)
       | _ -> err "emt_mov_ptn_to_ptn 1" ) in
+  let rec lp_f2 l1 =
+    ( match l1 with
+      | (ii,i0)::tl ->
+        if not(s0.(i0)) then
+          let e0 = "\tmov "^(emt_reg_x86 i0)^","^(string_of_int ii)^"\n"^
+                   "\tbts r12,"^(string_of_int i0)^"\n" in
+          let e1 = lp_f2 tl in
+          e0^e1
+        else err "lp_f2 0"
+      | [] -> "" ) in
   let (lt,e_rl) = lp_0 [] l0 "" in
   let (_,e_unrl) = lp_1 lt l1 "" in
-  c_l^e_rl^e_unrl
+  let e2 = lp_f2 l2 in
+  c_l^e_rl^e_unrl^e2
 and subst (lt:R.subst) (i0:int) =
   ( try List.assoc i0 lt with _ -> i0 )
 and subst_ptn lt (p0:R.r_atm RP.t) = RP.map (subst_ptn_atm lt) p0
