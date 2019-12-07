@@ -1022,7 +1022,6 @@ and print_ir p0 =
     | Clj _ -> err "print_ir 0"
   )
 and print_line p0 =
-  Util.pnt true "Fp\n";
   ( match p0 with
     | Seq (o,_) -> (print_nd o)^"\n"
     | Ret r -> "∎ "^(pnt_ptn r)^"\n"
@@ -1324,7 +1323,7 @@ and inst_mtc_atm gns (ns:ns_v) l e =
         | P_R2 _ -> Axm Axm.r2
         | P_Stg _ -> Axm Axm.stg ))
 and slv (gns:g_ns_v) (ns:ns_v) l p0 =
-  Util.pnt true ("enter slv:"^(print_line p0)^"\n");
+  Util.Log.add ("enter slv:"^(print_line p0)^"\n");
   ( match p0 with
     | Ret r ->
       let y = inst_ptn gns (l+1) r in
@@ -1394,13 +1393,11 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
                 ()
               | IR_Id_Ax _ -> err "slv id 0" )
           | IR_Glb_Call(n,x,y) ->
-            Util.pnt true "F0\n";
             let pf = slv_ns0 ns n in
             let tf = inst (l+1) (Var( try get_ns gns pf with _ -> err "slv_exp_atm 6")) in
             let tx = inst_ptn gns (l+1) x in
             let ty = inst_ptn gns (l+1) y in
             unify [] tf (Imp(tx,ty));
-            Util.pnt true "F5\n";
             gen (ref []) l ty
           | IR_Out (_,_) -> err "slv x1"
           | IR_Glb_Out (o,x) ->
@@ -1612,7 +1609,7 @@ and ir_of_id r rs =
 
 and slv_r rv p0 =
   let c_l = "enter slv_r:"^(print_line p0) in
-  Util.pnt true c_l;
+  Util.Log.add c_l;
   ( match p0 with
     | Ret r ->
       let r = csm_ptn_rv r rv in
@@ -3358,7 +3355,7 @@ and emt_exe m =
   (ex,pp)
 
 and emt_bytes s =
-  pnt true "enter emt_bytes\n";
+  Util.Log.add "enter emt_bytes\n";
   let l = Bytes.length s in
   if l=0 then ""
   else
@@ -3369,7 +3366,7 @@ and emt_bytes s =
       else "" in
     lp 0
 and emt_cst_stg cs =
-  pnt true "enter emt_cst_stg\n";
+  Util.Log.add "enter emt_cst_stg\n";
   ( match cs with
     | [] -> ""
     | (p,s)::tl ->
@@ -3558,7 +3555,7 @@ and dlt_ptn m s0 i0 =
    let (l1,l0) = lp i0 i1 in *)
 and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
   let c_l = "; _emt_mov_ptn_to_ptn:"^(RSet.pnt s0)^","^(R.print i0)^" ⊢ "^(R.print i1)^"\n" in
-  Util.pnt true c_l;
+  Util.Log.add c_l;
   let _ =
     if m=R.M_Gbg then
       let s_t = RSet.ini () in
@@ -3953,7 +3950,7 @@ and mk_idx_k iv p =
     | RP.A(pa,Mtc_R_Cst _) -> Hashtbl.find iv (mk_r_p pa)
     | RP.R rs -> RP.R(Array.map (mk_idx_k iv) rs) )
 and emt_ir i1 gns (ns:ns_v ref) iv p =
-  pnt true ("enter emt_ir:"^(print_line p)^"\n");
+  Util.Log.add ("enter emt_ir:"^(print_line p)^"\n");
   let c_l = "; "^(print_line p)^" ; {> "^(pnt_iv gns iv)^" }\n" in
   ( match p with
     | Ret r ->

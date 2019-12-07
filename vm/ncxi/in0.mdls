@@ -4,23 +4,19 @@
 	##_in_fn fn0 ⊢ { fn0 fn0_c }  
 	##_emt_q fn0_c ⊢ fn0_c 
 ##	∎ {}
-[#
 § C1 « 
 	» "-27686gg" _ ⊢ s0 
 	» 6r _ ⊢ x0 
 	» 2r _ ⊢ x1 
-#]
 	##_emt_q s0 ⊢ s0
 	##_scf_d.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	##_emt_q { x0 a0 } ⊢ { x0 a0 }  
-[#
 	_mlc_s8 x0 ⊢ { x0 sx } 
 	_lds { s0 x1 } ⊢ { s0 x1 r0 } 
 	_sts { sx x1 r0 } ⊢ { sx x1 r0 } 
-	_emt_q { s0 sx } ⊢ { s0 sx } 
+	_emt_q s0 ⊢ s0 
 	_emt_q r0 ⊢ r0
 	∎ {} 
-#] 
 § f0 x 
 	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 } . 
 		∎ {}
