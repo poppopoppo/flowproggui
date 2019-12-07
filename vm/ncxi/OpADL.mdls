@@ -1,108 +1,313 @@
+§ @.s8_of_r64_lst_i { i rl }  
+	∐ rl ⊢ _cns◂{ ri rl_tl } . 
+		_inc i ⊢ i 
+		s8_of_r64_lst_i { i rl_tl } ⊢ { i s0 }
+		_dec i ⊢ i  
+		_sts { s0 i ri } ⊢ { s0 i ri } 
+		∎ { i s0 }  
+	∐. rl ⊢ _nil◂{} . 
+		_mlc_s8 i ⊢ { i s0 }
+		∎ { i s0 } 
+§ s8_of_r64_lst cl 
+	» 0r _ ⊢ i 
+	s8_of_r64_lst_i { i cl } ⊢ { i s } 
+	∎ s
+
 §§+s8 
-	@.cha 
-		∐ .. ⊢ { b0 } 
-			_some b0 ⊢ o0 
-			∎ o0
-	@.t 
-		∐ "J"  ⊢ { %p0 } 
-			_none {} ⊢ a0 
-			∎ a0
-		∐ ⊢ {} 
-			_none {} ⊢ a0 
-			∎ a0 
-§ S0 = "JJ" 
-§ C0 « 
-	» _^ _ ⊢ s0
-		S0 // 
-	» 0xr0 _ ⊢ x0 
-	t.prs { s0 x0 } ⊢ { s0 x0 a0 } 
-	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
-	∎ {} 
-§§ OpADL 
-§§ type 
-∎∎ 
-§§ ast 
-∎∎
-§§ syntax 
+	@.stg_ltr
+	∐. "\"" stg_ltr_seq ⊢ { {} cl } 
+		s8_of_r64_lst cl ⊢ s
+		_some s ⊢ a 
+		∎ a
+	@.stg_ltr_seq 
+	∐ "\\" stg_ltr_sp stg_ltr_seq ⊢ { {} c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		_some cl ⊢ a 
+		∎ a  
+	∐ "\"" ⊢ { {} }
+		_nil {} ⊢ cl 
+		_some cl ⊢ a 
+		∎ a 
+	∐. _byt stg_ltr_seq ⊢ { c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		_some cl ⊢ a 
+		∎ a
+	@.stg_ltr_sp 
+	∐ "\\" ⊢ { {} }
+		» 92r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "\"" ⊢ { {} }
+		» 34r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "n" ⊢ { {} }
+		» 10r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "t" ⊢ { {} }
+		» 9r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐. "0" ⊢ { {} }
+		» 0r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	
 §§+s8 
-	@.glb_etr_lst
-		∐ glb_etr glb_etr_lst
-		∐ 
-	@.glb_etr 
-		∐ mdl_etr 
-		∐ cst_etr 
-		∐ op_etr 
-		∐ dta_etr 
-	@.mdl_etr 
-		∐* "§§" word glb_etr_lst "∎∎"
-		∐* "§§" word "=" name 
-	@.cst_etr 
-		∐* "§" word "«" op_lines
-		∐* "§" word "=" cst  
-	@.op_etr 
-		∐* "§" word reg_ptn op_lines
-		∐* "§" word "=" name 
-	@.dta_etr 
-		∐* "¶" word dta_def 
-		∐* "¶" word "=" name 
-	@.cst 
-		∐ "0xr0" 
+	@.dgt
+	∐. _byt ⊢ { c } 
+		» 48r _ ⊢ c0 
+		» 57r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a  
+§§+s8 
+	@.ch_l 
+	∐. _byt ⊢ { c } 
+		» 97r _ ⊢ c0 
+		» 122r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a
+			  
+§§+s8 
+	@.ch_u
+	∐. _byt ⊢ { c } 
+		» 65r _ ⊢ c0 
+		» 90r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a  
+§§+s8 
+	@.ch_a 
+	∐ ch_u ⊢ { c } 
+		_some c ⊢ a 
+		∎ a  
+	∐. ch_l ⊢ { c } 
+		_some c ⊢ a 
+		∎ a 		 	
+§§+s8 
 	@.word 
-		∐ cha word
-		∐  
-	@.cha
-		∐ "a" 
-		∐ "b" 
-		∐ "c" 
-	@.name 
-		∐ word "." name
-		∐ word
-	@.dta_def 
-		∐ dta_def_coprd 
-	@.dta_def_coprd 
-		∐* "∐" word ":" type 
-		∐* "∐" word ":" type   
-	@.op_lines 
-		∐* op reg_ptn "⊢" reg_ptn 
-		∐* "∎" reg_ptn 
-	@.op 
-		∐* name 
-		∐* "»" cst  
-	@.type 
-		∐ type_imp
-	@.type_imp 
-		∐* type_app "→" type_imp
-		∐* type_app 
-	@.type_app 
-		∐* type_atm "◂" type_atm 
-		∐* type_atm 
-	@.type_atm 
-		∐ word
-	@.reg_ptn 
-		∐* "{" reg_ptn_lst "}" 
-		∐* reg 
-	@.reg_ptn_lst 
-		∐* reg reg_ptn_lst 
-		∐ 
-	@.reg 
-		∐ "%" word 
-		∐* word
-		∐ "_" 
-∎∎
+	∐. ch_a word_tl ⊢ { c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		s8_of_r64_lst cl ⊢ s 
+		_some s ⊢ a 
+		∎ a
+	@.word_tl 
+	∐ word_hd word_tl ⊢ { c tl } 
+		_cns { c tl } ⊢ l 
+		_some l ⊢ a 
+		∎ a 
+	∐. ⊢ { } 
+		_nil {} ⊢ l 
+		_some l ⊢ a 
+		∎ a
+	@.word_hd 
+	∐ ch_a ⊢ { c } 
+		_some c ⊢ a 
+		∎ a 
+	∐ dgt ⊢ { c } 
+		» "P0" _ ⊢ s0 
+		_emt_q s0 ⊢ s0 
+		_some c ⊢ a 
+		∎ a  
+	∐. "_" ⊢ { {} } 
+		» "P1" _ ⊢ s0 
+		_emt_q s0 ⊢ s0 
+		» 95r _ ⊢ c 
+		_some c ⊢ a 
+		∎ a 
+			
+§§+s8 
+	@.prm_word 
+	∐ "_" word_tl ⊢ { {} cl } 
+		s8_of_r64_lst cl ⊢ s 
+		_some s ⊢ a 
+		∎ a
+	∐. word ⊢ { s } 
+		_some s ⊢ a 
+		∎ a   
+§§+s8 
+	@.g0 
+		∐.* ⟦ word ⟧
+[#
+§ Cg0 « 
+	» "Gx GxGx GxGG G f e " _ ⊢ s0 
+	» 0r _ ⊢ x0 
+	g0.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt_q { s0 x0 a0 } ⊢ p 
+	∎ {} 
+#]
+§§ OpADL 
+	§§ type 
+	∎∎ 
+	§§ ast 
+	∎∎
+¶ cmt_t 
+	∐ cmt_c : _r64
+	∐ cmt_s : _r64 
+§§ syntax 
+	§§+s8 
+		@.cmt 
+			∐ "[#" blk_cmt cmt ⊢ { {} l0 r } 
+				» 2r _ ⊢ l 
+				_add { l l0 } ⊢ { l l0 } 
+				cmt_c l ⊢ hd 
+				_cns { hd r } ⊢ r 
+				_some r ⊢ a 
+				∎ a 
+			∐ "##" line_cmt cmt ⊢ { {} l0 r } 
+				» 2r _ ⊢ l 
+				_add { l l0 } ⊢ { l l0 } 
+				cmt_c l ⊢ hd 
+				_cns { hd r } ⊢ r 
+				_some r ⊢ a 
+				∎ a 
+			∐ _byt cmt ⊢ { c r } 
+				∐ r ⊢ _cns◂{ hd tl }; hd ⊢ cmt_s◂l . 
+					» 1r _ ⊢ x 
+					_add { l x } ⊢ { l x } 
+					cmt_s l ⊢ hd 
+					_cns { hd tl } ⊢ r 
+					_some r ⊢ a 
+					∎ a
+				∐. . 
+					» 1r _ ⊢ l 
+					cmt_s l ⊢ hd 
+					_cns { hd r } ⊢ r 
+					_some r ⊢ a 
+					∎ a
+			∐. ⊢ { } 
+				_nil {} ⊢ r 
+				_some r ⊢ a 
+				∎ a 
+		@.blk_cmt 
+			∐ "#]" ⊢ { {} } 
+				» 2r _ ⊢ l 
+				_some l ⊢ a
+				∎ a 
+			∐ "[#" blk_cmt blk_cmt ⊢ { {} l0 l1 } 
+				» 2r _ ⊢ l 
+				_add { l l0 } ⊢ { l l0 } 
+				_add { l l1 } ⊢ { l l1 } 
+				_some l ⊢ a 
+				∎ a 
+			∐. _byt blk_cmt ⊢ { c l0 }
+				» 1r _ ⊢ l 
+				_add { l l0 } ⊢ { l l0 } 
+				_some l ⊢ a 
+				∎ a   
+		@.line_cmt 
+			∐ "\n" ⊢ { {} }
+				» 1r _ ⊢ l 
+				_some l ⊢ a 
+				∎ a
+			∐. _byt line_cmt ⊢ { c l0 } 
+				» 1r _ ⊢ l
+				_add { l l0 } ⊢ { l l0 } 
+				_some l ⊢ a 
+				∎ a 
+			 
+	§ Cc « 
+		» _^ _ ⊢ s0 
+			##`## FOIJJFI 
+			##`FI IJ 
+			`[# oije [# F  F #]
+			`hhFe E #] 
+			##` + +; e 2  
+			##"[# [# #] #]"
+			// 
+		» 0r _  ⊢ x0 
+		cmt.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+		_emt_q { s0 x0 a0 } ⊢ t 
+		∎ {}	
+
+	§§+s8 
+		@.glb_etr_lst
+			∐ glb_etr glb_etr_lst
+			∐. 
+		@.glb_etr 
+			##∐* "§§+s8" grm_lst 
+			∐* "§§" word "=" name 
+			∐* "§§" word glb_etr_lst "∎∎"
+			∐* "§" word "=" cst 
+			∐* "§" word "«" op_lines  
+			∐* "§" word reg_ptn op_lines
+			∐* "¶" word "=" name 
+			∐.* "¶" word dta_def
+		@.cst 
+			∐ _scf_d "r"  
+			∐ stg_ltr 
+			∐. name
+		@.name 
+			∐ prm_word "." name
+			∐ word "." name
+			∐ word
+			∐. prm_word
+		@.dta_def 
+			∐. "∐" word ":" type dta_def_coprd dta_def_coprd 
+		@.dta_def_coprd 
+			∐* "∐" word ":" type dta_def_coprd  
+			∐.* 
+		@.op_lines 
+			∐* name reg_ptn "⊢" reg_ptn 
+			∐* "$" reg_ptn "⊢" reg_ptn cmm_reg_ptn
+			∐.* "∎" reg_ptn  
+		@.cmm_reg_ptn 
+			∐.* "," reg_ptn 
+		@.type 
+			∐. type_imp
+		@.type_imp 
+			∐* type_app "→" type_imp
+			∐.* type_app 
+		@.type_app 
+			∐* type_atm "◂" type_atm 
+			∐.* type_atm 
+		@.type_atm 
+			∐. word
+		@.reg_ptn 
+			∐* "{" reg_ptn_lst "}" 
+			∐.* reg 
+		@.reg_ptn_lst 
+			∐* reg reg_ptn_lst 
+			∐. 
+		@.reg 
+			∐ "%" word 
+			∐* word
+			∐. "_" 
+	∎∎
+		
 § C0 « 
-	» _^ _ ⊢ s0 
-		`§§ a 
-		`∎∎ 
-		//
+	##» _^ _ ⊢ s0 
+	##	`§§ abhgd 
+	##	`∎∎ 
+	##	//
 	» "a" _ ⊢ sa
-	» 0xr0 _ ⊢ x0
+	##» 0xr0 _ ⊢ x0
 	##syntax.word.prs { sa x0 } ⊢ { sa x0 a0 } 
-	syntax.mdl_etr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
-	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+	##syntax.glb_etr_lst.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	##_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
 	##_in0 {} ⊢ s_in0 
 	##_emt_q s_in0 ⊢ s_in0 
 	##» "OpADL.mdls" _ ⊢ fn0 
 	##_in_fn fn0 ⊢ { fn0 fn0_c }  
 	##_emt_q fn0_c ⊢ fn0_c
-	∎ {}
+	∎ {} 
+
 ∎∎
