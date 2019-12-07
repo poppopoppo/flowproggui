@@ -226,16 +226,13 @@
 			 
 	§ Cc « 
 		» _^ _ ⊢ s0 
-			##`## FOIJJFI 
-			##`FI IJ 
-			`[# oije [# F  F #]
-			`hhFe E #] 
-			##` + +; e 2  
-			##"[# [# #] #]"
+			`## FOIJJFI  
+			"[##]"
 			// 
+		##» "" _ ⊢ s0 
 		» 0r _  ⊢ x0 
 		cmt.prs { s0 x0 } ⊢ { s0 x0 a0 } 
-		_emt_q { s0 x0 a0 } ⊢ t 
+		_emt_q { s0 x0 a0 }  ⊢ t 
 		∎ {}	
 
 	§§+s8 

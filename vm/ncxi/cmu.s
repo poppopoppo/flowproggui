@@ -32,7 +32,7 @@ section .bss
   tmp_pop: resb 8
   tmp_push: resb 8
   dyn_call_vct: resb 16
-  str_ret: resb 1000
+  str_ret: resb 10000
   out_vct: resb (8+8+8)*256
   prs_vct: resb (8+8) * 64
   set_ptn_vct: resb (8+8) * 16
@@ -494,44 +494,36 @@ pnt_v_tl:
   pop rdi
   ret
 
-pp_v: ; rdi=value ⊢ rax=ret_stg
-  push rdi
+pp_v: ; rdi=value rsi=cf ⊢ rax=ret_stg
+  ;push rdi
+  ;push rsi
+  ;mov rdi,10000
+  ;xor rax,rax
+  ;call malloc
+  ;pop rsi
+  ;pop rdi
+  bt rsi,0
+  ;mov rsi,rax
+  ;push rsi
   mov rsi,str_ret
   call pp
-  ;push rax
-  ;mov rdi,fmt_dbg
-  ;mov rsi,str_ret
-  ;mov rax,0
-  ;call printf
-  ;pop rax
+  ;mov rsi,QWORD [rsp]
+  ;sub rax,rsi
   sub rax,str_ret
   push rax
   mov rdi,rax
   call mlc_s8
-  pop rdi
-  mov rdx,rdi
-  shr rdi,3
-  xor rsi,rsi
-pp_v_lp:
-  mov r8,QWORD [str_ret+8*rsi]
-  mov QWORD [rax+8*1+8*rsi],r8
-  cmp rsi,rdi
-  jz pp_v_tl
-  add rsi,1
-  jmp pp_v_lp
-pp_v_tl:
-  mov r8,0
-  and rdx,0b0111
-  cmp rdx,0
-  jz pp_v_tl_0
-  mov rcx,0b1000
-  sub rcx,rdx
-  shl rcx,3
-  mov r8,~0
-  shr r8,cl
-pp_v_tl_0:
-  and QWORD [rax+8*1+8*rsi],r8
-  pop rdi
+  pop rcx
+  mov rsi,str_ret
+  mov rdi,rax
+  add rdi,8
+  ;mov rdx,rsi
+  rep movsb
+  ;push rax
+  ;mov rdi,rdx
+  ;xor rax,rax
+  ;call free
+  ;pop rax
   ret
 
 mlc_s8: ; rdi=size of bytes
@@ -564,7 +556,7 @@ mlc_s8: ; rdi=size of bytes
   pop rdx
   ret
 
-pp: ; rdi=tkn rsi=dst
+pp: ; rdi=tkn cf ⊢ rsi=dst
   jc pp_end
   jmp pp_r_p
 pp_end:
@@ -594,6 +586,13 @@ pp_r_p:
   and rsp,~0xf
   call sprintf
   mov rsp,QWORD [rsp_tmp]
+  ;push rax
+  ;mov QWORD [rsp_tmp],rsp
+  ;mov rdi,str_ret
+  ;xor rax,rax
+  ;call printf
+  ;mov rsp,QWORD [rsp_tmp]
+  ;pop rax
   pop rsi
   pop rdi
   add rsi,rax
@@ -601,12 +600,11 @@ pp_r_p:
   and rdi,r10
 pp_r_p_blk:
   mov r10,[rdi]
-  shr r10,48
   push rdi
   push rsi
   mov rdi,rsi
   mov rsi,fmt_ref
-  mov rdx,r10
+  mov rdx,rdi
   xor rax,rax
   mov QWORD [rsp_tmp],rsp
   and rsp,~0xf
@@ -1415,7 +1413,7 @@ scf_wd_A:
 ;scf_lwd:
 ;scf_uwd:
 
-emt_q:
+emt_q: ; rdi=tkn rsi=cf
   call pp_v
   push rax
   mov rdi,rax
