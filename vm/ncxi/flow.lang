@@ -134,11 +134,11 @@ License along with this library; if not, write to the Free Software Foundation, 
         </context>
 
         <context id="code-symbol-0" style-ref="code-symbol">
-          <match>((&#x00A7;&#x00A7;\.)|(&#x00A7;&#x00A7;)|&#x00A7;|(\.&#x00BB;)|(&#x00BB;\.)|&#x00BB;|&#x2243;|&#x2252;)</match>
+          <match>((&#x00A7;&#x00A7;\+s8)|(&#x00A7;&#x00A7;\.)|(&#x00A7;&#x00A7;)|&#x00A7;|(\.&#x00BB;)|(&#x00BB;\.)|&#x00BB;|&#x2243;|&#x2252;)</match>
         </context>
 
         <context id="code-symbol-1" style-ref="code-symbol">
-          <match>(\^|&#x00A6;|&#x00B6;|&#x00AB;|&#x2045;|&#x2046;|&#x2206;|&#x2207;|&#x220F;|(&#x2210;\.)|(&#x2210;\\)|&#x2210;|&#x22A2;|(\|&#x00BB;)|&#x220E;)</match>
+          <match>(\^|&#x00A6;|&#x00B6;|&#x00AB;|&#x2045;|&#x2046;|&#x2206;|&#x2207;|&#x220F;|(&#x2210;\.\*)|(&#x2210;\*)|(&#x2210;\.)|(&#x2210;\\)|&#x2210;|&#x22A2;|(\|&#x00BB;)|&#x220E;)</match>
         </context>
 
         <context id="code-symbol-2" style-ref="code-symbol">
@@ -170,7 +170,7 @@ License along with this library; if not, write to the Free Software Foundation, 
         </context>
 
         <context id="type-cmp">
-          <match>(&#x229E;|&#x27E6;|&#x27E7;|&#x2039;|&#x203A;|&#x2192;)</match>
+          <match>(&#x229E;|&#x2039;|&#x203A;|&#x2192;)</match>
         </context>
 
         <context id="type-atom">

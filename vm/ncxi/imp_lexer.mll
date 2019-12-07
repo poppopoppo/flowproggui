@@ -123,6 +123,7 @@ rule token = parse
     | "_^" { S8_E }
     | "//" { S8_P }
     | "∐*"  { ORD_LEX_COPRD }
+    | "∐.*" { ORD_LEX_COPRD_END }
     | "," { CMM }
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "@" (("\'")* as lxm) { SLF (String.length lxm) }

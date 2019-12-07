@@ -10,7 +10,7 @@
 %token L_PRN R_PRN  APP COPRD_END PRD_END MNS CST SRC_IL COPRD_PTN_END
 %token ACT SPL FOR_ALL MDL MDL_END L_BLK R_BLK  COPRD SEQ EQ LB OUT_IR PRJ_IR CNS_IR
 %token IO PRJ N SLH L_OPN R_OPN L_LST R_LST SGN NL MTC_IR CLN2 EOP_EXN EOP_OUT
-%token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP
+%token MCR PLS MLT EOF CMM LET TYP_STG TYP_SGN TYP_VCT TYP_OPN_VCT IMP ORD_LEX_COPRD_END
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD DOT_END
 %token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE SCL
@@ -140,26 +140,45 @@ grm_etr:
     Lang.Grm.Cnc($3,go) }
   ;
 grm_ord_act:
-  | grm_rule_act { [$1] }
-  | grm_ord_act grm_rule_act { $1@[$2] }
+  | grm_rule_act_end { [$1] }
+  | grm_rule_act grm_ord_act { $1::$2 }
   ;
 grm_rule_act:
-  | ord grm_ptns grm_prd grm_act { ($4,$1,$2) }
+  | ord grm_ptns grm_prd grm_act grm_rule_act_seq { ($4,$1,$2) }
+  ;
+grm_rule_act_end:
+  | ord_end grm_ptns grm_prd grm_act grm_rule_act_seq { ($4,$1,$2) }
+  ;
+grm_rule_act_seq:
+  | {}
+  | SCL grm_ord_act {}
   ;
 grm_act:
   | SRC reg_ptn_src ir_lines { ($2,ref $3) }
   ;
 grm_ord:
-  | grm_rule { [$1] }
-  | grm_ord grm_rule  { $1@[$2] }
+  | grm_rule_end { [$1] }
+  | grm_rule grm_ord { $1::$2 }
 grm_rule:
   | ord NAM CLN grm_ptns grm_prd { ($2,$1,$4) }
-  | ord grm_ptns grm_prd { ("_",$1,$2) }
+  | ord grm_ptns grm_prd grm_rule_seq { ("_",$1,$2) }
+  ;
+grm_rule_seq:
+  | {}
+  | SCL grm_ord {}
+  ;
+grm_rule_end:
+  | ord_end NAM CLN grm_ptns grm_prd { ($2,$1,$4) }
+  | ord_end grm_ptns grm_prd grm_rule_seq { ("_",$1,$2) }
   ;
 ord:
   | COPRD { Grm.Lex }
   | ORD_LEX_COPRD { Grm.Synt }
   | SYNT_COPRD { Grm.Synt }
+  ;
+ord_end:
+  | COPRD_END { Grm.Lex }
+  | ORD_LEX_COPRD_END { Grm.Synt }
   ;
 grm_ptns:
   | { [] }

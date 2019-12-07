@@ -1,3 +1,14 @@
+module Log = struct
+  let v = Queue.create ()
+  let add s =
+    Queue.push s v
+  let pnt _ =
+    ( try
+        let s = Queue.pop v in
+        (print_string s;flush stdout)
+      with _ -> ()
+    )
+end
 let bin_of_int d =
   if d < 0 then invalid_arg "bin_of_int" else
   if d = 0 then "0" else
@@ -70,21 +81,21 @@ let fmt_of_string s =
       let l = lp (i+1) in
       si::l in
   lp 0
-  let fmt_of_string_m s =
-    let l = String.length s in
-    let bl = l / 8 in
-    let m = l mod 8 in
-    let fmt_i i j = "_"^(Printf.sprintf "%02x" (Char.code s.[i+j])) in
-    let rec fmt_q i j = if j=8 then "" else (fmt_q i (j+1))^(fmt_i i j) in
-    let rec fmt_m j =
-      if m=j then [] else (fmt_i (8*bl) j)::(fmt_m (j+1)) in
-    let rec lp i =
-      if i=bl then ([],fmt_m 0)
-      else
-        let si = "0x"^(fmt_q (8*i) 0) in
-        let (l,m) = lp (i+1) in
-        (si::l,m) in
-    lp 0
+let fmt_of_string_m s =
+  let l = String.length s in
+  let bl = l / 8 in
+  let m = l mod 8 in
+  let fmt_i i j = "_"^(Printf.sprintf "%02x" (Char.code s.[i+j])) in
+  let rec fmt_q i j = if j=8 then "" else (fmt_q i (j+1))^(fmt_i i j) in
+  let rec fmt_m j =
+    if m=j then [] else ("0x"^(fmt_i (8*bl) j))::(fmt_m (j+1)) in
+  let rec lp i =
+    if i=bl then ([],fmt_m 0)
+    else
+      let si = "0x"^(fmt_q (8*i) 0) in
+      let (l,m) = lp (i+1) in
+      (si::l,m) in
+  lp 0
 let rec string_of_list f p l =
   match l with
   | [] -> ""
@@ -92,6 +103,7 @@ let rec string_of_list f p l =
   | x::tl -> (p x)^f^(string_of_list f p tl)
 exception OPEN_IN
 exception P_F
+
 let open_in_close (s:string) (p:Pervasives.in_channel -> 'a) : 'a =
   let f = (try open_in s with _ -> raise @@ OPEN_IN) in
   let v = (try p f with _ -> raise @@ P_F) in

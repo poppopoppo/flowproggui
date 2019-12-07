@@ -45,6 +45,7 @@ type token =
   | PLS
   | OUT_IR
   | OUT of (int)
+  | ORD_LEX_COPRD_END
   | ORD_LEX_COPRD
   | ORD_COPRD
   | OP
