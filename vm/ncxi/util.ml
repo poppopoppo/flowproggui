@@ -126,7 +126,9 @@ let rec assoc_group l =
         ) in
       l0 tl0
   )
-let err s = raise (Failure s)
+let err s =
+  Log.pnt ();
+  raise (Failure s)
 let ( *| ) o e =
   ( match o with
     | Some x -> x

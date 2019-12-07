@@ -518,6 +518,7 @@ pp_v: ; rdi=value rsi=cf ⊢ rax=ret_stg
   mov rdi,rax
   add rdi,8
   ;mov rdx,rsi
+  cld
   rep movsb
   ;push rax
   ;mov rdi,rdx
@@ -1217,6 +1218,7 @@ rpc_s8: ; rdi=src
   mov rdi,rax
   add rdi,8
   add rsi,8
+  cld
   rep movsb
   pop rcx
   ret
@@ -1383,6 +1385,7 @@ scf_sl_lp_end:
   pop rcx
   mov rsi,rdx
   lea rdi,[rax+8]
+  cld
   rep movsb
   push rax
   mov rdi,rsi
