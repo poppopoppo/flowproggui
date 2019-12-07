@@ -165,37 +165,40 @@
 §§ syntax 
 	§§+s8 
 		@.cmt 
-			∐ "[#" blk_cmt cmt ⊢ { {} l0 r } 
+			∐ "[#" blk_cmt cmt ⊢ { {} l0 { n r } } 
 				» 2r _ ⊢ l 
 				_add { l l0 } ⊢ { l l0 } 
 				cmt_c l ⊢ hd 
 				_cns { hd r } ⊢ r 
-				_some r ⊢ a 
+				_some { n r } ⊢ a 
 				∎ a 
-			∐ "##" line_cmt cmt ⊢ { {} l0 r } 
+			∐ "##" line_cmt cmt ⊢ { {} l0 { n r } } 
 				» 2r _ ⊢ l 
 				_add { l l0 } ⊢ { l l0 } 
 				cmt_c l ⊢ hd 
 				_cns { hd r } ⊢ r 
-				_some r ⊢ a 
+				_some { n r } ⊢ a 
 				∎ a 
-			∐ _byt cmt ⊢ { c r } 
+			∐ _byt cmt ⊢ { c { n r } } 
 				∐ r ⊢ _cns◂{ hd tl }; hd ⊢ cmt_s◂l . 
 					» 1r _ ⊢ x 
 					_add { l x } ⊢ { l x } 
+					_add { n x } ⊢ { n x } 
 					cmt_s l ⊢ hd 
 					_cns { hd tl } ⊢ r 
-					_some r ⊢ a 
+					_some { n r } ⊢ a 
 					∎ a
 				∐. . 
 					» 1r _ ⊢ l 
+					_add { n l } ⊢ { n l } 
 					cmt_s l ⊢ hd 
 					_cns { hd r } ⊢ r 
-					_some r ⊢ a 
+					_some { n r } ⊢ a 
 					∎ a
 			∐. ⊢ { } 
 				_nil {} ⊢ r 
-				_some r ⊢ a 
+				» 0r _ ⊢ n 
+				_some { n r } ⊢ a 
 				∎ a 
 		@.blk_cmt 
 			∐ "#]" ⊢ { {} } 
@@ -223,16 +226,31 @@
 				_add { l l0 } ⊢ { l l0 } 
 				_some l ⊢ a 
 				∎ a 
-			 
+	§ @.rmv_cmt_lp { s0 o0 s1 l } 
+		∐ l ⊢ _cns◂{ hd tl } . 
+			∐ hd ⊢ cmt_s◂%n . 
+				
+	§ rmv_cmt s0 
+		» 0r _ ⊢ o0 
+		cmt.prs { s0 o0 } ⊢ { s0 o1 a } 
+		∐ a ⊢ _some◂{ n l } . 
+			_mlc_s8 n ⊢ { n s1 } 
+			» 0r _ ⊢ o2 
+			rmv_cmt_lp { s0 o2 s1 l } ⊢ { s0 o2 s1 } 
+			∎ s1  
+		∐. . 
+			∎ s0  
+			
 	§ Cc « 
 		» _^ _ ⊢ s0 
 			`## FOIJJFI  
-			"[##]"
+			"[##]" "\n"
 			// 
 		##» "" _ ⊢ s0 
+		_emt_q s0 ⊢ s0 
 		» 0r _  ⊢ x0 
 		cmt.prs { s0 x0 } ⊢ { s0 x0 a0 } 
-		_emt_q { s0 x0 a0 }  ⊢ t 
+		_emt_q { s0 x0 a0 }  ⊢ { s0 x0 a0 }   
 		∎ {}	
 
 	§§+s8 

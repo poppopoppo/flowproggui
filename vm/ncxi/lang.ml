@@ -444,6 +444,7 @@ module Ast = struct
     let _lds = sgn ()
     let _sts = sgn ()
     let _ecs = sgn ()
+    let _rep_movsb = sgn ()
     let _in0 = sgn ()
     let _in_fn = sgn ()
     let _emt_q = sgn ()
@@ -949,7 +950,7 @@ let print_v v =
     find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_m_t) with _ -> None)
   let get_ns_m ns n =
     find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_m) with _ -> None)
-  let get_ns_e gns n = List.assoc n gns.ns_e
+  let get_ns_e gns n = (try List.assoc n gns.ns_e with _ -> err "get_ns_e 0" )
   (* find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_e) with _ -> None) *)
   let slv_ns0 ns n0 =
     ( match !n0 with
@@ -3219,6 +3220,36 @@ and init_prm () =
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._ecs,em)::gns.ns_c;
 
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64])))) in
+  !ns.ns_p <- ("_rep_movsb",Ast.Axm._rep_movsb)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._rep_movsb,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._rep_movsb,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2);RP.A(R.Idx 3);RP.A(R.Idx 4)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2);RP.A(R.Idx 3);RP.A(R.Idx 4)|])))::gns.ns_e;
+  let _ = "" in
+  let em =
+    (* r13=count r14=src r8=src-ofs r9=dst r10=dst-ofs *)
+    "NS_E_ID_"^(Sgn.print Ast.Axm._rep_movsb)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._rep_movsb)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._rep_movsb)^":\n"^
+    "\tmov rax,[r14]\n"^
+    "\tlea r8,[r8-1+r13]\n"^
+      (*"\tadd r8,r13\n"^*)
+    "\tshr rax,32\n"^
+    "\tcmp r8,rax\n"^
+    "\tjge err\n"^
+    "\tmov rax,[r9]\n"^
+    "\tlea r10,[r10-1+r13]\n"^
+    "\tshr rax,32\n"^
+    "\tcmp r10,rax\n"^
+    "\tjge err\n"^
+    "\tlea rsi,[r14+8+r8]\n"^
+    "\tlea rdi,[r9+8+r10]\n"^
+    "\tmov rcx,r13\n"^
+    "\tstd\n"^
+    "\trep movsb\n"^
+    "\tcld\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._rep_movsb,em)::gns.ns_c;
+
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
   !ns.ns_p <- ("_emt_q",Ast.Axm._emt_q)::!ns.ns_p;
@@ -4745,6 +4776,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                        "\tmov rsi,"^(emt_reg_x86 ir0.(i))^"\n"^
                        "\tadd rsi,8\n"^
                        "\tmov rcx,QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"]\n"^
+                       "\tcld\n"^
                        "\trep movsb\n"^
                        "\tpop rcx\n"
                      | Ast.S8_Name n ->
