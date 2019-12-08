@@ -1433,11 +1433,10 @@ scf_wd_A:
 emt_q: ; rdi=tkn rsi=cf
   call pp_v
   push rax
-  mov rdi,rax
-  mov rax,0
-  add rdi,8
-  mov rsi,rdi
+  mov rsi,rax
+  add rsi,8
   mov rdi,fmt_emt_q
+  mov rax,0
   mov QWORD [rsp_tmp],rsp
   and rsp,~0xf
   call printf
