@@ -174,7 +174,7 @@
 				_some { n r } ⊢ a 
 				∎ a 
 			∐ "##" line_cmt cmt ⊢ { {} l0 { n r } } 
-				_emt_q r ⊢ r 
+				_emt_q { l0 n r } ⊢ { l0 n r }
 				» 2r _ ⊢ l 
 				_add { l l0 } ⊢ { l l0 } 
 				cmt_c l ⊢ hd 
@@ -182,23 +182,31 @@
 				_some { n r } ⊢ a 
 				∎ a 
 			∐ _byt cmt ⊢ { c { n r } } 
+				_emt_q { c n r } ⊢ { c n r }
 				_emt_q r ⊢ r 
 				∐ r ⊢ _cns◂{ hd tl }; hd ⊢ cmt_s◂l . 
+					_emt_q { l tl } ⊢ { l tl }
 					» 1r _ ⊢ x 
 					_add { l x } ⊢ { l x } 
 					_add { n x } ⊢ { n x } 
 					cmt_s l ⊢ hd 
 					_cns { hd tl } ⊢ r 
-					_emt_q r ⊢ r 
 					_some { n r } ⊢ a 
-					_emt_q a ⊢ a 
 					∎ a
 				∐. . 
+					_emt_q r ⊢ r 
 					» 1r _ ⊢ l 
+					_emt_q l ⊢ l 
 					_add { n l } ⊢ { n l } 
+					_emt_q { n l } ⊢ { n l } 
 					cmt_s l ⊢ hd 
+					_emt_q hd ⊢ hd 
+					_emt_q r ⊢ r 
 					_cns { hd r } ⊢ r 
+					_emt_q r ⊢ r 
+					
 					_some { n r } ⊢ a 
+					_emt_q a ⊢ a 
 					∎ a
 			∐. ⊢ { } 
 				» "cmt {}" _ ⊢ sc 
@@ -268,8 +276,8 @@
 	
 	§ Cc « 
 		» _^ _ ⊢ s0 
-			`## FOI
-			"HELkP" "[##]" "eeb\n"
+			`##
+			"W" "[##]"
 			// 
 		rmv_cmt s0 ⊢ { s0 s1 } 
 		_emt_q { s0 s1 }  ⊢ { s0 s1 }   

@@ -3253,6 +3253,7 @@ and init_prm () =
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
   !ns.ns_p <- ("_emt_q",Ast.Axm._emt_q)::!ns.ns_p;
+  !ns.ns_p <- ("_emt",Ast.Axm._emt_q)::!ns.ns_p;
   gns.ns <- (Ast.Axm._emt_q,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._emt_q,ref(Etr_V(RP.A(R.Idx 0),RP.A(R.Idx 0))))::gns.ns_e;
   let se_emt_q = "" in
@@ -3260,13 +3261,19 @@ and init_prm () =
     "NS_E_ID_"^(Sgn.print Ast.Axm._emt_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._emt_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._emt_q)^":\n"^
-    push_all^
+    "\tpush r13\n"^
     "\tmov rdi,r13\n"^
-    "\tmov rsi,0\n"^
+    "\tmov rsi,str_ret\n"^
     "\tbt r12,0\n"^
-    "\tsetc sil\n"^
-    "\tcall emt_q\n"^
-    pop_all^
+    "\tcall pp\n"^
+    "\tmov rdi,fmt_emt_q\n"^
+    "\tmov rsi,str_ret\n"^
+    "\txor rax,rax\n"^
+    "\tmov QWORD [rsp_tmp],rsp\n"^
+    "\tand rsp,~0xf\n"^
+    "\tcall printf\n"^
+    "\tmov rsp,QWORD [rsp_tmp]\n"^
+    "\tpop r13\n"^
     "\tret\n" in
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Rcd(rcd_cl [Var v_q;Axm Axm.stg])))) in
@@ -3734,7 +3741,7 @@ and subst_ptn_atm lt (a0:R.r_atm) =
     | R.AglUnn(ia,rs) -> R.AglUnn(ia,Array.map (subst_ptn lt) rs)
     | R.Etr(ie,pe) -> R.Etr(subst lt ie,subst_ptn lt pe) )
 and mov_rl_ptn m s0 i1 p0 =
-  if i1<0 then
+  if i1<0&&m=R.M_Dlt then
     dlt_ptn m s0 p0
   else if m=R.M_Dlt then
     ( match p0 with
@@ -3768,11 +3775,10 @@ and mov_rl_ptn m s0 i1 p0 =
           "\tmov rax,"^(emt_reg_x86 ia)^"\n"^
           "\tshl rax,56\n"^
           "\tor rax,1\n"^
-          "\tmov rdi,rax\n"^
-          "\tor "^(emt_reg_x86 i1)^",rdi\n"
+          "\tor "^(emt_reg_x86 i1)^",rax\n"
         else err "mov_rl_ptn 0"
       | RP.A(R.AglUnn(ia,ps)) ->
-        if s0.(ia) then
+        if s0.(ia)&&false then
           let l0 = lb () in
           let l1 = lb () in
           let lb0 = lb () in
@@ -3885,7 +3891,8 @@ and mov_unrl_ptn m s0 p1 i0 =
   let c0 = "; "^(string_of_int i0)^"' ⊢ "^(R.print p1)^"\n" in
   if s0.(i0) then
     ( match p1 with
-      | RP.A(R.Idx i1) -> (mov_r m s0 i1 i0)
+      | RP.A(R.Idx i1) ->
+        (mov_r m s0 i1 i0)
       | RP.A(R.AglStt(ii,_,pa)) ->
         let l0 = lb () in
         let s1 = Array.copy s0 in
@@ -4035,6 +4042,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             let e0 = emt_ir i1 gns ns ivi p in
             let e1 = emt_mtc pv0 iv0 k1 psl_tl lb1 in
             lb0^":\n"^
+            "\tmov r15,0\n"^
             e_eq^
             e_d^
             e0^
