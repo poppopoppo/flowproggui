@@ -77,6 +77,7 @@ section .bss
   endstruc
 
 section .data
+  err_n: dq 0
   out_n: dq 0
   out_bs_p: dq 0
   out_tp_p: dq 0
@@ -109,7 +110,7 @@ section .data
   agl_fmt: db "°%d◂",0
   fmt_s8: db `\"%s\"`,0
   fmt_line: db `%s\n`,0
-  fmt_err_line: db `err:%s\n`,0
+  fmt_err_line: db `err:%d\n`,0
   fmt_dbg: db `dbg:%s\n`,0
   fmt_err: db "err",0
   cst_stg_test: db `\194\187\194\187 Foo \226\136\128 Baa \194\167\194\182 \t \t \n`,0,0,0,0,0
@@ -1038,19 +1039,21 @@ emt: ; rdi s8
   add rdi,8
   call printf
   ret
+
+err_bug:
+  mov QWORD [err_n],1
+  jmp err
+err_s8_ge:
+  mov QWORD [err_n],0
+  jmp err
 err:
-  mov rdi,rbx
-  mov rsi,str_ret
-  call pnt
   mov rdi,fmt_err_line
-  mov rsi,str_ret
-  mov rax,0
+  mov rsi,QWORD [err_n]
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call printf
-  ;mov rdi,fmt_nl
-  ;mov rax,0
-  ;call printf
-  ;mov rdi,fmt_line
-  ;mov rsi,cst_stg_test1
+  mov rsp,QWORD [rsp_tmp]
   mov rax,1
   mov rbx,0
   int 0x80
@@ -1175,7 +1178,6 @@ in_fn: ; rdi=filename
   mov rax,2
   mov rsi,2
   add rdi,8
-  mov rdi,test_fn
   syscall
   push rax ; [rsp]=fd
   mov rdi,rax

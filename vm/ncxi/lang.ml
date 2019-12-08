@@ -3171,7 +3171,7 @@ and init_prm () =
     "\tmov rax,QWORD [rdi]\n"^
     "\tshr rax,32\n"^
     "\tcmp rsi,rax\n"^
-    "\tjge err\n"^
+    "\tjge err_s8_ge\n"^
     "\tmov rax,QWORD [rdi+8+rsi]\n"^
     "\tand rax,0xff\n"^
     "\tmov "^(emt_reg_x86 2)^",rax\n"^
@@ -3193,7 +3193,7 @@ and init_prm () =
     "\tmov rax,QWORD [rdi]\n"^
     "\tshr rax,32\n"^
     "\tcmp rsi,rax\n"^
-    "\tjge err\n"^
+    "\tjge err_s8_ge\n"^
     "\tmov rax,"^(emt_reg_x86 2)^"\n"^
     "\tmov BYTE [rdi+8+rsi],al\n"^
     "\tret\n" in
@@ -3213,7 +3213,7 @@ and init_prm () =
     "\tmov rax,QWORD [rdi]\n"^
     "\tshr rax,32\n"^
     "\tcmp rsi,rax\n"^
-    "\tjge err\n"^
+    "\tjge err_s8_ge\n"^
     "\tmov rax,"^(emt_reg_x86 2)^"\n"^
     "\txchg al,BYTE [rdi+8+rsi]\n"^
     "\tand rax,0xff\n"^
@@ -3235,18 +3235,20 @@ and init_prm () =
     (*"\tadd r8,r13\n"^*)
     "\tshr rax,32\n"^
     "\tcmp r8,rax\n"^
-    "\tjge err\n"^
+    "\tjge err_s8_ge\n"^
     "\tmov rax,[r9]\n"^
     "\tlea r10,[r10-1+r13]\n"^
     "\tshr rax,32\n"^
     "\tcmp r10,rax\n"^
-    "\tjge err\n"^
+    "\tjge err_s8_ge\n"^
     "\tlea rsi,[r14+8+r8]\n"^
     "\tlea rdi,[r9+8+r10]\n"^
     "\tmov rcx,r13\n"^
     "\tstd\n"^
     "\trep movsb\n"^
     "\tcld\n"^
+    "\tadd r8,1\n"^
+    "\tadd r10,1\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._rep_movsb,em)::gns.ns_c;
 
@@ -3904,7 +3906,7 @@ and mov_unrl_ptn m s0 p1 i0 =
           "\tmov rax,"^(emt_reg_x86 i0)^"\n"^
           "\tshr rax,56\n"^
           "\tcmp rax,"^(string_of_int ii)^"\n"^
-          "\tjnz err\n"^
+          "\tjnz err_bug\n"^
           "\tmov rax,0x00ff_ffff_ffff_fffe\n"^
           "\tand rax,"^(emt_reg_x86 i0)^"\n"^
           "\tbt QWORD [rax],17\n"^
