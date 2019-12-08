@@ -451,7 +451,7 @@ let
 
   | 3 ->
 # 24 "imp_lexer.mll"
-                     ( Util.pnt true "start line comment\n"; token lexbuf )
+                     ( Util.Log.add "start line comment\n"; token lexbuf )
 # 456 "imp_lexer.ml"
 
   | 4 ->
@@ -1127,7 +1127,7 @@ and __ocaml_lex_line_comment_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
 # 145 "imp_lexer.mll"
-          ( Util.pnt true "end line comment\n"; token lexbuf )
+          ( Util.Log.add "end line comment\n"; token lexbuf )
 # 1132 "imp_lexer.ml"
 
   | 1 ->

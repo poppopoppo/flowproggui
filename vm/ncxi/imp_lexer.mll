@@ -21,7 +21,7 @@ rule token = parse
     | "." space* "\n" { DOT_END }
     | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n"|"\\\'")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | '`' (([^ '\n']* '\n') as lxm) { LINE(lxm) }
-    | "##" [^ '\n']* { Util.pnt true "start line comment\n"; token lexbuf }
+    | "##" [^ '\n']* { Util.Log.add "start line comment\n"; token lexbuf }
     | "[#"   { cmt_n := !cmt_n +1; blk_cmt lexbuf }
     | ";" { SCL }
     | "0r" (digit+ as lxm) { R64(Int64.of_string lxm) }
@@ -142,5 +142,5 @@ and blk_cmt = parse
   | "[#" { cmt_n := !cmt_n+1; blk_cmt lexbuf }
   | _ { blk_cmt lexbuf }
 and line_comment = parse
-  | "\n"  { Util.pnt true "end line comment\n"; token lexbuf }
+  | "\n"  { Util.Log.add "end line comment\n"; token lexbuf }
   | _ { line_comment lexbuf }
