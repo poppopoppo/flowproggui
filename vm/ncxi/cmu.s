@@ -97,14 +97,14 @@ section .data
   fmt_c_r0: dq 0
   fmt_s: db "%s",0
   fmt_nl: db 10,0
-  fmt_ref: db "(%d)*{| ",0
+  fmt_ref: db "(%llx)*",0
   vct_l: db "|{",0
   vct_r: db "}|",0
 ;  fmt: db "%d",10,0
-  blk_l: db "{| ",0
-  blk_r: db "|} ",0
-  ln_l: db "[| ",0
-  ln_r: db "|] ",0
+  blk_l: db "{ ",0
+  blk_r: db "} ",0
+  ln_l: db "[ ",0
+  ln_r: db " ] ",0
   spc: db " ",0
   agl_fmt: db "°%d◂",0
   fmt_s8: db `\"%s\"`,0
@@ -188,6 +188,7 @@ SFLS_lp:
   mov QWORD [rdx],rsi
   jmp SFLS_lp
 SFLS_end:
+  mov QWORD [rsi],~0
   mov QWORD [SFLS_BTM],rdx
   ret
 
@@ -575,7 +576,7 @@ pp_end:
   ret
 pp_r_p:
   bt rdi,0
-  jnc pp_r_p_blk
+  jnc pp_r_p_ref
   mov rdx,rdi
   shr rdx,56
   push rdi
@@ -599,13 +600,13 @@ pp_r_p:
   add rsi,rax
   mov r10,0x00ff_ffff_ffff_fffe
   and rdi,r10
-pp_r_p_blk:
+pp_r_p_ref:
   mov r10,[rdi]
   push rdi
   push rsi
+  mov rdx,rdi
   mov rdi,rsi
   mov rsi,fmt_ref
-  mov rdx,rdi
   xor rax,rax
   mov QWORD [rsp_tmp],rsp
   and rsp,~0xf
@@ -614,12 +615,25 @@ pp_r_p_blk:
   pop rsi
   pop rdi
   add rsi,rax
-pp_r_p_n_agl:
+
   mov r10,[rdi]
   bt r10,16
   jc pp_opq
   bt r10,17
   jc pp_ln
+  push rdi
+  push rsi
+  mov rdi,rsi
+  mov rsi,blk_l
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call sprintf
+  mov rsp,QWORD [rsp_tmp]
+  pop rsi
+  pop rdi
+  add rsi,rax
+  mov r10,[rdi]
   mov r9,r10
   shr r9,32
   and r9,0xffff

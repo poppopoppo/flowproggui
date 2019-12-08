@@ -2,10 +2,10 @@ module Log = struct
   let v = Queue.create ()
   let add s =
     Queue.push s v
-  let pnt _ =
+  let rec pnt _ =
     ( try
         let s = Queue.pop v in
-        (print_string s;flush stdout)
+        (print_string s;flush stdout; pnt ())
       with _ -> ()
     )
 end

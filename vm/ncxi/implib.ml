@@ -70,7 +70,7 @@ let ast_from_string s =
   (Imp_parser.buffer Imp_lexer.token lexbuf)
 let ast_from_file (f:string) =
   Util.open_in_close f
-    (fun c ->
+    ( fun c ->
        let lexbuf = Lexing.from_channel c in
        Imp_parser.file Imp_lexer.token lexbuf)
 
