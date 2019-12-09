@@ -261,13 +261,53 @@
 		» _^ _ ⊢ s0 
 			`##
 			"W" "[# fdEF [# F #] jfioe 2 #]"
-			`FF## huugugugu
-						
+			`FF## huugugugu						
 			// 
 		rmv_cmt s0 ⊢ { s0 s1 } 
 		_emt { s0 s1 }  ⊢ { s0 s1 }   
 		∎ {}	
-
+	§§+s8 
+		@.name 
+			∐* word "." name 
+			∐.* word
+			
+	§§+s8 
+		@.glb_etr 
+			∐* "§§" ! word ;
+				∐* "=" ! name 
+				∐.* ⟦ glb_etr ⟧ ! "∎∎"
+			∐* "§" ! word ; 
+				∐* "=" ! cst 
+				∐* "«" ! lc_code
+				∐.* reg_ptn lc_code  
+			∐.* "¶" ! word ; 
+				∐* "=" ! name 
+				∐.* dta_def 
+		[#
+		@.lc_code 
+			∐* "∐." ! mtc_etr 
+			∐* "∐" ! mtc_etr mtc_tl
+			∐* "∎" ! reg_ptn 
+			∐.* lc_line ! lc_code 
+		@.lc_line
+			∐* "$" ! reg_ptn "⊢" reg_ptn dst_ptns
+			∐* "◂" ! reg_ptn ! "," ! reg_ptn ! "⊢" reg_ptn
+			∐* "»" ! ;
+				∐* "_^" ! ; 
+					∐* "_" ! "⊢" ! reg s8_pnt_exp 
+					∐.* src_ptn ! ⟦ src_ptns ⟧ ! "⊢" ! dst_ptn ! ⟦ dst_ptns ⟧ s8_pnt_exp
+				∐.* cst src_ptn "⊢" dst_ptn 		 
+			∐* name ! reg_ptn "⊢" reg_ptn #]
+		[#
+		@.mtc_etr 
+			∐* "." "\n" ! 
+			∐* mtc_test ! mtc_test_tl ; 
+				∐* ";" ! ;
+					∐* "\n" ! ; 
+						∐* "∐." ! mtc_etr 
+						∐.* "∐" ! mtc_etr mtc_tl 
+					∐* 
+#]
 	§§+s8 
 		@.glb_etr_lst
 			∐ glb_etr glb_etr_lst
@@ -335,14 +375,14 @@
 	##_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
 	##_in0 {} ⊢ s_in0 
 	##_emt_q s_in0 ⊢ s_in0 
-	» "in0.mdls" _ ⊢ fn0 
-	_in_fn fn0 ⊢ { fn0 fn0_c }  
-	_emt fn0_c ⊢ fn0_c 
-	» 0r _ ⊢ x0 
-	syntax.cmt.prs { fn0_c x0 } ⊢ { fn0_c x0 a0 } 
-	_emt a0 ⊢ a0 
-	syntax.rmv_cmt fn0_c ⊢ { fn0_c sc }
-	_emt sc ⊢ sc 
+	##» "in0.mdls" _ ⊢ fn0 
+	##_in_fn fn0 ⊢ { fn0 fn0_c }  
+	##_emt fn0_c ⊢ fn0_c 
+	##» 0r _ ⊢ x0 
+	##syntax.cmt.prs { fn0_c x0 } ⊢ { fn0_c x0 a0 } 
+	##_emt a0 ⊢ a0 
+	##syntax.rmv_cmt fn0_c ⊢ { fn0_c sc }
+	##_emt sc ⊢ sc 
 	∎ {} 
 
 ∎∎

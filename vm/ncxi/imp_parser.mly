@@ -131,27 +131,27 @@ grm_etr:
     Lang.Grm.Act($3,$4)
   }
   | SLF DOT NAM grm_ord {
-    let (_,go) =
-    List.fold_left
-    ( fun (i,go) (cn,f,r) ->
-      if cn="_" then (i+1,go@[("c"^(string_of_int i),f,r)])
-      else (i+1,go@[(cn,f,r)]))
-      (0,[]) $4 in
-    Lang.Grm.Cnc($3,go) }
+    Lang.Grm.Cnc($3,$4) }
   ;
 grm_ord_act:
   | grm_rule_act_end { [$1] }
   | grm_rule_act grm_ord_act { $1::$2 }
   ;
 grm_rule_act:
-  | ord grm_ptns grm_prd grm_act grm_rule_act_seq { ($4,$1,$2) }
+  | ord grm_ptns grm_prd grm_act grm_rule_act_seq {
+    match $5 with
+    | Some e -> Grm.Act_Seq($4,$1,$2,e)
+    | None -> Grm.Act_End($4,$1,$2) }
   ;
 grm_rule_act_end:
-  | ord_end grm_ptns grm_prd grm_act grm_rule_act_seq { ($4,$1,$2) }
+  | ord_end grm_ptns grm_prd grm_act grm_rule_act_seq {
+    match $5 with
+    | Some e -> Grm.Act_Seq($4,$1,$2,e)
+    | None -> Grm.Act_End($4,$1,$2) }
   ;
 grm_rule_act_seq:
-  | {}
-  | SCL grm_ord_act {}
+  | { None }
+  | SCL grm_ord_act { Some $2 }
   ;
 grm_act:
   | SRC reg_ptn_src ir_lines { ($2,ref $3) }
@@ -160,16 +160,34 @@ grm_ord:
   | grm_rule_end { [$1] }
   | grm_rule grm_ord { $1::$2 }
 grm_rule:
-  | ord NAM CLN grm_ptns grm_prd { ($2,$1,$4) }
-  | ord grm_ptns grm_prd grm_rule_seq { ("_",$1,$2) }
+  | ord NAM CLN grm_ptns grm_prd grm_rule_seq {
+    match $6 with
+    | Some e -> Grm.Cnc_Seq(Grm.CN $2,$1,$4,e)
+    | None -> Grm.Cnc_End(Grm.CN $2,$1,$4) }
+    ;
+  | ord grm_ptns grm_prd grm_rule_seq {
+    match $4 with
+    | Some e -> Grm.Cnc_Seq(Grm.CN_A,$1,$2,e)
+    | None -> Grm.Cnc_End(Grm.CN_A,$1,$2) }
+  ;
+grm_cn:
+  | { Grm.CN_A }
+  | NAM CLN { Grm.CN $1 }
   ;
 grm_rule_seq:
-  | {}
-  | SCL grm_ord {}
+  | { None }
+  | SCL grm_ord { Some $2 }
   ;
 grm_rule_end:
-  | ord_end NAM CLN grm_ptns grm_prd { ($2,$1,$4) }
-  | ord_end grm_ptns grm_prd grm_rule_seq { ("_",$1,$2) }
+  | ord_end grm_ptns grm_prd grm_rule_seq {
+    match $4 with
+    | Some e -> Grm.Cnc_Seq(Grm.CN_A,$1,$2,e)
+    | None -> Grm.Cnc_End(Grm.CN_A,$1,$2) }
+    ;
+  | ord_end NAM CLN grm_ptns grm_prd grm_rule_seq {
+    match $6 with
+    | Some e -> Grm.Cnc_Seq(Grm.CN $2,$1,$4,e)
+    | None -> Grm.Cnc_End(Grm.CN $2,$1,$4) }
   ;
 ord:
   | COPRD { Grm.Lex }
@@ -183,6 +201,7 @@ ord_end:
 grm_ptns:
   | { [] }
   | grm_ptn grm_ptns { $1::$2 }
+  | grm_ptn EXP grm_ptns { $1::$3 }
   ;
 grm_ptn:
   | grm_atom { Grm.Atm $1 }
