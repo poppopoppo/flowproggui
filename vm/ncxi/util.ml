@@ -1,7 +1,12 @@
 module Log = struct
-  let v = Queue.create ()
+  type flg =  | Off | On | Queue
+    let v = Queue.create ()
+  let f = ref Off
   let add s =
-    Queue.push s v
+    ( match !f with
+      | Off -> ()
+      | On -> ( print_string s; flush stdout )
+      | Queue -> Queue.push s v )
   let rec pnt _ =
     ( try
         let s = Queue.pop v in

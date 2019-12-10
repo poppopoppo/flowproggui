@@ -9,6 +9,10 @@
 ; rbx SSS top
 bits 64
 
+%define SFLS_MAX 2048
+%define SFLS_NULL 0xffff_ffff_ffff_0000
+%define S8_NULL 0xffff_ffff_ffff_0001
+%define EMT_MAX 20000
 extern exit
 extern free
 extern printf
@@ -21,7 +25,7 @@ extern isspace
 section .bss
   SFLS_TOP: resb 8*1
   SFLS_BTM: resb 8*1
-  SFLS_VCT: resb 8*16*1024
+  SFLS_VCT: resb 8*16*SFLS_MAX
   ir_s8_len_vct: resb 8*32
   ir_s8_vct: resb 8*32
   st_vct: resb 400
@@ -32,27 +36,27 @@ section .bss
   tmp_pop: resb 8
   tmp_push: resb 8
   dyn_call_vct: resb 16
-  str_ret: resb 10000
-  out_vct: resb (8+8+8)*256
-  prs_vct: resb (8+8) * 64
-  set_ptn_vct: resb (8+8) * 16
-  mtc_vct_0: resb (8+8) * 32
-  mtc_vct_1: resb (8+8) * 32
-  mtc_vct_2: resb (8+8) * 32
-  mtc_vct_3: resb (8+8) * 32
-  mtc_vct_4: resb (8+8) * 32
-  mtc_vct_5: resb (8+8) * 32
-  mtc_vct_6: resb (8+8) * 32
-  mtc_vct_7: resb (8+8) * 32
-  mtc_vct_8: resb (8+8) * 32
-  mtc_vct_9: resb (8+8) * 32
-  mtc_vct_10: resb (8+8) * 32
-  mtc_vct_11: resb (8+8) * 32
+  str_ret: resb EMT_MAX
+  out_vct: resb (8+8+8)*32
+  ;prs_vct: resb (8+8) * 64
+  ;set_ptn_vct: resb (8+8) * 16
+  ;mtc_vct_0: resb (8+8) * 32
+  ;mtc_vct_1: resb (8+8) * 32
+  ;mtc_vct_2: resb (8+8) * 32
+  ;mtc_vct_3: resb (8+8) * 32
+  ;mtc_vct_4: resb (8+8) * 32
+  ;mtc_vct_5: resb (8+8) * 32
+  ;mtc_vct_6: resb (8+8) * 32
+  ;mtc_vct_7: resb (8+8) * 32
+  ;mtc_vct_8: resb (8+8) * 32
+  ;mtc_vct_9: resb (8+8) * 32
+  ;mtc_vct_10: resb (8+8) * 32
+  ;mtc_vct_11: resb (8+8) * 32
   fmt_s_r0: resb 256
-  fmt_d_r0: resb 4
+  ;fmt_d_r0: resb 4
   in0: resq 1
-  stat: resb 144
   gbg_vct: resq 64
+  stat: resb 144
   struc STAT
     .st_dev         resq 1
     .st_ino         resq 1
@@ -113,12 +117,12 @@ section .data
   fmt_err_line: db `err:%d\n`,0
   fmt_dbg: db `dbg:%s\n`,0
   fmt_err: db "err",0
-  cst_stg_test: db `\194\187\194\187 Foo \226\136\128 Baa \194\167\194\182 \t \t \n`,0,0,0,0,0
-  cst_stg_test0: db `\u263a`
-  cst_stg_test1: db `\xe2\x98\xba`
-  stg0: db `\194\187`
-  s8_0: db "43444",0
-  test_fn: db "OpADL.mdls",0
+  ;cst_stg_test: db `\194\187\194\187 Foo \226\136\128 Baa \194\167\194\182 \t \t \n`,0,0,0,0,0
+  ;cst_stg_test0: db `\u263a`
+  ;cst_stg_test1: db `\xe2\x98\xba`
+  ;stg0: db `\194\187`
+  ;s8_0: db "43444",0
+  ;test_fn: db "OpADL.mdls",0
 
   rsp_tmp: dq 0
   gbg_ptr: dq gbg_vct
@@ -181,7 +185,7 @@ SFLS_init:
   mov rdi,0
   mov rsi,SFLS_VCT
 SFLS_lp:
-  cmp rdi,1024
+  cmp rdi,SFLS_MAX
   jz SFLS_end
   mov rdx,rsi
   add rsi,8*16
@@ -189,7 +193,8 @@ SFLS_lp:
   mov QWORD [rdx],rsi
   jmp SFLS_lp
 SFLS_end:
-  mov QWORD [rsi],~0
+  mov rax,SFLS_NULL
+  mov QWORD [rsi],rax
   mov QWORD [SFLS_BTM],rdx
   ret
 

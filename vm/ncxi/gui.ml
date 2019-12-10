@@ -345,8 +345,12 @@ let main () =
                         "nasm -F dwarf -g -f elf64 "^ss^" -o "^ssp^".o\n"^
                         "gcc "^ssp^".o -nostartfiles -no-pie -pg -g -o "^ssp^".exe\n"^
                         "time ./"^ssp^".exe\n" in
-                        let _ = Sys.command cd in
-                        ()
+                        let pi = Unix.fork () in
+                        ( match pi with
+                          | pi when pi=0 ->
+                            let _ = Sys.command cd in
+                            exit 0 
+                          | _ -> ())
                       | _ ->
                         pnt "module is imported\n" )
                   in

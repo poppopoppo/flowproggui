@@ -5,19 +5,20 @@
 	##_emt_q fn0_c ⊢ fn0_c 
 ##	∎ {}
 § C1 « 
-	» "-27686gg" _ ⊢ s0 
-	» 6r _ ⊢ x0 
-	» 4r _ ⊢ x1 
-	» 0r _ ⊢ x2 
-	» 0r _ ⊢ x3 
+	##» "-27686gg" _ ⊢ s0 
+	##» 6r _ ⊢ x0 
+	##» 4r _ ⊢ x1 
+	##» 0r _ ⊢ x2 
+	##» 0r _ ⊢ x3 
 	
 	##_emt_q s0 ⊢ s0
 	##_scf_d.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	##_emt_q { x0 a0 } ⊢ { x0 a0 }  
-	_mlc_s8 x0 ⊢ { x0 sx } 
-	_rep_movsb { x1 s0 x2 sx x3 } ⊢ { x1 s0 x2 sx x3 } 
-	_emt_q sx  ⊢ sx
+	##_mlc_s8 x0 ⊢ { x0 sx } 
+	##_rep_movsb { x1 s0 x2 sx x3 } ⊢ { x1 s0 x2 sx x3 } 
+	##_emt_q sx  ⊢ sx
 	∎ {} 
+[#
 § f0 x 
 	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 } . 
 		∎ {}
@@ -25,6 +26,7 @@
 		∎ {}
 	∐. x ⊢ _nil◂{} . 
 		∎ {}
+#]
 [#
 § @.s8_of_r64_lst_i { i rl }  
 	∐ rl ⊢ _cns◂{ ri rl_tl } . 
