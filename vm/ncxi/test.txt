@@ -713,10 +713,17 @@ Lx°
           write([From, to, To]), nl,
           hanoi(N1, Via, To, From).
 
-§ hanoi %N ⊢ { %From %To %Via }
-  ∐ N'=1 .
-    » t _ ⊢ b
-    ∎ b
+§ Hanoi_N %N ⊢ { %From %To %Via }
+  ∐ N ⊢ _S◂N0; N0 ⊢ _O◂{} .
   ∐. _dec N ⊢ N1; [#(N'-1)=N1';#] hanoi N1 ⊢ { From Via To }; hanoi N1 ⊢ { Via To From } .
-    » t _ ⊢ b
-    ∎ b
+  ∐. N ⊢ _S◂N1; hanoi N1 ⊢ { From Via To }; hanoi N1 ⊢ { Via To From } .
+
+§ Hanoi_FT { %From %To } ⊢ { %N %Via }
+  ∐. hanoi N ⊢ { From To Via } .
+
+ramification
+
+  ∐ -"∎" !| -"JI" +"FF" ⟦g0⟧ ‹"G"› !
+
+  ∐* "A" !| "B" "C" -| "V" ; 
+    ∐ +| g0 ;
