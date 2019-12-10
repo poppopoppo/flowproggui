@@ -158,6 +158,14 @@
 	§§ type 
 	∎∎ 
 	§§ ast 
+	¶ @.name 
+		∐ mdl_n : { _s8 name } 
+		∐ fst_n : _s8 		
+	¶ 
+		@.mdl = _lst◂mdl_etr 
+		@.mdl_etr 
+			∐ mdl_def : { _s8 _lst◂mdl_etr } 
+			∐ mdl_ln : name
 	∎∎
 ¶ cmt_t 
 	∐ cmt_c : _r64
@@ -268,14 +276,36 @@
 		∎ {}	
 	§§+s8 
 		@.name 
-			∐* word "." name 
-			∐.* word
+			∐ word "." name 
+			∐. word
+	§§+s8 
+		@.cst 
+			∐ _scf_d "r"
+			∐ stg_ltr 
+			∐. name 
 			
 	§§+s8 
+		@.nl 
+			∐.# "\n" ⟦"\n"⟧
+	§§+s8 
 		@.glb_etr 
-			∐* "§§" ! word ;
-				∐* "=" ! name 
-				∐.* ⟦ glb_etr ⟧ ! "∎∎"
+			∐.* "§§" word ;
+				∐* "=" name
+				∐.* ⟦ mdl_glb_etr ⟧
+		@.mdl_glb_etr 
+			∐* "∎∎" 
+			∐. glb_etr 
+			
+	§ f0 «
+		» _^ _ ⊢ s0 
+			`§§ m0 = m1 
+			// 
+		» 0r _ ⊢ x0 
+		glb_etr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+		_emt { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+		∎ {}
+		
+	[#
 			∐* "§" ! word ; 
 				∐* "=" ! cst 
 				∐* "«" ! lc_code
@@ -283,7 +313,6 @@
 			∐.* "¶" ! word ; 
 				∐* "=" ! name 
 				∐.* dta_def 
-		[#
 		@.lc_code 
 			∐* "∐." ! mtc_etr 
 			∐* "∐" ! mtc_etr mtc_tl

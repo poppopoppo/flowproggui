@@ -14,6 +14,7 @@
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD DOT_END
 %token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE SCL
+%token ORD_LINE_COPRD ORD_LINE_COPRD_END
 %token <string> NAM STG VAL REG PRM LINE
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
@@ -193,10 +194,12 @@ ord:
   | COPRD { Grm.Lex }
   | ORD_LEX_COPRD { Grm.Synt }
   | SYNT_COPRD { Grm.Synt }
+  | ORD_LINE_COPRD { Grm.Line }
   ;
 ord_end:
   | COPRD_END { Grm.Lex }
   | ORD_LEX_COPRD_END { Grm.Synt }
+  | ORD_LINE_COPRD_END { Grm.Line }
   ;
 grm_ptns:
   | { [] }
