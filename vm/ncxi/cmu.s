@@ -92,6 +92,8 @@ section .data
   fmtr64: db "0xr","0x%llx",0
   str_r64: db "0x%llx FEFEF",0
   fmt_emt_q: db "_emt_q:%s",10,0
+  fmt_emt: db "_emt:",0
+  fmt_nl: db 10,0
   fmt64_spc: db "0x%llx ",0
   fmt_d: db "%d",0
   fmt_x: db "%x",0
@@ -101,7 +103,6 @@ section .data
   fmt_c: db "%c",0
   fmt_c_r0: dq 0
   fmt_s: db "%s",0
-  fmt_nl: db 10,0
   fmt_ref: db "(%llx)*",0
   vct_l: db "|{",0
   vct_r: db "}|",0
@@ -760,6 +761,141 @@ pp_ln:
   mov rsp,QWORD [rsp_tmp]
   pop rsi
   add rax,rsi
+  ret
+
+pp0: ; rdi=tkn cf ⊢ rsi=dst
+  jc pp0_end
+  jmp pp0_r_p
+pp0_end:
+  mov rsi,rdi
+  mov rdi,fmt64
+  mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  ret
+pp0_r_p:
+  bt rdi,0
+  jnc pp0_r_p_ref
+  mov rsi,rdi
+  shr rsi,56
+  push rdi
+  mov rdi,agl_fmt
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  mov r10,0x00ff_ffff_ffff_fffe
+  and rdi,r10
+pp0_r_p_ref:
+  push rdi
+  mov rsi,rdi
+  mov rdi,fmt_ref
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  mov r10,[rdi]
+  bt QWORD [rdi],16
+  jc pp0_opq
+  bt QWORD [rdi],17
+  jc pp0_ln
+  push rdi
+  mov rdi,blk_l
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  mov r10,[rdi]
+  mov r9,r10
+  shr r9,32
+  and r9,0xffff
+  add rdi,8
+pp0_r_p_lp:
+  cmp r9,0
+  je pp0_r_p_end
+  sub r9,1
+  rcr r10,1
+  jc pp0_r_p_lp_nxt
+  push r9
+  push r10
+  push rdi
+  mov rdi,[rdi]
+  call pp0_r_p
+  pop rdi
+  pop r10
+  pop r9
+  add rdi,8
+  jmp pp0_r_p_lp
+pp0_r_p_lp_nxt:
+  push rdi
+  push r9
+  push r10
+  mov rsi,[rdi]
+  mov rdi,fmt64_spc
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop r10
+  pop r9
+  pop rdi
+  add rdi,8
+  jmp pp0_r_p_lp
+pp0_r_p_end:
+  mov rdi,blk_r
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  ret
+
+pp0_opq:
+  mov rax,[rdi]
+  shr rax,30
+  add rax,4
+  sub rsp,rax
+  mov rsi,rsp
+  push rax
+  push rsi
+  call pp_opq
+  pop rdi
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop rax
+  add rsp,rax
+  ret
+
+pp0_ln:
+  push rdi
+  mov rdi,ln_l
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  bt QWORD [rdi],0
+  mov rdi,QWORD [rdi+8]
+  call pp0
+  mov rdi,ln_r
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
   ret
 
 rpc_ref: ; rdi=ref ⊢ rax=dst-ref

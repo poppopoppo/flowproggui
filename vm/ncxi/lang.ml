@@ -3400,19 +3400,21 @@ and init_prm () =
     "NS_E_ID_"^(Sgn.print Ast.Axm._emt_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._emt_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._emt_q)^":\n"^
-    "\tpush r13\n"^
-    "\tmov rdi,r13\n"^
-    "\tmov rsi,str_ret\n"^
-    "\tbt r12,0\n"^
-    "\tcall pp0\n"^
-    "\tmov rdi,fmt_emt_q\n"^
-    "\tmov rsi,str_ret\n"^
+    "\tmov rdi,fmt_emt\n"^
     "\txor rax,rax\n"^
     "\tmov QWORD [rsp_tmp],rsp\n"^
     "\tand rsp,~0xf\n"^
     "\tcall printf\n"^
     "\tmov rsp,QWORD [rsp_tmp]\n"^
-    "\tpop r13\n"^
+    "\tmov rdi,r13\n"^
+    "\tbt r12,0\n"^
+    "\tcall pp0\n"^
+    "\tmov rdi,fmt_nl\n"^
+    "\txor rax,rax\n"^
+    "\tmov QWORD [rsp_tmp],rsp\n"^
+    "\tand rsp,~0xf\n"^
+    "\tcall printf\n"^
+    "\tmov rsp,QWORD [rsp_tmp]\n"^
     "\tret\n" in
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Rcd(rcd_cl [Var v_q;Axm Axm.stg])))) in
@@ -3501,7 +3503,7 @@ and init_prm () =
   gns.ns <- (Ast.Axm._mov_x,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._mov_x,ref(E_K_WC))::gns.ns_e;
 
-  (se_in0^se_emt_q^se_byt^se_chr^se_dgt^se_u_al^se_l_al^se_emt^se_pp_v,em_in0^em_emt_q^emt_byt^em_chr^em_dgt^em_l_al^em_u_al^em_emt^em_pp_v,ns,gns)
+  (se_in0^se_emt_q^se_byt^se_chr^se_dgt^se_u_al^se_l_al^se_pp_v,em_in0^em_emt_q^emt_byt^em_chr^em_dgt^em_l_al^em_u_al^em_pp_v,ns,gns)
 and emt_exe m =
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
