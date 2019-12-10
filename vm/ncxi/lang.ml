@@ -3215,7 +3215,7 @@ and init_prm () =
     "\tmov rax,0\n"^
     "\tret\n" in
 
-  let v = ref(Ln(App(Axm Axm.out_p,Axm Axm.stg))) in
+  (*let v = ref(Ln(App(Axm Axm.out_p,Axm Axm.stg))) in
   !ns.ns_p <- ("_emt",Ast.Axm._emt)::!ns.ns_p;
   gns.ns <- (Ast.Axm._emt,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._emt,ref(Etr_V(RP.A(R.Idx 0),RP.R[||])))::gns.ns_e;
@@ -3227,7 +3227,7 @@ and init_prm () =
     "\tcall emt\n"^
     "\tmov rdi,rbx\n"^
     "\tcall dec_r\n"^
-    "\tret\n" in
+    "\tret\n" in *)
   (*let vr = Rcd(rcd_cl [Axm Axm.stg;(Imp(Axm Axm.stg,unt ()))]) in
     let v = ref(Ln(App(Axm Axm.out_p,vr))) in
     !ns.ns <- ("_frd",v)::!ns.ns;
@@ -3404,7 +3404,7 @@ and init_prm () =
     "\tmov rdi,r13\n"^
     "\tmov rsi,str_ret\n"^
     "\tbt r12,0\n"^
-    "\tcall pp\n"^
+    "\tcall pp0\n"^
     "\tmov rdi,fmt_emt_q\n"^
     "\tmov rsi,str_ret\n"^
     "\txor rax,rax\n"^
@@ -3505,7 +3505,7 @@ and init_prm () =
 and emt_exe m =
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
-  Util.Log.pnt ();
+  (*Util.Log.pnt ();*)
   (*let epf = get_ep !ns f in*)
   let ex =
     "%include \"cmu.s\"\n"^
