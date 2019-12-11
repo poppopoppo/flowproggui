@@ -25,6 +25,16 @@
 		∎ {}
 	∐. x ⊢ _nil◂{} . 
 		∎ {}
+§§+s8 
+	@.g0 
+		∐ "A" !| "B" 
+		∐. "C" 
+§ C0 « 
+	» "AB" _ ⊢ s0 
+	» 0r _ ⊢ x0 
+	g0.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+	∎ {}
 \[
 § @.s8_of_r64_lst_i { i rl }  
 	∐ rl ⊢ _cns◂{ ri rl_tl } . 

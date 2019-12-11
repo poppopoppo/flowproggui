@@ -2107,6 +2107,15 @@ and prs_dec_i i =
     "\tcall dlt\n"^
     lb0^":\n"^
     (prs_dec_i (i-1))
+and prs_dec_i_cut sp =
+  ( match sp with
+    | [] -> ""
+    | (rni,_)::tl ->
+      (prs_dec_i (rni-1))^
+      "\tadd rsp,"^(string_of_int (rni*16))^"\n"^
+      "\tpop "^(emt_reg_x86 1)^"\n"^
+      (prs_dec_i_cut tl)
+  )
 and prs_set_i sp rn j =
   let e0 =
     "\tmov rdi,rbx\n"^
@@ -2181,29 +2190,66 @@ and emt_rle gns ns l =
                 "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
                 "\tpop "^(emt_reg_x86 1)^"\n"^
                 (lp sp (i+1) tl)
-              | Grm.Cnc_End(cn,f,r,_) ->
-                let rn = List.length r in
-                (*"_"^mn^"_"^n^":\n"^ *)
-                let lbn = lb () in
-                let cn =
-                  ( match cn with
-                    | Grm.CN_A -> "_" | Grm.CN cn -> cn ) in
-                "; "^cn^"\n"^
-                "\tmov r10,QWORD [r13]\n"^
-                "\tshr r10,32\n"^
-                "\tpush "^(emt_reg_x86 1)^"\n"^
-                "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
-                (emt_ptn_grm lbn i ns f r 0)^
-                (prs_set_i sp rn i)^
-                "\tmov "^(emt_reg_x86 2)^",0\n"^
-                "\tmov "^(emt_reg_x86 3)^",rdi\n"^
-                "\tbtr r12,3\n"^
-                "\tbts r12,2\n"^
-                "\tret\n"^
-                lbn^":\n"^
-                "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
-                "\tpop "^(emt_reg_x86 1)^"\n"^
-                (lp sp (i+1) tl) )
+              | Grm.Cnc_End(cn,f,r,rc) ->
+                    let rn = List.length r in
+                    (*"_"^mn^"_"^n^":\n"^ *)
+                    let lbn = lb () in
+                    let cn =
+                      ( match cn with
+                        | Grm.CN_A -> "_" | Grm.CN cn -> cn ) in
+                ( match rc with
+                  | None ->
+                    "; "^cn^"\n"^
+                    "\tmov r10,QWORD [r13]\n"^
+                    "\tshr r10,32\n"^
+                    "\tpush "^(emt_reg_x86 1)^"\n"^
+                    "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
+                    (emt_ptn_grm lbn i ns f r 0)^
+                    (prs_set_i sp rn i)^
+                    "\tmov "^(emt_reg_x86 2)^",0\n"^
+                    "\tmov "^(emt_reg_x86 3)^",rdi\n"^
+                    "\tbtr r12,3\n"^
+                    "\tbts r12,2\n"^
+                    "\tret\n"^
+                    lbn^":\n"^
+                    "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
+                    "\tpop "^(emt_reg_x86 1)^"\n"^
+                    (lp sp (i+1) tl)
+                  | Some rc ->
+                    let rnc = List.length rc in
+                    let lbnc = lb () in
+                    "; "^cn^"\n"^
+                    "\tmov r10,QWORD [r13]\n"^
+                    "\tshr r10,32\n"^
+                    "\tpush "^(emt_reg_x86 1)^"\n"^
+                    "\tsub rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                    (emt_ptn_grm lbn i ns f r 0)^
+                    (emt_ptn_grm lbnc i ns f rc rn)^
+                    (prs_set_i sp (rn+rnc) i)^
+                    "\tmov "^(emt_reg_x86 2)^",0\n"^
+                    "\tmov "^(emt_reg_x86 3)^",rdi\n"^
+                    "\tbtr r12,3\n"^
+                    "\tbts r12,2\n"^
+                    "\tret\n"^
+                    lbnc^":\n"^
+                    "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                    "\tpop "^(emt_reg_x86 1)^"\n"^
+                    (prs_dec_i_cut sp)^
+                    "\tmov rax,0x0000_0000_0000_ffff\n"^
+                    "\tmov rdi,rbx\n"^
+                    "\tmov rbx,QWORD [rbx]\n"^
+                    "\tmov QWORD [rdi],rax\n"^
+                    "\tmov "^(emt_reg_x86 3)^",rdi\n"^
+                    "\tmov "^(emt_reg_x86 2)^",1\n"^
+                    "\tbtr r12,3\n"^
+                    "\tbts r12,2\n"^
+                    "\tret\n"^
+                    lbn^":\n"^
+                    "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                    "\tpop "^(emt_reg_x86 1)^"\n"^
+                    (lp sp (i+1) tl)
+                )
+            )
           | [] ->
             if sp=[] then
               "\tmov rax,0x0000_0000_0000_ffff\n"^
