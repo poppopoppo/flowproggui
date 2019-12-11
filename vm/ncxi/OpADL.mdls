@@ -308,19 +308,19 @@
 		@.file 
 			∐.* ⟦glb_etr⟧
 		@.glb_etr 
-			∐* "§§+s8" grm_etr !| ⟦grm_etr⟧
-			∐* "§§" word !| ;
-				∐* "=" name
+			∐* "§§+s8" !| grm_etr ⟦grm_etr⟧
+			∐* "§§" !| word ;
+				∐* "=" !| name
 				∐.* mdl_glb_etr 
-			∐* "§" ; 
-				∐* "@" "." word reg_ptn lc_code ⟦qlq_etr⟧  
+			∐* "§" !| ; 
+				∐* "@" !| "." word reg_ptn lc_code ⟦qlq_etr⟧  
 				∐.* word ;
-					∐* "=" cst 
-					∐* "«" lc_code 
+					∐* "=" !| cst 
+					∐* "«" !| lc_code 
 					∐.* reg_ptn lc_code
 			∐.* "¶" ; 
-				∐* "@" "." dt_etr_body ⟦qlq_dt_etr⟧
-				∐* word "=" name 
+				∐* "@" !| "." dt_etr_body ⟦qlq_dt_etr⟧
+				∐* word "=" !| name 
 				∐.* dt_etr_body  
 		@.mdl_glb_etr 
 			∐* "∎∎" 
@@ -334,10 +334,10 @@
 			∐* lc_mtc
 			∐.* lc_line lc_code
 		@.lc_line
-			∐* "$" reg_ptn "⊢" reg_ptn
-			∐* "◂" reg_ptn "⊢" reg_ptn 
-			∐* "»" ; 
-				∐* "_^" ; 
+			∐* "$" !| reg_ptn "⊢" reg_ptn
+			∐* "◂" !| reg_ptn "⊢" reg_ptn 
+			∐* "»" !| ; 
+				∐* "_^" !|; 
 					∐* "_" "⊢" reg ⟦s8_ptn⟧ "//"
 					∐.* reg ⟦reg_tl⟧ "⊢" reg ⟦reg_tl⟧ ⟦s8_ptn⟧ "//"  
 				∐.* cst "_" "⊢" reg_ptn 
@@ -363,7 +363,7 @@
 			∐* mtc_test ⟦mtc_test_tl⟧
 			∐.* 
 		@.mtc_test 
-			∐* reg_ptn "⊢" name "◂" reg_ptn 
+			∐* reg_ptn "⊢" !| name "◂" reg_ptn 
 			∐.* mtc_val "=" mtc_val 
 		@.mtc_test_tl 
 			∐.* ";" mtc_test		   
@@ -402,11 +402,11 @@
 				∐.* grm_etr_cnc 
 		@.grm_etr_act 
 			∐* grm_ord_end ⟦grm_ptn⟧ ; 
-				∐* ";" "⊢" reg_ptn grm_etr_act 
-				∐.* "⊢" reg_ptn lc_code 
+				∐* ";" "⊢" !| reg_ptn grm_etr_act 
+				∐.* "⊢" !| reg_ptn lc_code 
 			∐.* grm_ord ⟦grm_ptn⟧ ; 
-				∐* ";" "⊢" reg_ptn grm_etr_act grm_etr_act 
-				∐.* "⊢" reg_ptn lc_code grm_etr_act 
+				∐* ";" "⊢" !| reg_ptn grm_etr_act grm_etr_act 
+				∐.* "⊢" !| reg_ptn lc_code grm_etr_act 
 		@.grm_ptn 
 			∐* "⟦" grm_ptn "⟧" 
 			∐* stg_ltr 
@@ -442,6 +442,7 @@
 			` § C1 « 
 			`		∎ {} 
 			`∎∎ 
+			
 			
 			// 
 		» 0r _ ⊢ x0 
