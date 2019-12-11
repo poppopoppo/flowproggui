@@ -142,7 +142,7 @@ License along with this library; if not, write to the Free Software Foundation, 
         </context>
 
         <context id="code-symbol-2" style-ref="code-symbol">
-          <match>//|\?|\;</match>
+          <match>//|\?|\;|\!\|</match>
         </context>
 
         <context id="angle" style-ref="exp-opr">

@@ -2166,7 +2166,7 @@ and emt_rle gns ns l =
         ( match l with
           | e::tl ->
             ( match e with
-              | Grm.Cnc_Seq(cn,f,r,_,q) ->
+              | Grm.Cnc_Seq(cn,f,r,rc,q) ->
                 let rn = List.length r in
                 (*"_"^mn^"_"^n^":\n"^ *)
                 let cn =
@@ -2174,29 +2174,59 @@ and emt_rle gns ns l =
                     | Grm.CN_A -> "_" | Grm.CN cn -> cn ) in
                 (*let lb1 = lb () in*)
                 let lbn = lb () in
-                let eq = lp ((rn,i)::sp) 0 q in
-                "; "^cn^"\n"^
-                "\tmov r10,QWORD [r13]\n"^
-                "\tshr r10,32\n"^
-                "\tpush "^(emt_reg_x86 1)^"\n"^
-                "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
-                (emt_ptn_grm lbn i ns f r 0)^
-                eq^
-                (*"\tcall "^lb1^"\n"^*)
-                (prs_dec_i (rn-1))^
-                (*"\tjmp "^lbn^"\n"^
-                  lb1^":\n"^*)
-                lbn^":\n"^
-                "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
-                "\tpop "^(emt_reg_x86 1)^"\n"^
-                (lp sp (i+1) tl)
+                ( match rc with
+                  | None ->
+                    let eq = lp ((rn,i)::sp) 0 q in
+                    "; "^cn^"\n"^
+                    "\tmov r10,QWORD [r13]\n"^
+                    "\tshr r10,32\n"^
+                    "\tpush "^(emt_reg_x86 1)^"\n"^
+                    "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
+                    (emt_ptn_grm lbn i ns f r 0)^
+                    eq^
+                    (prs_dec_i (rn-1))^
+                    lbn^":\n"^
+                    "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
+                    "\tpop "^(emt_reg_x86 1)^"\n"^
+                    (lp sp (i+1) tl)
+                  | Some rc ->
+                    let lbnc = lb () in
+                    let rnc = List.length rc in
+                    let eq = lp ((rn+rnc,i)::sp) 0 q in
+                    "; "^cn^"\n"^
+                    "\tmov r10,QWORD [r13]\n"^
+                    "\tshr r10,32\n"^
+                    "\tpush "^(emt_reg_x86 1)^"\n"^
+                    "\tsub rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                    (emt_ptn_grm lbn i ns f r 0)^
+                    (emt_ptn_grm lbnc i ns f rc rn)^
+                    eq^
+                    (prs_dec_i (rn+rnc-1))^
+                    lbnc^":\n"^
+                    "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                    "\tpop "^(emt_reg_x86 1)^"\n"^
+                    (prs_dec_i_cut sp)^
+                    "\tmov rax,0x0000_0000_0000_ffff\n"^
+                    "\tmov rdi,rbx\n"^
+                    "\tmov rbx,QWORD [rbx]\n"^
+                    "\tmov QWORD [rdi],rax\n"^
+                    "\tmov "^(emt_reg_x86 3)^",rdi\n"^
+                    "\tmov "^(emt_reg_x86 2)^",1\n"^
+                    "\tbtr r12,3\n"^
+                    "\tbts r12,2\n"^
+                    "\tret\n"^
+                    lbn^":\n"^
+                    "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                    "\tpop "^(emt_reg_x86 1)^"\n"^
+                    (lp sp (i+1) tl)
+                )
               | Grm.Cnc_End(cn,f,r,rc) ->
-                    let rn = List.length r in
-                    (*"_"^mn^"_"^n^":\n"^ *)
-                    let lbn = lb () in
-                    let cn =
-                      ( match cn with
-                        | Grm.CN_A -> "_" | Grm.CN cn -> cn ) in
+                let rn = List.length r in
+                (*"_"^mn^"_"^n^":\n"^ *)
+                let lbn = lb () in
+                let cn =
+                  ( match cn with
+                    | Grm.CN_A -> "_" | Grm.CN cn -> cn ) in
                 ( match rc with
                   | None ->
                     "; "^cn^"\n"^
@@ -2924,7 +2954,11 @@ and emt_m gns (ns:ns_v ref) ld el =
                       let rsl = List.length rs in
                       let rec f0 i rsl t_p cn e =
                         ( match e with
-                          | Grm.Cnc_Seq(nc,_,r,_,l) ->
+                          | Grm.Cnc_Seq(nc,_,r,rc,l) ->
+                            let r =
+                              ( match rc with
+                                | Some rc -> r@rc
+                                | None -> r ) in
                             let nc =
                               ( match nc with
                                 | Grm.CN nc -> nc
@@ -2935,13 +2969,17 @@ and emt_m gns (ns:ns_v ref) ld el =
                             !ns_g.ns_p <- (nc,epv_i)::!ns_g.ns_p;
                             gns.ns <- (epv_i,ref (Ln tc))::gns.ns;
                             gns.ns_e <-  (epv_i,ref(Ctr(i,rsl)))::gns.ns_e;
-                            let rsl0 = List.length r in
+                            let rsl0 = List.length l in
                             let t_p0 = sgn () in
                             !ns_g.ns_t <- (nc^"_t",ref(Ln(Axm t_p0)))::!ns_g.ns_t;
                             let l0 = List.mapi (fun i e -> f0 i rsl0 t_p0 nc e) l in
                             (nc,t_p,t,epv_i,`Seq l0)
-                          | Grm.Cnc_End(nc,_,r,_) ->
-                            let nc =
+                          | Grm.Cnc_End(nc,_,r,rc) ->
+                          let r =
+                            ( match rc with
+                              | Some rc -> r@rc
+                              | None -> r ) in
+                          let nc =
                               ( match nc with
                                 | Grm.CN nc -> nc
                                 | Grm.CN_A -> cn^"_c"^(string_of_int i)) in
