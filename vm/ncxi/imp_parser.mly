@@ -14,7 +14,7 @@
 %token DEQ FNT EXN WC PLS_NAT MNS_NAT MLT_NAT L_VCT L_LST_PLS DSH COPRD_PTN MTC
 %token NOT_SPL DTA_GRM ORD_LEX_COPRD ORD_COPRD GRM NOT AGL_TOP AGL_COD DOT_END
 %token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE SCL
-%token ORD_LINE_COPRD ORD_LINE_COPRD_END
+%token ORD_LINE_COPRD ORD_LINE_COPRD_END CUT
 %token <string> NAM STG VAL REG PRM LINE
 %token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
 %token <int64> R64
@@ -141,14 +141,14 @@ grm_ord_act:
 grm_rule_act:
   | ord grm_ptns grm_prd grm_act grm_rule_act_seq {
     match $5 with
-    | Some e -> Grm.Act_Seq($4,$1,$2,e)
-    | None -> Grm.Act_End($4,$1,$2) }
+    | Some e -> Grm.Act_Seq($4,$1,$2,$3,e)
+    | None -> Grm.Act_End($4,$1,$2,$3) }
   ;
 grm_rule_act_end:
   | ord_end grm_ptns grm_prd grm_act grm_rule_act_seq {
     match $5 with
-    | Some e -> Grm.Act_Seq($4,$1,$2,e)
-    | None -> Grm.Act_End($4,$1,$2) }
+    | Some e -> Grm.Act_Seq($4,$1,$2,$3,e)
+    | None -> Grm.Act_End($4,$1,$2,$3) }
   ;
 grm_rule_act_seq:
   | { None }
@@ -163,13 +163,13 @@ grm_ord:
 grm_rule:
   | ord NAM CLN grm_ptns grm_prd grm_rule_seq {
     match $6 with
-    | Some e -> Grm.Cnc_Seq(Grm.CN $2,$1,$4,e)
-    | None -> Grm.Cnc_End(Grm.CN $2,$1,$4) }
+    | Some e -> Grm.Cnc_Seq(Grm.CN $2,$1,$4,$5,e)
+    | None -> Grm.Cnc_End(Grm.CN $2,$1,$4,$5) }
     ;
   | ord grm_ptns grm_prd grm_rule_seq {
     match $4 with
-    | Some e -> Grm.Cnc_Seq(Grm.CN_A,$1,$2,e)
-    | None -> Grm.Cnc_End(Grm.CN_A,$1,$2) }
+    | Some e -> Grm.Cnc_Seq(Grm.CN_A,$1,$2,$3,e)
+    | None -> Grm.Cnc_End(Grm.CN_A,$1,$2,$3) }
   ;
 grm_cn:
   | { Grm.CN_A }
@@ -182,13 +182,13 @@ grm_rule_seq:
 grm_rule_end:
   | ord_end grm_ptns grm_prd grm_rule_seq {
     match $4 with
-    | Some e -> Grm.Cnc_Seq(Grm.CN_A,$1,$2,e)
-    | None -> Grm.Cnc_End(Grm.CN_A,$1,$2) }
+    | Some e -> Grm.Cnc_Seq(Grm.CN_A,$1,$2,$3,e)
+    | None -> Grm.Cnc_End(Grm.CN_A,$1,$2,$3) }
     ;
   | ord_end NAM CLN grm_ptns grm_prd grm_rule_seq {
     match $6 with
-    | Some e -> Grm.Cnc_Seq(Grm.CN $2,$1,$4,e)
-    | None -> Grm.Cnc_End(Grm.CN $2,$1,$4) }
+    | Some e -> Grm.Cnc_Seq(Grm.CN $2,$1,$4,$5,e)
+    | None -> Grm.Cnc_End(Grm.CN $2,$1,$4,$5) }
   ;
 ord:
   | COPRD { Grm.Lex }
@@ -219,7 +219,7 @@ grm_atom:
   ;
 grm_prd:
   | { None }
-  | prd_flg grm_ptns { Some ($1,$2) }
+  | CUT grm_ptns { Some $2 }
   ;
 prd_flg:
   | SPL { Peg.And }

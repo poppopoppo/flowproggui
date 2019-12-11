@@ -18,7 +18,6 @@
 	##_rep_movsb { x1 s0 x2 sx x3 } ⊢ { x1 s0 x2 sx x3 } 
 	##_emt_q sx  ⊢ sx
 	∎ {} 
-[#
 § f0 x 
 	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 } . 
 		∎ {}
@@ -26,8 +25,7 @@
 		∎ {}
 	∐. x ⊢ _nil◂{} . 
 		∎ {}
-#]
-[#
+\[
 § @.s8_of_r64_lst_i { i rl }  
 	∐ rl ⊢ _cns◂{ ri rl_tl } . 
 		_mov_x i ⊢ { i i0 } 
@@ -38,5 +36,5 @@
 	∐. rl ⊢ _nil◂{} . 
 		_mlc_s8 i ⊢ { i s0 }
 		∎ s0 
-#]
+\]
 ∎∎

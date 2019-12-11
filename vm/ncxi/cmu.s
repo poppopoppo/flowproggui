@@ -868,8 +868,9 @@ pp0_opq:
   push rax
   push rsi
   call pp_opq
-  pop rdi
+  pop rsi
   xor rax,rax
+  mov rdi,fmt_s
   mov QWORD [rsp_tmp],rsp
   and rsp,~0xf
   call printf
