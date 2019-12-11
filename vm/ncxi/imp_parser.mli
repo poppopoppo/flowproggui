@@ -107,6 +107,7 @@ type token =
   | DOT
   | DEQ
   | DEF
+  | CUT
   | CST
   | COPRD_PTN_END
   | COPRD_PTN

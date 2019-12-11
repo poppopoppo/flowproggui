@@ -1,0 +1,98 @@
+¶ cmt_t 
+	∐ cmt_c : _r64
+	∐ cmt_s : _r64 
+§§+s8 
+	@.line 
+		∐ "\n" ⊢ { {} } 
+				» 1r _ ⊢ l 
+				_some l ⊢ a 
+				∎ a 
+			∐. _byt line ⊢ { c l } 
+				_inc l ⊢ l 
+				_some l ⊢ a 
+				∎ a 
+		@.line_spc 
+			∐ " " ⊢ { {} } 
+				» 1r _ ⊢ l 
+				_some l ⊢ a 
+				∎ a 
+			∐ "\t" ⊢ { {} } 
+				» 1r _ ⊢ l 
+				_some l ⊢ a 
+				∎ a 
+			∐. ⊢ { } 
+				» 0r _ ⊢ l 
+				_some l ⊢ a 
+				∎ a  
+		@.lines
+			∐ line_spc "/#" line_spc "\n" cmt_lines lines ⊢ { l0 {} l1 {} l2 { l3 r } } 
+				» 3r _ ⊢ l 
+				_add { l l0 } ⊢ { l l0 } 
+				_add { l l1 } ⊢ { l l1 } 
+				_add { l l2 } ⊢ { l l2 } 
+				_add { l3 l } ⊢ { l3 l } 
+				cmt_c l ⊢ hd 
+				_cns { hd r } ⊢ r 
+				_some { l3 r } ⊢ a 
+				∎ a
+			∐ line_cmt lines ⊢ { l0 { l1 r } }
+				_add { l1 l0 } ⊢ { l1 l0 } 
+				_cmt_c l0 ⊢ hd 
+				_cns { hd r } ⊢ r 
+				_some { l1 r } ⊢ a
+				∎ a 
+			∐. line lines ⊢ { l0 { l1 r }
+				_add { l1 l0 } ⊢ { l1 l0 } 
+				∐ r ⊢ _cns◂{ hd0 tl0 }; hd0 ⊢ cmt_s◂ls . 
+					_add { ls l0 } ⊢ { ls l0 } 
+					cmt_s ls ⊢ hd0 
+					_cns { hd0 tl0 } ⊢ r 
+					_some { l1 r } ⊢ a 
+					∎ a 
+				∐. .
+					cmt_s l0 ⊢ hd
+					_cns { hd r } ⊢ r 
+					_some { l1 r } ⊢ a 
+					∎ a
+		@.cmt_lines 
+			∐ line_spc "#/" line_spc "\n" ⊢ { l0 {} l1 {} } 
+				_add { l0 l1 } ⊢ { l0 l1 } 
+				_some l0 ⊢ a 
+				∎ a 
+			∐ line_spc "/#" line_spc "\n" cmt_lines cmt_lines ⊢ { l0 {} l1 {} l2 l3 } 
+				_add { l0 l1 } ⊢ { l0 l1 } 
+				_add { l0 l2 } ⊢ { l0 l2 } 
+				_add { l0 l3 } ⊢ { l0 l3 } 
+				_some l0 ⊢ a 
+				∎ a 
+			∐. line_spc "##" line cmt_lines ⊢ { l0 {} l1 l2 } 
+				_add { l0 l1 } ⊢ { l0 l1 } 
+				_add { l0 l2 } ⊢ { l0 l2 } 
+				_some l0 ⊢ a 
+	§ @.rmv_cmt_lp { s0 o0 s1 o1 l } 
+		∐ l ⊢ _cns◂{ hd tl } .
+			∐ hd ⊢ cmt_s◂%n . 
+				_mov_x n ⊢ { n n0 } 
+				_rep_movsb { n0 s0 o0 s1 o1 } ⊢ { n0 s0 o0 s1 o1 } 
+				rmv_cmt_lp { s0 o0 s1 o1 tl } ⊢ { s0 s1 }
+				∎ { s0 s1 } 
+			∐. hd ⊢ cmt_c◂%n . 
+				_add { o0 n } ⊢ { o0 n } 
+				rmv_cmt_lp { s0 o0 s1 o1 tl } ⊢ { s0 s1 } 
+				∎ { s0 s1 } 
+		∐. . 
+			∎ { s0 s1 }
+	
+	§ rmv_cmt s0 
+		» 0r _ ⊢ o0 
+		cmt.prs { s0 o0 } ⊢ { s0 o1 a } 
+		∐ a ⊢ _some◂{ n l } . 
+			_mlc_s8 n ⊢ { n s1 } 
+			» 0r _ ⊢ o2 
+			» 0r _ ⊢ o3 
+			rmv_cmt_lp { s0 o2 s1 o3 l } ⊢ { s0 s1 } 
+			_some s1 ⊢ r 
+			∎ { s0 r }  
+		∐. . 
+			_none {} ⊢ r 
+			∎ { s0 r } 	
