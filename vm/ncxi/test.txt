@@ -738,3 +738,10 @@ ramification
     e2
     ∐ e0 !| _fail
     ∐.
+
+comment
+  ¡¡
+
+  0x' 1x' 2x'     3d' 4d' 5s' 6p' 7b'
+
+  0x02'    0b4' 0d'
