@@ -155,10 +155,81 @@
 		∐ mdl_n : { _s8 name } 
 		∐ fst_n : _s8 		
 	¶ 
-		@.mdl = _lst◂mdl_etr 
-		@.mdl_etr 
-			∐ mdl_def : { _s8 _lst◂mdl_etr } 
-			∐ mdl_ln : name
+		@.file = _lst◂glb_etr 
+		@.glb_etr
+			∐ mdl_def : { _s8 _lst◂glb_etr } 
+			∐ mdl_ln : { _s8 name }
+			∐ grm_def : _lst◂{ _s8 grm_def }
+			∐ lc_def : { _s8 reg_ptn lc_code } 
+			∐ lc_qlq_def : _lst◂{ _s8 reg_ptn lc_code } 
+			∐ cst_ln : { _s8 cst }
+			∐ cst_def : { _s8 lc_code } 
+			∐ dt_def : { _s8 _lst◂{ _s8 type } }
+			∐ dt_qlq_def : _lst◂{ _s8 _lst◂{ _s8 type }} 
+			∐ dt_ln :  { _s8 name } 
+		@.grm_def
+			∐ grm_cnc : grm_cnc 
+			∐ grm_act : grm_act 
+		@.grm_cnc 
+			∐ grm_rle_seq : { _opn◂_s8 rle_flg grm_rle _opn◂grm_cnc grm_cnc }
+			∐ grm_rle_end : { _opn◂_s8 rle_flg grm_rle _opn◂grm_cnc }
+		@.grm_act  
+			∐ grm_rle_seq : { reg_ptn lc_code  rle_flg grm_rle _opn◂grm_cnc grm_cnc }
+			∐ grm_rle_end : { reg_ptn lc_code _opn◂_s8 rle_flg grm_rle _opn◂grm_cnc }
+		@.rle_flg 
+			∐ lex : {} 
+			∐ synt : {} 
+			∐ line : {} 
+		@.grm_rle	 
+			∐ grm_ptn_cut : grm_rle_cut  
+			∐ grm_ptn_seq : { grm_atm grm_rle }
+			∐ grm_ptn_end : {}
+		@.grm_rle_cut 
+			∐ grm_rle_cut_seq : { grm_ptn grm_rle_cut } 
+			∐ grm_rle_cut_end : {}  
+		@.grm_ptn 
+			∐ grm_lst : grm_atm 
+			∐ grm_atm : grm_atm 
+		@.grm_atm 
+			∐ grm_name : name 
+			∐ grm_s8 : _s8 
+		@.reg_ptn 
+			∐ rcd : _lst◂reg_ptn
+			∐ reg : _s8  
+		@.type 
+			∐ imp : { type type } 
+			∐ app : { type type } 
+			∐ type_name : _s8 
+			∐ type_var : _s8 
+		@.cst 
+			∐ r64 : _r64 
+			∐ s8 : _s8 
+			∐ cst_name : name
+		@.lc_code 
+			∐ seq : { op reg_ptn reg_ptn lc_code } 
+			∐ mtc : lc_mtc 
+			∐ ret : reg_ptn  
+		@.lc_mtc 
+			∐ mtc_seq : { _lst◂mtc_op mtc_etr lc_mtc } 
+			∐ mtc_end : mtc_etr 
+		@.mtc_etr 
+			∐ mtc_rmf : lc_mtc 
+			∐ mtc_code : lc_code
+		@.op 
+			∐ op_name : name 
+			∐ op_id : _r64 
+			∐ op_app : {} 
+			∐ op_exp_cst : cst 
+			∐ op_exp_s8 : { _r64 _lst◂op_exp_s8 }
+		@.op_exp_s8 
+			∐ exp_s8_s8 : _s8 
+			∐ exp_s8_cst : name 
+			∐ exp_s8_idx : { exp_s8_t r64 } 
+		@.exp_s8_t 
+			∐ exp_fmt_s : {} 
+			∐ exp_fmt_d : {} 
+			∐ exp_fmt_x : {} 
+			∐ exp_fmt_p : {} 		
 	∎∎
 	§§ syntax 
 		§§ cmt 
@@ -302,8 +373,7 @@
 			
 	§§+s8 
 		@.nl 
-			∐.# "\n" ⟦"\n"⟧
-			
+			∐.# "\n" ⟦"\n"⟧			
 	§§+s8 
 		@.file 
 			∐.* ⟦glb_etr⟧
@@ -337,8 +407,8 @@
 			∐* "$" !| reg_ptn "⊢" reg_ptn
 			∐* "◂" !| reg_ptn "⊢" reg_ptn 
 			∐* "»" !| ; 
-				∐* "_^" !|; 
-					∐* "_" "⊢" reg ⟦s8_ptn⟧ "//"
+				∐* "_^" !| ; 
+					∐* "_" !| "⊢" reg ⟦s8_ptn⟧ "//"
 					∐.* reg ⟦reg_tl⟧ "⊢" reg ⟦reg_tl⟧ ⟦s8_ptn⟧ "//"  
 				∐.* cst "_" "⊢" reg_ptn 
 			∐.* name reg_ptn "⊢" reg_ptn
@@ -355,8 +425,8 @@
 		@.reg_tl 
 			∐. "," reg
 		@.lc_mtc 
-			∐* "∐" mtc_line dot_nl lc_code lc_mtc 
-			∐.* "∐." mtc_line dot_nl lc_code 
+			∐* "∐." !| mtc_line dot_nl lc_code 
+			∐.* "∐" mtc_line dot_nl lc_code lc_mtc 
 		@.dot_nl 
 			∐.# "." "\n"  
 		@.mtc_line
@@ -441,9 +511,7 @@
 			`§§ In0 
 			` § C1 « 
 			`		∎ {} 
-			`∎∎ 
-			
-			
+			`∎∎ 		
 			// 
 		» 0r _ ⊢ x0 
 		syntax.file.prs { s0 x0 } ⊢ { s0 x0 a0 } 
