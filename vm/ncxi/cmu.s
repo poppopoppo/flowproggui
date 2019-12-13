@@ -22,7 +22,9 @@ extern sscanf
 extern strtol
 extern strtoul
 extern isspace
+extern strlen
 section .bss
+  args: resq 1
   SFLS_TOP: resb 8*1
   SFLS_BTM: resb 8*1
   SFLS_VCT: resb 8*16*SFLS_MAX
@@ -199,6 +201,24 @@ SFLS_end:
   mov QWORD [SFLS_BTM],rdx
   ret
 
+mk_s8: ; rdi=C-string
+  push rdi
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  xor rax,rax
+  call strlen
+  mov rsp,QWORD [rsp_tmp]
+  push rax
+  mov rdi,rax
+  call mlc_s8
+  pop rcx
+  pop rsi
+  mov rdi,rax
+  add rdi,8
+  cld
+  rep movsb
+  ret
+
 dlt_gbg:
   bt rdi,0
   jnc dlt_gbg_blk
@@ -368,57 +388,48 @@ dcp:
   jc dcp_r64
   bt rdi,0
   jnc dcp_blk
-  mov rsi,0x00ff_ffff_ffff_fffe
-  mov rdx,0xff00_0000_0000_0001
-  mov rcx,rdi
-  and rdi,rsi
-  and rcx,rdx
-  push rcx
-  jmp dcp_agl
+  mov rsi,rdi
+  mov rdx,0x00ff_ffff_ffff_fffe
+  mov rcx,0xff00_0000_0000_0001
+  and rdi,rdx
+  and rsi,rcx
+  push rsi
+  call dcp_blk
+  pop rdi
+  or rax,rdi
+  ret
 dcp_blk:
-  push QWORD 0
-dcp_agl:
   bt QWORD [rdi],16
-  jc rpc_opq
-  bt QWORD [rdi],17
-  jc rpc_ln
-  mov rsi,[rdi]
-  shr rsi,32
-  and rsi,0xffff
-  push rdi
-  push rsi
-  mov rdi,rsi
-  call mlc
-  pop rsi
-  pop rdi
-  mov r11,[rdi]
-  mov [rax],r11
-  mov r10,0
+  jc rpc_s8
+  mov rsi,rbx
+  mov rbx,[rbx]
+  mov rdx,[rdi]
+  mov [rsi],rdx
+  mov r8,[rdi]
+  shr rdx,32
+  mov r9,0
 dcp_blk_lp:
-  cmp r10,rsi
-  je dcp_end
-  rcr r11,1
-  push r11
-  push r10
-  push rax
-  push rsi
+  cmp rdx,r9
+  jz dcp_end
+  rcr r8,1
   push rdi
-  mov rdi,[rdi+8*r10+8*1]
+  push r8
+  push rdx
+  push rsi
+  push r9
+  mov rdi,[rdi+8+8*r9]
   call dcp
-  mov r9,rax
-  pop rax
-  mov [rax+8*r10+8*1],r9
-  pop rdi
+  pop r9
   pop rsi
-  pop rax
-  pop r10
-  pop r11
-  add r10,1
+  mov [rsi+8+8*r9],rax
+  pop rdx
+  pop r8
+  pop rdi
+  add r9,1
   jmp dcp_blk_lp
 dcp_end:
-  pop rsi
-  or rax,rsi
   clc
+  mov rax,rsi
   ret
 dcp_r64:
   mov rax,rdi
@@ -816,7 +827,6 @@ pp0_r_p_ref:
   mov r10,[rdi]
   mov r9,r10
   shr r9,32
-  and r9,0xffff
   add rdi,8
 pp0_r_p_lp:
   cmp r9,0
@@ -1363,6 +1373,7 @@ in0_init:
   mov rax,0
   ;call printf
   ret
+
 rpc_s8: ; rdi=src
   push rcx
   mov rsi,[rdi]

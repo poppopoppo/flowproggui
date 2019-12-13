@@ -745,3 +745,24 @@ comment
   0x' 1x' 2x'     3d' 4d' 5s' 6p' 7b'
 
   0x02'    0b4' 0d'
+
+¶ _act◂a',b'
+  ∐ _ret : a'
+  ∐ _nxt : b'
+  ∐ _cut : {}
+
+¶ _sum◂a',b'
+  ∐ _in_l : a'
+  ∐ _in_r : b'
+
+ramified semantic action
+  ∐ .. ; ⊢ { r0 r1 }
+    ..
+    ∎ a
+    ∐ .. ⊢ r1
+      op { r1 _st } ⊢ ..
+      _in_l a ⊢ b
+      ∎ b
+    ∐.
+
+    %_s
