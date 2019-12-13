@@ -165,7 +165,7 @@
 			∐ cst_ln : { _s8 cst }
 			∐ cst_def : { _s8 lc_code } 
 			∐ dt_def : { _s8 _lst◂{ _s8 type } }
-			∐ dt_qlq_def : _lst◂{ _s8 _lst◂{ _s8 type }} 
+			∐ dt_qlq_def : _lst◂{ _s8 _lst◂{ _s8 type } } 
 			∐ dt_ln :  { _s8 name } 
 		@.grm_def
 			∐ grm_cnc : grm_cnc 
@@ -339,7 +339,6 @@
 		» 0r _ ⊢ o0 
 		lines.prs { s0 o0 } ⊢ { s0 o1 a } 
 		∐ a ⊢ _some◂{ n l } . 
-			_emt { n l } ⊢ { n l } 
 			_mlc_s8 n ⊢ { n s1 } 
 			» 0r _ ⊢ o2 
 			» 0r _ ⊢ o3 
@@ -364,7 +363,7 @@
 			`## huugugugu						
 			// 
 		cmt.rmv_cmt s0 ⊢ { s0 s1 } 
-		_emt { s0 s1 }  ⊢ { s0 s1 }   
+		##_emt { s0 s1 }  ⊢ { s0 s1 }   
 		∎ {}	
 	§§+s8 
 		@.name 
@@ -532,17 +531,29 @@
 			`∎∎ 		
 			// 
 		» 0r _ ⊢ x0 
-		syntax.file.prs { s0 x0 } ⊢ { s0 x0 a0 } 
-		_emt { s0 x0 a0 } ⊢ { s0 x0 a0 } 
-		» "OpADL.mdls" _ ⊢ fn0 
-		_in_fn fn0 ⊢ { fn0 fn0_c }   
-		_emt { fn0 fn0_c } ⊢ { fn0 fn0_c } 
-		syntax.cmt.rmv_cmt fn0_c ⊢ { fn0_c fn0_c0 }
-		∐ fn0_c0 ⊢ _some◂fn0_c0 . 
-			» 0r _ ⊢ x1 
-			syntax.file.prs { fn0_c0 x1 } ⊢ { fn0_c0 x1 a0 } 
-			_emt { fn0_c0 x1 a0 } ⊢ { fn0_c0 x1 a0 }  
+		» _args _ ⊢ ags 
+		∐ ags ⊢ _cns◂{ pn tl0 }; tl0 ⊢ _cns◂{ fn0 tl1 }; tl1 ⊢ _nil◂{} . 
+			_in_fn fn0 ⊢ { fn0 fn0_c }   
+			syntax.cmt.rmv_cmt fn0_c ⊢ { fn0_c fn0_c0 }
+			∐ fn0_c0 ⊢ _some◂fn0_c0 . 
+				» 0r _ ⊢ x1 
+				syntax.file.prs { fn0_c0 x1 } ⊢ { fn0_c0 x1 a0 } 
+				_emt fn0_c0 ⊢ fn0_c0  
+				∎ {}
+			∐. . 		
 			∎ {}
-		∐. . 		
-			∎ {} 
+		∐. . 
+			syntax.file.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+			##_emt { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+			» "OpADL.mdls" _ ⊢ fn0 
+			_in_fn fn0 ⊢ { fn0 fn0_c }   
+			_emt { fn0 fn0_c } ⊢ { fn0 fn0_c } 
+			syntax.cmt.rmv_cmt fn0_c ⊢ { fn0_c fn0_c0 }
+			∐ fn0_c0 ⊢ _some◂fn0_c0 . 
+				» 0r _ ⊢ x1 
+				syntax.file.prs { fn0_c0 x1 } ⊢ { fn0_c0 x1 a0 } 
+				_emt { fn0_c0 x1 a0 } ⊢ { fn0_c0 x1 a0 }  
+				∎ {}
+			∐. . 		
+			∎ {}
 ∎∎

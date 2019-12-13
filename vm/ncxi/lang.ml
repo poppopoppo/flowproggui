@@ -4060,7 +4060,8 @@ and mov_rl_ptn m s0 i1 p0 =
           "\tmov rdi,0x0000_0001_0002_fffe\n"^
           "\tor rdi,rsi\n"^
           "\tmov QWORD [rax],rdi\n"^
-          "\tmov QWORD [rax+8*1],"^(emt_reg_x86 i1)^"\n"^
+          "\tmov rdi,"^(emt_reg_x86 i1)^"\n"^
+          "\tmov QWORD [rax+8*1],rdi\n"^
           "\tmov "^(emt_reg_x86 i1)^",rax\n"^
           "\tbtr r12,"^(string_of_int i1)^"\n"^
           l1^":\n"^
@@ -4108,7 +4109,8 @@ and mov_rl_ptn m s0 i1 p0 =
           "\tmov rdi,0x0000_0001_0002_fffe\n"^
           "\tor rdi,rsi\n"^
           "\tmov QWORD [rax],rdi\n"^
-          "\tmov QWORD [rax+8*1],"^(emt_reg_x86 i1)^"\n"^
+          "\tmov rdi,"^(emt_reg_x86 i1)^"\n"^
+          "\tmov QWORD [rax+8*1],rdi\n"^
           "\tmov "^(emt_reg_x86 i1)^",rax\n"^
           "\tbtr r12,"^(string_of_int i1)^"\n"^
           l1^":\n"^
@@ -4137,7 +4139,8 @@ and mov_rl_ptn m s0 i1 p0 =
         "\tmov rdi,0x0000_0001_0002_fffe\n"^
         "\tor rdi,rsi\n"^
         "\tmov QWORD [rax],rdi\n"^
-        "\tmov QWORD [rax+8*1],"^(emt_reg_x86 i1)^"\n"^
+        "\tmov rdi,"^(emt_reg_x86 i1)^"\n"^
+        "\tmov QWORD [rax+8*1],rdi\n"^
         "\tmov "^(emt_reg_x86 i1)^",rax\n"^
         "\tbtr r12,"^(string_of_int i1)^"\n"^
         l1^":\n"^
