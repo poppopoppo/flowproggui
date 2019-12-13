@@ -7,7 +7,9 @@
 § C1 « 
 	» "-27686gg" _ ⊢ s0 
 	» _args _  ⊢ a 
-	_emt a ⊢ a 
+	» _args _ ⊢ a0 
+	» _args _ ⊢ a1 
+	_emt { a a0 a1 } ⊢ { a a0 a1 } 
 	##» 6r _ ⊢ x0 
 	##» 4r _ ⊢ x1 
 	##» 0r _ ⊢ x2 
