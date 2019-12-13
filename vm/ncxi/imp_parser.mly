@@ -139,16 +139,20 @@ grm_ord_act:
   | grm_rule_act grm_ord_act { $1::$2 }
   ;
 grm_rule_act:
-  | ord grm_ptns grm_prd grm_act grm_rule_act_seq {
-    match $5 with
-    | Some e -> Grm.Act_Seq($4,$1,$2,$3,e)
-    | None -> Grm.Act_End($4,$1,$2,$3) }
+  | ord grm_ptns grm_prd SCL SRC reg_ptn_src ir_lines grm_ord_act {
+    Grm.Act_Seq(($6,ref $7),$1,$2,$3,$8)
+  }
+  | ord grm_ptns grm_prd SRC reg_ptn_src ir_lines {
+    Grm.Act_End(($5,ref $6),$1,$2,$3)
+   }
   ;
 grm_rule_act_end:
-  | ord_end grm_ptns grm_prd grm_act grm_rule_act_seq {
-    match $5 with
-    | Some e -> Grm.Act_Seq($4,$1,$2,$3,e)
-    | None -> Grm.Act_End($4,$1,$2,$3) }
+  | ord_end grm_ptns grm_prd SCL SRC reg_ptn_src ir_lines grm_ord_act {
+    Grm.Act_Seq(($6,ref $7),$1,$2,$3,$8)
+  }
+  | ord_end grm_ptns grm_prd SRC reg_ptn_src ir_lines {
+    Grm.Act_End(($5,ref $6),$1,$2,$3)
+ }
   ;
 grm_rule_act_seq:
   | { None }

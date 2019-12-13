@@ -31,10 +31,6 @@ rule token = parse
     | "0rb" { R2(false) }
     | "1rb" { R2(true) }
     | "§"  { LCE }
-    | "§=" { LCE_EQ }
-    | "§~" { LCE_EXEC }
-    | "##" { ENV }
-    | "§+0" { LCE_IR  }
     | "§§"  { MDL }
     | "§§." { MDL_END }
     | "¶" { DTA }
