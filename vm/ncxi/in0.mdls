@@ -29,10 +29,36 @@
 		∎ {}
 	∐. x ⊢ _nil◂{} . 
 		∎ {}
+§ fx x 
+	» 0r _ ⊢ x 
+	» 1r _ ⊢ x 
+	_nil {} ⊢ y
+	_some x ⊢ y 
+	∎ x
+	\[
 §§+s8 
 	@.g0 
-		∐ "A" !| g0
-		∐. "C" 
+		∐ "A" !| g0 ⊢ { {} x } 
+			» 0r _ ⊢ x 
+			∎ x 
+		∐. "C" ⊢ { {} } 
+			» 1r _ ⊢ x 
+			∎ x 
+			\]
+¶ @.reg_ptn ◂ a' 
+	∐ rcd : _lst◂(reg_ptn◂a') 
+	∐ atm : a' 
+¶ s8_ptn = reg_ptn◂_s8 
+¶ r64_ptn = reg_ptn◂_r64
+§ A0 « 
+	» "A" _ ⊢ s0 
+	» 1r _ ⊢ x0 
+	_nil {} ⊢ l0 
+	##rcd l0 ⊢ r0
+	atm x0 ⊢ lx 
+	atm s0 ⊢ ls 
+	∎ {}
+
 § C0 « 
 	» "AC" _ ⊢ s0 
 	» 0r _ ⊢ x0 
