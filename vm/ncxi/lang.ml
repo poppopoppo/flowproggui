@@ -101,6 +101,7 @@ module Types = struct
     let zn = sgn ()
     let lst = sgn ()
     let opn = sgn ()
+    let sum = sgn ()
     let sgn_p = sgn ()
     let stg = sgn ()
     let out_p = sgn ()
@@ -134,18 +135,28 @@ module Types = struct
       | Axm p when p=Axm.fd -> "_fd"
       | Axm p -> "_p"^(Sgn.print p)
       | Var v ->
+        Util.pnt true "P t1\n";
         let i = print_v v_vct v in
         ( match !v with
           | WC _-> "_"
           | V (_,l) -> "v"^(string_of_int i)^"''("^(string_of_int l)^")"
           | Q (_,l) -> "t"^(string_of_int i)^"'("^(string_of_int l)^")"
-          | Ln y -> print y
+          | Ln y ->
+            Util.pnt true "P t2\n";
+            print y
           | N n -> pnt_name n
-          | N_Ln (n,y) -> (pnt_name n)^"(="^(print y)^")" )
-      | App(y0,y1) -> "("^(print y0)^")◂("^(print y1)^")"
-      | Imp(y0,y1) -> (print y0)^"→"^(print y1)
+          | N_Ln (n,y) ->
+            Util.pnt true "P t3\n";
+            (pnt_name n)^"(="^(print y)^")" )
+      | App(y0,y1) ->
+        Util.pnt true "P t4\n";
+        "("^(print y0)^")◂("^(print y1)^")"
+      | Imp(y0,y1) ->
+        Util.pnt true "P t5\n";
+        (print y0)^"→"^(print y1)
       | Rcd r -> "{ "^(print_rcd r)^"}"
       | Abs(v,y) ->
+        Util.pnt true "P t0\n";
         let i =fst @@ (BatList.findi (fun _ vi -> vi==v) !v_vct)in
         "∀["^(string_of_int i)^"]."^(print y)
     )
@@ -492,6 +503,7 @@ module Ast = struct
     let _args = sgn ()
     let _in_l = sgn ()
     let _in_r = sgn ()
+    let _ext = sgn ()
     let _mlc_s8 = sgn ()
     let _lds = sgn ()
     let _sts = sgn ()
@@ -1184,8 +1196,10 @@ and rcd_occurs (v1:v_rcd ref) (l1:t_rcd) =
         | N _ -> err "occurs n2" )
     | Cns(_,t2) -> rcd_occurs v1 t2)
 let rec unify ru t0 t1 =
+  Util.pnt true "enter unify:";
   let se = (Types.print t0)^" ~ "^(Types.print t1) in
   Util.Log.add ("enter unify:"^se^"\n");
+  Util.pnt true ("enter unify:"^se^"\n");
   if t0==t1 then ()
   else
     ( match t0,t1 with
@@ -1446,11 +1460,17 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
                 ()
               | IR_Id_Ax _ -> err "slv id 0" )
           | IR_Glb_Call(n,x,y) ->
+            Util.pnt true "E0\n";
             let pf = slv_ns0 ns n in
+            Util.pnt true "E1\n";
             let tf = inst (l+1) (Var( try get_ns gns pf with _ -> err "slv_exp_atm 6")) in
+            Util.pnt true "E2\n";
             let tx = inst_ptn gns (l+1) x in
+            Util.pnt true "E3\n";
             let ty = inst_ptn gns (l+1) y in
+            Util.pnt true "E4\n";
             unify [] tf (Imp(tx,ty));
+            Util.pnt true "E5\n";
             gen (ref []) l ty
           | IR_Out (_,_) -> err "slv x1"
           | IR_Glb_Out (o,x) ->
@@ -1733,11 +1753,13 @@ and csm_ptn_rv r rv = Rcd_Ptn.map (fun r0 -> csm_rv r0 rv) r
 and crt_rv dl r rv =
   ( match !r with
     | R_N n ->
-      let p = sgn () in
-      let r0 = R_Ax(R_A p) in
-      Hashtbl.add rv n p;
-      r := r0;
-      r
+      if Hashtbl.mem rv n then err @@ "crt_rv 0:"^(pnt_rv rv)^",%"^n^"is exist"
+      else
+        let p = sgn () in
+        let r0 = R_Ax(R_A p) in
+        Hashtbl.add rv n p;
+        r := r0;
+        r
     | R_Ax(R_WC p) ->
       dl := p::!dl;
       r
@@ -1748,26 +1770,25 @@ and crt_ptn_rv r rv =
   (!dl,r)
 and crt_mtc_ptn_rv (es,_) rv  =
   Util.Log.add @@ "enter crt_mtc_ptn_rv:"^(pnt_rv rv);
-  let rv0 = Hashtbl.copy rv in
   let (dl,es) =
     List.fold_left
       (fun (dl,es) (v0,e) ->
          ( match !e with
            | Eq_Agl(_,_,_,_) -> err "crt_mtc_ptn_rv 0"
            | Eq_Agl_N(_,r) ->
-             let v1 = csm_rv v0 rv0 in
-             let (dl1,_) = crt_ptn_rv r rv0 in
+             let v1 = csm_rv v0 rv in
+             let (dl1,_) = crt_ptn_rv r rv in
              (dl1@dl,es@[(v1,e)])
            | P_Cst _ ->
-             let rv_t = Hashtbl.copy rv0 in
+             let rv_t = Hashtbl.copy rv in
              let v1 = csm_rv v0 rv_t in
              (dl,es@[(v1,e)]) ))
       ([],[]) es in
   let d =
     Hashtbl.fold
-      ( fun n r d ->
-          Hashtbl.add rv n r; (r::d))
-      rv0 [] in
+      ( fun _ r d ->
+          (r::d))
+      rv [] in
   (es,Some (dl,d))
 and slv_r_etr (r0,p0) =
   let rv = Hashtbl.create 10 in
@@ -2297,11 +2318,11 @@ and emt_rle gns ns l =
             else "" ) in
       lp [] 0 l
     | `V (_,l) ->
-      let rec lp i l =
+      let rec lp lb_p ps i l =
         ( match l with
           | e::tl ->
             ( match e with
-              | Grm.Act_Seq _ -> err "`V 0"
+              | Grm.Act_Seq _ -> err "emt_prs `V seq"
               | Grm.Act_End((re,pi),f,r,rc) ->
                 ( match rc with
                   | None ->
@@ -2357,14 +2378,93 @@ and emt_rle gns ns l =
                       "\tjmp "^lb1_0^"\n"^
                       lb1_1^":\n"^
                       "\tadd rsp,8\n"^
-                      "\tret\n"^
+                      ( match lb_p with
+                        | Some lb_p -> "\tjmp "^lb_p^"\n"
+                        | None -> "\tret\n" )^
                       lbn^":\n"^
                       "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
                       "\tpop r14\n"^
                       lb1_0^":\n" in
                     e1^
-                    (lp (i+1) tl)
-                  | Some _ -> "" )
+                    (lp lb_p ps (i+1) tl)
+                  | Some rc ->
+                    let rn = List.length r in
+                    let rnc = List.length rc in
+                    let iv0 = Hashtbl.create 10 in
+                    let i_e_s = RP.R(Array.init (rn+rnc) (fun i -> RP.A(R.Idx i))) in
+                    let i0 = crt_ptn_iv gns (mk_idx_ptn re) iv0 in
+                    let i1 = RP.A(R.Agl(2,2,RP.A(R.Idx 3))) in
+                    let e_pi = emt_ir i1 gns ns iv0 !pi in
+                    let lb1 = lb () in
+                    let lb1_0 = lb () in
+                    let lb1_1 = lb () in
+                    let s_e_s = RSet.ini () in
+                    let rec e_s i =
+                      if i<0 then ""
+                      else
+                        ( s_e_s.(i)<-true;
+                          "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"]\n"^
+                          "\tbt rax,0\n"^
+                          (cf_set i)^
+                          "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"+8*1]\n"^
+                          "\tmov "^(emt_reg_x86 i)^",rax\n"^
+                          (e_s (i-1)) ) in
+                    let lbn = lb () in
+                    let lbnc = lb () in
+                    let e0 =
+                      "\tmov r10,QWORD [r13]\n"^
+                      "\tshr r10,32\n"^
+                      "\tpush "^(emt_reg_x86 1)^"\n"^
+                      "\tsub rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                      (emt_ptn_grm lbn i ns f r 0)^
+                      (emt_ptn_grm lbnc i ns f rc rn)^
+                      "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+                      "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+                      (e_s ((rn+rnc)-1))^
+                      "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                      "\tpush rdi\n"^
+                      "\tpush rsi\n"^
+                      "\tpush "^lb1^"\n" in
+                    let e1 =
+                      e0^
+                      (emt_mov_ptn_to_ptn R.M_Dlt s_e_s i_e_s i0)^
+                      e_pi^
+                      lb1^":\n"^
+                      "\tpop "^(emt_reg_x86 1)^"\n"^
+                      "\tpop "^(emt_reg_x86 0)^"\n"^
+                      "\tbts r12,1\n"^
+                      "\tbtr r12,0\n"^
+                      "\tcmp "^(emt_reg_x86 2)^",0\n"^
+                      "\tjz "^lb1_1^"\n"^
+                      "\tpop "^(emt_reg_x86 1)^"\n"^
+                      "\tmov rdi,"^(emt_reg_x86 3)^"\n"^
+                      "\tmov QWORD [rdi],rbx\n"^
+                      "\tmov rbx,rdi\n"^
+                      "\tjmp "^lb1_0^"\n"^
+                      lb1_1^":\n"^
+                      "\tadd rsp,8\n"^
+                      ( match lb_p with
+                        | Some lb_p -> "\tjmp "^lb_p^"\n"
+                        | None -> "\tret\n" )^
+                      lbnc^":\n"^
+                      "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                      "\tpop "^(emt_reg_x86 1)^"\n"^
+                      (prs_dec_i_cut ps)^
+                      "\tmov rax,0x0000_0000_0000_ffff\n"^
+                      "\tmov rdi,rbx\n"^
+                      "\tmov rbx,QWORD [rbx]\n"^
+                      "\tmov QWORD [rdi],rax\n"^
+                      "\tmov "^(emt_reg_x86 3)^",rdi\n"^
+                      "\tmov "^(emt_reg_x86 2)^",1\n"^
+                      "\tbtr r12,3\n"^
+                      "\tbts r12,2\n"^
+                      "\tret\n"^
+                      lbn^":\n"^
+                      "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
+                      "\tpop "^(emt_reg_x86 1)^"\n"^
+                      lb1_0^":\n" in
+                    e1^
+                    (lp lb_p ps (i+1) tl)                )
             )
           | [] ->
             "\tmov rax,0x0000_0000_0000_ffff\n"^
@@ -2376,7 +2476,7 @@ and emt_rle gns ns l =
             "\tbtr r12,3\n"^
             "\tbts r12,2\n"^
             "\tret\n" ) in
-      lp 0 l )
+      lp None [] 0 l )
 and emt_ptn_grm lbn i ns f r j =
   ( match r with
     | p::tl ->
@@ -2843,7 +2943,7 @@ and emt_m gns (ns:ns_v ref) ld el =
               | Ast.Def_EqT (n,a,y) ->
                 let (a0,_) = List.split a in
                 let ya = mk_vars (ref []) !ns `Abs (ref a) y in
-                let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
+                let yt = List.fold_left ( fun yt (_,v) -> Abs(v,yt)) ya a in
                 !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;
                 ("","","",tbs^"¶ "^n^(pnt_args `Hd a0)^" = "^(Types.print_t ya)^"\n")
               | _ -> err "slv_flows 1" )
@@ -2860,7 +2960,10 @@ and emt_m gns (ns:ns_v ref) ld el =
                         !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;
                         `CP(n,a,ds,yt)
                       | Ast.Def_Abs (n,a) -> (`Abs (n,a))
-                      | Ast.Def_EqT (n,a,x) -> (`EqT (n,a,x))
+                      | Ast.Def_EqT (n,a,y) ->
+                        let v = newvar () in
+                        !ns.ns_t <- (n,v)::!ns.ns_t;
+                        (`EqT (n,a,y,v))
                       | _ -> err "slv_flows 1" )
                 ) q in
             let (es,pp) =
@@ -2892,7 +2995,12 @@ and emt_m gns (ns:ns_v ref) ld el =
                       | `Abs (n,a) ->
                         let (a,_) = List.split a in
                         ("",pp^tbs^"\t@."^n^(pnt_args `Hd a)^"\n")
-                      | `EqT (_,_,_) -> ("",pp)
+                      | `EqT (n,a,y,v) ->
+                        let (_,_) = List.split a in
+                        let ya = mk_vars (ref []) !ns `Abs (ref a) y in
+                        let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
+                        v := (Ln yt);
+                        ("",pp^tbs^"\t@."^n^" = ..\n")
                       | _ -> err "slv_flows 1" )
                 )
                 ("","") dl in
@@ -3007,13 +3115,17 @@ and emt_m gns (ns:ns_v ref) ld el =
                         List.fold_left
                           ( fun rts e ->
                               ( match e with
-                                | Grm.Act_End((r0,p0),_,r,_) ->
+                                | Grm.Act_End((r0,p0),_,r,rc) ->
+                                  let r =
+                                    ( match rc with
+                                      | Some rc -> r@rc
+                                      | None -> r ) in
                                   let y = mk_var_grm !ns_g r in
                                   let (r0,p0) = slv_r_etr (r0,p0) in
                                   let y0 = inst_ptn gns 0 r0 in
                                   let _ = unify [] y y0 in
                                   let y1 = slv gns !ns 0 !p0 in
-                                  let _ = unify [] y1 (App(Axm Types.Axm.opn,Var t_v)) in
+                                  let _ = unify [] (inst 0 y1) (App(Axm Types.Axm.opn,Var t_v)) in
                                   rts @ [y]
                                 | _ -> err "`V 0" ) )
                           [] rs in
@@ -3581,6 +3693,18 @@ and init_prm () =
   gns.ns_e <- (Ast.Axm._cns,ref(Ctr(0,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._cns,v)::gns.ns;
 
+  !ns.ns_t <- ("_sum",ref(Ln(Axm Axm.sum)))::!ns.ns_t;
+  let q0 = newvar_q (-1) in
+  let q1 = newvar_q (-1) in
+  let v = ref(Ln(Imp(Var q0,App(App(Axm Axm.sum,Var q0),Var q1)))) in
+  !ns.ns_p <- ("_in_l",Ast.Axm._in_l)::!ns.ns_p;
+  gns.ns_e <- (Ast.Axm._in_l,ref(Ctr(0,2)))::gns.ns_e;
+  gns.ns <- (Ast.Axm._in_l,v)::gns.ns;
+  let v = ref(Ln(Imp(Var q1,App(App(Axm Axm.sum,Var q0),Var q1)))) in
+  !ns.ns_p <- ("_in_r",Ast.Axm._in_r)::!ns.ns_p;
+  gns.ns_e <- (Ast.Axm._in_r,ref(Ctr(1,2)))::gns.ns_e;
+  gns.ns <- (Ast.Axm._in_r,v)::gns.ns;
+
   let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64;Axm Axm.r64])))) in
   !ns.ns_p <- ("_setge",Ast.Axm._setge)::!ns.ns_p;
   gns.ns <- (Ast.Axm._setge,v)::gns.ns;
@@ -3655,9 +3779,10 @@ and args_init =
     mov [r13+16],r8
 "
 and emt_exe m =
+  Util.Log.f := Util.Log.On;
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
-  (*Util.Log.pnt ();*)
+  Util.Log.pnt ();
   (*let epf = get_ep !ns f in*)
   let ex =
     "%include \"cmu.s\"\n"^
@@ -3708,6 +3833,7 @@ and emt_cst_stg cs =
       let s_e = emt_bytes s in
       "\tcst_stg_"^(Sgn.print p)^": db "^s_e^(st mx)^"\n"^(emt_cst_stg tl) )
 and mov_r m s0 i1 i0 =
+  Util.pnt true @@ "enter mov_r:"^(RSet.pnt s0)^","^(string_of_int i1)^","^(string_of_int i0)^"\n";
   if i1<0&&s0.(i0)&&(not s0.(i1))&&m=R.M_Dlt then
     let l0 = lb () in
     ( s0.(i0)<-false;
@@ -3741,7 +3867,7 @@ and mov_r m s0 i1 i0 =
         "\tbts r12,"^(string_of_int i1)^"\n"^
         l1^":\n"
     )
-  else err "mov r 0"
+  else err @@ "mov r 0:"^(RSet.pnt s0)^","^(string_of_int i0)^","^(string_of_int i1)
 and push_iv iv =
   let s0 = rset_iv iv in
   let (_,n,e0,e1) =
@@ -3929,6 +4055,7 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
         let (lt,l0,e0) = lp_f0 lt l0 e0 in
         lp_0 lt l0 e0 )
   and lp_f0 lt l0 e0 =
+    Util.pnt true "lp_f0\n";
     ( match l0 with
       | (RP.A(R.Idx i0),i1)::tl when i0=i1 ->
         let e1 =
@@ -3964,6 +4091,7 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
         let (lt,l1,e0) = lp_f1 lt l1 e0 in
         lp_1 lt l1 e0 )
   and lp_f1 lt l1 e0 =
+    Util.pnt true "lp_f1\n";
     ( match l1 with
       | (i0,p1)::[] ->
         let s_p1 = RSet.ini () in
@@ -4000,13 +4128,14 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
         let s_p1 = RSet.ini () in
         let _ = rset_ptn s_p1 p1 in
         let s_a0 = RSet.and_v s0 s_p1 in
-        if RSet.is_zero s_a0 then
-          let (lt,l0,e1) = lp_f1 lt tl e0 in
-          (lt,(i0,p1)::l0,e1)
-        else
-          let e1 =
-            (mov_unrl_ptn m s0 p1 (subst lt i0)) in
-          (lt,tl,e0^e1)
+        ( match RSet.is_zero s_a0 with
+          | false ->
+            let (lt,l0,e1) = lp_f1 lt tl e0 in
+            (lt,(i0,p1)::l0,e1)
+          | true ->
+            let e1 =
+              (mov_unrl_ptn m s0 p1 (subst lt i0)) in
+            (lt,tl,e0^e1) )
       | _ -> err "emt_mov_ptn_to_ptn 1" ) in
   let rec lp_f2 l1 =
     ( match l1 with
@@ -4184,6 +4313,7 @@ and mov_rl_ptn m s0 i1 p0 =
   else err "mov_rl_ptn 3"
 and mov_unrl_ptn m s0 p1 i0 =
   let c0 = "; "^(string_of_int i0)^"' ⊢ "^(R.print p1)^"\n" in
+  Util.pnt true @@ c0;
   if s0.(i0) then
     ( match p1 with
       | RP.A(R.Idx i1) ->
