@@ -3833,7 +3833,7 @@ and emt_cst_stg cs =
       let s_e = emt_bytes s in
       "\tcst_stg_"^(Sgn.print p)^": db "^s_e^(st mx)^"\n"^(emt_cst_stg tl) )
 and mov_r m s0 i1 i0 =
-  Util.pnt true @@ "enter mov_r:"^(RSet.pnt s0)^","^(string_of_int i1)^","^(string_of_int i0)^"\n";
+  Util.Log.add @@ "enter mov_r:"^(RSet.pnt s0)^","^(string_of_int i1)^","^(string_of_int i0)^"\n";
   if i1<0&&s0.(i0)&&(not s0.(i1))&&m=R.M_Dlt then
     let l0 = lb () in
     ( s0.(i0)<-false;
@@ -3847,7 +3847,7 @@ and mov_r m s0 i1 i0 =
     let l0 = lb () in
     let l1 = lb () in
     ( s0.(i0)<-(if m=R.M_Dlt then false else true); s0.(i1)<-true;
-      if i1<9 then
+      if i1<8 then
         "\tmov "^(emt_reg_x86 i1)^","^(emt_reg_x86 i0)^"\n"^
         "\tbt r12,"^(string_of_int i0)^"\n"^
         "\tjc "^l0^"\n"^
@@ -3874,7 +3874,7 @@ and push_iv iv =
     Array.fold_left
       (fun (i,n,e0,e1) b ->
          if b then
-           if i<9 then
+           if i<8 then
              let e0 =
                e0^
                "\tmov QWORD [rsp+8+8*"^(string_of_int n)^"],"^(emt_reg_x86 i)^"\n" in
@@ -4055,7 +4055,7 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
         let (lt,l0,e0) = lp_f0 lt l0 e0 in
         lp_0 lt l0 e0 )
   and lp_f0 lt l0 e0 =
-    Util.pnt true "lp_f0\n";
+    (*Util.pnt true "lp_f0\n";*)
     ( match l0 with
       | (RP.A(R.Idx i0),i1)::tl when i0=i1 ->
         let e1 =
@@ -4091,7 +4091,7 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
         let (lt,l1,e0) = lp_f1 lt l1 e0 in
         lp_1 lt l1 e0 )
   and lp_f1 lt l1 e0 =
-    Util.pnt true "lp_f1\n";
+    (*Util.pnt true "lp_f1\n";*)
     ( match l1 with
       | (i0,p1)::[] ->
         let s_p1 = RSet.ini () in
@@ -4313,7 +4313,7 @@ and mov_rl_ptn m s0 i1 p0 =
   else err "mov_rl_ptn 3"
 and mov_unrl_ptn m s0 p1 i0 =
   let c0 = "; "^(string_of_int i0)^"' ⊢ "^(R.print p1)^"\n" in
-  Util.pnt true @@ c0;
+  Util.Log.add @@ c0;
   if s0.(i0) then
     ( match p1 with
       | RP.A(R.Idx i1) ->

@@ -1,6 +1,37 @@
 §§ TEST
-¶ t0 
-	∐ c0 : _r64 
-	∐ c1 : _s8 
+##FEFE
+§§ T0 
+	§§ T2 = T4 
+∎∎ 
+¶ a ◂ v' 
+	∐ c : t 
+¶ b = _r◂(c◂x)
+§§ reg_ptn 
+		¶ @.t ◂ a'
+			∐ rcd : _lst◂(t◂a') 
+			∐ atm : a' 
+		∎∎
+§ C « 
+	» 0r _ ⊢ x 
+	_emt_q e ⊢ a 
+	∎ {} 
+	
+§ C2 « 
+	» 0r _ ⊢ x0 
+	» 4r _ ⊢ x1 
+	fact x1 ⊢ y1 
+	_emt_q y1 ⊢ y1 
+	∎ {}
+\[
+§ C5 « 
+	» 20r _ ⊢ x0 
+	» 10r _ ⊢ x1 
+	» 0r _ ⊢ x2 
+	tak_x { x0 x1 x2 } ⊢ { x0 x1 x2 y } 
+	_emt_q y ⊢ y 
+	∎ {}
+\]
+##§§ T0 
+##∎∎ 
 ∎∎ 
 
