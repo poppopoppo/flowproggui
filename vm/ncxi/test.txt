@@ -773,4 +773,32 @@ vector application
   v4add { { x0 y0 } { x1 y1 } { x2 y2 } { x3 y3 } } ⊢
 
   'lb0 src ⊢ dst
-  'lb1 
+  'lb1
+
+grammer
+  _emp ; empty set
+  _all ; top set
+  _res ;
+  ∐ ..
+    _some ..
+    ∎ a
+  ∐. _res ⊢ { {} }
+    » "err" _ ⊢ s
+    prs_err s ⊢ e
+    _some e ⊢ a
+    ∎ a
+    ∐ _fail
+    ∐ _ret
+    ∐ _ctn
+
+    ∐ .. ; ⊢ { .. }
+      _ret r ⊢ a
+      ∎ a
+      ∐
+      ∐.
+
+
+  prs_log : { _s8 _r64 } ⊢ { _s8 _r64 a _s8 }
+
+  » _^ ..
+    0'*"\t" 3r*2' 0'*1'

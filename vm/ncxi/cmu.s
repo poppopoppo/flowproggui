@@ -9,7 +9,7 @@
 ; rbx SSS top
 bits 64
 
-%define SFLS_MAX 2048
+%define SFLS_MAX 8000
 %define SFLS_NULL 0xffff_ffff_ffff_0000
 %define S8_NULL 0xffff_ffff_ffff_0001
 %define EMT_MAX 20000
@@ -27,18 +27,21 @@ section .bss
   args: resq 1
   SFLS_TOP: resb 8*1
   SFLS_BTM: resb 8*1
-  SFLS_VCT: resb 8*16*SFLS_MAX
+  SFLS_VCT1: resb 8*2*SFLS_MAX
+  SFLS_VCT2: resb 8*4*SFLS_MAX
+  SFLS_VCT: resb 8*8*SFLS_MAX
+  SFLS_VCT4: resb 8*16*SFLS_MAX
   ir_s8_len_vct: resb 8*32
   ir_s8_vct: resb 8*32
   st_vct: resb 400
-  st_vct_tmp: resb 400
+  ;st_vct_tmp: resb 400
   regs_vct: resb 8*10
   free_vct: resb 8*16
   tmp: resb 80
   tmp_pop: resb 8
   tmp_push: resb 8
   dyn_call_vct: resb 16
-  str_ret: resb EMT_MAX
+  str_ret: resb 256
   out_vct: resb (8+8+8)*32
   ;prs_vct: resb (8+8) * 64
   ;set_ptn_vct: resb (8+8) * 16
