@@ -35,16 +35,24 @@
 	_nil {} ⊢ y
 	_some x ⊢ y 
 	∎ x
-	\[
+	
 §§+s8 
 	@.g0 
 		∐ "A" !| g0 ⊢ { {} x } 
+						
 			» 0r _ ⊢ x 
+			
 			∎ x 
+		
+			
 		∐. "C" ⊢ { {} } 
-			» 1r _ ⊢ x 
+			» 1r _ ⊢ x
+			 
 			∎ x 
+			
+			\[
 			\]
+
 ¶ @.reg_ptn ◂ a' 
 	∐ rcd : _lst◂(reg_ptn◂a') 
 	∐ atm : a' 
@@ -65,7 +73,6 @@
 	g0.prs { s0 x0 } ⊢ { s0 x0 a0 } 
 	_emt { s0 x0 a0 } ⊢ { s0 x0 a0 } 
 	∎ {}
-\[
 § @.s8_of_r64_lst_i { i rl }  
 	∐ rl ⊢ _cns◂{ ri rl_tl } . 
 		_mov_x i ⊢ { i i0 } 
@@ -76,5 +83,4 @@
 	∐. rl ⊢ _nil◂{} . 
 		_mlc_s8 i ⊢ { i s0 }
 		∎ s0 
-\]
 ∎∎
