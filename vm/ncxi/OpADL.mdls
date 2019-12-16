@@ -344,17 +344,17 @@
 					_some l ⊢ a 
 					∎ a 
 				@.line_spc 
-					∐ " " line_spc ⊢ { {} } 
-					» 1r _ ⊢ l 
-					_some l ⊢ a 
+					∐ " " line_spc ⊢ { {} l } 
+						_inc l ⊢ l 
+						_some l ⊢ a 
 					∎ a 
-					∐ "\t" line_spc ⊢ { {} } 
-					» 1r _ ⊢ l 
-					_some l ⊢ a 
+					∐ "\t" line_spc ⊢ { {} l } 
+						_inc l ⊢ l 
+						_some l ⊢ a 
 					∎ a 
 					∐. ⊢ { } 
-					» 0r _ ⊢ l 
-					_some l ⊢ a 
+						» 0r _ ⊢ l 
+						_some l ⊢ a 
 					∎ a  
 			@.lines
 				∐ line_spc "\\[" !| line_spc "\n" cmt_lines lines ⊢ { l0 {} l1 {} l2 { l3 r } } 
