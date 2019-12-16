@@ -135,28 +135,28 @@ module Types = struct
       | Axm p when p=Axm.fd -> "_fd"
       | Axm p -> "_p"^(Sgn.print p)
       | Var v ->
-        Util.pnt true "P t1\n";
+        (*Util.pnt true "P t1\n"; *)
         let i = print_v v_vct v in
         ( match !v with
           | WC _-> "_"
           | V (_,l) -> "v"^(string_of_int i)^"''("^(string_of_int l)^")"
           | Q (_,l) -> "t"^(string_of_int i)^"'("^(string_of_int l)^")"
           | Ln y ->
-            Util.pnt true "P t2\n";
+            (*Util.pnt true "P t2\n";*)
             print y
           | N n -> pnt_name n
           | N_Ln (n,y) ->
-            Util.pnt true "P t3\n";
+            (*Util.pnt true "P t3\n";*)
             (pnt_name n)^"(="^(print y)^")" )
       | App(y0,y1) ->
-        Util.pnt true "P t4\n";
+        (*Util.pnt true "P t4\n";*)
         "("^(print y0)^")◂("^(print y1)^")"
       | Imp(y0,y1) ->
-        Util.pnt true "P t5\n";
+        (*Util.pnt true "P t5\n";*)
         (print y0)^"→"^(print y1)
       | Rcd r -> "{ "^(print_rcd r)^"}"
       | Abs(v,y) ->
-        Util.pnt true "P t0\n";
+        (*Util.pnt true "P t0\n";*)
         let i =fst @@ (BatList.findi (fun _ vi -> vi==v) !v_vct)in
         "∀["^(string_of_int i)^"]."^(print y)
     )
@@ -1196,10 +1196,10 @@ and rcd_occurs (v1:v_rcd ref) (l1:t_rcd) =
         | N _ -> err "occurs n2" )
     | Cns(_,t2) -> rcd_occurs v1 t2)
 let rec unify ru t0 t1 =
-  Util.pnt true "enter unify:";
+  (*Util.pnt true "enter unify:";*)
   let se = (Types.print t0)^" ~ "^(Types.print t1) in
   Util.Log.add ("enter unify:"^se^"\n");
-  Util.pnt true ("enter unify:"^se^"\n");
+  (*  Util.pnt true ("enter unify:"^se^"\n"); *)
   if t0==t1 then ()
   else
     ( match t0,t1 with
@@ -1462,13 +1462,9 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
           | IR_Glb_Call(n,x,y) ->
             Util.pnt true "E0\n";
             let pf = slv_ns0 ns n in
-            Util.pnt true "E1\n";
             let tf = inst (l+1) (Var( try get_ns gns pf with _ -> err "slv_exp_atm 6")) in
-            Util.pnt true "E2\n";
             let tx = inst_ptn gns (l+1) x in
-            Util.pnt true "E3\n";
             let ty = inst_ptn gns (l+1) y in
-            Util.pnt true "E4\n";
             unify [] tf (Imp(tx,ty));
             Util.pnt true "E5\n";
             gen (ref []) l ty
@@ -3739,7 +3735,6 @@ and init_prm () =
   !ns.ns_p <- ("_mov_x",Ast.Axm._mov_x)::!ns.ns_p;
   gns.ns <- (Ast.Axm._mov_x,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._mov_x,ref(E_K_WC))::gns.ns_e;
-
   (se_in0^se_emt_q^se_byt^se_chr^se_dgt^se_u_al^se_l_al^se_pp_v,em_in0^em_emt_q^emt_byt^em_chr^em_dgt^em_l_al^em_u_al^em_pp_v,ns,gns)
 and args_init =
   "pop r14 ; number of args
@@ -3779,7 +3774,7 @@ and args_init =
     mov [r13+16],r8
 "
 and emt_exe m =
-  Util.Log.f := Util.Log.On;
+  (*Util.Log.f := Util.Log.On;*)
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
   Util.Log.pnt ();
