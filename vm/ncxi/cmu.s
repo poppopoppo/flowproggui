@@ -269,7 +269,6 @@ dlt_blk:
   mov rax,[rdi]
   mov rsi,rax
   shr rax,32
-  and rax,0xffff
   mov rdx,0
 dlt_lp:
   cmp rdx,rax
@@ -441,9 +440,8 @@ dcp_r64:
   ret
 
 rpc_opq:
-  mov rsi,[rdi]
-  shr rsi,32
-  and rsi,0xffff
+  mov esi,DWORD [rdi+4]
+  ;shr rsi,32
   push rdi
   push rsi
   mov rdi,rsi
@@ -710,22 +708,9 @@ pp_r_p_end:
   add rax,rsi
   ret
 pp_opq:
-  ;push rsi
-  ;mov rdx,rdi
-  ;add rdx,8
-  ;mov rdi,rsi
-  ;mov rsi,fmt_s8
-  ;mov rax,0
-  ;mov QWORD [rsp_tmp],rsp
-  ;and rsp,~0xf
-  ;call sprintf
-  ;mov rsp,QWORD [rsp_tmp]
-  ;pop rsi
-  ;add rax,rsi
   mov BYTE [rsi],34
   add rsi,1
-  mov rdx,QWORD [rdi]
-  shr rdx,32
+  mov edx,DWORD [rdi+4]
   mov rax,0
 pp_opq_lp:
   cmp rax,rdx
@@ -1318,12 +1303,12 @@ prs_chr_null:
   mov rax,~0
   ret
 byt: ; rdi=stg rsi=offset
-  mov rax,QWORD [rdi]
-  shr rax,32
+  mov eax,DWORD [rdi+4]
+  ;free_blk0 rax,32
   cmp rsi,rax
   jge byt_bound_err
-  xor rax,rax
-  mov al,BYTE [rdi+8*1+rsi]
+  ;xor rax,rax
+  movzx rax,BYTE [rdi+8*1+rsi]
   stc
   ret
 byt_bound_err:
@@ -1380,8 +1365,8 @@ in0_init:
 
 rpc_s8: ; rdi=src
   push rcx
-  mov rsi,[rdi]
-  shr rsi,32
+  mov esi,[rdi+4]
+  ;shr rsi,32
   push rdi
   push rsi
   mov rdi,rsi
