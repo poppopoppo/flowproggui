@@ -9,7 +9,7 @@
 ; rbx SSS top
 bits 64
 
-%define SFLS_MAX 8000
+%define SFLS_MAX 16000
 %define SFLS_NULL 0xffff_ffff_ffff_0000
 %define S8_NULL 0xffff_ffff_ffff_0001
 %define EMT_MAX 20000
@@ -25,12 +25,13 @@ extern isspace
 extern strlen
 section .bss
   args: resq 1
+  SFLS_HD: resb 8*8
   SFLS_TOP: resb 8*1
   SFLS_BTM: resb 8*1
-  SFLS_VCT1: resb 8*2*SFLS_MAX
-  SFLS_VCT2: resb 8*4*SFLS_MAX
+  ;SFLS_VCT1: resb 8*2*SFLS_MAX
+  ;SFLS_VCT2: resb 8*4*SFLS_MAX
   SFLS_VCT: resb 8*8*SFLS_MAX
-  SFLS_VCT4: resb 8*16*SFLS_MAX
+  ;SFLS_VCT4: resb 8*16*SFLS_MAX
   ir_s8_len_vct: resb 8*32
   ir_s8_vct: resb 8*32
   st_vct: resb 400
@@ -194,7 +195,7 @@ SFLS_lp:
   cmp rdi,SFLS_MAX
   jz SFLS_end
   mov rdx,rsi
-  add rsi,8*16
+  add rsi,8*8
   add rdi,1
   mov QWORD [rdx],rsi
   jmp SFLS_lp
