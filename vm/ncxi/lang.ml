@@ -455,6 +455,7 @@ module Ast = struct
   and s8_ptn =
       S8_Txt of string
     | S8_Name of axm0 | S8_Var of int
+    | S8_For_Txt of int * string
   type line =
     | End | Line of exp_rcd
   type grm = etr Grm.t
@@ -1107,9 +1108,10 @@ and print_ir_mtc ps =
 and pnt_mtc_ptn e = print_mtc e
 and pnt_s8_ptn p =
   ( match p with
-    | S8_Txt s -> "\""^s^"\""
+    | S8_Txt s -> "\""^(String.escaped s)^"\""
     | S8_Name n -> pnt_stt_name !n
-    | S8_Var i -> (string_of_int i)^"\'" )
+    | S8_Var i -> (string_of_int i)^"\'"
+    | S8_For_Txt (i,s) -> (string_of_int i)^"\'*"^"\""^(String.escaped s)^"\"")
 and print_nd o =
   ( match o with
     | IR_S8 { contents=IR_S8_C(pl,rs0,rs1) } ->
@@ -1436,19 +1438,27 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
       let _ =
         ( match o with
           | IR_S8 { contents =IR_S8_C(pl,rs0,rs1) } ->
-            let rec mn pl =
-              ( match pl with
-                | (S8_Var i)::tl -> max i (mn tl)
-                | _::tl -> mn tl
-                | [] -> (-1) ) in
-            let mn = mn pl in
-            if mn>=(Array.length rs0) then err "emt_ir IR_S8 0"
-            else
+            let sl = Array.length rs0 in
+            if (sl+1)=(Array.length rs1) then
               let ts0 = Array.map (fun r -> inst_v_r gns (l+1) r) rs0 in
               let ts1 = Array.map (fun r -> inst_v_r gns (l+1) r) rs1 in
-              let _ = Array.map (fun t -> unify [] t (Axm Axm.stg)) ts0 in
-              let _ = Array.map (fun t -> unify [] t (Axm Axm.stg)) ts1 in
+              let _ =
+                List.fold_left
+                  ( fun _ p ->
+                      match p with
+                      | (S8_Var i) ->
+                        let _ = unify [] (try ts0.(i) with _ -> err "IR_S8 bd 0") (Axm Axm.stg) in
+                        ()
+                      | S8_For_Txt(i,_) ->
+                        let _ = unify [] (try ts0.(i) with _ -> err "IR_S8 bd 1") (Axm Axm.r64) in
+                        ()
+                      | _ -> () )
+                  () pl in
+              let _ = Array.mapi (fun i t -> unify [] t ts1.(i)) ts0 in
+              let _ = unify [] ts1.(sl) (Axm Axm.stg) in
+              let _ = Array.map (fun t -> gen (ref []) l t) ts1 in
               ()
+            else err "IR_S8 bd 2"
           | IR_Id id ->
             ( match !id with
               | IR_Id_C(r,rs) ->
@@ -2049,7 +2059,7 @@ let free_blk n =
   "\tmov [rdi],rax\n"^
   "\tmov [SFLS_HD+8*"^(string_of_int n)^"],rdi\n"
 let free_blk_n =
-  "\tmovzx rsi,BYTE [rdi+2]\n"^
+  "\tmovzx rsi,BYTE [rdi+4]\n"^
   "\tmov rax,[SFLS_HD+8*rsi]\n"^
   "\tmov [rdi],rax\n"^
   "\tmov [SFLS_HD+8*rsi],rdi\n"
@@ -2182,8 +2192,7 @@ and emt_rle gns ns l =
                   | None ->
                     let eq = lp ((rn,i)::sp) 0 q in
                     "; "^cn^"\n"^
-                    "\tmov r10,QWORD [r13]\n"^
-                    "\tshr r10,32\n"^
+                    "\tmov r10d,DWORD [r13+4]\n"^
                     "\tpush "^(emt_reg_x86 1)^"\n"^
                     "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
                     (emt_ptn_grm lbn i ns f r 0)^
@@ -2198,8 +2207,7 @@ and emt_rle gns ns l =
                     let rnc = List.length rc in
                     let eq = lp ((rn+rnc,i)::sp) 0 q in
                     "; "^cn^"\n"^
-                    "\tmov r10,QWORD [r13]\n"^
-                    "\tshr r10,32\n"^
+                    "\tmov r10d,DWORD [r13+4]\n"^
                     "\tpush "^(emt_reg_x86 1)^"\n"^
                     "\tsub rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
                     (emt_ptn_grm lbn i ns f r 0)^
@@ -2233,8 +2241,7 @@ and emt_rle gns ns l =
                 ( match rc with
                   | None ->
                     "; "^cn^"\n"^
-                    "\tmov r10,QWORD [r13]\n"^
-                    "\tshr r10,32\n"^
+                    "\tmov r10d,DWORD [r13+4]\n"^
                     "\tpush "^(emt_reg_x86 1)^"\n"^
                     "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
                     (emt_ptn_grm lbn i ns f r 0)^
@@ -2252,8 +2259,7 @@ and emt_rle gns ns l =
                     let rnc = List.length rc in
                     let lbnc = lb () in
                     "; "^cn^"\n"^
-                    "\tmov r10,QWORD [r13]\n"^
-                    "\tshr r10,32\n"^
+                    "\tmov r10d,DWORD [r13+4]\n"^
                     "\tpush "^(emt_reg_x86 1)^"\n"^
                     "\tsub rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
                     (emt_ptn_grm lbn i ns f r 0)^
@@ -2325,8 +2331,7 @@ and emt_rle gns ns l =
                           (e_s (i-1)) ) in
                     let lbn = lb () in
                     let e0 =
-                      "\tmov r10,QWORD [r13]\n"^
-                      "\tshr r10,32\n"^
+                      "\tmov r10d,DWORD [r13+4]\n"^
                       "\tpush "^(emt_reg_x86 1)^"\n"^
                       "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
                       (emt_ptn_grm lbn i ns f r 0)^
@@ -2388,8 +2393,7 @@ and emt_rle gns ns l =
                     let lbn = lb () in
                     let lbnc = lb () in
                     let e0 =
-                      "\tmov r10,QWORD [r13]\n"^
-                      "\tshr r10,32\n"^
+                      "\tmov r10d,DWORD [r13+4]\n"^
                       "\tpush "^(emt_reg_x86 1)^"\n"^
                       "\tsub rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
                       (emt_ptn_grm lbn i ns f r 0)^
@@ -3443,12 +3447,10 @@ and init_prm () =
     "NS_E_RDI_"^(Sgn.print Ast.Axm._lds)^":\n"^
     "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
     "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
-    "\tmov rax,QWORD [rdi]\n"^
-    "\tshr rax,32\n"^
+    "\tmov eax,DWORD [rdi+4]\n"^
     "\tcmp rsi,rax\n"^
     "\tjge err_s8_ge\n"^
-    "\tmov rax,QWORD [rdi+8+rsi]\n"^
-    "\tand rax,0xff\n"^
+    "\tmovzx rax,BYTE [rdi+8+rsi]\n"^
     "\tmov "^(emt_reg_x86 2)^",rax\n"^
     "\tbts r12,2\n"^
     "\tret\n" in
@@ -3465,8 +3467,7 @@ and init_prm () =
     "NS_E_RDI_"^(Sgn.print Ast.Axm._sts)^":\n"^
     "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
     "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
-    "\tmov rax,QWORD [rdi]\n"^
-    "\tshr rax,32\n"^
+    "\tmov eax,DWORD [rdi+4]\n"^
     "\tcmp rsi,rax\n"^
     "\tjge err_s8_ge\n"^
     "\tmov rax,"^(emt_reg_x86 2)^"\n"^
@@ -3485,8 +3486,7 @@ and init_prm () =
     "NS_E_RDI_"^(Sgn.print Ast.Axm._ecs)^":\n"^
     "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
     "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
-    "\tmov rax,QWORD [rdi]\n"^
-    "\tshr rax,32\n"^
+    "\tmov eax,DWORD [rdi+4]\n"^
     "\tcmp rsi,rax\n"^
     "\tjge err_s8_ge\n"^
     "\tmov rax,"^(emt_reg_x86 2)^"\n"^
@@ -3505,15 +3505,13 @@ and init_prm () =
     "NS_E_ID_"^(Sgn.print Ast.Axm._rep_movsb)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._rep_movsb)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._rep_movsb)^":\n"^
-    "\tmov rax,[r14]\n"^
+    "\tmov eax,[r14+4]\n"^
     "\tlea r8,[r8-1+r13]\n"^
     (*"\tadd r8,r13\n"^*)
-    "\tshr rax,32\n"^
     "\tcmp r8,rax\n"^
     "\tjge err_s8_ge\n"^
-    "\tmov rax,[r9]\n"^
+    "\tmov eax,[r9+4]\n"^
     "\tlea r10,[r10-1+r13]\n"^
-    "\tshr rax,32\n"^
     "\tcmp r10,rax\n"^
     "\tjge err_s8_ge\n"^
     "\tlea rsi,[r14+8+r8]\n"^
@@ -4746,7 +4744,6 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             let ls0 = Array.length rs0 in
             let im = RSet.min_0 (rset_iv iv) in
             let c0 = cmt ("» _^ ..") in
-            let rc0 = Array.map (fun _ -> 0) rs0 in
             let ir0 =
               Array.mapi
                 ( fun i v ->
@@ -4757,116 +4754,141 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                       | _ -> err "emt_ir S8 x0" )                  )
                 rs0 in
             let _ = mk_idx_iv iv (RP.A(R.Idx im)) (RP.A(mk_idx rs1.(ls0))) in
-            let rec len l =
-              ( match l with
-                | [] -> 0
-                | hd::tl ->
-                  let n_hd =
-                    ( match hd with
-                      | S8_Txt s -> String.length s
-                      | S8_Name n ->
-                        let p = slv_ns0 !ns n in
-                        let e = get_ns_e gns p in
-                        ( match !e with
-                          | Cst_Stt(Cst.S8 s0) -> String.length s0
-                          | _ -> err "emt_ir _^ 0" )
-                      | S8_Var i -> rc0.(i) <- rc0.(i)+1; 0 ) in
-                  n_hd+(len tl)
-              ) in
-            let len0 = len pl in
-            let e0 =
-              c0^
-              "\tmov rax,"^(string_of_int len0)^"\n"^
-              "\tmov rdi,0\n"^
-              "\tmov rsi,0\n" in
-            let (_,e_a) =
-              Array.fold_left
-                (fun (i,e_a) c ->
-                   let e_i =
-                     "\tmov rdi,"^(emt_reg_x86 ir0.(i))^"\n"^
-                     "\tmov rdi,QWORD [rdi]\n"^
-                     "\tshr rdi,32\n"^
-                     "\tmov QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"],rdi\n"^
-                     "\timul rdi,"^(string_of_int c)^"\n"^
-                     "\tadd rax,rdi\n" in
-                   (i+1,e_a^e_i)) (0,"") rc0 in
-            let e_1 =
-              "\tmov rdi,rax\n"^
-              "\tcall mlc_s8\n"^
-              "\tmov rdi,rax\n"^
-              "\tadd rdi,8\n"^
-              (List.fold_left
-                 ( fun e_p p ->
-                     match p with
-                     | Ast.S8_Txt s ->
-                       let l_s = String.length s in
-                       let (lc,lm) = Util.fmt_of_string_m s in
-                       let (i,e_l) =
-                         List.fold_left
-                           ( fun (i,e_l) si ->
-                               let e_i =
-                                 "\tmov rsi,"^si^"\n"^
-                                 "\tmov QWORD [rdi+8*"^(string_of_int i)^"],rsi\n" in
-                               (i+1,e_l^e_i))
-                           (0,"") lc in
-                       let (_,e_lm) =
-                         List.fold_left
-                           ( fun (j,e_lm) si ->
-                               let e_i =
-                                 "\tmov rsi,"^si^"\n"^
-                                 "\tmov BYTE [rdi+8*"^(string_of_int i)^"+"^(string_of_int j)^"],sil\n" in
-                               (j+1,e_lm^e_i))
-                           (0,"") lm in
-                       e_p^
-                       "; \""^(String.escaped s)^"\"\n"^
+            let (e_l,e_x) =
+              List.fold_left
+                (fun (e_l,e_x) p ->
+                   match p with
+                   | S8_Txt s ->
+                     let sl = String.length s in
+                     let e_l =
                        e_l^
+                       "\tadd rax,"^(string_of_int sl)^"\n" in
+                     let (lc,lm) = Util.fmt_of_string_m s in
+                     let (i,e_m) =
+                       List.fold_left
+                         ( fun (i,e_m) si ->
+                             let e_i =
+                               "\tmov rsi,"^si^"\n"^
+                               "\tmov QWORD [rdi+8*"^(string_of_int i)^"],rsi\n" in
+                             (i+1,e_m^e_i))
+                         (0,"") lc in
+                     let (_,e_lm) =
+                       List.fold_left
+                         ( fun (j,e_lm) si ->
+                             let e_i =
+                               "\tmov rsi,"^si^"\n"^
+                               "\tmov BYTE [rdi+8*"^(string_of_int i)^"+"^(string_of_int j)^"],sil\n" in
+                             (j+1,e_lm^e_i))
+                         (0,"") lm in
+                     let e_x =
+                       e_x^
+                       "; \""^(String.escaped s)^"\"\n"^
+                       e_m^
                        e_lm^
-                       "\tadd rdi,"^(string_of_int l_s)^"\n"
-                     | Ast.S8_Var i ->
-                       e_p^
+                       "\tadd rdi,"^(string_of_int sl)^"\n" in
+                     (e_l,e_x)
+                   | S8_Name n ->
+                     let p = slv_ns0 !ns n in
+                     let e = get_ns_e gns p in
+                     ( match !e with
+                       | Cst_Stt(Cst.S8 s) ->
+                         let sl = String.length s in
+                         let e_l =
+                           e_l^
+                           "\tadd rax,"^(string_of_int sl)^"\n" in
+                         let (lc,lm) = Util.fmt_of_string_m s in
+                         let (i,e_m) =
+                           List.fold_left
+                             ( fun (i,e_m) si ->
+                                 let e_i =
+                                   "\tmov rsi,"^si^"\n"^
+                                   "\tmov QWORD [rdi+8*"^(string_of_int i)^"],rsi\n" in
+                                 (i+1,e_m^e_i))
+                             (0,"") lc in
+                         let (_,e_lm) =
+                           List.fold_left
+                             ( fun (j,e_lm) si ->
+                                 let e_i =
+                                   "\tmov rsi,"^si^"\n"^
+                                   "\tmov BYTE [rdi+8*"^(string_of_int i)^"+"^(string_of_int j)^"],sil\n" in
+                                 (j+1,e_lm^e_i))
+                             (0,"") lm in
+                         let e_x =
+                           e_x^
+                           "; \""^(String.escaped s)^"\"\n"^
+                           e_m^
+                           e_lm^
+                           "\tadd rdi,"^(string_of_int sl)^"\n" in
+                         (e_l,e_x)
+                       | _ -> err "emt_ir _^ 0" )
+                   | S8_Var i ->
+                     let e_l =
+                       e_l^
+                       "\tmov rsi,"^(emt_reg_x86 ir0.(i))^"\n"^
+                       "\tmov esi,DWORD [rsi+4]\n"^
+                       "\tadd rax,rsi\n" in
+                     let e_x =
+                       e_x^
                        "; "^(string_of_int i)^"\'\n"^
                        "\tpush rcx\n"^
                        "\tmov rsi,"^(emt_reg_x86 ir0.(i))^"\n"^
+                       "\tmov ecx,DWORD [rsi+4]\n"^
                        "\tadd rsi,8\n"^
-                       "\tmov rcx,QWORD [ir_s8_len_vct+8*"^(string_of_int i)^"]\n"^
                        "\tcld\n"^
                        "\trep movsb\n"^
-                       "\tpop rcx\n"
-                     | Ast.S8_Name n ->
-                       let p = slv_ns0 !ns n in
-                       let e = get_ns_e gns p in
-                       ( match !e with
-                         | Cst_Stt(Cst.S8 s) ->
-                           let l_s = String.length s in
-                           let (lc,lm) = Util.fmt_of_string_m s in
-                           let (i,e_l) =
-                             List.fold_left
-                               ( fun (i,e_l) si ->
-                                   let e_i =
-                                     "\tmov rsi,"^si^"\n"^
-                                     "\tmov QWORD [rdi+8*"^(string_of_int i)^"],rsi\n" in
-                                   (i+1,e_l^e_i))
-                               (0,"") lc in
-                           let (_,e_lm) =
-                             List.fold_left
-                               ( fun (j,e_lm) si ->
-                                   let e_i =
-                                     "\tmov rsi,"^si^"\n"^
-                                     "\tmov BYTE [rdi+8*"^(string_of_int i)^"+"^(string_of_int j)^"],sil\n" in
-                                   (j+1,e_lm^e_i))
-                               (0,"") lm in
-                           e_p^
-                           "; \""^(String.escaped s)^"\"\n"^
-                           e_l^
-                           e_lm^
-                           "\tadd rdi,"^(string_of_int l_s)^"\n"
-                         | _ -> err "emt_ir _^ 0" ) )
-                 "" pl
-              )^
-              "; //\n"^
-              "\tmov "^(emt_reg_x86 im)^",rax\n"^
-              "\tbtr r12,"^(string_of_int im)^"\n" in
-            e0^e_a^e_1
+                       "\tpop rcx\n" in
+                     (e_l,e_x)
+                   | S8_For_Txt(i,s) ->
+                     let sl = String.length s in
+                     let e_l =
+                       e_l^
+                       "\tmov rsi,"^(emt_reg_x86 ir0.(i))^"\n"^
+                       "\timul rsi,"^(string_of_int sl)^"\n"^
+                       "\tadd rax,rsi\n" in
+                     let lb0 = lb () in
+                     let lb1 = lb () in
+                     let (lc,lm) = Util.fmt_of_string_m s in
+                     let (i,e_m) =
+                       List.fold_left
+                         ( fun (i,e_m) si ->
+                             let e_i =
+                               "\tmov rsi,"^si^"\n"^
+                               "\tmov QWORD [rdi+8*"^(string_of_int i)^"],rsi\n" in
+                             (i+1,e_m^e_i))
+                         (0,"") lc in
+                     let (_,e_lm) =
+                       List.fold_left
+                         ( fun (j,e_lm) si ->
+                             let e_i =
+                               "\tmov rsi,"^si^"\n"^
+                               "\tmov BYTE [rdi+8*"^(string_of_int i)^"+"^(string_of_int j)^"],sil\n" in
+                             (j+1,e_lm^e_i))
+                         (0,"") lm in
+                     let e_x =
+                       e_x^
+                       "; "^(string_of_int i)^"*\""^(String.escaped s)^"\"\n"^
+                       "\tmov rax,"^(emt_reg_x86 ir0.(i))^"\n"^
+                       lb0^":\n"^
+                       "\tcmp rax,0\n"^
+                       "\tjz "^lb1^"\n"^
+                       e_m^
+                       e_lm^
+                       "\tadd rdi,"^(string_of_int sl)^"\n"^
+                       "\tsub rax,1\n"^
+                       "\tjmp "^lb0^"\n"^
+                       lb1^":\n" in
+                     (e_l,e_x) )
+                ("","") pl in
+            c0^
+            "\txor rax,rax\n"^
+            e_l^
+            "\tmov rdi,rax\n"^
+            "\tcall mlc_s8\n"^
+            "\tmov "^(emt_reg_x86 im)^",rax\n"^
+            "\tbtr r12,"^(string_of_int im)^"\n"^
+            "\tmov rdi,rax\n"^
+            "\tadd rdi,8\n"^
+            e_x
           | _ -> err "emt_etr 0" ) in
       s0^(emt_ir i1 gns ns iv p1)
     | _ -> err "emt_ir T4"

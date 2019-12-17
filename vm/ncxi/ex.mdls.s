@@ -185,14 +185,12 @@ NS_E_RDI_33:
 NS_E_ID_23: dq 0
 NS_E_23:
 NS_E_RDI_23:
-	mov rax,[r14]
+	mov eax,[r14+4]
 	lea r8,[r8-1+r13]
-	shr rax,32
 	cmp r8,rax
 	jge err_s8_ge
-	mov rax,[r9]
+	mov eax,[r9+4]
 	lea r10,[r10-1+r13]
-	shr rax,32
 	cmp r10,rax
 	jge err_s8_ge
 	lea rsi,[r14+8+r8]
@@ -209,8 +207,7 @@ NS_E_22:
 NS_E_RDI_22:
 	mov rdi,r13
 	mov rsi,r14
-	mov rax,QWORD [rdi]
-	shr rax,32
+	mov eax,DWORD [rdi+4]
 	cmp rsi,rax
 	jge err_s8_ge
 	mov rax,r8
@@ -222,8 +219,7 @@ NS_E_21:
 NS_E_RDI_21:
 	mov rdi,r13
 	mov rsi,r14
-	mov rax,QWORD [rdi]
-	shr rax,32
+	mov eax,DWORD [rdi+4]
 	cmp rsi,rax
 	jge err_s8_ge
 	mov rax,r8
@@ -234,12 +230,10 @@ NS_E_20:
 NS_E_RDI_20:
 	mov rdi,r13
 	mov rsi,r14
-	mov rax,QWORD [rdi]
-	shr rax,32
+	mov eax,DWORD [rdi+4]
 	cmp rsi,rax
 	jge err_s8_ge
-	mov rax,QWORD [rdi+8+rsi]
-	and rax,0xff
+	movzx rax,BYTE [rdi+8+rsi]
 	mov r8,rax
 	bts r12,2
 	ret
@@ -616,8 +610,7 @@ NS_E_128:
 NS_E_RDI_128:
 NS_E_128_ETR_TBL:
 NS_E_128_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; _byt
@@ -807,8 +800,7 @@ NS_E_167:
 NS_E_RDI_167:
 NS_E_167_ETR_TBL:
 NS_E_167_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; _byt
@@ -998,8 +990,7 @@ NS_E_206:
 NS_E_RDI_206:
 NS_E_206_ETR_TBL:
 NS_E_206_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; _byt
@@ -1189,8 +1180,7 @@ NS_E_245:
 NS_E_RDI_245:
 NS_E_245_ETR_TBL:
 NS_E_245_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; ch_u
@@ -1263,8 +1253,7 @@ LB_255:
 	add rsp,16
 	pop r14
 LB_253:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; ch_l
@@ -1350,8 +1339,7 @@ NS_E_276:
 NS_E_RDI_276:
 NS_E_276_ETR_TBL:
 NS_E_276_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,32
 ; ch_a
@@ -1552,8 +1540,7 @@ NS_E_277:
 NS_E_RDI_277:
 NS_E_277_ETR_TBL:
 NS_E_277_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,32
 ; word_hd
@@ -1713,8 +1700,7 @@ LB_346:
 	add rsp,32
 	pop r14
 LB_344:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,0
 	mov rdi,r13
@@ -1795,8 +1781,7 @@ NS_E_278:
 NS_E_RDI_278:
 NS_E_278_ETR_TBL:
 NS_E_278_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; ch_a
@@ -1869,8 +1854,7 @@ LB_373:
 	add rsp,16
 	pop r14
 LB_371:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; dgt
@@ -1993,8 +1977,7 @@ LB_393:
 	add rsp,16
 	pop r14
 LB_391:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "_"
@@ -2118,8 +2101,7 @@ NS_E_RDI_418:
 NS_E_418_ETR_TBL:
 NS_E_418_TBL:
 ; _
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,32
 ; "_"
@@ -2192,8 +2174,7 @@ LB_421:
 	add rsp,32
 	pop r14
 ; _
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; word
@@ -2478,8 +2459,7 @@ NS_E_492:
 NS_E_RDI_492:
 NS_E_492_ETR_TBL:
 NS_E_492_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,32
 ; "\""
@@ -2631,8 +2611,7 @@ NS_E_493:
 NS_E_RDI_493:
 NS_E_493_ETR_TBL:
 NS_E_493_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,48
 ; "\\"
@@ -2868,8 +2847,7 @@ LB_558:
 	add rsp,48
 	pop r14
 LB_556:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "\""
@@ -2969,8 +2947,7 @@ LB_598:
 	add rsp,16
 	pop r14
 LB_596:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,32
 ; _byt
@@ -3143,8 +3120,7 @@ NS_E_494:
 NS_E_RDI_494:
 NS_E_494_ETR_TBL:
 NS_E_494_TBL:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "\\"
@@ -3229,8 +3205,7 @@ LB_642:
 	add rsp,16
 	pop r14
 LB_640:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "\""
@@ -3315,8 +3290,7 @@ LB_657:
 	add rsp,16
 	pop r14
 LB_655:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "n"
@@ -3401,8 +3375,7 @@ LB_672:
 	add rsp,16
 	pop r14
 LB_670:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "t"
@@ -3487,8 +3460,7 @@ LB_687:
 	add rsp,16
 	pop r14
 LB_685:
-	mov r10,QWORD [r13]
-	shr r10,32
+	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "0"
@@ -3585,11 +3557,12 @@ LB_700:
 NS_E_720:
 NS_E_RDI_720:
 ; » _^ ..
-	mov rax,19
-	mov rdi,0
-	mov rsi,0
+	xor rax,rax
+	add rax,19
 	mov rdi,rax
 	call mlc_s8
+	mov r13,rax
+	btr r12,0
 	mov rdi,rax
 	add rdi,8
 ; "\"Hello\\tWorld !!\" \n"
@@ -3604,9 +3577,6 @@ NS_E_RDI_720:
 	mov rsi,0x_0a
 	mov BYTE [rdi+8*2+2],sil
 	add rdi,19
-; //
-	mov r13,rax
-	btr r12,0
 ; » 0xr0 |~ {  } ⊢ %_713 : %_713
  ; {>  %_712~0':_stg }
 ; 	» 0xr0 _ ⊢ 1' : %_713
