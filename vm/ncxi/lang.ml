@@ -2825,19 +2825,21 @@ and emt_m gns (ns:ns_v ref) ld el =
               "\tcall NS_E_"^(Sgn.print ep)^"\n" in
             (se,e_p,sx,pp)
           | Etr_Clq q ->
-            let l_0 =
+            let (l_0,_) =
               List.fold_left
-                (fun l_0 (n,_,_,(r0,p0)) ->
-                   let (r0,p0) = slv_r_etr (r0,p0) in
-                   let ep = sgn () in
-                   !ns.ns_p <- (n,ep)::!ns.ns_p;
-                   let y0 = inst_ptn gns 0 r0 in
-                   let y1 = newvar_l 0 in
-                   let y2 = newvar () in
-                   y2 := Ln(Imp(y0,Var y1));
-                   gns.ns <-  (ep,y2)::gns.ns;
-                   (n,y2,y1,p0,r0,ep)::l_0 )
-                [] q in
+                (fun (l_0,nl) (n,_,_,(r0,p0)) ->
+                   if List.exists (fun m -> n=m) nl then err "Etr_Clq 0"
+                   else
+                     let (r0,p0) = slv_r_etr (r0,p0) in
+                     let ep = sgn () in
+                     !ns.ns_p <- (n,ep)::!ns.ns_p;
+                     let y0 = inst_ptn gns 0 r0 in
+                     let y1 = newvar_l 0 in
+                     let y2 = newvar () in
+                     y2 := Ln(Imp(y0,Var y1));
+                     gns.ns <-  (ep,y2)::gns.ns;
+                     ((n,y2,y1,p0,r0,ep)::l_0,n::nl) )
+                ([],[]) q in
             let l_1 =
               List.fold_left
                 ( fun l (n,y2,y0,p0,r0,ep) ->
@@ -2884,8 +2886,9 @@ and emt_m gns (ns:ns_v ref) ld el =
                 let ds = List.map (fun (y,c) -> (mk_vars (ref []) !ns `Abs (ref a) y,c)) ds in
                 let yp = sgn () in
                 let ya = List.fold_left (fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
-                let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
-                !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;
+                (*let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
+                !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;*)
+                !ns.ns_t <- (n,ref(Ln(Axm yp)))::!ns.ns_t;
                 let dl = List.length ds in
                 let (_,es,pp0) =
                   List.fold_left
@@ -2917,36 +2920,44 @@ and emt_m gns (ns:ns_v ref) ld el =
                 ("","","",tbs^"¶ "^n^(pnt_args `Hd a0)^" = "^(Types.print_t ya)^"\n")
               | _ -> err "slv_flows 1" )
           | Flow_Clq q ->
+            let nl = ref [] in
             let dl =
               List.map
                 ( fun f ->
                     ( match f with
                       | Ast.Def_CoPrd (n,a,ds) ->
-                        let (_,_) = List.split a in
-                        let yp = sgn () in
-                        let ya = List.fold_left ( fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
-                        let yt = List.fold_left ( fun yt (_,v) -> Abs(v,yt)) ya a in
-                        !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;
-                        `CP(n,a,ds,yt)
+                        if List.exists (fun m -> n=m) !nl then err "Flow_Clq 0"
+                        else
+                          ( nl := n::!nl;
+                            let (_,_) = List.split a in
+                            let yp = sgn () in
+                            let ya = List.fold_left ( fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
+                            (*let yt = List.fold_left ( fun yt (_,v) -> Abs(v,yt)) ya a in
+                              !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;*)
+                            !ns.ns_t <- (n,ref(Ln(Axm yp)))::!ns.ns_t;
+                            `CP(n,a,ds,ya) )
                       | Ast.Def_Abs (n,a) -> (`Abs (n,a))
                       | Ast.Def_EqT (n,a,y) ->
-                        let v = newvar () in
-                        !ns.ns_t <- (n,v)::!ns.ns_t;
-                        (`EqT (n,a,y,v))
+                        if List.exists (fun m -> n=m) !nl then err "Flow_Clq 1"
+                        else
+                          ( nl := n::!nl;
+                            let v = newvar () in
+                            !ns.ns_t <- (n,v)::!ns.ns_t;
+                            (`EqT (n,a,y,v)) )
                       | _ -> err "slv_flows 1" )
                 ) q in
             let (es,pp) =
               List.fold_left
                 ( fun (es,pp) f ->
                     ( match f with
-                      | `CP (n,a,ds,yt) ->
+                      | `CP (n,a,ds,ya) ->
                         let (_,vs) = List.split a in
                         let ds = List.map (fun (y,c) -> (mk_vars (ref []) !ns `Abs (ref a) y,c)) ds in
                         let dl = List.length ds in
                         let (_,eq,pp0) =
                           List.fold_left
                             (fun (i,eq,pp0) (t,n) ->
-                               let tc = Imp(t,yt) in
+                               let tc = Imp(t,ya) in
                                let epi = sgn () in
                                !ns.ns_p <- (n,epi)::!ns.ns_p;
                                gns.ns_e <- (epi,ref(Ctr(i,dl)))::gns.ns_e;
@@ -2976,11 +2987,17 @@ and emt_m gns (ns:ns_v ref) ld el =
             (es,"","",tbs^"¶\n"^pp)
           | Grm_Abs _ -> err "Grm_Abs 0"
           | Gram g ->
+            let nl = ref [] in
+            let nla n =
+              if List.exists (fun m -> n=m) !nl then err "Etr_Clq 0"
+              else
+                nl := n::!nl in
             let gv =
               List.fold_left
                 ( fun gv g ->
                     ( match g with
                       | Grm.Cnc (n,rs) ->
+                        let _ = (nla n) in
                         !ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
                         let ns_g = ref(init_ns ()) in
                         !ns_g.root <- Some ns;
@@ -2994,6 +3011,7 @@ and emt_m gns (ns:ns_v ref) ld el =
                         gns.ns_e <- (epv,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|])))::gns.ns_e;
                         gv@[`P(n,rs,t_p,epv,ns_g)]
                       | Grm.Act(n,rs) ->
+                        let _ = nla n in
                         !ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
                         let ns_g = ref(init_ns ()) in
                         !ns_g.root <- Some ns;
@@ -3689,7 +3707,7 @@ and args_init =
     mov [r13+16],r8
 "
 and emt_exe m =
-  (*Util.Log.f := Util.Log.On;*)
+  Util.Log.f := Util.Log.On;
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
   Util.Log.pnt ();
