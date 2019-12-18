@@ -53,7 +53,7 @@
 § f1 r 
 	∐ r ⊢ rcd◂l .
 		∎ {} 
-	∐ r ⊢ atm◂a . 
+	∐. r ⊢ atm◂a . 
 		∎ {}
 § A0 « 
 	» "A" _ ⊢ s0 
@@ -62,6 +62,8 @@
 	rcd l0 ⊢ r0
 	atm x0 ⊢ lx 
 	atm s0 ⊢ ls 
+	» 8r _ ⊢ x0
+	_mk_arr x0 ⊢ { x0 v0 }
 	∎ {}
 
 § C0 «  

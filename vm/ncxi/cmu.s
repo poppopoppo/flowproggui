@@ -117,6 +117,9 @@ section .data
   blk_r: db "} ",0
   ln_l: db "[ ",0
   ln_r: db " ] ",0
+  arr_l: db "{| ",0
+  arr_r: db "|} ",0
+  arr_null: db " _ ",0
   spc: db " ",0
   agl_fmt: db "°%d◂",0
   fmt_s8: db `\"%s\"`,0
@@ -264,11 +267,12 @@ dlt: ; rdi=src
 dlt_blk:
   bt QWORD [rdi],16
   jc dlt_opq
+  bt QWORD [rdi],18
+  jc dlt_arr
   push rdx
   push rsi
-  mov rax,[rdi]
-  mov rsi,rax
-  shr rax,32
+  mov eax,DWORD [rdi+4]
+  mov rsi,[rdi]
   mov rdx,0
 dlt_lp:
   cmp rdx,rax
@@ -314,6 +318,31 @@ dlt_opq:
   pop rcx
   pop rdx
   pop rsi
+  ret
+
+dlt_arr:
+  mov esi,DWORD [rdi+4]
+  mov rax,0
+dlt_arr_lp:
+  cmp rsi,rax
+  je dlt_arr_lp_end
+  push rdi
+  mov rdi,[rdi+8*1+8*rax]
+  cmp rdi,0
+  jz dlt_arr_lp_nxt
+  push rsi
+  push rax
+  clc
+  call dlt
+  pop rax
+  pop rsi
+dlt_arr_lp_nxt:
+  pop rdi
+  add rax,1
+  jmp dlt_arr_lp
+dlt_arr_lp_end:
+  mov QWORD [rdi],rbx
+  mov rbx,rdi
   ret
 
 dec_r:
@@ -805,6 +834,8 @@ pp0_r_p_ref:
   jc pp0_opq
   bt QWORD [rdi],17
   jc pp0_ln
+  bt QWORD [rdi],18
+  jc pp0_arr
   push rdi
   mov rdi,blk_l
   xor rax,rax
@@ -858,6 +889,7 @@ pp0_r_p_end:
   mov rsp,QWORD [rsp_tmp]
   ret
 
+
 pp0_opq:
   mov rax,[rdi]
   shr rax,30
@@ -891,6 +923,59 @@ pp0_ln:
   mov rdi,QWORD [rdi+8]
   call pp0
   mov rdi,ln_r
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  ret
+
+pp0_arr:
+  push rdi
+  mov rdi,arr_l
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  mov r10,[rdi]
+  mov r9,r10
+  shr r9,32
+  add rdi,8
+  pp0_arr_r_p_lp:
+  cmp r9,0
+  je pp0_arr_r_p_end
+  sub r9,1
+  push rdi
+  mov rdi,[rdi]
+  cmp rdi,0
+  jz pp0_arr_r_p_lp_nxt
+  push r9
+  push r10
+  clc
+  call pp0_r_p
+  pop r10
+  pop r9
+  pop rdi
+  add rdi,8
+  jmp pp0_arr_r_p_lp
+  pp0_arr_r_p_lp_nxt:
+  push r9
+  push r10
+  mov rdi,arr_null
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call printf
+  mov rsp,QWORD [rsp_tmp]
+  pop r10
+  pop r9
+  pop rdi
+  add rdi,8
+  jmp pp0_arr_r_p_lp
+  pp0_arr_r_p_end:
+  mov rdi,arr_r
   xor rax,rax
   mov QWORD [rsp_tmp],rsp
   and rsp,~0xf
@@ -1591,4 +1676,51 @@ emt_q: ; rdi=tkn rsi=cf
   and rsp,~0xf
   call free
   mov rsp,QWORD [rsp_tmp]
+  ret
+
+mk_vct: ; rdi=size
+  push rdi
+  shl rdi,1
+  lea rdi,[8*rdi+16]
+  push rdi
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call malloc
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  pop rdx
+  sub rdx,16
+  mov rsi,rdi
+  shl rsi,32
+  add rsi,0x4_0000
+  mov QWORD [rax],rsi
+  lea rsi,[rax+16]
+  mov QWORD [rax+8],rsi
+  mov QWORD [rax+16],rdx
+  lea rsi,[rax+32]
+  mov QWORD [rax+24],rsi
+
+
+mk_arr:
+  push rdi
+  lea rdi,[8*rdi+8]
+  xor rax,rax
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call malloc
+  mov rsp,QWORD [rsp_tmp]
+  pop rdi
+  mov rsi,rdi
+  shl rdi,32
+  add rdi,0x4_0000
+  mov QWORD [rax],rdi
+  xor rcx,rcx
+mk_arr_lp:
+  cmp rcx,rsi
+  jz mk_arr_lp_end
+  mov QWORD [rax+8+8*rcx],0
+  add rcx,1
+  jmp mk_arr_lp
+mk_arr_lp_end:
   ret

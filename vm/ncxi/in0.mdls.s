@@ -37,22 +37,22 @@ pop r14 ; number of args
     mov rcx,0x0100_0000_0000_0001
     or r8,rcx
     mov [r13+16],r8
-	call NS_E_559
-	call NS_E_737
-	call NS_E_744
+	call NS_E_81
+	call NS_E_262
+	call NS_E_281
 	call exec_out
 	jmp _end
-NS_E_ID_24: dq 0
-NS_E_24:
-NS_E_RDI_24:
+NS_E_ID_35: dq 0
+NS_E_35:
+NS_E_RDI_35:
 	mov rdi,[in0]
 	call rpc_s8
 	mov r13,rax
 	btr r12,0
 	ret
-NS_E_ID_26: dq 0
-NS_E_26:
-NS_E_RDI_26:
+NS_E_ID_37: dq 0
+NS_E_37:
+NS_E_RDI_37:
 	mov rdi,fmt_emt
 	xor rax,rax
 	mov QWORD [rsp_tmp],rsp
@@ -69,20 +69,20 @@ NS_E_RDI_26:
 	call printf
 	mov rsp,QWORD [rsp_tmp]
 	ret
-NS_E_544:
-NS_E_RDI_544:
-NS_E_544_ETR_TBL:
+NS_E_66:
+NS_E_RDI_66:
+NS_E_66_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	call byt
-	jnc LB_545
+	jnc LB_67
 	add r14,1
 	mov r8,0
 	mov r9,rax
 	bts r12,3
 	bts r12,2
 	ret
-LB_545:
+LB_67:
 	mov r8,1
 	mov rdi,rbx
 	mov rbx,[rdi]
@@ -92,22 +92,22 @@ LB_545:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_547:
-NS_E_RDI_547:
-NS_E_547_ETR_TBL:
+NS_E_69:
+NS_E_RDI_69:
+NS_E_69_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	call prs_chr
 	mov r13,rdi
 	mov r14,rsi
 	bt rax,63
-	jc NS_E_547_LB_0
+	jc NS_E_69_LB_0
 	mov r8,0
 	mov r9,rax
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_547_LB_0:
+NS_E_69_LB_0:
 	mov r8,1
 	mov rdi,rbx
 	mov rbx,[rdi]
@@ -117,52 +117,52 @@ NS_E_547_LB_0:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_548:
-NS_E_RDI_548:
-NS_E_548_ETR_TBL:
+NS_E_70:
+NS_E_RDI_70:
+NS_E_70_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,48
-	jb NS_E_548_LB_0
+	jb NS_E_70_LB_0
 	cmp r11,57
-	ja NS_E_548_LB_0
+	ja NS_E_70_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_548_LB_0:
+NS_E_70_LB_0:
 	mov rax,0
 	ret
-NS_E_550:
-NS_E_RDI_550:
-NS_E_550_ETR_TBL:
+NS_E_72:
+NS_E_RDI_72:
+NS_E_72_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,97
-	jb NS_E_550_LB_0
+	jb NS_E_72_LB_0
 	cmp r11,122
-	ja NS_E_550_LB_0
+	ja NS_E_72_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_550_LB_0:
+NS_E_72_LB_0:
 	mov rax,0
 	ret
-NS_E_549:
-NS_E_RDI_549:
-NS_E_549_ETR_TBL:
+NS_E_71:
+NS_E_RDI_71:
+NS_E_71_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,65
-	jb NS_E_549_LB_0
+	jb NS_E_71_LB_0
 	cmp r11,90
-	ja NS_E_549_LB_0
+	ja NS_E_71_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_549_LB_0:
+NS_E_71_LB_0:
 	mov rax,0
 	ret
-NS_E_33:
+NS_E_44:
 	mov rdi,r13
 	bt r12,0
-NS_E_RDI_33:
+NS_E_RDI_44:
 	mov rsi,0
 	setc sil
 	push rsi
@@ -179,9 +179,19 @@ NS_E_RDI_33:
 	or QWORD [rax],rsi
 	clc
 	ret
-NS_E_ID_23: dq 0
-NS_E_23:
-NS_E_RDI_23:
+NS_E_ID_19: dq 0
+NS_E_19:
+NS_E_RDI_19:
+	mov rdi,r13
+	push r13
+	call mk_arr
+	mov r14,rax
+	pop r13
+	btr r12,1
+	ret
+NS_E_ID_34: dq 0
+NS_E_34:
+NS_E_RDI_34:
 	mov eax,[r14+4]
 	lea r8,[r8-1+r13]
 	cmp r8,rax
@@ -199,9 +209,9 @@ NS_E_RDI_23:
 	add r8,1
 	add r10,1
 	ret
-NS_E_ID_22: dq 0
-NS_E_22:
-NS_E_RDI_22:
+NS_E_ID_33: dq 0
+NS_E_33:
+NS_E_RDI_33:
 	mov rdi,r13
 	mov rsi,r14
 	mov eax,DWORD [rdi+4]
@@ -211,9 +221,9 @@ NS_E_RDI_22:
 	xchg al,BYTE [rdi+8+rsi]
 	and rax,0xff
 	ret
-NS_E_ID_21: dq 0
-NS_E_21:
-NS_E_RDI_21:
+NS_E_ID_32: dq 0
+NS_E_32:
+NS_E_RDI_32:
 	mov rdi,r13
 	mov rsi,r14
 	mov eax,DWORD [rdi+4]
@@ -222,9 +232,9 @@ NS_E_RDI_21:
 	mov rax,r8
 	mov BYTE [rdi+8+rsi],al
 	ret
-NS_E_ID_20: dq 0
-NS_E_20:
-NS_E_RDI_20:
+NS_E_ID_31: dq 0
+NS_E_31:
+NS_E_RDI_31:
 	mov rdi,r13
 	mov rsi,r14
 	mov eax,DWORD [rdi+4]
@@ -234,9 +244,9 @@ NS_E_RDI_20:
 	mov r8,rax
 	bts r12,2
 	ret
-NS_E_ID_19: dq 0
-NS_E_19:
-NS_E_RDI_19:
+NS_E_ID_30: dq 0
+NS_E_30:
+NS_E_RDI_30:
 	mov rdi,r13
 	push r13
 	call mlc_s8
@@ -244,9 +254,9 @@ NS_E_RDI_19:
 	pop r13
 	btr r12,1
 	ret
-NS_E_ID_25: dq 0
-NS_E_25:
-NS_E_RDI_25:
+NS_E_ID_36: dq 0
+NS_E_36:
+NS_E_RDI_36:
 	mov rdi,r13
 	push r13
 	call in_fn
@@ -254,9 +264,9 @@ NS_E_RDI_25:
 	pop r13
 	btr r12,1
 	ret
-NS_E_546:
-NS_E_RDI_546:
-NS_E_546_ETR_TBL:
+NS_E_68:
+NS_E_RDI_68:
+NS_E_68_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	push r14
@@ -277,14 +287,14 @@ NS_E_546_ETR_TBL:
 	pop rdx
 	pop r14
 	cmp rdi,0
-	jz NS_E_546_LB_0
+	jz NS_E_68_LB_0
 	mov r14,rsi
 	mov r8,0
 	mov r9,rax
 	bts r12,3
 	bts r12,2
 	ret
-NS_E_546_LB_0:
+NS_E_68_LB_0:
 	mov r8,1
 	mov rdi,rbx
 	mov rbx,[rdi]
@@ -294,9 +304,9 @@ NS_E_546_LB_0:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_559:
-NS_E_RDI_559:
-; 	» "-27686gg" _ ⊢ 0' : %_551
+NS_E_81:
+NS_E_RDI_81:
+; 	» "-27686gg" _ ⊢ 0' : %_73
 	mov rdi,8
 	call mlc_s8
 	mov rdi,rax
@@ -306,9 +316,9 @@ NS_E_RDI_559:
 	mov QWORD [rdi+8*1+8*1],rax
 	mov r13,rdi
 	btr r12,0
-; » _f15 |~ {  } ⊢ %_552 : %_552
- ; {>  %_551~0':_stg }
-; 	» _args _ ⊢ 1' : %_552
+; » _f26 |~ {  } ⊢ %_74 : %_74
+ ; {>  %_73~0':_stg }
+; 	» _args _ ⊢ 1' : %_74
 	push r14
 	push rdx
 	push rcx
@@ -330,9 +340,9 @@ NS_E_RDI_559:
 	pop r14
 	mov r14,rax
 	btr r12,1
-; » _f15 |~ {  } ⊢ %_553 : %_553
- ; {>  %_551~0':_stg %_552~1':(_lst)◂(_stg) }
-; 	» _args _ ⊢ 2' : %_553
+; » _f26 |~ {  } ⊢ %_75 : %_75
+ ; {>  %_74~1':(_lst)◂(_stg) %_73~0':_stg }
+; 	» _args _ ⊢ 2' : %_75
 	push r14
 	push rdx
 	push rcx
@@ -354,9 +364,9 @@ NS_E_RDI_559:
 	pop r14
 	mov r8,rax
 	btr r12,2
-; » _f15 |~ {  } ⊢ %_554 : %_554
- ; {>  %_551~0':_stg %_553~2':(_lst)◂(_stg) %_552~1':(_lst)◂(_stg) }
-; 	» _args _ ⊢ 3' : %_554
+; » _f26 |~ {  } ⊢ %_76 : %_76
+ ; {>  %_75~2':(_lst)◂(_stg) %_74~1':(_lst)◂(_stg) %_73~0':_stg }
+; 	» _args _ ⊢ 3' : %_76
 	push r14
 	push rdx
 	push rcx
@@ -378,9 +388,9 @@ NS_E_RDI_559:
 	pop r14
 	mov r9,rax
 	btr r12,3
-; _f26 { %_552 %_553 %_554 } ⊢ { %_555 %_556 %_557 } : { %_555 %_556 %_557 }
- ; {>  %_551~0':_stg %_553~2':(_lst)◂(_stg) %_552~1':(_lst)◂(_stg) %_554~3':(_lst)◂(_stg) }
-; _f26 { 1' 2' 3' } ⊢ { 1' 2' 3' }
+; _f37 { %_74 %_75 %_76 } ⊢ { %_77 %_78 %_79 } : { %_77 %_78 %_79 }
+ ; {>  %_76~3':(_lst)◂(_stg) %_75~2':(_lst)◂(_stg) %_74~1':(_lst)◂(_stg) %_73~0':_stg }
+; _f37 { 1' 2' 3' } ⊢ { 1' 2' 3' }
 ; push_iv 
 	sub rsp,16
 	mov QWORD [rsp+8+8*0],r13
@@ -394,112 +404,112 @@ NS_E_RDI_559:
 	btr r12,0
 	mov r10,r14
 	bt r12,1
-	jc LB_564
+	jc LB_86
 	btr r12,4
-	jmp LB_565
-LB_564:
+	jmp LB_87
+LB_86:
 	bts r12,4
-LB_565:
+LB_87:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*0],r10
 	bt r12,4
-	jc LB_562
+	jc LB_84
 	btr QWORD [rdi],0
-	jmp LB_563
-LB_562:
+	jmp LB_85
+LB_84:
 	bts QWORD [rdi],0
-LB_563:
+LB_85:
 	mov r10,r8
 	bt r12,2
-	jc LB_568
+	jc LB_90
 	btr r12,4
-	jmp LB_569
-LB_568:
+	jmp LB_91
+LB_90:
 	bts r12,4
-LB_569:
+LB_91:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*1],r10
 	bt r12,4
-	jc LB_566
+	jc LB_88
 	btr QWORD [rdi],1
-	jmp LB_567
-LB_566:
+	jmp LB_89
+LB_88:
 	bts QWORD [rdi],1
-LB_567:
+LB_89:
 	mov r10,r9
 	bt r12,3
-	jc LB_572
+	jc LB_94
 	btr r12,4
-	jmp LB_573
-LB_572:
+	jmp LB_95
+LB_94:
 	bts r12,4
-LB_573:
+LB_95:
 	mov rdi,r13
 	mov QWORD [rdi+8*1+8*2],r10
 	bt r12,4
-	jc LB_570
+	jc LB_92
 	btr QWORD [rdi],2
-	jmp LB_571
-LB_570:
+	jmp LB_93
+LB_92:
 	bts QWORD [rdi],2
-LB_571:
-	call NS_E_26
+LB_93:
+	call NS_E_37
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ { 1' 2' 3' }
 ; 0' ⊢ { 1' 2' 3' }
 	mov rdi,r13
 	mov rax,QWORD [rdi+8*1+8*0]
 	mov r10,rax
 	bt QWORD [rdi],0
-	jc LB_576
+	jc LB_98
 	btr r12,4
-	jmp LB_577
-LB_576:
+	jmp LB_99
+LB_98:
 	bts r12,4
-LB_577:
+LB_99:
 	mov r14,r10
 	bt r12,4
-	jc LB_574
+	jc LB_96
 	btr r12,1
-	jmp LB_575
-LB_574:
+	jmp LB_97
+LB_96:
 	bts r12,1
-LB_575:
+LB_97:
 	mov rdi,r13
 	mov rax,QWORD [rdi+8*1+8*1]
 	mov r10,rax
 	bt QWORD [rdi],1
-	jc LB_580
+	jc LB_102
 	btr r12,4
-	jmp LB_581
-LB_580:
+	jmp LB_103
+LB_102:
 	bts r12,4
-LB_581:
+LB_103:
 	mov r8,r10
 	bt r12,4
-	jc LB_578
+	jc LB_100
 	btr r12,2
-	jmp LB_579
-LB_578:
+	jmp LB_101
+LB_100:
 	bts r12,2
-LB_579:
+LB_101:
 	mov rdi,r13
 	mov rax,QWORD [rdi+8*1+8*2]
 	mov r10,rax
 	bt QWORD [rdi],2
-	jc LB_584
+	jc LB_106
 	btr r12,4
-	jmp LB_585
-LB_584:
+	jmp LB_107
+LB_106:
 	bts r12,4
-LB_585:
+LB_107:
 	mov r9,r10
 	bt r12,4
-	jc LB_582
+	jc LB_104
 	btr r12,3
-	jmp LB_583
-LB_582:
+	jmp LB_105
+LB_104:
 	bts r12,3
-LB_583:
+LB_105:
 	mov rdi,r13
 	mov [rdi],rbx
 	mov rbx,rdi
@@ -507,16 +517,16 @@ LB_583:
 	mov rax,QWORD [rsp]
 	mov r13,QWORD [rsp+8+8*0]
 	bt QWORD rax,0
-	jc LB_560
+	jc LB_82
 	btr r12,0
-	jmp LB_561
-LB_560:
+	jmp LB_83
+LB_82:
 	bts r12,0
-LB_561:
+LB_83:
 	add rsp,16
-; _f26 %_551 ⊢ %_558 : %_558
- ; {>  %_551~0':_stg %_556~2':(_lst)◂(_stg) %_557~3':(_lst)◂(_stg) %_555~1':(_lst)◂(_stg) }
-; _f26 0' ⊢ 0'
+; _f37 %_73 ⊢ %_80 : %_80
+ ; {>  %_79~3':(_lst)◂(_stg) %_77~1':(_lst)◂(_stg) %_78~2':(_lst)◂(_stg) %_73~0':_stg }
+; _f37 0' ⊢ 0'
 ; push_iv 
 	sub rsp,32
 	mov QWORD [rsp+8+8*0],r14
@@ -524,69 +534,69 @@ LB_561:
 	mov QWORD [rsp+8+8*2],r9
 	mov QWORD [rsp],r12
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 0'
-	call NS_E_26
+	call NS_E_37
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 0'
 ; pop_iv
 	mov rax,QWORD [rsp]
 	mov r9,QWORD [rsp+8+8*2]
 	bt QWORD rax,3
-	jc LB_590
+	jc LB_112
 	btr r12,3
-	jmp LB_591
-LB_590:
+	jmp LB_113
+LB_112:
 	bts r12,3
-LB_591:
+LB_113:
 	mov r8,QWORD [rsp+8+8*1]
 	bt QWORD rax,2
-	jc LB_588
+	jc LB_110
 	btr r12,2
-	jmp LB_589
-LB_588:
+	jmp LB_111
+LB_110:
 	bts r12,2
-LB_589:
+LB_111:
 	mov r14,QWORD [rsp+8+8*0]
 	bt QWORD rax,1
-	jc LB_586
+	jc LB_108
 	btr r12,1
-	jmp LB_587
-LB_586:
+	jmp LB_109
+LB_108:
 	bts r12,1
-LB_587:
+LB_109:
 	add rsp,32
 ; ∎ {  }
- ; {>  %_558~0':_stg %_556~2':(_lst)◂(_stg) %_557~3':(_lst)◂(_stg) %_555~1':(_lst)◂(_stg) }
+ ; {>  %_80~0':_stg %_79~3':(_lst)◂(_stg) %_77~1':(_lst)◂(_stg) %_78~2':(_lst)◂(_stg) }
 ; 	∎ {  }
 	bt r12,0
-	jc LB_592
+	jc LB_114
 	mov rdi,r13
 	call dlt
-LB_592:
-	bt r12,2
-	jc LB_593
-	mov rdi,r8
-	call dlt
-LB_593:
+LB_114:
 	bt r12,3
-	jc LB_594
+	jc LB_115
 	mov rdi,r9
 	call dlt
-LB_594:
+LB_115:
 	bt r12,1
-	jc LB_595
+	jc LB_116
 	mov rdi,r14
 	call dlt
-LB_595:
+LB_116:
+	bt r12,2
+	jc LB_117
+	mov rdi,r8
+	call dlt
+LB_117:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-NS_E_603:
+NS_E_125:
 ; 	|» 0'
-NS_E_RDI_603:
-MTC_LB_604:
+NS_E_RDI_125:
+MTC_LB_126:
 	mov r15,0
 	mov rax,r13
 	shr rax,56
 	cmp rax,0
-	jnz MTC_LB_605
+	jnz MTC_LB_127
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ °0◂{ 1' 2' }
 ; 0' ⊢ °0◂{ 1' 2' }
 	btr r12,3
@@ -597,64 +607,64 @@ MTC_LB_604:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r13
 	bt QWORD [rdi],17
-	jnc LB_606
+	jnc LB_128
 	bt QWORD [rdi],0
-	jc LB_607
+	jc LB_129
 	btr r12,3
-	jmp LB_608
-LB_607:
+	jmp LB_130
+LB_129:
 	bts r12,3
-LB_608:
+LB_130:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_606:
+LB_128:
 	mov r9,rdi
 ; 3' ⊢ { 1' 2' }
 	mov rdi,r9
 	mov rax,QWORD [rdi+8*1+8*0]
 	mov r10,rax
 	bt QWORD [rdi],0
-	jc LB_611
+	jc LB_133
 	btr r12,4
-	jmp LB_612
-LB_611:
+	jmp LB_134
+LB_133:
 	bts r12,4
-LB_612:
+LB_134:
 	mov r14,r10
 	bt r12,4
-	jc LB_609
+	jc LB_131
 	btr r12,1
-	jmp LB_610
-LB_609:
+	jmp LB_132
+LB_131:
 	bts r12,1
-LB_610:
+LB_132:
 	mov rdi,r9
 	mov rax,QWORD [rdi+8*1+8*1]
 	mov r10,rax
 	bt QWORD [rdi],1
-	jc LB_615
+	jc LB_137
 	btr r12,4
-	jmp LB_616
-LB_615:
+	jmp LB_138
+LB_137:
 	bts r12,4
-LB_616:
+LB_138:
 	mov r8,r10
 	bt r12,4
-	jc LB_613
+	jc LB_135
 	btr r12,2
-	jmp LB_614
-LB_613:
+	jmp LB_136
+LB_135:
 	bts r12,2
-LB_614:
+LB_136:
 	mov rdi,r9
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rax,r8
 	shr rax,56
 	cmp rax,0
-	jnz MTC_LB_605
+	jnz MTC_LB_127
 ; _emt_mov_ptn_to_ptn:{| 1110.. |},2' ⊢ °0◂{ 3' 4' }
 ; 2' ⊢ °0◂{ 3' 4' }
 	btr r12,5
@@ -665,94 +675,94 @@ LB_614:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r8
 	bt QWORD [rdi],17
-	jnc LB_617
+	jnc LB_139
 	bt QWORD [rdi],0
-	jc LB_618
+	jc LB_140
 	btr r12,5
-	jmp LB_619
-LB_618:
+	jmp LB_141
+LB_140:
 	bts r12,5
-LB_619:
+LB_141:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_617:
+LB_139:
 	mov r11,rdi
 ; 5' ⊢ { 3' 4' }
 	mov rdi,r11
 	mov rax,QWORD [rdi+8*1+8*0]
 	mov rcx,rax
 	bt QWORD [rdi],0
-	jc LB_622
+	jc LB_144
 	btr r12,6
-	jmp LB_623
-LB_622:
+	jmp LB_145
+LB_144:
 	bts r12,6
-LB_623:
+LB_145:
 	mov r9,rcx
 	bt r12,6
-	jc LB_620
+	jc LB_142
 	btr r12,3
-	jmp LB_621
-LB_620:
+	jmp LB_143
+LB_142:
 	bts r12,3
-LB_621:
+LB_143:
 	mov rdi,r11
 	mov rax,QWORD [rdi+8*1+8*1]
 	mov rcx,rax
 	bt QWORD [rdi],1
-	jc LB_626
+	jc LB_148
 	btr r12,6
-	jmp LB_627
-LB_626:
+	jmp LB_149
+LB_148:
 	bts r12,6
-LB_627:
+LB_149:
 	mov r10,rcx
 	bt r12,6
-	jc LB_624
+	jc LB_146
 	btr r12,4
-	jmp LB_625
-LB_624:
+	jmp LB_147
+LB_146:
 	bts r12,4
-LB_625:
+LB_147:
 	mov rdi,r11
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
-LB_628:
+LB_150:
 	cmp r15,0
-	jz LB_629
+	jz LB_151
 	mov rdi,QWORD [gbg_vct-8+8*r15],
 	call dlt_gbg
 	sub r15,1
-	jmp LB_628
-LB_629:
+	jmp LB_150
+LB_151:
 ; ∎ {  }
- ; {>  %_600~4':(_lst)◂(t307'(-1)) %_597~1':t307'(-1) %_599~3':t307'(-1) }
+ ; {>  %_122~4':(_lst)◂(t47'(-1)) %_121~3':t47'(-1) %_119~1':t47'(-1) }
 ; 	∎ {  }
 	bt r12,4
-	jc LB_630
+	jc LB_152
 	mov rdi,r10
 	call dlt
-LB_630:
-	bt r12,1
-	jc LB_631
-	mov rdi,r14
-	call dlt
-LB_631:
+LB_152:
 	bt r12,3
-	jc LB_632
+	jc LB_153
 	mov rdi,r9
 	call dlt
-LB_632:
+LB_153:
+	bt r12,1
+	jc LB_154
+	mov rdi,r14
+	call dlt
+LB_154:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-MTC_LB_605:
+MTC_LB_127:
 	mov r15,0
 	mov rax,r13
 	shr rax,56
 	cmp rax,0
-	jnz MTC_LB_633
+	jnz MTC_LB_155
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ °0◂{ 1' 2' }
 ; 0' ⊢ °0◂{ 1' 2' }
 	btr r12,3
@@ -763,64 +773,64 @@ MTC_LB_605:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r13
 	bt QWORD [rdi],17
-	jnc LB_634
+	jnc LB_156
 	bt QWORD [rdi],0
-	jc LB_635
+	jc LB_157
 	btr r12,3
-	jmp LB_636
-LB_635:
+	jmp LB_158
+LB_157:
 	bts r12,3
-LB_636:
+LB_158:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_634:
+LB_156:
 	mov r9,rdi
 ; 3' ⊢ { 1' 2' }
 	mov rdi,r9
 	mov rax,QWORD [rdi+8*1+8*0]
 	mov r10,rax
 	bt QWORD [rdi],0
-	jc LB_639
+	jc LB_161
 	btr r12,4
-	jmp LB_640
-LB_639:
+	jmp LB_162
+LB_161:
 	bts r12,4
-LB_640:
+LB_162:
 	mov r14,r10
 	bt r12,4
-	jc LB_637
+	jc LB_159
 	btr r12,1
-	jmp LB_638
-LB_637:
+	jmp LB_160
+LB_159:
 	bts r12,1
-LB_638:
+LB_160:
 	mov rdi,r9
 	mov rax,QWORD [rdi+8*1+8*1]
 	mov r10,rax
 	bt QWORD [rdi],1
-	jc LB_643
+	jc LB_165
 	btr r12,4
-	jmp LB_644
-LB_643:
+	jmp LB_166
+LB_165:
 	bts r12,4
-LB_644:
+LB_166:
 	mov r8,r10
 	bt r12,4
-	jc LB_641
+	jc LB_163
 	btr r12,2
-	jmp LB_642
-LB_641:
+	jmp LB_164
+LB_163:
 	bts r12,2
-LB_642:
+LB_164:
 	mov rdi,r9
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rax,r8
 	shr rax,56
 	cmp rax,1
-	jnz MTC_LB_633
+	jnz MTC_LB_155
 ; _emt_mov_ptn_to_ptn:{| 1110.. |},2' ⊢ °1◂{  }
 ; 2' ⊢ °1◂{  }
 	btr r12,3
@@ -831,48 +841,48 @@ LB_642:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r8
 	bt QWORD [rdi],17
-	jnc LB_645
+	jnc LB_167
 	bt QWORD [rdi],0
-	jc LB_646
+	jc LB_168
 	btr r12,3
-	jmp LB_647
-LB_646:
+	jmp LB_169
+LB_168:
 	bts r12,3
-LB_647:
+LB_169:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_645:
+LB_167:
 	mov r9,rdi
 ; 3' ⊢ {  }
 	mov rdi,r9
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
-LB_648:
+LB_170:
 	cmp r15,0
-	jz LB_649
+	jz LB_171
 	mov rdi,QWORD [gbg_vct-8+8*r15],
 	call dlt_gbg
 	sub r15,1
-	jmp LB_648
-LB_649:
+	jmp LB_170
+LB_171:
 ; ∎ {  }
- ; {>  %_601~1':t307'(-1) }
+ ; {>  %_123~1':t47'(-1) }
 ; 	∎ {  }
 	bt r12,1
-	jc LB_650
+	jc LB_172
 	mov rdi,r14
 	call dlt
-LB_650:
+LB_172:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-MTC_LB_633:
+MTC_LB_155:
 	mov r15,0
 	mov rax,r13
 	shr rax,56
 	cmp rax,1
-	jnz MTC_LB_651
+	jnz MTC_LB_173
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ °1◂{  }
 ; 0' ⊢ °1◂{  }
 	btr r12,1
@@ -883,57 +893,57 @@ MTC_LB_633:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r13
 	bt QWORD [rdi],17
-	jnc LB_652
+	jnc LB_174
 	bt QWORD [rdi],0
-	jc LB_653
+	jc LB_175
 	btr r12,1
-	jmp LB_654
-LB_653:
+	jmp LB_176
+LB_175:
 	bts r12,1
-LB_654:
+LB_176:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_652:
+LB_174:
 	mov r14,rdi
 ; 1' ⊢ {  }
 	mov rdi,r14
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
-LB_655:
+LB_177:
 	cmp r15,0
-	jz LB_656
+	jz LB_178
 	mov rdi,QWORD [gbg_vct-8+8*r15],
 	call dlt_gbg
 	sub r15,1
-	jmp LB_655
-LB_656:
+	jmp LB_177
+LB_178:
 ; ∎ {  }
  ; {>  }
 ; 	∎ {  }
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-MTC_LB_651:
-NS_E_657:
-NS_E_RDI_657:
-NS_E_657_ETR_TBL:
-NS_E_657_TBL:
+MTC_LB_173:
+NS_E_179:
+NS_E_RDI_179:
+NS_E_179_ETR_TBL:
+NS_E_179_TBL:
 	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,32
 ; "A"
 	add r14,1
 	cmp r14,r10
-	jg LB_684
+	jg LB_206
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1-1+0]
 	cmp al,65
-	jnz LB_684
-	jmp LB_685
-LB_684:
-	jmp LB_667
-LB_685:
+	jnz LB_206
+	jmp LB_207
+LB_206:
+	jmp LB_189
+LB_207:
 	mov rax,rbx
 	mov rbx,[rax]
 	mov rdi,0x0000_0000_0000_ffff
@@ -942,21 +952,21 @@ LB_685:
 	mov QWORD [rsp+8*1+16*0],rax
 ; g0
 	push r10
-	call NS_E_657_ETR_TBL
+	call NS_E_179_ETR_TBL
 	pop r10
 	cmp r8,0
-	jz LB_676
+	jz LB_198
 	mov rdi,r9
 	mov [rdi],rbx
 	mov rbx,rdi
 	mov rsi,QWORD [rsp+16*0]
 	bt rsi,0
-	jc LB_677
+	jc LB_199
 	mov rdi,QWORD [rsp+16*0+8*1]
 	call dlt
-LB_677:
-	jmp LB_668
-LB_676:
+LB_199:
+	jmp LB_190
+LB_198:
 	mov rax,0
 	bt r12,3
 	setc al
@@ -966,83 +976,83 @@ LB_676:
 	mov rsi,r14
 	mov rax,QWORD [rsp+16*1]
 	bt rax,0
-	jc LB_671
+	jc LB_193
 	btr r12,1
-	jmp LB_672
-LB_671:
+	jmp LB_194
+LB_193:
 	bts r12,1
-LB_672:
+LB_194:
 	mov rax,QWORD [rsp+16*1+8*1]
 	mov r14,rax
 	mov rax,QWORD [rsp+16*0]
 	bt rax,0
-	jc LB_669
+	jc LB_191
 	btr r12,0
-	jmp LB_670
-LB_669:
+	jmp LB_192
+LB_191:
 	bts r12,0
-LB_670:
+LB_192:
 	mov rax,QWORD [rsp+16*0+8*1]
 	mov r13,rax
 	add rsp,32
 	push rdi
 	push rsi
-	push LB_664
+	push LB_186
 ; _emt_mov_ptn_to_ptn:{| 110.. |},{ 0' 1' } ⊢ { {  } 0' }
 	mov r8,r13
 	bt r12,0
-	jc LB_686
+	jc LB_208
 	btr r12,2
-	jmp LB_687
-LB_686:
+	jmp LB_209
+LB_208:
 	bts r12,2
-LB_687:
+LB_209:
 	mov r13,r14
 	bt r12,1
-	jc LB_688
+	jc LB_210
 	btr r12,0
-	jmp LB_689
-LB_688:
+	jmp LB_211
+LB_210:
 	bts r12,0
-LB_689:
+LB_211:
 ; 2' ⊢ {  }
 	mov rdi,r8
 	mov [rdi],rbx
 	mov rbx,rdi
-; _some %_658 ⊢ %_659 : %_659
- ; {>  %_658~0':_r64 }
+; _some %_180 ⊢ %_181 : %_181
+ ; {>  %_180~0':_r64 }
 ; _some 0' ⊢ °0◂0'
-; ∎ %_659
- ; {>  %_659~°0◂0':(_opn)◂(_r64) }
+; ∎ %_181
+ ; {>  %_181~°0◂0':(_opn)◂(_r64) }
 ; 	∎ °0◂0'
 ; _emt_mov_ptn_to_ptn:{| 10.. |},°0◂0' ⊢ 2'◂3'
 	mov r9,r13
 	bt r12,0
-	jc LB_662
+	jc LB_184
 	btr r12,3
-	jmp LB_663
-LB_662:
+	jmp LB_185
+LB_184:
 	bts r12,3
-LB_663:
+LB_185:
 	mov r8,0
 	bts r12,2
 	ret
-LB_664:
+LB_186:
 	pop r14
 	pop r13
 	bts r12,1
 	btr r12,0
 	cmp r8,0
-	jz LB_666
+	jz LB_188
 	pop r14
 	mov rdi,r9
 	mov [rdi],rbx
 	mov rbx,rdi
-	jmp LB_665
-LB_666:
+	jmp LB_187
+LB_188:
 	add rsp,8
 	ret
-LB_668:
+LB_190:
 	add rsp,32
 	pop r14
 	mov rax,0x0000_0000_0000_ffff
@@ -1054,25 +1064,25 @@ LB_668:
 	btr r12,3
 	bts r12,2
 	ret
-LB_667:
+LB_189:
 	add rsp,32
 	pop r14
-LB_665:
+LB_187:
 	mov r10d,DWORD [r13+4]
 	push r14
 	sub rsp,16
 ; "C"
 	add r14,1
 	cmp r14,r10
-	jg LB_703
+	jg LB_225
 	mov rax,0
 	mov al,BYTE [r13+r14+8*1-1+0]
 	cmp al,67
-	jnz LB_703
-	jmp LB_704
-LB_703:
-	jmp LB_695
-LB_704:
+	jnz LB_225
+	jmp LB_226
+LB_225:
+	jmp LB_217
+LB_226:
 	mov rax,rbx
 	mov rbx,[rax]
 	mov rdi,0x0000_0000_0000_ffff
@@ -1083,66 +1093,66 @@ LB_704:
 	mov rsi,r14
 	mov rax,QWORD [rsp+16*0]
 	bt rax,0
-	jc LB_696
+	jc LB_218
 	btr r12,0
-	jmp LB_697
-LB_696:
+	jmp LB_219
+LB_218:
 	bts r12,0
-LB_697:
+LB_219:
 	mov rax,QWORD [rsp+16*0+8*1]
 	mov r13,rax
 	add rsp,16
 	push rdi
 	push rsi
-	push LB_692
+	push LB_214
 ; _emt_mov_ptn_to_ptn:{| 10.. |},{ 0' } ⊢ { {  } }
 ; 0' ⊢ {  }
 	mov rdi,r13
 	mov [rdi],rbx
 	mov rbx,rdi
-; » 0xr1 |~ {  } ⊢ %_660 : %_660
+; » 0xr1 |~ {  } ⊢ %_182 : %_182
  ; {>  }
-; 	» 0xr1 _ ⊢ 0' : %_660
+; 	» 0xr1 _ ⊢ 0' : %_182
 	mov rdi,0x1
 	mov r13,rdi
 	bts r12,0
-; _some %_660 ⊢ %_661 : %_661
- ; {>  %_660~0':_r64 }
+; _some %_182 ⊢ %_183 : %_183
+ ; {>  %_182~0':_r64 }
 ; _some 0' ⊢ °0◂0'
-; ∎ %_661
- ; {>  %_661~°0◂0':(_opn)◂(_r64) }
+; ∎ %_183
+ ; {>  %_183~°0◂0':(_opn)◂(_r64) }
 ; 	∎ °0◂0'
 ; _emt_mov_ptn_to_ptn:{| 10.. |},°0◂0' ⊢ 2'◂3'
 	mov r9,r13
 	bt r12,0
-	jc LB_690
+	jc LB_212
 	btr r12,3
-	jmp LB_691
-LB_690:
+	jmp LB_213
+LB_212:
 	bts r12,3
-LB_691:
+LB_213:
 	mov r8,0
 	bts r12,2
 	ret
-LB_692:
+LB_214:
 	pop r14
 	pop r13
 	bts r12,1
 	btr r12,0
 	cmp r8,0
-	jz LB_694
+	jz LB_216
 	pop r14
 	mov rdi,r9
 	mov [rdi],rbx
 	mov rbx,rdi
-	jmp LB_693
-LB_694:
+	jmp LB_215
+LB_216:
 	add rsp,8
 	ret
-LB_695:
+LB_217:
 	add rsp,16
 	pop r14
-LB_693:
+LB_215:
 	mov rax,0x0000_0000_0000_ffff
 	mov rdi,rbx
 	mov rbx,[rdi]
@@ -1152,15 +1162,15 @@ LB_693:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_711:
+NS_E_233:
 ; 	|» 0'
-NS_E_RDI_711:
-MTC_LB_712:
+NS_E_RDI_233:
+MTC_LB_234:
 	mov r15,0
 	mov rax,r13
 	shr rax,56
 	cmp rax,0
-	jnz MTC_LB_713
+	jnz MTC_LB_235
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ °0◂1'
 ; 0' ⊢ °0◂1'
 	btr r12,2
@@ -1171,52 +1181,52 @@ MTC_LB_712:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r13
 	bt QWORD [rdi],17
-	jnc LB_714
+	jnc LB_236
 	bt QWORD [rdi],0
-	jc LB_715
+	jc LB_237
 	btr r12,2
-	jmp LB_716
-LB_715:
+	jmp LB_238
+LB_237:
 	bts r12,2
-LB_716:
+LB_238:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_714:
+LB_236:
 	mov r8,rdi
 	mov r14,r8
 	bt r12,2
-	jc LB_717
+	jc LB_239
 	btr r12,1
-	jmp LB_718
-LB_717:
+	jmp LB_240
+LB_239:
 	bts r12,1
-LB_718:
-LB_719:
+LB_240:
+LB_241:
 	cmp r15,0
-	jz LB_720
+	jz LB_242
 	mov rdi,QWORD [gbg_vct-8+8*r15],
 	call dlt_gbg
 	sub r15,1
-	jmp LB_719
-LB_720:
+	jmp LB_241
+LB_242:
 ; ∎ {  }
- ; {>  %_709~1':(_lst)◂((_p705)◂(t337'(-1))) }
+ ; {>  %_231~1':(_lst)◂((_p227)◂(t77'(-1))) }
 ; 	∎ {  }
 	bt r12,1
-	jc LB_721
+	jc LB_243
 	mov rdi,r14
 	call dlt
-LB_721:
+LB_243:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-MTC_LB_713:
+MTC_LB_235:
 	mov r15,0
 	mov rax,r13
 	shr rax,56
 	cmp rax,1
-	jnz MTC_LB_722
+	jnz MTC_LB_244
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ °1◂1'
 ; 0' ⊢ °1◂1'
 	btr r12,2
@@ -1227,50 +1237,50 @@ MTC_LB_713:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r13
 	bt QWORD [rdi],17
-	jnc LB_723
+	jnc LB_245
 	bt QWORD [rdi],0
-	jc LB_724
+	jc LB_246
 	btr r12,2
-	jmp LB_725
-LB_724:
+	jmp LB_247
+LB_246:
 	bts r12,2
-LB_725:
+LB_247:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_723:
+LB_245:
 	mov r8,rdi
 	mov r14,r8
 	bt r12,2
-	jc LB_726
+	jc LB_248
 	btr r12,1
-	jmp LB_727
-LB_726:
+	jmp LB_249
+LB_248:
 	bts r12,1
-LB_727:
-LB_728:
+LB_249:
+LB_250:
 	cmp r15,0
-	jz LB_729
+	jz LB_251
 	mov rdi,QWORD [gbg_vct-8+8*r15],
 	call dlt_gbg
 	sub r15,1
-	jmp LB_728
-LB_729:
+	jmp LB_250
+LB_251:
 ; ∎ {  }
- ; {>  %_710~1':t337'(-1) }
+ ; {>  %_232~1':t77'(-1) }
 ; 	∎ {  }
 	bt r12,1
-	jc LB_730
+	jc LB_252
 	mov rdi,r14
 	call dlt
-LB_730:
+LB_252:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-MTC_LB_722:
-NS_E_737:
-NS_E_RDI_737:
-; 	» "A" _ ⊢ 0' : %_731
+MTC_LB_244:
+NS_E_262:
+NS_E_RDI_262:
+; 	» "A" _ ⊢ 0' : %_253
 	mov rdi,1
 	call mlc_s8
 	mov rdi,rax
@@ -1278,44 +1288,114 @@ NS_E_RDI_737:
 	mov QWORD [rdi+8*1+8*0],rax
 	mov r13,rdi
 	btr r12,0
-; » 0xr1 |~ {  } ⊢ %_732 : %_732
- ; {>  %_731~0':_stg }
-; 	» 0xr1 _ ⊢ 1' : %_732
+; » 0xr1 |~ {  } ⊢ %_254 : %_254
+ ; {>  %_253~0':_stg }
+; 	» 0xr1 _ ⊢ 1' : %_254
 	mov rdi,0x1
 	mov r14,rdi
 	bts r12,1
-; _nil {  } ⊢ %_733 : %_733
- ; {>  %_731~0':_stg %_732~1':_r64 }
+; _nil {  } ⊢ %_255 : %_255
+ ; {>  %_254~1':_r64 %_253~0':_stg }
 ; _nil {  } ⊢ °1◂{  }
-; _f706 %_733 ⊢ %_734 : %_734
- ; {>  %_731~0':_stg %_732~1':_r64 %_733~°1◂{  }:(_lst)◂(t345'(0)) }
-; _f706 °1◂{  } ⊢ °0◂°1◂{  }
-; _f707 %_732 ⊢ %_735 : %_735
- ; {>  %_731~0':_stg %_732~1':_r64 %_734~°0◂°1◂{  }:(_p705)◂(t347'(0)) }
-; _f707 1' ⊢ °1◂1'
-; _f707 %_731 ⊢ %_736 : %_736
- ; {>  %_731~0':_stg %_735~°1◂1':(_p705)◂(_r64) %_734~°0◂°1◂{  }:(_p705)◂(t347'(0)) }
-; _f707 0' ⊢ °1◂0'
+; _f228 %_255 ⊢ %_256 : %_256
+ ; {>  %_255~°1◂{  }:(_lst)◂(t85'(0)) %_254~1':_r64 %_253~0':_stg }
+; _f228 °1◂{  } ⊢ °0◂°1◂{  }
+; _f229 %_254 ⊢ %_257 : %_257
+ ; {>  %_254~1':_r64 %_253~0':_stg %_256~°0◂°1◂{  }:(_p227)◂(t87'(0)) }
+; _f229 1' ⊢ °1◂1'
+; _f229 %_253 ⊢ %_258 : %_258
+ ; {>  %_257~°1◂1':(_p227)◂(_r64) %_253~0':_stg %_256~°0◂°1◂{  }:(_p227)◂(t87'(0)) }
+; _f229 0' ⊢ °1◂0'
+; » 0xr8 |~ {  } ⊢ %_259 : %_259
+ ; {>  %_257~°1◂1':(_p227)◂(_r64) %_258~°1◂0':(_p227)◂(_stg) %_256~°0◂°1◂{  }:(_p227)◂(t87'(0)) }
+; 	» 0xr8 _ ⊢ 2' : %_259
+	mov rdi,0x8
+	mov r8,rdi
+	bts r12,2
+; _f19 %_259 ⊢ { %_260 %_261 } : { %_260 %_261 }
+ ; {>  %_257~°1◂1':(_p227)◂(_r64) %_259~2':_r64 %_258~°1◂0':(_p227)◂(_stg) %_256~°0◂°1◂{  }:(_p227)◂(t87'(0)) }
+; _f19 2' ⊢ { 2' 3' }
+; push_iv 
+	sub rsp,24
+	mov QWORD [rsp+8+8*0],r13
+	mov QWORD [rsp+8+8*1],r14
+	mov QWORD [rsp],r12
+; _emt_mov_ptn_to_ptn:{| 0010.. |},2' ⊢ 0'
+	mov r13,r8
+	bt r12,2
+	jc LB_267
+	btr r12,0
+	jmp LB_268
+LB_267:
+	bts r12,0
+LB_268:
+	call NS_E_19
+; _emt_mov_ptn_to_ptn:{| 110.. |},{ 0' 1' } ⊢ { 2' 3' }
+	mov r8,r13
+	bt r12,0
+	jc LB_269
+	btr r12,2
+	jmp LB_270
+LB_269:
+	bts r12,2
+LB_270:
+	mov r9,r14
+	bt r12,1
+	jc LB_271
+	btr r12,3
+	jmp LB_272
+LB_271:
+	bts r12,3
+LB_272:
+; pop_iv
+	mov rax,QWORD [rsp]
+	mov r14,QWORD [rsp+8+8*1]
+	bt QWORD rax,1
+	jc LB_265
+	btr r12,1
+	jmp LB_266
+LB_265:
+	bts r12,1
+LB_266:
+	mov r13,QWORD [rsp+8+8*0]
+	bt QWORD rax,0
+	jc LB_263
+	btr r12,0
+	jmp LB_264
+LB_263:
+	bts r12,0
+LB_264:
+	add rsp,24
 ; ∎ {  }
- ; {>  %_735~°1◂1':(_p705)◂(_r64) %_734~°0◂°1◂{  }:(_p705)◂(t347'(0)) %_736~°1◂0':(_p705)◂(_stg) }
+ ; {>  %_257~°1◂1':(_p227)◂(_r64) %_261~3':t97'(0) %_258~°1◂0':(_p227)◂(_stg) %_260~2':_r64 %_256~°0◂°1◂{  }:(_p227)◂(t87'(0)) }
 ; 	∎ {  }
 	bt r12,1
-	jc LB_738
+	jc LB_273
 	mov rdi,r14
 	call dlt
-LB_738:
+LB_273:
+	bt r12,3
+	jc LB_274
+	mov rdi,r9
+	call dlt
+LB_274:
 	bt r12,0
-	jc LB_739
+	jc LB_275
 	mov rdi,r13
 	call dlt
-LB_739:
+LB_275:
+	bt r12,2
+	jc LB_276
+	mov rdi,r8
+	call dlt
+LB_276:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-NS_E_744:
-NS_E_RDI_744:
-; » 0xr9 |~ {  } ⊢ %_740 : %_740
+NS_E_281:
+NS_E_RDI_281:
+; » 0xr9 |~ {  } ⊢ %_277 : %_277
  ; {>  }
-; 	» 0xr9 _ ⊢ 0' : %_740
+; 	» 0xr9 _ ⊢ 0' : %_277
 	mov rdi,0x9
 	mov r13,rdi
 	bts r12,0
@@ -1333,24 +1413,24 @@ NS_E_RDI_744:
 	add rdi,8
 ; 0*"\tX"
 	mov rax,r13
-LB_745:
+LB_282:
 	cmp rax,0
-	jz LB_746
+	jz LB_283
 	mov rsi,0x_09
 	mov BYTE [rdi+8*0+0],sil
 	mov rsi,0x_58
 	mov BYTE [rdi+8*0+1],sil
 	add rdi,2
 	sub rax,1
-	jmp LB_745
-LB_746:
+	jmp LB_282
+LB_283:
 ; "\n"
 	mov rsi,0x_0a
 	mov BYTE [rdi+8*0+0],sil
 	add rdi,1
-; _f26 %_742 ⊢ %_743 : %_743
- ; {>  %_741~0':_r64 %_742~1':_stg }
-; _f26 1' ⊢ 1'
+; _f37 %_279 ⊢ %_280 : %_280
+ ; {>  %_279~1':_stg %_278~0':_r64 }
+; _f37 1' ⊢ 1'
 ; push_iv 
 	sub rsp,16
 	mov QWORD [rsp+8+8*0],r13
@@ -1358,57 +1438,57 @@ LB_746:
 ; _emt_mov_ptn_to_ptn:{| 010.. |},1' ⊢ 0'
 	mov r13,r14
 	bt r12,1
-	jc LB_749
+	jc LB_286
 	btr r12,0
-	jmp LB_750
-LB_749:
+	jmp LB_287
+LB_286:
 	bts r12,0
-LB_750:
-	call NS_E_26
+LB_287:
+	call NS_E_37
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 1'
 	mov r14,r13
 	bt r12,0
-	jc LB_751
+	jc LB_288
 	btr r12,1
-	jmp LB_752
-LB_751:
+	jmp LB_289
+LB_288:
 	bts r12,1
-LB_752:
+LB_289:
 ; pop_iv
 	mov rax,QWORD [rsp]
 	mov r13,QWORD [rsp+8+8*0]
 	bt QWORD rax,0
-	jc LB_747
+	jc LB_284
 	btr r12,0
-	jmp LB_748
-LB_747:
+	jmp LB_285
+LB_284:
 	bts r12,0
-LB_748:
+LB_285:
 	add rsp,16
 ; ∎ {  }
- ; {>  %_741~0':_r64 %_743~1':_stg }
+ ; {>  %_278~0':_r64 %_280~1':_stg }
 ; 	∎ {  }
 	bt r12,0
-	jc LB_753
+	jc LB_290
 	mov rdi,r13
 	call dlt
-LB_753:
+LB_290:
 	bt r12,1
-	jc LB_754
+	jc LB_291
 	mov rdi,r14
 	call dlt
-LB_754:
+LB_291:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	ret
-NS_E_768:
+NS_E_305:
 ; 	|» { 0' 1' }
-NS_E_RDI_768:
-MTC_LB_769:
+NS_E_RDI_305:
+MTC_LB_306:
 	mov r15,0
 	mov rax,r14
 	shr rax,56
 	cmp rax,0
-	jnz MTC_LB_770
+	jnz MTC_LB_307
 ; _emt_mov_ptn_to_ptn:{| 110.. |},1' ⊢ °0◂{ 2' 3' }
 ; 1' ⊢ °0◂{ 2' 3' }
 	btr r12,4
@@ -1419,78 +1499,78 @@ MTC_LB_769:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r14
 	bt QWORD [rdi],17
-	jnc LB_771
+	jnc LB_308
 	bt QWORD [rdi],0
-	jc LB_772
+	jc LB_309
 	btr r12,4
-	jmp LB_773
-LB_772:
+	jmp LB_310
+LB_309:
 	bts r12,4
-LB_773:
+LB_310:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_771:
+LB_308:
 	mov r10,rdi
 ; 4' ⊢ { 2' 3' }
 	mov rdi,r10
 	mov rax,QWORD [rdi+8*1+8*0]
 	mov r11,rax
 	bt QWORD [rdi],0
-	jc LB_776
+	jc LB_313
 	btr r12,5
-	jmp LB_777
-LB_776:
+	jmp LB_314
+LB_313:
 	bts r12,5
-LB_777:
+LB_314:
 	mov r8,r11
 	bt r12,5
-	jc LB_774
+	jc LB_311
 	btr r12,2
-	jmp LB_775
-LB_774:
+	jmp LB_312
+LB_311:
 	bts r12,2
-LB_775:
+LB_312:
 	mov rdi,r10
 	mov rax,QWORD [rdi+8*1+8*1]
 	mov r11,rax
 	bt QWORD [rdi],1
-	jc LB_780
+	jc LB_317
 	btr r12,5
-	jmp LB_781
-LB_780:
+	jmp LB_318
+LB_317:
 	bts r12,5
-LB_781:
+LB_318:
 	mov r9,r11
 	bt r12,5
-	jc LB_778
+	jc LB_315
 	btr r12,3
-	jmp LB_779
-LB_778:
+	jmp LB_316
+LB_315:
 	bts r12,3
-LB_779:
+LB_316:
 	mov rdi,r10
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
-LB_782:
+LB_319:
 	cmp r15,0
-	jz LB_783
+	jz LB_320
 	mov rdi,QWORD [gbg_vct-8+8*r15],
 	call dlt_gbg
 	sub r15,1
-	jmp LB_782
-LB_783:
-; _f41 %_755 ⊢ { %_759 %_760 } : { %_759 %_760 }
- ; {>  %_758~3':(_lst)◂(_r64) %_757~2':_r64 %_755~0':_r64 }
+	jmp LB_319
+LB_320:
+; _f52 %_292 ⊢ { %_296 %_297 } : { %_296 %_297 }
+ ; {>  %_295~3':(_lst)◂(_r64) %_292~0':_r64 %_294~2':_r64 }
 	mov r14,r13
 	bts r12,1
-; _f44 %_760 ⊢ %_761 : %_761
- ; {>  %_758~3':(_lst)◂(_r64) %_757~2':_r64 %_759~0':_r64 %_760~1':_r64 }
+; _f55 %_297 ⊢ %_298 : %_298
+ ; {>  %_297~1':_r64 %_295~3':(_lst)◂(_r64) %_296~0':_r64 %_294~2':_r64 }
 	add r14,1
-; _f768 { %_761 %_758 } ⊢ %_762 : %_762
- ; {>  %_758~3':(_lst)◂(_r64) %_757~2':_r64 %_761~1':_r64 %_759~0':_r64 }
-; _f768 { 1' 3' } ⊢ 1'
+; _f305 { %_298 %_295 } ⊢ %_299 : %_299
+ ; {>  %_295~3':(_lst)◂(_r64) %_298~1':_r64 %_296~0':_r64 %_294~2':_r64 }
+; _f305 { 1' 3' } ⊢ 1'
 ; push_iv 
 	sub rsp,24
 	mov QWORD [rsp+8+8*0],r13
@@ -1499,106 +1579,106 @@ LB_783:
 ; _emt_mov_ptn_to_ptn:{| 01010.. |},{ 1' 3' } ⊢ { 0' 1' }
 	mov r13,r14
 	bt r12,1
-	jc LB_788
+	jc LB_325
 	btr r12,0
-	jmp LB_789
-LB_788:
+	jmp LB_326
+LB_325:
 	bts r12,0
-LB_789:
+LB_326:
 	mov r14,r9
 	bt r12,3
-	jc LB_790
+	jc LB_327
 	btr r12,1
-	jmp LB_791
-LB_790:
+	jmp LB_328
+LB_327:
 	bts r12,1
-LB_791:
-	call NS_E_768
+LB_328:
+	call NS_E_305
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 1'
 	mov r14,r13
 	bt r12,0
-	jc LB_792
+	jc LB_329
 	btr r12,1
-	jmp LB_793
-LB_792:
+	jmp LB_330
+LB_329:
 	bts r12,1
-LB_793:
+LB_330:
 ; pop_iv
 	mov rax,QWORD [rsp]
 	mov r8,QWORD [rsp+8+8*1]
 	bt QWORD rax,2
-	jc LB_786
+	jc LB_323
 	btr r12,2
-	jmp LB_787
-LB_786:
+	jmp LB_324
+LB_323:
 	bts r12,2
-LB_787:
+LB_324:
 	mov r13,QWORD [rsp+8+8*0]
 	bt QWORD rax,0
-	jc LB_784
+	jc LB_321
 	btr r12,0
-	jmp LB_785
-LB_784:
+	jmp LB_322
+LB_321:
 	bts r12,0
-LB_785:
+LB_322:
 	add rsp,24
-; _f21 { %_762 %_759 %_757 } ⊢ { %_763 %_764 %_765 } : { %_763 %_764 %_765 }
- ; {>  %_757~2':_r64 %_762~1':_stg %_759~0':_r64 }
-; _f21 { 1' 0' 2' } ⊢ { 0' 1' 2' }
+; _f32 { %_299 %_296 %_294 } ⊢ { %_300 %_301 %_302 } : { %_300 %_301 %_302 }
+ ; {>  %_299~1':_stg %_296~0':_r64 %_294~2':_r64 }
+; _f32 { 1' 0' 2' } ⊢ { 0' 1' 2' }
 ; push_iv 
 	sub rsp,8
 	mov QWORD [rsp],r12
 ; _emt_mov_ptn_to_ptn:{| 1110.. |},{ 1' 0' 2' } ⊢ { 0' 1' 2' }
 	mov r9,r14
 	bt r12,1
-	jc LB_794
+	jc LB_331
 	btr r12,3
-	jmp LB_795
-LB_794:
+	jmp LB_332
+LB_331:
 	bts r12,3
-LB_795:
+LB_332:
 	mov r14,r13
 	bt r12,0
-	jc LB_796
+	jc LB_333
 	btr r12,1
-	jmp LB_797
-LB_796:
+	jmp LB_334
+LB_333:
 	bts r12,1
-LB_797:
+LB_334:
 	mov r13,r9
 	bt r12,3
-	jc LB_798
+	jc LB_335
 	btr r12,0
-	jmp LB_799
-LB_798:
+	jmp LB_336
+LB_335:
 	bts r12,0
-LB_799:
-	call NS_E_21
+LB_336:
+	call NS_E_32
 ; _emt_mov_ptn_to_ptn:{| 1110.. |},{ 0' 1' 2' } ⊢ { 0' 1' 2' }
 ; pop_iv
 	mov rax,QWORD [rsp]
 	add rsp,8
-; ∎ %_763
- ; {>  %_764~1':_r64 %_765~2':_r64 %_763~0':_stg }
+; ∎ %_300
+ ; {>  %_301~1':_r64 %_300~0':_stg %_302~2':_r64 }
 ; 	∎ 0'
 	bt r12,1
-	jc LB_800
+	jc LB_337
 	mov rdi,r14
 	call dlt
-LB_800:
+LB_337:
 	bt r12,2
-	jc LB_801
+	jc LB_338
 	mov rdi,r8
 	call dlt
-LB_801:
+LB_338:
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 0'
 	ret
-MTC_LB_770:
+MTC_LB_307:
 	mov r15,0
 	mov rax,r14
 	shr rax,56
 	cmp rax,1
-	jnz MTC_LB_802
+	jnz MTC_LB_339
 ; _emt_mov_ptn_to_ptn:{| 110.. |},1' ⊢ °1◂{  }
 ; 1' ⊢ °1◂{  }
 	btr r12,2
@@ -1609,103 +1689,103 @@ MTC_LB_770:
 	mov rdi,0x00ff_ffff_ffff_fffe
 	and rdi,r14
 	bt QWORD [rdi],17
-	jnc LB_803
+	jnc LB_340
 	bt QWORD [rdi],0
-	jc LB_804
+	jc LB_341
 	btr r12,2
-	jmp LB_805
-LB_804:
+	jmp LB_342
+LB_341:
 	bts r12,2
-LB_805:
+LB_342:
 	mov rax,rdi
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
 	mov rdi,QWORD [rdi+8*1]
-LB_803:
+LB_340:
 	mov r8,rdi
 ; 2' ⊢ {  }
 	mov rdi,r8
 	mov QWORD [gbg_vct+8*r15],rdi
 	add r15,1
-LB_806:
+LB_343:
 	cmp r15,0
-	jz LB_807
+	jz LB_344
 	mov rdi,QWORD [gbg_vct-8+8*r15],
 	call dlt_gbg
 	sub r15,1
-	jmp LB_806
-LB_807:
-; _f19 %_755 ⊢ { %_766 %_767 } : { %_766 %_767 }
- ; {>  %_755~0':_r64 }
-; _f19 0' ⊢ { 0' 1' }
+	jmp LB_343
+LB_344:
+; _f30 %_292 ⊢ { %_303 %_304 } : { %_303 %_304 }
+ ; {>  %_292~0':_r64 }
+; _f30 0' ⊢ { 0' 1' }
 ; push_iv 
 	sub rsp,8
 	mov QWORD [rsp],r12
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 0'
-	call NS_E_19
+	call NS_E_30
 ; _emt_mov_ptn_to_ptn:{| 110.. |},{ 0' 1' } ⊢ { 0' 1' }
 ; pop_iv
 	mov rax,QWORD [rsp]
 	add rsp,8
-; ∎ %_767
- ; {>  %_767~1':_stg %_766~0':_r64 }
+; ∎ %_304
+ ; {>  %_304~1':_stg %_303~0':_r64 }
 ; 	∎ 1'
 	bt r12,0
-	jc LB_808
+	jc LB_345
 	mov rdi,r13
 	call dlt
-LB_808:
+LB_345:
 ; _emt_mov_ptn_to_ptn:{| 010.. |},1' ⊢ 0'
 	mov r13,r14
 	bt r12,1
-	jc LB_809
+	jc LB_346
 	btr r12,0
-	jmp LB_810
-LB_809:
+	jmp LB_347
+LB_346:
 	bts r12,0
-LB_810:
+LB_347:
 	ret
-MTC_LB_802:
+MTC_LB_339:
 section .data
-	NS_E_DYN_544:
+	NS_E_DYN_66:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_544
-	NS_E_DYN_547:
+		dq NS_E_66
+	NS_E_DYN_69:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_547
-	NS_E_DYN_548:
+		dq NS_E_69
+	NS_E_DYN_70:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_548
-	NS_E_DYN_549:
+		dq NS_E_70
+	NS_E_DYN_71:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_549
-	NS_E_DYN_550:
+		dq NS_E_71
+	NS_E_DYN_72:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_550
-	CST_DYN_559:
+		dq NS_E_72
+	CST_DYN_81:
 		dq 0x0000_0001_00_82_ffff
 		dq 1
-	NS_E_DYN_603:
+	NS_E_DYN_125:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_603
-	NS_E_DYN_657:
+		dq NS_E_125
+	NS_E_DYN_179:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_657
-	NS_E_DYN_706:
+		dq NS_E_179
+	NS_E_DYN_228:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 0
-	NS_E_DYN_707:
+	NS_E_DYN_229:
 		dq 0b00000000_00000001_00000000_00000001_11000000_00000000_00000000_00000001
 		dq 1
-	NS_E_DYN_711:
+	NS_E_DYN_233:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_711
-	CST_DYN_737:
+		dq NS_E_233
+	CST_DYN_262:
 		dq 0x0000_0001_00_82_ffff
 		dq 1
-	CST_DYN_744:
+	CST_DYN_281:
 		dq 0x0000_0001_00_82_ffff
 		dq 1
-	NS_E_DYN_768:
+	NS_E_DYN_305:
 		dq 0b00000000_00000001_00000000_00000001_10000000_00000000_00000000_00000001
-		dq NS_E_768
+		dq NS_E_305

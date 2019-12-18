@@ -91,12 +91,16 @@ module Types = struct
   let rm:rm = ref []
   let v_vct:((v ref) list ref) = ref []
   module Axm = struct
+    let arr = sgn ()
+    let ext = sgn ()
     let nat = sgn ()
     let v = sgn ()
     let z_n = sgn ()
     let fd = sgn ()
     let z_u = sgn ()
     let r64 = sgn ()
+    let r32 = sgn ()
+    let r16 = sgn ()
     let r2 = sgn ()
     let zn = sgn ()
     let lst = sgn ()
@@ -501,6 +505,13 @@ module Ast = struct
   let init_gns () =
     { ns_vct_n=0; ns_vct=Array.make 256 (sgn ()); ns=[]; ns_e=[]; ns_c=[]; ns_r_t=[]; ns_r_i=[]  }
   module Axm = struct
+    let _mk_arr = sgn ()
+    let _exc_q = sgn ()
+    let _set_q = sgn ()
+    let _lod_q = sgn ()
+    let _get_q = sgn ()
+    let _write = sgn ()
+    let _system = sgn ()
     let _args = sgn ()
     let _in_l = sgn ()
     let _in_r = sgn ()
@@ -3633,6 +3644,24 @@ and init_prm () =
   !ns.ns_p <- ("_in_r",Ast.Axm._in_r)::!ns.ns_p;
   gns.ns_e <- (Ast.Axm._in_r,ref(Ctr(1,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._in_r,v)::gns.ns;
+
+  !ns.ns_t <- ("_arr",ref(Ln(Axm Axm.arr)))::!ns.ns_t;
+  !ns.ns_p <- ("_mk_arr",Ast.Axm._mk_arr)::!ns.ns_p;
+  let q0 = newvar_q (-1) in
+  gns.ns <- (Ast.Axm._mk_arr,ref(Ln(Imp(Axm Axm.r64,Rcd(rcd_cl [Axm Axm.r64;Var q0])))))::gns.ns;
+  gns.ns_e <- (Ast.Axm._mk_arr,ref(Etr_V(RP.A(R.Idx 0),RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|])))::gns.ns_e;
+  let em_mk_arr =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._mk_arr)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._mk_arr)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._mk_arr)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tpush "^(emt_reg_x86 0)^"\n"^
+    "\tcall mk_arr\n"^
+    "\tmov "^(emt_reg_x86 1)^",rax\n"^
+    "\tpop "^(emt_reg_x86 0)^"\n"^
+    "\tbtr r12,1\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._mk_arr,em_mk_arr)::gns.ns_c;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64;Axm Axm.r64])))) in
   !ns.ns_p <- ("_setge",Ast.Axm._setge)::!ns.ns_p;
