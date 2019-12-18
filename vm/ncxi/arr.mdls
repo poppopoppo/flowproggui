@@ -1,0 +1,6 @@
+§ A0 « 
+	» 8r _ ⊢ x 
+	_mk_arr x ⊢ { x v }
+	_emt v ⊢ v  
+	∎ {} 
+	
