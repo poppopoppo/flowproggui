@@ -50,11 +50,16 @@
 	∐ atm : a' 
 ¶ s8_ptn = reg_ptn◂_s8 
 ¶ r64_ptn = reg_ptn◂_r64
+§ f1 r 
+	∐ r ⊢ rcd◂l .
+		∎ {} 
+	∐ r ⊢ atm◂a . 
+		∎ {}
 § A0 « 
 	» "A" _ ⊢ s0 
 	» 1r _ ⊢ x0 
 	_nil {} ⊢ l0 
-	##rcd l0 ⊢ r0
+	rcd l0 ⊢ r0
 	atm x0 ⊢ lx 
 	atm s0 ⊢ ls 
 	∎ {}
