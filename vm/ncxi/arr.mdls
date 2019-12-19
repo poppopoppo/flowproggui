@@ -18,6 +18,7 @@
 	_lod_q { v0 y } ⊢ { v0 y x0 }
 	_emt x0 ⊢ x0 
 	» 1r _ ⊢ z 
-	_lod_q { v0 z } ⊢ { v0 z x1 }
+	$ z ⊢ z,z0 
+	_emt { z z0 } ⊢ { z z0 }
 	∎ {} 
 	

@@ -347,7 +347,7 @@ s8_ptn:
   | STG s8_ptn { (S8_Txt $1)::$2 }
   | IDX s8_ptn { (S8_Var $1)::$2 }
   | name s8_ptn { (S8_Name(ref(Ast.Stt_Name $1)))::$2 }
-  | IDX MLT STG s8_ptn { (S8_For_Txt($1,$3))::$4 } 
+  | IDX MLT STG s8_ptn { (S8_For_Txt($1,$3))::$4 }
   ;
 ir_ptn:
   | ir_ptn_atm { Rcd_Ptn.A $1 }
@@ -383,6 +383,8 @@ mtc_ir_test:
     }
   | VAL EQ ir_ptn_cst {
     (ref(R_N $1),ref(P_Cst $3)) }
+  | VAL EQ VAL {
+    (ref(R_N $1),ref(Eq_V(ref(R_N $3)))) }
   ;
 ir_ptn_cst:
   | STG { P_Stg $1 }

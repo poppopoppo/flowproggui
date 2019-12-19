@@ -434,6 +434,8 @@ dcp:
 dcp_blk:
   bt QWORD [rdi],16
   jc rpc_s8
+  bt QWORD [rdi],18
+  jc rpc_arr
   mov rsi,rbx
   mov rbx,[rbx]
   mov rdx,[rdi]
@@ -1466,6 +1468,34 @@ rpc_s8: ; rdi=src
   rep movsb
   pop rcx
   ret
+
+rpc_arr:
+  push rdi
+  mov edi,DWORD [rdi+4]
+  push rdi
+  call mk_arr
+  pop rsi
+  pop rdi
+  mov rcx,rax
+rpc_arr_lp:
+  cmp rsi,0
+  jz rpc_arr_end
+  push rcx
+  push rsi
+  push rdi
+  mov rdi,QWORD [rdi+8*rsi]
+  clc
+  call dcp
+  pop rdi
+  pop rsi
+  pop rcx
+  mov QWORD [rcx+8*rsi],rax
+  sub rsi,1
+  jmp rpc_arr_lp
+rpc_arr_end:
+  mov rax,rcx
+  ret 
+
 
 ; rdi=stg rsi=offset0 ⊢ rdi rsi=offset1 rax=dst
 scf_d:
