@@ -505,6 +505,7 @@ module Ast = struct
   let init_gns () =
     { ns_vct_n=0; ns_vct=Array.make 256 (sgn ()); ns=[]; ns_e=[]; ns_c=[]; ns_r_t=[]; ns_r_i=[]  }
   module Axm = struct
+    let _rpc = sgn ()
     let _mk_arr = sgn ()
     let _exc_q = sgn ()
     let _set_q = sgn ()
@@ -2898,7 +2899,7 @@ and emt_m gns (ns:ns_v ref) ld el =
                 let yp = sgn () in
                 let ya = List.fold_left (fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
                 (*let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
-                !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;*)
+                  !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;*)
                 !ns.ns_t <- (n,ref(Ln(Axm yp)))::!ns.ns_t;
                 let dl = List.length ds in
                 let (_,es,pp0) =
@@ -3648,7 +3649,7 @@ and init_prm () =
   !ns.ns_t <- ("_arr",ref(Ln(Axm Axm.arr)))::!ns.ns_t;
   !ns.ns_p <- ("_mk_arr",Ast.Axm._mk_arr)::!ns.ns_p;
   let q0 = newvar_q (-1) in
-  gns.ns <- (Ast.Axm._mk_arr,ref(Ln(Imp(Axm Axm.r64,Rcd(rcd_cl [Axm Axm.r64;Var q0])))))::gns.ns;
+  gns.ns <- (Ast.Axm._mk_arr,ref(Ln(Imp(Axm Axm.r64,Rcd(rcd_cl [Axm Axm.r64;App(Axm Axm.arr,Var q0)])))))::gns.ns;
   gns.ns_e <- (Ast.Axm._mk_arr,ref(Etr_V(RP.A(R.Idx 0),RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|])))::gns.ns_e;
   let em_mk_arr =
     "NS_E_ID_"^(Sgn.print Ast.Axm._mk_arr)^": dq 0\n"^
@@ -3662,6 +3663,83 @@ and init_prm () =
     "\tbtr r12,1\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._mk_arr,em_mk_arr)::gns.ns_c;
+
+  !ns.ns_p <- ("_set_q",Ast.Axm._set_q)::!ns.ns_p;
+  let q0 = newvar_q (-1) in
+  gns.ns <- (Ast.Axm._set_q,ref(Ln(Imp(Rcd(rcd_cl [App(Axm Axm.arr,Var q0);Axm Axm.r64;Var q0]),Rcd(rcd_cl [App(Axm Axm.arr,Var q0);Axm Axm.r64])))))::gns.ns;
+  gns.ns_e <- (Ast.Axm._set_q,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|])))::gns.ns_e;
+  let em_set_q =
+    let lb0 = lb () in
+    "NS_E_ID_"^(Sgn.print Ast.Axm._set_q)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._set_q)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._set_q)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rax,"^(emt_reg_x86 1)^"\n"^
+    "\tmov esi,DWORD [rdi+4]\n"^
+    "\tcmp rax,rsi\n"^
+    "\tjge err\n"^
+    "\tmov rsi,QWORD [rdi+8+8*rax]\n"^
+    "\tnot rsi\n"^
+    "\txor rsi,rsp\n"^
+    "\tmov rsi,[rsi]\n"^
+    "\tbt r12,"^(string_of_int 2)^"\n"^
+    "\tjc "^lb0^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 2)^"\n"^
+    "\tmov QWORD [rdi+8+8*rax],rsi\n"^
+    "\tret\n"^
+    lb0^":\n"^
+    "\tmov rsi,rbx\n"^
+    "\tmov rbx,[rsi]\n"^
+    "\tmov QWORD [rdi+8+8*rax],rsi\n"^
+    "\tmov rax,"^(emt_reg_x86 2)^"\n"^
+    "\tmov QWORD [rsi+8],rax\n"^
+    "\tmov rax,0x0000_0001_0002_ffff\n"^
+    "\tmov QWORD [rsi],rax\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._set_q,em_set_q)::gns.ns_c;
+
+  !ns.ns_p <- ("_lod_q",Ast.Axm._lod_q)::!ns.ns_p;
+  let q0 = newvar_q (-1) in
+  gns.ns <- (Ast.Axm._lod_q,ref(Ln(Imp(Rcd(rcd_cl [App(Axm Axm.arr,Var q0);Axm Axm.r64]),Rcd(rcd_cl [App(Axm Axm.arr,Var q0);Axm Axm.r64;Var q0])))))::gns.ns;
+  gns.ns_e <- (Ast.Axm._lod_q,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|])))::gns.ns_e;
+  let em_lod_q =
+    let lb0 = lb () in
+    "NS_E_ID_"^(Sgn.print Ast.Axm._lod_q)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rax,"^(emt_reg_x86 1)^"\n"^
+    "\tmov esi,DWORD [rdi+4]\n"^
+    "\tcmp rax,rsi\n"^
+    "\tjge err\n"^
+    "\tmov rdi,QWORD [rdi+8+8*rax]\n"^
+    "\tbt rdi,0\n"^
+    "\tjc "^lb0^"\n"^
+    "\tbt QWORD [rdi],17\n"^
+    "\tmov rdi,QWORD [rdi+8]\n"^
+    "\tpush "^(emt_reg_x86 0)^"\n"^
+    "\tpush "^(emt_reg_x86 1)^"\n"^
+    "\tcall dcp\n"^
+    "\tpop "^(emt_reg_x86 1)^"\n"^
+    "\tpop "^(emt_reg_x86 0)^"\n"^
+    "\tbt QWORD [rsi],17""\tnot rsi\n"^
+    "\txor rsi,rsp\n"^
+    "\tmov rsi,[rsi]\n"^
+    "\tbt r12,"^(string_of_int 2)^"\n"^
+    "\tjc "^lb0^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 2)^"\n"^
+    "\tmov QWORD [rdi+8+8*rax],rsi\n"^
+    "\tret\n"^
+    lb0^":\n"^
+    "\tmov rsi,rbx\n"^
+    "\tmov rbx,[rsi]\n"^
+    "\tmov QWORD [rdi+8+8*rax],rsi\n"^
+    "\tmov rax,"^(emt_reg_x86 2)^"\n"^
+    "\tmov QWORD [rsi+8],rax\n"^
+    "\tmov rax,0x0000_0001_0002_ffff\n"^
+    "\tmov QWORD [rsi],rax\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._lod_q,em_lod_q)::gns.ns_c;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64;Axm Axm.r64])))) in
   !ns.ns_p <- ("_setge",Ast.Axm._setge)::!ns.ns_p;
@@ -3697,7 +3775,16 @@ and init_prm () =
   !ns.ns_p <- ("_mov_x",Ast.Axm._mov_x)::!ns.ns_p;
   gns.ns <- (Ast.Axm._mov_x,v)::gns.ns;
   gns.ns_e <- (Ast.Axm._mov_x,ref(E_K_WC))::gns.ns_e;
+
+  let q = newvar_q (-1) in
+  let v = ref(Ln(Imp(Var q,Rcd(rcd_cl [Var q;Var q])))) in
+  !ns.ns_p <- ("_rpc",Ast.Axm._rpc)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._rpc,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._rpc,ref(E_K_WC))::gns.ns_e;
+
   (se_in0^se_emt_q^se_byt^se_chr^se_dgt^se_u_al^se_l_al^se_pp_v,em_in0^em_emt_q^emt_byt^em_chr^em_dgt^em_l_al^em_u_al^em_pp_v,ns,gns)
+
+
 and args_init =
   "pop r14 ; number of args
   pop rdi ; program name
@@ -4709,6 +4796,33 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                             "\tbts r12,"^(string_of_int im)^"\n"^
                             free_blk0_rax
                           | _ -> err "emt_ir _mov 0" )
+                          | ep when ep=Ast.Axm._mov ->
+                            let ix = csm_ptn_iv (mk_idx_ptn x) iv in
+                            ( match ix with
+                              | RP.R[|RP.A(R.Idx x0);RP.A(R.Idx x1)|] ->
+                                let _ = mk_idx_iv iv ix (mk_idx_ptn y) in
+                                if x1<9 then
+                                  c_l^
+                                  "\tmov "^(emt_reg_x86 x0)^","^(emt_reg_x86 x1)^"\n"
+                                else
+                                  c_l^
+                                  "\tmov rdi,"^(emt_reg_x86 x1)^"\n"^
+                                  "\tmov "^(emt_reg_x86 x0)^",rdi\n"
+                              | RP.A(R.Idx xp) ->
+                                let s0 = rset_iv iv in
+                                s0.(xp)<-true;
+                                let im = RSet.min_0 s0 in
+                                let iy = RP.R [|RP.A(R.Idx xp);RP.A(R.Idx im)|] in
+                                let _ = mk_idx_iv iv iy (mk_idx_ptn y) in
+                                c_l^
+                                "\tmov rax,"^(emt_reg_x86 xp)^"\n"^
+                                "\tmov rdi,QWORD [rax+8*2]\n"^
+                                "\tmov "^(emt_reg_x86 xp)^",rdi\n"^
+                                "\tmov "^(emt_reg_x86 im)^",rdi\n"^
+                                "\tbts r12,"^(string_of_int xp)^"\n"^
+                                "\tbts r12,"^(string_of_int im)^"\n"^
+                                free_blk0_rax
+                              | _ -> err "emt_ir _mov 0" )
                       | ep when ep=Ast.Axm._mov_x ->
                         let ix = csm_ptn_iv (mk_idx_ptn x) iv in
                         ( match ix with

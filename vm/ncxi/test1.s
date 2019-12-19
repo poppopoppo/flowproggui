@@ -11,5 +11,8 @@ main:
 	movzx rax,BYTE [rsp+4]
 	mov al,BYTE [rsp+5]
 	mov ax,WORD [rsp+6]
+	mov rax,rsp 
+	add rax,1 
+	mov rax,QWORD [rax] 
 	ret 
 
