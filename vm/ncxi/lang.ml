@@ -1876,22 +1876,6 @@ and crt_ptn_iv gns r rv =
   ( match r with
     | RP.A a -> crt_iv gns a rv
     | RP.R rs -> RP.R(Array.map (fun r -> crt_ptn_iv gns r rv) rs) )
-and crt_mtc_ptn_iv gns (r,es) rv  =
-  let _ = crt_ptn_iv gns (mk_idx_ptn r) rv in
-  let es =
-    List.fold_left
-      (fun es (v0,e) ->
-         let v1 = csm_iv (mk_idx v0) rv in
-         ( match !e with
-           | Eq_Agl(_,_,_,r)
-           | Eq_Agl_N(_,r) ->
-             let _ = crt_ptn_iv gns (mk_idx_ptn r) rv in
-             es@[(v1,e)]
-           | P_Cst _ -> es@[(v1,e)]
-           | Eq_V _ -> es@[(v1,e)]
-         ))
-      [] es in
-  (r,es)
 let emt_flg = true
 let cmt s = if emt_flg then "; "^s^"\n" else ""
 let x86_reg_lst = [
@@ -4411,7 +4395,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                           "\tcmp rax,"^(emt_reg_x86 ix0)^"\n"^
                           "\tjnz "^lb1^"\n" in
                         let (dl,e1) = emt_mtc_eq iv0 es_tl lb1 in
-                        (px::dl,e0^e1)
+                        (dl,e0^e1)
                       | _ -> err "emt_mtc_eq 4" )
                   | _ -> err "emt_mtc_eq 5" )
               | Eq_V ve ->
@@ -4426,7 +4410,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                       "\tbt r12,"^(string_of_int ix0)^"\n"^
                       "\tcall eq\n"^
                       "\tjnz "^lb1^"\n" in
-                    (px::py::dl,e0^e1)
+                    (dl,e0^e1)
                   | _ -> err "Eq_V 0" )
               | _ -> err "emt_mtc_eq 1" ) ) in
       let iv_0 = Hashtbl.copy iv in

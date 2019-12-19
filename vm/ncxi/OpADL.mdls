@@ -27,8 +27,7 @@
 
 § @.assoc { l k } 
 	∐ l ⊢ _cns◂{ { k0 o0 } l } . 
-		_eq { k k0 } ⊢ { k k0 b } 
-		∐ b'=1r . 
+		∐ k'=k0' . 
 			∐ o0 ⊢ _some◂v0 .
 				$ v0 ⊢ v0,v1 
 				_some v0 ⊢ o0 
@@ -177,33 +176,6 @@
 		∎ a   
 
 §§ OpADL 
-	§§ ns
-		¶ @.reg_env = _lst◂{ _s8 _opn◂_r64 } 
-			@.mdl_env = _lst◂{ _s8 _opn◂_r64 }
-			@.etr_env = _lst◂{ _s8 _opn◂_r64 }
-			@.type_env = _lst◂{ _s8 _opn◂_r64 }
-			@.mdl_vct = _arr◂mdl_k 
-			@.reg_vct = _arr◂reg_k 
-			@.etr_vct = _arr◂etr_k 
-			@.type_vct = _arr◂var
-			@.mdl_k = mdl_env 
-			@.reg_k = {} 
-			@.etr_k 
-				∐ etr_cst : _r64 
-				∐ etr_op : { _r64 _r64 }
-			@.type_k 
-				∐ rcd : _lst◂type_k 
-				∐ app : { type_k type_k }
-				∐ imp : { type_k type_k }  
-				∐ abs : { type_k type_k } 
-				∐ axm : _r64 
-				∐ var : _r64   
-				∐ idx : _r64   
-			@.var 
-				∐ var_q : { _r64 _r64 }
-				∐ var_l : { _r64 _r64 } 
-				∐ var_ln : type_k 
-		∎∎
 	§§ ast 
 	¶ @.name 
 		∐ mdl_n : { _s8 name } 
@@ -1518,6 +1490,33 @@
 				_some r ⊢ a
 				∎ a 
 	∎∎ 
+	§§ ns
+		¶ @.reg_env = _lst◂{ _s8 _opn◂_r64 } 
+			@.mdl_env = _lst◂{ _s8 _opn◂_r64 }
+			@.etr_env = _lst◂{ _s8 _opn◂_r64 }
+			@.type_env = _lst◂{ _s8 _opn◂_r64 }
+			@.mdl_vct = _arr◂mdl_k 
+			@.reg_vct = _arr◂reg_k 
+			@.etr_vct = _arr◂etr_k 
+			@.type_vct = _arr◂var
+			@.mdl_k = mdl_env 
+			@.reg_k = {} 
+			@.etr_k 
+				∐ etr_cst : _r64 
+				∐ etr_op : { _r64 _r64 }
+			@.type_k 
+				∐ rcd : _lst◂type_k 
+				∐ app : { type_k type_k }
+				∐ imp : { type_k type_k }  
+				∐ abs : { type_k type_k } 
+				∐ axm : _r64 
+				∐ var : _r64   
+				∐ idx : _r64   
+			@.var 
+				∐ var_q : { _r64 _r64 }
+				∐ var_l : { _r64 _r64 } 
+				∐ var_ln : type_k 
+		∎∎
 	§ f0 «
 		» _^ _ ⊢ s0 
 			`§§ m0 
