@@ -9,6 +9,7 @@
 ; rbx SSS top
 bits 64
 
+%define NULL ~0
 %define SFLS_MAX 16000
 %define SFLS_NULL 0xffff_ffff_ffff_0000
 %define S8_NULL 0xffff_ffff_ffff_0001
@@ -328,7 +329,7 @@ dlt_arr_lp:
   je dlt_arr_lp_end
   push rdi
   mov rdi,[rdi+8*1+8*rax]
-  cmp rdi,0
+  cmp rdi,NULL
   jz dlt_arr_lp_nxt
   push rsi
   push rax
@@ -949,7 +950,7 @@ pp0_arr:
   sub r9,1
   push rdi
   mov rdi,[rdi]
-  cmp rdi,0
+  cmp rdi,NULL
   jz pp0_arr_r_p_lp_nxt
   push r9
   push r10
@@ -1719,7 +1720,7 @@ mk_arr:
 mk_arr_lp:
   cmp rcx,rsi
   jz mk_arr_lp_end
-  mov QWORD [rax+8+8*rcx],0
+  mov QWORD [rax+8+8*rcx],NULL
   add rcx,1
   jmp mk_arr_lp
 mk_arr_lp_end:

@@ -1,6 +1,14 @@
 § A0 « 
 	» 8r _ ⊢ x 
-	_mk_arr x ⊢ { x v }
-	_emt v ⊢ v  
+	» "H" _ ⊢ s0 
+	» "E" _ ⊢ s1 
+	» 4r _ ⊢ y
+	» 5r _ ⊢ z 
+	##$ z ⊢ z0,z1
+	_mk_arr x ⊢ { x v }	
+	_emt v ⊢ v
+	_set_q { v y s0 } ⊢ { v y }
+	_set_q { v x s1 } ⊢ { v x }  
+	_emt v ⊢ v
 	∎ {} 
 	
