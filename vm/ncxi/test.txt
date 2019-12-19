@@ -802,3 +802,8 @@ grammer
 
   » _^ ..
     0'*"\t" 3r*2' 0'*1'
+
+
+      len | col agl   ; opq
+tag-v len |           ; blk
+    agl col tag-v len 
