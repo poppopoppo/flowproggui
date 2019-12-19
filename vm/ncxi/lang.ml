@@ -2067,9 +2067,11 @@ let cf_set i =
   let l1 = lb () in
   "\tjc "^l0^"\n"^
   "\tbtr r12,"^(string_of_int i)^"\n"^
+  "\tclc\n"^
   "\tjmp "^l1^"\n"^
   l0^":\n"^
   "\tbts r12,"^(string_of_int i)^"\n"^
+  "\tstc\n"^
   l1^":\n"
 
 let emt_n0b n =
@@ -3609,9 +3611,12 @@ and init_prm () =
   gns.ns_e <- (Ast.Axm._lod_q,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|])))::gns.ns_e;
   let em_lod_q =
     let lb0 = lb () in
+    let lb1 = lb () in
     "NS_E_ID_"^(Sgn.print Ast.Axm._lod_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
+    "\tpush "^(emt_reg_x86 0)^"\n"^
+    "\tpush "^(emt_reg_x86 1)^"\n"^
     "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
     "\tmov rax,"^(emt_reg_x86 1)^"\n"^
     "\tmov esi,DWORD [rdi+4]\n"^
@@ -3621,30 +3626,20 @@ and init_prm () =
     "\tbt rdi,0\n"^
     "\tjc "^lb0^"\n"^
     "\tbt QWORD [rdi],17\n"^
-    "\tmov rdi,QWORD [rdi+8]\n"^
+    "\tjnc "^lb0^"\n"^
     "\tbt QWORD [rdi],0\n"^
-    lb0^":\n"^
-    "\tpush "^(emt_reg_x86 0)^"\n"^
-    "\tpush "^(emt_reg_x86 1)^"\n"^
+    (cf_set 2)^
+    "\tmov rdi,QWORD [rdi+8]\n"^
     "\tcall dcp\n"^
+    "\tjmp "^lb1^"\n"^
+    lb0^":\n"^
+    "\tbtr r12,"^(string_of_int 2)^"\n"^
+    "\tclc\n"^
+    "\tcall dcp\n"^
+    lb1^":\n"^
+    "\tmov "^(emt_reg_x86 2)^",rax\n"^
     "\tpop "^(emt_reg_x86 1)^"\n"^
     "\tpop "^(emt_reg_x86 0)^"\n"^
-    "\tbt QWORD [rsi],17\n"^
-    "\tnot rsi\n"^
-    "\txor rsi,rsp\n"^
-    "\tmov rsi,[rsi]\n"^
-    "\tbt r12,"^(string_of_int 2)^"\n"^
-    "\tjc "^lb0^"\n"^
-    "\tmov rsi,"^(emt_reg_x86 2)^"\n"^
-    "\tmov QWORD [rdi+8+8*rax],rsi\n"^
-    "\tret\n"^
-    "\tmov rsi,rbx\n"^
-    "\tmov rbx,[rsi]\n"^
-    "\tmov QWORD [rdi+8+8*rax],rsi\n"^
-    "\tmov rax,"^(emt_reg_x86 2)^"\n"^
-    "\tmov QWORD [rsi+8],rax\n"^
-    "\tmov rax,0x0000_0001_0002_ffff\n"^
-    "\tmov QWORD [rsi],rax\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._lod_q,em_lod_q)::gns.ns_c;
 

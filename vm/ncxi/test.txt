@@ -806,4 +806,8 @@ grammer
 
       len | col agl   ; opq
 tag-v len |           ; blk
-    agl col tag-v len 
+    agl col tag-v len
+
+    replicable type | non-replicable type
+
+    {= B0 B1 .. Bn < r =}
