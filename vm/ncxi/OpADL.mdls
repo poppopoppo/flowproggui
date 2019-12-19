@@ -25,6 +25,27 @@
 	s8_of_r64_lst_i { i cl } ⊢ { i s } 
 	∎ s
 
+§ @.assoc { l k } 
+	∐ l ⊢ _cns◂{ { k0 o0 } l } . 
+		∐ k'=k0' . 
+			∐ o0 ⊢ _some◂v0 .
+				$ v0 ⊢ v0,v1 
+				_some v0 ⊢ o0 
+				_cns { { k0 o0 } l } ⊢ l 
+				_some v1 ⊢ r1 
+				∎ { l k r1 }
+			∐. .  
+				_cns { { k0 o0 } l } ⊢ l 
+				_none {} ⊢ r1
+				∎ { l k r1 }
+		∐. . 
+			assoc { l k } ⊢ { l k r0 } 
+			_cns { { k0 o0 } l } ⊢ l 
+			∎ { l k r0 }
+	∐. . 
+		_none {} ⊢ r1 
+		∎ { l k r1 }  
+	  
 §§+s8 
 	@.stg_ltr
 	∐. "\"" stg_ltr_seq ⊢ { {} cl } 
@@ -155,8 +176,33 @@
 		∎ a   
 
 §§ OpADL 
-	§§ type 
-	∎∎ 
+	§§ ns
+		¶ @.reg_env = _lst◂{ _s8 _opn◂_r64 } 
+			@.mdl_env = _lst◂{ _s8 _opn◂_r64 }
+			@.etr_env = _lst◂{ _s8 _opn◂_r64 }
+			@.type_env = _lst◂{ _s8 _opn◂_r64 }
+			@.mdl_vct = _arr◂mdl_k 
+			@.reg_vct = _arr◂reg_k 
+			@.etr_vct = _arr◂etr_k 
+			@.type_vct = _arr◂var
+			@.mdl_k = mdl_env 
+			@.reg_k = {} 
+			@.etr_k 
+				∐ etr_cst : _r64 
+				∐ etr_op : { _r64 _r64 }
+			@.type_k 
+				∐ rcd : _lst◂type_k 
+				∐ app : { type_k type_k }
+				∐ imp : { type_k type_k }  
+				∐ abs : { type_k type_k } 
+				∐ axm : _r64 
+				∐ var : _r64   
+				∐ idx : _r64   
+			@.var 
+				∐ var_q : { _r64 _r64 }
+				∐ var_l : { _r64 _r64 } 
+				∐ var_ln : type_k 
+		∎∎
 	§§ ast 
 	¶ @.name 
 		∐ mdl_n : { _s8 name } 
