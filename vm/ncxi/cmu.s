@@ -1164,103 +1164,77 @@ pnt_opq:
   pop rsi
   add rax,rsi
   ret
-eq: ; rdi=rsi rdx= c0 rcx = c1
-  bt rdx,0
-  jnc eq_nc_b
-  bt rcx,0
-  jnc eq_c_nc
+
+eq: ; rdi=rsi xf
+  jnc eq_nc
   cmp rdi,rsi
-  mov rax,0
-  setc al
   ret
-eq_c_nc:
-  mov rax,0
+eq_nc: ; rdi=rsi ⊢ zf
+  push rcx
+  bt QWORD rdi,0
+  jnc eq_ref
+  mov rax,~0x00ff_ffff_ffff_ffff
+  and rax,rdi
+  mov rcx,~0x00ff_ffff_ffff_ffff
+  and rcx,rsi
+  cmp rax,rcx
+  jz eq_nc_t
+  pop rcx
   ret
-eq_nc_b:
-  bt rcx,0
-  jnc eq_nc_nc
-  mov rax,0
-  ret
-eq_nc_nc: ; rdi=rsi ⊢ zf
-  mov r11,[rdi]
-  bt r11,16
-  jc eq_opq_nc
-  mov r10,[rsi]
-  bt r10,16
-  jc eq_blk_opq
-eq_blk_blk:
-  mov r9,r11
-  mov r10,0x0000ffff00000000
-  and r9,r10
-  shr r9,32
-  add rdi,8
-  add rsi,8
-eq_blk_blk_lp:
-  cmp r9,0
-  jz eq_opq_opq_lp_end_t
-  sub r9,1
-  mov rdx,0
-  mov rcx,0
-  rcr r11,1
-  rcl rdx,1
-  rcr r10,1
-  rcl rcx,1
-  push r10
-  push r11
-  push r9
+eq_nc_t:
+  mov rax,0x00ff_ffff_ffff_fffe
+  and rdi,rax
+  and rsi,rax
+eq_ref:
+  bt QWORD [rdi],16
+  jc eq_opq
+  bt QWORD [rdi],18
+  jc eq_arr
+  mov eax,DWORD [rdi+4]
+  xor rdx,rdx
+eq_blk_lp:
+  cmp rcx,rax
+  jz eq_blk_lp_end
+  bt QWORD [rdi],rcx
   push rdi
   push rsi
-  mov rdi,[rdi]
-  mov rsi,[rsi]
+  push rax
+  push rcx
+  mov rdi,QWORD [rdi+8+8*rcx]
+  mov rsi,QWORD [rsi+8+8*rcx]
   call eq
+  pop rcx
+  pop rax
   pop rsi
   pop rdi
-  pop r9
-  pop r11
-  pop r10
-  bt rax,0
-  jnc eq_blk_blk_lp_end_f
+  jnz eq_blk_lp_end
+  add rcx,1
+  jmp eq_blk_lp
+eq_blk_lp_end:
+  pop rcx
+  ret
+
+eq_opq:
+  mov eax,DWORD [rdi+4]
+  mov ecx,DWORD [rsi+4]
+  cmp rax,rcx
+  jnz eq_opq_end
   add rdi,8
   add rsi,8
-  jmp eq_blk_blk_lp
-eq_blk_blk_lp_end_t:
-  mov rax,1
-  ret
-eq_blk_blk_lp_end_f:
-  mov rax,0
-  ret
-eq_blk_opq:
-  mov rax,0
-  ret
-eq_opq_nc:
-  mov rdx,[rsi]
-  bt rdx,16
-  jc eq_opq_opq
-eq_opq_opq:
-  mov rcx,rdx
-  mov r11,0x0000ffff00000000
-  and rcx,r11
-  shr rcx,32
-  add rdi,8
-  add rsi,8
-eq_opq_opq_lp:
+  cld
+  repz cmpsb
   cmp rcx,0
-  jz eq_opq_opq_lp_end_t
-  sub rcx,1
-  mov rax,[rdi]
-  mov rdx,[rsi]
-  cmp rax,rdx
-  jnz eq_opq_opq_lp_end_f
-  add rdi,8
-  add rsi,8
-  jmp eq_opq_opq_lp
-eq_opq_opq_lp_end_t:
-  mov rax,1
+  pop rcx
+eq_opq_end:
   ret
-eq_opq_opq_lp_end_f:
-  mov rax,0
-  ret
-neq:
+eq_arr:
+  mov eax,DWORD [rdi+4]
+  mov ecx,DWORD [rsi+4]
+  cmp rax,rcx
+  jnz eq_arr_end
+  xor rcx,rcx
+  cmp rcx,1
+eq_arr_end:
   ret
 
 emt: ; rdi s8
@@ -1494,7 +1468,7 @@ rpc_arr_lp:
   jmp rpc_arr_lp
 rpc_arr_end:
   mov rax,rcx
-  ret 
+  ret
 
 
 ; rdi=stg rsi=offset0 ⊢ rdi rsi=offset1 rax=dst

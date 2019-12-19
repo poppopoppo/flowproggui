@@ -1572,67 +1572,6 @@ and mk_var_grm_atm ns a =
       ( match !mf with
         | M_Prm "grm" -> Var(try List.assoc "t" !ma.ns_t with _ -> err ("mk_var_grm_atm 3:"^(pnt_name n)) )
         | _ -> err "mk_var_grm_atm 0" ) )
-(*let rec idx_crt_ptn s r = Rcd_Ptn.map (fun v -> idx_crt s v) r
-  and idx_crt s v =
-  if List.exists (fun (s,w) -> w==v&&s="_") !Ast.rm then (-2)
-  else
-    let n = idx_min 0 s in
-    Hashtbl.add s n v;
-    n
-  and idx_ini r =
-  let open Rcd_Ptn in
-  let rec lp n r =
-    ( match r with
-      | A _ -> (n+1,A n)
-      | R rs ->
-        let (n,rs) =
-          Array.fold_left
-            (fun (n,rs) r ->
-               let (n0,r) = lp n r in
-               (n0,rs |+| [|r|]))
-            (n,[||]) rs in
-        (n,R rs)
-      | Ro (rs,_) ->
-        let (n,rs) =
-          Array.fold_left
-            (fun (n,rs) r ->
-               let (n0,r) = lp n r in
-               (n0,rs |+| [|r|]))
-            (n,[||]) rs in
-        (n+1,Ro(rs,n))
-      | R_Lb rs ->
-        let (n,rs) =
-          Array.fold_left
-            (fun (n,rs) (lb,r) ->
-               let (n0,r) = lp n r in
-               (n0,rs |+| [|(lb,r)|]))
-            (n,[||]) rs in
-        (n,R_Lb rs)
-      | Ro_Lb (rs,_) ->
-        let (n,rs) =
-          Array.fold_left
-            (fun (n,rs) (lb,r) ->
-               let (n0,r) = lp n r in
-               (n0,rs |+| [|(lb,r)|]))
-            (n,[||]) rs in
-        (n+1,Ro_Lb (rs,n))
-    ) in
-  lp 0 r
-  and idx_csm s (v:_ v_t ref) =
-  let i = idx s v in
-  if i=(-2) then i
-  else
-    ( Hashtbl.remove s i; i )
-  and idx s v =
-  let i = Hashtbl.fold (fun n v0 m -> if v0==v then n else m) s (-1) in
-  if i=(-1) then err ("idx 0:"^(string_of_int i)) else i
-  and idx_csm_ptn s r = Rcd_Ptn.map (fun v -> idx_csm s v) r
-  and idx_add s = let v = newvar () in idx_crt s v
-  and idx_min i s =
-  if Hashtbl.mem s i then idx_min (i+1) s else i
-  and idx_ptn s r = Rcd_Ptn.map (idx s) r
-*)
-
 let rec ir_of_exp r0 r1 e =
   let open Ast in
   let open Rcd_Ptn in
@@ -3657,6 +3596,44 @@ and init_prm () =
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._lod_q,em_lod_q)::gns.ns_c;
 
+  !ns.ns_p <- ("_eq",Ast.Axm._eq)::!ns.ns_p;
+  let q0 = newvar_q (-1) in
+  gns.ns <- (Ast.Axm._eq,ref(Ln(Imp(Rcd(rcd_cl [App(Axm Axm.arr,Var q0);Axm Axm.r64]),Rcd(rcd_cl [App(Axm Axm.arr,Var q0);Axm Axm.r64;Var q0])))))::gns.ns;
+  gns.ns_e <- (Ast.Axm._eq,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|])))::gns.ns_e;
+  let em_eq =
+    let lb0 = lb () in
+    let lb1 = lb () in
+    "NS_E_ID_"^(Sgn.print Ast.Axm._eq)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._eq)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._eq)^":\n"^
+    "\tpush "^(emt_reg_x86 0)^"\n"^
+    "\tpush "^(emt_reg_x86 1)^"\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rax,"^(emt_reg_x86 1)^"\n"^
+    "\tmov esi,DWORD [rdi+4]\n"^
+    "\tcmp rax,rsi\n"^
+    "\tjge err\n"^
+    "\tmov rdi,QWORD [rdi+8+8*rax]\n"^
+    "\tbt rdi,0\n"^
+    "\tjc "^lb0^"\n"^
+    "\tbt QWORD [rdi],17\n"^
+    "\tjnc "^lb0^"\n"^
+    "\tbt QWORD [rdi],0\n"^
+    (cf_set 2)^
+    "\tmov rdi,QWORD [rdi+8]\n"^
+    "\tcall dcp\n"^
+    "\tjmp "^lb1^"\n"^
+    lb0^":\n"^
+    "\tbtr r12,"^(string_of_int 2)^"\n"^
+    "\tclc\n"^
+    "\tcall dcp\n"^
+    lb1^":\n"^
+    "\tmov "^(emt_reg_x86 2)^",rax\n"^
+    "\tpop "^(emt_reg_x86 1)^"\n"^
+    "\tpop "^(emt_reg_x86 0)^"\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._eq,em_eq)::gns.ns_c;
+
   let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64;Axm Axm.r64])))) in
   !ns.ns_p <- ("_setge",Ast.Axm._setge)::!ns.ns_p;
   gns.ns <- (Ast.Axm._setge,v)::gns.ns;
@@ -4445,7 +4422,10 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                     let (dl,e1) = emt_mtc_eq iv0 es_tl lb1 in
                     let e0 =
                       "\tmov rdi,"^(emt_reg_x86 ix0)^"\n"^
-                      "\tmov rsi,"^(emt_reg_x86 iy0)^"\n" in
+                      "\tmov rsi,"^(emt_reg_x86 iy0)^"\n"^
+                      "\tbt r12,"^(string_of_int ix0)^"\n"^
+                      "\tcall eq\n"^
+                      "\tjnz "^lb1^"\n" in
                     (px::py::dl,e0^e1)
                   | _ -> err "Eq_V 0" )
               | _ -> err "emt_mtc_eq 1" ) ) in
