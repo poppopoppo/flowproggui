@@ -8,7 +8,16 @@
 	_mk_arr x ⊢ { x v }	
 	_emt v ⊢ v
 	_set_q { v y s0 } ⊢ { v y }
-	_set_q { v x s1 } ⊢ { v x }  
+	_set_q { v z s1 } ⊢ { v z }
+	_lod_q { v z } ⊢ { v z s2 }   
 	_emt v ⊢ v
+	_emt s2 ⊢ s2 
+	_mk_arr x ⊢ { x v0 } 
+	_set_q { v0 y z } ⊢ { v0 y }  
+	_emt v0 ⊢ v0 
+	_lod_q { v0 y } ⊢ { v0 y x0 }
+	_emt x0 ⊢ x0 
+	» 1r _ ⊢ z 
+	_lod_q { v0 z } ⊢ { v0 z x1 }
 	∎ {} 
 	
