@@ -27,7 +27,8 @@
 
 § @.assoc { l k } 
 	∐ l ⊢ _cns◂{ { k0 o0 } l } . 
-		∐ k'=k0' . 
+		_eq { k k0 } ⊢ { k k0 b } 
+		∐ b'=1r . 
 			∐ o0 ⊢ _some◂v0 .
 				$ v0 ⊢ v0,v1 
 				_some v0 ⊢ o0 
