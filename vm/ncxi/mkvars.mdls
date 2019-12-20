@@ -1,0 +1,22 @@
+§§ reg_ptn 
+	¶ @.t ◂ a'
+		∐ rcd : _lst◂(t◂a') 
+		∐ atm : a' 
+	∎∎ 
+§§ RP = reg_ptn
+¶ @.name 
+	∐ mdl_n : { _s8 name } 
+	∐ fst_n : _s8 	
+¶ cst 
+	∐ r64 : _r64 
+	∐ s8 : _s8 
+	∐ cst_name : name
+¶ 
+	@.src◂r'
+		∐ im_reg : cst 
+		∐ src_reg : r'  
+	@.dst◂r'
+		∐ wc : {} 
+		∐ dst_reg : r' 
+	@.src_ptn = RP.t◂(src◂_s8) 
+	@.dst_ptn = RP.t◂(dst◂_s8)

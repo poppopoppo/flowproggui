@@ -101,6 +101,11 @@ License along with this library; if not, write to the Free Software Foundation, 
           </include>
         </context>
 
+        <context id="im_reg" style-ref="exp-opr">
+          <start>\%\[</start>
+          <end>\]</end>
+        </context>
+
         <context id="line_string" style-ref="string" end-at-line-end="true">
           <start>`</start>
         </context>
@@ -157,12 +162,12 @@ License along with this library; if not, write to the Free Software Foundation, 
           <match>&#x25C2;</match>
         </context>
 
-        <context id="exp-special" style-ref="exp-opr">
-          <match>(\!\|\-\|\+\||\!|\:|\`|\_)</match>
+        <context id="sp-opr" style-ref="exp-opr">
+          <match>(\$)</match>
         </context>
 
-        <context id="root-symbol" style-ref="exp-atom">
-          <match>(\$|\@)</match>
+        <context id="sp-sym" style-ref="exp-atom">
+          <match>(\@)</match>
         </context>
 
         <context id="exp-cmp">

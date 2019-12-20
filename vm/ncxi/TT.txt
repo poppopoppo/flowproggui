@@ -1,53 +1,65 @@
-_emt:(18b4180)*"grm_etr 0"
-_emt:(18b4180)*"grm_etr 1"
-_emt:(18b5210)*"grm_etr 0"
-_emt:(18b5210)*"grm_etr 1"
-_emt:(18b5450)*"grm_etr 0"
-_emt:(18b5450)*"grm_etr 1"
-_emt:(18b5510)*"grm_etr 0"
-_emt:(18b5510)*"grm_etr 1"
-_emt:(18b75f0)*"grm_etr 0"
-_emt:(18b7610)*"grm_etr 0"
-_emt:(18b7630)*"grm_etr 0"
-_emt:(18b7650)*"grm_etr 0"
-_emt:(18b7650)*"grm_etr 1"
-_emt:(18b7650)*"grm_etr 2"
-_emt:(18b7710)*"grm_etr 0"
-_emt:(18b7710)*"grm_etr 1"
-_emt:(18b77b0)*"grm_etr 0"
-_emt:(18b7790)*"grm_etr 0"
-_emt:(18b7790)*"grm_etr 1"
-_emt:(18b7790)*"grm_etr 2"
-_emt:(18b7770)*"grm_etr 0"
-_emt:(18b7770)*"grm_etr 1"
-_emt:(18b7770)*"grm_etr 2"
-_emt:(18b95f0)*"grm_etr 0"
-_emt:(18b95f0)*"grm_etr 1"
-_emt:(18b9630)*"grm_etr 0"
-_emt:(18b9630)*"grm_etr 1"
-_emt:(18b9f30)*"grm_etr 0"
-_emt:(18b9f30)*"grm_etr 1"
-_emt:(18c0110)*"grm_etr 0"
-_emt:(18c0650)*"grm_etr 0"
-_emt:(18c0330)*"grm_etr 0"
-_emt:(18c0330)*"grm_etr 1"
-_emt:(18c0330)*"grm_etr 2"
-_emt:(18c2710)*"grm_etr 0"
-_emt:(18c2710)*"grm_etr 1"
-_emt:(18c2810)*"grm_etr 0"
-_emt:(18c2810)*"grm_etr 1"
-_emt:(18c2eb0)*"grm_etr 0"
-_emt:(18c2eb0)*"grm_etr 1"
-_emt:(18c3ae0)*"grm_etr 0"
-_emt:(18c3ae0)*"grm_etr 1"
-_emt:(18c3ae0)*"grm_etr 2"
-_emt:(18c3ba0)*"grm_etr 0"
-_emt:(18c3ba0)*"grm_etr 1"
-_emt:(18cfc80)*"grm_etr 0"
-_emt:(18cfc80)*"grm_etr 1"
-_emt:(18cfec0)*"grm_etr 0"
-_emt:(18cfec0)*"grm_etr 1"
-_emt:(18cfec0)*"grm_etr 2"
+_emt:(2466980)*"grm_etr 0"
+_emt:(2466980)*"grm_etr 1"
+_emt:(2467a10)*"grm_etr 0"
+_emt:(2467a10)*"grm_etr 1"
+_emt:(2467c50)*"grm_etr 0"
+_emt:(2467c50)*"grm_etr 1"
+_emt:(2467d10)*"grm_etr 0"
+_emt:(2467d10)*"grm_etr 1"
+_emt:(2468110)*"grm_etr 0"
+_emt:(2468110)*"grm_etr 1"
+_emt:(246a3f0)*"grm_etr 0"
+_emt:(246a410)*"grm_etr 0"
+_emt:(246a430)*"grm_etr 0"
+_emt:(246a430)*"grm_etr 1"
+_emt:(246a430)*"grm_etr 2"
+_emt:(246a4f0)*"grm_etr 0"
+_emt:(246a4f0)*"grm_etr 1"
+_emt:(246a590)*"grm_etr 0"
+_emt:(246a570)*"grm_etr 0"
+_emt:(246a570)*"grm_etr 1"
+_emt:(246a570)*"grm_etr 2"
+_emt:(246a550)*"grm_etr 0"
+_emt:(246a7d0)*"grm_etr 0"
+_emt:(246a7d0)*"grm_etr 1"
+_emt:(246a7d0)*"grm_etr 2"
+_emt:(246a8b0)*"grm_etr 0"
+_emt:(246a8b0)*"grm_etr 1"
+_emt:(246a8b0)*"grm_etr 2"
+_emt:(246ab10)*"grm_etr 0"
+_emt:(246ab10)*"grm_etr 1"
+_emt:(246ab10)*"grm_etr 2"
+_emt:(246c310)*"grm_etr 0"
+_emt:(246c310)*"grm_etr 1"
+_emt:(246c350)*"grm_etr 0"
+_emt:(246c350)*"grm_etr 1"
+_emt:(246cc90)*"grm_etr 0"
+_emt:(246cc90)*"grm_etr 1"
+_emt:(2472e30)*"grm_etr 0"
+_emt:(2473370)*"grm_etr 0"
+_emt:(2473050)*"grm_etr 0"
+_emt:(2473050)*"grm_etr 1"
+_emt:(2473050)*"grm_etr 2"
+_emt:(2475430)*"grm_etr 0"
+_emt:(2475430)*"grm_etr 1"
+_emt:(2475530)*"grm_etr 0"
+_emt:(2475530)*"grm_etr 1"
+_emt:(24765d0)*"grm_etr 0"
+_emt:(24765d0)*"grm_etr 1"
+_emt:(24765d0)*"grm_etr 2"
+_emt:(2476690)*"grm_etr 0"
+_emt:(2476690)*"grm_etr 1"
+_emt:(2482950)*"grm_etr 0"
+_emt:(2482970)*"grm_etr 0"
+_emt:(2482970)*"grm_etr 1"
+_emt:(2482970)*"grm_etr 2"
+_emt:(2483350)*"grm_etr 0"
+_emt:(2483350)*"grm_etr 1"
+_emt:(2483bb0)*"grm_etr 0"
+_emt:(2483bb0)*"grm_etr 1"
+_emt:(2483df0)*"grm_etr 0"
+_emt:(2483df0)*"grm_etr 1"
+_emt:(2483df0)*"grm_etr 2"
 _emt:0x3
 _emt:0x4
 _emt:0x3
@@ -79,7 +91,21 @@ _emt:0x3
 _emt:0x3
 _emt:0x3
 _emt:0x3
-_emt:(18db340)*"START
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:0x3
+_emt:(248fae0)*"START
 § 
 	@.rev_i { l0 l1 }
 		∐ .. .
@@ -107,6 +133,27 @@ _emt:(18db340)*"START
 		» ??r { } ⊢ i
 		s8_of_r64_lst_i { i cl } ⊢ { i s }
 		∎ ..
+§ 
+	@.assoc { l k }
+		∐ .. .
+			∐ .. .
+				∐ .. .
+					$ v0 ⊢ v0
+					some v0 ⊢ o0
+					cns { { k0 o0 } l } ⊢ l
+					some v1 ⊢ r1
+					∎ ..
+				∐. .. .
+					cns { { k0 o0 } l } ⊢ l
+					none { } ⊢ r1
+					∎ ..
+			∐. .. .
+				assoc { l k } ⊢ { l k r0 }
+				cns { { k0 o0 } l } ⊢ l
+				∎ ..
+		∐. .. .
+			none { } ⊢ r1
+			∎ ..
 §§+s8
 	@.stg_ltr
 		∐. .. ⊢ { { } cl }
@@ -231,8 +278,6 @@ _emt:(18db340)*"START
 			some s ⊢ a
 			∎ ..
 §§ OpADL
-	§§ type
-		∎∎
 	§§ ast
 		¶
 			@.name
@@ -253,6 +298,20 @@ _emt:(18db340)*"START
 					∐ rcd : lst◂t◂a'
 					∐ atm : a'
 			∎∎
+		§§ RP = reg_ptn
+		¶ cst
+			∐ r64 : r64
+			∐ s8 : s8
+			∐ cst_name : name
+		¶
+			@.src
+				∐ im_reg : cst
+				∐ src_reg : r'
+			@.dst
+				∐ wc : { }
+				∐ dst_reg : r'
+			@.src_ptn = .. 
+			@.dst_ptn = .. 
 		¶
 			@.file = .. 
 			@.glb_etr
@@ -298,31 +357,12 @@ _emt:(18db340)*"START
 			@.grm_atm
 				∐ grm_name : name
 				∐ grm_s8 : s8
-			@.reg_ptn
-				∐ rcd : lst◂reg_ptn
-				∐ reg : s8
-			@.src
-				∐ im_reg : cst
-				∐ src_reg : s8
-			@.dst
-				∐ wc : { }
-				∐ dst_reg : s8
-			@.src_ptn
-				∐ src_rcd : lst◂src_ptn
-				∐ src_atm : src
-			@.dst_ptn
-				∐ dst_rcd : lst◂dst_ptn
-				∐ dst_atm : dst
 			@.type
 				∐ type_rcd : lst◂type
 				∐ imp : { type type }
 				∐ app : { type type }
 				∐ type_name : name
 				∐ type_var : s8
-			@.cst
-				∐ r64 : r64
-				∐ s8 : s8
-				∐ cst_name : name
 			@.lc_code
 				∐ seq : { lc_line lc_code }
 				∐ mtc : lc_mtc
@@ -837,11 +877,6 @@ _emt:(18db340)*"START
 						none { } ⊢ r
 						∎ ..
 			∎∎
-		§ Cc « 
-				» _^ { } ⊢ { s0 }
- .. //
-				cmt.rmv_cmt s0 ⊢ { s0 s1 }
-				∎ ..
 		§§+s8
 			@.name
 				∐ .. ⊢ { w { } n }
@@ -883,11 +918,11 @@ _emt:(18db340)*"START
 		§§+s8
 			@.src_ptn
 				∐ .. ⊢ { { } l { } }
-					ast.src_rcd l ⊢ r
+					ast.RP.rcd l ⊢ r
 					some r ⊢ a
 					∎ ..
 				∐. .. ⊢ { s }
-					ast.src_atm s ⊢ r
+					ast.RP.atm s ⊢ r
 					some r ⊢ a
 					∎ ..
 			@.src_ptn_lst
@@ -901,7 +936,7 @@ _emt:(18db340)*"START
 					∎ ..
 			@.src_tl
 				∐ .. ⊢ { { } r rs }
-					ast.src_atm r ⊢ r
+					ast.RP.atm r ⊢ r
 					cns { r rs } ⊢ rs
 					some rs ⊢ a
 					∎ ..
@@ -925,11 +960,11 @@ _emt:(18db340)*"START
 		§§+s8
 			@.dst_ptn
 				∐ .. ⊢ { { } l { } }
-					ast.dst_rcd l ⊢ r
+					ast.RP.rcd l ⊢ r
 					some r ⊢ a
 					∎ ..
 				∐. .. ⊢ { s }
-					ast.dst_atm s ⊢ r
+					ast.RP.atm s ⊢ r
 					some r ⊢ a
 					∎ ..
 			@.dst_ptn_lst
@@ -946,7 +981,7 @@ _emt:(18db340)*"START
 				∐. .. 
 			@.dst_tl
 				∐ .. ⊢ { { } r rs }
-					ast.dst_atm r ⊢ r
+					ast.RP.atm r ⊢ r
 					cns { r rs } ⊢ rs
 					some rs ⊢ a
 					∎ ..
@@ -1194,7 +1229,7 @@ _emt:(18db340)*"START
 					nil { } ⊢ r
 					cns { r1 r } ⊢ r
 					cns { r0 r } ⊢ r
-					ast.src_rcd r ⊢ r
+					ast.RP.rcd r ⊢ r
 					some { e r r2 } ⊢ a
 					∎ ..
 				∐ .. ⊢ { { } l }
@@ -1212,27 +1247,27 @@ _emt:(18db340)*"START
 				∐. .. ⊢ { c { } { } r }
 					ast.op_exp_cst c ⊢ e
 					nil { } ⊢ l
-					ast.src_rcd l ⊢ s
+					ast.RP.rcd l ⊢ s
 					some { e s r } ⊢ a
 					∎ ..
 			@.lc_exp_s8_sd
 				∐ .. ⊢ { { } { } r }
 					» ??r { } ⊢ n
 					nil { } ⊢ l0
-					ast.src_rcd l0 ⊢ l0
+					ast.RP.rcd l0 ⊢ l0
 					nil { } ⊢ l1
-					ast.dst_atm r ⊢ r
+					ast.RP.atm r ⊢ r
 					cns { r l1 } ⊢ l1
-					ast.dst_rcd l1 ⊢ l1
+					ast.RP.rcd l1 ⊢ l1
 					some { n l0 l1 } ⊢ a
 					∎ ..
 				∐. .. ⊢ { r0 rs0 { } r1 rs1 }
-					ast.src_atm r0 ⊢ r0
-					ast.dst_atm r1 ⊢ r1
+					ast.RP.atm r0 ⊢ r0
+					ast.RP.atm r1 ⊢ r1
 					cns { r0 rs0 } ⊢ rs0
 					cns { r1 rs1 } ⊢ rs1
-					ast.src_rcd rs0 ⊢ rs0
-					ast.dst_rcd rs1 ⊢ rs1
+					ast.RP.rcd rs0 ⊢ rs0
+					ast.RP.rcd rs1 ⊢ rs1
 					» ??r { } ⊢ n
 					some { n rs0 rs1 } ⊢ a
 					∎ ..
@@ -1463,6 +1498,52 @@ _emt:(18db340)*"START
 					none { } ⊢ r
 					some r ⊢ a
 					∎ ..
+		∎∎
+	§§ ns
+		¶
+			@.reg_env = .. 
+			@.mdl_env = .. 
+			@.etr_env = .. 
+			@.etr_p
+				∐ op_p : r64
+				∐ cst_p : r64
+			@.type_env = .. 
+			@.mdl_vct = .. 
+			@.reg_vct = .. 
+			@.etr_vct = .. 
+			@.cst_vct = .. 
+			@.type_vct = .. 
+			@.mdl_k = .. 
+			@.reg_k = .. 
+			@.etr_k = .. 
+			@.cst_k = .. 
+			@.type_k
+				∐ rcd : lst◂type_k
+				∐ app : { type_k type_k }
+				∐ imp : { type_k type_k }
+				∐ abs : { type_k type_k }
+				∐ axm : r64
+				∐ var : r64
+				∐ idx : r64
+			@.var
+				∐ var_q : { r64 r64 }
+				∐ var_l : { r64 r64 }
+				∐ var_ln : type_k
+		§ 
+			@.nc gel
+				» ??r { } ⊢ max
+				mk_arr max ⊢ { max mv }
+				mk_arr max ⊢ { max rv }
+				mk_arr max ⊢ { max ev }
+				mk_arr max ⊢ { max tv }
+				» ??r { } ⊢ mv_n
+				» ??r { } ⊢ rv_n
+				» ??r { } ⊢ ev_n
+				» ??r { } ⊢ tv_n
+				nc_lp { mv mv_n rv rv_n ev ev_n tv tv_n gel } ⊢ { mv mv_n rv rv_n ev ev_n tv tv_n }
+				∎ ..
+			@.nc_lp { mv mv_n rv rv_n ev ev_n tv tv_n gel }
+				∎ ..
 		∎∎
 	§ f0 « 
 			» _^ { } ⊢ { s0 }

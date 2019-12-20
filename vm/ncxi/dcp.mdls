@@ -1,6 +1,6 @@
 § A0 « 
 	» 2r _ ⊢ x 
-	$ x ⊢ x,x0
+	$ x ⊢ x,x0 
 	_emt { x x0 } ⊢ { x x0 }  
 	$ { x x0 } ⊢ p,p0 
 	_emt { p p0 } ⊢ { p p0 }

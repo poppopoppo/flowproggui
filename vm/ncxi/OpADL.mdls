@@ -193,76 +193,21 @@
 			∐ rcd : _lst◂(t◂a') 
 			∐ atm : a' 
 		∎∎
+	§§ RP = reg_ptn
+	¶ cst 
+		∐ r64 : _r64 
+		∐ s8 : _s8 
+		∐ cst_name : name
 	¶ 
-		@.file = _lst◂glb_etr 
-		@.glb_etr
-			∐ mdl_etr : { _s8 mdl_etr } 
-			∐ grm_etr : _lst◂{ _s8 grm_etr }
-			∐ lc_etr : { _s8 lc_etr } 
-			∐ lc_qlq_etr : _lst◂{ _s8 dst_ptn lc_code }
-			∐ dt_etr : { _s8 dt_etr } 
-			∐ dt_qlq_etr : _lst◂{ _s8 dt_etr } 
-		@.mdl_etr 
-			∐ mdl_def : _lst◂glb_etr
-			∐ mdl_ln : name
-		@.lc_etr 
-			∐ lc_def : { dst_ptn lc_code } 
-			∐ lc_ln : cst 
-			∐ lc_cst : lc_code 
-		@.dt_etr 
-			∐ dt_def : _lst◂{ _s8 type } 
-			∐ dt_ln : type
-		@.grm_etr
-			∐ grm_cnc : grm_cnc 
-			∐ grm_act : grm_act 
-		@.grm_cnc 
-			∐ grm_cnc_seq : { _opn◂_s8 rle_flg grm_rle _opn◂grm_cnc grm_cnc }
-			∐ grm_cnc_end : { _opn◂_s8 rle_flg grm_rle _opn◂grm_cnc }
-		@.grm_act  
-			∐ grm_act_seq : { dst_ptn lc_code  rle_flg grm_rle _opn◂grm_act grm_act }
-			∐ grm_act_end : { dst_ptn lc_code rle_flg grm_rle _opn◂grm_act }
-		@.rle_flg 
-			∐ lex : {} 
-			∐ synt : {} 
-			∐ line : {} 
-		@.grm_rle	 
-			∐ grm_ptn_cut : grm_rle_cut  
-			∐ grm_ptn_seq : { grm_ptn grm_rle }
-			∐ grm_ptn_end : {}
-		@.grm_rle_cut 
-			∐ grm_rle_cut_seq : { grm_ptn grm_rle_cut } 
-			∐ grm_rle_cut_end : {}  
-		@.grm_ptn 
-			∐ grm_lst : grm_atm 
-			∐ grm_atm : grm_atm 
-		@.grm_atm 
-			∐ grm_name : name 
-			∐ grm_s8 : _s8 
-		@.reg_ptn 
-			∐ rcd : _lst◂reg_ptn
-			∐ reg : _s8  
-		@.src 
+		@.src◂r'
 			∐ im_reg : cst 
-			∐ src_reg : _s8  
-		@.dst  
+			∐ src_reg : r'  
+		@.dst◂r'  
 			∐ wc : {} 
-			∐ dst_reg : _s8 
-		@.src_ptn 
-			∐ src_rcd : _lst◂src_ptn 
-			∐ src_atm : src 
-		@.dst_ptn
-			∐ dst_rcd : _lst◂dst_ptn 
-			∐ dst_atm : dst
-		@.type 
-			∐ type_rcd : _lst◂type
-			∐ imp : { type type } 
-			∐ app : { type type } 
-			∐ type_name : name 
-			∐ type_var : _s8 
-		@.cst 
-			∐ r64 : _r64 
-			∐ s8 : _s8 
-			∐ cst_name : name
+			∐ dst_reg : r' 
+		@.src_ptn = reg_ptn.t◂(src◂_s8) 
+		@.dst_ptn = reg_ptn.t◂(dst◂_s8)
+	¶ 
 		@.lc_code 
 			∐ seq : { lc_line lc_code } 
 			∐ mtc : lc_mtc 
@@ -296,6 +241,57 @@
 			∐ exp_fmt_d : {} 
 			∐ exp_fmt_x : {} 
 			∐ exp_fmt_p : {} 		
+	¶ 
+		@.file = _lst◂glb_etr 
+		@.glb_etr
+			∐ mdl_etr : { _s8 mdl_etr } 
+			∐ grm_etr : _lst◂{ _s8 grm_etr }
+			∐ lc_etr : { _s8 lc_etr } 
+			∐ lc_qlq_etr : _lst◂{ _s8 dst_ptn lc_code }
+			∐ dt_etr : { _s8 dt_etr } 
+			∐ dt_qlq_etr : _lst◂{ _s8 dt_etr } 
+		@.mdl_etr 
+			∐ mdl_def : _lst◂glb_etr
+			∐ mdl_ln : name
+		@.lc_etr 
+			∐ lc_def : { dst_ptn lc_code } 
+			∐ lc_ln : cst 
+			∐ lc_cst : lc_code 
+		@.dt_etr 
+			∐ dt_def : _lst◂{ _s8 type } 
+			∐ dt_ln : type
+		@.grm_etr
+			∐ grm_cnc : grm_cnc 
+			∐ grm_act : grm_act 
+		@.grm_cnc 
+			∐ grm_cnc_seq : { _opn◂_s8 rle_flg grm_rle _opn◂grm_cnc grm_cnc }
+			∐ grm_cnc_end : { _opn◂_s8 rle_flg grm_rle _opn◂grm_cnc }
+		@.grm_act  
+			∐ grm_act_seq : { dst_ptn lc_code rle_flg grm_rle _opn◂grm_act grm_act }
+			∐ grm_act_end : { dst_ptn lc_code rle_flg grm_rle _opn◂grm_act }
+		@.rle_flg 
+			∐ lex : {} 
+			∐ synt : {} 
+			∐ line : {} 
+		@.grm_rle	 
+			∐ grm_ptn_cut : grm_rle_cut  
+			∐ grm_ptn_seq : { grm_ptn grm_rle }
+			∐ grm_ptn_end : {}
+		@.grm_rle_cut 
+			∐ grm_rle_cut_seq : { grm_ptn grm_rle_cut } 
+			∐ grm_rle_cut_end : {}  
+		@.grm_ptn 
+			∐ grm_lst : grm_atm 
+			∐ grm_atm : grm_atm 
+		@.grm_atm 
+			∐ grm_name : name 
+			∐ grm_s8 : _s8   
+		@.type 
+			∐ type_rcd : _lst◂type
+			∐ imp : { type type } 
+			∐ app : { type type } 
+			∐ type_name : name 
+			∐ type_var : _s8 
 	§ pnt_cst c 
 		∐ c ⊢ r64◂x . 
 			» "??r" _ ⊢ sr 
@@ -307,12 +303,12 @@
 			pnt_name n ⊢ sr 
 			∎ sr  
 	§ @.pnt_src_ptn sp 
-			∐ sp ⊢ src_rcd◂l . 
+			∐ sp ⊢ RP.rcd◂l . 
 				pnt_src_ptn_lst l ⊢ sl 
 				» _^ sl ⊢ sl,sr 
 					"{ " 0' "}" // 
 				∎ sr 
-			∐. sp ⊢ src_atm◂a . 
+			∐. sp ⊢ RP.atm◂a . 
 				∐ a ⊢ im_reg◂c . 
 					pnt_cst c ⊢ sc 
 					» _^ sc ⊢ sc,sr 
@@ -331,12 +327,12 @@
 				» "" _ ⊢ sr 
 				∎ sr 
 		@.pnt_dst_ptn p 
-			∐ p ⊢ dst_rcd◂l . 
+			∐ p ⊢ RP.rcd◂l . 
 				pnt_dst_ptn_lst l ⊢ sl 
 				» _^ sl ⊢ sl,sr 
 					"{ " 0' "}" // 
 				∎ sr 
-			∐. p ⊢ dst_atm◂a . 
+			∐. p ⊢ RP.atm◂a . 
 				∐ a ⊢ wc◂{} . 
 					» "_ " _ ⊢ sr 
 					∎ sr 
@@ -813,22 +809,6 @@
 			_none {} ⊢ r 
 			∎ { s0 r }
 		∎∎
-	§ Cc « 
-		» _^ _ ⊢ s0 
-			`## FEFEF 
-			`HELLO 
-			`\[ 
-			`fdEF 
-			`\[ 
-			`F fe 
-			`\] 
-			`\]
-			`WORlD 
-			`## huugugugu						
-			// 
-		cmt.rmv_cmt s0 ⊢ { s0 s1 } 
-		##_emt { s0 s1 }  ⊢ { s0 s1 }   
-		∎ {}	
 	§§+s8 
 		@.name 
 			∐# prm_word "." name ⊢ { w {} n } 
@@ -871,11 +851,11 @@
 	§§+s8 
 		@.src_ptn 
 			∐* "{" src_ptn_lst "}" ⊢ { {} l {} }
-				ast.src_rcd l ⊢ r 
+				ast.RP.rcd l ⊢ r 
 				_some r ⊢ a
 				∎ a
 			∐.* src ⊢ { s } 
-				ast.src_atm s ⊢ r 
+				ast.RP.atm s ⊢ r 
 				_some r ⊢ a 
 				∎ a
 		@.src_ptn_lst 
@@ -889,7 +869,7 @@
 				∎ a
 		@.src_tl 
 			∐* "," !| src src_tl ⊢ { {} r rs } 
-				ast.src_atm r ⊢ r 
+				ast.RP.atm r ⊢ r 
 				_cns { r rs } ⊢ rs 
 				_some rs ⊢ a 
 				∎ a 
@@ -913,11 +893,11 @@
 	§§+s8 
 		@.dst_ptn 
 			∐* "{" dst_ptn_lst "}" ⊢ { {} l {} }
-				ast.dst_rcd l ⊢ r 
+				ast.RP.rcd l ⊢ r 
 				_some r ⊢ a
 				∎ a
 			∐.* dst ⊢ { s } 
-				ast.dst_atm s ⊢ r 
+				ast.RP.atm s ⊢ r 
 				_some r ⊢ a 
 				∎ a
 		@.dst_ptn_lst 
@@ -934,7 +914,7 @@
 			∐.*
 		@.dst_tl 
 			∐* "," !| dst dst_tl ⊢ { {} r rs } 
-				ast.dst_atm r ⊢ r 
+				ast.RP.atm r ⊢ r 
 				_cns { r rs } ⊢ rs 
 				_some rs ⊢ a 
 				∎ a 
@@ -1183,7 +1163,7 @@
 				_nil {} ⊢ r 
 				_cns { r1 r } ⊢ r 
 				_cns { r0 r } ⊢ r
-				ast.src_rcd r ⊢ r  
+				ast.RP.rcd r ⊢ r  
 				_some { e r r2 } ⊢ a 
 				∎ a
 			∐* "»" !| lc_exp_line ⊢ { {} l } 
@@ -1201,27 +1181,27 @@
 			∐.* cst "_" "⊢" dst_ptn ⊢ { c {} {} r } 
 				ast.op_exp_cst c ⊢ e 
 				_nil {} ⊢ l 
-				ast.src_rcd l ⊢ s 
+				ast.RP.rcd l ⊢ s 
 				_some { e s r } ⊢ a
 				∎ a 
 		@.lc_exp_s8_sd 
 			∐* "_" !| "⊢" dst ⊢ { {} {} r } 
 				» 0r _ ⊢ n 
 				_nil {} ⊢ l0 
-				ast.src_rcd l0 ⊢ l0 
+				ast.RP.rcd l0 ⊢ l0 
 				_nil {} ⊢ l1 
-				ast.dst_atm r ⊢ r
+				ast.RP.atm r ⊢ r
 				_cns { r l1 } ⊢ l1
-				ast.dst_rcd l1 ⊢ l1  
+				ast.RP.rcd l1 ⊢ l1  
 				_some { n l0 l1 } ⊢ a
 				∎ a 
 			∐.* src src_tl "⊢" dst dst_tl ⊢ { r0 rs0 {} r1 rs1 } 
-				ast.src_atm r0 ⊢ r0 
-				ast.dst_atm r1 ⊢ r1 
+				ast.RP.atm r0 ⊢ r0 
+				ast.RP.atm r1 ⊢ r1 
 				_cns { r0 rs0 } ⊢ rs0 
 				_cns { r1 rs1 } ⊢ rs1 
-				ast.src_rcd rs0 ⊢ rs0 
-				ast.dst_rcd rs1 ⊢ rs1 
+				ast.RP.rcd rs0 ⊢ rs0 
+				ast.RP.rcd rs1 ⊢ rs1 
 				» 1r _ ⊢ n 
 				_some { n rs0 rs1 } ⊢ a 
 				∎ a
@@ -1279,20 +1259,6 @@
 				_cns { b l } ⊢ l 
 				_some l ⊢ a 
 				∎ a
-		\[
-		@.reg_tl 
-			∐* "," !| reg reg_tl ⊢ { {} r rs } 
-				_cns { r rs } ⊢ rs 
-				_some rs ⊢ a 
-				∎ a 
-			∐.* ⊢ { } 
-				_nil {} ⊢ rs 
-				_some rs ⊢ a
-				∎ a 
-		@.reg_ptn_tl 
-			∐* "," !| reg_ptn reg_ptn_tl 
-			∐.* 
-		\]
 		@.lc_mtc 
 			∐* "∐." !| mtc_line lc_code ⊢ { {} l c0 } 
 				_nil {} ⊢ l0 
@@ -1342,29 +1308,6 @@
 				ast.test_cst c ⊢ v 
 				_some v ⊢ a
 				∎ a
-		\[
-		@.reg_ptn 
-			∐* "{" ⟦reg_ptn⟧ "}" ⊢ { {} l {} }
-				ast.rcd l ⊢ r 
-				_some r ⊢ a 
-				∎ a
-			∐.* reg ⊢ { r } 
-				ast.reg r ⊢ r 
-				_some r ⊢ a 
-				∎ a
-		@.reg 
-			∐ "%" word ⊢ { {} w } 
-				_some w ⊢ a
-				∎ a
-			∐ word ⊢ { w } 
-				_some w ⊢ a 
-				∎ a  
-			∐. "_" ⊢ { {} } 
-				» "_" _ ⊢ w 
-				_some w ⊢ a 
-				∎ a  
-		\]
-		
 		@.grm_etr 
 			∐.* "@" "." word grm_etr_def ⊢ { {} {} w d }
 				_some { w d } ⊢ a 
@@ -1492,18 +1435,21 @@
 	∎∎ 
 	§§ ns
 		¶ @.reg_env = _lst◂{ _s8 _opn◂_r64 } 
-			@.mdl_env = _lst◂{ _s8 _opn◂_r64 }
-			@.etr_env = _lst◂{ _s8 _opn◂_r64 }
+			@.mdl_env = { _lst◂{ _s8 _opn◂_r64 } type_env etr_env reg_env }
+			@.etr_env = _lst◂{ _s8 _opn◂etr_p }
+			@.etr_p 
+				∐ op_p : _r64 
+				∐ cst_p : _r64 
 			@.type_env = _lst◂{ _s8 _opn◂_r64 }
 			@.mdl_vct = _arr◂mdl_k 
 			@.reg_vct = _arr◂reg_k 
 			@.etr_vct = _arr◂etr_k 
+			@.cst_vct = _arr◂cst_k 
 			@.type_vct = _arr◂var
 			@.mdl_k = mdl_env 
 			@.reg_k = {} 
-			@.etr_k 
-				∐ etr_cst : _r64 
-				∐ etr_op : { _r64 _r64 }
+			@.etr_k = { _r64 _r64 }
+			@.cst_k = _r64
 			@.type_k 
 				∐ rcd : _lst◂type_k 
 				∐ app : { type_k type_k }
@@ -1516,6 +1462,21 @@
 				∐ var_q : { _r64 _r64 }
 				∐ var_l : { _r64 _r64 } 
 				∐ var_ln : type_k 
+		§ 
+			@.nc gel 
+				» 200r _ ⊢ max 
+				_mk_arr max ⊢ { max mv } 
+				_mk_arr max ⊢ { max rv } 
+				_mk_arr max ⊢ { max ev } 
+				_mk_arr max ⊢ { max tv } 
+				» 0r _ ⊢ mv_n 
+				» 0r _ ⊢ rv_n 
+				» 0r _ ⊢ ev_n 
+				» 0r _ ⊢ tv_n 			
+				nc_lp { mv mv_n rv rv_n ev ev_n tv tv_n gel } ⊢ { mv mv_n rv rv_n ev ev_n tv tv_n }
+				∎ { mv mv_n rv rv_n ev ev_n tv tv_n }
+			@.nc_lp { mv mv_n rv rv_n ev ev_n tv tv_n gel }
+				∎ { mv mv_n rv rv_n ev ev_n tv tv_n }
 		∎∎
 	§ f0 «
 		» _^ _ ⊢ s0 

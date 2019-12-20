@@ -378,6 +378,7 @@ module Ast = struct
     | Gram of etr Grm.t
     | Grm_Abs of string
     | Mdl of string * glb_etr list
+    | Mdl_Eq of string * abs_name
     | Mdl_Ln of bool * string
   and flow =
     | Def_Abs of name * args
@@ -1056,7 +1057,8 @@ let print_v v =
         | hd::tl ->
           let s1 =
             ( match hd with
-              | Mdl_Ln (_,n) -> "§ "^n^"._\n"
+              | Mdl_Ln (_,n) -> "§§ "^n^"._\n"
+              | Mdl_Eq (n,m) -> "§§ "^n^" = "^(pnt_name m)
               | Etr(n,_,_,_) -> "§ .."^n^"\n"
               | Etr_Abs(n,_,_) -> "§ "^n^" : .. ⊢ ..\n"
               | Etr_Out_Abs(n,_) -> "§ "^n^" : .. ⊢| \n"
@@ -2626,6 +2628,12 @@ and emt_m gns (ns:ns_v ref) ld el =
             !ns.ns_m <- ns1.ns_m@ !ns.ns_m;
             !ns.ns_m_t <- ns1.ns_m_t@ !ns.ns_m_t;
             ("","","","§ "^n^"._")
+          | Mdl_Eq(n,m) ->
+            let nsm = get_ns_m !ns m in
+            let nsm_t = get_ns_m_t !ns m in
+            !ns.ns_m_t <- (n,nsm_t):: !ns.ns_m_t;
+            !ns.ns_m <- (n,nsm)::!ns.ns_m;
+            ("","","",tbs^"§§ "^n^" = "^(pnt_name m)^"\n")
           | Mdl(n,el0) ->
             !ns.ns_m_t <- (n,ref Ast.M_WC):: !ns.ns_m_t;
             let ns_1 = ref(init_ns ()) in
@@ -3700,7 +3708,7 @@ and args_init =
     mov [r13+16],r8
 "
 and emt_exe m =
-  Util.Log.f := Util.Log.On;
+  (*Util.Log.f := Util.Log.On;*)
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
   Util.Log.pnt ();
