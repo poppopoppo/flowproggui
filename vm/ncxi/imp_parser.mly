@@ -113,6 +113,7 @@ mdl_etr:
   | def_typ { $1 }
   | def_mdl {
     let (n,el) = $1 in Mdl (n,el) }
+  | MDL NAM EQ name { Mdl_Eq($2,$4) }
   ;
 def_typ:
   | DTA def_typ_clique { Flow_Clq $2 }
