@@ -1,16 +1,42 @@
-	
-§ C2 « 
-	» 0r _ ⊢ x0 
-	» 4r _ ⊢ x1 
-	fact x1 ⊢ y1 
-	_emt_q y1 ⊢ y1 
-	∎ {}
 
-§ C5 « 
-	» 20r _ ⊢ x0 
-	» 10r _ ⊢ x1 
-	» 0r _ ⊢ x2 
-	tak_x { x0 x1 x2 } ⊢ { x0 x1 x2 y } 
-	_emt_q y ⊢ y 
-	∎ {}
-
+§ C x
+	_add x ⊢ y
+	∎|
+\[
+§§+s8
+	@.rcd
+		∐.* "{" rcd_lst "}" ⊢ { {} l {} }
+			##_emt _n ⊢ n
+			##_emt _r ⊢ r
+			##_emt _c ⊢ c
+			_some n ⊢ p
+			∎ p
+	@.rcd_lst
+		∐* rcd rcd_lst ⊢ { hd tl }
+			_emt _n ⊢ n
+			##_emt _r ⊢ r
+			##_emt _c ⊢ c
+			_some n ⊢ p
+			∎ p
+		∐.* ⊢ { }
+			_emt _n ⊢ n
+			##_emt _r ⊢ r
+			##_emt _c ⊢ c
+			_some n ⊢ p
+			∎ p
+\]
+§ C «
+	\[
+	» "{ {} {} }" _ ⊢ s
+	» 0r _ ⊢ x
+	rcd.prs { s x } ⊢ { s x a }
+	_emt { x a } ⊢ { x a }
+	\]
+	» "x" _ ⊢ sx
+	» "y" _ ⊢ sy
+	∐ sx'=sy' .
+		_emt sx ⊢ sx
+		∎ {}
+	∐. .
+		_emt sy ⊢ sy
+		∎ {}
