@@ -311,7 +311,7 @@ glb_etr_body_ir:
   ;
 ir_ret:
   | EOP reg_ptn { Ret $2 }
-  | EOP_EXN reg { Exn $2 }
+  | EOP_EXN { Exn (ref(R_Ax(R_A(Util.sgn ())))) }
   ;
 ir_lines:
   | ir_ret { $1 }

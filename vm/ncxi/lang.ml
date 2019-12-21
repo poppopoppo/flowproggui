@@ -1653,7 +1653,7 @@ and slv_r rv p0 =
       let r = csm_ptn_rv r rv in
       Ret r
     | Exn r ->
-      let r = csm_rv r rv in
+      (*let r = csm_rv r rv in*)
       Exn r
     | IL_Glb_Call(n,r) ->
       let r = csm_ptn_rv r rv in
@@ -3708,7 +3708,7 @@ and args_init =
     mov [r13+16],r8
 "
 and emt_exe m =
-  (*Util.Log.f := Util.Log.On;*)
+  Util.Log.f := Util.Log.On;
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
   Util.Log.pnt ();
@@ -4324,7 +4324,8 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
       let e1 = emt_mov_ptn_to_ptn R.M_Dlt s0 ir i1 in
       c_l^c0^e0^e1^
       "\tret\n"
-    | Exn _ -> err "emt_ir Exn 0"
+    | Exn _ ->
+      "\tjmp err\n"
     | Mtc ps ->
       let psl = Array.to_list ps in
       let rec emt_mtc pv0 iv0 k0 psl lb0 =
@@ -4762,7 +4763,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             let c0 = cmt ("\t» "^(print_exp (ExpCst(Cst.R64 x)))^" _ ⊢ "^(emt_ptn iy)^rtl^(pnt_ptn (RP.A y))) in
             c_l^
             c0^
-            ( if im<9 then
+            ( if im<8 then
                 "\tmov rdi,0x"^(Int64.format "%x" x)^"\n"^
                 "\tmov "^(emt_reg_x86 im)^",rdi\n"
               else

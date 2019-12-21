@@ -66,20 +66,20 @@ NS_E_RDI_38:
 	call printf
 	mov rsp,QWORD [rsp_tmp]
 	ret
-NS_E_133:
-NS_E_RDI_133:
-NS_E_133_ETR_TBL:
+NS_E_52423:
+NS_E_RDI_52423:
+NS_E_52423_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	call byt
-	jnc LB_134
+	jnc LB_52424
 	add r14,1
 	mov r8,0
 	mov r9,rax
 	bts r12,3
 	bts r12,2
 	ret
-LB_134:
+LB_52424:
 	mov r8,1
 	mov rdi,rbx
 	mov rbx,[rdi]
@@ -89,22 +89,22 @@ LB_134:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_136:
-NS_E_RDI_136:
-NS_E_136_ETR_TBL:
+NS_E_52426:
+NS_E_RDI_52426:
+NS_E_52426_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	call prs_chr
 	mov r13,rdi
 	mov r14,rsi
 	bt rax,63
-	jc NS_E_136_LB_0
+	jc NS_E_52426_LB_0
 	mov r8,0
 	mov r9,rax
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_136_LB_0:
+NS_E_52426_LB_0:
 	mov r8,1
 	mov rdi,rbx
 	mov rbx,[rdi]
@@ -114,46 +114,46 @@ NS_E_136_LB_0:
 	btr r12,3
 	bts r12,2
 	ret
-NS_E_137:
-NS_E_RDI_137:
-NS_E_137_ETR_TBL:
+NS_E_52427:
+NS_E_RDI_52427:
+NS_E_52427_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,48
-	jb NS_E_137_LB_0
+	jb NS_E_52427_LB_0
 	cmp r11,57
-	ja NS_E_137_LB_0
+	ja NS_E_52427_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_137_LB_0:
+NS_E_52427_LB_0:
 	mov rax,0
 	ret
-NS_E_139:
-NS_E_RDI_139:
-NS_E_139_ETR_TBL:
+NS_E_52429:
+NS_E_RDI_52429:
+NS_E_52429_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,97
-	jb NS_E_139_LB_0
+	jb NS_E_52429_LB_0
 	cmp r11,122
-	ja NS_E_139_LB_0
+	ja NS_E_52429_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_139_LB_0:
+NS_E_52429_LB_0:
 	mov rax,0
 	ret
-NS_E_138:
-NS_E_RDI_138:
-NS_E_138_ETR_TBL:
+NS_E_52428:
+NS_E_RDI_52428:
+NS_E_52428_ETR_TBL:
 	mov r11b,[rdi+rsi+8*1]
 	cmp r11,65
-	jb NS_E_138_LB_0
+	jb NS_E_52428_LB_0
 	cmp r11,90
-	ja NS_E_138_LB_0
+	ja NS_E_52428_LB_0
 	add rsi,1
 	mov rax,1
 	ret
-NS_E_138_LB_0:
+NS_E_52428_LB_0:
 	mov rax,0
 	ret
 NS_E_45:
@@ -188,26 +188,26 @@ NS_E_RDI_59:
 	jge err
 	mov rdi,QWORD [rdi+8+8*rax]
 	bt rdi,0
-	jc LB_145
+	jc LB_52435
 	bt QWORD [rdi],17
-	jnc LB_145
+	jnc LB_52435
 	bt QWORD [rdi],0
-	jc LB_147
+	jc LB_52437
 	btr r12,2
 	clc
-	jmp LB_148
-LB_147:
+	jmp LB_52438
+LB_52437:
 	bts r12,2
 	stc
-LB_148:
+LB_52438:
 	mov rdi,QWORD [rdi+8]
 	call dcp
-	jmp LB_146
-LB_145:
+	jmp LB_52436
+LB_52435:
 	btr r12,2
 	clc
 	call dcp
-LB_146:
+LB_52436:
 	mov r8,rax
 	pop r14
 	pop r13
@@ -224,26 +224,26 @@ NS_E_RDI_23:
 	jge err
 	mov rdi,QWORD [rdi+8+8*rax]
 	bt rdi,0
-	jc LB_141
+	jc LB_52431
 	bt QWORD [rdi],17
-	jnc LB_141
+	jnc LB_52431
 	bt QWORD [rdi],0
-	jc LB_143
+	jc LB_52433
 	btr r12,2
 	clc
-	jmp LB_144
-LB_143:
+	jmp LB_52434
+LB_52433:
 	bts r12,2
 	stc
-LB_144:
+LB_52434:
 	mov rdi,QWORD [rdi+8]
 	call dcp
-	jmp LB_142
-LB_141:
+	jmp LB_52432
+LB_52431:
 	btr r12,2
 	clc
 	call dcp
-LB_142:
+LB_52432:
 	mov r8,rax
 	pop r14
 	pop r13
@@ -261,11 +261,11 @@ NS_E_RDI_22:
 	xor rsi,rsp
 	mov rsi,[rsi]
 	bt r12,2
-	jc LB_140
+	jc LB_52430
 	mov rsi,r8
 	mov QWORD [rdi+8+8*rax],rsi
 	ret
-LB_140:
+LB_52430:
 	mov rsi,rbx
 	mov rbx,[rsi]
 	mov QWORD [rdi+8+8*rax],rsi
@@ -359,9 +359,9 @@ NS_E_RDI_37:
 	pop r13
 	btr r12,1
 	ret
-NS_E_135:
-NS_E_RDI_135:
-NS_E_135_ETR_TBL:
+NS_E_52425:
+NS_E_RDI_52425:
+NS_E_52425_ETR_TBL:
 	mov rdi,r13
 	mov rsi,r14
 	push r14
@@ -382,14 +382,14 @@ NS_E_135_ETR_TBL:
 	pop rdx
 	pop r14
 	cmp rdi,0
-	jz NS_E_135_LB_0
+	jz NS_E_52425_LB_0
 	mov r14,rsi
 	mov r8,0
 	mov r9,rax
 	bts r12,3
 	bts r12,2
 	ret
-NS_E_135_LB_0:
+NS_E_52425_LB_0:
 	mov r8,1
 	mov rdi,rbx
 	mov rbx,[rdi]

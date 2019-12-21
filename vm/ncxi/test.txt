@@ -811,3 +811,55 @@ tag-v len |           ; blk
     replicable type | non-replicable type
 
     {= B0 B1 .. Bn < r =}
+
+    $ r ⊢ {> x~%v < r0 }
+    $ {> x~v < r0 } ⊢ r
+
+over-head
+  malloc-free > cancelation
+  arithmetic > vectolization
+  error-check > vectolization,null-branching
+  branching > table-jump-nization,brancing-prediction,null-branch-exp-handling,abbreviation
+  sequential > multi-thread
+
+  table call
+  f0 f1 f2 .. fn < fn+1 i,x ⊢ y
+  table jump call
+  f0 .. fn < _ i,x ⊢|
+  ◂ p0 p1 p2 .. pn < pn+1 ,i,x ⊢ y
+
+¶ t
+  ∐ c0 :
+  ∐ c1 : s
+  ∐ c2 : g ⊢ h
+  ∐ c3 : g ⊢ h ⊢ i
+
+¶¶ T
+  ∐ t0 :
+  ∐ t1 : *
+  ∐ t2 : * ⊢ *
+  ∐ t3 : S ⊢ U ⊢ *
+
+_r64 = _rX◂_R64
+
+¶¶ _RX
+  ∐ _R64 :
+  ∐ _R32 :
+  ∐ _R16 :
+  ∐ _R8 :
+
+¶ R'::_RX ∀ _rX◂R'
+
+_addq : { _r64 _r64 } → { _r64 _r64 }
+_add : R'::_RX ∀ { _rX◂R' _rX◂R' } → { _rX◂R' _rX◂R' }
+_rX : _RX → *
+  {> f0~t0 f1~t1 .. fn~tn ⊢ s0 s1 .. sn }
+§ add : { _rX◂a' _rX◂b' }
+  ∐∐ a' ⊢ _R64; b' ⊢ _R64 .
+    = addq
+  ∐∐ b' ⊢ _R32; b' ⊢ _R64 .
+    = addd
+  ∐∐ b' ⊢ _R16; b' ⊢ _R64 .
+    = addw
+  ∐∐ b' ⊢ _R8; b' ⊢ _R64 .
+    = add
