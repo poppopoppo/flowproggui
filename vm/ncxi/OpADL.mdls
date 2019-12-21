@@ -1516,11 +1516,11 @@
 				∐. .
 					_nil {} ⊢ l0
 					∎ { n re l0 }
-		§ @.csm_src_ptn { n re p }
+		§ @.csm_src_ptn { re p }
 			∐ p ⊢ ast.RP.rcd◂l .
-				csm_src_ptn_lst { n re l } ⊢ { n re l }
+				csm_src_ptn_lst { re l } ⊢ { re l }
 				ast.RP.rcd l ⊢ p
-				∎ { n re p }
+				∎ { re p }
 			∐. p ⊢ ast.RP.atm◂a .
 				∐ a ⊢ ast.src_reg◂w .
 					assoc { re w } ⊢ { re w o }
@@ -1529,27 +1529,48 @@
 						ast.RP.atm a ⊢ p
 						_none {} ⊢ o
 						_cns { { w o } re } ⊢ re
-						∎ { n re p }
+						∎ { re p }
 					∐. .
 						∎|
 				∐. a ⊢ ast.im_reg◂c .
 					ast.im_reg c ⊢ a
 					ast.RP.atm a ⊢ p
-					∎ { n re p }
-			@.csm_src_ptn_lst { n re l }
+					∎ { re p }
+			@.csm_src_ptn_lst { re l }
 				∐ l ⊢ _cns◂{ hd l } .
-					csm_src_ptn { n re hd } ⊢ { n re hd }
-					csm_src_ptn_lst { n re l } ⊢ { n re l }
+					csm_src_ptn { re hd } ⊢ { re hd }
+					csm_src_ptn_lst { re l } ⊢ { re l }
 					_cns { hd l } ⊢ l
-					∎ { n re l }
+					∎ { re l }
 				∐. .
 					_nil {} ⊢ l0
-					∎ { n re l0 }
+					∎ { re l0 }
 
-		##§ @.slv_r lc
-		##	∐ lc ⊢ seq◂{ ll lc } .
-
-
+		§ @.slv_r { n re lc }
+			$ lc ⊢
+				∐ ast.seq◂{ ll lc } .
+					$ ll ⊢
+						∐ ast.op_name◂{ o s d } .
+							csm_src_ptn { re s } ⊢ { re s }
+							crt_dst_ptn { n re d } ⊢ { n re d }
+							slv_r { n re lc } ⊢ { n re lc }
+							ast.op_name { o s d } ⊢ ll
+							ast.seq { ll lc } ⊢ lc
+							∎ { n re lc }
+						∐ ast.op_id◂{ s ds } .
+							∎|
+						∐ ast.op_app◂{ f x y } .
+							∎|
+						∐ ast.op_exp_cst◂{ c s d } .
+							∎|
+						∐. ast.op_exp_s8◂{ pl ss ds } .
+							∎|
+				∐ ast.mtc◂lm .
+					∎|
+				∐ ast.ret◂s .
+					∎|
+				∐. ast.exn◂{} .
+					∎|
 		§
 			@.nc gel
 				» 200r _ ⊢ max
@@ -1632,7 +1653,7 @@
 				» 0r _ ⊢ y
 				syntax.src_ptn.prs { s y } ⊢ { s y a }
 				∐ a ⊢ _some◂py .
-					ns.csm_src_ptn { n re py } ⊢ { n re py }
+					ns.csm_src_ptn { re py } ⊢ { re py }
 					_emt py ⊢ py
 					∎ {}
 				∐. .
