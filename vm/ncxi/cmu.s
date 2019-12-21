@@ -1219,14 +1219,18 @@ eq_opq:
   mov ecx,DWORD [rsi+4]
   cmp rax,rcx
   jnz eq_opq_end
-  add rdi,8
-  add rsi,8
-  cld
-  repz cmpsb
+eq_opq_lp:
   cmp rcx,0
-  pop rcx
+  jz eq_opq_end
+  mov al,BYTE [rsi+7+rcx]
+  cmp al,BYTE [rdi+7+rcx]
+  jnz eq_opq_end
+  sub rcx,1
+  jmp eq_opq_lp
 eq_opq_end:
+  pop rcx
   ret
+
 eq_arr:
   mov eax,DWORD [rdi+4]
   mov ecx,DWORD [rsi+4]

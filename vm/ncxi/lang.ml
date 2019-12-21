@@ -375,7 +375,7 @@ module Ast = struct
     | Etr_Glb of string * pt
     | Flow of flow
     | Flow_Clq of flow list
-    | Gram of etr Grm.t
+    | Gram of (Sgn.t * Sgn.t * Sgn.t * etr) Grm.t
     | Grm_Abs of string
     | Mdl of string * glb_etr list
     | Mdl_Eq of string * abs_name
@@ -464,7 +464,7 @@ module Ast = struct
     | S8_For_Txt of int * string
   type line =
     | End | Line of exp_rcd
-  type grm = etr Grm.t
+  type grm = (Sgn.t * Sgn.t * Sgn.t * etr) Grm.t
   type ns = (string * Types.v ref) list ref
   type ns_t = (string * Types.v ref) list ref
   type inst = {
@@ -1408,7 +1408,7 @@ and inst_mtc_atm gns (ns:ns_v) l e =
         | P_R2 _ -> Axm Axm.r2
         | P_Stg _ -> Axm Axm.stg )
     | Eq_V ve ->
-      let y_ve = inst_v_r gns (l+1) ve in
+      let y_ve = inst_v_r gns l ve in
       y_ve
   )
 and slv (gns:g_ns_v) (ns:ns_v) l p0 =
@@ -1418,11 +1418,11 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
       let y = inst_ptn gns (l+1) r in
       let _ = gen (ref []) l y in
       y
-    | Exn r ->
-      let y = inst_v_r gns (l+1) r in
+    | Exn _ ->
+      (*let y = inst_v_r gns (l+1) r in
       let _ = unify []  (Axm Axm.exn_p) y in
-      let _ = gen (ref []) l y in
-      Var (newvar_q l)
+        let _ = gen (ref []) l y in*)
+        Var (newvar_q l)
     | IL_Glb_Call(n,r) ->
       let pf = slv_ns0 ns n in
       let y_e =
@@ -1436,12 +1436,14 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
       Util.Log.add ("test 4:"^"\n");
       yy
     | Mtc pns ->
+      Util.pnt true "slv Mtc 0\n";
       let _ =
         Array.fold_left
           ( fun _ (e,_) ->
               let _ = inst_mtc_ptn gns ns l e in
               () )
           () pns in
+      Util.pnt true "slv Mtc 1\n";
       let (_,ys) =
         Array.fold_left
           ( fun (j,ys) (_,p) ->
@@ -1450,8 +1452,10 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
           (0,[||]) pns in
       let tts = Array.map (fun y -> inst (l+1) y) ys in
       let rrt = Var (newvar_l (l+1)) in
+      Util.pnt true "slv Mtc 2\n";
       let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) rrt (Array.to_list tts) in
       let _ = gen (ref []) l rrt in
+      Util.pnt true "slv Mtc 3\n";
       rrt
     | Clj _ -> err "slv:0"
     | Seq(o,p1) ->
@@ -1763,6 +1767,14 @@ and crt_mtc_ptn_rv (es,_) rv  =
   (es,Some (dl,d))
 and slv_r_etr (r0,p0) =
   let rv = Hashtbl.create 10 in
+  let _ = crt_ptn_rv r0 rv in
+  let p = slv_r rv !p0 in
+  (r0,ref p)
+and slv_r_grm_etr n r c (r0,p0) =
+  let rv = Hashtbl.create 10 in
+  let _ = Hashtbl.add rv "_n" n in
+  let _ = Hashtbl.add rv "_r" r in
+  let _ = Hashtbl.add rv "_c" c in
   let _ = crt_ptn_rv r0 rv in
   let p = slv_r rv !p0 in
   (r0,ref p)
@@ -2246,15 +2258,21 @@ and emt_rle gns ns l =
           | e::tl ->
             ( match e with
               | Grm.Act_Seq _ -> err "emt_prs `V seq"
-              | Grm.Act_End((re,pi),f,r,rc) ->
+              | Grm.Act_End((p_n,p_r,p_c,(re,pi)),f,r,rc) ->
                 ( match rc with
                   | None ->
+                    Util.pnt true "V None 0\n";
                     let rn = List.length r in
                     let iv0 = Hashtbl.create 10 in
                     let i_e_s = RP.R(Array.init rn (fun i -> RP.A(R.Idx i))) in
                     let i0 = crt_ptn_iv gns (mk_idx_ptn re) iv0 in
+                    let iv1 = Hashtbl.create 10 in
+                    let _ = Hashtbl.add iv1 p_n (RP.A(R.Idx rn)) in
+                    let _ = Hashtbl.add iv1 p_r (RP.A(R.Idx (rn+1))) in
+                      let _ = Hashtbl.add iv1 p_c (RP.A(R.Idx (rn+2))) in
                     let i1 = RP.A(R.Agl(2,2,RP.A(R.Idx 3))) in
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
+                    Util.pnt true "V None 00\n";
                     let lb1 = lb () in
                     let lb1_0 = lb () in
                     let lb1_1 = lb () in
@@ -2269,6 +2287,9 @@ and emt_rle gns ns l =
                           "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"+8*1]\n"^
                           "\tmov "^(emt_reg_x86 i)^",rax\n"^
                           (e_s (i-1)) ) in
+                    s_e_s.(rn)<-true;
+                    s_e_s.(rn+1)<-true;
+                    s_e_s.(rn+2)<-true;
                     let lbn = lb () in
                     let e0 =
                       "\tmov r10d,DWORD [r13+4]\n"^
@@ -2277,6 +2298,7 @@ and emt_rle gns ns l =
                       (emt_ptn_grm lbn i ns f r 0)^
                       "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
                       "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+                      "\tmov "^(emt_reg_x86 rn)^",rsi\n"^
                       (e_s (rn-1))^
                       "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
                       "\tpush rdi\n"^
@@ -2285,6 +2307,9 @@ and emt_rle gns ns l =
                     let e1 =
                       e0^
                       (emt_mov_ptn_to_ptn R.M_Dlt s_e_s i_e_s i0)^
+                      "\tbts r12,"^(string_of_int rn)^"\n"^
+                      "\tbts r12,"^(string_of_int (rn+1))^"\n"^
+                      "\tbts r12,"^(string_of_int (rn+2))^"\n"^
                       e_pi^
                       lb1^":\n"^
                       "\tpop "^(emt_reg_x86 1)^"\n"^
@@ -2309,6 +2334,7 @@ and emt_rle gns ns l =
                     e1^
                     (lp lb_p ps (i+1) tl)
                   | Some rc ->
+                    Util.pnt true "V None 1\n";
                     let rn = List.length r in
                     let rnc = List.length rc in
                     let iv0 = Hashtbl.create 10 in
@@ -2316,6 +2342,7 @@ and emt_rle gns ns l =
                     let i0 = crt_ptn_iv gns (mk_idx_ptn re) iv0 in
                     let i1 = RP.A(R.Agl(2,2,RP.A(R.Idx 3))) in
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
+                    Util.pnt true "V None 2\n";
                     let lb1 = lb () in
                     let lb1_0 = lb () in
                     let lb1_1 = lb () in
@@ -2775,22 +2802,24 @@ and emt_m gns (ns:ns_v ref) ld el =
                 ([],[]) q in
             let l_1 =
               List.fold_left
-                ( fun l (n,y2,y0,p0,r0,ep) ->
-                    let y1 = slv gns !ns 0 !p0 in
-                    (n,y2,y0,y1,p0,r0,ep)::l )
+                ( fun l (n,y2,y1,p0,r0,ep) ->
+                    let y1_x = slv gns !ns 0 !p0 in
+                    (n,y2,y1,y1_x,p0,r0,ep)::l )
                 [] l_0 in
             let l_2 =
               List.fold_left
-                ( fun l (n,y2,y0,y1,p0,r0,ep) ->
-                    let _ = unify [] (Var y0) (inst 0 y1) in
+                ( fun l (n,y2,y1,y1_x,p0,r0,ep) ->
+                    Util.pnt true "l_2:0\n";
+                    let y1_0 = inst 0 (Var y1) in
+                    let _ = unify [] y1_0 (inst 0 y1_x) in
                     gen (ref []) (-1) (Var y2);
                     let iv0 = Hashtbl.create 10 in
                     let i0 = crt_ptn_iv gns (mk_idx_ptn r0) iv0 in
                     (*let (i0,s0) = slv_idx_etr !ns (r0,p0) in*)
                     let s1 = Hashtbl.create 10 in
-                    let i1 = alc_idx_ty (rset_iv s1) y1 in
-                    gns.ns_e <- (ep,ref(Etr_V(i0, i1)))::gns.ns_e;
-                    (n,y2,y0,y1,p0,r0,i0,i1,iv0,ep)::l )
+                    let i1 = alc_idx_ty (rset_iv s1) y1_x in
+                    gns.ns_e <- (ep,ref(Etr_V(i0,i1)))::gns.ns_e;
+                    (n,y2,y1,y1_x,p0,r0,i0,i1,iv0,ep)::l )
                 [] l_1 in
             List.fold_left
               ( fun (e_0,e_1,e_2,pp) (n,_,y0,y1,p0,_,i0,i1,s0,ep) ->
@@ -2998,14 +3027,17 @@ and emt_m gns (ns:ns_v ref) ld el =
                         List.fold_left
                           ( fun rts e ->
                               ( match e with
-                                | Grm.Act_End((r0,p0),_,r,rc) ->
+                                | Grm.Act_End((p_n,p_r,p_c,(r0,p0)),_,r,rc) ->
                                   let r =
                                     ( match rc with
                                       | Some rc -> r@rc
                                       | None -> r ) in
                                   let y = mk_var_grm !ns_g r in
-                                  let (r0,p0) = slv_r_etr (r0,p0) in
+                                  let (r0,p0) = slv_r_grm_etr p_n p_r p_c (r0,p0) in
                                   let y0 = inst_ptn gns 0 r0 in
+                                  gns.ns_r_t<-(p_n,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
+                                  gns.ns_r_t<-(p_r,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
+                                  gns.ns_r_t<-(p_c,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
                                   let _ = unify [] y y0 in
                                   let y1 = slv gns !ns 0 !p0 in
                                   let _ = unify [] (inst 0 y1) (App(Axm Types.Axm.opn,Var t_v)) in
@@ -4354,7 +4386,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             e1
           | [] ->
             if k0=[] then lb0^":\n"
-            else err @@ "emt_mtc 0:"(*^(pnt_env_set k0)*) )
+            else err @@ "emt_mtc 0:non exh"(*^(pnt_env_set k0)*) )
       and emt_mtc_eq iv0 es lb1 =
         Util.Log.add @@ "enter emt_mtc_eq:"^(pnt_iv gns iv0)^"\n";
         ( match es with

@@ -141,18 +141,18 @@ grm_ord_act:
   ;
 grm_rule_act:
   | ord grm_ptns grm_prd SCL SRC reg_ptn_src ir_lines grm_ord_act {
-    Grm.Act_Seq(($6,ref $7),$1,$2,$3,$8)
+    Grm.Act_Seq((sgn (),sgn (),sgn(),($6,ref $7)),$1,$2,$3,$8)
   }
   | ord grm_ptns grm_prd SRC reg_ptn_src ir_lines {
-    Grm.Act_End(($5,ref $6),$1,$2,$3)
+    Grm.Act_End((sgn (),sgn (),sgn (),($5,ref $6)),$1,$2,$3)
    }
   ;
 grm_rule_act_end:
   | ord_end grm_ptns grm_prd SCL SRC reg_ptn_src ir_lines grm_ord_act {
-    Grm.Act_Seq(($6,ref $7),$1,$2,$3,$8)
+    Grm.Act_Seq((sgn (),sgn (),sgn(),($6,ref $7)),$1,$2,$3,$8)
   }
   | ord_end grm_ptns grm_prd SRC reg_ptn_src ir_lines {
-    Grm.Act_End(($5,ref $6),$1,$2,$3)
+    Grm.Act_End((sgn (),sgn (),sgn(),($5,ref $6)),$1,$2,$3)
  }
   ;
 grm_rule_act_seq:
@@ -318,10 +318,10 @@ ir_lines:
   | ir_line ir_lines { Seq($1,$2) }
 (*  | MTC reg_ptn mtc_ir COPRD_END { Mtc($2,$3) } *)
   | mtc_ir_end { Mtc($1) }
-  | name reg_ptn SRC_IL { IL_Glb_Call(ref(Ast.Stt_Name $1),$2) }
+  | name reg_ptn_src SRC_IL { IL_Glb_Call(ref(Ast.Stt_Name $1),$2) }
   ;
 ir_line:
-  | ROT reg_ptn SRC reg_ptn regs { IR_Id(ref(IR_Id_C($2,[|$4|] |+| $5)))  }
+  | ROT reg_ptn_src SRC reg_ptn regs { IR_Id(ref(IR_Id_C($2,[|$4|] |+| $5)))  }
   | ARR exp INI_IR reg_ptn_src SRC reg_ptn  { IR_Exp($2,$4,$6) }
   | ARR exp reg_ptn_src SRC reg_ptn { IR_Exp($2,$3,$5) }
   | ARR S8_E WC SRC reg s8_ptn S8_P {
@@ -329,12 +329,12 @@ ir_line:
   | ARR S8_E src_par_p (*S8_STT*) s8_ptn S8_P {
       let (l0,l1) = $3 in
       IR_S8(ref(IR_S8_C($4,l0,l1))) }
-  | name reg_ptn SRC reg_ptn { IR_Glb_Call(ref(Ast.Stt_Name $1),$2,$4) }
+  | name reg_ptn_src SRC reg_ptn { IR_Glb_Call(ref(Ast.Stt_Name $1),$2,$4) }
   | APP reg CMM reg_ptn SRC reg_ptn {
      IR_Glb_Call(ref(Lang.Ast.Stt_Axm Lang.Ast.Axm._app),RP.R [|RP.A $2;$4|],$6) }
   | OUT_IR reg reg_ptn SRC_OUT {
     IR_Out($2,$3) }
-  | name reg_ptn SRC_OUT { IR_Glb_Out(ref(Ast.Stt_Name $1),$2) }
+  | name reg_ptn_src SRC_OUT { IR_Glb_Out(ref(Ast.Stt_Name $1),$2) }
   ;
 src_par_p:
   | reg_dst SRC reg CMM reg { ([|$1|],[|$3;$5|]) }
@@ -424,6 +424,7 @@ ir_tkn:
   | NAM   {}
   ;
 reg_src:
+  | PRM { ref(R_N $1) }
   | NAM { ref(R_N $1) }
   | REG { ref(R_N $1) }
   ;
