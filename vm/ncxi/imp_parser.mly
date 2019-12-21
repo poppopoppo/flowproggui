@@ -317,11 +317,31 @@ ir_lines:
   | ir_ret { $1 }
   | ir_line ir_lines { Seq($1,$2) }
 (*  | MTC reg_ptn mtc_ir COPRD_END { Mtc($2,$3) } *)
+  | id_line { $1 }
   | mtc_ir_end { Mtc($1) }
   | name reg_ptn_src SRC_IL { IL_Glb_Call(ref(Ast.Stt_Name $1),$2) }
   ;
+id_line:
+  | ROT id_src SRC reg_ptn regs ir_lines {
+  Seq(IR_Id(ref(IR_Id_C($2,[|$4|] |+| $5))),$6)  }
+  | ROT reg_src SRC reg_ptn regs ir_lines {
+    Seq(IR_Id(ref(IR_Id_C(RP.A $2,[|$4|] |+| $5))),$6)  }
+  | ROT reg_src SRC id_mtc {
+    let ms =
+      Array.map
+        (fun (cn,p,(es,o),lc) ->
+          (((ref(!$2),ref(Eq_Agl_N(ref(Ast.Stt_Name cn),p)))::es,o),lc) )
+      $4  in
+    Mtc ms
+  }
+  ;
+id_src:
+  | WC { Rcd_Ptn.R [||] }
+  | L_RCD reg_ptn_lst_src reg_ptn_op_src {
+    match $3 with
+    | None ->  Rcd_Ptn.R $2
+    | Some _ -> err "reg_ptn_src 0" (* Rcd_Ptn.Ro ($2,r)*) }
 ir_line:
-  | ROT reg_ptn_src SRC reg_ptn regs { IR_Id(ref(IR_Id_C($2,[|$4|] |+| $5)))  }
   | ARR exp INI_IR reg_ptn_src SRC reg_ptn  { IR_Exp($2,$4,$6) }
   | ARR exp reg_ptn_src SRC reg_ptn { IR_Exp($2,$3,$5) }
   | ARR S8_E WC SRC reg s8_ptn S8_P {
@@ -490,6 +510,12 @@ mtc_ir:
   | COPRD_PTN ir_ptn ir_ptn_eq SRC ir_lines mtc_ir {[|(($2,$3,None),$5)|] |+| $6 }
   ;
   *)
+id_mtc:
+  | coprd_ptn_end name APP reg_ptn mtc_ir_tail ir_lines
+    { [|($2,$4,($5,None),$6)|] }
+  | coprd_ptn name APP reg_ptn mtc_ir_tail ir_lines id_mtc
+    { [|($2,$4,($5,None),$6)|] |+| $7 }
+  ;
 mtc_ir_end:
   | coprd_ptn_end ir_ptn_eq ir_lines { [|(($2,None),$3)|] }
   | coprd_ptn ir_ptn_eq ir_lines mtc_ir_end {[|(($2,None),$3)|] |+| $4 }
