@@ -1,65 +1,68 @@
-_emt:(2466980)*"grm_etr 0"
-_emt:(2466980)*"grm_etr 1"
-_emt:(2467a10)*"grm_etr 0"
-_emt:(2467a10)*"grm_etr 1"
-_emt:(2467c50)*"grm_etr 0"
-_emt:(2467c50)*"grm_etr 1"
-_emt:(2467d10)*"grm_etr 0"
-_emt:(2467d10)*"grm_etr 1"
-_emt:(2468110)*"grm_etr 0"
-_emt:(2468110)*"grm_etr 1"
-_emt:(246a3f0)*"grm_etr 0"
-_emt:(246a410)*"grm_etr 0"
-_emt:(246a430)*"grm_etr 0"
-_emt:(246a430)*"grm_etr 1"
-_emt:(246a430)*"grm_etr 2"
-_emt:(246a4f0)*"grm_etr 0"
-_emt:(246a4f0)*"grm_etr 1"
-_emt:(246a590)*"grm_etr 0"
-_emt:(246a570)*"grm_etr 0"
-_emt:(246a570)*"grm_etr 1"
-_emt:(246a570)*"grm_etr 2"
-_emt:(246a550)*"grm_etr 0"
-_emt:(246a7d0)*"grm_etr 0"
-_emt:(246a7d0)*"grm_etr 1"
-_emt:(246a7d0)*"grm_etr 2"
-_emt:(246a8b0)*"grm_etr 0"
-_emt:(246a8b0)*"grm_etr 1"
-_emt:(246a8b0)*"grm_etr 2"
-_emt:(246ab10)*"grm_etr 0"
-_emt:(246ab10)*"grm_etr 1"
-_emt:(246ab10)*"grm_etr 2"
-_emt:(246c310)*"grm_etr 0"
-_emt:(246c310)*"grm_etr 1"
-_emt:(246c350)*"grm_etr 0"
-_emt:(246c350)*"grm_etr 1"
-_emt:(246cc90)*"grm_etr 0"
-_emt:(246cc90)*"grm_etr 1"
-_emt:(2472e30)*"grm_etr 0"
-_emt:(2473370)*"grm_etr 0"
-_emt:(2473050)*"grm_etr 0"
-_emt:(2473050)*"grm_etr 1"
-_emt:(2473050)*"grm_etr 2"
-_emt:(2475430)*"grm_etr 0"
-_emt:(2475430)*"grm_etr 1"
-_emt:(2475530)*"grm_etr 0"
-_emt:(2475530)*"grm_etr 1"
-_emt:(24765d0)*"grm_etr 0"
-_emt:(24765d0)*"grm_etr 1"
-_emt:(24765d0)*"grm_etr 2"
-_emt:(2476690)*"grm_etr 0"
-_emt:(2476690)*"grm_etr 1"
-_emt:(2482950)*"grm_etr 0"
-_emt:(2482970)*"grm_etr 0"
-_emt:(2482970)*"grm_etr 1"
-_emt:(2482970)*"grm_etr 2"
-_emt:(2483350)*"grm_etr 0"
-_emt:(2483350)*"grm_etr 1"
-_emt:(2483bb0)*"grm_etr 0"
-_emt:(2483bb0)*"grm_etr 1"
-_emt:(2483df0)*"grm_etr 0"
-_emt:(2483df0)*"grm_etr 1"
-_emt:(2483df0)*"grm_etr 2"
+_emt:(2196a00)*"grm_etr 0"
+_emt:(2196a00)*"grm_etr 1"
+_emt:(2197a90)*"grm_etr 0"
+_emt:(2197a90)*"grm_etr 1"
+_emt:(2197cd0)*"grm_etr 0"
+_emt:(2197cd0)*"grm_etr 1"
+_emt:(2197d90)*"grm_etr 0"
+_emt:(2197d90)*"grm_etr 1"
+_emt:(2198190)*"grm_etr 0"
+_emt:(2198190)*"grm_etr 1"
+_emt:(219a470)*"grm_etr 0"
+_emt:(219a490)*"grm_etr 0"
+_emt:(219a4b0)*"grm_etr 0"
+_emt:(219a4b0)*"grm_etr 1"
+_emt:(219a4b0)*"grm_etr 2"
+_emt:(219a570)*"grm_etr 0"
+_emt:(219a570)*"grm_etr 1"
+_emt:(219a610)*"grm_etr 0"
+_emt:(219a5f0)*"grm_etr 0"
+_emt:(219a5f0)*"grm_etr 1"
+_emt:(219a5f0)*"grm_etr 2"
+_emt:(219a5d0)*"grm_etr 0"
+_emt:(219a850)*"grm_etr 0"
+_emt:(219a850)*"grm_etr 1"
+_emt:(219a850)*"grm_etr 2"
+_emt:(219a930)*"grm_etr 0"
+_emt:(219a930)*"grm_etr 1"
+_emt:(219a930)*"grm_etr 2"
+_emt:(219ab10)*"grm_etr 0"
+_emt:(219ab10)*"grm_etr 1"
+_emt:(219ab10)*"grm_etr 2"
+_emt:(219b4b0)*"grm_etr 0"
+_emt:(219b4b0)*"grm_etr 1"
+_emt:(219b4b0)*"grm_etr 2"
+_emt:(219c4b0)*"grm_etr 0"
+_emt:(219c4b0)*"grm_etr 1"
+_emt:(219c4f0)*"grm_etr 0"
+_emt:(219c4f0)*"grm_etr 1"
+_emt:(219ce30)*"grm_etr 0"
+_emt:(219ce30)*"grm_etr 1"
+_emt:(21a2fd0)*"grm_etr 0"
+_emt:(21a3510)*"grm_etr 0"
+_emt:(21a31f0)*"grm_etr 0"
+_emt:(21a31f0)*"grm_etr 1"
+_emt:(21a31f0)*"grm_etr 2"
+_emt:(21a55d0)*"grm_etr 0"
+_emt:(21a55d0)*"grm_etr 1"
+_emt:(21a56d0)*"grm_etr 0"
+_emt:(21a56d0)*"grm_etr 1"
+_emt:(21a6770)*"grm_etr 0"
+_emt:(21a6770)*"grm_etr 1"
+_emt:(21a6770)*"grm_etr 2"
+_emt:(21a6830)*"grm_etr 0"
+_emt:(21a6830)*"grm_etr 1"
+_emt:(21b2af0)*"grm_etr 0"
+_emt:(21b2b10)*"grm_etr 0"
+_emt:(21b2b10)*"grm_etr 1"
+_emt:(21b2b10)*"grm_etr 2"
+_emt:(21b34f0)*"grm_etr 0"
+_emt:(21b34f0)*"grm_etr 1"
+_emt:(21b3d50)*"grm_etr 0"
+_emt:(21b3d50)*"grm_etr 1"
+_emt:(21b3f90)*"grm_etr 0"
+_emt:(21b3f90)*"grm_etr 1"
+_emt:(21b3f90)*"grm_etr 2"
 _emt:0x3
 _emt:0x4
 _emt:0x3
@@ -105,7 +108,7 @@ _emt:0x3
 _emt:0x3
 _emt:0x3
 _emt:0x3
-_emt:(248fae0)*"START
+_emt:(21c0cb0)*"START
 § 
 	@.rev_i { l0 l1 }
 		∐ .. .
@@ -313,19 +316,53 @@ _emt:(248fae0)*"START
 			@.src_ptn = .. 
 			@.dst_ptn = .. 
 		¶
+			@.lc_code
+				∐ seq : { lc_line lc_code }
+				∐ mtc : lc_mtc
+				∐ ret : src_ptn◂s8
+			@.lc_line = .. 
+			@.lc_mtc
+				∐ mtc_seq : { lst◂mtc_op mtc_etr lc_mtc }
+				∐ mtc_end : { lst◂mtc_op mtc_etr }
+			@.mtc_etr
+				∐ mtc_rmf : lc_mtc
+				∐ mtc_code : lc_code
+			@.mtc_op
+				∐ mtc_id : { src_ptn◂s8 name dst_ptn◂s8 }
+				∐ mtc_test : { test_var test_var }
+			@.test_var
+				∐ test_cst : cst
+				∐ test_var : s8
+			@.op
+				∐ op_name : name
+				∐ op_id : r64
+				∐ op_app : { }
+				∐ op_exp_cst : cst
+				∐ op_exp_s8 : { r64 lst◂op_exp_s8 }
+			@.op_exp_s8
+				∐ exp_s8_s8 : s8
+				∐ exp_s8_cst : name
+				∐ exp_s8_idx : { exp_s8_t r64 }
+				∐ exp_s8_for : { r64 s8 }
+			@.exp_s8_t
+				∐ exp_fmt_s : { }
+				∐ exp_fmt_d : { }
+				∐ exp_fmt_x : { }
+				∐ exp_fmt_p : { }
+		¶
 			@.file = .. 
 			@.glb_etr
 				∐ mdl_etr : { s8 mdl_etr }
 				∐ grm_etr : lst◂{ s8 grm_etr }
 				∐ lc_etr : { s8 lc_etr }
-				∐ lc_qlq_etr : lst◂{ s8 dst_ptn lc_code }
+				∐ lc_qlq_etr : lst◂{ s8 dst_ptn◂s8 lc_code }
 				∐ dt_etr : { s8 dt_etr }
 				∐ dt_qlq_etr : lst◂{ s8 dt_etr }
 			@.mdl_etr
 				∐ mdl_def : lst◂glb_etr
 				∐ mdl_ln : name
 			@.lc_etr
-				∐ lc_def : { dst_ptn lc_code }
+				∐ lc_def : { dst_ptn◂s8 lc_code }
 				∐ lc_ln : cst
 				∐ lc_cst : lc_code
 			@.dt_etr
@@ -338,8 +375,8 @@ _emt:(248fae0)*"START
 				∐ grm_cnc_seq : { opn◂s8 rle_flg grm_rle opn◂grm_cnc grm_cnc }
 				∐ grm_cnc_end : { opn◂s8 rle_flg grm_rle opn◂grm_cnc }
 			@.grm_act
-				∐ grm_act_seq : { dst_ptn lc_code rle_flg grm_rle opn◂grm_act grm_act }
-				∐ grm_act_end : { dst_ptn lc_code rle_flg grm_rle opn◂grm_act }
+				∐ grm_act_seq : { dst_ptn◂s8 lc_code rle_flg grm_rle opn◂grm_act grm_act }
+				∐ grm_act_end : { dst_ptn◂s8 lc_code rle_flg grm_rle opn◂grm_act }
 			@.rle_flg
 				∐ lex : { }
 				∐ synt : { }
@@ -363,39 +400,6 @@ _emt:(248fae0)*"START
 				∐ app : { type type }
 				∐ type_name : name
 				∐ type_var : s8
-			@.lc_code
-				∐ seq : { lc_line lc_code }
-				∐ mtc : lc_mtc
-				∐ ret : src_ptn
-			@.lc_line = .. 
-			@.lc_mtc
-				∐ mtc_seq : { lst◂mtc_op mtc_etr lc_mtc }
-				∐ mtc_end : { lst◂mtc_op mtc_etr }
-			@.mtc_etr
-				∐ mtc_rmf : lc_mtc
-				∐ mtc_code : lc_code
-			@.mtc_op
-				∐ mtc_id : { src_ptn name dst_ptn }
-				∐ mtc_test : { test_var test_var }
-			@.test_var
-				∐ test_cst : cst
-				∐ test_var : s8
-			@.op
-				∐ op_name : name
-				∐ op_id : r64
-				∐ op_app : { }
-				∐ op_exp_cst : cst
-				∐ op_exp_s8 : { r64 lst◂op_exp_s8 }
-			@.op_exp_s8
-				∐ exp_s8_s8 : s8
-				∐ exp_s8_cst : name
-				∐ exp_s8_idx : { exp_s8_t r64 }
-				∐ exp_s8_for : { r64 s8 }
-			@.exp_s8_t
-				∐ exp_fmt_s : { }
-				∐ exp_fmt_d : { }
-				∐ exp_fmt_x : { }
-				∐ exp_fmt_p : { }
 		§ pnt_cst c
 				∐ .. .
 					» .. { } ⊢ sr

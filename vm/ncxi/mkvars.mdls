@@ -18,5 +18,10 @@
 	@.dst◂r'
 		∐ wc : {} 
 		∐ dst_reg : r' 
-	@.src_ptn = RP.t◂(src◂_s8) 
-	@.dst_ptn = RP.t◂(dst◂_s8)
+	@.src_ptn◂r' = RP.t◂(src◂r') 
+	@.dst_ptn◂r' = RP.t◂(dst◂r') 
+	
+¶ SP = src_ptn
+¶ t◂v' 
+	∐ c : _s8 
+¶ s◂v' = _r64

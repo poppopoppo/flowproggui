@@ -23,4 +23,8 @@ let _ =
     let _ = output_string d a in
     flush_all ();
     let _ = close_out d in
+    let cd =
+      "nasm -g -gdwarf -f elf64 "^(Sys.argv.(1)^".s")^" -o out.o\n"^
+      "gcc out.o -nostartfiles -no-pie -pg -g -o "^(Sys.argv.(1))^".exe\n" in
+    let _ = Sys.command cd in
     exit 0
