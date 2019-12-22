@@ -1,3 +1,7 @@
+¶ p_lst ◂ a'
+ 	∐ p_cns : { a' p_lst◂a' }
+	∐ p_end : a'
+
 § @.rev_i { l0 l1 }
 	∐ l1 ⊢ _nil◂{} .
 		∎ l0
@@ -210,25 +214,32 @@
 	¶ SP◂r' = src_ptn◂r'
 	¶ DP◂r' = dst_ptn◂r'
 	¶
+		@.mtc◂r'
+			∐ mtc_agl : { name MP◂r' }
+			∐ mtc_cst : cst
+			∐ mtc_wc : {}
+		@.MP◂r' = reg_ptn.t◂(mtc◂r')
+	¶
 		@.lc_code◂r'
 			∐ seq : { lc_line◂r' lc_code◂r' }
 			∐ mtc : lc_mtc◂r'
+			∐ id_mtc : { SP◂r' lc_id_mtc◂r' }
 			∐ ret : SP◂r'
 			∐ exn : {}
+		@.lc_mtc◂r' = p_lst◂{ _lst◂(mtc_op◂r') mtc_etr◂r' }
+		@.lc_id_mtc◂r' = p_lst◂{ MP◂r' _lst◂(mtc_op◂r') mtc_etr◂r' }
 		@.lc_line◂r'
 			∐ op_name : { name SP◂r' DP◂r' }
 			∐ op_id : { SP◂r' _lst◂(DP◂r') }
 			∐ op_app : { src◂r' SP◂r' DP◂r' }
 			∐ op_exp_cst : { cst SP◂r' DP◂r' }
 			∐ op_exp_s8 : { _lst◂op_exp_s8 _lst◂(src◂r') _lst◂(dst◂r') }
-		@.lc_mtc◂r'
-			∐ mtc_seq : { _lst◂(mtc_op◂r') mtc_etr◂r' lc_mtc◂r' }
-			∐ mtc_end : { _lst◂(mtc_op◂r') mtc_etr◂r' }
 		@.mtc_etr◂r'
 			∐ mtc_rmf : lc_mtc◂r'
+			∐ mtc_id_rmf : { SP◂r' lc_id_mtc◂r' }
 			∐ mtc_code : lc_code◂r'
 		@.mtc_op◂r'
-			∐ mtc_id : { SP◂r' name DP◂r' }
+			∐ mtc_id : { SP◂r' MP◂r' }
 			∐ mtc_test : { test_var◂r' test_var◂r' }
 		@.test_var◂r'
 			∐ test_cst : cst
@@ -1302,7 +1313,7 @@
 				_some l ⊢ a
 				∎ a
 		@.mtc_test
-			∐# src_ptn "⊢" !| name "◂" dst_ptn ⊢ { r0 {} n {} r1 }
+			∐# src "⊢" !| name "◂" dst_ptn ⊢ { r0 {} n {} r1 }
 				ast.mtc_id { r0 n r1 } ⊢ r
 				_some r ⊢ a
 				∎ a
