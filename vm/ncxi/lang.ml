@@ -2669,6 +2669,7 @@ and emt_m gns (ns:ns_v ref) ld el =
             let (e0,e1,e2,pp) = emt_m gns ns_1 (ld+1) el0 in
             (e0,e1,e2,tbs^"§§ "^n^"\n"^pp^tbs^"§§.\n")
           | Etr(n,_,_,(r0,p0)) ->
+            Util.pnt true @@ "Etr "^n^"\n";
             let (r0,p0) = slv_r_etr (r0,p0) in
             let y0 = inst_ptn gns 0 r0 in
             let y1 = slv gns !ns 0 !p0 in
@@ -2803,6 +2804,7 @@ and emt_m gns (ns:ns_v ref) ld el =
             let l_1 =
               List.fold_left
                 ( fun l (n,y2,y1,p0,r0,ep) ->
+                                Util.pnt true @@ "Etr "^n^"\n";
                     let y1_x = slv gns !ns 0 !p0 in
                     (n,y2,y1,y1_x,p0,r0,ep)::l )
                 [] l_0 in
