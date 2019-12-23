@@ -1,0 +1,106 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "OpADL",
+	"patterns": [
+		{
+			"include": "#blk_comments"
+		},	
+		{ 
+			"include": "#line_comments"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#symbols"
+		},
+		{
+			"include": "#sp_ops"
+		},
+		{
+			"include": "#csts"
+		},
+		{
+			"include": "#im_regs"
+		}
+	],
+	"repository": {
+		"strings": {
+			"name": "string.quoted.double.opadl",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.opadl",
+					"match": "\\\\."
+				}
+			]
+		},
+		"symbols": {
+			"patterns": [
+				{
+					"name": "keyword.opadl",
+					"match": "(\u00A7\u00A7\\+s8|\u00A7\u00A7|\u00A7|\u00B6\u00B6|\u00B6|\u220E\u220E|\u220E\\||\u220E|\u2210\u2210|\u2210\\.#|\u2210\\.\\*|\u2210\\.|\u2210#|\u2210\\*|\u2210|\u00AB|\u00BB|\u22A2|(\\.\\s*\\n)|//|:)"
+				}
+			]
+		},
+		"sp_ops": {
+			"patterns": [
+				{
+					"name": "support.class.opadl",
+					"match": "(\u25C2|_\\^|(\\b_\\b)|\\$)"
+				}
+			]
+		},
+		"csts": {
+			"patterns": [
+				{
+					"name": "constant.language.opadl",
+					"match": "([0-9]+r|[A-Za-z0-9_]+'|@)"
+				}
+			]
+		},
+		"im_regs": {
+			"name": "support.class.im_reg.opadl",
+			"begin": "%\\[",
+			"beginCaptures": {
+				"1": {
+					"name": "support.class.im_reg.begin"
+				}
+			},
+			"end": "\\]",
+			"endCaptures": {
+				"1": {
+					"name": "support.class.im_reg.end"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#csts"
+				},
+				{ 
+					"include": "#strings" 
+				}
+			]
+	},
+	"line_comments": {
+		"patterns": [
+			{
+				"name": "comment.line.opadl",
+				"match": "(##.*\\n?)"
+			}
+		]
+	},
+	"blk_comments": {
+		"name": "comment.blk.opadl",
+		"begin": "\\\\\\[",
+		"end": "\\\\\\]",
+		"patterns": [
+			{
+				"include": "$self"
+			}
+		]
+	}
+},
+	"scopeName": "source.opadl"
+}

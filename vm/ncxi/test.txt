@@ -877,3 +877,9 @@ _rX : _RX → *
     &{ p0 p1 p2 .. pn < k }
 
     &{ _Et < {} }
+
+  &{ a b c < d } : &{ _prc _chn _m8 < _r64 } 
+    &.F &{ .. } 
+      
+      mku_rp8 ; mark upped rope 
+      
