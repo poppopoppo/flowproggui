@@ -2258,7 +2258,7 @@ and emt_rle gns ns l =
           | e::tl ->
             ( match e with
               | Grm.Act_Seq _ -> err "emt_prs `V seq"
-              | Grm.Act_End((p_n,p_r,p_c,(re,pi)),f,r,rc) ->
+              | Grm.Act_End((p_n,p_r,_,(re,pi)),f,r,rc) ->
                 ( match rc with
                   | None ->
                     Util.pnt true "V None 0\n";
@@ -2266,10 +2266,12 @@ and emt_rle gns ns l =
                     let iv0 = Hashtbl.create 10 in
                     let i_e_s = RP.R(Array.init rn (fun i -> RP.A(R.Idx i))) in
                     let i0 = crt_ptn_iv gns (mk_idx_ptn re) iv0 in
-                    let iv1 = Hashtbl.create 10 in
-                    let _ = Hashtbl.add iv1 p_n (RP.A(R.Idx rn)) in
-                    let _ = Hashtbl.add iv1 p_r (RP.A(R.Idx (rn+1))) in
-                      let _ = Hashtbl.add iv1 p_c (RP.A(R.Idx (rn+2))) in
+                    let s0 = rset_iv iv0 in 
+                    let i_n = RSet.min_0 s0 in 
+                    s0.(i_n)<-true;
+                    let i_r = RSet.min_0 s0 in 
+                    let _ = Hashtbl.add iv0 p_n (RP.A(R.Idx i_n)) in
+                    let _ = Hashtbl.add iv0 p_r (RP.A(R.Idx i_r)) in
                     let i1 = RP.A(R.Agl(2,2,RP.A(R.Idx 3))) in
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
                     Util.pnt true "V None 00\n";
@@ -2287,18 +2289,14 @@ and emt_rle gns ns l =
                           "\tmov rax,QWORD [rsp+16*"^(string_of_int i)^"+8*1]\n"^
                           "\tmov "^(emt_reg_x86 i)^",rax\n"^
                           (e_s (i-1)) ) in
-                    s_e_s.(rn)<-true;
-                    s_e_s.(rn+1)<-true;
-                    s_e_s.(rn+2)<-true;
                     let lbn = lb () in
                     let e0 =
-                      "\tmov r10d,DWORD [r13+4]\n"^
-                      "\tpush "^(emt_reg_x86 1)^"\n"^
+                      "\tmov r10d,DWORD [r13+4]\n"^ 
+                  "\tpush "^(emt_reg_x86 1)^"\n"^
                       "\tsub rsp,"^(string_of_int (rn*16))^"\n"^
                       (emt_ptn_grm lbn i ns f r 0)^
                       "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
                       "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
-                      "\tmov "^(emt_reg_x86 rn)^",rsi\n"^
                       (e_s (rn-1))^
                       "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
                       "\tpush rdi\n"^
@@ -2307,9 +2305,12 @@ and emt_rle gns ns l =
                     let e1 =
                       e0^
                       (emt_mov_ptn_to_ptn R.M_Dlt s_e_s i_e_s i0)^
-                      "\tbts r12,"^(string_of_int rn)^"\n"^
-                      "\tbts r12,"^(string_of_int (rn+1))^"\n"^
-                      "\tbts r12,"^(string_of_int (rn+2))^"\n"^
+                      "\tmov rax,QWORD [rsp+8]\n"^
+                      "\tmov "^(emt_reg_x86 i_r)^",rax\n"^
+                      "\tmov rax,QWORD [rsp+8*3]\n"^
+                      "\tmov "^(emt_reg_x86 i_n)^",rax\n"^
+                      "\tbts r12,"^(string_of_int i_n)^"\n"^
+                      "\tbts r12,"^(string_of_int i_r)^"\n"^
                       e_pi^
                       lb1^":\n"^
                       "\tpop "^(emt_reg_x86 1)^"\n"^
@@ -2340,6 +2341,12 @@ and emt_rle gns ns l =
                     let iv0 = Hashtbl.create 10 in
                     let i_e_s = RP.R(Array.init (rn+rnc) (fun i -> RP.A(R.Idx i))) in
                     let i0 = crt_ptn_iv gns (mk_idx_ptn re) iv0 in
+                    let s0 = rset_iv iv0 in 
+                    let i_n = RSet.min_0 s0 in 
+                    s0.(i_n)<-true;
+                    let i_r = RSet.min_0 s0 in 
+                    let _ = Hashtbl.add iv0 p_n (RP.A(R.Idx i_n)) in
+                    let _ = Hashtbl.add iv0 p_r (RP.A(R.Idx i_r)) in
                     let i1 = RP.A(R.Agl(2,2,RP.A(R.Idx 3))) in
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
                     Util.pnt true "V None 2\n";
@@ -2375,6 +2382,12 @@ and emt_rle gns ns l =
                     let e1 =
                       e0^
                       (emt_mov_ptn_to_ptn R.M_Dlt s_e_s i_e_s i0)^
+                      "\tmov rax,QWORD [rsp+8]\n"^
+                      "\tmov "^(emt_reg_x86 i_r)^",rax\n"^
+                      "\tmov rax,QWORD [rsp+8*3]\n"^
+                      "\tmov "^(emt_reg_x86 i_n)^",rax\n"^
+                      "\tbts r12,"^(string_of_int i_n)^"\n"^
+                      "\tbts r12,"^(string_of_int i_r)^"\n"^
                       e_pi^
                       lb1^":\n"^
                       "\tpop "^(emt_reg_x86 1)^"\n"^
@@ -3062,7 +3075,7 @@ and emt_m gns (ns:ns_v ref) ld el =
                     | `P(n,rs,_,_,epv,ns_g) ->
                       let ppi = Grm.print_etr (n,rs) in
                       let es0 =
-                        es0^
+                        es0^ 
                         (emt_prs gns ns_g epv (`P rs)) in
                       (es0,es1(*^eq^eq0*),pp^ppi)
                     | `V(n,rs,rts,t_v,epv,ns_g) ->

@@ -42,6 +42,8 @@ section .bss
   tmp: resb 80
   tmp_pop: resb 8
   tmp_push: resb 8
+  r_n_tmp: resq 1 
+  r_r_tmp: resq 1 
   dyn_call_vct: resb 16
   str_ret: resb 256
   out_vct: resb (8+8+8)*32
