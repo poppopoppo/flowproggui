@@ -451,7 +451,7 @@
 				pnt_src_ptn fr ⊢ sf
 				pnt_src_ptn x ⊢ ss
 				pnt_dst_ptn y ⊢ sd
-				» _^ dn,sf,ss,sd ⊢ dn,sf,ss,sd,sr
+				» _^ dn,sf,ss,sd ⊢ dn,sf,ss,sd,sr 
 					0'*"\t" "◂ " 1' "," 2' " ⊢ " 3' "\n" //
 				∎ { dn sr }
 			∐ o ⊢ op_exp_cst◂{ c s d } .
