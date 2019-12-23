@@ -12,6 +12,9 @@
 			"include": "#strings"
 		},
 		{
+			"include": "#line_strings"
+		},
+		{
 			"include": "#symbols"
 		},
 		{
@@ -36,11 +39,19 @@
 				}
 			]
 		},
+		"line_strings": {
+			"patterns": [
+				{
+					"name": "string.line.opadl",
+					"match": "(`.*\\n?)"
+				}
+			]
+		},
 		"symbols": {
 			"patterns": [
 				{
 					"name": "keyword.opadl",
-					"match": "(\u00A7\u00A7\\+s8|\u00A7\u00A7|\u00A7|\u00B6\u00B6|\u00B6|\u220E\u220E|\u220E\\||\u220E|\u2210\u2210|\u2210\\.#|\u2210\\.\\*|\u2210\\.|\u2210#|\u2210\\*|\u2210|\u00AB|\u00BB|\u22A2|(\\.\\s*\\n)|//|:)"
+					"match": "(\u00A7\u00A7\\+s8|\u00A7\u00A7|\u00A7|\u00B6\u00B6|\u00B6|\u220E\u220E|\u220E\\||\u220E|\u2210\u2210|\u2210\\.#|\u2210\\.\\*|\u2210\\.|\u2210#|\u2210\\*|\u2210|\u00AB|\u00BB|\u22A2|(\\.\\s*\\n)|//|:|\\!\\|)"
 				}
 			]
 		},
@@ -52,6 +63,7 @@
 				}
 			]
 		},
+		
 		"csts": {
 			"patterns": [
 				{
