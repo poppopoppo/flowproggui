@@ -1,0 +1,86 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "OpADL",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		}, 
+		{
+			"include": "#symbols"
+		},
+		{
+			"include": "#sp_ops"
+		},
+		{
+			"include": "#csts"
+		}, 
+		{ 
+			"include": "#im_regs"
+		}
+	],
+	"repository": {
+		"symbols": {
+			"patterns": [{
+				"name": "entity.control.opadl",
+				"match": "\\b(§§\\+s8|§§|¶¶|¶|∎∎|∎\\||∎|∐∐|∐.#|∐.*|∐.|∐#|∐\\*|«|»|⊢|\\.)\\b"
+			}]
+		},
+		"sp_ops": {
+			"patterns": [
+				{
+					"name": "keyword.control.opadl",
+					"match": "(◂|\\b_\\^\\b|\\b_\\b|\\$)"
+				}]
+		},
+		"csts": {
+			"patterns": [
+				{
+					"name": "constant.control.opadl",
+					"match": "([0-9]+r|[A-Za-z][A-Za-z0-9_]+\\')"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.opadl",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.opadl",
+					"match": "\\\\."
+				}
+			]
+		},
+		"im_regs": {
+			"name": "meta.im_reg.opadl",
+			"begin": "%[",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.im_reg.begin"
+				}
+			},
+			"end": "]",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.im_reg.end"
+				}
+			},
+			"patterns": [
+				{
+						"include": "csts"
+				},
+				{
+						"include": "strings"
+				},							
+				{
+					"name": "meta.character.escape.opadl",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.opadl"
+}

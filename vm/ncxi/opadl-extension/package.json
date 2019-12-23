@@ -1,0 +1,27 @@
+{
+    "repository": "_", 
+	"publisher": "Koh88",
+	"name": "opadl-extension",
+    "displayName": "OpADL extension",
+    "description": "OpADL extension",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.41.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "opadl",
+            "aliases": ["OpADL", "opadl"],
+            "extensions": ["mdls"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "opadl",
+            "scopeName": "source.opadl",
+            "path": "./syntaxes/opadl.tmLanguage.json"
+        }]
+    }
+}

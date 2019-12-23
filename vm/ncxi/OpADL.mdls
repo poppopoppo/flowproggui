@@ -136,7 +136,7 @@
 	@.ch_a
 	∐ ch_u ⊢ { c }
 		_some c ⊢ a
-		∎ a
+		∎ a 
 	∐. ch_l ⊢ { c }
 		_some c ⊢ a
 		∎ a
@@ -155,7 +155,7 @@
 		∎ a
 	∐. ⊢ { }
 		_nil {} ⊢ l
-		_some l ⊢ a
+		_some l ⊢ a 
 		∎ a
 	@.word_hd
 	∐ ch_a ⊢ { c }
@@ -173,7 +173,7 @@
 	@.prm_word
 	∐ "_" word_tl ⊢ { {} cl }
 		s8_of_r64_lst cl ⊢ s
-		_some s ⊢ a
+		_some s ⊢ a 
 		∎ a
 	∐. word ⊢ { s }
 		_some s ⊢ a
@@ -325,15 +325,15 @@
 				∐ a ⊢ im_reg◂c .
 					pnt_cst c ⊢ sc
 					» _^ sc ⊢ sc,sr
-						"%[ " 0' " ] " //
+						"%[ " 0' " ] " // 
 					∎ sr
 				∐. a ⊢ src_reg◂w .
 					∎ w
 		@.pnt_src_ptn_lst l
 			∐ l ⊢ _cns◂{ hd l } .
-				pnt_src_ptn hd ⊢ shd
+				pnt_src_ptn hd ⊢ shd 
 				pnt_src_ptn_lst l ⊢ sl
-				» _^ shd,sl ⊢ shd,sl,sr
+				» _^ shd,sl ⊢ shd,sl,sr 
 					0' " " 1' //
 				∎ sr
 			∐. l ⊢ _nil◂{} .
@@ -705,7 +705,7 @@
 					//
 				∎ { dn sr }
 		@.pnt_lc_qlq_etr { dn q }
-			∐ q ⊢ _cns◂{ { w dp lc } q } .
+			∐ q ⊢ _cns◂{ { w dp lc } q } .  
 				pnt_dst_ptn dp ⊢ sdp
 				pnt_lc_qlq_etr { dn q } ⊢ { dn sq }
 				_inc dn ⊢ dn
@@ -716,7 +716,7 @@
 						3'
 					4'
 					//
-				∎ { dn sr }
+				∎ { dn sr } 
 			∐. q ⊢ _nil◂{} .
 				» "" _ ⊢ sr
 				∎ { dn sr }
@@ -862,7 +862,7 @@
 		@.nl
 			∐.# "\n" ⟦"\n"⟧
 	¶ prs_rslt
-		∐ prs_vld : ast.file
+		∐ prs_vld : ast.file 
 		∐ prs_err : _s8
 
 	§ @.mk_app { a l }
@@ -1649,14 +1649,14 @@
 				syntax.file.prs { fn0_c0 x1 } ⊢ { fn0_c0 x1 a1 }
 				_emt { fn0_c0 x1 a1 } ⊢ { fn0_c0 x1 a1 }
 				∎ {}
-			∐. .
+			∐. . 
 			∎ {}
-		§ C «
+		§ C « 
 			» "{ x   y z }" _ ⊢ s
 			» 0r _ ⊢ x
 			syntax.dst_ptn.prs { s x } ⊢ { s x a }
 			_emt a ⊢ a
-			∐ a ⊢ _some◂p .
+			∐ a ⊢ _some◂p . 
 				» 0r _ ⊢ n
 				_nil {} ⊢ re
 				ns.crt_dst_ptn { n re p } ⊢ { n re p }
