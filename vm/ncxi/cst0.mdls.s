@@ -1681,6 +1681,7 @@ LB_322:
 ; » _^ ..
 	xor rax,rax
 	sub rsp,124
+	mov rdi,rsp
 	push rax
 	push r14
 	push rdx
@@ -1690,7 +1691,6 @@ LB_322:
 	push r10
 	push r11
 	push r13
-	mov rdi,rsp
 	mov rdx,r11
 	xor rax,rax
 	mov rsi,fmt_d

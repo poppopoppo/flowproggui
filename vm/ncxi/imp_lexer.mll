@@ -22,7 +22,7 @@ rule token = parse
     | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n"|"\\\'")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | '`' (([^ '\n']* '\n') as lxm) { LINE(lxm) }
     | "##" [^ '\n']* "\n" { Util.Log.add "start line comment\n"; token lexbuf }
-    | "\\[" { cmt_n := !cmt_n +1; blk_cmt lexbuf }
+    | "\\[" [' ' '\t' '\n']* "\n" { cmt_n := !cmt_n +1; blk_cmt lexbuf }
     | ";" { SCL }
     | "0r" (digit+ as lxm) { R64(Int64.of_string lxm) }
     | "0xr" (hex+ as lxm) { R64(Int64.of_string ("0x"^lxm)) }
@@ -138,8 +138,8 @@ rule token = parse
                       "At offset %d: unexpected character.\n"
                       (Lexing.lexeme_start lexbuf))) }
 and blk_cmt = parse
-  | "\\]" { cmt_n := !cmt_n-1; if !cmt_n=0 then token lexbuf else blk_cmt lexbuf }
-  | "\\["  { cmt_n := !cmt_n+1; blk_cmt lexbuf }
+  | "\\]" [' ' '\t' '\n']* "\n" { cmt_n := !cmt_n-1; if !cmt_n=0 then token lexbuf else blk_cmt lexbuf }
+  | "\\[" [' ' '\t' '\n']* "\n" { cmt_n := !cmt_n+1; blk_cmt lexbuf }
   | _ { blk_cmt lexbuf }
 and line_comment = parse
   | "\n"  { Util.Log.add "end line comment\n"; token lexbuf }
