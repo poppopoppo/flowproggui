@@ -16,7 +16,7 @@
 %token S8_STT S8_END S8_E S8_P MDL_EOP LCE_EQ LCE_EXEC ENV SYNT_COPRD BYTE SCL
 %token ORD_LINE_COPRD ORD_LINE_COPRD_END CUT
 %token <string> NAM STG VAL REG PRM LINE
-%token <int> INT IN OUT ROT SLF NAT INJ IDX CHO AGL_OP
+%token <int> INT IN OUT ROT SLF NAT INJ IDX IDX_FMT_D CHO AGL_OP 
 %token <int64> R64
 %token <bool> R2
 %nonassoc AGL_PRE
@@ -140,19 +140,19 @@ grm_ord_act:
   | grm_rule_act grm_ord_act { $1::$2 }
   ;
 grm_rule_act:
-  | ord grm_ptns grm_prd SCL SRC reg_ptn_src ir_lines grm_ord_act {
-    Grm.Act_Seq((sgn (),sgn (),sgn(),($6,ref $7)),$1,$2,$3,$8)
+  | ord grm_ptns grm_prd SCL SRC reg_ptn_src CMM reg ir_lines grm_ord_act {
+    Grm.Act_Seq((sgn (),sgn (),sgn(),$8,($6,ref $9)),$1,$2,$3,$10)
   }
   | ord grm_ptns grm_prd SRC reg_ptn_src ir_lines {
-    Grm.Act_End((sgn (),sgn (),sgn (),($5,ref $6)),$1,$2,$3)
+    Grm.Act_End((sgn (),sgn (),sgn (),ref(R_Ax(R_WC(sgn()))),($5,ref $6)),$1,$2,$3)
    }
   ;
 grm_rule_act_end:
-  | ord_end grm_ptns grm_prd SCL SRC reg_ptn_src ir_lines grm_ord_act {
-    Grm.Act_Seq((sgn (),sgn (),sgn(),($6,ref $7)),$1,$2,$3,$8)
+  | ord_end grm_ptns grm_prd SCL SRC reg_ptn_src CMM reg ir_lines grm_ord_act {
+    Grm.Act_Seq((sgn (),sgn (),sgn(),$8,($6,ref $9)),$1,$2,$3,$10)
   }
   | ord_end grm_ptns grm_prd SRC reg_ptn_src ir_lines {
-    Grm.Act_End((sgn (),sgn (),sgn(),($5,ref $6)),$1,$2,$3)
+    Grm.Act_End((sgn (),sgn (),sgn(),ref(R_Ax(R_WC(sgn()))),($5,ref $6)),$1,$2,$3)
  }
   ;
 grm_rule_act_seq:
@@ -367,6 +367,7 @@ s8_ptn:
   | LINE s8_ptn { (S8_Txt $1)::$2 }
   | STG s8_ptn { (S8_Txt $1)::$2 }
   | IDX s8_ptn { (S8_Var $1)::$2 }
+  | IDX_FMT_D s8_ptn { (S8_Var_D $1)::$2 }
   | name s8_ptn { (S8_Name(ref(Ast.Stt_Name $1)))::$2 }
   | IDX MLT STG s8_ptn { (S8_For_Txt($1,$3))::$4 }
   ;

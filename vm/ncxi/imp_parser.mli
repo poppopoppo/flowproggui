@@ -88,6 +88,7 @@ type token =
   | INI_IR
   | IN of (int)
   | IMP
+  | IDX_FMT_D of (int)
   | IDX of (int)
   | GRM
   | FOR_ALL
