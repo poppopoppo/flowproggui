@@ -127,6 +127,7 @@ rule token = parse
     | "$" (("\'")* as lxm) { ROT (String.length lxm) }
     | "@" (("\'")* as lxm) { SLF (String.length lxm) }
     | (digit+ as lxm) "\'" { IDX (int_of_string lxm) }
+    | (digit+ as lxm) "d\'" { IDX_FMT_D(int_of_string lxm) }
     | "." { DOT }
     | "∠"  { AGL }
     | digit+ as lxm  { INT (int_of_string lxm) }

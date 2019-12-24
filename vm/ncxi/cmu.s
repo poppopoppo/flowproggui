@@ -46,6 +46,7 @@ section .bss
   r_r_tmp: resq 1 
   dyn_call_vct: resb 16
   str_ret: resb 256
+  
   out_vct: resb (8+8+8)*32
   ;prs_vct: resb (8+8) * 64
   ;set_ptn_vct: resb (8+8) * 16
@@ -165,7 +166,10 @@ _end:
   ;mov rbx,0
   ;int 0x80
   mov rdi,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call exit
+  mov rsp,QWORD [rsp_tmp]
 mlc:
   push rdx
   push rcx
@@ -181,7 +185,10 @@ mlc:
   mov rax,0
   add rdi,1
   shl rdi,3
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
   call malloc
+  mov rsp,QWORD [rsp_tmp]
   pop rdi
   mov [rax],rdi
   pop r11
@@ -395,7 +402,10 @@ dec_r_lp_nxt:
 dec_r_lp_end:
  pop rdi
  mov rax,0
- call free
+ mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call free
+  mov rsp,QWORD [rsp_tmp]
  ret
 dec_r_end:
   pop rdi
