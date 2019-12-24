@@ -2286,7 +2286,6 @@ and emt_rle gns ns l =
                     s0.(i_r)<-true;
                     let _ = Hashtbl.add iv0 p_n (RP.A(R.Idx i_n)) in
                     let _ = Hashtbl.add iv0 p_r (RP.A(R.Idx i_r)) in
-                    let _ = crt_iv gns (mk_idx p_s) iv0 in 
                     let i1 = RP.A(R.Agl(2,2,RP.A(R.Idx 3))) in
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
                     Util.pnt true "V None 00\n";
@@ -2322,11 +2321,11 @@ and emt_rle gns ns l =
                       (prs_dec_i (rn-1))^
                       "\tjmp "^lbn^"\n"^
                       lb_x1^":\n"^
+                      "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+                      "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
                       "\tmov "^(emt_reg_x86 rn)^","^(emt_reg_x86 3)^"\n"^
                       "\tbt r12,3\n"^
                       (cf_set rn)^
-                      "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
-                      "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
                       (e_s (rn-1))^
                       "\tadd rsp,"^(string_of_int (rn*16))^"\n"^
                       "\tpush rdi\n"^
@@ -2414,11 +2413,11 @@ and emt_rle gns ns l =
                       (prs_dec_i (rn-1))^
                       "\tjmp "^lbn^"\n"^
                       lb_x1^":\n"^
+                      "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+                      "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
                       "\tmov "^(emt_reg_x86 (rn+rnc))^","^(emt_reg_x86 3)^"\n"^
                       "\tbt r12,3\n"^
                       (cf_set (rn+rnc))^
-                      "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
-                      "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
                       (e_s ((rn+rnc)-1))^
                       "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
                       "\tpush rdi\n"^
@@ -2461,7 +2460,9 @@ and emt_rle gns ns l =
                       "\tmov "^(emt_reg_x86 2)^",1\n"^
                       "\tbtr r12,3\n"^
                       "\tbts r12,2\n"^
-                      "\tret\n"^
+                      ( match lb_p with
+                        | Some lb_p -> "\tjmp "^lb_p^"\n"
+                        | None -> "\tret\n" )^
                       lbn^":\n"^
                       "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
                       "\tpop "^(emt_reg_x86 1)^"\n"^
@@ -2626,7 +2627,9 @@ and emt_rle gns ns l =
                       "\tmov "^(emt_reg_x86 2)^",1\n"^
                       "\tbtr r12,3\n"^
                       "\tbts r12,2\n"^
-                      "\tret\n"^
+                      ( match lb_p with
+                        | Some lb_p -> "\tjmp "^lb_p^"\n"
+                        | None -> "\tret\n" )^
                       lbn^":\n"^
                       "\tadd rsp,"^(string_of_int ((rn+rnc)*16))^"\n"^
                       "\tpop "^(emt_reg_x86 1)^"\n"^
@@ -2696,8 +2699,7 @@ and emt_ptn_grm lbn i ns f r j =
                 let rec e_lp0 ib =
                   if ib<lbs
                   then
-                    "\tmov rax,0\n"^
-                    "\tmov al,BYTE [r13+r14+8*1-"^(string_of_int lbs)^"+"^(string_of_int ib)^"]\n"^
+                    "\tmovzx rax,BYTE [r13+r14+8*1+"^(string_of_int ib)^"-"^(string_of_int lbs)^"]\n"^
                     "\tcmp al,"^(string_of_int (Char.code bs.[ib]))^"\n"^
                     "\tjnz "^lb_f^"\n"^
                     (e_lp0 (ib+1))
