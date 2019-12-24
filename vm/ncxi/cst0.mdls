@@ -6,21 +6,18 @@
 	@.rcd
 		∐.* "{" rcd_lst "}" ⊢ { {} l {} }
 			_emt { _n _r } ⊢ { n r }
-			##_emt _r ⊢ r
-			##_emt _c ⊢ c
 			_some n ⊢ p
 			∎ p
 	@.rcd_lst
 		∐* rcd rcd_lst ⊢ { hd tl }
-			##_emt _r ⊢ r
-			##_emt _c ⊢ c
+			
 			_some _n ⊢ p
 			∎ p
 		∐.* ⊢ { }
-			##_emt _r ⊢ r
-			##_emt _c ⊢ c
+			
 			_some _n ⊢ p
 			∎ p
+
 §§+s8 
 	@.gx
 		∐* "A" gx ; ⊢ { {} w },s

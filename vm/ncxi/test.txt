@@ -883,3 +883,5 @@ _rX : _RX → *
       
       mku_rp8 ; mark upped rope 
       
+      _cns { h %[ _nil ] } ⊢ l  
+      _for { %[ 10r ] %st %[ lpx ] } ⊢ %st 
