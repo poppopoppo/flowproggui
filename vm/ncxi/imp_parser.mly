@@ -198,7 +198,6 @@ grm_rule_end:
 ord:
   | COPRD { Grm.Lex }
   | ORD_LEX_COPRD { Grm.Synt }
-  | SYNT_COPRD { Grm.Synt }
   | ORD_LINE_COPRD { Grm.Line }
   ;
 ord_end:
@@ -474,9 +473,12 @@ reg_ptn_lst_lb_src:
   ;
 reg:
   | WC { ref(R_Ax(R_WC (sgn ()))) }
-  | reg_dst { $1 }
+  | NAM { ref(R_N $1) }
+  | PRM { ref(R_N $1) }
+  | REG { ref(R_N $1) }
   ;
 reg_dst:
+  | PRM { ref(R_N $1) }
   | NAM { ref(R_N $1) }
   | REG { ref(R_N $1) }
   ;
