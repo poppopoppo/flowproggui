@@ -26156,8 +26156,6 @@ LB_5685:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_5684
-	cmp al,10
-	jz LB_5684
 	cmp al,32
 	jz LB_5684
 LB_5686:
@@ -26185,8 +26183,6 @@ LB_5690:
 	jge LB_5691
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_5689
-	cmp al,10
 	jz LB_5689
 	cmp al,32
 	jz LB_5689
@@ -26222,8 +26218,6 @@ LB_5698:
 	jge LB_5699
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_5697
-	cmp al,10
 	jz LB_5697
 	cmp al,32
 	jz LB_5697
@@ -35622,8 +35616,6 @@ LB_7327:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7326
-	cmp al,10
-	jz LB_7326
 	cmp al,32
 	jz LB_7326
 LB_7328:
@@ -35652,8 +35644,6 @@ LB_7321:
 	jge LB_7322
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7320
-	cmp al,10
 	jz LB_7320
 	cmp al,32
 	jz LB_7320
@@ -35734,8 +35724,6 @@ LB_7313:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7312
-	cmp al,10
-	jz LB_7312
 	cmp al,32
 	jz LB_7312
 LB_7314:
@@ -35763,8 +35751,6 @@ LB_7305:
 	jge LB_7306
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7304
-	cmp al,10
 	jz LB_7304
 	cmp al,32
 	jz LB_7304
@@ -35883,8 +35869,6 @@ LB_7355:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7354
-	cmp al,10
-	jz LB_7354
 	cmp al,32
 	jz LB_7354
 LB_7356:
@@ -35913,8 +35897,6 @@ LB_7349:
 	jge LB_7350
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7348
-	cmp al,10
 	jz LB_7348
 	cmp al,32
 	jz LB_7348
@@ -36093,8 +36075,6 @@ LB_7387:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7386
-	cmp al,10
-	jz LB_7386
 	cmp al,32
 	jz LB_7386
 LB_7388:
@@ -36126,8 +36106,6 @@ LB_7381:
 	jge LB_7382
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7380
-	cmp al,10
 	jz LB_7380
 	cmp al,32
 	jz LB_7380
@@ -36306,8 +36284,6 @@ LB_7574:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7573
-	cmp al,10
-	jz LB_7573
 	cmp al,32
 	jz LB_7573
 LB_7575:
@@ -36344,8 +36320,6 @@ LB_7497:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7496
-	cmp al,10
-	jz LB_7496
 	cmp al,32
 	jz LB_7496
 LB_7498:
@@ -36374,8 +36348,6 @@ LB_7504:
 	jge LB_7505
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7503
-	cmp al,10
 	jz LB_7503
 	cmp al,32
 	jz LB_7503
@@ -36410,8 +36382,6 @@ LB_7510:
 	jge LB_7511
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7509
-	cmp al,10
 	jz LB_7509
 	cmp al,32
 	jz LB_7509
@@ -36456,8 +36426,6 @@ LB_7519:
 	jge LB_7520
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7518
-	cmp al,10
 	jz LB_7518
 	cmp al,32
 	jz LB_7518
@@ -36505,8 +36473,6 @@ LB_7529:
 	jge LB_7530
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7528
-	cmp al,10
 	jz LB_7528
 	cmp al,32
 	jz LB_7528
@@ -37711,8 +37677,6 @@ LB_7775:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7774
-	cmp al,10
-	jz LB_7774
 	cmp al,32
 	jz LB_7774
 LB_7776:
@@ -37749,8 +37713,6 @@ LB_7684:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7683
-	cmp al,10
-	jz LB_7683
 	cmp al,32
 	jz LB_7683
 LB_7685:
@@ -37779,8 +37741,6 @@ LB_7691:
 	jge LB_7692
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7690
-	cmp al,10
 	jz LB_7690
 	cmp al,32
 	jz LB_7690
@@ -37815,8 +37775,6 @@ LB_7697:
 	jge LB_7698
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7696
-	cmp al,10
 	jz LB_7696
 	cmp al,32
 	jz LB_7696
@@ -37861,8 +37819,6 @@ LB_7706:
 	jge LB_7707
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7705
-	cmp al,10
 	jz LB_7705
 	cmp al,32
 	jz LB_7705
@@ -37910,8 +37866,6 @@ LB_7716:
 	jge LB_7717
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7715
-	cmp al,10
 	jz LB_7715
 	cmp al,32
 	jz LB_7715
@@ -38985,8 +38939,6 @@ LB_7808:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7807
-	cmp al,10
-	jz LB_7807
 	cmp al,32
 	jz LB_7807
 LB_7809:
@@ -39018,8 +38970,6 @@ LB_7800:
 	jge LB_7801
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7799
-	cmp al,10
 	jz LB_7799
 	cmp al,32
 	jz LB_7799
@@ -39182,8 +39132,6 @@ LB_7828:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7827
-	cmp al,10
-	jz LB_7827
 	cmp al,32
 	jz LB_7827
 LB_7829:
@@ -39211,8 +39159,6 @@ LB_7833:
 	jge LB_7834
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7832
-	cmp al,10
 	jz LB_7832
 	cmp al,32
 	jz LB_7832
@@ -39568,8 +39514,6 @@ LB_7885:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7884
-	cmp al,10
-	jz LB_7884
 	cmp al,32
 	jz LB_7884
 LB_7886:
@@ -39625,8 +39569,6 @@ LB_7872:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_7871
-	cmp al,10
-	jz LB_7871
 	cmp al,32
 	jz LB_7871
 LB_7873:
@@ -39654,8 +39596,6 @@ LB_7877:
 	jge LB_7878
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_7876
-	cmp al,10
 	jz LB_7876
 	cmp al,32
 	jz LB_7876
@@ -61331,8 +61271,6 @@ LB_11708:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_11707
-	cmp al,10
-	jz LB_11707
 	cmp al,32
 	jz LB_11707
 LB_11709:
@@ -61360,8 +61298,6 @@ LB_11713:
 	jge LB_11714
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_11712
-	cmp al,10
 	jz LB_11712
 	cmp al,32
 	jz LB_11712
@@ -61734,8 +61670,6 @@ LB_11810:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_11809
-	cmp al,10
-	jz LB_11809
 	cmp al,32
 	jz LB_11809
 LB_11811:
@@ -61763,8 +61697,6 @@ LB_11815:
 	jge LB_11816
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_11814
-	cmp al,10
 	jz LB_11814
 	cmp al,32
 	jz LB_11814
@@ -61807,8 +61739,6 @@ LB_11784:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_11783
-	cmp al,10
-	jz LB_11783
 	cmp al,32
 	jz LB_11783
 LB_11785:
@@ -61848,8 +61778,6 @@ LB_11791:
 	jge LB_11792
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_11790
-	cmp al,10
 	jz LB_11790
 	cmp al,32
 	jz LB_11790
@@ -61903,8 +61831,6 @@ LB_11801:
 	jge LB_11802
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_11800
-	cmp al,10
 	jz LB_11800
 	cmp al,32
 	jz LB_11800
@@ -62560,8 +62486,6 @@ LB_11914:
 	mov al,[r13+r14+8*1]
 	cmp al,9
 	jz LB_11913
-	cmp al,10
-	jz LB_11913
 	cmp al,32
 	jz LB_11913
 LB_11915:
@@ -62590,8 +62514,6 @@ LB_11901:
 	jge LB_11902
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_11900
-	cmp al,10
 	jz LB_11900
 	cmp al,32
 	jz LB_11900
@@ -62626,8 +62548,6 @@ LB_11907:
 	jge LB_11908
 	mov al,[r13+r14+8*1]
 	cmp al,9
-	jz LB_11906
-	cmp al,10
 	jz LB_11906
 	cmp al,32
 	jz LB_11906
