@@ -165,6 +165,9 @@ _end:
   ;mov rax,1
   ;mov rbx,0
   ;int 0x80
+  mov rdi,[args] 
+  clc 
+  call dlt 
   mov rdi,0
   mov QWORD [rsp_tmp],rsp
   and rsp,~0xf

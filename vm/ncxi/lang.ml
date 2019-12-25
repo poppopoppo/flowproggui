@@ -2153,7 +2153,7 @@ and emt_rle gns ns l =
                 let lbn = lb () in
                 ( match rc with
                   | None ->
-                    let eq = lp ((rn,i)::sp) 0 q in
+                    let eq = lp sp 0 q in
                     "; "^cn^"\n"^
                     "\tmov r10d,DWORD [r13+4]\n"^
                     "\tpush "^(emt_reg_x86 1)^"\n"^
@@ -2168,7 +2168,7 @@ and emt_rle gns ns l =
                   | Some rc ->
                     let lbnc = lb () in
                     let rnc = List.length rc in
-                    let eq = lp ((rn+rnc,i)::sp) 0 q in
+                    let eq = lp sp 0 q in
                     "; "^cn^"\n"^
                     "\tmov r10d,DWORD [r13+4]\n"^
                     "\tpush "^(emt_reg_x86 1)^"\n"^
@@ -2396,6 +2396,7 @@ and emt_rle gns ns l =
                      s_e_s.(rn+rnc)<-true;
                      let lbn = lb () in
                     let lbnc = lb () in
+                    let lbnc_0 = lb () in 
                     let e0 =
                       "\tmov r10d,DWORD [r13+4]\n"^
                       "\tpush "^(emt_reg_x86 1)^"\n"^
@@ -2441,9 +2442,7 @@ and emt_rle gns ns l =
                       "\tcmp "^(emt_reg_x86 2)^",0\n"^
                       "\tjz "^lb1_1^"\n"^
                       "\tpop "^(emt_reg_x86 1)^"\n"^
-                      "\tmov rdi,"^(emt_reg_x86 3)^"\n"^
-                      free_blk0^
-                      "\tjmp "^lb1_0^"\n"^
+                      "\tjmp "^lbnc_0^"\n"^
                       lb1_1^":\n"^
                       "\tadd rsp,8\n"^
                       ( match lb_p with
@@ -2460,6 +2459,7 @@ and emt_rle gns ns l =
                       "\tmov "^(emt_reg_x86 2)^",1\n"^
                       "\tbtr r12,3\n"^
                       "\tbts r12,2\n"^
+                      lbnc_0^":\n"^
                       ( match lb_p with
                         | Some lb_p -> "\tjmp "^lb_p^"\n"
                         | None -> "\tret\n" )^
@@ -2577,6 +2577,7 @@ and emt_rle gns ns l =
                           (e_s (i-1)) ) in
                     let lbn = lb () in
                     let lbnc = lb () in
+                    let lbnc_0 = lb () in 
                     let e0 =
                       "\tmov r10d,DWORD [r13+4]\n"^
                       "\tpush "^(emt_reg_x86 1)^"\n"^
@@ -2608,9 +2609,7 @@ and emt_rle gns ns l =
                       "\tcmp "^(emt_reg_x86 2)^",0\n"^
                       "\tjz "^lb1_1^"\n"^
                       "\tpop "^(emt_reg_x86 1)^"\n"^
-                      "\tmov rdi,"^(emt_reg_x86 3)^"\n"^
-                      free_blk0^
-                      "\tjmp "^lb1_0^"\n"^
+                      "\tjmp "^lbnc_0^"\n"^
                       lb1_1^":\n"^
                       "\tadd rsp,8\n"^
                       ( match lb_p with
@@ -2627,6 +2626,7 @@ and emt_rle gns ns l =
                       "\tmov "^(emt_reg_x86 2)^",1\n"^
                       "\tbtr r12,3\n"^
                       "\tbts r12,2\n"^
+                      lbnc_0^":\n"^
                       ( match lb_p with
                         | Some lb_p -> "\tjmp "^lb_p^"\n"
                         | None -> "\tret\n" )^

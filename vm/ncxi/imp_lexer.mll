@@ -48,7 +48,6 @@ rule token = parse
     | "◃|"  { CNS_IR  }
     | "|~"  { INI_IR }
     | "~|"  { MTC_IR }
-    | "∐#" { SYNT_COPRD }
     | "≃" { ISO }
     | "~" { LET }
     | "<" { OP }
