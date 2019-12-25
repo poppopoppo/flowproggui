@@ -1394,7 +1394,7 @@
 				prs_vld l ⊢ l 
 				_some l ⊢ a
 				∎ a
-			∐* glb_etr mdl_glb_etr ⊢ { e gl }
+			∐* nls glb_etr mdl_glb_etr ⊢ { nn e gl }
 				$ gl ⊢ 
 				∐ prs_vld◂gl . 
 					$ e ⊢ 
@@ -1837,8 +1837,8 @@
 				∐ var_q : { _r64 _r64 }
 				∐ var_l : { _r64 _r64 }
 				∐ var_ln : type_k
-
-		§ @.slv_ns_e { n mmv mev ev m_ns e_ns } 
+\[
+		§ @.slv_ns_e { n mmv mev ev m_ns e_ns m_l } 
 			$ n ⊢ 
 			∐ ast.mdl_n◂{ w n } . 
 				assoc { m_ns w } ⊢ { m_ns w i_m }
@@ -1846,18 +1846,73 @@
 				∐ _some◂i_m . 
 					_lod_q { mmv i_m } ⊢ { mmv i_m m_ns0 }
 					_lod_q { mev i_m } ⊢ { mev i_m e_ns0 }
-					slv_ns_e { n mmv mev ev m_ns0 e_ns0 } ⊢ { mmv mev ev m_ns0 e_ns0 i_e }
-					∎ { mmv mev ev m_ns0 e_ns0 i_e }
+					_nil {} ⊢ m_l0 
+					slv_ns_e { n mmv mev ev m_ns0 e_ns0 m_l0 } ⊢ { mmv mev ev m_ns0 e_ns0 m_l0 i_e }
+					∎ { mmv mev ev m_ns0 e_ns0 m_l i_e }
 				∐. _none◂{} . 
-					∎|  
+					$ m_l ⊢ 
+					∐ _cns◂{ i_m_r m_l } .
+						_lod_q { mmv i_m } ⊢ { mmv i_m m_ns0 }
+						_lod_q { mev i_m } ⊢ { mev i_m e_ns0 }
+						ast.mdl_n { w n } ⊢ n 
+						slv_ns_e { n mmv mev ev m_ns0 e_ns0 m_l } ⊢ { mmv mev ev m_ns0 e_ns0 i_e m_l }
+						_cns { i_m_r m_l } ⊢ m_l 
+						∎ { mmv mev ev m_ns0 e_ns0 m_l i_e }
+					∐. _nil◂{} . 
+						∎|  
 			∐. ast.fst_n◂w . 
 				assoc { e_ns w } ⊢ { e_ns w i_e } 
 				$ i_e ⊢
 				∐ _some◂i_e . 
 					∎ { mmv mev ev m_ns e_ns i_e }
 				∐. _none◂{} . 
-					∎|
-
+					$ m_l ⊢ 
+					∐ _cns◂{ i_m_r m_l } .
+						_lod_q { mmv i_m_r } ⊢ { mmv i_m_r m_ns0 }
+						_lod_q { mev i_m_r } ⊢ { mev i_m_r e_ns0 }
+						ast.fst_n w ⊢ n 
+						slv_ns_e { n mmv mev ev m_ns0 e_ns0 m_l } ⊢ { mmv mev ev m_ns0 e_ns0 i_e m_l }
+						_cns { i_m_r m_l } ⊢ m_l 
+						∎ { mmv mev ev m_ns0 e_ns0 m_l i_e }
+					∐ _nil◂{} . 
+						∎|  
+						\]
+		§ @.slv_ns_m { n mmv m_ns m_l } 
+			$ n ⊢ 
+			∐ ast.mdl_n◂{ w n } . 
+				assoc { m_ns w } ⊢ { m_ns w o }
+				$ o ⊢ 
+				∐ _some◂i_m0 . 
+					_lod_q { mmv i_m0 } ⊢ { mmv i_m0 m_ns0 }
+					_nil {} ⊢ m_l0 
+					slv_ns_m { n mmv m_ns0 m_l0 } ⊢ { mmv m_ns0 m_l0 i_m }
+					∎ { mmv m_ns0 m_l i_m }
+				∐. _none◂{} . 
+					$ m_l ⊢ 
+					∐ _cns◂{ i_m_r m_l } .
+						_lod_q { mmv i_m_r } ⊢ { mmv i_m_r m_ns0 }
+						ast.mdl_n { w n } ⊢ n 
+						slv_ns_m { n mmv m_ns0 m_l } ⊢ { mmv m_ns0 m_l i_m }
+						_cns { i_m_r m_l } ⊢ m_l 
+						∎ { mmv m_ns0 m_l i_m }
+					∐. _nil◂{} . 
+						∎|    
+			∐. ast.fst_n◂w . 
+				assoc { m_ns w } ⊢ { m_ns w o } 
+				$ o ⊢
+				∐ _some◂i_m . 
+					∎ { mmv m_ns m_l i_m }
+				∐. _none◂{} . 
+					$ m_l ⊢ 
+					∐ _cns◂{ i_m_r m_l } .
+						_lod_q { mmv i_m_r } ⊢ { mmv i_m_r m_ns0 }
+						ast.fst_n w ⊢ n 
+						slv_ns_m { n mmv m_ns0 m_l } ⊢ { mmv m_ns0 m_l i_m }
+						_cns { i_m_r m_l } ⊢ m_l 
+						∎ { mmv m_ns0 m_l i_m }
+					∐. _nil◂{} . 
+						∎|
+	
 		§ @.crt_dst_ptn { n re p }
 				_emt { n re p } ⊢ { n re p }
 				∐ p ⊢ ast.RP.rcd◂l .
@@ -1949,6 +2004,9 @@
 					∎|
 		§
 			@.slv_file gel
+				_nil {} ⊢ ns_m 
+				_nil {} ⊢ ns_t 
+				_nil {} ⊢ ns_e 
 				» 200r _ ⊢ max
 				_mk_arr max ⊢ { max mmv }
 				_mk_arr max ⊢ { max mev }
@@ -1960,18 +2018,48 @@
 				» 0r _ ⊢ rv_n
 				» 0r _ ⊢ ev_n
 				» 0r _ ⊢ tv_n
-				slv_file_lp { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n gel } ⊢ { mv mv_n rv rv_n ev ev_n tv tv_n }
-				∎ { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n }
-			@.slv_file_lp { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n gel }
+				» 0r _ ⊢ i 
+				_nil {} ⊢ il 
+				slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
+				∎ { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
+			@.slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel }
 				$ gel ⊢ 
 				∐ _cns◂{ e gel } .
 					$ e ⊢ 
 					∐ ast.mdl_etr◂{ w e } .
 						$ e ⊢ 
 						∐ ast.mdl_def◂gel0 . 
-							∎| 
-						∐. ast.mdl_ln◂n0 . 
-							∎|
+							$ mv_n ⊢ mv_n,mv_n_0 
+							_inc mv_n ⊢ mv_n
+							_set_q { mmv i ns_m } ⊢ { mmv i } 
+							_set_q { mev i ns_e } ⊢ { mev i } 
+							_set_q { mtv i ns_t } ⊢ { mtv i } 
+							_cns { i il } ⊢ il 
+							_nil {} ⊢ ns_m 
+							_nil {} ⊢ ns_e 
+							_nil {} ⊢ ns_t 
+							slv_file_lp { mv_n_0 il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel0 } ⊢ { mv_n_0 il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
+							_set_q { mmv mv_n_0 ns_m } ⊢ { mmv mv_n_0 } 
+							_set_q { mev mv_n_0 ns_e } ⊢ { mev mv_n_0 } 
+							_set_q { mtv mv_n_0 ns_t } ⊢ { mtv mv_n_0 } 
+							$ il ⊢ 
+							∐ _cns◂{ i il } . 
+								_some mv_n_0 ⊢ o 
+								_get_q { mmv i } ⊢ { mmv i ns_m }
+								_get_q { mev i } ⊢ { mev i ns_e } 
+								_get_q { mtv i } ⊢ { mtv i ns_t } 
+								_cns { { w o } ns_m } ⊢ ns_m
+								slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+								∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
+							∐. _nil◂{} . 
+								∎| 
+						∐. ast.mdl_ln◂n0 . 							
+							$ n0 ⊢ n0,n0_0 
+							slv_ns_m { n0 mmv ns_m il } ⊢ { mmv ns_m il i_m } 
+							_some i_m ⊢ o 
+							_cns { { w o } ns_m } ⊢ ns_m 
+							slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+							∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
 					∐ ast.grm_etr◂g .
 						∎|
 					∐ ast.lc_etr◂{ w e } .
@@ -1983,8 +2071,7 @@
 					∐. ast.dt_qlq_etr◂q .
 						∎|
 				∐. _nil◂{} . 
-					∎ { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n }
-		
+					∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }		
 		∎∎
 	
 	§ f0 «
@@ -1996,6 +2083,10 @@
 			∐ a0 ⊢ _some◂a0 .
 				$ a0 ⊢ 
 				∐ syntax.prs_vld◂a0 . 
+					_emt x1 ⊢ x1 
+					ns.slv_file a0 ⊢ v 
+					_emt v ⊢ v 
+					\[
 					» 0r _ ⊢ dn
 					ast.pnt { dn a0 } ⊢ { dn sr }
 					» _^ sr ⊢ sr,sr0
@@ -2003,6 +2094,7 @@
 						0'
 						 //
 					_emt sr0 ⊢ sr0
+					\]
 					∎ {}
 				∐. syntax.prs_err◂err . 
 						syntax.pnt_prs_err err ⊢ s_err 
