@@ -1,0 +1,13 @@
+§ @.lp0 x 
+  lp0 x ⊢| 
+§ @.lp1 x 
+  _emt x ⊢ x 
+  ∐ x'=0r . 
+    ∎ {} 
+  ∐. . 
+    _dec x ⊢ x 
+    lp1 x ⊢| 
+§ A « 
+  » 10r _ ⊢ x 
+  lp1 x ⊢ x 
+  ∎ x
