@@ -2072,19 +2072,29 @@
 					∐ ast.grm_etr◂g .
 						∎|
 					∐ ast.lc_etr◂{ w e } .
+						$ ev_n ⊢ ev_n,ev_i 
+						_some ev_i ⊢ o 
+						_cns { { w o } ns_e } ⊢ ns_e 
+						_inc ev_n ⊢ ev_n 
 						$ e ⊢
 						∐ ast.lc_def◂{ d lc } .
-							∎| 
+							slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+							∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
 						∐ ast.lc_ln◂c . 
-							∎| 
+							slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+							∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
 						∐. ast.lc_cst◂lc . 
-							∎| 
+							slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+							∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
 					∐ ast.lc_qlq_etr◂q .
-						∎| 
+						slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+						∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
 					∐ ast.dt_etr◂{ w e } .
-						∎|
+						slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+						∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
 					∐. ast.dt_qlq_etr◂q .
-						∎|
+						slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+						∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
 				∐. _nil◂{} . 
 					∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }		
 		∎∎
