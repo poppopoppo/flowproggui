@@ -1848,7 +1848,7 @@
 					_lod_q { mev i_m } ⊢ { mev i_m e_ns0 }
 					_nil {} ⊢ m_l0 
 					slv_ns_e { n mmv mev ev m_ns0 e_ns0 m_l0 } ⊢ { mmv mev ev m_ns0 e_ns0 m_l0 i_e }
-					∎ { mmv mev ev m_ns0 e_ns0 m_l i_e }
+					∎ { mmv mev ev m_ns e_ns m_l i_e }
 				∐. _none◂{} . 
 					$ m_l ⊢ 
 					∐ _cns◂{ i_m_r m_l } .
@@ -1857,7 +1857,7 @@
 						ast.mdl_n { w n } ⊢ n 
 						slv_ns_e { n mmv mev ev m_ns0 e_ns0 m_l } ⊢ { mmv mev ev m_ns0 e_ns0 i_e m_l }
 						_cns { i_m_r m_l } ⊢ m_l 
-						∎ { mmv mev ev m_ns0 e_ns0 m_l i_e }
+						∎ { mmv mev ev m_ns e_ns m_l i_e }
 					∐. _nil◂{} . 
 						∎|  
 			∐. ast.fst_n◂w . 
@@ -1873,7 +1873,7 @@
 						ast.fst_n w ⊢ n 
 						slv_ns_e { n mmv mev ev m_ns0 e_ns0 m_l } ⊢ { mmv mev ev m_ns0 e_ns0 i_e m_l }
 						_cns { i_m_r m_l } ⊢ m_l 
-						∎ { mmv mev ev m_ns0 e_ns0 m_l i_e }
+						∎ { mmv mev ev m_ns e_ns m_l i_e }
 					∐ _nil◂{} . 
 						∎|  
 			\]
@@ -1886,7 +1886,7 @@
 					_lod_q { mmv i_m0 } ⊢ { mmv i_m0 m_ns0 }
 					_nil {} ⊢ m_l0 
 					slv_ns_m { n mmv m_ns0 m_l0 } ⊢ { mmv m_ns0 m_l0 i_m }
-					∎ { mmv m_ns0 m_l i_m }
+					∎ { mmv m_ns m_l i_m }
 				∐. _none◂{} . 
 					$ m_l ⊢ 
 					∐ _cns◂{ i_m_r m_l } .
@@ -1894,8 +1894,12 @@
 						ast.mdl_n { w n } ⊢ n 
 						slv_ns_m { n mmv m_ns0 m_l } ⊢ { mmv m_ns0 m_l i_m }
 						_cns { i_m_r m_l } ⊢ m_l 
-						∎ { mmv m_ns0 m_l i_m }
+						∎ { mmv m_ns m_l i_m }
 					∐. _nil◂{} . 
+						» _^ _ ⊢ sr 
+							"slv_ns_m 0:not found\n" //
+						_emt sr ⊢ sr 
+						_emt { m_ns w } ⊢ { m_ns w }
 						∎|    
 			∐. ast.fst_n◂w . 
 				assoc { m_ns w } ⊢ { m_ns w o } 
@@ -1909,8 +1913,12 @@
 						ast.fst_n w ⊢ n 
 						slv_ns_m { n mmv m_ns0 m_l } ⊢ { mmv m_ns0 m_l i_m }
 						_cns { i_m_r m_l } ⊢ m_l 
-						∎ { mmv m_ns0 m_l i_m }
+						∎ { mmv m_ns m_l i_m }
 					∐. _nil◂{} . 
+						» _^ _ ⊢ sr 
+							"slv_ns_m 1:not found\n" //
+						_emt sr ⊢ sr 
+						_emt { m_ns w } ⊢ { m_ns w }
 						∎|
 	
 		§ @.crt_dst_ptn { n re p }
@@ -2023,6 +2031,7 @@
 				slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
 				∎ { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
 			@.slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel }
+				_emt ns_m ⊢ ns_m 
 				$ gel ⊢ 
 				∐ _cns◂{ e gel } .
 					$ e ⊢ 
@@ -2063,7 +2072,13 @@
 					∐ ast.grm_etr◂g .
 						∎|
 					∐ ast.lc_etr◂{ w e } .
-						∎|
+						$ e ⊢
+						∐ ast.lc_def◂{ d lc } .
+							∎| 
+						∐ ast.lc_ln◂c . 
+							∎| 
+						∐. ast.lc_cst◂lc . 
+							∎| 
 					∐ ast.lc_qlq_etr◂q .
 						∎| 
 					∐ ast.dt_etr◂{ w e } .
