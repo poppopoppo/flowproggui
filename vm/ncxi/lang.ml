@@ -3048,12 +3048,12 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                    else
                      let ep = sgn () in
                      !ns.ns_p <- (n,ep)::!ns.ns_p;
+                     let (r0,p0) = slv_r_etr (r0,p0) in
                      let y0 = inst_ptn gns 0 r0 in
                      let y1 = newvar_l 0 in
                      let y2 = newvar () in
                      y2 := Ln(Imp(y0,Var y1));
                      gns.ns <-  (ep,y2)::gns.ns;
-                     let (r0,p0) = slv_r_etr (r0,p0) in
                      ((n,y2,y1,p0,r0,ep)::l_0,n::nl) )
                 ([],[]) q in
             let l_1 =
@@ -4068,6 +4068,7 @@ and args_init =
 "
 and emt_mov_tbl v n = 
   let rec f0 i j = 
+    Util.pnt true "f0 i j\n";
     if j=n then 
       if i=n then ("","") 
       else f0 (i+1) 0 
@@ -4848,16 +4849,14 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
               let _ = rset_ptn s0 ix in
               let e_c0 = (emt_mov_ptn_to_ptn R.M_Dlt s0 ix f_i0) in
               let c0 = "; "^(pnt_stt_name !n)^" "^(emt_ptn ix)^" ⊢|\n" in
-              let lbj = lb () in 
               c_l^
               c0^
               e0^
               e_c0^
-              "\tmov [rsp],"^lbj^"\n"^
-              "\tcall NS_E_"^(Sgn.print ep)^"\n"^
-              lbj^":\n"^
-              "\tmov rdi,[rsp+8]\n"^
-              "\tjmp QWORD [MOV_TBL_"^(string_of_int pvi)^"+8*rdi]\n"
+              "\tmov rdi,[rsp+16]\n"^
+              "\tmov rax,QWORD [MOV_TBL_"^(string_of_int pvi)^"+8*rdi]\n"^
+              "\tmov [rsp],rax\n"^
+              "\tjmp NS_E_"^(Sgn.print ep)^"\n"
             | E_K_WC ->
               ( match ep with
                 | ep when ep=Ast.Axm._add ->

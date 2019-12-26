@@ -47,7 +47,8 @@
 	glb_etr_res.prs { s x } ⊢ { s x a } 
 	_emt { x a } ⊢ { x a } 
 	∎ {}
-
+§ @.lp0 x 
+ ∎ x 
 § C «
 	» "{ {} {} }" _ ⊢ s
 	» 0r _ ⊢ x
