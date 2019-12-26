@@ -1876,7 +1876,7 @@
 						∎ { mmv mev ev m_ns0 e_ns0 m_l i_e }
 					∐ _nil◂{} . 
 						∎|  
-						\]
+			\]
 		§ @.slv_ns_m { n mmv m_ns m_l } 
 			$ n ⊢ 
 			∐ ast.mdl_n◂{ w n } . 
@@ -2014,7 +2014,7 @@
 				_mk_arr max ⊢ { max rv }
 				_mk_arr max ⊢ { max ev }
 				_mk_arr max ⊢ { max tv }
-				» 0r _ ⊢ mv_n
+				» 1r _ ⊢ mv_n
 				» 0r _ ⊢ rv_n
 				» 0r _ ⊢ ev_n
 				» 0r _ ⊢ tv_n
