@@ -3815,10 +3815,12 @@ and init_prm () =
     "\tmov esi,DWORD [rdi+4]\n"^
     "\tcmp rax,rsi\n"^
     "\tjge err\n"^
-    "\tmov rsi,QWORD [rdi+8+8*rax]\n"^
+    (*"\tmov rsi,QWORD [rdi+8+8*rax]\n"^
     "\tnot rsi\n"^
     "\txor rsi,rsp\n"^
-    "\tmov rsi,[rsi]\n"^
+    "\tmov rsi,[rsi]\n"^ *)
+    "\tbt QWORD [rdi+8+8*rax],63\n"^
+    "\tjnc err\n"^
     "\tbt r12,"^(string_of_int 2)^"\n"^
     "\tjc "^lb0^"\n"^
     "\tmov rsi,"^(emt_reg_x86 2)^"\n"^
@@ -3842,6 +3844,7 @@ and init_prm () =
   let em_lod_q =
     let lb0 = lb () in
     let lb1 = lb () in
+    let lba = lb () in 
     "NS_E_ID_"^(Sgn.print Ast.Axm._lod_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
@@ -3854,14 +3857,18 @@ and init_prm () =
     "\tjge err\n"^
     "\tmov rdi,QWORD [rdi+8+8*rax]\n"^
     "\tbt rdi,0\n"^
-    "\tjc "^lb0^"\n"^
-    "\tbt QWORD [rdi],17\n"^
+    "\tjc "^lba^"\n"^
+    "\tmov rax,[rdi]\n"^
+    "\tbt QWORD rax,17\n"^
     "\tjnc "^lb0^"\n"^
-    "\tbt QWORD [rdi],0\n"^
+    "\tbt QWORD rax,0\n"^
     (cf_set 2)^
     "\tmov rdi,QWORD [rdi+8]\n"^
     "\tcall dcp\n"^
     "\tjmp "^lb1^"\n"^
+    lba^":\n"^
+    "\tcmp rdi,NULL\n"^
+    "\tjz err\n"^
     lb0^":\n"^
     "\tbtr r12,"^(string_of_int 2)^"\n"^
     "\tclc\n"^
@@ -3880,35 +3887,36 @@ and init_prm () =
   let em_get_q =
     let lb0 = lb () in
     let lb1 = lb () in
+    let lba = lb () in 
     "NS_E_ID_"^(Sgn.print Ast.Axm._get_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._get_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._get_q)^":\n"^
-    "\tpush "^(emt_reg_x86 0)^"\n"^
-    "\tpush "^(emt_reg_x86 1)^"\n"^
     "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
     "\tmov rax,"^(emt_reg_x86 1)^"\n"^
     "\tmov esi,DWORD [rdi+4]\n"^
     "\tcmp rax,rsi\n"^
     "\tjge err\n"^
-    "\tmov rdi,QWORD [rdi+8+8*rax]\n"^
-    "\tmov rsi,NULL\n"^
-    "\tmov QWORD [rdi+8+8*rax],rsi\n"^
+    "\tmov rsi,QWORD [rdi+8+8*rax]\n"^
+    "\tmov QWORD [rdi+8+8*rax],NULL\n"^
+    "\tmov rdi,rsi\n"^
     "\tbt rdi,0\n"^
-    "\tjc "^lb0^"\n"^
-    "\tbt QWORD [rdi],17\n"^
+    "\tjc "^lba^"\n"^
+    "\tmov rax,[rdi]\n"^
+    "\tbt rax,17\n"^
     "\tjnc "^lb0^"\n"^
-    "\tbt QWORD [rdi],0\n"^
+    "\tbt QWORD rax,0\n"^
     (cf_set 2)^
     "\tmov rsi,QWORD [rdi+8]\n"^
     free_blk0^
     "\tmov rdi,rsi\n"^
     "\tjmp "^lb1^"\n"^
+    lba^":\n"^
+    "\tcmp rdi,NULL\n"^
+    "\tjz err\n"^
     lb0^":\n"^
     "\tbtr r12,"^(string_of_int 2)^"\n"^
     lb1^":\n"^
     "\tmov "^(emt_reg_x86 2)^",rdi\n"^
-    "\tpop "^(emt_reg_x86 1)^"\n"^
-    "\tpop "^(emt_reg_x86 0)^"\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._get_q,em_get_q)::gns.ns_c;
 
