@@ -1,4 +1,6 @@
 %include "cmu.s"
+%define MOV_OFS_0 0
+%define MOV_OFS_1 2
 main:
 	mov r12,~0
 	call SFLS_init
@@ -448,7 +450,7 @@ NS_E_RDI_88:
 ; _f88 0' ⊢|
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 0'
 	mov rdi,[rsp+16]
-	mov rax,QWORD [MOV_TBL_0+8*rdi]
+	mov rax,QWORD [MOV_TBL+8*MOV_OFS_0+8*rdi]
 	mov [rsp],rax
 	jmp NS_E_88
 NS_E_90:
@@ -511,7 +513,7 @@ LB_102:
 ; _f90 0' ⊢|
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ 0'
 	mov rdi,[rsp+16]
-	mov rax,QWORD [MOV_TBL_1+8*rdi]
+	mov rax,QWORD [MOV_TBL+8*MOV_OFS_1+8*rdi]
 	mov [rsp],rax
 	jmp NS_E_90
 MTC_LB_100:
@@ -566,28 +568,12 @@ MOV_1_0:
 MOV_1_1:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
 	jmp QWORD [rsp]
-MOV_2_0:
-; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ 0'
-	mov rax,rbx
-	mov rbx,[rax]
-	mov rdi,0x0000_0000_0000_ffff
-	mov QWORD [rax],rdi
-	mov r13,rax
-	btr r12,0
-	jmp QWORD [rsp]
-MOV_2_1:
-; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ {  }
-	jmp QWORD [rsp]
 section .data
-MOV_TBL_0:
+MOV_TBL:
 	dq MOV_0_0
 	dq MOV_0_1
-MOV_TBL_1:
 	dq MOV_1_0
 	dq MOV_1_1
-MOV_TBL_2:
-	dq MOV_2_0
-	dq MOV_2_1
 	CST_DYN_105:
 		dq 0x0000_0001_00_82_ffff
 		dq 1

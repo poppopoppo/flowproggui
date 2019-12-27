@@ -2058,8 +2058,9 @@
 								_get_q { mev i } ⊢ { mev i ns_e } 
 								_get_q { mtv i } ⊢ { mtv i ns_t } 
 								_cns { { w o } ns_m } ⊢ ns_m
-								slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
-								∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
+								slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢| 
+								##slv_file_lp { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t gel } ⊢ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t } 
+								##∎ { i il mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n ns_m ns_e ns_t }
 							∐. _nil◂{} . 
 								∎| 
 						∐. ast.mdl_ln◂n0 . 							

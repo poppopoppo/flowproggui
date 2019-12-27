@@ -885,3 +885,6 @@ _rX : _RX → *
       
       _cns { h %[ _nil ] } ⊢ l  
       _for { %[ 10r ] %st %[ lpx ] } ⊢ %st 
+
+  op0 s0 ⊢ d0 ¦ op1 s1 ⊢ d1 ¦ op2 s2 ⊢ d2 .. ¦ opn sn ⊢ dn 
+  
