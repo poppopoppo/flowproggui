@@ -1,4 +1,4 @@
 (executable
   (name gui)
-  (libraries core batteries str lablgtk2.sourceview2 lablgtk2)
+  (libraries batteries str lablgtk2.sourceview2 lablgtk2)
 )

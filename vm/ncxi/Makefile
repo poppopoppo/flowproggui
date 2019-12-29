@@ -8,7 +8,7 @@ gui: peg.ml lang.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly implib.ml 
 	ln -s /home/kohe/git-repos/flow/_build/default/vm/ncxi/gui.exe gui
 evo: util.ml evo_tkn.ml
 	ocamlfind ocamlopt -thread -p -o evo_tkn.exe -linkpkg \
-	-package core,batteries,threads \
+	-package batteries,threads \
 	util.ml peg.ml lang.ml evo_tkn.ml
 run: gui evo
 	./gui
@@ -18,7 +18,7 @@ nc: util.ml lang.ml nc.ml imp_lexer.mll imp_parser.mly
 	menhir --explain imp_parser.mly
 	ocamlc -c imp_parser.mli
 	ocamlfind ocamlopt -thread -p -o nc -linkpkg \
-	-package core,batteries,threads \
+	-package batteries,threads \
 	util.ml peg.ml lang.ml imp_lexer.ml imp_parser.ml implib.ml nc.ml
 	#gcc -o test test.s
 run_nc: nc
