@@ -10,8 +10,14 @@
 bits 64
 
 %define NULL ~0
-%define SFLS_MAX 16000
-%define SFLS_NULL 0xffff_ffff_ffff_0000
+%define SFLS_MAX 8000
+%define SFLS_NULL 0xffff_ffff_ffff_0000 
+%define SFLS_0_NULL 0xffff_ffff_ffff_0001 
+%define SFLS_1_NULL 0xffff_ffff_ffff_0101 
+%define SFLS_2_NULL 0xffff_ffff_ffff_0201 
+%define SFLS_3_NULL 0xffff_ffff_ffff_0301 
+%define SFLS_4_NULL 0xffff_ffff_ffff_0401 
+
 %define S8_NULL 0xffff_ffff_ffff_0001
 %define EMT_MAX 20000
 extern exit
@@ -29,12 +35,22 @@ section .bss
   SFLS_HD: resb 8*8
   SFLS_TOP: resb 8*1
   SFLS_BTM: resb 8*1
-  ;SFLS_VCT1: resb 8*2*SFLS_MAX
-  ;SFLS_VCT2: resb 8*4*SFLS_MAX
+  SFLS_TBL: 
+    resq 1 
+    resq 1 
+    resq 1
+    resq 1 
+    resq 1 
+    resq 1 
+  SFLS_VCT_0: resq SFLS_MAX
+  SFLS_VCT_1: resq 2*SFLS_MAX
+  SFLS_VCT_2: resq 4*SFLS_MAX
+  SFLS_VCT_3: resq 8*SFLS_MAX 
+  SFLS_VCT_4: resq 16*SFLS_MAX
+  
   SFLS_VCT: resb 8*8*SFLS_MAX
-  ;SFLS_VCT4: resb 8*16*SFLS_MAX
-  ir_s8_len_vct: resb 8*32
-  ir_s8_vct: resb 8*32
+  ;ir_s8_len_vct: resb 8*32
+  ;ir_s8_vct: resb 8*32
   st_vct: resb 400
   ;st_vct_tmp: resb 400
   regs_vct: resb 8*10
@@ -202,6 +218,42 @@ mlc:
   pop rdx
   ret
 
+SFLS_X_INIT: 
+  mov QWORD [SFLS_TBL],SFLS_VCT_0
+  mov QWORD [SFLS_TBL+8],SFLS_VCT_1
+  mov QWORD [SFLS_TBL+16],SFLS_VCT_2
+  mov QWORD [SFLS_TBL+24],SFLS_VCT_3
+  mov QWORD [SFLS_TBL+32],SFLS_VCT_4   
+  mov rdi,0
+SFLS_X_lp:
+  cmp rdi,SFLS_MAX
+  jz SFLS_X_end 
+  mov rsi,rdi 
+  shl rsi,3
+  lea rax,[SFLS_VCT_0+8+rsi] 
+  mov QWORD [SFLS_VCT_0+rsi],rax
+  lea rax,[SFLS_VCT_1+2*8+2*rsi]
+  mov QWORD [SFLS_VCT_1+2*rsi],rax
+  lea rax,[SFLS_VCT_2+4*8+4*rsi]
+  mov QWORD [SFLS_VCT_2+4*rsi],rax 
+  lea rax,[SFLS_VCT_3+8*8+8*rsi]
+  mov QWORD [SFLS_VCT_3+8*rsi],rax 
+  shl rsi,1 
+  lea rax,[SFLS_VCT_4+16*8+8*rsi]
+  mov QWORD [SFLS_VCT_4+8*rsi],rax 
+  add rdi,1
+  jmp SFLS_X_lp
+SFLS_X_end:
+  sub rdi,1 
+  shl rdi,3
+  mov QWORD [SFLS_VCT_0+rdi],SFLS_0_NULL
+  mov QWORD [SFLS_VCT_1+2*rdi],SFLS_1_NULL
+  mov QWORD [SFLS_VCT_2+4*rdi],SFLS_2_NULL
+  mov QWORD [SFLS_VCT_3+8*rdi],SFLS_3_NULL
+  shl rdi,1
+  mov QWORD [SFLS_VCT_4+8*rdi],SFLS_4_NULL
+  ret
+
 SFLS_init:
   mov QWORD [SFLS_TOP],SFLS_VCT
   mov QWORD rbx,SFLS_VCT
@@ -247,8 +299,10 @@ dlt_gbg:
 dlt_gbg_blk:
   bt QWORD [rdi],16
   jc dlt_gbg_opq
-  mov [rdi],rbx
-  mov rbx,rdi
+  movzx rax,BYTE [rdi+3]
+  mov rsi,QWORD [SFLS_TBL+8*rax]
+  mov [rdi],rsi
+  mov [SFLS_TBL+8*rax],rdi
   ret
 dlt_gbg_opq:
   mov rax,0
@@ -308,8 +362,10 @@ dlt_lp_nxt:
 dlt_lp_end:
   pop rsi
   pop rdx
-  mov QWORD [rdi],rbx
-  mov rbx,rdi
+  movzx rax,BYTE [rdi+3]
+  mov rsi,QWORD [SFLS_TBL+8*rax]
+  mov [rdi],rsi
+  mov [SFLS_TBL+8*rax],rdi 
   ret
 dlt_opq:
   mov rax,0
@@ -354,8 +410,10 @@ dlt_arr_lp_nxt:
   add rax,1
   jmp dlt_arr_lp
 dlt_arr_lp_end:
-  mov QWORD [rdi],rbx
-  mov rbx,rdi
+  movzx rax,BYTE [rdi+3]
+  mov rsi,QWORD [SFLS_TBL+8*rax]
+  mov [rdi],rsi
+  mov [SFLS_TBL+8*rax],rdi
   ret
 
 dec_r:
@@ -451,8 +509,10 @@ dcp_blk:
   jc rpc_s8
   bt QWORD [rdi],18
   jc rpc_arr
-  mov rsi,rbx
-  mov rbx,[rbx]
+  movzx rax,BYTE [rdi+3] 
+  mov rsi,QWORD [SFLS_TBL+8*rax]
+  mov rdx,QWORD [rsi] 
+  mov QWORD [SFLS_TBL+8*rax],rdx 
   mov rdx,[rdi]
   mov [rsi],rdx
   mov r8,[rdi]

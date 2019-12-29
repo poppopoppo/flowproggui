@@ -151,7 +151,7 @@ sig
   val compare : t -> t -> int
   val eq : t -> t -> bool
   val hash : t -> int
-  val sexp_of_t : t -> Core.Sexp.t
+  (* val sexp_of_t : t -> Core.Sexp.t *)
   val get_env : unit -> env
   val set_env : env -> unit
 end
@@ -176,7 +176,7 @@ end
     (string_of_int i)
   let compare x y = compare (hash x) (hash y)
   let eq x y = x==y
-  let sexp_of_t _ = Core.Sexp.List []
+  (* let sexp_of_t _ = Core.Sexp.List [] *)
   let get_env () = 0
   let set_env _ = ()
 end

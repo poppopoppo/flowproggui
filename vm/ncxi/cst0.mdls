@@ -9,12 +9,10 @@
 			_some n ⊢ p
 			∎ p
 	@.rcd_lst
-		∐* rcd rcd_lst ⊢ { hd tl }
-			
+		∐* rcd rcd_lst ⊢ { hd tl }			
 			_some _n ⊢ p
 			∎ p
 		∐.* ⊢ { }
-			
 			_some _n ⊢ p
 			∎ p
 

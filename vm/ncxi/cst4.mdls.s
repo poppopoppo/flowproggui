@@ -3,42 +3,48 @@
 %define MOV_OFS_1 2
 main:
 	mov r12,~0
-	call SFLS_init
+	call SFLS_X_INIT
 pop r14 ; number of args
   pop rdi ; program name
   call mk_s8
-    mov r13,rbx
-    mov rbx,[rbx]
-    mov rsi,r13
-    or rsi,1
-    mov [args],rsi
-    mov rcx,0x0000_0002_0000_fffc
+	mov r8,rax
+	mov rax,QWORD [SFLS_TBL+8*2]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*2],rdi
+ mov r13,rax
+    or rax,1
+    mov [args],rax
+    mov rcx,0x0000_0002_0200_fffc
     mov [r13],rcx
-    mov [r13+8],rax
+    mov [r13+8],r8
   args_lp:
     cmp r14,1
     jz args_end
     pop rdi
   call mk_s8
-    mov r8,rbx
-    mov rbx,[rbx]
+    mov r10,rax
+    	mov rax,QWORD [SFLS_TBL+8*2]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*2],rdi
+ mov r8,rax
     mov r9,r8
     or r9,1
     mov [r13+16],r9
     mov r13,r8
-    mov rcx,0x0000_0002_0000_fffc
+    mov rcx,0x0000_0002_0200_fffc
     mov [r13],rcx
-    mov [r13+8],rax
+    mov [r13+8],r10
     sub r14,1
     jmp args_lp
   args_end:
-    mov r8,rbx
-    mov rbx,[rbx]
-    mov rcx,0x0000_0000_0000_ffff
-    mov [r8],rcx
+  	mov rax,QWORD [SFLS_TBL+8*0]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*0],rdi
+ mov rcx,0x0000_0000_0000_ffff
+    mov [rax],rcx
     mov rcx,0x0100_0000_0000_0001
-    or r8,rcx
-    mov [r13+16],r8
+    or rax,rcx
+    mov [r13+16],rax
 	call NS_E_105
 	call exec_out
 	jmp _end
@@ -84,11 +90,12 @@ NS_E_66_ETR_TBL:
 	ret
 LB_67:
 	mov r8,1
-	mov rdi,rbx
-	mov rbx,[rdi]
-	mov rax,0x0000_0000_0000_ffff
-	mov QWORD [rdi],rax
-	mov r9,rdi
+	mov rax,QWORD [SFLS_TBL+8*0]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*0],rdi
+	mov rdi,0x0000_0000_0000_ffff
+	mov QWORD [rax],rdi
+	mov r9,rax
 	btr r12,3
 	bts r12,2
 	ret
@@ -109,11 +116,12 @@ NS_E_69_ETR_TBL:
 	ret
 NS_E_69_LB_0:
 	mov r8,1
-	mov rdi,rbx
-	mov rbx,[rdi]
+	mov rax,QWORD [SFLS_TBL+8*0]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*0],rdi
 	mov rsi,0x0000_0000_0000_ffff
-	mov QWORD [rdi],rsi
-	mov r9,rdi
+	mov QWORD [rax],rsi
+	mov r9,rax
 	btr r12,3
 	bts r12,2
 	ret
@@ -241,9 +249,12 @@ LB_82:
 	stc
 LB_83:
 	mov rsi,QWORD [rdi+8]
-	mov [rdi],rbx
-	mov rbx,rdi
-	mov rdi,rsi
+	push rsi
+	movzx rax,BYTE [rdi+3]
+	mov rsi,QWORD [SFLS_TBL+8*rax]
+	mov QWORD [rdi],rsi
+	mov QWORD [SFLS_TBL+8*rax],rdi
+	pop rdi
 	jmp LB_80
 LB_81:
 	cmp rdi,NULL
@@ -309,13 +320,13 @@ NS_E_RDI_22:
 	mov QWORD [rdi+8+8*rax],rsi
 	ret
 LB_73:
-	mov rsi,rbx
-	mov rbx,[rsi]
-	mov QWORD [rdi+8+8*rax],rsi
-	mov rax,r8
-	mov QWORD [rsi+8],rax
-	mov rax,0x0000_0001_0002_ffff
-	mov QWORD [rsi],rax
+	mov rax,QWORD [SFLS_TBL+8*1]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*1],rdi
+	mov QWORD [r13+8+8*r14],rax
+	mov QWORD [rax+8],r8
+	mov rdi,0x0000_0001_0102_ffff
+	mov QWORD [rax],rdi
 	ret
 NS_E_ID_20: dq 0
 NS_E_20:
@@ -434,11 +445,12 @@ NS_E_68_ETR_TBL:
 	ret
 NS_E_68_LB_0:
 	mov r8,1
-	mov rdi,rbx
-	mov rbx,[rdi]
+	mov rax,QWORD [SFLS_TBL+8*0]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*0],rdi
 	mov rsi,0x0000_0000_0000_ffff
-	mov QWORD [rdi],rsi
-	mov r9,rdi
+	mov QWORD [rax],rsi
+	mov r9,rax
 	btr r12,3
 	bts r12,2
 	ret
@@ -553,14 +565,17 @@ MOV_0_1:
 ; _emt_mov_ptn_to_ptn:{| 10.. |},0' ⊢ {  }
 ; 0' ⊢ {  }
 	mov rdi,r13
-	mov [rdi],rbx
-	mov rbx,rdi
+	movzx rax,BYTE [rdi+3]
+	mov rsi,QWORD [SFLS_TBL+8*rax]
+	mov QWORD [rdi],rsi
+	mov QWORD [SFLS_TBL+8*rax],rdi
 	jmp QWORD [rsp]
 MOV_1_0:
 ; _emt_mov_ptn_to_ptn:{| 0.. |},{  } ⊢ 0'
-	mov rax,rbx
-	mov rbx,[rax]
-	mov rdi,0x0000_0000_0000_ffff
+	mov rax,QWORD [SFLS_TBL+8*4]
+	mov rdi,QWORD [rax]
+	mov QWORD [SFLS_TBL+8*4],rdi
+	mov rdi,0x0000_0000_0400_ffff
 	mov QWORD [rax],rdi
 	mov r13,rax
 	btr r12,0

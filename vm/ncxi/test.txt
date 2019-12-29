@@ -887,4 +887,37 @@ _rX : _RX → *
       _for { %[ 10r ] %st %[ lpx ] } ⊢ %st 
 
   op0 s0 ⊢ d0 ¦ op1 s1 ⊢ d1 ¦ op2 s2 ⊢ d2 .. ¦ opn sn ⊢ dn 
+
+¶¶ VCT 
+  ∐ vct_hsh :
+  ∐ vct_arr :
+  ∐ vct_s8 :
+  ∐ vct_rp8 :
+
+¶ vct t'::VCT «
+  ∐ t' ⊢ %[ vct_hsh ] . 
+    $ %[ hsh ] ⊢ y' 
+    ∎ y' 
+  ∐ t' ⊢ %[ vct_arr ] . 
+    $ %[ arr ] ⊢ y' 
+    ∎ y'  
+  ∐ t' ⊢ %[ vct_s8 ] . 
+    $ %[ s8 ] ⊢ y' 
+    ∎ y'  
+  ∐. t' ⊢ %[ RP8 ] .
+    $ %[ rp8 ] ⊢ y' 
+    ∎ y' 
   
+§ lod_vct { v i } : { vct◂t' _ }  
+  ∐∐ t' ⊢ vct_hsh◂h' . 
+    hsh.lod { v i } ⊢ { v i a } 
+    ∎ { v i a } 
+  ∐∐ t' ⊢ vct_arr◂h' . 
+    arr.lod { v i } ⊢ { v i a } 
+    ∎ { v i a } 
+  ∐∐ t' ⊢ vct_s8◂h' . 
+    s8.lod { v i } ⊢ { v i a } 
+    ∎ { v i a }
+  ∐∐. t' ⊢ vct_rp8◂h' . 
+    rp8.lod { v i } ⊢ { v i a } 
+    ∎ { v i a }
