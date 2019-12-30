@@ -16,15 +16,22 @@ open Lang
     let _ = close_out d in
     exit 0 *)
 let _ =
-    let s = Util.load_file Sys.argv.(1) in
+    Util.Log.f := Util.Log.Off;
+    let p = 
+      let s = Sys.argv.(1) in 
+      if s="-p" then 
+        ( Util.Log.f := Util.Log.On; Sys.argv.(2) )
+    else s in
+    let s = Util.load_file p in
     let (_,el) = Implib.mdl_from_string s in
     let (a,_) = emt_exe el in
-    let d = open_out (Sys.argv.(1)^".s") in
+    if !Util.Log.f=Util.Log.On then Util.Log.pnt ();
+    let d = open_out (p^".s") in
     let _ = output_string d a in
     flush_all ();
     let _ = close_out d in
     let cd =
-      "nasm -g -gdwarf -f elf64 "^(Sys.argv.(1)^".s")^" -o out.o\n"^
-      "gcc out.o -nostartfiles -no-pie -pg -g -o "^(Sys.argv.(1))^".exe\n" in
+      "nasm -g -gdwarf -f elf64 "^(p^".s")^" -o out.o\n"^
+      "gcc out.o -nostartfiles -no-pie -pg -g -o "^p^".exe\n" in
     let _ = Sys.command cd in
     exit 0

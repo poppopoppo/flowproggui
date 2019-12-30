@@ -84,6 +84,7 @@ nls:
   ;
 def_arg:
   | { ([],[]) }
+  | args { $1 }
   | APP args { $2 }
   | APP args_rot { ([],BatList.init $2 (fun n -> ("$"^(String.make n '\''),newvar_q (-2)))) }
   ;
