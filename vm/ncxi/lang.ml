@@ -468,7 +468,7 @@ module Ast = struct
   type ns = (string * Types.v ref) list ref
   type ns_t = (string * Types.v ref) list ref
   type inst = {
-    al:(v ref * v ref) list;
+    mutable al:(v ref * v ref) list;
     al_rcd:(v_rcd ref * v_rcd ref) list;
   }
   type e_k = Sgn.t * e_k_v
@@ -1267,6 +1267,7 @@ and unify_rcd ru l1 l2 =
     | Cns(t1,t2),Cns(t3,t4) -> unify ru t1 t3; unify_rcd ru t2 t4
     | _ -> err "unify_rcd:1" )
 let rec gen rl l y =
+  Util.Log.add "enter gen:\n";
   ( match y with
     | Var v ->
       ( match !v with
@@ -1293,29 +1294,34 @@ and gen_rcd rl l r =
         | N_Ln (_,y1) -> gen_rcd rl l y1
         | N _ -> err "gen_rcd n0"      )
     | Cns(t0,t1) -> gen rl l t0; gen_rcd rl l t1 )
-let inst_ini () = { al = []; al_rcd = []; }
+let inst_ini () = {  al = []; al_rcd = []; }
 let rec inst l (i:Ast.inst) (y:Types.t) =
-  (* pnt true "enter inst\n"; *)
+  let c = Types.print y in 
+  Util.Log.add @@ "enter inst:"^c^"\n";
   ( match y with
-    | App(Var ({contents = Ln(Abs(v,y0))} as v0),y1) ->
+    (*| App(Var ({contents = Ln(Abs(v,y0))} as v0),y1) ->
       ( try (Var (List.assq v0 i.al),i)
         with Not_found ->
           let v1 = newvar_l l in
           let i = { i with al = (v0,v1)::i.al } in
           let (y2,i) = inst l i y0 in
           let (y3,i) = inst l i y1 in
-          let vt = List.assq v i.al in
+          let vt = ( try List.assq v i.al with _ -> err "inst a0") in
           vt := Ln y3;
           v1 := Ln y2;
-          (Var v1,i))
+          (Var v1,i))*)
     | App(Var {contents = Ln y0 },y1) -> inst l i (App(y0,y1))
     | App(Abs(v,y0),y1) ->
+      let vq = newvar_q (-1) in 
+      i.al<-(v,vq)::i.al;
       let (y2,i) = inst l i y0 in
       let (y3,i) = inst l i y1 in
-      let v0 = List.assq v i.al in
+      (*let v0 = (try List.assq v i.al with _ -> err "inst a1") in
       v0 := Ln y3;
+      (y2,i)*)
+      vq := (Ln y3);
       (y2,i)
-    | Var v ->
+    | Var v -> 
       ( match !v with
         | Q _ ->
           ( try (Var (List.assq v i.al),i)
@@ -1326,16 +1332,22 @@ let rec inst l (i:Ast.inst) (y:Types.t) =
         | Ln y -> inst l i y
         | WC _ -> v := Types.V ((),l); (y,i)
         | _ -> (y,i))
+    | App(Axm a,y2) -> 
+      let (y2,i) = inst l i y2 in
+      (App(Axm a,y2),i)
     | App (y1,y2) ->
       let (y1,i) = inst l i y1 in
       let (y2,i) = inst l i y2 in
-      (App(y1,y2),i)
+      ( match y1 with 
+      | Abs(_,_) -> inst l i (App(y1,y2)) 
+      | _ -> (App(y1,y2),i) )
     | Imp (y1,y2) ->
       let (y1,i) = inst l i y1 in
       let (y2,i) = inst l i y2 in
       (Imp(y1,y2),i)
     | Rcd r -> let (r,i) = (inst_rcd l i r) in (Rcd r,i)
-    | _ -> (y,i))
+    | Axm a -> (Types.Axm a,i)
+    | Abs(v,y) -> (Abs(v,y),i) )
 and inst_rcd l (i:inst) r =
   ( match r with
     | U -> (r,i)
@@ -1394,7 +1406,7 @@ and inst_mtc_atm gns (ns:ns_v) l e =
     | Eq_Agl(_,_,_,_) -> err "inst_mtc_atm 0"
     | Eq_Agl_N(n,r) ->
       let p = slv_ns0 ns n in
-      let f = List.assoc p gns.ns_e in
+      let f = (try List.assoc p gns.ns_e with _ -> err "inst_mtc_atm 3") in
       ( match !f with
         | Ctr(i0,i_n) ->
           e := Eq_Agl(p,i0,i_n,r);
@@ -1440,26 +1452,25 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
       Util.Log.add ("test 4:"^"\n");
       yy
     | Mtc pns ->
-      Util.pnt true "slv Mtc 0\n";
+      Util.Log.add "slv Mtc 3\n";
       let _ =
         Array.fold_left
           ( fun _ (e,_) ->
               let _ = inst_mtc_ptn gns ns l e in
               () )
           () pns in
-      Util.pnt true "slv Mtc 1\n";
+            Util.Log.add "slv Mtc 3\n";
       let (_,ys) =
         Array.fold_left
           ( fun (j,ys) (_,p) ->
               let y1 = slv gns ns l p in
               (j+1,ys |+| [|y1|]) )
           (0,[||]) pns in
+            Util.Log.add "slv Mtc 3\n";
       let tts = Array.map (fun y -> inst (l+1) y) ys in
       let rrt = Var (newvar_l (l+1)) in
-      Util.pnt true "slv Mtc 2\n";
       let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) rrt (Array.to_list tts) in
       let _ = gen (ref []) l rrt in
-      Util.pnt true "slv Mtc 3\n";
       rrt
     | Clj _ -> err "slv:0"
     | Seq(o,p1) ->
@@ -2077,15 +2088,16 @@ let rec pnt_vs f l =
     | _,[] -> "" )
 let pnt_vs = pnt_vs `Hd
 
+let emt_etr_id i0 i1 p = 
+  let sp = Sgn.print p in 
+  "NS_E_DST_ID_"^sp^": dq "^(string_of_int i1)^"\n"^
+  "NS_E_SRC_ID_"^sp^": dq "^(string_of_int i0)^"\n"^
+  "NS_E_"^sp^":\n"^
+  "NS_E_RDI_"^sp^":\n"^
+  "NS_E_"^sp^"_ETR_TBL:\n"
 
 let rec emt_prs gns ns ep rs =
-  let l_e = "NS_E_"^(Sgn.print ep) in
-  let l_e_rdi = "NS_E_RDI_"^(Sgn.print ep) in
-  l_e^":\n"^
-  l_e_rdi^":\n"^
-  (*e0^ *)
-  l_e^"_ETR_TBL:\n"^
-  l_e^"_TBL:\n"^
+  (emt_etr_id 0 1 ep)^
   (emt_rle gns ns rs)
 and prs_dec_i i =
   let lb0 = lb () in
@@ -2299,7 +2311,7 @@ and emt_rle gns ns l =
                 let e_al = lp (Some lb_x) ps 0 al in 
                 ( match rc with
                   | None ->
-                    Util.pnt true "V None 0\n";
+                    (*Util.pnt true "V None 0\n";*)
                     let rn = List.length r in
                     let iv0 = Hashtbl.create 10 in
                     let i_e_s = RP.R[|RP.R(Array.init rn (fun i -> RP.A(R.Idx i)));RP.A(R.Idx rn)|] in
@@ -2316,7 +2328,7 @@ and emt_rle gns ns l =
                     gns.ns_vct.(pvi)<-(i1,ref(Ln(App(Axm Axm.opn,Var t_v))),Prs_Dst);
                     gns.ns_vct_n<-pvi+1;
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
-                    Util.pnt true "V None 00\n";
+                    (*Util.pnt true "V None 00\n";*)
                     let lb1 = lb () in
                     let lb1_0 = lb () in
                     let lb1_1 = lb () in
@@ -2395,7 +2407,7 @@ and emt_rle gns ns l =
                     e1^
                     (lp lb_p ps (i+1) tl)
                   | Some rc ->
-                    Util.pnt true "V None 1\n";
+                    (*Util.pnt true "V None 1\n";*)
                     let rn = List.length r in
                     let rnc = List.length rc in
                     let iv0 = Hashtbl.create 10 in
@@ -2412,7 +2424,7 @@ and emt_rle gns ns l =
                     gns.ns_vct.(pvi)<-(i1,ref(Ln(App(Axm Axm.opn,Var t_v))),Prs_Dst);
                     gns.ns_vct_n<-pvi+1;
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
-                    Util.pnt true "V None 2\n";
+                    (*Util.pnt true "V None 2\n";*)
                     let lb1 = lb () in
                     let lb1_0 = lb () in
                     let lb1_1 = lb () in
@@ -2510,7 +2522,7 @@ and emt_rle gns ns l =
               | Grm.Act_End((p_n,p_r,_,_,(re,pi)),f,r,rc) ->
                 ( match rc with
                   | None ->
-                    Util.pnt true "V None 0\n";
+                    (*Util.pnt true "V None 0\n";*)
                     let rn = List.length r in
                     let iv0 = Hashtbl.create 10 in
                     let i_e_s = RP.R(Array.init rn (fun i -> RP.A(R.Idx i))) in
@@ -2526,7 +2538,7 @@ and emt_rle gns ns l =
                     gns.ns_vct.(pvi)<-(i1,ref(Ln(App(Axm Axm.opn,Var t_v))),Prs_Dst);
                     gns.ns_vct_n<-pvi+1;
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
-                    Util.pnt true "V None 00\n";
+                    (*Util.pnt true "V None 00\n";*)
                     let lb1 = lb () in
                     let lb1_0 = lb () in
                     let lb1_1 = lb () in
@@ -2590,7 +2602,7 @@ and emt_rle gns ns l =
                     e1^
                     (lp lb_p ps (i+1) tl)
                   | Some rc ->
-                    Util.pnt true "V None 1\n";
+                    (*Util.pnt true "V None 1\n";*)
                     let rn = List.length r in
                     let rnc = List.length rc in
                     let iv0 = Hashtbl.create 10 in
@@ -2607,7 +2619,7 @@ and emt_rle gns ns l =
                     gns.ns_vct.(pvi)<-(i1,ref(Ln(App(Axm Axm.opn,Var t_v))),Prs_Dst);
                     gns.ns_vct_n<-pvi+1;
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
-                    Util.pnt true "V None 2\n";
+                    (*Util.pnt true "V None 2\n";*)
                     let lb1 = lb () in
                     let lb1_0 = lb () in
                     let lb1_1 = lb () in
@@ -3087,14 +3099,14 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
             let l_1 =
               List.fold_left
                 ( fun l (n,y2,y1,p0,r0,ep) ->
-                    Util.pnt true @@ "Etr "^n^"\n";
+                    (*Util.pnt true @@ "Etr "^n^"\n";*)
                     let y1_x = slv gns !ns 0 !p0 in
                     (n,y2,y1,y1_x,p0,r0,ep)::l )
                 [] l_0 in
             let l_2 =
               List.fold_left
                 ( fun l (n,y2,y1,y1_x,p0,r0,ep) ->
-                    Util.pnt true "l_2:0\n";
+                    (*Util.pnt true "l_2:0\n";*)
                     let y1_0 = inst 0 (Var y1) in
                     let _ = unify [] y1_0 (inst 0 y1_x) in
                     gen (ref []) (-1) (Var y2);
@@ -3106,7 +3118,6 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                     gns.ns_vct.(pvi)<-(i1,y1,Etr_Dst);
                     gns.ns_vct_n<-pvi+1;
                     gns.ns_e <- (ep,ref(Etr_V(i0,i1,pvi)))::gns.ns_e;
-                    Util.pnt true "l_2:1\n";
                     (n,y2,y1,y1_x,p0,r0,i0,i1,iv0,ep)::l )
                 [] l_1 in
             List.fold_left
@@ -3155,7 +3166,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
               | Ast.Def_EqT (n,a,y) ->
                 let (a0,_) = List.split a in
                 let ya = mk_vars (ref []) !ns `Abs (ref a) y in
-                let yt = List.fold_left ( fun yt (_,v) -> Abs(v,yt)) ya a in
+                let yt = List.fold_right ( fun (_,v) yt -> Abs(v,yt)) a ya in
                 !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;
                 ("","","",tbs^"¶ "^n^(pnt_args `Hd a0)^" = "^(Types.print_t ya)^"\n")
               | _ -> err "slv_flows 1" )
@@ -3213,7 +3224,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                       | `EqT (n,a,y,v) ->
                         let (_,_) = List.split a in
                         let ya = mk_vars (ref []) !ns `Abs (ref a) y in
-                        let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
+                        let yt = List.fold_right (fun (_,v) yt -> Abs(v,yt)) a ya in
                         v := (Ln yt);
                         ("",pp^tbs^"\t@."^n^" = ..\n")
                       | _ -> err "slv_flows 1" )
@@ -3336,7 +3347,6 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                                     let _ = gen (ref []) (-1) y in *)
                                   let y1 = slv gns !ns lv !p0 in
                                   let _ = unify [] (inst lv y1) (App(Axm Types.Axm.opn,Var t_v)) in
-                                  Util.pnt true "U3\n";
                                   rts @ [y]
                                 | Grm.Act_End((p_n,p_r,p_c,_,(r0,p0)),_,r,rc) ->
                                   let r =
@@ -3559,7 +3569,7 @@ and init_prm () =
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
   gns.ns <- (epf,ref(Ln yp))::gns.ns;
   gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|],(-1))))::gns.ns_e;
-  let l0 = "NS_E_"^(Sgn.print epf)^"_LB_0" in
+  let l0 = lb () in
   let l_e = "NS_E_"^(Sgn.print epf) in
   let l_e_rdi = "NS_E_RDI_"^(Sgn.print epf) in
   let l_e_tbl = "NS_E_"^(Sgn.print epf)^"_ETR_TBL" in
@@ -3589,7 +3599,7 @@ and init_prm () =
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
   gns.ns <- (epf,ref(Ln yp))::gns.ns;
   gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|],(-1))))::gns.ns_e;
-  let l0 = "NS_E_"^(Sgn.print epf)^"_LB_0" in
+  let l0 = lb () in
   let l_e = "NS_E_"^(Sgn.print epf) in
   let l_e_rdi = "NS_E_RDI_"^(Sgn.print epf) in
   let l_e_tbl = "NS_E_"^(Sgn.print epf)^"_ETR_TBL" in
@@ -4108,13 +4118,12 @@ and emt_mov_etr i j pi pj =
 and emt_mov_tbl v n = 
   let vv = Array.make (n*n) None in 
   let ov = Array.make n 0 in 
-  let em = ref "" in
   Util.pnt true @@ "EM "^(string_of_int n)^"\n";
   let f o i = 
     let (pi,vi,vti) = v.(i) in 
     Array.fold_left 
-      ( fun (t,j,o,oM) (pj,vj,_) -> 
-          Util.pnt true @@ "f "^(string_of_int i)^","^(string_of_int j)^":\n";
+      ( fun (t,j,o,oM,em) (pj,vj,_) -> 
+          (*Util.pnt true @@ "f "^(string_of_int i)^","^(string_of_int j)^":\n"; *)
           let b = 
             ( try 
                 let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in 
@@ -4124,29 +4133,29 @@ and emt_mov_tbl v n =
             | `NULL,true -> 
               ov.(i)<-(o-j);
               vv.(o)<-(Some(i,j));
-              em := 
-                !em^
-                (emt_mov_etr i j pi pj);
-              (`V,j+1,o+1,o+1) 
+              let em = 
+                Rope.concat2 em
+                (Rope.of_string (emt_mov_etr i j pi pj)) in
+              (`V,j+1,o+1,o+1,em) 
             | `NULL,false -> 
-              (`NULL,j+1,o,oM) 
+              (`NULL,j+1,o,oM,em) 
             | `V,true -> 
               vv.(o)<-(Some(i,j));
-              em := 
-                !em^
-                (emt_mov_etr i j pi pj);
-              (`V,j+1,o+1,o+1)
+              let em = 
+                Rope.concat2 em
+                (Rope.of_string (emt_mov_etr i j pi pj)) in
+              (`V,j+1,o+1,o+1,em)
             | `V,false -> 
               ov.(i)<-o-j;
               vv.(o)<-None;
-              (`V,j+1,o+1,oM) ) ) 
-      (`NULL,0,o,o) v in
-  let rec g o i = 
-    if i=n then o 
+              (`V,j+1,o+1,oM,em) ) ) 
+      (`NULL,0,o,o,Rope.of_string "") v in
+  let rec g o i em0 = 
+    if i=n then (o,em0) 
     else 
-      let (_,_,_,oM) = f o i in 
-      g oM (i+1) in 
-  let o = g 0 0 in 
+      let (_,_,_,oM,em1) = f o i in 
+      g oM (i+1) (Rope.concat2 em0 em1) in 
+  let (o,em) = g 0 0 Rope.empty in 
   let vv = Array.sub vv 0 o in 
   let (e0,_) = 
     Array.fold_left 
@@ -4162,13 +4171,12 @@ and emt_mov_tbl v n =
       (fun (ed,i) o -> 
          (ed^"%define MOV_OFS_"^(string_of_int i)^" "^(string_of_int o)^"\n",i+1))
       ("",0) ov in 
-  (ed,!em,"MOV_TBL:\n"^e0)
+  (ed,Rope.to_string em,"MOV_TBL:\n"^e0)
 and emt_exe m =
-  Util.Log.f := Util.Log.On;
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
   let (ed_t,em_t,et_t) = emt_mov_tbl (Array.sub gns.ns_vct 0 gns.ns_vct_n) gns.ns_vct_n in 
-  Util.Log.pnt ();
+  Util.pnt true pp;
   let ex =
     "%include \"cmu.s\"\n"^
     ed_t^
@@ -4311,7 +4319,7 @@ and dlt_gbg () =
   lb0^":\n"^
   "\tcmp r15,0\n"^
   "\tjz "^lb1^"\n"^
-  "\tmov rdi,QWORD [gbg_vct-8+8*r15],\n"^
+  "\tmov rdi,QWORD [gbg_vct-8+8*r15]\n"^
   "\tcall dlt_gbg\n"^
   "\tsub r15,1\n"^
   "\tjmp "^lb0^"\n"^

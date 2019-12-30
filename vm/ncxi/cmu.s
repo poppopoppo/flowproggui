@@ -10,7 +10,12 @@
 bits 64
 
 %define NULL ~0
-%define SFLS_MAX 8000
+%define SFLS_MAX 16000
+%define SFLS_0_MAX 40000 
+%define SFLS_1_MAX 20000 
+%define SFLS_2_MAX 10000 
+%define SFLS_3_MAX 5000 
+%define SFLS_4_MAX 2500
 %define SFLS_NULL 0xffff_ffff_ffff_0000 
 %define SFLS_0_NULL 0xffff_ffff_ffff_0001 
 %define SFLS_1_NULL 0xffff_ffff_ffff_0101 
@@ -142,10 +147,10 @@ section .data
   arr_null: db " _ ",0
   spc: db " ",0
   agl_fmt: db "°%d◂",0
-  fmt_s8: db `\"%s\"`,0
-  fmt_line: db `%s\n`,0
-  fmt_err_line: db `err:%d\n`,0
-  fmt_dbg: db `dbg:%s\n`,0
+  fmt_s8: db 34,"%s",34,0
+  fmt_line: db "%s",10,0
+  fmt_err_line: db "err:%d",10,0
+  fmt_dbg: db "dbg:%s",10,0
   fmt_err: db "err",0
   ;cst_stg_test: db `\194\187\194\187 Foo \226\136\128 Baa \194\167\194\182 \t \t \n`,0,0,0,0,0
   ;cst_stg_test0: db `\u263a`
@@ -157,7 +162,7 @@ section .data
   rsp_tmp: dq 0
   gbg_ptr: dq gbg_vct
 ; dynamic entries
-  etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
+ ; etr0: db 0,0b1,0,0b1,0b10000000,0,0,0b1,0,0,0,0,0,0,0,0
 ; global constants
   unt: dq 0x0001_0000_0000_ffff
 ; global variables
