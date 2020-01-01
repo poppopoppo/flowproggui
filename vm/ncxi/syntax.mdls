@@ -1493,11 +1493,21 @@
 						prs_err err ⊢ e 
 						_some e ⊢ a 
 						∎ a   
-			∐.* nls ⊢ { nn }
+			∐.* nls ; ⊢ { nn },p 
 				_nil {} ⊢ gl
 				prs_vld gl ⊢ gl  
 				_some gl ⊢ a
 				∎ a
+				∐* _byt !| ⊢ { b }
+					» "!!!" _ ⊢ xx 
+					_emt xx ⊢ xx 
+					_none {} ⊢ a 
+					∎ a   
+				∐.* ⊢ { } 
+					» "???" _ ⊢ xx 
+					_emt xx ⊢ xx 
+					_some {} ⊢ a 
+					∎ a 
 		@.glb_etr
 			∐* "§§+s8" !| ; ⊢ { {} },p 
 				_some p ⊢ a
@@ -2403,7 +2413,7 @@
 			_inc n ⊢ n 
 			_some n0 ⊢ o 
 			_cns { { e o } ns } ⊢ ns 
-			∎ { n ns }
+			∎ { n ns } 
 		§§ slv_lc_clq 
 			§ 
 				@.f { env0 ev_n r_n q } 
@@ -2445,6 +2455,26 @@
 						_nil {} ⊢ q 
 						∎ { env0 r_n q }
 			∎∎ 
+		§ @.slv_dt_def { ev ev_n ns_e dl } 
+			$ dl ⊢ 
+			∐ _cns◂{ { cn y } dl } . 
+				add_e { ev_n ns_e cn } ⊢ { ev_n ns_e } 
+				slv_dt_def { ev ev_n ns_e dl } ⊢| 
+			∐. _nil◂{} . 
+				∎ { ev ev_n ns_e } 
+		§ slv_dt_etr { ev ev_n ns_e e } 
+			$ e ⊢ 
+			∐ ast.dt_def◂dl .
+				slv_dt_def { ev ev_n ns_e dl } ⊢| 
+			∐. ast.dt_ln◂y . 
+				∎ { ev ev_n ns_e }
+		§ @.slv_dt_clq { ev ev_n ns_e q } 
+			$ q ⊢ 
+			∐ _cns◂{ { w d } q } . 
+				slv_dt_etr { ev ev_n ns_e d } ⊢ { ev ev_n ns_e } 
+				slv_dt_clq { ev ev_n ns_e q } ⊢|
+			∐. _nil◂{} .
+				∎ { ev ev_n ns_e } 
 		§
 			@.slv_file gel
 				_nil {} ⊢ ns_m 
@@ -2500,6 +2530,8 @@
 				» "_some" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_none" _ ⊢ se
+				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
+				» "_in_fn" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢| 
 			@.slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel }
@@ -2569,8 +2601,10 @@
 						slv_lc_clq.f { { mmv mev ev ns_m ns_e il } ev_n rv_n q } ⊢ { { mmv mev ev ns_m ns_e il } ev_n rv_n q }
 						slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢|
 					∐ ast.dt_etr◂{ w e } .
+						slv_dt_etr { ev ev_n ns_e e } ⊢ { ev ev_n ns_e } 
 						slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢|
 					∐. ast.dt_qlq_etr◂q .
+						slv_dt_clq { ev ev_n ns_e q } ⊢ { ev ev_n ns_e }
 						slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢|
 				∐. _nil◂{} . 
 					∎ { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t }		

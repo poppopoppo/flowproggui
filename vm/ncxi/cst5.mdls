@@ -7,3 +7,11 @@
   _add q ⊢ r 
   _inc i ⊢ e 
   ∎ { y z r }
+§§ A 
+  §§ B 
+  ∎∎ 
+  §§ D
+  §§ V = B  
+  ∎∎ 
+∎∎
+§§ C = A.B
