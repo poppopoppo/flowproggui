@@ -18,9 +18,9 @@ nc: util.ml lang.ml nc.ml imp_lexer.mll imp_parser.mly
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
 	ocamlc -c imp_parser.mli
-	ocamlfind ocamlopt -thread -p -o nc -linkpkg \
+	ocamlfind ocamlopt -inline 4 -O2 -thread -p -o nc -linkpkg \
 	-package batteries,threads,rope \
-	util.ml peg.ml lang.ml imp_lexer.ml imp_parser.ml implib.ml nc.ml
+	util.ml lang.ml imp_lexer.ml imp_parser.ml implib.ml nc.ml
 	#gcc -o test test.s
 #run_nc: nc
 #	./test
