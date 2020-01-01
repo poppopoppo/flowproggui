@@ -774,7 +774,7 @@ let print_v v =
       | RP.R rs -> RP.R (Array.map mk_mtc_v_k rs)
       | RP.A p -> RP.A(p,Mtc_R_Top) )
   and mk_mtc_v_k_eq p0 v0 e0 =
-    Util.Log.add ("enter mk_mtc_v_k_eq:"^(print_mtc_v_k p0)^","^(pnt_r_a v0)^","^(print_test e0)^"\n");
+    (*Util.Log.add ("enter mk_mtc_v_k_eq:"^(print_mtc_v_k p0)^","^(pnt_r_a v0)^","^(print_test e0)^"\n");*)
     ( match p0 with
       | RP.R rs -> RP.R(Array.map (fun r -> mk_mtc_v_k_eq r v0 e0) rs)
       | RP.A(q0,ra) ->
@@ -803,7 +803,7 @@ let print_v v =
             | Mtc_R_Agl(i0,i_n,r0) -> RP.A(q0,Mtc_R_Agl(i0,i_n,mk_mtc_v_k_eq r0 v0 e0))
             | _ -> p0 ) )
   and mk_mtc_v_k_eq_and ra e0 =
-    Util.Log.add ("enter mk_mtc_v_k_eq_and:"^(print_mtc_v_k ra)^","^(pnt_ptn e0)^"\n");
+    (*Util.Log.add ("enter mk_mtc_v_k_eq_and:"^(print_mtc_v_k ra)^","^(pnt_ptn e0)^"\n"); *)
     ( match ra,e0 with
       | RP.R rs0,RP.R rs1 ->
         let (_,a) =
@@ -1267,7 +1267,7 @@ and unify_rcd ru l1 l2 =
     | Cns(t1,t2),Cns(t3,t4) -> unify ru t1 t3; unify_rcd ru t2 t4
     | _ -> err "unify_rcd:1" )
 let rec gen rl l y =
-  Util.Log.add "enter gen:\n";
+  (*Util.Log.add "enter gen:\n";*)
   ( match y with
     | Var v ->
       ( match !v with
@@ -1296,8 +1296,8 @@ and gen_rcd rl l r =
     | Cns(t0,t1) -> gen rl l t0; gen_rcd rl l t1 )
 let inst_ini () = {  al = []; al_rcd = []; }
 let rec inst l (i:Ast.inst) (y:Types.t) =
-  let c = Types.print y in 
-  Util.Log.add @@ "enter inst:"^c^"\n";
+  let _ = Types.print y in 
+  (*Util.Log.add @@ "enter inst:"^c^"\n";*)
   ( match y with
     (*| App(Var ({contents = Ln(Abs(v,y0))} as v0),y1) ->
       ( try (Var (List.assq v0 i.al),i)
@@ -1317,8 +1317,8 @@ let rec inst l (i:Ast.inst) (y:Types.t) =
       let (y2,i) = inst l i y0 in
       let (y3,i) = inst l i y1 in
       (*let v0 = (try List.assq v i.al with _ -> err "inst a1") in
-      v0 := Ln y3;
-      (y2,i)*)
+        v0 := Ln y3;
+        (y2,i)*)
       vq := (Ln y3);
       (y2,i)
     | Var v -> 
@@ -1339,8 +1339,8 @@ let rec inst l (i:Ast.inst) (y:Types.t) =
       let (y1,i) = inst l i y1 in
       let (y2,i) = inst l i y2 in
       ( match y1 with 
-      | Abs(_,_) -> inst l i (App(y1,y2)) 
-      | _ -> (App(y1,y2),i) )
+        | Abs(_,_) -> inst l i (App(y1,y2)) 
+        | _ -> (App(y1,y2),i) )
     | Imp (y1,y2) ->
       let (y1,i) = inst l i y1 in
       let (y2,i) = inst l i y2 in
@@ -1459,14 +1459,14 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
               let _ = inst_mtc_ptn gns ns l e in
               () )
           () pns in
-            Util.Log.add "slv Mtc 3\n";
+      Util.Log.add "slv Mtc 3\n";
       let (_,ys) =
         Array.fold_left
           ( fun (j,ys) (_,p) ->
               let y1 = slv gns ns l p in
               (j+1,ys |+| [|y1|]) )
           (0,[||]) pns in
-            Util.Log.add "slv Mtc 3\n";
+      Util.Log.add "slv Mtc 3\n";
       let tts = Array.map (fun y -> inst (l+1) y) ys in
       let rrt = Var (newvar_l (l+1)) in
       let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) rrt (Array.to_list tts) in
@@ -1839,7 +1839,7 @@ and alc_idx (s:RSet.t) v =
       let im = RSet.min_0 s in
       s.(im)<-true;
       RP.A(R.Idx im)
-    | _ -> err "alc_idx 0" )
+    | _ -> err @@ "alc_idx 0:"^(Types.print (Var v)) )
 and alc_idx_ty (s:RSet.t) y =
   ( match y with
     | Var v ->
@@ -3106,10 +3106,11 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
             let l_2 =
               List.fold_left
                 ( fun l (n,y2,y1,y1_x,p0,r0,ep) ->
-                    (*Util.pnt true "l_2:0\n";*)
+                    (*Util.Log.add "l_2:0\n";*)
                     let y1_0 = inst 0 (Var y1) in
                     let _ = unify [] y1_0 (inst 0 y1_x) in
                     gen (ref []) (-1) (Var y2);
+                    gen (ref []) (-1) y1_0;
                     let iv0 = Hashtbl.create 10 in
                     let i0 = crt_ptn_iv gns (mk_idx_ptn r0) iv0 in
                     let s1 = Hashtbl.create 10 in
@@ -4073,7 +4074,7 @@ and args_init =
   call mk_s8\n"^
   "\tmov r8,rax\n"^
   (alc_blk_r 2)^
-    " mov r13,rax
+  " mov r13,rax
     or rax,1
     mov [args],rax
     mov rcx,0x0000_0002_0200_fffc
@@ -4086,8 +4087,8 @@ and args_init =
   call mk_s8
     mov r10,rax
     "^
-    (alc_blk_r 2)^
-    " mov r8,rax
+  (alc_blk_r 2)^
+  " mov r8,rax
     mov r9,r8
     or r9,1
     mov [r13+16],r9
@@ -4099,8 +4100,8 @@ and args_init =
     jmp args_lp
   args_end:
   "^
-    (alc_blk_r 0)^
-    " mov rcx,0x0000_0000_0000_ffff
+  (alc_blk_r 0)^
+  " mov rcx,0x0000_0000_0000_ffff
     mov [rax],rcx
     mov rcx,0x0100_0000_0000_0001
     or rax,rcx
@@ -4116,46 +4117,71 @@ and emt_mov_etr i j pi pj =
   (emt_mov_ptn_to_ptn R.M_Dlt s0 pi pj)^
   "\tjmp QWORD [rsp]\n"
 and emt_mov_tbl v n = 
+  let vl = Array.length v in 
   let vv = Array.make (n*n) None in 
   let ov = Array.make n 0 in 
   Util.pnt true @@ "EM "^(string_of_int n)^"\n";
   let f o i = 
     let (pi,vi,vti) = v.(i) in 
-    Array.fold_left 
-      ( fun (t,j,o,oM,em) (pj,vj,_) -> 
-          (*Util.pnt true @@ "f "^(string_of_int i)^","^(string_of_int j)^":\n"; *)
-          let b = 
-            ( try 
-                let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in 
-                if vti=Etr_Dst then true else false
-              with _ -> false ) in 
-          ( match t,b with 
-            | `NULL,true -> 
-              ov.(i)<-(o-j);
-              vv.(o)<-(Some(i,j));
-              let em = 
-                Rope.concat2 em
-                (Rope.of_string (emt_mov_etr i j pi pj)) in
-              (`V,j+1,o+1,o+1,em) 
-            | `NULL,false -> 
-              (`NULL,j+1,o,oM,em) 
-            | `V,true -> 
-              vv.(o)<-(Some(i,j));
-              let em = 
-                Rope.concat2 em
-                (Rope.of_string (emt_mov_etr i j pi pj)) in
-              (`V,j+1,o+1,o+1,em)
-            | `V,false -> 
-              ov.(i)<-o-j;
-              vv.(o)<-None;
-              (`V,j+1,o+1,oM,em) ) ) 
-      (`NULL,0,o,o,Rope.of_string "") v in
+    let t = ref true in 
+    let j = ref 0 in
+    let o0 = o in 
+    let o = ref o0 in 
+    let oM = ref o0 in 
+    let em = ref "" in
+    while !t&&(!j<vl) do  
+      let o0 = !o in
+      let j0 = !j in 
+      let (pj,vj,_) = v.(j0) in
+      let b = 
+        ( try 
+            let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in 
+            if vti=Etr_Dst then true else false
+          with _ -> false ) in 
+      ( match b with 
+        | true -> 
+          ov.(i)<-(o0-j0);
+          vv.(o0)<-(Some(i,j0));
+          em := 
+            !em ^
+            (emt_mov_etr i j0 pi pj);
+          t := false; 
+          j := j0+1; o := o0+1; oM := o0+1;
+          () 
+        | false -> 
+          j := j0+1 ) 
+    done;
+    while !j<vl do 
+      let o0 = !o in 
+      let j0 = !j in 
+      let (pj,vj,_) = v.(j0) in
+      let b = 
+        ( try 
+            let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in 
+            if vti=Etr_Dst then true else false
+          with _ -> false ) in 
+      ( match b with 
+        | true -> 
+          vv.(o0)<-(Some(i,j0));
+          em := 
+            !em^
+            (emt_mov_etr i j0 pi pj);
+          j := j0+1; o := o0+1; oM := o0+1; 
+          () 
+        | false -> 
+          ov.(i)<-o0-j0;
+          vv.(o0)<-None;
+          j := j0+1; o := o0+1; 
+          () ) 
+    done; 
+    (!oM,!em) in
   let rec g o i em0 = 
+    Util.pnt true @@ "g:"^(string_of_int i)^"\n";
     if i=n then (o,em0) 
     else 
-      let (_,_,_,oM,em1) = f o i in 
-      g oM (i+1) (Rope.concat2 em0 em1) in 
-  let (o,em) = g 0 0 Rope.empty in 
+      let (oM,em1) = f o i in 
+      g oM (i+1) (em0^em1) in 
+  let (o,em) = g 0 0 "" in 
   let vv = Array.sub vv 0 o in 
   let (e0,_) = 
     Array.fold_left 
@@ -4171,7 +4197,7 @@ and emt_mov_tbl v n =
       (fun (ed,i) o -> 
          (ed^"%define MOV_OFS_"^(string_of_int i)^" "^(string_of_int o)^"\n",i+1))
       ("",0) ov in 
-  (ed,Rope.to_string em,"MOV_TBL:\n"^e0)
+  (ed,em,"MOV_TBL:\n"^e0)
 and emt_exe m =
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
@@ -4199,7 +4225,7 @@ and emt_exe m =
   (ex,pp)
 
 and emt_bytes s =
-  Util.Log.add "enter emt_bytes\n";
+  (*Util.Log.add "enter emt_bytes\n";*)
   let l = Bytes.length s in
   if l=0 then ""
   else
@@ -4210,7 +4236,7 @@ and emt_bytes s =
       else "" in
     lp 0
 and emt_cst_stg cs =
-  Util.Log.add "enter emt_cst_stg\n";
+  (*Util.Log.add "enter emt_cst_stg\n";*)
   ( match cs with
     | [] -> ""
     | (p,s)::tl ->
@@ -4222,7 +4248,7 @@ and emt_cst_stg cs =
       let s_e = emt_bytes s in
       "\tcst_stg_"^(Sgn.print p)^": db "^s_e^(st mx)^"\n"^(emt_cst_stg tl) )
 and mov_r m s0 i1 i0 =
-  Util.Log.add @@ "enter mov_r:"^(RSet.pnt s0)^","^(string_of_int i1)^","^(string_of_int i0)^"\n";
+  (*Util.Log.add @@ "enter mov_r:"^(RSet.pnt s0)^","^(string_of_int i1)^","^(string_of_int i0)^"\n";*)
   if i1<0&&s0.(i0)&&(not s0.(i1))&&m=R.M_Dlt then
     let l0 = lb () in
     ( s0.(i0)<-false;
@@ -4365,7 +4391,7 @@ and dlt_ptn m s0 i0 =
         "" rs )
 and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
   let c_l = "; _emt_mov_ptn_to_ptn:"^(RSet.pnt s0)^","^(R.print i0)^" ⊢ "^(R.print i1)^"\n" in
-  Util.Log.add c_l;
+  (*Util.Log.add c_l;*)
   let _ =
     if m=R.M_Gbg then
       let s_t = RSet.ini () in
@@ -4663,7 +4689,7 @@ and mov_rl_ptn m s0 i1 p0 =
   else err "mov_rl_ptn 3"
 and mov_unrl_ptn m s0 p1 i0 =
   let c0 = "; "^(string_of_int i0)^"' ⊢ "^(R.print p1)^"\n" in
-  Util.Log.add @@ c0;
+  (*Util.Log.add @@ c0;*)
   if s0.(i0) then
     ( match p1 with
       | RP.A(R.Idx i1) ->
@@ -4726,9 +4752,9 @@ and mov_unrl_ptn m s0 p1 i0 =
               (cf_set im)^
               (if m=R.M_Dlt then
                  "\tmov rdi,QWORD [rax+8*1]\n"^
-                  "\tpush rdi\n"^
-                  "\tmov rdi,rax\n"^
-                  free_blk_r^
+                 "\tpush rdi\n"^
+                 "\tmov rdi,rax\n"^
+                 free_blk_r^
                  "\tpop rax\n"
                else
                  "\tmov rdi,rax"^"\n"^
@@ -4781,7 +4807,7 @@ and mk_idx_k iv p =
     | RP.A(pa,Mtc_R_Cst _) -> Hashtbl.find iv (mk_r_p pa)
     | RP.R rs -> RP.R(Array.map (mk_idx_k iv) rs) )
 and emt_ir i1 gns (ns:ns_v ref) iv p =
-  Util.Log.add ("enter emt_ir:"^(print_line p)^"\n");
+  (* Util.Log.add ("enter emt_ir:"^(print_line p)^"\n"); *)
   let c_l = "; "^(print_line p)^" ; {> "^(pnt_iv gns iv)^" }\n" in
   ( match p with
     | Ret r ->
@@ -4798,14 +4824,14 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
     | Mtc ps ->
       let psl = Array.to_list ps in
       let rec emt_mtc pv0 iv0 k0 psl lb0 =
-        Util.Log.add ("enter emt_mtc:"^(pnt_m_set k0)^"\n");
+        (*Util.Log.add ("enter emt_mtc:"^(pnt_m_set k0)^"\n");*)
         ( match psl with
           | ((es,_),p)::psl_tl ->
             let lb1 = "MTC_"^(lb ()) in
             let k1 =
               ( try
                   let vm0 = mk_vct pv0 es in
-                  Util.Log.add @@ "S0"^(pnt_vct vm0)^"\n";
+                  (*Util.Log.add @@ "S0"^(pnt_vct vm0)^"\n";*)
                   sub_lst_vct k0 vm0
                 with _ -> k0 ) in
             let ivi = Hashtbl.copy iv0 in
@@ -4825,16 +4851,14 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             if k0=[] then lb0^":\n"
             else err @@ "emt_mtc 0:non exh"(*^(pnt_env_set k0)*) )
       and emt_mtc_eq iv0 es lb1 =
-        Util.Log.add @@ "enter emt_mtc_eq:"^(pnt_iv gns iv0)^"\n";
+        (*Util.Log.add @@ "enter emt_mtc_eq:"^(pnt_iv gns iv0)^"\n";*)
         ( match es with
           | [] -> ([],"")
           | (vx,pa)::es_tl ->
-            Util.Log.add "X2\n";
             let px = mk_r_p(mk_idx vx) in
             let ix = Hashtbl.find iv0 px in
             ( match !pa with
               | Eq_Agl(_,i0,i_n,ra) ->
-                Util.Log.add "X3\n";
                 let ya = inst_ptn gns 0 ra in
                 let _ = gen (ref []) (-1) ya in
                 let iya = alc_idx_ty (rset_iv iv0) ya in
@@ -4862,12 +4886,10 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                     (px::dl,e0^e1)
                   | _ -> err "emt_mtc_eq a0" )
               | P_Cst c0 ->
-                Util.Log.add "X P\n";
                 ( match c0 with
                   | P_R64 x0 ->
                     ( match ix with
                       | RP.A(R.Idx ix0) ->
-                        Util.Log.add "X0\n";
                         let e0 =
                           "\tmov QWORD rax,0x"^(Int64.format "%x" x0)^"\n"^
                           "\tcmp rax,"^(emt_reg_x86 ix0)^"\n"^
@@ -5139,6 +5161,16 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
     | Seq(n,p1) ->
       let s0 =
         ( match n with
+          | IR_Id{ contents=IR_Id_C(r,[|r0|]) } ->
+            Util.Log.add "Id 0\n";
+            let sv = rset_iv iv in
+            let ir = csm_ptn_iv (mk_idx_ptn r) iv in
+            let y0 = inst_ptn gns 0 r0 in 
+            let _ = gen (ref 0) (-1) y0 in 
+            let ir0 = alc_idx_ty (rset_iv iv) y0 in
+            let e_c0 = emt_mov_ptn_to_ptn R.M_Dlt sv ir ir0 in
+            let _ = mk_idx_iv iv ir0 (mk_idx_ptn r0) in 
+            e_c0
           | IR_Id{ contents=IR_Id_C(r,[|r0;r1|]) } ->
             let sv = rset_iv iv in
             let ir = csm_ptn_iv (mk_idx_ptn r) iv in

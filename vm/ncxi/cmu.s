@@ -617,8 +617,8 @@ pnt_v_lp:
   add rsi,1
   jmp pnt_v_lp
 pnt_v_tl:
-  and rdx,0b0111
-  mov rcx,0b1000
+  and rdx,0111b
+  mov rcx,1000b
   sub rcx,rdx
   shl rcx,3
   mov r8,~0
@@ -671,7 +671,7 @@ mlc_s8: ; rdi=size of bytes
   shl rsi,32
   bts rsi,16
   push rsi
-  and rdi,~0b0111
+  and rdi,~0111b
   add rdi,16
   xor rax,rax
   push rdi
