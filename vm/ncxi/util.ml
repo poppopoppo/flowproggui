@@ -144,7 +144,6 @@ let unt () = [| |]
 module Sgn :
 sig
   type t
-  type env
   val n : unit -> int
   val ini : unit -> t
   val print : t -> string
@@ -152,11 +151,20 @@ sig
   val eq : t -> t -> bool
   val hash : t -> int
   (* val sexp_of_t : t -> Core.Sexp.t *)
-  val get_env : unit -> env
-  val set_env : env -> unit
 end
 = struct
-  type t = int ref
+  type t = int 
+  let sgn_N = ref 0 
+  let n () = !sgn_N 
+  let ini () = 
+    let n0 = !sgn_N in 
+    sgn_N := !sgn_N + 1; 
+    n0 
+  let print p = (string_of_int p) 
+  let compare (p0:int) (p1:int) = compare p0 p1 
+  let eq p0 p1 = p0=p1 
+  let hash p0 = p0 
+  (*type t = int ref
   type env = int
   let sgn_N = ref 0
   let env = ref []
@@ -177,8 +185,7 @@ end
   let compare x y = compare (hash x) (hash y)
   let eq x y = x==y
   (* let sexp_of_t _ = Core.Sexp.List [] *)
-  let get_env () = 0
-  let set_env _ = ()
+  *)
 end
 let ( =& ) x y = Sgn.eq x y
 let sgn = Sgn.ini

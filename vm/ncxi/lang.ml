@@ -66,7 +66,7 @@ module Types = struct
   type ('y, 'k) v_t =
     | WC of 'k | V of 'k * level | Q of 'k * level | Ln of 'y
     | N of name | N_Ln of name * 'y
-  and v = (t, unit) v_t
+  and v = (t, Sgn.t) v_t
   and k =
     | K1 of {
         hd : Sgn.t;
@@ -112,20 +112,22 @@ module Types = struct
     let exn_p = sgn ()
   end
   let newvar () =
-    let v = ref (WC ()) in
-    v_vct := !v_vct@[v];
+    let v = ref (WC (sgn())) in
     v
   let newvar_l l =
-    let v = ref (V ((),l)) in
-    v_vct := !v_vct@[v];
+    let v = ref (V (sgn(),l)) in
     v
   let newvar_q l =
-    let v = ref (Q ((),l)) in
-    v_vct := !v_vct@[v];
+    let v = ref (Q (sgn(),l)) in
     v
-  let rec print_v v_vct v =
-    ( try (fst @@ BatList.findi (fun _ vi -> vi==v) !v_vct)
-      with _ -> v_vct := !v_vct@[v]; print_v v_vct v)
+  let print_v v =
+    ( match !v with 
+    | WC p
+    | V(p,_) 
+    | Q(p,_) ->  (Sgn.print p)^"'" 
+    | N n -> pnt_name n 
+    | N_Ln(n,_) -> pnt_name n 
+    | Ln _ -> "_'" )
   let rec print y =
     ( match y with
       | Axm p when p=Axm.r64 -> "_r64"
@@ -140,11 +142,11 @@ module Types = struct
       | Axm p -> "_p"^(Sgn.print p)
       | Var v ->
         (*Util.pnt true "P t1\n"; *)
-        let i = print_v v_vct v in
+        let i = print_v v in
         ( match !v with
           | WC _-> "_"
-          | V (_,l) -> "v"^(string_of_int i)^"''("^(string_of_int l)^")"
-          | Q (_,l) -> "t"^(string_of_int i)^"'("^(string_of_int l)^")"
+          | V (_,l) -> "v"^i^"''("^(string_of_int l)^")"
+          | Q (_,l) -> "t"^i^"'("^(string_of_int l)^")"
           | Ln y ->
             (*Util.pnt true "P t2\n";*)
             print y
@@ -161,8 +163,7 @@ module Types = struct
       | Rcd r -> "{ "^(print_rcd r)^"}"
       | Abs(v,y) ->
         (*Util.pnt true "P t0\n";*)
-        let i =fst @@ (BatList.findi (fun _ vi -> vi==v) !v_vct)in
-        "∀["^(string_of_int i)^"]."^(print y)
+        "∀["^(print_v v)^"]."^(print y)
     )
   and print_t y = print y
   and print_rcd r =
@@ -193,8 +194,8 @@ module Types = struct
       | Abs(_,y0) -> mk_abs rl x y0
       | Var v ->
         ( match !v with
-          | Q ((),-2) -> v := Ln (Var x)
-          | Q ((),q) when q<(-2) -> v := Q ((),q+1)
+          | Q (_,-2) -> v := Ln (Var x)
+          | Q (_,q) when q<(-2) -> v := Q (sgn(),q+1)
           | Ln y -> mk_abs rl x y
           | _ -> () )
       | Imp(y0,y1)
@@ -585,12 +586,6 @@ module Ast = struct
     ( match a with
       | (R_A p) -> "%_"^(Sgn.print p)
       | R_WC p -> "_("^(Sgn.print p)^")" )
-  (*
-let print_v v =
-    ( try let (n,_) = List.find (fun (_,w) -> v==w) !Types.rm in n
-      with _ -> "_r"^(string_of_int (Types.print_v Types.v_vct v)))
-*)
-
   let mk_idx r =
     ( match !r with
       | R_Ax p -> p
@@ -1049,9 +1044,7 @@ let print_v v =
         ( match ns.root with
           | Some ns_r -> find_m f !ns_r
           | None -> err "find_ns 0" ))
-  let print_v v =
-    ( try let (n,_) = List.find (fun (_,w) -> v==w) !rm in n
-      with _ -> "_r"^(string_of_int (Types.print_v v_vct v)))
+  let print_v v = "_r"^(Types.print_v v)
   let rec print_mdl (n,g) =
     let s0 = "§§ "^n^"\n" in
     let rec lp g =
@@ -1330,7 +1323,7 @@ let rec inst l (i:Ast.inst) (y:Types.t) =
               let i = { i with al = (v,v0)::i.al } in
               (Var v0,i))
         | Ln y -> inst l i y
-        | WC _ -> v := Types.V ((),l); (y,i)
+        | WC _ -> v := Types.V (sgn(),l); (y,i)
         | _ -> (y,i))
     | App(Axm a,y2) -> 
       let (y2,i) = inst l i y2 in
@@ -4134,17 +4127,24 @@ and emt_mov_tbl v n =
       let j0 = !j in 
       let (pj,vj,_) = v.(j0) in
       let b = 
-        ( try 
-            let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in 
-            if vti=Etr_Dst then true else false
-          with _ -> false ) in 
+            ( match vti with 
+            | Etr_Dst -> 
+              ( try 
+              let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in
+              true 
+              with _ -> false ) 
+              | _ -> false ) in
       ( match b with 
         | true -> 
           ov.(i)<-(o0-j0);
           vv.(o0)<-(Some(i,j0));
           em := 
             !em ^
-            (emt_mov_etr i j0 pi pj);
+            ( let s0 = RSet.ini () in 
+              let _ = rset_ptn s0 pi in 
+              "MOV_"^(string_of_int i)^"_"^(string_of_int j0)^":\n"^
+              (emt_mov_ptn_to_ptn R.M_Dlt s0 pi pj)^
+              "\tjmp QWORD [rsp]\n" );
           t := false; 
           j := j0+1; o := o0+1; oM := o0+1;
           () 
@@ -4155,17 +4155,24 @@ and emt_mov_tbl v n =
       let o0 = !o in 
       let j0 = !j in 
       let (pj,vj,_) = v.(j0) in
-      let b = 
-        ( try 
-            let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in 
-            if vti=Etr_Dst then true else false
-          with _ -> false ) in 
+     let b = 
+            ( match vti with 
+            | Etr_Dst -> 
+              ( try 
+              let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in
+              true 
+              with _ -> false ) 
+              | _ -> false ) in
       ( match b with 
         | true -> 
           vv.(o0)<-(Some(i,j0));
           em := 
             !em^
-            (emt_mov_etr i j0 pi pj);
+            ( let s0 = RSet.ini () in 
+              let _ = rset_ptn s0 pi in 
+              "MOV_"^(string_of_int i)^"_"^(string_of_int j0)^":\n"^
+              (emt_mov_ptn_to_ptn R.M_Dlt s0 pi pj)^
+              "\tjmp QWORD [rsp]\n" );
           j := j0+1; o := o0+1; oM := o0+1; 
           () 
         | false -> 
@@ -4176,7 +4183,7 @@ and emt_mov_tbl v n =
     done; 
     (!oM,!em) in
   let rec g o i em0 = 
-    Util.pnt true @@ "g:"^(string_of_int i)^"\n";
+    (*Util.pnt true @@ "g:"^(string_of_int i)^"\n";*)
     if i=n then (o,em0) 
     else 
       let (oM,em1) = f o i in 
@@ -4194,7 +4201,7 @@ and emt_mov_tbl v n =
       ("",0) vv in
   let (ed,_) = 
     Array.fold_left 
-      (fun (ed,i) o -> 
+      ( fun (ed,i) o -> 
          (ed^"%define MOV_OFS_"^(string_of_int i)^" "^(string_of_int o)^"\n",i+1))
       ("",0) ov in 
   (ed,em,"MOV_TBL:\n"^e0)
@@ -4202,8 +4209,8 @@ and emt_exe m =
   let (se_p,em_p,ns,gns) = (init_prm ()) in
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
   let (ed_t,em_t,et_t) = emt_mov_tbl (Array.sub gns.ns_vct 0 gns.ns_vct_n) gns.ns_vct_n in 
-  Util.pnt true pp;
-  let ex =
+  Util.pnt true pp;  
+  let ex = 
     "%include \"cmu.s\"\n"^
     ed_t^
     "main:\n"^
@@ -4409,7 +4416,7 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
           Array.fold_left
             ( fun (i,l0,l1,l2) ri0 ->
                 let (l0_0,l1_0,l2_0) = lp ri0 rs1.(i) in
-                (i+1,l0@l0_0,l1@l1_0,l2@l2_0) )
+                (i+1,List.rev_append l0_0 l0,List.rev_append l1_0 l1,List.rev_append l2_0 l2) )
             (0,[],[],[]) rs0 in
         (l0,l1,l2)
       | RP.A(R.Agl(ia0,i_n0,ra0)),RP.A(R.Agl(ia1,i_n1,ra1)) ->
@@ -4499,7 +4506,7 @@ and emt_mov_ptn_to_ptn (m:R.mov_t) (s0:RSet.t) (i0:R.t) (i1:R.t) =
                   e1^
                   (mov_r m s0 ix i))
               "" lx in
-          let lt = lx@lt in
+          let lt = List.rev_append lx lt in
           let e1 =
             em^
             (mov_unrl_ptn m s0 p1 (subst lt i0)) in

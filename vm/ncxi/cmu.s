@@ -251,12 +251,17 @@ SFLS_X_lp:
 SFLS_X_end:
   sub rdi,1 
   shl rdi,3
-  mov QWORD [SFLS_VCT_0+rdi],SFLS_0_NULL
-  mov QWORD [SFLS_VCT_1+2*rdi],SFLS_1_NULL
-  mov QWORD [SFLS_VCT_2+4*rdi],SFLS_2_NULL
-  mov QWORD [SFLS_VCT_3+8*rdi],SFLS_3_NULL
+  mov rsi,SFLS_0_NULL
+  mov QWORD [SFLS_VCT_0+rdi],rsi
+  mov rsi,SFLS_1_NULL
+  mov QWORD [SFLS_VCT_1+2*rdi],rsi
+  mov rsi,SFLS_2_NULL
+  mov QWORD [SFLS_VCT_2+4*rdi],rsi 
+  mov rsi,SFLS_3_NULL
+  mov QWORD [SFLS_VCT_3+8*rdi],rsi
   shl rdi,1
-  mov QWORD [SFLS_VCT_4+8*rdi],SFLS_4_NULL
+  mov rsi,SFLS_4_NULL
+  mov QWORD [SFLS_VCT_4+8*rdi],rsi
   ret
 
 SFLS_init:
@@ -1079,7 +1084,7 @@ rpc_ref: ; rdi=ref ⊢ rax=dst-ref
   bt QWORD [rdi],16
   jc rpc_ref_s8
   mov rdx,[rdi]
-  mov rcx,~0xffff_0000_0000_0000
+  mov rcx,0x0000_ffff_ffff_ffff
   and rdx,rcx
   mov rcx,0x0001_0000_0000_0000
   add rdx,rcx
@@ -1103,7 +1108,7 @@ rpc_ref_end:
 
 rpc_ref_s8:
   mov rdx,[rdi]
-  mov rcx,~0xffff_0000_0000_0000
+  mov rcx,0x0000_ffff_ffff_ffff
   and rdx,rcx
   mov rcx,0x0001_0000_0000_0000
   add rdx,rcx
