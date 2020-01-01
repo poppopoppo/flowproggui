@@ -2485,6 +2485,14 @@
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_add" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
+				» "_sts" _ ⊢ se
+				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
+				» "_lds" _ ⊢ se
+				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
+				» "_rep_movsb" _ ⊢ se
+				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
+				» "_add" _ ⊢ se
+				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_nil" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_cns" _ ⊢ se
