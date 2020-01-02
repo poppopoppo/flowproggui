@@ -2475,6 +2475,24 @@
 				slv_dt_clq { ev ev_n ns_e q } ⊢|
 			∐. _nil◂{} .
 				∎ { ev ev_n ns_e } 
+		§ @.slv_grm { mmv mev mtv ns_m mv_n ev ev_n g } 
+			$ g ⊢ 
+			∐ _cns◂{ { w e } g } . 
+				$ mv_n ⊢ mv_n,mv_n_0 
+				_inc mv_n ⊢ mv_n  
+				_nil {} ⊢ ns_m_g 
+				_nil {} ⊢ ns_e_g 
+				_nil {} ⊢ ns_t_g
+				» "prs" _ ⊢ e0 
+				add_e { ev_n ns_e_g e0 } ⊢ { ev_n ns_e_g }
+				_set_q { mmv mv_n_0 ns_m_g } ⊢ { mmv mv_n_0 }
+				_set_q { mev mv_n_0 ns_e_g } ⊢ { mev mv_n_0 }
+				_set_q { mtv mv_n_0 ns_t_g } ⊢ { mtv mv_n_0 }				
+				_some mv_n_0 ⊢ o 
+				_cns { { w o } ns_m } ⊢ ns_m 
+				slv_grm { mmv mev mtv ns_m mv_n ev ev_n g } ⊢|
+			∐. _nil◂{} . 
+				∎ { mmv mev mtv ns_m mv_n ev ev_n } 
 		§
 			@.slv_file gel
 				_nil {} ⊢ ns_m 
@@ -2572,6 +2590,7 @@
 							_cns { { w o } ns_m } ⊢ ns_m 
 							slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢|
 					∐ ast.grm_etr◂g .
+						slv_grm { mmv mev mtv ns_m mv_n ev ev_n g } ⊢ { mmv mev mtv ns_m mv_n ev ev_n }
 						slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢|
 					∐ ast.lc_etr◂{ w e } .
 						$ e ⊢
