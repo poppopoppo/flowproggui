@@ -266,7 +266,7 @@
 			∐ test_var : r'
 		@.op_exp_s8 e' 
 			∐ exp_s8_s8 : _s8
-			∐ exp_s8_cst : e'
+			∐ exp_s8_cst : cst◂e'
 			∐ exp_s8_idx : { exp_s8_t _r64 }
 			∐ exp_s8_for : { _r64 _s8 }
 		@.exp_s8_t
@@ -1367,7 +1367,8 @@
 				_some s ⊢ a
 				∎ a
 			∐* name ⊢ { n }
-				ast.exp_s8_cst n ⊢ n
+				ast.cst_name n ⊢ c 
+				ast.exp_s8_cst c ⊢ n
 				_some n ⊢ a
 				∎ a
 			∐.* s8_fmt ⊢ { f }
@@ -2245,7 +2246,7 @@
 			∐ ast.exp_s8_cst◂c . 
 				slv_cst { env0 c } ⊢ { env0 c } 
 				ast.exp_s8_cst c ⊢ e 
-				∎ { env0 e } 
+				∎ { env0 e }
 			∐ ast.exp_s8_s8◂s . 
 				ast.exp_s8_s8 s ⊢ e 
 				∎ { env0 e } 
@@ -2308,8 +2309,8 @@
 					ast.seq { ll lc } ⊢ lc 
 					∎ { env0 n re lc }
 				∐. ast.op_exp_s8◂{ pl ss ds } .
-					## slv_exp_s8_lst { env0 pl } ⊢ { env0 pl } 
-					_nil {} ⊢ pl0 
+					slv_exp_s8_lst { env0 pl } ⊢ { env0 pl0 } 
+					##_nil {} ⊢ pl0 
 					csm_src_lst { re ss } ⊢ { re ss } 
 					crt_dst_lst { n re ds } ⊢ { n re ds } 
 					ast.op_exp_s8 { pl0 ss ds } ⊢ ll 
