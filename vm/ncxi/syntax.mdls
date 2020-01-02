@@ -1900,7 +1900,6 @@
 				∐ rcd : _lst◂type_k
 				∐ dta : { _r64 _lst◂type_k }
 				∐ imp : { type_k type_k }
-				∐ qvar : { _r64 _r64 } 
 				∐ ivar : _r64 
 				∐ var : _r64
 			@.type_exp 
@@ -1908,6 +1907,7 @@
 				∐ idx : _r64
 			@.var
 				∐ var_l : _r64
+				∐ var_q : _r64 
 				∐ var_ln : type_k
 
 		§ @.occurs { tv_n tv i0 lv0 y1 } 
@@ -1928,7 +1928,7 @@
 					$ v1 ⊢ 
 					∐ var_ln◂y2 . 
 						occurs { tv_n tv i0 lv0 y2 } ⊢| 
-					∐. var_l◂lv1 . 
+					∐ var_l◂lv1 . 
 						_setge { lv0 lv1 } ⊢ { lv0 lv1 b }
 						∐ b'=0r . 
 							$ lv0 ⊢ lv0,lv0_0 
@@ -1937,7 +1937,10 @@
 							_set_q { tv i1 v2 } ⊢ { tv i1 } 
 							∎ { tv_n tv i0 lv0 } 
 						∐. . 
-							∎ { tv_n tv i0 lv0 } 
+							∎ { tv_n tv i0 lv0 }
+					∐. var_q◂lv1 .
+						_emt { i1 lv1 } ⊢ a 
+						∎| 
 			∐. . 
 				_emt { tv_n tv i0 lv0 } ⊢ { tv_n tv i0 lv0 } 
 				∎|
@@ -2029,27 +2032,27 @@
 			∐ imp◂{ y0 y1 } . 
 				inst { tv_n tv lv y0 al } ⊢ { tv_n tv lv y0 al } 
 				inst { tv_n tv lv y0 al } ⊢| 
-			∐ qvar◂{ lvq iq } .
-				assoc { al iq } ⊢ { al iq o } 
-				$ o ⊢ 
-				∐ _some◂i0 . 
-					var i0 ⊢ y0 
-					∎ { tv_n tv lv y0 al } 
-				∐. _none◂{} . 
-					$ tv_n ⊢ tv_n,tv_n_0
-					$ tv_n ⊢ tv_n,tv_n_1 
-					_inc tv_n ⊢ tv_n
-					$ lv ⊢ lv,lv_0 
-					var_l lv_0 ⊢ v0
-					_set_q { tv tv_n_0 v0 } ⊢ { tv tv_n_0 } 
-					var tv_n_0 ⊢ y0 
-					_some tv_n_1 ⊢ o 
-					_cns { { iq o } al } ⊢ al  
-					∎ { tv_n tv lv y0 al } 
 			∐ var◂i0 . 
 				_get_q { tv i0 } ⊢ { tv i0 v0 } 
 				∐ v0 ⊢ var_ln◂y0 . 
-					inst { tv_n tv lv y0 al } ⊢| 
+					inst { tv_n tv lv y0 al } ⊢|
+				∐ v0 ⊢ var_q◂lvq .
+					assoc { al i0 } ⊢ { al iq o } 
+					$ o ⊢ 
+					∐ _some◂i0 . 
+						var i0 ⊢ y0 
+						∎ { tv_n tv lv y0 al } 
+					∐. _none◂{} . 
+						$ tv_n ⊢ tv_n,tv_n_0
+						$ tv_n ⊢ tv_n,tv_n_1 
+						_inc tv_n ⊢ tv_n
+						$ lv ⊢ lv,lv_0 
+						var_l lv_0 ⊢ v0
+						_set_q { tv tv_n_0 v0 } ⊢ { tv tv_n_0 } 
+						var tv_n_0 ⊢ y0 
+						_some tv_n_1 ⊢ o 
+						_cns { { iq o } al } ⊢ al  
+						∎ { tv_n tv lv y0 al }  
 				∐. . 
 					var i0 ⊢ y 
 					∎ { tv_n tv lv y al } 
@@ -2064,7 +2067,54 @@
 				∎ { tv_n tv lv l al }
 			∐. _nil◂{} . 
 				_nil {} ⊢ l
-				∎ { tv_n tv lv l al } 
+				∎ { tv_n tv lv l al }
+		§ @.gen { tv_n tv lv y } 
+			$ y ⊢ 
+			∐ rcd◂l . 
+				gen_lst { tv_n tv lv l } ⊢ { tv_n tv lv l }
+				rcd l ⊢ y 
+				∎ { tv_n tv lv y } 
+			∐ dta◂{ a l } . 
+				gen_lst { tv_n tv lv l } ⊢ { tv_n tv lv l }
+				dta { a l } ⊢ y
+				∎ { tv_n tv lv y }
+			∐ imp◂{ y0 y1 } . 
+				gen { tv_n tv lv y0 } ⊢ { tv_n tv lv y0 } 
+				gen { tv_n tv lv y1 } ⊢ { tv_n tv lv y1 } 
+				imp { y0 y1 } ⊢ y 
+				∎ { tv_n tv lv y } 
+			∐ ivar◂i . 
+				_emt { tv_n tv lv } ⊢ a 
+				∎| 
+			∐. var◂i . 
+				_lod_q { tv i } ⊢ { tv i v } 
+				∐ v ⊢ var_l◂lv1 .
+					_setge { lv lv1 } ⊢ { lv lv1 b } 
+					∐ b'=0r .
+						_get_q { tv i } ⊢ { tv i vt } 
+						$ lv ⊢ lv,lv_0 
+						var_q lv_0 ⊢ vq 
+						_set_q { tv i vq } ⊢ { tv i } 
+						var i ⊢ y  
+						∎ { tv_n tv lv y }
+					∐. . 
+						var i ⊢ y 
+						∎ { tv_n tv lv y }
+				∐ v ⊢ var_ln◂y1 . 
+						gen { tv_n tv lv y1 } ⊢|  
+				∐. . 
+					_emt { tv i } ⊢ a 
+					∎|
+			@.gen_lst { tv_n tv lv l } 
+				$ l ⊢ 
+				∐ _cns◂{ y l } .
+					gen { tv_n tv lv y } ⊢ { tv_n tv lv y } 
+					gen_lst { tv_n tv lv l } ⊢ { tv_n tv lv l } 
+					_cns { y l } ⊢ l 
+					∎ { tv_n tv lv l } 
+				∐. _nil◂{} . 
+					_nil {} ⊢ l 
+					∎ { tv_n tv lv l } 
 		§ @.slv_ns_e { n mmv mev ev m_ns e_ns m_l } 
 			$ n ⊢ 
 			∐ ast.mdl_n◂{ w n } . 
