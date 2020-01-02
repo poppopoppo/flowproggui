@@ -326,8 +326,7 @@
 		@.dt_etr
 			∐ dt_def : _lst◂{ _s8 type }
 			∐ dt_ln : type
-		
-		
+				
 	§ pnt_cst c
 		$ c ⊢
 		∐ cst_v◂v . 
@@ -2017,6 +2016,55 @@
 					_set_q { tv i0 vy } ⊢ { tv i0 }  
 					∎ { tv_n tv }
 			∎∎ 
+		§ @.inst { tv_n tv lv y al } 
+			$ y ⊢
+			∐ rcd◂l . 
+				inst_lst { tv_n tv lv l al } ⊢ { tv_n tv lv l al } 
+				rcd l ⊢ y 
+				∎ { tv_n tv lv y al } 
+			∐ dta◂{ a l } . 
+				inst_lst { tv_n tv lv l al } ⊢ { tv_n tv lv l al }
+				dta { a l } ⊢ y 
+				∎ { tv_n tv lv y al } 
+			∐ imp◂{ y0 y1 } . 
+				inst { tv_n tv lv y0 al } ⊢ { tv_n tv lv y0 al } 
+				inst { tv_n tv lv y0 al } ⊢| 
+			∐ qvar◂{ lvq iq } .
+				assoc { al iq } ⊢ { al iq o } 
+				$ o ⊢ 
+				∐ _some◂i0 . 
+					var i0 ⊢ y0 
+					∎ { tv_n tv lv y0 al } 
+				∐. _none◂{} . 
+					$ tv_n ⊢ tv_n,tv_n_0
+					$ tv_n ⊢ tv_n,tv_n_1 
+					_inc tv_n ⊢ tv_n
+					$ lv ⊢ lv,lv_0 
+					var_l lv_0 ⊢ v0
+					_set_q { tv tv_n_0 v0 } ⊢ { tv tv_n_0 } 
+					var tv_n_0 ⊢ y0 
+					_some tv_n_1 ⊢ o 
+					_cns { { iq o } al } ⊢ al  
+					∎ { tv_n tv lv y0 al } 
+			∐ var◂i0 . 
+				_get_q { tv i0 } ⊢ { tv i0 v0 } 
+				∐ v0 ⊢ var_ln◂y0 . 
+					inst { tv_n tv lv y0 al } ⊢| 
+				∐. . 
+					var i0 ⊢ y 
+					∎ { tv_n tv lv y al } 
+			∐. ivar◂i . 
+				∎| 
+		@.inst_lst { tv_n tv lv l al } 
+			$ l ⊢ 
+			∐ _cns◂{ y l } . 
+				inst { tv_n tv lv y al } ⊢ { tv_n tv lv y al } 
+				inst_lst { tv_n tv lv l al } ⊢ { tv_n tv lv l al } 
+				_cns { y l } ⊢ l 
+				∎ { tv_n tv lv l al }
+			∐. _nil◂{} . 
+				_nil {} ⊢ l
+				∎ { tv_n tv lv l al } 
 		§ @.slv_ns_e { n mmv mev ev m_ns e_ns m_l } 
 			$ n ⊢ 
 			∐ ast.mdl_n◂{ w n } . 
@@ -2593,7 +2641,9 @@
 				» "_sts" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_lds" _ ⊢ se
-				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
+				add_e { ev_n ns_e se } ⊢ { ev_n ns_e }
+				» "_setge" _ ⊢ se
+				add_e { ev_n ns_e se } ⊢ { ev_n ns_e }  
 				» "_rep_movsb" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_add" _ ⊢ se
