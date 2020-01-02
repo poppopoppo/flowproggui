@@ -162,7 +162,7 @@ end
     n0 
   let print p = (string_of_int p) 
   let compare (p0:int) (p1:int) = compare p0 p1 
-  let eq p0 p1 = p0=p1 
+  let eq (p0:int) (p1:int) = p0=p1 
   let hash p0 = p0 
   (*type t = int ref
   type env = int
