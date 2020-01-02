@@ -1908,8 +1908,47 @@
 				∐ app : { type_exp type_exp }
 				∐ idx : _r64
 			@.var
-				∐ var_l : { _r64 _r64 }
+				∐ var_l : _r64
 				∐ var_ln : type_k
+
+		§ @.occurs { tv_n tv i0 lv0 y1 } 
+			∐ y1 ⊢ rcd◂l1 . 
+				occurs_lst { tv_n tv i0 lv0 l1 } ⊢| 
+			∐ y1 ⊢ dta◂{ a1 l1 } . 
+				occurs_lst { tv_n tv i0 lv0 l1 } ⊢| 
+			∐ y1 ⊢ imp◂{ y1_0 y1_1 } . 
+				occurs { tv_n tv i0 lv0 y1_0 } ⊢ { tv_n tv i0 lv0 } 
+				occurs { tv_n tv i0 lv0 y1_1 } ⊢ { tv_n tv i0 lv0 } 
+				∎ { tv_n tv i0 lv0 } 
+			∐ y1 ⊢ var◂i1 . 
+				∐ i0'=i1' . 
+					_emt { tv_n tv i0 lv0 } ⊢ { tv_n tv i0 lv0 } 
+					∎| 
+				∐. . 
+					_lod_q { tv i1 } ⊢ { tv i1 v1 } 
+					$ v1 ⊢ 
+					∐ var_ln◂y2 . 
+						occurs { tv_n tv i0 lv0 y2 } ⊢| 
+					∐. var_l◂lv1 . 
+						_setge { lv0 lv1 } ⊢ { lv0 lv1 b }
+						∐ b'=0r . 
+							$ lv0 ⊢ lv0,lv0_0 
+							_get_q { tv i1 } ⊢ { tv i1 vt } 
+							var_l lv0_0 ⊢ v2 
+							_set_q { tv i1 v2 } ⊢ { tv i1 } 
+							∎ { tv_n tv i0 lv0 } 
+						∐. . 
+							∎ { tv_n tv i0 lv0 } 
+			∐. . 
+				_emt { tv_n tv i0 lv0 } ⊢ { tv_n tv i0 lv0 } 
+				∎|
+			@.occurs_lst { tv_n tv i0 lv0 l1 } 
+				$ l1 ⊢ 
+				∐ _cns◂{ y1 l1 } . 
+					occurs { tv_n tv i0 lv0 y1 } ⊢ { tv_n tv i0 lv0 } 
+					occurs_lst { tv_n tv i0 lv0 l1 } ⊢| 
+				∐. _nil◂{} . 
+					∎ { tv_n tv i0 lv0 } 
 		§§ unify 
 		§ @.f { tv_n tv y0 y1 }
 				∐ y0 ⊢ var◂i0 . 
@@ -1942,24 +1981,41 @@
 				_lod_q { tv i0 } ⊢ { tv i0 v0 } 
 				∐ v0 ⊢ var_ln◂y2 . 
 					f { tv_n tv y2 y1 } ⊢|
-				∐ v0 ⊢ var_l◂{ lv vn } .  
-					f_l1 { tv_n tv i0 lv vn y1 } ⊢|
+				∐ v0 ⊢ var_l◂lv .  
+					f_l1 { tv_n tv i0 lv y1 } ⊢|
 				∐. . 
 					∎|  
-			@.f_l1 { tv_n tv i0 lv vn y1 } 
+			@.f_l1 { tv_n tv i0 lv y1 } 
 				∐ y1 ⊢ var◂i1 . 
 					∐ i0'=i1' . 
 						∎ { tv_n tv } 
 					∐. .
 						_lod_q { tv i1 } ⊢ { tv i1 v1 }
 						∐ v1 ⊢ var_ln◂y2 . 
-							f_l1 { tv_n tv i0 lv vn y2 } ⊢|  
-						∐ v1 ⊢ var_l◂{ lv1 vn1 } . 
-							∎| 
+							f_l1 { tv_n tv i0 lv y2 } ⊢|  
+						∐ v1 ⊢ var_l◂lv1 . 
+							_setge { lv lv1 } ⊢ { lv lv1 b }
+							∐ b'=0r .  
+								_get_q { tv i1 } ⊢ { tv i1 vt } 
+								var i0 ⊢ yv 
+								var_ln yv ⊢ v2 
+								_set_q { tv i1 v2 } ⊢ { tv i1 } 
+								∎ { tv_n tv } 
+							∐. . 
+								_get_q { tv i0 } ⊢ { tv i0 vt } 
+								var i1 ⊢ yv 
+								var_ln yv ⊢ v2 
+								_set_q { tv i0 v2 } ⊢ { tv i0 } 
+								∎ { tv_n tv }
 						∐. . 
 							∎|  
 				∐. .  
-					∎|
+					$ y1 ⊢ y1,y1_0 
+					occurs { tv_n tv i0 lv y1 } ⊢ { tv_n tv i0 lv }
+					_get_q { tv i0 } ⊢ { tv i0 vt }
+					var_ln y1_0 ⊢ vy 
+					_set_q { tv i0 vy } ⊢ { tv i0 }  
+					∎ { tv_n tv }
 			∎∎ 
 		§ @.slv_ns_e { n mmv mev ev m_ns e_ns m_l } 
 			$ n ⊢ 
