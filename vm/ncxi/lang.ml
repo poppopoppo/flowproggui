@@ -3867,6 +3867,7 @@ and init_prm () =
   gns.ns_e <- (Ast.Axm._set_q,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Idx 2)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],(-1))))::gns.ns_e;
   let em_set_q =
     let lb0 = lb () in
+    let lb_err = lb () in 
     "NS_E_ID_"^(Sgn.print Ast.Axm._set_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._set_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._set_q)^":\n"^
@@ -3874,7 +3875,7 @@ and init_prm () =
     "\tmov rax,"^(emt_reg_x86 1)^"\n"^
     "\tmov esi,DWORD [rdi+4]\n"^
     "\tcmp rax,rsi\n"^
-    "\tjge err\n"^
+    "\tjge "^lb_err^"\n"^
     (*"\tmov rsi,QWORD [rdi+8+8*rax]\n"^
       "\tnot rsi\n"^
       "\txor rsi,rsp\n"^
@@ -3892,7 +3893,10 @@ and init_prm () =
     "\tmov QWORD [rax+8],r8\n"^
     "\tmov rdi,0x0000_0001_"^(Printf.sprintf "%02x" 1)^"02_ffff\n"^
     "\tmov QWORD [rax],rdi\n"^
-    "\tret\n" in
+    "\tret\n"^
+    lb_err^":\n"^
+    "\tmov QWORD [err_n],3\n"^
+    "\tjmp err\n" in
   gns.ns_c <- (Ast.Axm._set_q,em_set_q)::gns.ns_c;
 
   !ns.ns_p <- ("_lod_q",Ast.Axm._lod_q)::!ns.ns_p;

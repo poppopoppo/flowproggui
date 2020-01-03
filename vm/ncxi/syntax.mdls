@@ -1,4 +1,3 @@
-
 ¶ @.p_lst ◂ a'
  	∐ p_cns : { a' p_lst◂a' }
 	∐ p_end : a'
@@ -2228,9 +2227,11 @@
 			_some n0 ⊢ o
 			_cns { { w o } re } ⊢ re
 			$ tv_n ⊢ tv_n,tv_n_0
+			_emt { rv rv_n } ⊢ { rv rv_n }
 			_set_q { rv rv_n tv_n_0 } ⊢ { rv rv_n } 
 			$ lv ⊢ lv,lv_0 
 			var_l lv_0 ⊢ v0 
+			_emt { tv tv_n } ⊢ { tv tv_n }
 			_set_q { tv tv_n v0 } ⊢ { tv tv_n }
 			$ tv_n ⊢ tv_n,tv_n_0 
 			var tv_n_0 ⊢ y 
@@ -2247,7 +2248,7 @@
 				∐. p ⊢ ast.RP.atm◂a .
 				 	$ a ⊢ 
 					∐ ast.mtc_reg◂w .
-						_emt { w n } ⊢ { w n }
+						_emt { lv w n } ⊢ { lv w n }
 						assoc { re w } ⊢ { re w o }
 						∐ o ⊢ _none◂{} .
 							$ n ⊢ n,n0
@@ -2256,6 +2257,8 @@
 							ast.RP.atm a ⊢ p
 							∎ { lv env0 rv tv tv_n n re p y }
 						∐. .
+							» "crt_mtc_ptn 0" _ ⊢ e 
+							_emt e ⊢ e 
 							∎|
 					∐ ast.mtc_cst◂c . 
 						slv_cst { env0 c } ⊢ { env0 c y } 
@@ -2303,7 +2306,7 @@
 					∎ { n re p }
 			@.crt_dst { n re a } 
 				 	∐ a ⊢ ast.dst_reg◂w .
-						_emt { w n } ⊢ { w n }
+						_emt { re w n } ⊢ { re w n }
 						assoc { re w } ⊢ { re w o }
 						∐ o ⊢ _none◂{} .
 							$ n ⊢ n,n0
@@ -2684,9 +2687,11 @@
 				_mk_arr max ⊢ { max mmv }
 				_mk_arr max ⊢ { max mev }
 				_mk_arr max ⊢ { max mtv }
-				_mk_arr max ⊢ { max rv }
+				» 4000r _ ⊢ max_r 
+				_mk_arr max_r ⊢ { max_r rv }
 				_mk_arr max ⊢ { max ev }
-				_mk_arr max ⊢ { max tv }
+				» 4000r _ ⊢ max_t 
+				_mk_arr max_t ⊢ { max_t tv }
 				» 1r _ ⊢ mv_n
 				» 0r _ ⊢ rv_n
 				» 0r _ ⊢ ev_n
