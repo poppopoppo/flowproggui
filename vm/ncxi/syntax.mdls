@@ -2243,19 +2243,30 @@
 			» 0r _ ⊢ a 
 			dta { a l } ⊢ y 
 			∎ y 
-		§ slv_cst { env0 c } 
+		§ slv_cst { lv env0 tv_n tv c } 
 			$ c ⊢ 
 			∐ ast.cst_name◂cn . 
 				$ env0 ⊢ { mmv mev ev m_ns e_ns m_l } 
 				slv_ns_e { cn mmv mev ev m_ns e_ns m_l } ⊢ { mmv mev ev m_ns e_ns m_l i_e }
-				$ { mmv mev ev m_ns e_ns m_l } ⊢ env0 	
+				_lod_q { ev i_e } ⊢ { ev i_e vi }
 				ast.cst_name i_e ⊢ c 
-				inst_r64 {} ⊢ y 
-				∎ { env0 c y }
+				var vi ⊢ y 
+				_nil {} ⊢ al 
+				inst { tv_n tv lv y al } ⊢ { tv_n tv lv y al } 
+				$ { mmv mev ev m_ns e_ns m_l } ⊢ env0 	
+				∎ { lv env0 tv_n tv c y }
 			∐. ast.cst_v◂v .
-				inst_r64 {} ⊢ y  
-				ast.cst_v v ⊢ c 
-				∎ { env0 c y } 
+				$ v ⊢ 
+				∐ ast.r64◂x . 
+					t_axm.r64 {} ⊢ y 
+					ast.r64 x ⊢ v 
+					ast.cst_v v ⊢ c 
+					∎ { lv env0 tv_n tv c y }
+				∐. ast.s8◂s . 
+					t_axm.s8 {} ⊢ y 
+					ast.s8 s ⊢ v 
+					ast.cst_v v ⊢ c 
+					∎ { lv env0 tv_n tv c y }  
 		§ newvar_l { tv_n tv lv } 
 			$ lv ⊢ lv,lv0 
 			var_l lv0 ⊢ v
@@ -2319,7 +2330,7 @@
 							_emt e ⊢ e 
 							∎|
 					∐ ast.mtc_cst◂c . 
-						slv_cst { env0 c } ⊢ { env0 c y } 
+						slv_cst { lv env0 tv_n tv c } ⊢ { lv env0 tv_n tv c y } 
 						ast.mtc_cst c ⊢ a 
 						ast.RP.atm a ⊢ p 
 						∎ { lv env0 rv tv tv_n n re p y }
@@ -2426,7 +2437,7 @@
 						_emt { re w } ⊢ { re w }
 						∎|
 				∐. a ⊢ ast.im_reg◂c .
-					slv_cst { env0 c } ⊢ { env0 c y0 }
+					slv_cst { lv env0 tv_n tv c } ⊢ { lv env0 tv_n tv c y0 }
 					ast.im_reg c ⊢ a 
 					∎ { lv env0 rv tv tv_n re a y0 }
 			@.csm_src_ptn_lst { lv env0 rv tv tv_n re l }
@@ -2485,45 +2496,45 @@
 				∐. .
 					_nil {} ⊢ l0
 					∎ { re l0 }
-		§ @.slv_test_var { env0 n re v } 
+		§ @.slv_test_var { lv env0 tv_n tv n re v } 
 			$ v ⊢ 
 			∐ ast.test_var◂w . 
 				assoc { re w } ⊢ { re w o } 
 				$ o ⊢ 
 				∐ _some◂i . 
 					ast.test_var i ⊢ v 
-					∎ { env0 n re v }
+					∎ { lv env0 tv_n tv n re v }
 				∐. _none◂{} . 
 					∎| 
 			∐. ast.test_cst◂c . 
-				slv_cst { env0 c } ⊢ { env0 c y }
+				slv_cst { lv env0 tv_n tv c } ⊢ { lv env0 tv_n tv c y }
 				ast.test_cst c ⊢ v 
-				∎ { env0 n re v }
-		§ slv_exp_s8 { env0 e } 
+				∎ { lv env0 tv_n tv n re v }
+		§ slv_exp_s8 { lv env0 tv_n tv e } 
 			$ e ⊢ 
 			∐ ast.exp_s8_cst◂c . 
-				slv_cst { env0 c } ⊢ { env0 c y } 
+				slv_cst { lv env0 tv_n tv c } ⊢ { lv env0 tv_n tv c y } 
 				ast.exp_s8_cst c ⊢ e 
-				∎ { env0 e }
+				∎ { lv env0 tv_n tv e }
 			∐ ast.exp_s8_s8◂s . 
 				ast.exp_s8_s8 s ⊢ e 
-				∎ { env0 e } 
+				∎ { lv env0 tv_n tv e } 
 			∐ ast.exp_s8_idx◂p . 
 				ast.exp_s8_idx p ⊢ e 
-				∎ { env0 e } 
+				∎ { lv env0 tv_n tv e } 
 			∐. ast.exp_s8_for◂p . 
 				ast.exp_s8_for p ⊢ e 
-				∎ { env0 e } 
-		§ @.slv_exp_s8_lst { env0 el } 
+				∎ { lv env0 tv_n tv e } 
+		§ @.slv_exp_s8_lst { lv env0 tv_n tv el } 
 			$ el ⊢ 
 			∐ _cns◂{ hd el } .
-				slv_exp_s8 { env0 hd } ⊢ { env0 e } 
-				slv_exp_s8_lst { env0 el } ⊢ { env0 el }
+				slv_exp_s8 { lv env0 tv_n tv hd } ⊢ { lv env0 tv_n tv e } 
+				slv_exp_s8_lst { lv env0 tv_n tv el } ⊢ { lv env0 tv_n tv el }
 				_cns { e el } ⊢ el 
-				∎ { env0 el }
+				∎ { lv env0 tv_n tv el }
 			∐. _nil◂{} . 
 				_nil {} ⊢ el 
-				∎ { env0 el } 
+				∎ { lv env0 tv_n tv el } 
 		§ @.slv_r { lv env0 rv tv tv_n n re lc }
 			_emt { lv n } ⊢ { lv n }
 			$ lc ⊢
@@ -2561,7 +2572,7 @@
 					ast.seq { ll lc } ⊢ lc 
 					∎ { lv env0 rv tv tv_n n re lc } 
 				∐ ast.op_exp_cst◂{ c s d } .
-					slv_cst { env0 c } ⊢ { env0 c y } 
+					slv_cst { lv env0 tv_n tv c } ⊢ { lv env0 tv_n tv c y } 
 					csm_src_ptn { lv env0 rv tv tv_n re s } ⊢ { lv env0 rv tv tv_n re s y_s } 
 					crt_dst_ptn { lv rv tv tv_n n re d } ⊢ { lv rv tv tv_n n re d y_d } 
 					ast.op_exp_cst { c s d } ⊢ ll 
@@ -2569,7 +2580,7 @@
 					ast.seq { ll lc } ⊢ lc 
 					∎ { lv env0 rv tv tv_n n re lc }
 				∐. ast.op_exp_s8◂{ pl ss ds } .
-					slv_exp_s8_lst { env0 pl } ⊢ { env0 pl0 } 
+					slv_exp_s8_lst { lv env0 tv_n tv pl } ⊢ { lv env0 tv_n tv pl0 } 
 					##_nil {} ⊢ pl0 
 					csm_src_lst { lv env0 rv tv tv_n re ss } ⊢ { lv env0 rv tv tv_n re ss y0 } 
 					crt_dst_lst { lv rv tv tv_n n re ds } ⊢ { lv rv tv tv_n n re ds yl } 
@@ -2644,8 +2655,8 @@
 					_cns { t tl } ⊢ tl 
 					∎ { lv env0 rv tv tv_n n re tl } 
 				∐. ast.mtc_test◂{ v0 v1 } .  
-					slv_test_var { env0 n re v0 } ⊢ { env0 n re v0 } 
-					slv_test_var { env0 n re v1 } ⊢ { env0 n re v1 } 
+					slv_test_var { lv env0 tv_n tv n re v0 } ⊢ { lv env0 tv_n tv n re v0 } 
+					slv_test_var { lv env0 tv_n tv n re v1 } ⊢ { lv env0 tv_n tv n re v1 } 
 					ast.mtc_test { v0 v1 } ⊢ t 
 					slv_mtc_line { lv env0 rv tv tv_n n re tl } ⊢ { lv env0 rv tv tv_n n re tl } 
 					_cns { t tl } ⊢ tl 
