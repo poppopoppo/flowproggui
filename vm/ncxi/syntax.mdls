@@ -1888,7 +1888,8 @@
 			@.cst_vct = _arr◂cst_k
 			@.type_vct = _arr◂var
 			@.mdl_k = mdl_env
-			@.reg_k = { _s8 _r64 _r64 } ## { name pos type-var } 
+			@.reg_k = { _s8 _r64 _r64 } 
+			## { name pos type-var } 
 			@.etr_k
 				∐ k_op : { ast.DP◂_r64 ast.lc_code◂_r64◂_r64 }
 				∐ k_cst_v : ast.cst_v 
@@ -2051,6 +2052,7 @@
 					∎ { tv_n tv }
 			∎∎ 
 		§ @.inst { tv_n tv lv y al } 
+			_emt { lv y al } ⊢ { lv y al } 
 			$ y ⊢
 			∐ rcd◂l . 
 				inst_lst { tv_n tv lv l al } ⊢ { tv_n tv lv l al } 
@@ -2064,7 +2066,7 @@
 				inst { tv_n tv lv y0 al } ⊢ { tv_n tv lv y0 al } 
 				inst { tv_n tv lv y0 al } ⊢| 
 			∐ var◂i0 . 
-				_get_q { tv i0 } ⊢ { tv i0 v0 } 
+				_lod_q { tv i0 } ⊢ { tv i0 v0 } 
 				∐ v0 ⊢ var_ln◂y0 . 
 					inst { tv_n tv lv y0 al } ⊢|
 				∐ v0 ⊢ var_q◂lvq .
@@ -2088,6 +2090,7 @@
 					var i0 ⊢ y 
 					∎ { tv_n tv lv y al } 
 			∐. ivar◂i . 
+				_emt { tv_n tv } ⊢ { tv_n tv } 
 				∎| 
 		@.inst_lst { tv_n tv lv l al } 
 			$ l ⊢ 
@@ -2522,6 +2525,7 @@
 				_nil {} ⊢ el 
 				∎ { env0 el } 
 		§ @.slv_r { lv env0 rv tv tv_n n re lc }
+			_emt { lv n } ⊢ { lv n }
 			$ lc ⊢
 			∐ ast.jmp◂{ en x } . 
 				$ env0 ⊢ { mmv mev ev m_ns e_ns m_l } 
@@ -2538,6 +2542,7 @@
 			∐ ast.seq◂{ ll lc } .
 				$ ll ⊢
 				∐ ast.op_name◂{ o s d } .
+					_emt { o s d } ⊢ { o s d } 
 					$ env0 ⊢ { mmv mev ev m_ns e_ns m_l } 
 					slv_ns_e { o mmv mev ev m_ns e_ns m_l } ⊢ { mmv mev ev m_ns e_ns m_l i_e } 
 					$ { mmv mev ev m_ns e_ns m_l } ⊢ env0 
@@ -2818,7 +2823,7 @@
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢| 
 			@.slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel }
-				##_emt ns_m ⊢ ns_m 
+				_emt il ⊢ il 
 				$ gel ⊢ 
 				∐ _cns◂{ e gel } .
 					$ e ⊢ 
