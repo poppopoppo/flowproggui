@@ -2261,6 +2261,12 @@
 			_inc tv_n ⊢ tv_n 
 			var tv_n0 ⊢ y 
 			∎ { tv_n tv lv y }
+		§ newvar_ln { tv_n tv y } 
+			var_ln y ⊢ v 
+			_set_q { tv tv_n v } ⊢ { tv tv_n }
+			$ tv_n ⊢ tv_n,tv_n0 
+			_inc tv_n ⊢ tv_n 
+			∎ { tv_n tv tv_n0 }
 		§ inst_imp { tv_n tv lv y } 
 			_nil {} ⊢ al 
 			inst { tv_n tv lv y al } ⊢ { tv_n tv lv y al }
@@ -2343,51 +2349,54 @@
 					_nil {} ⊢ l0
 					_nil {} ⊢ y 
 					∎ { lv env0 rv tv tv_n n re l0 y }
-		§ @.crt_dst_ptn { n re p }
+		§ @.crt_dst_ptn { lv rv tv tv_n n re p }
 				_emt { n re p } ⊢ { n re p }
 				∐ p ⊢ ast.RP.rcd◂l .
-					crt_dst_ptn_lst { n re l } ⊢ { n re l }
+					crt_dst_ptn_lst { lv rv tv tv_n n re l } ⊢ { lv rv tv tv_n n re l y }
 					ast.RP.rcd l ⊢ p
-					∎ { n re p }
+					rcd y ⊢ y 
+					∎ { lv rv tv tv_n n re p y }
 				∐. p ⊢ ast.RP.atm◂a .
-					crt_dst { n re a } ⊢ { n re a } 
+					crt_dst { lv rv tv tv_n n re a } ⊢ { lv rv tv tv_n n re a y } 
 					ast.RP.atm a ⊢ p
-					∎ { n re p }
-			@.crt_dst { n re a } 
+					∎ { lv rv tv tv_n n re p y }
+			@.crt_dst { lv rv tv tv_n n re a } 
 				 	∐ a ⊢ ast.dst_reg◂w .
 						_emt { re w n } ⊢ { re w n }
 						assoc { re w } ⊢ { re w o }
 						∐ o ⊢ _none◂{} .
 							$ n ⊢ n,n0
-							_some n0 ⊢ o
-							_cns { { w o } re } ⊢ re
-							$ n ⊢ n,n0
-							_inc n ⊢ n
 							ast.dst_reg n0 ⊢ a
-							∎ { n re a }
+							ini_reg { lv w n rv re tv_n tv } ⊢ { lv n rv re tv_n tv y } 
+							∎ { lv rv tv tv_n n re a y }
 						∐. .
 							∎|
 					∐. a ⊢ ast.wc◂{} .
+						newvar_l { tv_n tv lv } ⊢ { tv_n tv lv y } 
 						ast.wc {} ⊢ a
-						∎ { n re a }
-			@.crt_dst_ptn_lst { n re l }
+						∎ { lv rv tv tv_n n re a y }
+			@.crt_dst_ptn_lst { lv rv tv tv_n n re l }
 				∐ l ⊢ _cns◂{ hd l } .
-					crt_dst_ptn { n re hd } ⊢ { n re hd }
-					crt_dst_ptn_lst { n re l } ⊢ { n re l }
+					crt_dst_ptn { lv rv tv tv_n n re hd } ⊢ { lv rv tv tv_n n re hd y }
+					crt_dst_ptn_lst { lv rv tv tv_n n re l } ⊢ { lv rv tv tv_n n re l yl }
 					_cns { hd l } ⊢ l
-					∎ { n re l }
+					_cns { y yl } ⊢ y 
+					∎ { lv rv tv tv_n n re l y }
 				∐. .
 					_nil {} ⊢ l0
-					∎ { n re l0 }
-			@.crt_dst_lst { n re l }
+					_nil {} ⊢ y 
+					∎ { lv rv tv tv_n n re l0 y }
+			@.crt_dst_lst { lv rv tv tv_n n re l }
 				∐ l ⊢ _cns◂{ hd l } .
-					crt_dst { n re hd } ⊢ { n re hd }
-					crt_dst_lst { n re l } ⊢ { n re l }
+					crt_dst { lv rv tv tv_n n re hd } ⊢ { lv rv tv tv_n n re hd y }
+					crt_dst_lst { lv rv tv tv_n n re l } ⊢ { lv rv tv tv_n n re l yl }
 					_cns { hd l } ⊢ l
-					∎ { n re l }
+					_cns { y yl } ⊢ y 
+					∎ { lv rv tv tv_n n re l y }
 				∐. .
 					_nil {} ⊢ l0
-					∎ { n re l0 }
+					_nil {} ⊢ y 
+					∎ { lv rv tv tv_n n re l0 y }
 		§ @.csm_src_ptn { re p }
 				∐ p ⊢ ast.RP.rcd◂l .
 					csm_src_ptn_lst { re l } ⊢ { re l }
@@ -2520,7 +2529,7 @@
 					slv_ns_e { o mmv mev ev m_ns e_ns m_l } ⊢ { mmv mev ev m_ns e_ns m_l i_e } 
 					$ { mmv mev ev m_ns e_ns m_l } ⊢ env0 
 					csm_src_ptn { re s } ⊢ { re s }
-					crt_dst_ptn { n re d } ⊢ { n re d }
+					crt_dst_ptn { lv rv tv tv_n n re d } ⊢ { lv rv tv tv_n n re d y0 }
 					ast.op_name { i_e s d } ⊢ ll
 					slv_r { lv env0 rv tv tv_n n re lc } ⊢ { lv env0 rv tv tv_n n re lc }
 					ast.seq { ll lc } ⊢ lc
@@ -2528,7 +2537,7 @@
 				∐ ast.op_app◂{ f x y } .
 					csm_src { re f } ⊢ { re f } 
 					csm_src_ptn { re x } ⊢ { re x } 
-					crt_dst_ptn { n re y } ⊢ { n re y } 
+					crt_dst_ptn { lv rv tv tv_n n re y } ⊢ { lv rv tv tv_n n re y yt } 
 					ast.op_app { f x y } ⊢ ll 
 					slv_r { lv env0 rv tv tv_n n re lc } ⊢ { lv env0 rv tv tv_n n re lc }
 					ast.seq { ll lc } ⊢ lc 
@@ -2536,7 +2545,7 @@
 				∐ ast.op_exp_cst◂{ c s d } .
 					slv_cst { env0 c } ⊢ { env0 c y } 
 					csm_src_ptn { re s } ⊢ { re s } 
-					crt_dst_ptn { n re d } ⊢ { n re d } 
+					crt_dst_ptn { lv rv tv tv_n n re d } ⊢ { lv rv tv tv_n n re d y0 } 
 					ast.op_exp_cst { c s d } ⊢ ll 
 					slv_r { lv env0 rv tv tv_n n re lc } ⊢ { lv env0 rv tv tv_n n re lc }
 					ast.seq { ll lc } ⊢ lc 
@@ -2545,7 +2554,7 @@
 					slv_exp_s8_lst { env0 pl } ⊢ { env0 pl0 } 
 					##_nil {} ⊢ pl0 
 					csm_src_lst { re ss } ⊢ { re ss } 
-					crt_dst_lst { n re ds } ⊢ { n re ds } 
+					crt_dst_lst { lv rv tv tv_n n re ds } ⊢ { lv rv tv tv_n n re ds yl } 
 					ast.op_exp_s8 { pl0 ss ds } ⊢ ll 
 					slv_r { lv env0 rv tv tv_n n re lc } ⊢ { lv env0 rv tv tv_n n re lc } 
 					ast.seq { ll lc } ⊢ lc 
@@ -2564,7 +2573,7 @@
 					∎ { lv env0 rv tv tv_n n re lc } 
 				∐. ast.id_line◂{ dl lc } . 
 					csm_src_ptn { re sp } ⊢ { re sp } 
-					crt_dst_ptn_lst { n re dl } ⊢ { n re dl }
+					crt_dst_ptn_lst { lv rv tv tv_n n re dl } ⊢ { lv rv tv tv_n n re dl y }
 					slv_r { lv env0 rv tv tv_n n re lc } ⊢ { lv env0 rv tv tv_n n re lc } 
 					ast.id_line { dl lc } ⊢ ll
 					ast.op_id { sp ll } ⊢ lc 
@@ -2680,7 +2689,7 @@
 					$ q ⊢ 
 					∐ _cns◂{ { d lc } q } . 
 						_nil {} ⊢ re 
-						crt_dst_ptn { r_n re d } ⊢ { r_n re d } 
+						crt_dst_ptn { lv rv tv tv_n r_n re d } ⊢ { lv rv tv tv_n r_n re d y0 } 
 						slv_r { lv env0 rv tv tv_n r_n re lc } ⊢ { lv env0 rv tv tv_n r_n re lc } 
 						f_l1 { lv env0 rv tv tv_n r_n q } ⊢ { lv env0 rv tv tv_n r_n q } 
 						_cns { { d lc } q } ⊢ q 
@@ -2763,6 +2772,11 @@
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_emt" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				imp { y0 y1 } ⊢ y 
+				newvar_ln { tv_n tv y } ⊢ { tv_n tv i0 } 
+				_set_q { ev ev_n i0 } ⊢ { ev ev_n }
 				» "_inc" _ ⊢ se
 				add_e { ev_n ns_e se } ⊢ { ev_n ns_e } 
 				» "_dec" _ ⊢ se
@@ -2835,7 +2849,7 @@
 						∐ ast.lc_def◂{ d lc } .
 							_nil {} ⊢ ns_r
 							» 0r _ ⊢ lv 
-							crt_dst_ptn { rv_n ns_r d } ⊢ { rv_n ns_r d } 
+							crt_dst_ptn { lv rv tv tv_n rv_n ns_r d } ⊢ { lv rv tv tv_n rv_n ns_r d y } 
 							slv_r { lv { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r lc } ⊢ { lv { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r lc } 
 							add_e { ev_n ns_e w } ⊢ { ev_n ns_e }
 							slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢|
