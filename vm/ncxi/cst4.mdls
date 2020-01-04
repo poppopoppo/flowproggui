@@ -1,3 +1,9 @@
+§§ t_axm 
+  § r64 = 0r 
+  § s8 = 1r 
+  § lst = 2r 
+  § opn = 3r  
+  ∎∎
 § @.lp0 x 
   lp0 x ⊢| 
 § @.lp1 x 
@@ -10,4 +16,6 @@
 § A « 
   » 10r _ ⊢ x 
   lp1 x ⊢ x 
+  » t_axm.r64 _ ⊢ a 
+  _emt a ⊢ a 
   ∎ x

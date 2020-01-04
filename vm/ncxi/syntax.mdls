@@ -1909,6 +1909,38 @@
 				∐ var_q : _r64 
 				∐ var_ln : type_k
 
+		§§ t_axm 
+  		§§ id 
+				§ r64 = 0r 
+  			§ s8 = 1r 
+  			§ lst = 2r 
+  			§ opn = 3r  
+  			∎∎
+			§ r64 {} 
+				_nil {} ⊢ l 
+				» id.r64 _ ⊢ a 
+				dta { a l } ⊢ y 
+				∎ y
+			§ s8 {} 
+				_nil {} ⊢ l
+				» id.s8 _ ⊢ a  
+				dta { a l } ⊢ y 
+				∎ y 
+			§ lst y 
+				_nil {} ⊢ l 
+				_cns { y l } ⊢ l 
+				» id.lst _ ⊢ a 
+				dta { a l } ⊢ y 
+				∎ y 
+			§ opn y 
+				_nil {} ⊢ l 
+				_cns { y l } ⊢ l 
+				» id.opn _ ⊢ a 
+				dta { a l } ⊢ y 
+				∎ y 
+			∎∎
+
+		
 		§ @.occurs { tv_n tv i0 lv0 y1 } 
 			∐ y1 ⊢ rcd◂l1 . 
 				occurs_lst { tv_n tv i0 lv0 l1 } ⊢| 
@@ -2221,7 +2253,24 @@
 				inst_r64 {} ⊢ y  
 				ast.cst_v v ⊢ c 
 				∎ { env0 c y } 
-		
+		§ newvar_l { tv_n tv lv } 
+			$ lv ⊢ lv,lv0 
+			var_l lv0 ⊢ v
+			_set_q { tv tv_n v } ⊢ { tv tv_n } 
+			$ tv_n ⊢ tv_n,tv_n0 
+			_inc tv_n ⊢ tv_n 
+			var tv_n0 ⊢ y 
+			∎ { tv_n tv lv y }
+		§ inst_imp { tv_n tv lv y } 
+			_nil {} ⊢ al 
+			inst { tv_n tv lv y al } ⊢ { tv_n tv lv y al }
+			newvar_l { tv_n tv lv } ⊢ { tv_n tv lv y0 }
+			newvar_l { tv_n tv lv } ⊢ { tv_n tv lv y1 } 
+			$ y0 ⊢ y0,y0_0 
+			$ y1 ⊢ y1,y1_0 
+			imp { y0_0 y1_0 } ⊢ y2 
+			unify.f { tv_n tv y y2 } ⊢ { tv_n tv } 
+			∎ { tv_n tv lv y0 y1 }
 		§ ini_reg { lv w rv_n rv re tv_n tv }
 			$ rv_n ⊢ rv_n,n0
 			_some n0 ⊢ o

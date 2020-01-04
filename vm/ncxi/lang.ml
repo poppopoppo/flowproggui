@@ -122,12 +122,12 @@ module Types = struct
     v
   let print_v v =
     ( match !v with 
-    | WC p
-    | V(p,_) 
-    | Q(p,_) ->  (Sgn.print p)^"'" 
-    | N n -> pnt_name n 
-    | N_Ln(n,_) -> pnt_name n 
-    | Ln _ -> "_'" )
+      | WC p
+      | V(p,_) 
+      | Q(p,_) ->  (Sgn.print p)^"'" 
+      | N n -> pnt_name n 
+      | N_Ln(n,_) -> pnt_name n 
+      | Ln _ -> "_'" )
   let rec print y =
     ( match y with
       | Axm p when p=Axm.r64 -> "_r64"
@@ -4131,13 +4131,13 @@ and emt_mov_tbl v n =
       let j0 = !j in 
       let (pj,vj,_) = v.(j0) in
       let b = 
-            ( match vti with 
-            | Etr_Dst -> 
-              ( try 
-              let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in
-              true 
+        ( match vti with 
+          | Etr_Dst -> 
+            ( try 
+                let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in
+                true 
               with _ -> false ) 
-              | _ -> false ) in
+          | _ -> false ) in
       ( match b with 
         | true -> 
           ov.(i)<-(o0-j0);
@@ -4159,14 +4159,14 @@ and emt_mov_tbl v n =
       let o0 = !o in 
       let j0 = !j in 
       let (pj,vj,_) = v.(j0) in
-     let b = 
-            ( match vti with 
-            | Etr_Dst -> 
-              ( try 
-              let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in
-              true 
+      let b = 
+        ( match vti with 
+          | Etr_Dst -> 
+            ( try 
+                let _ = unify [] (inst 0 (Var vi)) (inst 0 (Var vj)) in
+                true 
               with _ -> false ) 
-              | _ -> false ) in
+          | _ -> false ) in
       ( match b with 
         | true -> 
           vv.(o0)<-(Some(i,j0));
@@ -4206,7 +4206,7 @@ and emt_mov_tbl v n =
   let (ed,_) = 
     Array.fold_left 
       ( fun (ed,i) o -> 
-         (ed^"%define MOV_OFS_"^(string_of_int i)^" "^(string_of_int o)^"\n",i+1))
+          (ed^"%define MOV_OFS_"^(string_of_int i)^" "^(string_of_int o)^"\n",i+1))
       ("",0) ov in 
   (ed,em,"MOV_TBL:\n"^e0)
 and emt_exe m =
@@ -5451,20 +5451,40 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
               else
                 "\tmov "^(emt_reg_x86 im)^",0x"^(Int64.format "%x" x)^"\n" )^
             "\tbts r12,"^(string_of_int im)^"\n"
-          | IR_Exp(Ast.Name { contents=Stt_Axm p },_,Rcd_Ptn.A y) when p=Ast.Axm._args ->
-            let im = RSet.min_0 (rset_iv iv) in
-            let iy = RP.A(R.Idx im) in
-            let _ = mk_idx_iv iv iy (mk_idx_ptn (RP.A y)) in
-            let c0 = cmt ("\t» _args _ ⊢ "^(emt_ptn iy)^rtl^(pnt_ptn (RP.A y))) in
-            c_l^
-            c0^
-            push_all^
-            "\tmov rdi,[args]\n"^
-            "\tclc\n"^
-            "\tcall dcp\n"^
-            pop_all^
-            "\tmov "^(emt_reg_x86 im)^",rax\n"^
-            "\tbtr r12,"^(string_of_int im)^"\n"
+          | IR_Exp(Ast.Name n,_,Rcd_Ptn.A y) ->
+            ( match !n with 
+              | Stt_Axm p when p = Ast.Axm._args -> 
+                let im = RSet.min_0 (rset_iv iv) in
+                let iy = RP.A(R.Idx im) in
+                let _ = mk_idx_iv iv iy (mk_idx_ptn (RP.A y)) in
+                let c0 = cmt ("\t» _args _ ⊢ "^(emt_ptn iy)^rtl^(pnt_ptn (RP.A y))) in
+                c_l^
+                c0^
+                push_all^
+                "\tmov rdi,[args]\n"^
+                "\tclc\n"^
+                "\tcall dcp\n"^
+                pop_all^
+                "\tmov "^(emt_reg_x86 im)^",rax\n"^
+                "\tbtr r12,"^(string_of_int im)^"\n"
+              | _ -> 
+                let p = slv_ns0 !ns n in
+                let e = get_ns_e gns p in
+                ( match !e with 
+                  | Cst_Stt Cst.R64 x -> 
+                    let im = RSet.min_0 (rset_iv iv) in
+                    let iy = RP.A(R.Idx im) in
+                    let _ = mk_idx_iv iv iy (mk_idx_ptn (RP.A y)) in
+                    let c0 = cmt ("\t» "^(print_exp (ExpCst(Cst.R64 x)))^" _ ⊢ "^(emt_ptn iy)^rtl^(pnt_ptn (RP.A y))) in
+                    c_l^
+                    c0^
+                    ( if im<8 then
+                        "\tmov rdi,0x"^(Int64.format "%x" x)^"\n"^
+                        "\tmov "^(emt_reg_x86 im)^",rdi\n"
+                      else
+                        "\tmov "^(emt_reg_x86 im)^",0x"^(Int64.format "%x" x)^"\n" )^
+                    "\tbts r12,"^(string_of_int im)^"\n"
+                  | _ -> err "emt_ir exp x0" ) )
           | IR_S8 { contents=IR_S8_C(pl,rs0,rs1) } ->
             let ls0 = Array.length rs0 in
             let s0 = rset_iv iv in 
