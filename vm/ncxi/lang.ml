@@ -1452,14 +1452,14 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
               let _ = inst_mtc_ptn gns ns l e in
               () )
           () pns in
-      Util.Log.add "slv Mtc 3\n";
+      Util.Log.add "slv Mtc 4\n";
       let (_,ys) =
         Array.fold_left
           ( fun (j,ys) (_,p) ->
               let y1 = slv gns ns l p in
               (j+1,ys |+| [|y1|]) )
           (0,[||]) pns in
-      Util.Log.add "slv Mtc 3\n";
+      Util.Log.add "slv Mtc 5\n";
       let tts = Array.map (fun y -> inst (l+1) y) ys in
       let rrt = Var (newvar_l (l+1)) in
       let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) rrt (Array.to_list tts) in
@@ -3094,16 +3094,15 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                 ( fun l (n,y2,y1,p0,r0,ep) ->
                     (*Util.pnt true @@ "Etr "^n^"\n";*)
                     let y1_x = slv gns !ns 0 !p0 in
+                    let _ = unify [] (Var y1) (inst 0 y1_x) in
                     (n,y2,y1,y1_x,p0,r0,ep)::l )
                 [] l_0 in
             let l_2 =
               List.fold_left
                 ( fun l (n,y2,y1,y1_x,p0,r0,ep) ->
                     (*Util.Log.add "l_2:0\n";*)
-                    let y1_0 = inst 0 (Var y1) in
-                    let _ = unify [] y1_0 (inst 0 y1_x) in
                     gen (ref []) (-1) (Var y2);
-                    gen (ref []) (-1) y1_0;
+                    gen (ref []) (-1) (Var y1);
                     let iv0 = Hashtbl.create 10 in
                     let i0 = crt_ptn_iv gns (mk_idx_ptn r0) iv0 in
                     let s1 = Hashtbl.create 10 in
@@ -3115,10 +3114,10 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                     (n,y2,y1,y1_x,p0,r0,i0,i1,iv0,ep)::l )
                 [] l_1 in
             List.fold_left
-              ( fun (e_0,e_1,e_2,pp) (n,_,y0,y1,p0,_,i0,i1,s0,ep) ->
+              ( fun (e_0,e_1,e_2,pp) (n,y2,_,_,p0,_,i0,i1,s0,ep) ->
                   let e_p = emt_ir i1 gns ns s0 !p0 in
                   let pp =
-                    pp^tbs^"\t@."^n^" : "^(Types.print_t (Var y0))^" ⊢ "^(Types.print_t y1)^"\n" in
+                    pp^tbs^"\t@."^n^" : "^(Types.print_t (Var y2))^"\n" in
                   let c0 = cmt ("\t|» "^(emt_ptn i0)) in
                   let l_e = "NS_E_"^(Sgn.print ep) in
                   let l_e_rdi = "NS_E_RDI_"^(Sgn.print ep) in
