@@ -7,7 +7,8 @@
   ##_add q ⊢ r 
   _inc x ⊢ r 
   _mk_arr r ⊢ { r a } 
-  ∎ { y z r }
+  _set_q { a r z } ⊢ { a r } 
+  ∎ { y r }
 §§ A 
   §§ B 
   ∎∎ 

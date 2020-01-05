@@ -921,3 +921,11 @@ _rX : _RX → *
   ∐∐. t' ⊢ vct_rp8◂h' . 
     rp8.lod { v i } ⊢ { v i a } 
     ∎ { v i a }
+
+
+Hydra 
+
+
+Hydrix 
+HEAD 
+SP-HEAD
