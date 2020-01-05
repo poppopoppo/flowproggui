@@ -3957,7 +3957,8 @@ and init_prm () =
     let lb0 = lb () in
     let lb1 = lb () in
     let lba = lb () in 
-    let lb_err = lb () in 
+    let lb_err0 = lb () in 
+    let lb_err1 = lb () in 
     "NS_E_ID_"^(Sgn.print Ast.Axm._get_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._get_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._get_q)^":\n"^
@@ -3965,7 +3966,7 @@ and init_prm () =
     "\tmov rax,"^(emt_reg_x86 1)^"\n"^
     "\tmov esi,DWORD [rdi+4]\n"^
     "\tcmp rax,rsi\n"^
-    "\tjge err\n"^
+    "\tjge "^lb_err0^"\n"^
     "\tmov rsi,QWORD [rdi+8+8*rax]\n"^
     "\tmov QWORD [rdi+8+8*rax],NULL\n"^
     "\tmov rdi,rsi\n"^
@@ -3983,13 +3984,17 @@ and init_prm () =
     "\tjmp "^lb1^"\n"^
     lba^":\n"^
     "\tcmp rdi,NULL\n"^
-    "\tjz err\n"^
+    "\tjz "^lb_err1^"\n"^
     lb0^":\n"^
     "\tbtr r12,"^(string_of_int 2)^"\n"^
     lb1^":\n"^
     "\tmov "^(emt_reg_x86 2)^",rdi\n"^
-    "\tret\n"^lb_err^":\n"^
+    "\tret\n"^
+    lb_err0^":\n"^
     "\tmov QWORD [err_n],5\n"^
+    "\tjmp err\n"^
+    lb_err1^":\n"^
+    "\tmov QWORD [err_n],8\n"^
     "\tjmp err\n" in
   gns.ns_c <- (Ast.Axm._get_q,em_get_q)::gns.ns_c;
 
@@ -4841,6 +4846,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
       c_l^c0^e0^e1^
       "\tret\n"
     | Exn _ ->
+      "\tmov QWORD [err_n],-1\n"^
       "\tjmp err\n"
     | Mtc ps ->
       let psl = Array.to_list ps in

@@ -3,9 +3,10 @@
 ¶ s a',b' = t◂a'◂b' 
 ¶ u = s◂_r64◂_s8
 § @.f0 { x y z }  
-  $ x ⊢ q,i
-  _add q ⊢ r 
-  _inc i ⊢ e 
+  ##$ x ⊢ q,i
+  ##_add q ⊢ r 
+  _inc x ⊢ r 
+  _mk_arr r ⊢ { r a } 
   ∎ { y z r }
 §§ A 
   §§ B 
