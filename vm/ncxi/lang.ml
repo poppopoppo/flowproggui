@@ -3867,6 +3867,7 @@ and init_prm () =
   let em_set_q =
     let lb0 = lb () in
     let lb_err = lb () in 
+    let lb_err0 = lb () in 
     "NS_E_ID_"^(Sgn.print Ast.Axm._set_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._set_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._set_q)^":\n"^
@@ -3880,7 +3881,7 @@ and init_prm () =
       "\txor rsi,rsp\n"^
       "\tmov rsi,[rsi]\n"^ *)
     "\tbt QWORD [rdi+8+8*rax],63\n"^
-    "\tjnc err\n"^
+    "\tjnc "^lb_err0^"\n"^
     "\tbt r12,"^(string_of_int 2)^"\n"^
     "\tjc "^lb0^"\n"^
     "\tmov rsi,"^(emt_reg_x86 2)^"\n"^
@@ -3895,6 +3896,9 @@ and init_prm () =
     "\tret\n"^
     lb_err^":\n"^
     "\tmov QWORD [err_n],3\n"^
+    "\tjmp err\n"^
+    lb_err0^":\n"^
+    "\tmov QWORD [err_n],7\n"^
     "\tjmp err\n" in
   gns.ns_c <- (Ast.Axm._set_q,em_set_q)::gns.ns_c;
 
