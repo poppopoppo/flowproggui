@@ -2598,11 +2598,15 @@
 					_lod_q { tv iv } ⊢ { tv iv yt }  
 					_emt { i_e iv yt } ⊢ { i_e iv yt } 
 					var iv ⊢ yo 
+					_inc lv ⊢ lv 
 					inst { tv_n tv lv yo } ⊢ { tv_n tv lv yo } 
+					$ yo ⊢ yo,yo0 
 					csm_src_ptn { lv env0 rv tv tv_n re s } ⊢ { lv env0 rv tv tv_n re s y_s }
 					crt_dst_ptn { lv rv tv tv_n n re d } ⊢ { lv rv tv tv_n n re d y_d }
 					imp { y_s y_d } ⊢ y_s_d 
 					unify.f { tv_n tv yo y_s_d } ⊢ { tv_n tv } 
+					_dec lv ⊢ lv 
+					gen { tv_n tv lv yo0 } ⊢ { tv_n tv lv yo0 } 
 					ast.op_name { i_e s d } ⊢ ll
 					slv_r { lv env0 rv tv tv_n n re lc } ⊢ { lv env0 rv tv tv_n n re lc }
 					ast.seq { ll lc } ⊢ lc
@@ -2846,68 +2850,152 @@
 				rcd l0 ⊢ yr 
 				imp { y1 yr } ⊢ yx  
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_exc_q" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
+				
 				» "_set_q" _ ⊢ se
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv yv }
+				$ yv ⊢ yv,yv0 
+				t_axm.arr yv ⊢ ya
+				$ ya ⊢ ya,ya0 
+				_nil {} ⊢ l0 
+				_cns { yv0 l0 } ⊢ l0 
+				_cns { y0 l0 } ⊢ l0
+				_cns { ya l0 } ⊢ l0
+				rcd l0 ⊢ y_s 
+				_nil {} ⊢ l1 
+				_cns { y1 l1 } ⊢ l1
+				_cns { ya0 l1 } ⊢ l1   
+				rcd l1 ⊢ y_d 
+				imp { y_s y_d } ⊢ yx 
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
+				
 				» "_get_q" _ ⊢ se
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv yv }
+				$ yv ⊢ yv,yv0 
+				t_axm.arr yv ⊢ ya
+				$ ya ⊢ ya,ya0 
+				_nil {} ⊢ l0 
+				_cns { yv0 l0 } ⊢ l0 
+				_cns { y0 l0 } ⊢ l0
+				_cns { ya l0 } ⊢ l0
+				rcd l0 ⊢ y_d 
+				_nil {} ⊢ l1 
+				_cns { y1 l1 } ⊢ l1
+				_cns { ya0 l1 } ⊢ l1   
+				rcd l1 ⊢ y_s 
+				imp { y_s y_d } ⊢ yx
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
+				
 				» "_lod_q" _ ⊢ se
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv yv }
+				$ yv ⊢ yv,yv0 
+				t_axm.arr yv ⊢ ya
+				$ ya ⊢ ya,ya0 
+				_nil {} ⊢ l0 
+				_cns { yv0 l0 } ⊢ l0 
+				_cns { y0 l0 } ⊢ l0
+				_cns { ya l0 } ⊢ l0
+				rcd l0 ⊢ y_d 
+				_nil {} ⊢ l1 
+				_cns { y1 l1 } ⊢ l1
+				_cns { ya0 l1 } ⊢ l1   
+				rcd l1 ⊢ y_s 
+				imp { y_s y_d } ⊢ yx
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
+				
+				t_axm.s8 {} ⊢ ys 
+				t_axm.lst ys ⊢ yx 
 				» "_args" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
+				
+				t_axm.r64 {} ⊢ yl0 
+				t_axm.r64 {} ⊢ yl1
+				t_axm.s8 {} ⊢ ys 
+				_nil {} ⊢ l0 
+				_cns { ys l0 } ⊢ l0 
+				_cns { yl1 l0 } ⊢ l0 
+				rcd l0 ⊢ y_d 
+				imp { yl0 y_d } ⊢ yx  
 				» "_mlc_s8" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_emt" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ y0 
 				t_axm.r64 {} ⊢ y1 
 				imp { y0 y1 } ⊢ yx 
 				» "_inc" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
+				
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				imp { y0 y1 } ⊢ yx
 				» "_dec" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
+				
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				_nil {} ⊢ l0 
+				_cns { y0 l0 } ⊢ l0 
+				_cns { y1 l0 } ⊢ l0 
+				rcd l0 ⊢ y_d 
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				_nil {} ⊢ l0 
+				_cns { y0 l0 } ⊢ l0 
+				_cns { y1 l0 } ⊢ l0 
+				rcd l0 ⊢ y_s 
+				imp { y_s y_d } ⊢ yx
 				» "_add" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_sts" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_lds" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_setge" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_rep_movsb" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
-				t_axm.r64 {} ⊢ yx 
-				» "_add" _ ⊢ se
-				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_nil" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_cns" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_some" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_none" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				t_axm.r64 {} ⊢ yx 
 				» "_in_fn" _ ⊢ se
 				add_e { tv_n tv ev ev_n ns_e se yx } ⊢ { tv_n tv ev ev_n ns_e } 
+				
 				slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel } ⊢| 
 			@.slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } ns_m ns_e ns_t gel }
 				_emt il ⊢ il 
