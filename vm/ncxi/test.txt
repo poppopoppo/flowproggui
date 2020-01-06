@@ -923,9 +923,27 @@ _rX : _RX → *
     ∎ { v i a }
 
 
-Hydra 
-
+Hydra + Unix = Hydrix 
 
 Hydrix 
 HEAD 
 SP-HEAD
+
+specialized HEAD processor  
+hcall rX ; hcall-number 
+hcall [rX] 
+
+
+{ 
+  °1◂{ 0x0 °1◂{} } 
+  °2◂{ 
+    °0◂[ 
+      °0◂{ 
+        °4◂[ 0x5c9 ] 
+        °0◂{ 
+          °4◂[ 0x5ca ] 
+          °0◂{ °4◂[ 0x5cb ] °0◂{ °4◂[ 0x5cc ] °1◂{} } } 
+          } 
+        }  
+      ] 
+    °0◂[ °0◂(71037c)*{ °4◂(6bb64c)*[ 0x5ce ] °0◂(710bdc)*{ °4◂(6bb3cc)*[ 0x5cf ] °0◂(70ff3c)*{ °4◂(6bb41c)*[ 0x5d0 ] °0◂(70f19c)*{ °4◂(6bb46c)*[ 0x5d1 ] °1◂(68c5dc)*{ } } } } }  ] } } 
