@@ -10,8 +10,8 @@
 bits 64
 
 %define NULL ~0
-%define SFLS_MAX 16000
-%define SFLS_0_MAX 40000 
+%define SFLS_MAX 32000
+%define SFLS_0_MAX 80000 
 %define SFLS_1_MAX 20000 
 %define SFLS_2_MAX 10000 
 %define SFLS_3_MAX 5000 
@@ -47,7 +47,7 @@ section .bss
     resq 1 
     resq 1 
     resq 1 
-  SFLS_VCT_0: resq SFLS_MAX
+  SFLS_VCT_0: resq SFLS_0_MAX
   SFLS_VCT_1: resq 2*SFLS_MAX
   SFLS_VCT_2: resq 4*SFLS_MAX
   SFLS_VCT_3: resq 8*SFLS_MAX 
@@ -69,20 +69,6 @@ section .bss
   str_ret: resb 256
   
   out_vct: resb (8+8+8)*32
-  ;prs_vct: resb (8+8) * 64
-  ;set_ptn_vct: resb (8+8) * 16
-  ;mtc_vct_0: resb (8+8) * 32
-  ;mtc_vct_1: resb (8+8) * 32
-  ;mtc_vct_2: resb (8+8) * 32
-  ;mtc_vct_3: resb (8+8) * 32
-  ;mtc_vct_4: resb (8+8) * 32
-  ;mtc_vct_5: resb (8+8) * 32
-  ;mtc_vct_6: resb (8+8) * 32
-  ;mtc_vct_7: resb (8+8) * 32
-  ;mtc_vct_8: resb (8+8) * 32
-  ;mtc_vct_9: resb (8+8) * 32
-  ;mtc_vct_10: resb (8+8) * 32
-  ;mtc_vct_11: resb (8+8) * 32
   fmt_s_r0: resb 256
   ;fmt_d_r0: resb 4
   in0: resq 1
@@ -230,13 +216,13 @@ SFLS_X_INIT:
   mov QWORD [SFLS_TBL+24],SFLS_VCT_3
   mov QWORD [SFLS_TBL+32],SFLS_VCT_4   
   mov rdi,0
+  call SFLS_0_lp 
+  mov rdi,0
 SFLS_X_lp:
   cmp rdi,SFLS_MAX
   jz SFLS_X_end 
   mov rsi,rdi 
   shl rsi,3
-  lea rax,[SFLS_VCT_0+8+rsi] 
-  mov QWORD [SFLS_VCT_0+rsi],rax
   lea rax,[SFLS_VCT_1+2*8+2*rsi]
   mov QWORD [SFLS_VCT_1+2*rsi],rax
   lea rax,[SFLS_VCT_2+4*8+4*rsi]
@@ -251,8 +237,6 @@ SFLS_X_lp:
 SFLS_X_end:
   sub rdi,1 
   shl rdi,3
-  mov rsi,SFLS_0_NULL
-  mov QWORD [SFLS_VCT_0+rdi],rsi
   mov rsi,SFLS_1_NULL
   mov QWORD [SFLS_VCT_1+2*rdi],rsi
   mov rsi,SFLS_2_NULL
@@ -262,6 +246,22 @@ SFLS_X_end:
   shl rdi,1
   mov rsi,SFLS_4_NULL
   mov QWORD [SFLS_VCT_4+8*rdi],rsi
+  ret
+
+SFLS_0_lp:
+  cmp rdi,SFLS_0_MAX
+  jz SFLS_0_end 
+  mov rsi,rdi 
+  shl rsi,3
+  lea rax,[SFLS_VCT_0+8+rsi] 
+  mov QWORD [SFLS_VCT_0+rsi],rax
+  add rdi,1
+  jmp SFLS_0_lp
+SFLS_0_end:
+  sub rdi,1 
+  shl rdi,3
+  mov rsi,SFLS_0_NULL
+  mov QWORD [SFLS_VCT_0+rdi],rsi
   ret
 
 SFLS_init:

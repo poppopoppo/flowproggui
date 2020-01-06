@@ -8,12 +8,13 @@
   _inc x ⊢ r 
   _mk_arr r ⊢ { r a } 
   _set_q { a r z } ⊢ { a r } 
+  _emt r ⊢ r 
   ∎ { y r }
 §§ A 
   §§ B 
-  ∎∎ 
+    ∎∎ 
   §§ D
-  §§ V = B  
-  ∎∎ 
-∎∎
+    §§ V = B  
+    ∎∎ 
+  ∎∎
 §§ C = A.B
