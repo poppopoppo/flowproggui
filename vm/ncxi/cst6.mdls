@@ -1,25 +1,26 @@
 
+§ @.f {}
+	f {} ⊢ { l k0 }    
+	_cns { k0 l } ⊢ l
+	∎|
+\[
 § @.assoc { l k }
 	∐ l ⊢ _cns◂{ { k0 o0 } l } .
 		∐ k'=k0' .
-			∐ o0 ⊢ _some◂v0 .
-				$ v0 ⊢ v0,v1
-				_some v0 ⊢ o0
 				_cns { { k0 o0 } l } ⊢ l
-				_some v1 ⊢ r1
-				∎ { l k r1 }
-			∐. .
-				_cns { { k0 o0 } l } ⊢ l
-				_none {} ⊢ r1
-				∎ { l k r1 }
+				##_none {} ⊢ r1
+				∎| 
+        ##∎ { l k r1 }
 		∐. .
 			assoc { l k } ⊢ { l k r0 }
 			_cns { { k0 o0 } l } ⊢ l
-			∎ { l k r0 }
+			∎| 
+      ##∎ { l k r0 }
 	∐. .
 		∎| 
     \[
     _none {} ⊢ r1
 		∎ { l k r1 }
+    \]
     \]
     
