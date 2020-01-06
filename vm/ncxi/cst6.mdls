@@ -3,24 +3,11 @@
 	f {} ⊢ { l k0 }    
 	_cns { k0 l } ⊢ l
 	∎|
-\[
-§ @.assoc { l k }
-	∐ l ⊢ _cns◂{ { k0 o0 } l } .
-		∐ k'=k0' .
-				_cns { { k0 o0 } l } ⊢ l
-				##_none {} ⊢ r1
-				∎| 
-        ##∎ { l k r1 }
-		∐. .
-			assoc { l k } ⊢ { l k r0 }
-			_cns { { k0 o0 } l } ⊢ l
-			∎| 
-      ##∎ { l k r0 }
-	∐. .
-		∎| 
-    \[
-    _none {} ⊢ r1
-		∎ { l k r1 }
-    \]
-    \]
-    
+
+§ @.occurs {}  
+			» "occurs 1" _ ⊢ se 
+			_emt se ⊢ se 
+			∎|
+	@.occurs_lst {} 
+	  ∎| 
+    ##	occurs_lst {} ⊢| 
