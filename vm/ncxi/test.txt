@@ -958,4 +958,6 @@ hcall [rX]
   _lod_G◂◂T { v %[ 1r ] } ⊢ { v _ a1 }
   ∎ { v a0 a1 }
 
- 
+
+  
+§ j = g◂◂{ f◂◂C_hsh u } 

@@ -528,6 +528,7 @@ module Ast = struct
     let _sts = sgn ()
     let _ecs = sgn ()
     let _rep_movsb = sgn ()
+    let _s8_len = sgn () 
     let _in0 = sgn ()
     let _in_fn = sgn ()
     let _emt_q = sgn ()
@@ -3752,6 +3753,21 @@ and init_prm () =
     "\tadd r10,1\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._rep_movsb,em)::gns.ns_c;
+
+  let v = ref(Ln(Imp(Types.Axm Types.Axm.stg,Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64])))) in
+  !ns.ns_p <- ("_s8_len",Ast.Axm._s8_len)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._s8_len,v)::gns.ns;
+  gns.ns_e <- (Ast.Axm._s8_len,ref(Etr_V(RP.A(R.Idx 0),RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],(-1))))::gns.ns_e;
+  let em_s8_len =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._s8_len)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._s8_len)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._s8_len)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov edi,DWORD [rdi+4]\n"^
+    "\tmov "^(emt_reg_x86 1)^",rdi\n"^
+    "\tbts r12,1\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._s8_len,em_s8_len)::gns.ns_c;
 
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
