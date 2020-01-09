@@ -3911,6 +3911,9 @@ and init_prm () =
     "\tmov QWORD [rax],rdi\n"^
     "\tret\n"^
     lb_err^":\n"^
+    "\tmov rdi,rax\n"^
+    "\tbt r12,1\n"^
+    "\tcall pp0\n"^
     "\tmov QWORD [err_n],3\n"^
     "\tjmp err\n"^
     lb_err0^":\n"^
