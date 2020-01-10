@@ -3930,6 +3930,7 @@ and init_prm () =
     let lb1 = lb () in
     let lba = lb () in 
     let lb_err = lb () in
+    let lb_err0 = lb () in 
     "NS_E_ID_"^(Sgn.print Ast.Axm._lod_q)^": dq 0\n"^
     "NS_E_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
     "NS_E_RDI_"^(Sgn.print Ast.Axm._lod_q)^":\n"^
@@ -3953,7 +3954,7 @@ and init_prm () =
     "\tjmp "^lb1^"\n"^
     lba^":\n"^
     "\tcmp rdi,NULL\n"^
-    "\tjz "^lb_err^"\n"^
+    "\tjz "^lb_err0^"\n"^
     lb0^":\n"^
     "\tbtr r12,"^(string_of_int 2)^"\n"^
     "\tclc\n"^
@@ -3964,7 +3965,13 @@ and init_prm () =
     "\tpop "^(emt_reg_x86 0)^"\n"^
     "\tret\n"^
     lb_err^":\n"^
+    "\tmov rdi,rax\n"^
+    "\tbt r12,1\n"^
+    "\tcall pp0\n"^
     "\tmov QWORD [err_n],4\n"^
+    "\tjmp err\n"^
+     lb_err0^":\n"^
+     "\tmov QWORD [err_n],8\n"^
     "\tjmp err\n" in
   gns.ns_c <- (Ast.Axm._lod_q,em_lod_q)::gns.ns_c;
 
