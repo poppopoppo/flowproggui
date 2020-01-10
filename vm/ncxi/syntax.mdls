@@ -2758,7 +2758,7 @@
 			∐ rcd◂l .
 				pnt_type_k_lst { tv l } ⊢ { tv s } 
 				» _^ s ⊢ s,sr 
-					"{" 0' " }" // 
+					"{ " 0' "}" // 
 				∎ { tv sr } 
 			∐ dta◂{ a l } . 
 				pnt_dta { tv l } ⊢ { tv s }
@@ -4011,9 +4011,12 @@
 					_nil {} ⊢ l1
 					_nil {} ⊢ l2 
 					lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t } ⊢ { { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t }
+					lp0_ln { { l1 l2 } { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t } ⊢ { { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t } 
 					lp0_def { l0 { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t } ⊢ { { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t }
 					∎ { { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t }
 				@.lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t } 
+					» "slv_dt_clq.lp0" _ ⊢ sec1 
+					_emt sec1 ⊢ sec1 
 					$ q ⊢ 
 					∐ _cns◂{ { w d } q } . 
 						$ d ⊢ 
@@ -4109,6 +4112,15 @@
 			t_axm.opn y0 ⊢ y0 
 			abs { i1 y0 } ⊢ y0 
 			∎ { tv_n tv y0 }  
+		
+		§ arr_v { tv_n tv } 
+			_nil {} ⊢ l 
+			newvar_i { tv_n tv } ⊢ { tv_n tv i0 } 
+			$ i0 ⊢ i0,i1 
+			var i0 ⊢ y0 
+			t_axm.arr y0 ⊢ y0 
+			abs { i1 y0 } ⊢ y0 
+			∎ { tv_n tv y0 }  
 		§
 			@.slv_file gel
 				» t_axm.N0 _ ⊢ tx_n 
@@ -4144,8 +4156,12 @@
 				» "_lst" _ ⊢ t0
 				add_t { tv_n tv ns_t t0 y0 } ⊢ { tv_n tv ns_t }
 				
-				lst_v { tv_n tv } ⊢ { tv_n tv y0 }  
+				opn_v { tv_n tv } ⊢ { tv_n tv y0 }  
 				» "_opn" _ ⊢ t0
+				add_t { tv_n tv ns_t t0 y0 } ⊢ { tv_n tv ns_t }
+				
+				arr_v { tv_n tv } ⊢ { tv_n tv y0 }  
+				» "_arr" _ ⊢ t0
 				add_t { tv_n tv ns_t t0 y0 } ⊢ { tv_n tv ns_t }
 				
 				_nil {} ⊢ il 
