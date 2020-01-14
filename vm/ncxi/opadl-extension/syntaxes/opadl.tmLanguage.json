@@ -25,6 +25,9 @@
 		},
 		{
 			"include": "#im_regs"
+		},
+		{ 
+			"include": "#reg_name"
 		}
 	],
 	"repository": {
@@ -94,6 +97,14 @@
 					"include": "#strings" 
 				}
 			]
+	},
+	"reg_name": {
+		"patterns": [
+			{
+				"name": "keyword.operator.opadl",
+				"match": "(%[A-Z a-z '_']+)"
+			}
+		]
 	},
 	"line_comments": {
 		"patterns": [
