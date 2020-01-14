@@ -4260,9 +4260,11 @@ and emt_exe m =
   let (se,em,sx,pp) = (emt_m gns ns 0 m) in
   let (ed_t,em_t,et_t) = emt_mov_tbl (Array.sub gns.ns_vct 0 gns.ns_vct_n) gns.ns_vct_n in 
   Util.pnt true pp;  
+  let _ = Util.load_file "cmu.s" in 
   let ex = 
-    "%include \"cmu.s\"\n"^
     ed_t^
+    (*cmu_s^*) 
+    "%include \"cmu.s\"\n"^
     "main:\n"^
     "\tmov r12,~0\n"^
     "\tcall SFLS_X_INIT\n"^
@@ -4907,7 +4909,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
             e1
           | [] ->
             if k0=[] then lb0^":\n"
-            else err @@ "emt_mtc 0:non exh"(*^(pnt_env_set k0)*) )
+            else err @@ "emt_mtc 0:non exh"^(pnt_m_set k0) )
       and emt_mtc_eq iv0 es lb1 =
         (*Util.Log.add @@ "enter emt_mtc_eq:"^(pnt_iv gns iv0)^"\n";*)
         ( match es with
