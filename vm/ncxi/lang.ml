@@ -1414,7 +1414,10 @@ and inst_mtc_atm gns (ns:ns_v) l e =
       ( match c with
         | P_Z _ -> App(Axm Axm.z_n,(Axm Axm.z_u))
         | P_R64 _ -> Axm Axm.r64
-        | P_N _ -> err "inst_mtc_atm 1"
+        | P_N n -> 
+          let p = slv_ns0 ns n in
+          let yn = inst l (Var (get_ns gns p)) in
+          yn 
         | P_R2 _ -> Axm Axm.r2
         | P_Stg _ -> Axm Axm.stg )
     | Eq_V ve ->
@@ -4957,6 +4960,23 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                         let (dl,e1) = emt_mtc_eq iv0 es_tl lb1 in
                         (dl,e0^e1)
                       | _ -> err "emt_mtc_eq 4" )
+                  | P_N { contents=Stt_Axm p } -> 
+                    let f = (try List.assoc p gns.ns_e with _ -> err "inst_mtc_atm 3") in
+                    ( match !f with 
+                      | Cst_Stt c -> 
+                        ( match c with 
+                        | Cst.R64 x0 ->
+                          ( match ix with
+                            | RP.A(R.Idx ix0) ->
+                            let e0 =
+                            "\tmov QWORD rax,0x"^(Int64.format "%x" x0)^"\n"^
+                           "\tcmp rax,"^(emt_reg_x86 ix0)^"\n"^
+                           "\tjnz "^lb1^"\n" in
+                         let (dl,e1) = emt_mtc_eq iv0 es_tl lb1 in
+                         (dl,e0^e1)
+                            | _ -> err "emt_mtc_eq 5" )
+                      | _ -> err "emt_mtc_q 6" )
+                    | _ -> err "emt_met_eq 7" )
                   | _ -> err "emt_mtc_eq 5" )
               | Eq_V ve ->
                 let py = mk_r_p(mk_idx ve) in

@@ -1057,6 +1057,8 @@ _if_op : { _bl a'→b0x' } ⊢⊢ a' ⊢ b'
 § if_emt◂◂B = _if_op◂◂{ B _emt }
 
 
+\i0'.\i1'. ∐[ { i0' i1' } i0' ]
+
 0x°0◂(8a44ec)*{ (8a44cc)*{ 0x258 °0◂(7d661c)*[ 0x42b ] } °0◂(8a448c)*{ (8a44ac)*{ 0x3 °0◂(7d657c)*[ 0x42a ] } °0◂(8a430c)*{ (8a42cc)*{ 0x2 °0◂(7d658c)*[ 0x429 ] } °0◂(8a43ec)*{ (8a42ec)*{ 0x4 °0◂(7d655c)*[ 0x428 ] } °0◂(8a436c)*{ (8a438c)*{ 0x259 °0◂(7d651c)*[ 0x427 ] } °0◂(8a432c)*{ (8a42ac)*{ 0x255 °0◂(7d643c)*[ 0x426 ] } °0◂(8a404c)*{ (8a434c)*{ 0x253 °0◂(7d64ec)*[ 0x425 ] } °0◂(8a424c)*{ (8a426c)*{ 0x257 °0◂(7d644c)*[ 0x424 ] } °0◂(8a428c)*{ (8a3f6c)*{ 0x299 °0◂(7d64cc)*[ 0x423 ] } °0◂(8a40cc)*{ (8a402c)*{ 0x296 °0◂(7d649c)*[ 0x422 ] } °0◂(8a422c)*{ (8a416c)*{ 0x295 °0◂(7d647c)*[ 0x421 ] } °0◂(8a420c)*{ (8a41ec)*{ 0x294 °0◂(7d646c)*[ 0x420 ] } °0◂(8a41ac)*{ (8a418c)*{ 0x29a °0◂(7d64bc)*[ 0x41f ] } °0◂(8a3f4c)*{ (8a41cc)*{ 0x29b °0◂(7d645c)*[ 0x41e ] } °0◂(8a414c)*{ (8a412c)*{ 0x28f °0◂(7d639c)*[ 0x41d ] } °0◂(8a3fcc)*{ (8a40ec)*{ 0x28c °0◂(7d640c)*[ 0x41c ] } °0◂(8a3f8c)*{ (8a3fac)*{ 0x28e °0◂(7d63ec)*[ 0x41b ] } °0◂(8a400c)*{ (8a3fec)*{ 0x29f °0◂(7d634c)*[ 0x41a ] } °1◂(6f2af4)*{ } } } } } } } } } } } } } } } } } } } 
 
 t ◂ a' ∐ a' t◂(_lst◂a') t◂a' _r64 
@@ -1067,3 +1069,11 @@ _t8◂(_t13◂_t7)◂(((728''(1)))))
 
 _lst◂{ _s8 _t34 }→791''(1)
 _lst◂((_t8◂(_t13◂_t7))◂728''(1))→835''(2)
+global-segment = global-id 48bit , local-id 16bit 
+global-id = process-id 
+local-segment , offset 
+16bit , 48bit 
+segment-tag = { rd_rank~_r64 wt_rank~_r64 page_size~_r64 }
+rank-stack , security rank
+rret rank-decriment 
+rcall rank-increment 
