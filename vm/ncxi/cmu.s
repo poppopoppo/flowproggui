@@ -10,10 +10,10 @@
 bits 64
 
 %define NULL ~0
-%define SFLS_MAX 70000
+%define SFLS_MAX 20000
 %define SFLS_0_MAX 80000 
 %define SFLS_1_MAX 40000 
-%define SFLS_2_MAX 80000
+%define SFLS_2_MAX 60000
 %define SFLS_3_MAX 10000
 %define SFLS_4_MAX 5000
 %define SFLS_NULL 0xffff_ffff_ffff_0000 
@@ -48,8 +48,8 @@ section .bss
     resq 1 
     resq 1 
   SFLS_VCT_0: resq SFLS_0_MAX
-  SFLS_VCT_1: resq 2*SFLS_MAX
-  SFLS_VCT_2: resq 4*SFLS_MAX
+  SFLS_VCT_1: resq 2*SFLS_1_MAX
+  SFLS_VCT_2: resq 4*SFLS_2_MAX
   SFLS_VCT_3: resq 8*SFLS_MAX 
   SFLS_VCT_4: resq 16*SFLS_MAX
   
@@ -216,17 +216,17 @@ SFLS_X_INIT:
   mov QWORD [SFLS_TBL+24],SFLS_VCT_3
   mov QWORD [SFLS_TBL+32],SFLS_VCT_4   
   mov rdi,0
-  call SFLS_0_lp 
+  call SFLS_0_lp
+  mov rdi,0 
+  call SFLS_1_lp 
+  mov rdi,0
+  call SFLS_2_lp 
   mov rdi,0
 SFLS_X_lp:
   cmp rdi,SFLS_MAX
   jz SFLS_X_end 
   mov rsi,rdi 
   shl rsi,3
-  lea rax,[SFLS_VCT_1+2*8+2*rsi]
-  mov QWORD [SFLS_VCT_1+2*rsi],rax
-  lea rax,[SFLS_VCT_2+4*8+4*rsi]
-  mov QWORD [SFLS_VCT_2+4*rsi],rax 
   lea rax,[SFLS_VCT_3+8*8+8*rsi]
   mov QWORD [SFLS_VCT_3+8*rsi],rax 
   shl rsi,1 
@@ -237,10 +237,6 @@ SFLS_X_lp:
 SFLS_X_end:
   sub rdi,1 
   shl rdi,3
-  mov rsi,SFLS_1_NULL
-  mov QWORD [SFLS_VCT_1+2*rdi],rsi
-  mov rsi,SFLS_2_NULL
-  mov QWORD [SFLS_VCT_2+4*rdi],rsi 
   mov rsi,SFLS_3_NULL
   mov QWORD [SFLS_VCT_3+8*rdi],rsi
   shl rdi,1
@@ -264,6 +260,37 @@ SFLS_0_end:
   mov QWORD [SFLS_VCT_0+rdi],rsi
   ret
 
+SFLS_1_lp:
+  cmp rdi,SFLS_1_MAX
+  jz SFLS_1_end 
+  mov rsi,rdi 
+  shl rsi,3
+  lea rax,[SFLS_VCT_1+2*8+2*rsi]
+  mov QWORD [SFLS_VCT_1+2*rsi],rax 
+  add rdi,1
+  jmp SFLS_1_lp
+SFLS_1_end:
+  sub rdi,1 
+  shl rdi,3
+  mov rsi,SFLS_1_NULL
+  mov QWORD [SFLS_VCT_1+2*rdi],rsi
+  ret
+
+SFLS_2_lp:
+  cmp rdi,SFLS_2_MAX
+  jz SFLS_2_end 
+  mov rsi,rdi 
+  shl rsi,3
+  lea rax,[SFLS_VCT_2+4*8+4*rsi]
+  mov QWORD [SFLS_VCT_2+4*rsi],rax 
+  add rdi,1
+  jmp SFLS_2_lp
+SFLS_2_end:
+  sub rdi,1 
+  shl rdi,3
+  mov rsi,SFLS_2_NULL
+  mov QWORD [SFLS_VCT_2+4*rdi],rsi 
+  ret
 
 SFLS_init:
   mov QWORD [SFLS_TOP],SFLS_VCT
