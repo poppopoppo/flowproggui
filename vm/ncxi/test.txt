@@ -1077,3 +1077,11 @@ segment-tag = { rd_rank~_r64 wt_rank~_r64 page_size~_r64 }
 rank-stack , security rank
 rret rank-decriment 
 rcall rank-increment 
+
+  Op &{ &[ %s ] Ext } &⊢ &{ &[ s ] Ext }
+
+¶ t ◂ { a' b' } 
+  .. 
+  a'::{ _ _ } ∀ t◂a' 
+  a',b' ∀ t◂{ a' b' }
+§ t◂{ a' b' }
