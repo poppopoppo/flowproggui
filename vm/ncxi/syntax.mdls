@@ -1333,10 +1333,8 @@
 				∐.# ⊢ { } 
 					_some {} ⊢ a 
 					∎ a   
-			∐# line_res cmt_in ⊢ { p0 p1 } 
-					» "_byt" _ ⊢ se 
-					_emt se ⊢ se 
-				_some p1 ⊢ a 
+			∐# line_res_c ⊢ { c }
+				_some c ⊢ a 
 				∎ a
 			∐.# ⊢ { } 
 				_nil {} ⊢ l 
@@ -1345,6 +1343,17 @@
 				prs_err l ⊢ l 
 				_some l ⊢ a 
 				∎ a
+		@.line_res_c 
+			∐# "\n" cmt_in ⊢ { {} c }
+				_some c ⊢ a 
+				∎ a 
+			∐# _byt line_res_c ⊢ { b l }  
+				_some l ⊢ a 
+				∎ a 
+			∐.# ⊢ { } 
+				» "line_res_c 0" _ ⊢ se 
+				_emt se ⊢ se 
+				∎| 
 		@.line_res 
 			∐# "\n" ⊢ { {} }
 				_some { _n _r } ⊢ a 
@@ -2610,18 +2619,18 @@
 				dta { a l } ⊢ y 
 				∎ y 
 
-			§ lst { tv_n tv y }  
+			§ lst y  
 				» id.lst _ ⊢ a   
 				_nil {} ⊢ l 
 				_cns { y l } ⊢ l 
 				dta { a l } ⊢ y
-				∎ { tv_n tv y }
-			§ opn { tv_n tv y }  
+				∎ y 
+			§ opn y  
 				» id.opn _ ⊢ a 
 				_nil {} ⊢ l 
 				_cns { y l } ⊢ l
 				dta { a l } ⊢ y
-				∎ { tv_n tv y }
+				∎ y
 			§ arr y 
 				_nil {} ⊢ l 
 				_cns { y l } ⊢ l 
@@ -2748,24 +2757,24 @@
 					» _^ a ⊢ a,s 
 						"_t" 0d' // 
 					∎ s 
-		§ @.occurs { tv_n tv i0 lv0 y1 } 
+		§ @.occurs { tv i0 lv0 y1 } 
 			∐ y1 ⊢ rcd◂l1 . 
-				occurs_lst { tv_n tv i0 lv0 l1 } ⊢| 
+				occurs_lst { tv i0 lv0 l1 } ⊢| 
 			∐ y1 ⊢ dta◂{ a1 l1 } . 
-				occurs_lst { tv_n tv i0 lv0 l1 } ⊢| 
+				occurs_lst { tv i0 lv0 l1 } ⊢| 
 			∐ y1 ⊢ imp◂{ y1_0 y1_1 } . 
-				occurs { tv_n tv i0 lv0 y1_0 } ⊢ { tv_n tv i0 lv0 } 
-				occurs { tv_n tv i0 lv0 y1_1 } ⊢ { tv_n tv i0 lv0 } 
-				∎ { tv_n tv i0 lv0 } 
+				occurs { tv i0 lv0 y1_0 } ⊢ { tv i0 lv0 } 
+				occurs { tv i0 lv0 y1_1 } ⊢ { tv i0 lv0 } 
+				∎ { tv i0 lv0 } 
 			∐ y1 ⊢ var◂i1 . 
 				∐ i0'=i1' . 
-					_emt { tv_n i0 lv0 } ⊢ { tv_n i0 lv0 } 
+					_emt { i0 lv0 } ⊢ { i0 lv0 } 
 					∎| 
 				∐. . 
 					_lod_q { tv i1 } ⊢ { tv i1 v1 } 
 					$ v1 ⊢ 
 					∐ var_ln◂y2 . 
-						occurs { tv_n tv i0 lv0 y2 } ⊢| 
+						occurs { tv i0 lv0 y2 } ⊢| 
 					∐ var_l◂lv1 . 
 						_setge { lv0 lv1 } ⊢ { lv0 lv1 b }
 						∐ b'=0r . 
@@ -2773,14 +2782,14 @@
 							_get_q { tv i1 } ⊢ { tv i1 vt } 
 							var_l lv0_0 ⊢ v2 
 							_set_q { tv i1 v2 } ⊢ { tv i1 } 
-							∎ { tv_n tv i0 lv0 } 
+							∎ { tv i0 lv0 } 
 						∐. . 
-							∎ { tv_n tv i0 lv0 }
+							∎ { tv i0 lv0 }
 					∐ var_i◂{} . 
 						##» "occurs 17" _ ⊢ se 
 						##_emt se ⊢ se 
 						##∎| 
-						∎ { tv_n tv i0 lv0 } 
+						∎ { tv i0 lv0 } 
 					\[
 					∐ var_app◂{ y0 y1 } . 
 						occurs { tv_n tv i0 lv0 y0 } ⊢ { tv_n tv i0 lv0 } 
@@ -2793,19 +2802,19 @@
 						_emt se ⊢ se 
 						∎| 
 			∐. . 
-				_emt { tv_n i0 lv0 } ⊢ { tv_n i0 lv0 } 
+				_emt { i0 lv0 } ⊢ { i0 lv0 } 
 				» "occurs 1" _ ⊢ se 
 				_emt se ⊢ se 
 				∎|
-			@.occurs_lst { tv_n tv i0 lv0 l1 } 
+			@.occurs_lst { tv i0 lv0 l1 } 
 				$ l1 ⊢ 
 				∐ _cns◂{ y1 l1 } . 
-					occurs { tv_n tv i0 lv0 y1 } ⊢ { tv_n tv i0 lv0 } 
-					occurs_lst { tv_n tv i0 lv0 l1 } ⊢| 
+					occurs { tv i0 lv0 y1 } ⊢ { tv i0 lv0 } 
+					occurs_lst { tv i0 lv0 l1 } ⊢| 
 				∐. _nil◂{} . 
-					∎ { tv_n tv i0 lv0 } 
+					∎ { tv i0 lv0 } 
 		§§ unify 
-		§ @.f { tv_n tv y0 y1 }
+		§ @.f { tv y0 y1 }
 				##» "enter unify.f" _ ⊢ sc0 
 				##$ y0 ⊢ y0,y0_0 
 				##pnt_type_k { tv y0_0 } ⊢ { tv sy0 } 
@@ -2814,14 +2823,14 @@
 				##_emt { tv_n sy0 sy1 } ⊢ { tv_n sy0 sy1 } 
 				##_emt sc0 ⊢ sc0 
 				∐ y0 ⊢ var◂i0 . 
-					f_l0 { tv_n tv i0 y1 } ⊢| 
+					f_l0 { tv i0 y1 } ⊢| 
 				∐ y1 ⊢ var◂i1 . 
-					f_l0 { tv_n tv i1 y0 } ⊢| 
+					f_l0 { tv i1 y0 } ⊢| 
 				∐ y0 ⊢ rcd◂r0 ; y1 ⊢ rcd◂r1 . 
-					f_lst { tv_n tv r0 r1 } ⊢| 
+					f_lst { tv r0 r1 } ⊢| 
 				∐ y0 ⊢ dta◂{ a0 l0 }; y1 ⊢ dta◂{ a1 l1 } . 
 					∐ a0'=a1' . 
-						f_lst { tv_n tv l0 l1 } ⊢|
+						f_lst { tv l0 l1 } ⊢|
 					∐. . 
 						» "unify 0" _ ⊢ se 
 						pnt_type_k_lst { tv l0 } ⊢ { tv l0s } 
@@ -2832,8 +2841,8 @@
 						_emt se ⊢ se 
 						∎| 
 				∐ y0 ⊢ imp◂{ y0_0 y0_1 }; y1 ⊢ imp◂{ y1_0 y1_1 } . 
-					f { tv_n tv y0_0 y1_0 } ⊢ { tv_n tv } 
-					f { tv_n tv y0_1 y1_1 } ⊢|
+					f { tv y0_0 y1_0 } ⊢ tv  
+					f { tv y0_1 y1_1 } ⊢|
 				∐. . 
 					pnt_type_k { tv y0 } ⊢ { tv y0s } 
 					pnt_type_k { tv y1 } ⊢ { tv y1s } 
@@ -2841,36 +2850,36 @@
 					» "unify 1" _ ⊢ se 
 					_emt se ⊢ se 
 					∎|
-			@.f_lst { tv_n tv l0 l1 }
+			@.f_lst { tv l0 l1 }
 				∐ l0 ⊢ _cns◂{ y0 l0 }; l1 ⊢ _cns◂{ y1 l1 } . 
-					f { tv_n tv y0 y1 } ⊢ { tv_n tv } 
-					f_lst { tv_n tv l0 l1 } ⊢| 
+					f { tv y0 y1 } ⊢ tv 
+					f_lst { tv l0 l1 } ⊢| 
 				∐ l0 ⊢ _nil◂{}; l1 ⊢ _nil◂{} . 
-					∎ { tv_n tv } 
+					∎ tv 
 				∐. . 
 					» "unify.f_lst 2" _ ⊢ se 
 					_emt se ⊢ se 
 					_emt { l0 l1 } ⊢ { l0 l1 }
 					∎|  
 				
-			@.f_l0 { tv_n tv i0 y1 }   
+			@.f_l0 { tv i0 y1 }   
 				_lod_q { tv i0 } ⊢ { tv i0 v0 } 
 				∐ v0 ⊢ var_ln◂y2 . 
-					f { tv_n tv y2 y1 } ⊢|
+					f { tv y2 y1 } ⊢|
 				∐ v0 ⊢ var_l◂lv .  
-					f_l1 { tv_n tv i0 lv y1 } ⊢|
+					f_l1 { tv i0 lv y1 } ⊢|
 				∐. . 
 					» "unify 3" _ ⊢ se 
 					_emt se ⊢ se 
 					∎|  
-			@.f_l1 { tv_n tv i0 lv y1 } 
+			@.f_l1 { tv i0 lv y1 } 
 				∐ y1 ⊢ var◂i1 . 
 					∐ i0'=i1' . 
-						∎ { tv_n tv } 
+						∎ tv 
 					∐. .
 						_lod_q { tv i1 } ⊢ { tv i1 v1 }
 						∐ v1 ⊢ var_ln◂y2 . 
-							f_l1 { tv_n tv i0 lv y2 } ⊢|  
+							f_l1 { tv i0 lv y2 } ⊢|  
 						∐ v1 ⊢ var_l◂lv1 . 
 							_setge { lv lv1 } ⊢ { lv lv1 b }
 							∐ b'=0r .  
@@ -2878,33 +2887,33 @@
 								var i0 ⊢ yv 
 								var_ln yv ⊢ v2 
 								_set_q { tv i1 v2 } ⊢ { tv i1 } 
-								∎ { tv_n tv } 
+								∎ tv 
 							∐. . 
 								_get_q { tv i0 } ⊢ { tv i0 vt } 
 								var i1 ⊢ yv 
 								var_ln yv ⊢ v2 
 								_set_q { tv i0 v2 } ⊢ { tv i0 } 
-								∎ { tv_n tv }
+								∎ tv
 						∐. . 
 							» "unify 4" _ ⊢ se 
 							_emt se ⊢ se 
 							∎|  
 				∐. .  
 					$ y1 ⊢ y1,y1_0 
-					occurs { tv_n tv i0 lv y1 } ⊢ { tv_n tv i0 lv }
+					occurs { tv i0 lv y1 } ⊢ { tv i0 lv }
 					_get_q { tv i0 } ⊢ { tv i0 vt }
 					var_ln y1_0 ⊢ vy 
 					_set_q { tv i0 vy } ⊢ { tv i0 }  
-					∎ { tv_n tv }
+					∎ tv
 			∎∎ 
-		§ @.unifys { tv_n tv y0 ys } 
+		§ @.unifys { tv y0 ys } 
 			$ ys ⊢ 
 			∐ _cns◂{ %y1 %ys } . 
 				$ y0 ⊢ y0,y00 
-				unify.f { tv_n tv y0 y1 } ⊢ { tv_n tv } 
-				unifys { tv_n tv y00 ys } ⊢|
+				unify.f { tv y0 y1 } ⊢ tv 
+				unifys { tv y00 ys } ⊢|
 			∐. _nil◂{} . 
-				∎ { tv_n tv y0 } 
+				∎ { tv y0 } 
 		§ @.inst_al { tv_n tv lv y al } 
 			##» "enter inst" _ ⊢ sde0 
 			##_emt sde0 ⊢ sde0 
@@ -3137,6 +3146,8 @@
 			∎∎
 		§§ alc_type_k 
 			§ @.hp { tav tv_n tv t0 }
+				» "enter hp" _ ⊢ sd0 
+				_emt sd0 ⊢ sd0 
 				$ t0 ⊢ 
 					∐ dta◂{ a l } . 	
 						∐ a'=t_axm.id.arr; l ⊢ _cns◂{ y l }; l ⊢ _nil◂{} . 
@@ -3199,8 +3210,12 @@
 							stt_v.pv {} ⊢ h 
 							∎ { tav tv_n tv h cf }	
 					∐ abs◂{ a k0 } . 
+						» "hp abs" _ ⊢ se 
+						_emt se ⊢ se 
 						∎|  
 					∐. imp◂{ k0 k1 } .
+						» "hp imp" _ ⊢ se 
+						_emt se ⊢ se 
 						∎|
 				@.hp_lst { tav tv_n tv l } 
 					$ l ⊢ 
@@ -3261,6 +3276,15 @@
 							RP.atm r0 ⊢ p0 
 							∎ { tav tv_n tv s0 p0 }    
 						∐. .
+							rset.min_f s0 ⊢ { s0 j0 }
+							bl.t {} ⊢ b 
+							exc_q { s0 j0 b } ⊢ { s0 j0 b }
+							stt_v.pv {} ⊢ h0 
+							stt_v.cf_p {} ⊢ cf 
+							stt_v.hp { j0 cf h0 } ⊢ r0 
+							RP.atm r0 ⊢ p0 
+							∎ { tav tv_n tv s0 p0 } 
+									\[
 							mk_t_aux.f { tv_n tv tav a l } ⊢ { tv_n tv tav { s o } }
 							$ o ⊢ 
 							∐ _some◂r . 
@@ -3275,7 +3299,10 @@
 								RP.atm r0 ⊢ p0 
 								∎ { tav tv_n tv s0 p0 }
 							∐. _none◂{} . 
-								∎| 
+								» "alc_type_k.f 0" _ ⊢ se 
+								_emt se ⊢ se 
+								∎|
+								\] 
 					∐ rcd◂l .
 						f_lst { tav tv_n tv s0 l } ⊢ { tav tv_n tv s0 l } 
 						RP.rcd l ⊢ p0 
@@ -3294,8 +3321,12 @@
 							RP.atm r0 ⊢ p0 
 							∎ { tav tv_n tv s0 p0 }						 
 					∐ abs◂{ a k0 } . 
+						» "alc_type_k.f abs" _ ⊢ se 
+						_emt se ⊢ se 
 						∎|  
 					∐. imp◂{ k0 k1 } .
+						» "alc_type_k.f imp" _ ⊢ se 
+						_emt se ⊢ se 
 						∎| 
 			@.f_lst { tav tv_n tv s0 l } 
 				$ l ⊢ 
@@ -3772,7 +3803,7 @@
 			$ y0 ⊢ y0,y0_0 
 			$ y1 ⊢ y1,y1_0 
 			imp { y0_0 y1_0 } ⊢ y2 
-			unify.f { tv_n tv y y2 } ⊢ { tv_n tv } 
+			unify.f { tv y y2 } ⊢ tv 
 			∎ { tv_n tv lv y0 y1 }
 		§ ini_reg { lv w rv_n rv re tv_n tv }
 			$ rv_n ⊢ rv_n,n0
@@ -3841,7 +3872,7 @@
 						newvar_l { tv_n tv lv } ⊢ { tv_n tv lv yy }	
 						$ yy ⊢ yy,yy0 
 						imp { y yy } ⊢ y0 
-						unify.f { tv_n tv y0 yx } ⊢ { tv_n tv } 
+						unify.f { tv y0 yx } ⊢ tv 
 						ast.mtc_agl { i_e ap } ⊢ a
 						RP.atm a ⊢ p 
 						∎ { lv env0 rv tv tv_n n re p yy0 }
@@ -3882,6 +3913,8 @@
 							ini_reg { lv w n rv re tv_n tv } ⊢ { lv n rv re tv_n tv y } 
 							∎ { lv rv tv tv_n n re a y }
 						∐. .
+							» "crt_dst 0" _ ⊢ se 
+							_emt se ⊢ se 
 							∎|
 					∐. a ⊢ ast.wc◂{} .
 						newvar_l { tv_n tv lv } ⊢ { tv_n tv lv y } 
@@ -3985,6 +4018,8 @@
 					\[
 					∎ { re a }
 					\]
+					» "slv_src 0" _ ⊢ se 
+					_emt se ⊢ se 
 					∎|
 			@.slv_src_ptn_lst { re l }
 				∐ l ⊢ _cns◂{ hd l } .
@@ -4071,7 +4106,7 @@
 						csm_src { lv env0 rv tv tv_n re s } ⊢ { lv env0 rv tv tv_n re s ys }
 						crt_dst { lv rv tv tv_n n re d } ⊢ { lv rv tv tv_n n re d yd }
 						$ yd ⊢ yd,yd0 
-						unify.f { tv_n tv ys yd0 } ⊢ { tv_n tv }
+						unify.f { tv ys yd0 } ⊢ tv
 						_inc i ⊢ i 
 						f0 { lv env0 n rv re tv_n tv ss ds i } ⊢ { lv env0 n rv re tv_n tv ss ds a i ys }
 						_dec i ⊢ i 
@@ -4085,7 +4120,7 @@
 						crt_dst { lv rv tv tv_n n re d } ⊢ { lv rv tv tv_n n re d yd }						
 						t_axm.s8 {} ⊢ yy 
 						$ yd ⊢ yd,yd0 
-						unify.f { tv_n tv yy yd } ⊢ { tv_n tv } 
+						unify.f { tv yy yd } ⊢ tv  
 						_mk_arr i ⊢ { i a } 
 						_nil {} ⊢ ys 
 						_cns { yd0 ys } ⊢ ys 
@@ -4104,7 +4139,7 @@
 					$ o ⊢ 
 					∐ _some◂{ i y } . 
 						_lod_q { a i } ⊢ { a i yd }
-						unify.f { tv_n tv y yd } ⊢ { tv_n tv }
+						unify.f { tv y yd } ⊢ tv
 						f1 { lv env0 tv_n tv el a } ⊢ { lv env0 tv_n tv el a }
 						_cns { e el } ⊢ el 
 						∎ { lv env0 tv_n tv el a }
@@ -4133,7 +4168,7 @@
 				newvar_l { tv_n tv lv } ⊢ { tv_n tv lv yy } 
 				$ yy ⊢ yy,yy0 
 				imp { y0 yy } ⊢ y_f
-				unify.f { tv_n tv y_f yv } ⊢ { tv_n tv } 
+				unify.f { tv y_f yv } ⊢ tv 
 				_dec lv ⊢ lv 
 				gen { tv_n tv lv yy0 } ⊢ { tv_n tv lv yy0 } 
 				ast.jmp { i_e x } ⊢ lc 
@@ -4146,7 +4181,7 @@
 				_dec lv ⊢ lv 
 				$ yy ⊢ yy,yy0 
 				imp { y0 yy } ⊢ y_f
-				unify.f { tv_n tv y_f ys } ⊢ { tv_n tv } 
+				unify.f { tv y_f ys } ⊢ tv 
 				gen { tv_n tv lv yy0 } ⊢ { tv_n tv lv yy0 }
 				ast.app_jmp { f x } ⊢ lc 
 				∎ { lv env0 rv tv tv_n n re lc yy0 } 
@@ -4174,7 +4209,7 @@
 					csm_src_ptn { lv env0 rv tv tv_n re s } ⊢ { lv env0 rv tv tv_n re s y_s }
 					crt_dst_ptn { lv rv tv tv_n n re d } ⊢ { lv rv tv tv_n n re d y_d }
 					imp { y_s y_d } ⊢ y_s_d 
-					unify.f { tv_n tv yo y_s_d } ⊢ { tv_n tv } 
+					unify.f { tv yo y_s_d } ⊢ tv 
 					_dec lv ⊢ lv 
 					gen { tv_n tv lv yo0 } ⊢ { tv_n tv lv yo0 } 
 					ast.op_name { i_e s d } ⊢ ll 
@@ -4190,7 +4225,7 @@
 					crt_dst_ptn { lv rv tv tv_n n re y } ⊢ { lv rv tv tv_n n re y y_d } 
 					imp { y_s y_d } ⊢ yx 
 					$ y0 ⊢ y0,y0_0 
-					unify.f { tv_n tv y0 yx } ⊢ { tv_n tv } 
+					unify.f { tv y0 yx } ⊢ tv 
 					_dec lv ⊢ lv 
 					gen { tv_n tv lv y0_0 } ⊢ { tv_n tv lv y0_0 } 
 					ast.op_app { f x y } ⊢ ll 
@@ -4209,7 +4244,7 @@
 					##_emt sec0 ⊢ sec0
 					_dec lv ⊢ lv 
 					$ y ⊢ y,y0 
-					unify.f { tv_n tv y0 y_d } ⊢ { tv_n tv } 
+					unify.f { tv y0 y_d } ⊢ tv 
 					##_emt sec0 ⊢ sec0
 					gen { tv_n tv lv y } ⊢ { tv_n tv lv y } 
 					gen { tv_n tv lv y_s } ⊢ { tv_n tv lv y_s } 
@@ -4250,7 +4285,7 @@
 					csm_src_ptn { lv env0 rv tv tv_n re sp } ⊢ { lv env0 rv tv tv_n re sp y_s } 
 					crt_dst_ptn_lst { lv rv tv tv_n n re dl } ⊢ { lv rv tv tv_n n re dl y_d }
 					##$ y_s ⊢ y_s,y_s0 
-					unifys { tv_n tv y_s y_d } ⊢ { tv_n tv y_s } 
+					unifys { tv y_s y_d } ⊢ { tv y_s } 
 					_dec lv ⊢ lv 
 					gen { tv_n tv lv y_s } ⊢ { tv_n tv lv y_s } 
 					slv_r { lv env0 rv tv tv_n n re lc } ⊢ { lv env0 rv tv tv_n n re lc yr } 
@@ -4281,7 +4316,7 @@
 				inst { tv_n tv lv yr0 } ⊢ { tv_n tv lv yr0 } 
 				inst { tv_n tv lv yr1 } ⊢ { tv_n tv lv yr1 }
 				$ yr0 ⊢ yr0,yr0_0 
-				unify.f { tv_n tv yr0 yr1 } ⊢ { tv_n tv } 
+				unify.f { tv yr0 yr1 } ⊢ tv 
 				_dec lv ⊢ lv 
 				gen { tv_n tv lv yr0_0 } ⊢ { tv_n tv lv yr0_0 } 
 				p_cns { { tl me } lm } ⊢ lm 
@@ -4324,7 +4359,7 @@
 					crt_mtc_ptn { lv env0 rv tv tv_n n re mp } ⊢ { lv env0 rv tv tv_n n re mp y }
 					_dec lv ⊢ lv 
 					$ y0 ⊢ y0,y0_0 
-					unify.f { tv_n tv y0_0 y } ⊢ { tv_n tv } 
+					unify.f { tv y0_0 y } ⊢ tv 
 					gen { tv_n tv lv y0 } ⊢ { tv_n tv lv y0 } 
 					ast.mtc_id { sp mp } ⊢ t 
 					$ y0 ⊢ y0,y00 
@@ -4340,7 +4375,7 @@
 					slv_test_var { lv env0 tv_n tv rv n re v1 } ⊢ { lv env0 tv_n tv rv n re v1 y1 } 
 					_dec lv ⊢ lv 
 					$ y0 ⊢ y0,y0_0 
-					unify.f { tv_n tv y0_0 y1 } ⊢ { tv_n tv } 
+					unify.f { tv y0_0 y1 } ⊢ tv  
 					gen { tv_n tv lv y0 } ⊢ { tv_n tv lv y0 } 
 					ast.mtc_test { v0 v1 } ⊢ t 
 					slv_mtc_line { lv env0 rv tv tv_n n re tl } ⊢ { lv env0 rv tv tv_n n re tl } 
@@ -4360,14 +4395,14 @@
 				_inc lv ⊢ lv 
 				crt_mtc_ptn { lv env0 rv tv tv_n n re mp } ⊢ { lv env0 rv tv tv_n n re mp y } 
 				_dec lv ⊢ lv  
-				unify.f { tv_n tv y0 y } ⊢ { tv_n tv }
+				unify.f { tv y0 y } ⊢ tv
 				p_cns { { mp re tl me } ilm } ⊢ ilm 
 				∎ { lv env0 rv tv tv_n n ilm }
 			∐. p_end◂{ mp tl me } .
 				_inc lv ⊢ lv 
 				crt_mtc_ptn { lv env0 rv tv tv_n n re mp } ⊢ { lv env0 rv tv tv_n n re mp y } 
 				_dec lv ⊢ lv  
-				unify.f { tv_n tv y0 y } ⊢ { tv_n tv }
+				unify.f { tv y0 y } ⊢ tv 
 				p_end { mp re tl me } ⊢ ilm 
 				∎ { lv env0 rv tv tv_n n ilm }
 		@.slv_lc_id_mtc { lv env0 rv tv tv_n n ilm } 
@@ -4441,6 +4476,7 @@
 						crt_dst_ptn { lv rv tv tv_n r_n re d } ⊢ { lv rv tv tv_n r_n re d y0 } 
 						» "enter f_l1 d1" _ ⊢ sd1
 						_emt sd1 ⊢ sd1
+						_emt w ⊢ w 
 						slv_r { lv env0 rv tv tv_n r_n re lc } ⊢ { lv env0 rv tv tv_n r_n re lc yr } 
 						inst { tv_n tv lv yr } ⊢ { tv_n tv lv yr } 
 						» "enter f_l1 d2" _ ⊢ sd2
@@ -4448,7 +4484,12 @@
 						$ y0 ⊢ y0,y00 
 						$ yr ⊢ yr,yr0 
 						imp { y00 yr0 } ⊢ yf
-						unify.f { tv_n tv yf yx } ⊢ { tv_n tv } 
+						$ yf ⊢ yf,yf0 
+						pnt_type_k { tv yf0 } ⊢ { tv syf0 } 
+						_emt syf0 ⊢ syf0 
+						» "DBG Fx2" _ ⊢ sdde 
+						_emt sdde ⊢ sdde
+						unify.f { tv yf yx } ⊢ tv 
 						f_l1 { env0 rv tv tv_n r_n q } ⊢ { env0 rv tv tv_n r_n q yl } 
 						_cns { { d } q } ⊢ q 
 						_cns { { en lc w { y0 yr } } yl } ⊢ yl 
@@ -4468,6 +4509,7 @@
 						imp { ys0 yd0 } ⊢ yx
 						gen { tv_n tv lv yx } ⊢ { tv_n tv lv yx } 
 						##_emt yx ⊢ yx 
+						\[
 						$ ys ⊢ ys,ys0 
 						rset.ini {} ⊢ s0 
 						alc_type_k.f { tav tv_n tv s0 ys0 } ⊢ { tav tv_n tv s0 p0 } 
@@ -4475,6 +4517,8 @@
 						rset.ini {} ⊢ sd0 
 						alc_type_k.f { tav tv_n tv sd0 yd0 } ⊢ { tav tv_n tv sr0 pr0 } 
 						k_op { p0 pr0 } ⊢ k 
+						\]
+						k_op_axm {} ⊢ k 
 						$ yx ⊢ yx,yx0 
 						exc_q { evv en k } ⊢ { evv en k } 
 						pnt_type_k { tv yx0 } ⊢ { tv yx1s } 
@@ -4495,6 +4539,8 @@
 			∎∎ 
 		
 		§ @.slv_type { env0 mtv tv_n tv t_ns al t l2 } 
+			» 0r _ ⊢ xx 
+			_add { xx tv_n } ⊢ { xx tv_n } 
 			$ t ⊢ 
 			∐ ast.type_rcd◂l . 
 				slv_type_lst { env0 mtv tv_n tv t_ns al l l2 } ⊢ { env0 mtv tv_n tv t_ns al l l2 } 
@@ -4603,7 +4649,7 @@
 		§ slv_args_ln { env0 mtv tv_n tv t_ns as t l2 } 
 			_nil {} ⊢ al 
 			slv_args_ln { env0 mtv tv_n tv t_ns as al t l2 } ⊢| 
-		§ @.slv_args_def { env0 mtv tv_n tv t_ns as al x xl ql dl } 
+		§ @.slv_args_def_0 { env0 mtv tv_n tv t_ns as al x xl ql dl } 
 			$ as ⊢ 
 			∐ _cns◂{ a as } . 
 				assoc { al a } ⊢ { al a o } 
@@ -4612,6 +4658,7 @@
 					newvar_i { tv_n tv } ⊢ { tv_n tv i } 
 					» 0r _ ⊢ lv 
 					$ tv_n ⊢ tv_n,tv_n0 
+					$ tv_n ⊢ tv_n,qi 
 					newvar_q { tv_n tv lv } ⊢ { tv_n tv lv q } 
 					_cns { q ql } ⊢ ql 
 					_some tv_n0 ⊢ o 
@@ -4619,9 +4666,10 @@
 					$ i ⊢ i,i1 
 					var i1 ⊢ v 
 					_cns { v xl } ⊢ xl 
-					slv_args_def { env0 mtv tv_n tv t_ns as al x xl ql dl } ⊢ { env0 mtv tv_n tv t_ns al k yx dl } 
+					slv_args_def_0 { env0 mtv tv_n tv t_ns as al x xl ql dl } ⊢ { env0 mtv tv_n tv t_ns al k yx dl ql } 
+					_cns { qi ql } ⊢ ql 
 					abs { i k } ⊢ k 
-					∎ { env0 mtv tv_n tv t_ns al k yx dl }
+					∎ { env0 mtv tv_n tv t_ns al k yx dl ql }
 				∐. _some◂y . 
 					» "slv_args_def 0" _ ⊢ se 
 					_emt se ⊢ se 
@@ -4629,9 +4677,10 @@
 			∐. _nil◂{} .  
 				$ x ⊢ x,x0 
 				##slv_args_def_dl { tv_n dl } ⊢ { tv_n dl } 
+				_nil {} ⊢ ql0 
 				dta { x0 ql } ⊢ yx 
 				dta { x xl } ⊢ k 
-				∎ { env0 mtv tv_n tv t_ns al k yx dl }
+				∎ { env0 mtv tv_n tv t_ns al k yx dl ql0 }
 			\[
 			@.slv_args_def_dl { tv_n dl }  
 				$ dl ⊢ 
@@ -4649,9 +4698,10 @@
 			_nil {} ⊢ al 
 			_nil {} ⊢ xl
 			_nil {} ⊢ ql 
-			slv_args_def { env0 mtv tv_n tv t_ns as al x xl ql dl } ⊢| 
-
-		§ @.slv_dt_def { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } 
+			slv_args_def_0 { env0 mtv tv_n tv t_ns as al x xl ql dl } ⊢ { env0 mtv tv_n tv t_ns al k yx dl ql0 } 
+			rev ql0 ⊢ ql0 
+			∎ { env0 mtv tv_n tv t_ns al k yx dl ql0 }
+		§ @.slv_dt_def { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } 
 			$ dl ⊢ 
 			∐ _cns◂{ { cn y } dl } . 
 				_nil {} ⊢ l2 
@@ -4659,6 +4709,7 @@
 				» 0r _ ⊢ lv 
 				$ yx ⊢ yx,yx0 
 				##$ k ⊢ k,k0 
+				$ k ⊢ k,k0 
 				imp { k yx0 } ⊢ yy 
 				$ yy ⊢ yy,yy0 
 				pnt_type_k { tv yy0 } ⊢ { tv syy }
@@ -4667,27 +4718,67 @@
 				##var_ln k0 ⊢ vk 
 				##_set_q { tv ic vk } ⊢ { tv ic } 
 				_inc an ⊢ an 
-				slv_dt_def { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } ⊢ { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac }  
+				slv_dt_def { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } ⊢ { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac kl }  
 				_dec an ⊢ an 
+				_cns { k0 kl } ⊢ kl 
 				$ ac ⊢ ac,ac0 
 				$ an ⊢ an,an0 
 				k_ctr { an0 ac0 } ⊢ k 
 				add_e { tv_n tv evv ev ev_n ns_e cn k yy } ⊢ { tv_n tv evv ev ev_n ns_e } 
 				_cns { ep1 ep0 } ⊢ ep0 
-				∎ { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac } 
+				∎ { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac kl } 
 			∐. _nil◂{} . 
 				$ an ⊢ an,ac 
-				∎ { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac } 
+				_nil {} ⊢ kl 
+				∎ { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac kl }
+		§ @.subst_lst { ql al } 
+			$ ql ⊢ 
+			∐ _cns◂{ i0 ql } . 
+				assoc { al i0 } ⊢ { al i0 o } 
+				$ o ⊢ 
+				∐ _some◂i1 . 
+					subst_lst { ql al } ⊢ { ql al }
+					_cns { i1 ql } ⊢ ql 
+					∎ { ql al } 
+				∐. _none◂{} . 
+					» "subst_lst 0" _ ⊢ se 
+					_emt se ⊢ se 
+					∎| 
+			∐. _nil◂{} . 
+				_nil {} ⊢ ql 
+				∎ { ql al }
+		§ @.mk_asc_lst { tv_n tv ql } 
+			$ ql ⊢ 
+			∐ _cns◂{ i0 ql } . 
+				mk_asc_lst { tv_n tv ql } ⊢ { tv_n tv ql al } 
+				newvar_i { tv_n tv } ⊢ { tv_n tv i1 }
+				$ i1 ⊢ i1,i11 
+				_some i1 ⊢ o 
+				_cns { { i0 o } al } ⊢ al 
+				_cns { i11 ql } ⊢ ql 
+				∎ { tv_n tv ql al }
+			∐. _nil◂{} . 
+				_nil {} ⊢ al 
+				_nil {} ⊢ ql 
+				∎ { tv_n tv ql al } 
+		§ mk_t_aux_f { tv_n tv ql kl } 
+			mk_asc_lst { tv_n tv ql } ⊢ { tv_n tv ql al } 
+			» 1r _ ⊢ lv 
+			inst_lst { tv_n tv lv kl al } ⊢ { tv_n tv lv kl al } 
+			_dec lv ⊢ lv 
+			gen_lst { tv_n tv lv kl } ⊢ { tv_n tv lv kl }
+			##subst_lst { ql al } ⊢ { ql al } 
+			∎ { tv_n tv ql kl }
 		§§ slv_dt_clq 
 			§ @.f { q { mmv mev ev ns_m ns_e il } tav evv ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } }
 					_nil {} ⊢ l0 
 					_nil {} ⊢ l1
 					_nil {} ⊢ l2 
-					lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t } ⊢ { { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t }
+					lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tav tx_n mtv tv_n tv ns_t } ⊢ { { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tav tx_n mtv tv_n tv ns_t }
 					lp0_ln { { l1 l2 } { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } } ⊢ { { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } } 
 					lp0_def { l0 { mmv mev ev ns_m ns_e il } tav evv ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } } ⊢ { { mmv mev ev ns_m ns_e il } tav evv ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } }
 					∎ { { mmv mev ev ns_m ns_e il } tav evv ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } }
-				@.lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t } 
+				@.lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tav tx_n mtv tv_n tv ns_t } 
 					» "slv_dt_clq.lp0" _ ⊢ sec1 
 					_emt sec1 ⊢ sec1 
 					$ q ⊢ 
@@ -4695,12 +4786,14 @@
 						$ d ⊢ 
 						∐ ast.dt_def◂{ as dl } .
 							$ tx_n ⊢ tx_n,x 
+							$ x ⊢ x,x0 
+							$ w ⊢ w,w0 
 							_inc tx_n ⊢ tx_n 
-							slv_args_def { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t as x dl } ⊢ { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t al k yx dl } 
+							slv_args_def { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t as x dl } ⊢ { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t al k yx dl ql } 
 							add_t { tv_n tv ns_t w k } ⊢ { tv_n tv ns_t }
-							_cns { { al yx dl } l0 } ⊢ l0 
+							_cns { { al yx dl x0 w0 ql } l0 } ⊢ l0 
 							##_cns { { as dl
-							 lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t } ⊢| 
+							 lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tav tx_n mtv tv_n tv ns_t } ⊢| 
 						∐. ast.dt_ln◂{ as y } . 
 							##slv_args_ln { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t as y } ⊢ { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t al k } 
 							##add_t { tv_n tv ns_t w k } ⊢ { tv_n tv ns_t } 
@@ -4715,9 +4808,9 @@
 							_some { w0 as y } ⊢ o 
 							_some o ⊢ o 
 							_cns { { t0 o } l1 } ⊢ l1
-							lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t } ⊢| 
+							lp0 { q { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tav tx_n mtv tv_n tv ns_t } ⊢| 
 					∐. _nil◂{} .
-						∎ { { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tx_n mtv tv_n tv ns_t } 
+						∎ { { l0 l1 l2 } { mmv mev ev ns_m ns_e il } tav tx_n mtv tv_n tv ns_t } 
 				@.lp0_ln { { l1 l2 } { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } }  
 					$ l2 ⊢ 
 					∐ _cns◂{ i0 l2 } . 
@@ -4749,9 +4842,13 @@
 						∎ { { mmv mev ev ns_m ns_e il } ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } } 
 				@.lp0_def { l0 { mmv mev ev ns_m ns_e il } tav evv ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } } 
 					$ l0 ⊢ 
-					∐ _cns◂{ { al yx dl } l0 } . 
+					∐ _cns◂{ { al yx dl x w ql } l0 } . 
 						» 0r _ ⊢ an 
-						slv_dt_def { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } ⊢ { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac }
+						slv_dt_def { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } ⊢ { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac kl }
+						##mk_t_aux_f { tv_n tv ql kl } ⊢ { tv_n tv ql kl }
+						##_some { ql kl } ⊢ o 
+						_none {} ⊢ o 
+						_set_q { tav x { w o } } ⊢ { tav x } 
 						lp0_def { l0 { mmv mev ev ns_m ns_e il } tav evv ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } } ⊢| 
 					∐. _nil◂{} .
 						∎ { { mmv mev ev ns_m ns_e il } tav evv ev_n tx_n mtv tv_n tv ns_t { dd ep0 ec0 } }	
@@ -4782,7 +4879,7 @@
 			newvar_i { tv_n tv } ⊢ { tv_n tv i0 } 
 			$ i0 ⊢ i0,i1 
 			var i0 ⊢ y0 
-			t_axm.lst { tv_n tv y0 } ⊢ { tv_n tv y0 } 
+			t_axm.lst y0 ⊢ y0 
 			abs { i1 y0 } ⊢ y0 
 			∎ { tv_n tv y0 }  
 
@@ -4791,7 +4888,7 @@
 			newvar_i { tv_n tv } ⊢ { tv_n tv i0 } 
 			$ i0 ⊢ i0,i1 
 			var i0 ⊢ y0 
-			t_axm.opn { tv_n tv y0 } ⊢ { tv_n tv y0 } 
+			t_axm.opn y0 ⊢ y0 
 			abs { i1 y0 } ⊢ y0 
 			∎ { tv_n tv y0 }  
 		
@@ -4820,7 +4917,7 @@
 				_mk_arr max_e ⊢ { max_e evv } 
 				» 16000r _ ⊢ max_t 
 				_mk_arr max_t ⊢ { max_t tv }
-				» 200r _ ⊢ max_t_aux
+				» 1000r _ ⊢ max_t_aux
 				_mk_arr max_t_aux ⊢ { max_t_aux tav }
 				» 1r _ ⊢ mv_n
 				» 0r _ ⊢ rv_n
@@ -4854,7 +4951,7 @@
 				$ ia ⊢ ia,ia0 
 				var ia ⊢ v 
 				$ v ⊢ v,v0 
-				t_axm.lst { tv_n tv v } ⊢ { tv_n tv y }
+				t_axm.lst v ⊢ y
 				_nil {} ⊢ r0 
 				_cns { y r0 } ⊢ r0 
 				_cns { v0 r0 } ⊢ r0 
@@ -4877,7 +4974,7 @@
 				$ ia ⊢ ia,ia0 
 				var ia ⊢ v 
 				$ v ⊢ v,v0 
-				t_axm.opn { tv_n tv v } ⊢ { tv_n tv y }
+				t_axm.opn v ⊢ y 
 				_nil {} ⊢ r0 
 				t_axm.unt {} ⊢ u0
 				_nil {} ⊢ l0 
@@ -4977,7 +5074,7 @@
 				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
 								
 				t_axm.s8 {} ⊢ ys 
-				t_axm.lst { tv_n tv ys } ⊢ { tv_n tv yx } 
+				t_axm.lst ys ⊢ yx 
 				» "_args" _ ⊢ se
 				k_op_axm {} ⊢ k 
 				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
@@ -5139,7 +5236,7 @@
 				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
 						
 				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv y0 }
-				t_axm.lst { tv_n tv y0 } ⊢ { tv_n tv y0 } 
+				t_axm.lst y0 ⊢ y0  
 				_nil {} ⊢ l0 
 				rcd l0 ⊢ y1 
 				imp { y1 y0 } ⊢ yx
@@ -5151,7 +5248,7 @@
 						
 				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv y0 }
 				$ y0 ⊢ y0,y1 
-				t_axm.lst { tv_n tv y0 } ⊢ { tv_n tv y0 } 
+				t_axm.lst y0 ⊢ y0 
 				$ y0 ⊢ y0,y2 
 				_nil {} ⊢ l0 
 				_cns { y0 l0 } ⊢ l0 
@@ -5166,7 +5263,7 @@
 					
 				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv y0 } 
 				$ y0 ⊢ y0,y1 
-				t_axm.opn { tv_n tv y1 } ⊢ { tv_n tv y1 } 
+				t_axm.opn y1 ⊢ y1  
 				imp { y0 y1 } ⊢ yx 				
 				» "_some" _ ⊢ se
 				» 0r _ ⊢ ia0 
@@ -5175,7 +5272,7 @@
 				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
 					
 				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv y0 }
-				t_axm.opn { tv_n tv y0 } ⊢ { tv_n tv y0 } 
+				t_axm.opn y0 ⊢ y0 
 				_nil {} ⊢ l0 
 				rcd l0 ⊢ y1 
 				imp { y1 y0 } ⊢ yx
@@ -5275,6 +5372,7 @@
 							slv_r { lv { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r lc } ⊢ { lv { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r lc yr } 
 							_dec lv ⊢ lv 
 							gen { tv_n tv lv y } ⊢ { tv_n tv lv y } 
+							\[
 							$ y ⊢ y,y0 
 							rset.ini {} ⊢ s0 
 							alc_type_k.f { tav tv_n tv s0 y0 } ⊢ { tav tv_n tv s0 p0 } 
@@ -5282,6 +5380,8 @@
 							rset.ini {} ⊢ sr0 
 							alc_type_k.f { tav tv_n tv sr0 yr0 } ⊢ { tav tv_n tv sr0 pr0 } 
 							k_op { p0 pr0 } ⊢ k 
+							\]
+							k_op_axm {} ⊢ k 
 							imp { y yr } ⊢ yx 
 							$ yx ⊢ yx,yx0 
 							pnt_type_k { tv yx0 } ⊢ { tv syx } 
@@ -5322,11 +5422,17 @@
 						$ e ⊢ 
 						∐ ast.dt_def◂{ as dl } .
 							$ tx_n ⊢ tx_n,x 
-							_inc tx_n ⊢ tx_n 
-							slv_args_def { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t as x dl } ⊢ { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t al k yx dl } 
+							$ x ⊢ x,x0 
+							_inc tx_n ⊢ tx_n
+							$ w ⊢ w,w0 
+							slv_args_def { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t as x dl } ⊢ { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t al k yx dl ql } 
 							add_t { tv_n tv ns_t w k } ⊢ { tv_n tv ns_t }
 							» 0r _ ⊢ an 
-							slv_dt_def { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } ⊢ { { mmv mev ns_m il } tav evv an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac }
+							slv_dt_def { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e dl { dd ep0 ec0 } } ⊢ { { mmv mev ns_m il } { tav evv } an mtv al yx tv tv_n ns_t ev ev_n ns_e { dd ep0 ec0 } ac kl }
+							##mk_t_aux_f { tv_n tv ql kl } ⊢ { tv_n tv ql kl }
+							##_some { ql kl } ⊢ o 
+							_none {} ⊢ o 
+							_set_q { tav x0 { w0 o } } ⊢ { tav x } 
 							slv_file_lp { i il { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } tav evv tx_n ns_m ns_e ns_t gel { dd ep0 ec0 } } ⊢| 
 						∐. ast.dt_ln◂{ as y } . 
 							_nil {} ⊢ al

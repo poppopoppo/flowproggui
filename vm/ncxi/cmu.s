@@ -10,12 +10,12 @@
 bits 64
 
 %define NULL ~0
-%define SFLS_MAX 32000
+%define SFLS_MAX 70000
 %define SFLS_0_MAX 80000 
-%define SFLS_1_MAX 20000 
-%define SFLS_2_MAX 10000 
-%define SFLS_3_MAX 5000 
-%define SFLS_4_MAX 2500
+%define SFLS_1_MAX 40000 
+%define SFLS_2_MAX 80000
+%define SFLS_3_MAX 10000
+%define SFLS_4_MAX 5000
 %define SFLS_NULL 0xffff_ffff_ffff_0000 
 %define SFLS_0_NULL 0xffff_ffff_ffff_0001 
 %define SFLS_1_NULL 0xffff_ffff_ffff_0101 
@@ -263,6 +263,7 @@ SFLS_0_end:
   mov rsi,SFLS_0_NULL
   mov QWORD [SFLS_VCT_0+rdi],rsi
   ret
+
 
 SFLS_init:
   mov QWORD [SFLS_TOP],SFLS_VCT

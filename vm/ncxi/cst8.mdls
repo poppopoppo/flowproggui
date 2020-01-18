@@ -1,0 +1,64 @@
+##§ @.slv_type { env0 mtv tv_n tv t_ns al t l2 } 
+	\[
+  § ff { tv_n } 
+  	» 0r _ ⊢ xx 
+		_add { xx tv_n } ⊢ { xx tv_n } 
+		∎| 
+	\]
+  \[
+  @.slv_type_lst { env0 mtv tv_n tv t_ns al l l2 }
+		$ l ⊢ 
+		∐ _cns◂{ t l } . 
+			slv_type { env0 mtv tv_n tv t_ns al t l2 } ⊢ { env0 mtv tv_n tv t_ns al k l2 } 
+			slv_type_lst { env0 mtv tv_n tv t_ns al l l2 } ⊢ { env0 mtv tv_n tv t_ns al l l2 } 
+			_cns { k l } ⊢ l 
+			∎ { env0 mtv tv_n tv t_ns al l l2 }
+		∐. _nil◂{} . 
+				_nil {} ⊢ l 
+				∎ { env0 mtv tv_n tv t_ns al l l2 } 
+	\]
+  \[
+  
+		@.slv_type_app { env0 mtv tv_n tv t_ns al k0 k1 l2 } 
+				∐ k0 ⊢ abs◂{ a k0 } . 
+					var_ln k1 ⊢ v1 
+					exc_q { tv a v1 } ⊢ { tv a v1 } 
+					∎ { env0 mtv tv_n tv t_ns al k0 l2 } 
+				∐ k0 ⊢ var◂i . 
+					_lod_q { tv i } ⊢ { tv i v } 
+					∐ v ⊢ var_ln◂k2 . 
+						slv_type_app { env0 mtv tv_n tv t_ns al k2 k1 l2 } ⊢|
+					∐. . 
+						pnt_type_k { tv k1 } ⊢ { tv s0 } 
+						» "slv_type_app 1" _ ⊢ se 
+						_emt se ⊢ se 
+						_emt s0 ⊢ s0 
+						∎|
+				∐. . 
+					pnt_type_k { tv k0 } ⊢ { tv s0 } 
+					» "slv_type_app 0" _ ⊢ se 
+					_emt se ⊢ se 
+					_emt s0 ⊢ s0 
+					∎| 
+			@.slv_args_ln { env0 mtv tv_n tv t_ns as al t l2 } 
+				$ as ⊢ 
+				∐ _cns◂{ a as } . 
+					assoc { al a } ⊢ { al a o } 
+					$ o ⊢ 
+					∐ _none◂{} . 
+						newvar_i { tv_n tv } ⊢ { tv_n tv i } 
+						$ i ⊢ i,i0 
+						_some i ⊢ o 
+						_cns { { a o } al } ⊢ al 
+						slv_args_ln { env0 mtv tv_n tv t_ns as al t l2 } ⊢ { env0 mtv tv_n tv t_ns al k l2 } 
+						abs { i0 k } ⊢ k 
+						∎ { env0 mtv tv_n tv t_ns al k l2 }
+					∐. _some◂y . 
+						» "slv_args 0" _ ⊢ se 
+						_emt se ⊢ se 
+						∎| 
+				∐. _nil◂{} .  
+					slv_type { env0 mtv tv_n tv t_ns al t l2 } ⊢|
+					##∎|
+
+          \]
