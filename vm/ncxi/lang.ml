@@ -516,7 +516,7 @@ module Ast = struct
     let _lod_q = sgn ()
     let _get_q = sgn ()
     let _write = sgn ()
-    let _system = sgn ()
+    let _cd = sgn ()
     let _args = sgn ()
     let _in_l = sgn ()
     let _in_r = sgn ()
@@ -3671,6 +3671,24 @@ and init_prm () =
     "\tsyscall\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._emt_s8_to,em_emt_s8_to)::gns.ns_c;
+
+  let v = ref(Ln(Imp(Types.Axm Types.Axm.stg,Types.Axm Types.Axm.stg))) in
+  !ns.ns_p <- ("_cd",Ast.Axm._cd)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._cd,v)::gns.ns;
+  gns.ns_e <- 
+  (Ast.Axm._cd,ref(Etr_V(RP.A(R.Idx 0),RP.A(R.Idx 0),(-1))))::gns.ns_e;
+  let em_cd =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._cd)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._cd)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._cd)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tadd rdi,8\n"^
+    "\tmov QWORD [rsp_tmp],rsp\n"^
+    "\tand rsp,~0xf\n"^
+    "\tcall system\n"^
+    "\tmov rsp,QWORD [rsp_tmp]\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._cd,em_cd)::gns.ns_c;
 
   let v = ref(Ln(Imp(Types.Axm Types.Axm.r64,Rcd(rcd_cl [Types.Axm Types.Axm.r64;Types.Axm Types.Axm.stg])))) in
   !ns.ns_p <- ("_mlc_s8",Ast.Axm._mlc_s8)::!ns.ns_p;

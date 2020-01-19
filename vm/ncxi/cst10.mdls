@@ -6,4 +6,6 @@
     //
   » "FF.txt" _ ⊢ f 
   _emt_s8_to { f s } ⊢ { f s }
+  » "ls -a\n" _ ⊢ l0 
+  _cd l0 ⊢ l0 
   ∎ {} 

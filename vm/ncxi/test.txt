@@ -1100,3 +1100,5 @@ rcall rank-increment
 
 concurrent determinism = independency of result of computation from pases of parallel computational units 
 cell automaton, concurrent register machine 
+
+r' :: {> a,b } ∀ {> a~_s8 b~_r64 < r' } ⊢ { _s8 '{> r' } }

@@ -76,17 +76,17 @@
 			]
 		},
 		"im_regs": {
-			"name": "support.class.im_reg.opadl",
+			"name": "keyword.operator.im_reg.opadl",
 			"begin": "%\\[",
 			"beginCaptures": {
 				"1": {
-					"name": "support.class.im_reg.begin"
+					"name": "keyword.operator.im_reg.begin"
 				}
 			},
 			"end": "\\]",
 			"endCaptures": {
 				"1": {
-					"name": "support.class.im_reg.end"
+					"name": "keyword.operator.im_reg.end"
 				}
 			},
 			"patterns": [
@@ -102,7 +102,7 @@
 		"patterns": [
 			{
 				"name": "keyword.operator.opadl",
-				"match": "(%[A-Z a-z '_'][A-Z a-z '_' 0-9]*)"
+				"match": "(%[A-Za-z_][A-Za-z_0-9]*)"
 			}
 		]
 	},
