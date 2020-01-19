@@ -35,6 +35,7 @@ extern strtol
 extern strtoul
 extern isspace
 extern strlen
+extern system 
 section .bss
   args: resq 1
   SFLS_HD: resb 8*8
@@ -1519,6 +1520,7 @@ in_fn: ; rdi=filename
   mov rax,QWORD [rsp]
   add rsp,16
   ret
+
 
 in0_init:
   mov rax,5
