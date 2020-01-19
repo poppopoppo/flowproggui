@@ -298,10 +298,18 @@ glb_etr:
 eq_def:
   | name { EqLn $1 }
   | STG { Cst(Cst.S8 $1) }
+(*  | S8_E eq_def_s8 S8_P { Cst(Cst.S8 $2) }  *)
   | R64 { Cst(Cst.R64 $1) }
   | IDX { SttArg $1 }
   | ENV STG { ExStg $2 }
   | ENV IDX { ExStgArg $2 }
+  ;
+eq_def_s8:
+  | { [] }
+  | LINE eq_def_s8 { (P_Stg $1) :: $2 }
+  | STG eq_def_s8 { (P_Stg $1) :: $2 }
+  | name eq_def_s8 { (P_N(ref(Stt_Name $1)))::$2 } 
+  ;
 glb_etr_clique:
   | SLF DOT glb_etr_body_ir { [$3] }
   | SLF DOT glb_etr_body_ir glb_etr_clique { [$3]@$4 }
@@ -410,9 +418,7 @@ mtc_ir_test:
   ;
 ir_ptn_cst:
   | STG { P_Stg $1 }
-  | INT { P_Z $1 }
   | R64 { P_R64 $1 }
-  | R2 { P_R2 $1 }
   | name { P_N(ref(Ast.Stt_Name $1)) }
   ;
 ir_ptn_atm:

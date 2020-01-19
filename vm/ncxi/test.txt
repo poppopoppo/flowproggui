@@ -1079,9 +1079,24 @@ rret rank-decriment
 rcall rank-increment 
 
   Op &{ &[ %s ] Ext } &⊢ &{ &[ s ] Ext }
+  Op { &[ %s ] Ext } &⊢ { &[ s ] Ext }
+  _gnr : a'::_Sbt ∀ {} &⊢ { _pos◂a' _neg◂a' }
+  _snd : { _neg◂a' a' } &⊢ {} 
+  _rcv : _pos◂a' &⊢ a'
+¶ &.cmn ◂ a' 
+  ∐ _cmn :  _pos◂{ a' _cmn◂a' }
+
+¶ &@.sbt_lst a'
+  ∐ sbt_cns : { a' sbt_lst◂a' }
+  ∐ sbt_nil : {}
 
 ¶ t ◂ { a' b' } 
   .. 
   a'::{ _ _ } ∀ t◂a' 
   a',b' ∀ t◂{ a' b' }
 § t◂{ a' b' }
+
+§ _fmt_d◂◂#[ 123r ]
+
+concurrent determinism = independency of result of computation from pases of parallel computational units 
+cell automaton, concurrent register machine 
