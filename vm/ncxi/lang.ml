@@ -429,9 +429,7 @@ module Ast = struct
     | Mtc_Ln of Sgn.t
   and cst =
     | P_N of axm0
-    | P_Z of int
     | P_R64 of int64
-    | P_R2 of bool
     | P_Stg of string
   and p_sig = string
   and ir_code =
@@ -531,6 +529,7 @@ module Ast = struct
     let _s8_len = sgn () 
     let _in0 = sgn ()
     let _in_fn = sgn ()
+    let _emt_s8_to = sgn () 
     let _emt_q = sgn ()
     let _app = sgn ()
     let _out = sgn ()
@@ -614,10 +613,8 @@ module Ast = struct
     ( match c with
       | P_N n -> pnt_stt_name !n
       | P_Stg s -> "\""^s^"\""
-      | P_Z z -> (string_of_int z)
       | P_R64 x -> "0xr"^(Int64.format "%x" x)
-      | P_R2 false -> "0x2r0"
-      | P_R2 true -> "0x2r1" )
+     )
   let print_mtc p =
     let (es,_) = p in
     let s1 =
@@ -1412,13 +1409,11 @@ and inst_mtc_atm gns (ns:ns_v) l e =
         | _ -> err "inst_mtc_atm 2" )
     | P_Cst c ->
       ( match c with
-        | P_Z _ -> App(Axm Axm.z_n,(Axm Axm.z_u))
         | P_R64 _ -> Axm Axm.r64
         | P_N n -> 
           let p = slv_ns0 ns n in
           let yn = inst l (Var (get_ns gns p)) in
           yn 
-        | P_R2 _ -> Axm Axm.r2
         | P_Stg _ -> Axm Axm.stg )
     | Eq_V ve ->
       let y_ve = inst_v_r gns l ve in
@@ -3649,6 +3644,33 @@ and init_prm () =
     "\tbtr r12,1\n"^
     "\tret\n" in
   gns.ns_c <- (Ast.Axm._in_fn,em_in_fn)::gns.ns_c;
+
+  let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.stg]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.stg])))) in
+  !ns.ns_p <- ("_emt_s8_to",Ast.Axm._emt_s8_to)::!ns.ns_p;
+  gns.ns <- (Ast.Axm._emt_s8_to,v)::gns.ns;
+  gns.ns_e <- 
+  (Ast.Axm._emt_s8_to,ref(Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],(-1))))::gns.ns_e;
+  let em_emt_s8_to =
+    "NS_E_ID_"^(Sgn.print Ast.Axm._emt_s8_to)^": dq 0\n"^
+    "NS_E_"^(Sgn.print Ast.Axm._emt_s8_to)^":\n"^
+    "NS_E_RDI_"^(Sgn.print Ast.Axm._emt_s8_to)^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rax,2\n"^
+    "\tmov rsi,0x42\n"^
+    "\tadd rdi,8\n"^
+    "\tsyscall\n"^
+    "\tpush rax\n"^
+    "\tmov rdi,rax\n"^
+    "\tmov rsi,r14\n"^
+    "\tmov edx,DWORD [r14+4]\n"^
+    "\tadd rsi,8\n"^
+    "\tmov rax,1\n"^
+    "\tsyscall\n"^
+    "\tpop rdi\n"^
+    "\tmov rax,3\n"^
+    "\tsyscall\n"^
+    "\tret\n" in
+  gns.ns_c <- (Ast.Axm._emt_s8_to,em_emt_s8_to)::gns.ns_c;
 
   let v = ref(Ln(Imp(Types.Axm Types.Axm.r64,Rcd(rcd_cl [Types.Axm Types.Axm.r64;Types.Axm Types.Axm.stg])))) in
   !ns.ns_p <- ("_mlc_s8",Ast.Axm._mlc_s8)::!ns.ns_p;
