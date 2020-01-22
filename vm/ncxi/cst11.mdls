@@ -11,6 +11,8 @@
   _inc x ⊢ x 
   f0 x ⊢ x 
   $ %[ 3r ] ⊢ y 
+  $ %[ 4r ] ⊢ z 
+  f0 z ⊢ z 
   f1 { x y } ⊢ { x y }
   ∎ {} 
   

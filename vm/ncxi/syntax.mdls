@@ -3898,8 +3898,14 @@
 												1' // 
 											∎ { rsp vs0 v0 v1 sl e0 }
 									∐ stt_v.hp_im◂cv . 
-										» "" _ ⊢ e0 
-										∎ { rsp vs0 v0 v1 sl e0 }
+										∐ cv ⊢ ast.r64◂x . 
+											reg { rsp r1 } ⊢ { rsp r1 er bc } 
+											» _^ er,x ⊢ er,x,e0
+												"\tmov " 0' "," 1d' "\n" // 
+											∎ { rsp vs0 v0 v1 sl e0 }
+										∐. .
+											» "" _ ⊢ e0 
+											∎ { rsp vs0 v0 v1 sl e0 }	
 									∐ stt_v.hp_im_e◂ie . 
 										» "" _ ⊢ e0 
 										∎ { rsp vs0 v0 v1 sl e0 }
@@ -3936,28 +3942,32 @@
 			§§ push_regs 
 				§ @.lp { rsp irv vv v i n l e } 
 					∐ i' = REG_N . 
-						» _^ n,e ⊢ n,e,e1 
-							"\tlea rsp,[rsp-8*" 0d' "]\n"  
-							1' //
-						∎ { rsp irv vv v i n l e1 } 
+						∐ n' = 0r . 
+							∎ { rsp irv vv v i n l e }
+						∐. .
+							» _^ n,e ⊢ n,e,e1 
+								"\tlea rsp,[rsp-8*" 0d' "]\n"  
+								1' //
+							∎ { rsp irv vv v i n l e1 } 
 					∐. . 
-						_inc i ⊢ i 
 						_lod_q { v i } ⊢ { v i b } 
 						$ b ⊢ 
 						∐ bl.f◂{} . 
+							_inc i ⊢ i 
 							lp { rsp irv vv v i n l e } ⊢| 
 						∐. bl.t◂{} . 
 							» REG_N _ ⊢ m0 
 							_add { m0 n } ⊢ { m0 n } 
 							bl.t {} ⊢ bt 
 							exc_q { vv m0 bt } ⊢ { vv m0 bt } 
-							 $ n ⊢ n,n0 
-							_cns { n0 l } ⊢ l 
+							 $ i ⊢ i,i0 
+							_cns { i0 l } ⊢ l 
 							reg { rsp i } ⊢ { rsp i si b0 } 
 							» _^ n,si,e ⊢ n,si,e,e1 
 								2' 
 								"\tmov QWORD [rsp+8*" 0d' "]," 1' "\n" 
 								//
+							_inc i ⊢ i 
 							_inc n ⊢ n 
 							_inc rsp ⊢ rsp 
 							lp { rsp irv vv v i n l e1 } ⊢| 
@@ -4099,13 +4109,34 @@
 					» 0r _ ⊢ i 
 					_nil {} ⊢ sl 
 					» "" _ ⊢ e1 
+					rev l ⊢ l 
 					lp { rsp irv v0 v1 rl i l sl e1 } ⊢ { rsp irv v0 v1 rl i sl e1 }
 					subst_ptn { p1 sl } ⊢ { p1 sl }
 					∎ { rsp irv rl p1 e1 }
 				∎∎
+			§ @.pnt_env_lp { irv rl } 
+				$ rl ⊢ 
+				∐ _cns◂{ i rl } . 
+					_lod_q { irv i } ⊢ { irv i p } 
+					stt_v.pnt p ⊢ sp 
+					pnt_env_lp { irv rl } ⊢ { irv sr }
+					» _^ i,sp,sr ⊢ i,sp,sr,srr 
+						"%" 0d' "~" 1' " " 2' // 
+					∎ { irv srr }
+				∐. _nil◂{} . 
+					» "" _ ⊢ sr 
+					∎ { irv sr } 
+			§ pnt_env { irv rl } 
+				pnt_env_lp { irv rl } ⊢ { irv s }
+				» _^ s ⊢ s,sr 
+					";; " 0' "\n" // 
+				∎ { irv sr } 
 			§§ lc_code 
 				§ 
 					@.f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } 
+						$ rl ⊢ rl,rl0 
+						pnt_env { irv rl0 } ⊢ { irv srl } 
+						_cns { srl ec0 } ⊢ ec0 
 						$ lc ⊢
 						∐ ast.jmp◂{ en x } . 
 							» _^ en ⊢ en,ec1 
