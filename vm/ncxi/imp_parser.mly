@@ -141,7 +141,7 @@ grm_ord_act:
   | grm_rule_act grm_ord_act { $1::$2 }
   ;
 grm_rule_act:
-  | ord grm_ptns grm_prd SCL SRC reg_ptn_src CMM reg ir_lines grm_ord_act {
+  | ord grm_ptns grm_prd SCL SRC reg_ptn_src CMM reg_ptn_src ir_lines grm_ord_act {
     Grm.Act_Seq((sgn (),sgn (),sgn(),$8,($6,ref $9)),$1,$2,$3,$10)
   }
   | ord grm_ptns grm_prd SRC reg_ptn_src ir_lines {
