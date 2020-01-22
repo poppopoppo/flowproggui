@@ -1,5 +1,16 @@
+§ f0 x 
+  _inc x ⊢ x 
+  ∎ x
+§ f1 { x y } 
+  _inc x ⊢ x 
+  _inc y ⊢ y 
+  _inc y ⊢ y 
+  ∎ { x y }
 § C0 « 
-  $ %[ 0r ] ⊢ %x0 
-  _inc %x0 ⊢ %x0 
+  $ %[ 0r ] ⊢ x 
+  _inc x ⊢ x 
+  f0 x ⊢ x 
+  $ %[ 3r ] ⊢ y 
+  f1 { x y } ⊢ { x y }
   ∎ {} 
   
