@@ -1074,85 +1074,85 @@
 
 	§§+s8
 		@.mtc_ptn
-			∐* "{" mtc_ptn_lst "}" ⊢ { {} l {} }
+			∐# "{" mtc_ptn_lst "}" ⊢ { {} l {} }
 				RP.rcd l ⊢ r
 				_some r ⊢ a
 				∎ a
-			∐.* mtc ⊢ { s }
+			∐.# mtc ⊢ { s }
 				RP.atm s ⊢ r
 				_some r ⊢ a
 				∎ a
 		@.mtc_ptn_lst
-			∐* mtc_ptn mtc_ptn_lst ⊢ { hd tl }
+			∐# mtc_ptn mtc_ptn_lst ⊢ { hd tl }
 				_cns { hd tl } ⊢ l
 				_some l ⊢ a
 				∎ a
-			∐.* ⊢ {}
+			∐.# ⊢ {}
 				_nil {} ⊢ l
 				_some l ⊢ a
 				∎ a
 		@.mtc_tl
-			∐* "," !| mtc mtc_tl ⊢ { {} r rs }
+			∐# "," !| mtc mtc_tl ⊢ { {} r rs }
 				##RP.atm r ⊢ r
 				_cns { r rs } ⊢ rs
 				_some rs ⊢ a
 				∎ a
-			∐.* ⊢ { }
+			∐.# ⊢ { }
 				_nil {} ⊢ rs
 				_some rs ⊢ a
 				∎ a
 		@.mtc
-			∐* name "◂" mtc_ptn ⊢ { n {} mp } 
+			∐# name "◂" mtc_ptn ⊢ { n {} mp } 
 				ast.mtc_agl { n mp } ⊢ p 
 				_some p ⊢ a 
 				∎ a
-			∐* "%[" !| cst "]" ⊢ { {} c {} }
+			∐# "%[" !| cst "]" ⊢ { {} c {} }
 				ast.mtc_cst c ⊢ r
 				_some r ⊢ a
 				∎ a
-			∐* "%" !| prm_word ⊢ { {} w }
+			∐# "%" !| prm_word ⊢ { {} w }
 				ast.mtc_reg w ⊢ r
 				_some r ⊢ a
 				∎ a
-			∐* prm_word ⊢ { w }
+			∐# prm_word ⊢ { w }
 				ast.mtc_reg w ⊢ r
 				_some r ⊢ a
 				∎ a
-			∐.* "_" ⊢ { {} }
+			∐.# "_" ⊢ { {} }
 				ast.mtc_wc {} ⊢ r 
 				_some r ⊢ a 
 				∎ a
 	§§+s8
 		@.src_ptn
-			∐* "{" src_ptn_lst "}" ⊢ { {} l {} }
+			∐# "{" src_ptn_lst "}" ⊢ { {} l {} }
 				RP.rcd l ⊢ r
 				_some r ⊢ a
 				∎ a
-			∐.* src ⊢ { s }
+			∐.# src ⊢ { s }
 				RP.atm s ⊢ r
 				_some r ⊢ a
 				∎ a
 		@.src_ptn_lst
-			∐* src_ptn src_ptn_lst ⊢ { hd tl }
+			∐# src_ptn src_ptn_lst ⊢ { hd tl }
 				_cns { hd tl } ⊢ l
 				_some l ⊢ a
 				∎ a
-			∐.* ⊢ {}
+			∐.# ⊢ {}
 				_nil {} ⊢ l
 				_some l ⊢ a
 				∎ a
 		@.src_tl
-			∐* "," !| src src_tl ⊢ { {} r rs }
+			∐# "," !| src src_tl ⊢ { {} r rs }
 				##RP.atm r ⊢ r
 				_cns { r rs } ⊢ rs
 				_some rs ⊢ a
 				∎ a
-			∐.* ⊢ { }
+			∐.# ⊢ { }
 				_nil {} ⊢ rs
 				_some rs ⊢ a
 				∎ a
 		@.src
-			∐* "%[" cst "]" ⊢ { {} c {} }
+			∐# "%[" cst "]" ⊢ { {} c {} }
 				ast.im_reg c ⊢ r
 				_some r ⊢ a
 				∎ a
@@ -1160,45 +1160,45 @@
 				ast.src_reg w ⊢ r
 				_some r ⊢ a
 				∎ a
-			∐.* prm_word ⊢ { w }
+			∐.# prm_word ⊢ { w }
 				ast.src_reg w ⊢ r
 				_some r ⊢ a
 				∎ a
 	§§+s8
 		@.dst_ptn
-			∐* "{" dst_ptn_lst "}" ⊢ { {} l {} }
+			∐# "{" dst_ptn_lst "}" ⊢ { {} l {} }
 				RP.rcd l ⊢ r
 				_some r ⊢ a
 				∎ a
-			∐.* dst ⊢ { s }
+			∐.# dst ⊢ { s }
 				RP.atm s ⊢ r
 				_some r ⊢ a
 				∎ a
 		@.dst_ptn_lst
-			∐* dst_ptn dst_ptn_lst ⊢ { hd tl }
+			∐# dst_ptn dst_ptn_lst ⊢ { hd tl }
 				_cns { hd tl } ⊢ l
 				_some l ⊢ a
 				∎ a
-			∐.* ⊢ {}
+			∐.# ⊢ {}
 				_nil {} ⊢ l
 				_some l ⊢ a
 				∎ a
 		@.dst_ptn_tl
-			∐* "," !| dst_ptn dst_ptn_tl ⊢ { {} d ds }
+			∐# "," !| dst_ptn dst_ptn_tl ⊢ { {} d ds }
 				_cns { d ds } ⊢ ds
 				_some ds ⊢ a
 				∎ a
-			∐.* ⊢ { }
+			∐.# ⊢ { }
 				_nil {} ⊢ ds
 				_some ds ⊢ a
 				∎ a
 		@.dst_tl
-			∐* "," !| dst dst_tl ⊢ { {} r rs }
+			∐# "," !| dst dst_tl ⊢ { {} r rs }
 				##RP.atm r ⊢ r
 				_cns { r rs } ⊢ rs
 				_some rs ⊢ a
 				∎ a
-			∐.* ⊢ { }
+			∐.# ⊢ { }
 				_nil {} ⊢ rs
 				_some rs ⊢ a
 				∎ a
@@ -2910,17 +2910,18 @@
 			§ dec = 10r 
 			§ add = 11r 
 			§ sub = 12r 
-			§ sts = 13r 
-			§ lds = 14r 
-			§ setge = 15r 
-			§ rep_movsb = 16r 
-			§ nil = 17r 
-			§ cns = 18r 
-			§ some = 19r 
-			§ none = 20r
-			§ in_fn = 21r
-			§ emt_s8_to = 22r 
-			§ cd = 23r  
+			§ imul = 13r
+			§ sts = 14r 
+			§ lds = 15r 
+			§ setge = 16r 
+			§ rep_movsb = 17r 
+			§ nil = 18r 
+			§ cns = 19r 
+			§ some = 20r 
+			§ none = 21r
+			§ in_fn = 22r
+			§ emt_s8_to = 23r 
+			§ cd = 24r  
 			∎∎
 		§ @.pnt_type_k { tv k } 
 			$ k ⊢ 
@@ -4207,13 +4208,273 @@
 										∐. . 
 											» "lc_code.f t0" _ ⊢ se 
 											_emt se ⊢ se 
-											∎| 
+											∎|
+									∐ a'=e_axm.dec . 
+										∐ is ⊢ RP.atm◂k; k ⊢ stt_v.hp◂{ r cf h }; cf ⊢ stt_v.cf_t◂{} . 
+											stt_v.cf_t {} ⊢ cf 
+											$ r ⊢ r,r0 
+											stt_v.hp { r0 cf h } ⊢ k
+											RP.atm k ⊢ is 
+											_nil {} ⊢ dl 
+											crt_idx_ptn { irv d is rl dl } ⊢ { irv rl dl } 
+											reg { rsp r } ⊢ { rsp r sr b } 
+											$ b ⊢ 
+											∐ bl.t◂{} . 
+												» _^ sis,sr ⊢ sis,sr,ec1 
+													"; _sub " 0' " ⊢ " 0' "\n" 
+													"\tsub " 1' ",1\n" 
+												//
+												_cns { ec1 ec0 } ⊢ ec0 
+												f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+											∐. bl.f◂{} . 
+												» _^ sis,sr ⊢ sis,sr,ec1 
+													"; _sub " 0' " ⊢ " 0' "\n" 
+													"\tsub " 0' ",1\n"
+												//
+												_cns { ec1 ec0 } ⊢ ec0 
+												f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+										∐ is ⊢ RP.atm◂k; k ⊢ stt_v.hp_im◂v; v ⊢ ast.r64◂x . 
+											$ rl ⊢ rl,rl0 
+											rset.ini {} ⊢ v 
+											stt_v.mk_rset_env { irv rl0 v } ⊢ { irv v } 
+											rset.min_f v ⊢ { v i0 } 
+											stt_v.cf_t {} ⊢ cf 
+											stt_v.r64 {} ⊢ h 
+											$ i0 ⊢ i0,i00 
+											stt_v.hp { i0 cf h } ⊢ k
+											RP.atm k ⊢ is1 
+											$ is1 ⊢ is1,is10 
+											stt_v.pnt is10 ⊢ sis1
+											_nil {} ⊢ dl 
+											crt_idx_ptn { irv d is1 rl dl } ⊢ { irv rl dl } 
+											reg { rsp i00 } ⊢ { rsp i00 sr b } 
+											_dec x ⊢ x 
+											» _^ sis,sis1,sr,x ⊢ sis,sis1,sr,x,ec1 
+												"; _sub " 0' " ⊢ " 1' "\n" 
+												"\tmov " 2' "," 3d' "\n" 
+											//
+											_cns { ec1 ec0 } ⊢ ec0 
+											f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢| 
+										∐. . 
+											» "lc_code.f t0" _ ⊢ se 
+											_emt se ⊢ se 
+											∎|  
+					
+									∐ a' = e_axm.imul . 
+										∐ is ⊢ RP.rcd◂l; l ⊢ _cns◂{ a0 l }; l ⊢ _cns◂{ a1 l }; l ⊢ _nil◂{}; a0 ⊢ RP.atm◂k0; a1 ⊢ RP.atm◂k1 . 
+											∐ k0 ⊢ stt_v.hp◂{ r0 cf0 h0 }; cf0 ⊢ stt_v.cf_t◂{} .
+												∐ k1 ⊢ stt_v.hp◂{ r1 cf1 h1 }; cf1 ⊢ stt_v.cf_t◂{} .  
+													stt_v.cf_t {} ⊢ cf0 
+													$ r0 ⊢ r0,r00 
+													stt_v.hp { r00 cf0 h0 } ⊢ k0
+													stt_v.cf_t {} ⊢ cf1 
+													RP.atm k0 ⊢ a0 
+													$ r1 ⊢ r1,r10 
+													stt_v.hp { r10 cf1 h1 } ⊢ k1
+													RP.atm k1 ⊢ a1 
+													_nil {} ⊢ l 
+													_cns { a1 l } ⊢ l 
+													_cns { a0 l } ⊢ l 
+													RP.rcd l ⊢ is 
+													_nil {} ⊢ dl 
+													crt_idx_ptn { irv d is rl dl } ⊢ { irv rl dl } 
+													reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
+													reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
+													$ b1 ⊢ 
+													∐ bl.t◂{} . 
+														» _^ sis,sr0,sr1 ⊢ sis,sr0,sr1,ec1 
+														"; _imul " 0' " ⊢ " 0' "\n" 
+														"\timul " 1' "," 2' "\n" 
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+													∐. bl.f◂{} . 
+														» _^ sis,sr0,sr1 ⊢ sis,sr0,sr1,ec1 
+														"; _imul " 0' " ⊢ " 0' "\n"
+														"\tmov rdi," 2' "\n" 
+														"\timul " 1' ",rdi\n"
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+												∐ k1 ⊢ stt_v.hp_im◂v; v ⊢ ast.r64◂x . 
+													rset.ini {} ⊢ v0 
+													$ rl ⊢ rl,rl0 
+													stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+													bl.t {} ⊢ bt0 
+													exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+													rset.min_f v0 ⊢ { v0 rm0 } 
+													stt_v.cf_t {} ⊢ cf0 
+													$ r0 ⊢ r0,r00 
+													stt_v.hp { r00 cf0 h0 } ⊢ k0
+													RP.atm k0 ⊢ a0 
+													stt_v.cf_t {} ⊢ cf1 
+													$ rm0 ⊢ rm0,rm00 
+													stt_v.r64 {} ⊢ h1
+													stt_v.hp { rm00 cf1 h1 } ⊢ k1
+													RP.atm k1 ⊢ a1 
+													_nil {} ⊢ l 
+													_cns { a1 l } ⊢ l 
+													_cns { a0 l } ⊢ l 
+													RP.rcd l ⊢ is 
+													$ is ⊢ is,is0 
+													stt_v.pnt is0 ⊢ sis1 
+													_nil {} ⊢ dl 
+													crt_idx_ptn { irv d is rl dl } ⊢ { irv rl dl } 
+													reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
+													reg { rsp rm0 } ⊢ { rsp rm0 sr1 b1 } 
+													∐ b1 ⊢ bl.t◂{} . 
+														» _^ sis,sis1,sr0,sr1,x ⊢ sis,sis1,sr0,sr1,x,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov " 3' "," 4d' "\n"  
+														"\timul " 2' "," 3' "\n" 
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+													∐. b1 ⊢ bl.f◂{} . 
+														» _^ sis,sis1,sr0,sr1,x ⊢ sis,sis1,sr0,sr1,x,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov rdi," 4d' "\n" 
+														"\tmov " 3' ",rdi\n"  
+														"\timul " 2' ",rdi\n" 
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+												∐. . 
+													» "lc_code.f _imul 0" _ ⊢ se 
+													_emt se ⊢ se 
+													∎| 
+											∐ k0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ k1 ⊢ stt_v.hp◂{ r1 cf1 h1 }; cf1 ⊢ stt_v.cf_t◂{} .  
+													rset.ini {} ⊢ v0 
+													$ rl ⊢ rl,rl0 
+													stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+													bl.t {} ⊢ bt0 
+													exc_q { v0 r1 bt0 } ⊢ { v0 r1 bt0 } 
+													rset.min_f v0 ⊢ { v0 rm0 } 
+													stt_v.cf_t {} ⊢ cf1 
+													$ r1 ⊢ r1,r10 
+													stt_v.hp { r10 cf1 h1 } ⊢ k1
+													RP.atm k1 ⊢ a1 
+													stt_v.cf_t {} ⊢ cf0 
+													$ rm0 ⊢ rm0,rm00 
+													stt_v.r64 {} ⊢ h0
+													stt_v.hp { rm00 cf0 h0 } ⊢ k0
+													RP.atm k0 ⊢ a0 
+													_nil {} ⊢ l 
+													_cns { a1 l } ⊢ l 
+													_cns { a0 l } ⊢ l 
+													RP.rcd l ⊢ is 
+													$ is ⊢ is,is0 
+													stt_v.pnt is0 ⊢ sis1 
+													_nil {} ⊢ dl 
+													crt_idx_ptn { irv d is rl dl } ⊢ { irv rl dl } 
+													reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
+													reg { rsp rm0 } ⊢ { rsp rm0 sr0 b0 } 
+													∐ b0 ⊢ bl.t◂{} . 
+														» _^ sis,sis1,sr0,sr1,x0 ⊢ sis,sis1,sr0,sr1,x0,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov " 2' "," 4d' "\n"  
+														"\timul " 2' "," 3' "\n" 
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+													∐. b0 ⊢ bl.f◂{} . 
+														» _^ sis,sis1,sr0,sr1,x0 ⊢ sis,sis1,sr0,sr1,x0,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov rdi," 4d' "\n" 
+														"\timul rdi," 3' "\n" 
+														"\tmov " 2' ",rdi\n"  
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+												∐ k1 ⊢ stt_v.hp_im◂v1; v1 ⊢ ast.r64◂x1 . 
+													rset.ini {} ⊢ v0 
+													$ rl ⊢ rl,rl0 
+													stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+													bl.t {} ⊢ bt0 
+													rset.min_f v0 ⊢ { v0 rm0 }
+													exc_q { v0 rm0 bt0 } ⊢ { v0 rm0 bt0 } 
+													rset.min_f v0 ⊢ { v0 rm1 }
+													stt_v.cf_t {} ⊢ cf0 
+													$ rm0 ⊢ rm0,rm00 
+													stt_v.r64 {} ⊢ h0 
+													stt_v.hp { rm00 cf0 h0 } ⊢ k0
+													RP.atm k0 ⊢ a0 
+													stt_v.cf_t {} ⊢ cf1 
+													$ rm1 ⊢ rm1,rm10 
+													stt_v.r64 {} ⊢ h1 
+													stt_v.hp { rm10 cf1 h1 } ⊢ k1
+													RP.atm k1 ⊢ a1
+													$ rm1 ⊢ rm1,rm10 
+													_nil {} ⊢ l 
+													_cns { a1 l } ⊢ l 
+													_cns { a0 l } ⊢ l 
+													RP.rcd l ⊢ is 
+													$ is ⊢ is,is0 
+													stt_v.pnt is0 ⊢ sis1 
+													_nil {} ⊢ dl 
+													crt_idx_ptn { irv d is rl dl } ⊢ { irv rl dl } 
+													reg { rsp rm0 } ⊢ { rsp rm0 sr0 b0 } 
+													reg { rsp rm1 } ⊢ { rsp rm1 sr1 b1 } 
+													∐ b1 ⊢ bl.t◂{}; b0 ⊢ bl.f◂{} . 
+														» _^ sis,sis1,sr0,sr1,x0,x1 ⊢ sis,sis1,sr0,sr1,x0,x1,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov " 3' "," 5d' "\n"  
+														"\tmov rdi," 4d' "\n" 
+														"\timul rdi," 3' "\n"
+														"\tmov " 2' ",rdi\n"  
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+													∐ b1 ⊢ bl.t◂{}; b0 ⊢ bl.t◂{} . 
+														» _^ sis,sis1,sr0,sr1,x0,x1 ⊢ sis,sis1,sr0,sr1,x0,x1,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov " 3' "," 5d' "\n"  
+														"\tmov " 2' "," 4d' "\n" 
+														"\timul " 2' "," 3' "\n"
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+													∐ b1 ⊢ bl.f◂{}; b0 ⊢ bl.t◂{} . 
+														» _^ sis,sis1,sr0,sr1,x0,x1 ⊢ sis,sis1,sr0,sr1,x0,x1,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov rdi," 5d' "\n"  
+														"\tmov " 2' "," 4d' "\n" 
+														"\timul " 2' ",rdi\n"
+														"\tmov " 3' ",rdi\n" 
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+													∐. b1 ⊢ bl.f◂{}; b0 ⊢ bl.f◂{} . 
+														» _^ sis,sis1,sr0,sr1,x0,x1 ⊢ sis,sis1,sr0,sr1,x0,x1,ec1 
+														"; _imul " 0' " ⊢ " 1' "\n" 
+														"\tmov rsi," 5d' "\n"  
+														"\tmov rdi," 4d' "\n" 
+														"\timul rdi,rsi\n"
+														"\tmov " 2' ",rdi\n"  
+														"\tmov " 3' ",rsi\n" 
+														//
+														_cns { ec1 ec0 } ⊢ ec0 
+														f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+												∐. . 
+													» "lc_code.f _imul 1" _ ⊢ se 
+													_emt se ⊢ se 
+													∎| 
+											∐. . 
+												» "lc_code.f _imul 2" _ ⊢ se 
+													_emt se ⊢ se 
+												∎|
+										∐. . 
+											» "lc_code.f _imul 3" _ ⊢ se 
+												_emt se ⊢ se 
+											∎|  		
 									∐. . 
 										» _^ o ⊢ o,ec1 
 										"; #" 0d' ".. ⊢ ..\n"
 										"\tcall ETR_" 0d' "\n" // 
 										_cns { ec1 ec0 } ⊢ ec0
 										f { { ev evv } rsp { rv irv } tv lc ec0 rl pr } ⊢|
+									
 								∐ k ⊢ k_op◂{ rsp_s p0 rsp_d p1 } . 
 									$ rsp ⊢ rsp,rsp0 
 									rset.ini {} ⊢ v0 
@@ -5843,6 +6104,24 @@
 				imp { y_s y_d } ⊢ yx
 				» "_sub" _ ⊢ se
 				» e_axm.sub _ ⊢ k0 
+				k_op_axm k0 ⊢ k 
+				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
+					
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				_nil {} ⊢ l0 
+				_cns { y0 l0 } ⊢ l0 
+				_cns { y1 l0 } ⊢ l0 
+				rcd l0 ⊢ y_d 
+				t_axm.r64 {} ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				_nil {} ⊢ l0 
+				_cns { y0 l0 } ⊢ l0 
+				_cns { y1 l0 } ⊢ l0 
+				rcd l0 ⊢ y_s 
+				imp { y_s y_d } ⊢ yx
+				» "_imul" _ ⊢ se
+				» e_axm.imul _ ⊢ k0 
 				k_op_axm k0 ⊢ k 
 				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
 					
