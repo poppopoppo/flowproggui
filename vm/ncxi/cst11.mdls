@@ -6,6 +6,23 @@
   _inc y ⊢ y 
   _inc y ⊢ y 
   ∎ { x y }
+§ f2 { x y }
+  _imul { x y } ⊢ { x y }
+  _imul { %[ 4r ] y } ⊢ { z y }
+  ∎ { y x z } 
+\[
+§ @.fact x 
+  ∐ n'=0r . 
+    ∎ %[ 1r ]
+  ∐ n'=1r . 
+    ∎ x 
+  ∐. . 
+    $ x ⊢ x,x0 
+    _dec x ⊢ x 
+    fact x ⊢ x 
+    _imul { x0 x } ⊢ { x0 x } 
+    ∎ x0 
+\]
 § C0 « 
   $ %[ 0r ] ⊢ x 
   _inc x ⊢ x 

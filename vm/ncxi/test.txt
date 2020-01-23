@@ -1052,7 +1052,6 @@ t ◂ a0,a1,..an = ∐ c0 c1 .. cn
 § DBG = _t 
 _if_op◂◂{ B F } x 
 _if_op : { _bl a'→b0x' } ⊢⊢ a' ⊢ b' 
-  _if_op◂◂{ DBG _emt } x ⊢ x 
 
 § if_emt◂◂B = _if_op◂◂{ B _emt }
 
@@ -1085,6 +1084,7 @@ rcall rank-increment
   _rcv : _pos◂a' &⊢ a'
 ¶ &.cmn ◂ a' 
   ∐ _cmn :  _pos◂{ a' _cmn◂a' }
+  _if_op◂◂{ DBG _emt } x ⊢ x 
 
 ¶ &@.sbt_lst a'
   ∐ sbt_cns : { a' sbt_lst◂a' }
@@ -1102,3 +1102,8 @@ concurrent determinism = independency of result of computation from pases of par
 cell automaton, concurrent register machine 
 
 r' :: {> a,b } ∀ {> a~_s8 b~_r64 < r' } ⊢ { _s8 '{> r' } }
+
+_lds_bd : { _s8 _r64 _r64 } ⊢ { _s8 _r64 _r64 _r8 } 
+; { src offset bound } 
+_lds_bd_im : _r64 ⊢⊢ { _s8 _r64 } ⊢ { _s8 _r64 _r8 }
+
