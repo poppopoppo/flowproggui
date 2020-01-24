@@ -1,7 +1,12 @@
 bits 64 
 extern exit 
+extern printf 
 section .bss 
 	ret_vct: resq 64
+ rsp_tmp: resq 1
+section .data
+	err_n: dq 0
+	fmt_err_line: db "err:%d",10,0
 section .text
 global _start              
 _start:
@@ -52,25 +57,131 @@ ETR_27: ; f2 { 0t' 1t' } ⊢ { 0t' 1t' 2t' } : ({ _r64 _r64 }→{ _r64 _r64 _r64
 	mov r14,r9
 	mov r8,r11
 	ret
+ETR_28: ; f3 0t' ⊢ { 0t' 1t' } : (_r64→{ _r64 _r64 })
+;; %13~0t' 
+; _inc 0t' ⊢ 0t'
+	add r13,1
+;; %14~0t' 
+; $ 0t' ⊢ 0t',1t'
+	mov rdi,r13
+	mov r14,rdi
+;; %16~1t' %15~0t' 
+; ∎ { 0t' 1t' }
+; .mov_ptn { 0t' 1t' } ⊢ { 0t' 1t' }
+	mov r8,r13
+	mov r9,r14
+	mov r13,r8
+	mov r14,r9
+	ret
+ETR_29: ; f4 0t' ⊢ 0t' : (_r64→_r64)
+;; %17~0t' 
+	mov rdi,0
+	cmp r13,rdi
+	jnz LB_0
+;; %17~0t' 
+; _inc 0t' ⊢ 0t'
+	add r13,1
+;; %22~0t' 
+; ∎ 0t'
+; .mov_ptn 0t' ⊢ 0t'
+	mov r14,r13
+	mov r13,r14
+	ret
+LB_0:
+	mov rdi,1
+	cmp r13,rdi
+	jnz LB_1
+;; %17~0t' 
+; $ 0t' ⊢ 0t',1t'
+	mov rdi,r13
+	mov r14,rdi
+;; %19~1t' %18~0t' 
+; _imul { 0t' 1t' } ⊢ { 0t' 1t' }
+	imul r13,r14
+;; %21~1t' %20~0t' 
+; ∎ 0t'
+; .mov_ptn 0t' ⊢ 0t'
+	mov r14,r13
+	mov r13,r14
+	ret
+LB_1:
+;; %17~0t' 
+; ∎| 
+	jmp err
+ETR_30: ; f5 0t' ⊢ 0t' : (_r64→_r64)
+;; %23~0t' 
+; _sub 0t' ⊢ 0t'
+	sub r13,1
+;; %24~0t' 
+; ∎ 0t'
+; .mov_ptn 0t' ⊢ 0t'
+	mov r14,r13
+	mov r13,r14
+	ret
+ETR_31: ; fact 0t' ⊢ 0t' : (_r64→_r64)
+;; %25~0t' 
+	mov rdi,0
+	cmp r13,rdi
+	jnz LB_2
+;; %25~0t' 
+; ∎ %[ 1r ]
+; .mov_ptn %[ 1r ] ⊢ 0t'
+	mov r13,1
+	ret
+LB_2:
+	mov rdi,1
+	cmp r13,rdi
+	jnz LB_3
+;; %25~0t' 
+; ∎ 0t'
+; .mov_ptn 0t' ⊢ 0t'
+	mov r14,r13
+	mov r13,r14
+	ret
+LB_3:
+;; %25~0t' 
+; $ 0t' ⊢ 0t',1t'
+	mov rdi,r13
+	mov r14,rdi
+;; %27~1t' %26~0t' 
+; _sub 0t' ⊢ 0t'
+	sub r13,1
+;; %28~0t' %27~1t' 
+; #31 0t' ⊢ 0t'
+	lea rsp,[rsp-8*0]
+	lea rsp,[rsp-8*1]
+	mov QWORD [rsp+8*0],r14
+; .mov_ptn 0t' ⊢ 0t'
+	mov r14,r13
+	mov r13,r14
+	call ETR_31
+;; %29~0t' %27~1t' 
+; _imul { 1t' 0t' } ⊢ { 1t' 0t' }
+	imul r14,r13
+;; %31~0t' %30~1t' 
+; ∎ 1t'
+; .mov_ptn 1t' ⊢ 0t'
+	mov r13,r14
+	ret
 RTM_0:
 	push RTM_1
 ;; 
 ; $ %[ 0r ] ⊢ %[ 0r ]
-;; %13~%[ 0r ] 
+;; %32~%[ 0r ] 
 ; _inc %[ 0r ] ⊢ 0t'
 	mov r13,1
-;; %14~0t' 
+;; %33~0t' 
 ; #25 0t' ⊢ 0t'
 	lea rsp,[rsp-8*0]
 ; .mov_ptn 0t' ⊢ 0t'
 	mov r14,r13
 	mov r13,r14
 	call ETR_25
-;; %15~0t' 
+;; %34~0t' 
 ; $ %[ 3r ] ⊢ %[ 3r ]
-;; %16~%[ 3r ] %15~0t' 
+;; %35~%[ 3r ] %34~0t' 
 ; $ %[ 4r ] ⊢ %[ 4r ]
-;; %17~%[ 4r ] %16~%[ 3r ] %15~0t' 
+;; %36~%[ 4r ] %35~%[ 3r ] %34~0t' 
 ; #25 %[ 4r ] ⊢ 1t'
 	lea rsp,[rsp-8*0]
 	lea rsp,[rsp-8*1]
@@ -80,7 +191,7 @@ RTM_0:
 	call ETR_25
 	mov r14,r13
 	mov r13,[rsp+8*0]
-;; %18~1t' %16~%[ 3r ] %15~0t' 
+;; %37~1t' %35~%[ 3r ] %34~0t' 
 ; #26 { 0t' %[ 3r ] } ⊢ { 0t' 2t' }
 	lea rsp,[rsp-8*0]
 	lea rsp,[rsp-8*1]
@@ -92,7 +203,7 @@ RTM_0:
 	call ETR_26
 	mov r8,r14
 	mov r14,[rsp+8*0]
-;; %20~2t' %19~0t' %18~1t' 
+;; %39~2t' %38~0t' %37~1t' 
 ; ∎ { }
 ; .mov_ptn { } ⊢ { }
 	ret
@@ -104,3 +215,15 @@ RTM_1:
 	call exit
 	pop rdi
 	mov rsp,rdi
+
+err: 
+	mov rdi,fmt_err_line
+	mov rsi,QWORD [err_n]
+	xor rax,rax
+	mov QWORD [rsp_tmp],rsp
+	and rsp,~0xf
+	call printf
+	mov rsp,QWORD [rsp_tmp]
+	mov rax,1
+	mov rbx,0
+	int 0x80
