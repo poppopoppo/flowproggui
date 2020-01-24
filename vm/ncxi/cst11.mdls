@@ -9,12 +9,28 @@
 § f2 { x y }
   _imul { x y } ⊢ { x y }
   _imul { %[ 4r ] y } ⊢ { z y }
-  ∎ { y x z } 
-\[
+  ∎ { y x z }
+§ f3 x 
+  _inc x ⊢ x 
+  $ x ⊢ x,x0 
+  ∎ { x x0 }
+§ f4 x 
+  ∐ x'=0r .
+    _inc x ⊢ x 
+    ∎ x  
+  ∐ x'=1r .
+    $ x ⊢ x,x0 
+    _imul { x x0 } ⊢ { x x0 }
+    ∎ x 
+  ∐. . 
+    ∎|
+§ @.f5 x 
+  _dec x ⊢ x 
+  ∎ x 
 § @.fact x 
-  ∐ n'=0r . 
+  ∐ x'=0r . 
     ∎ %[ 1r ]
-  ∐ n'=1r . 
+  ∐ x'=1r . 
     ∎ x 
   ∐. . 
     $ x ⊢ x,x0 
@@ -22,7 +38,6 @@
     fact x ⊢ x 
     _imul { x0 x } ⊢ { x0 x } 
     ∎ x0 
-\]
 § C0 « 
   $ %[ 0r ] ⊢ x 
   _inc x ⊢ x 
