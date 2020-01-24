@@ -7,6 +7,7 @@ section .bss
 section .data
 	err_n: dq 0
 	fmt_err_line: db "err:%d",10,0
+	fmt_r64: db "%dr",10,0
 section .text
 global _start              
 _start:
@@ -148,13 +149,14 @@ LB_3:
 	sub r13,1
 ;; %28~0t' %27~1t' 
 ; #31 0t' ⊢ 0t'
-	lea rsp,[rsp-8*0]
 	lea rsp,[rsp-8*1]
 	mov QWORD [rsp+8*0],r14
 ; .mov_ptn 0t' ⊢ 0t'
 	mov r14,r13
 	mov r13,r14
 	call ETR_31
+	mov r14,[rsp+8*0]
+	lea rsp,[rsp+8*1]
 ;; %29~0t' %27~1t' 
 ; _imul { 1t' 0t' } ⊢ { 1t' 0t' }
 	imul r14,r13
@@ -172,7 +174,6 @@ RTM_0:
 	mov r13,1
 ;; %33~0t' 
 ; #25 0t' ⊢ 0t'
-	lea rsp,[rsp-8*0]
 ; .mov_ptn 0t' ⊢ 0t'
 	mov r14,r13
 	mov r13,r14
@@ -183,7 +184,6 @@ RTM_0:
 ; $ %[ 4r ] ⊢ %[ 4r ]
 ;; %36~%[ 4r ] %35~%[ 3r ] %34~0t' 
 ; #25 %[ 4r ] ⊢ 1t'
-	lea rsp,[rsp-8*0]
 	lea rsp,[rsp-8*1]
 	mov QWORD [rsp+8*0],r13
 ; .mov_ptn %[ 4r ] ⊢ 0t'
@@ -191,9 +191,21 @@ RTM_0:
 	call ETR_25
 	mov r14,r13
 	mov r13,[rsp+8*0]
+	lea rsp,[rsp+8*1]
 ;; %37~1t' %35~%[ 3r ] %34~0t' 
+	push rdx 
+	push rcx
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov rsi,r13
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop rcx 
+	pop rdx
+;; %38~0t' %37~1t' %35~%[ 3r ] 
 ; #26 { 0t' %[ 3r ] } ⊢ { 0t' 2t' }
-	lea rsp,[rsp-8*0]
 	lea rsp,[rsp-8*1]
 	mov QWORD [rsp+8*0],r14
 ; .mov_ptn { 0t' %[ 3r ] } ⊢ { 0t' 1t' }
@@ -203,7 +215,56 @@ RTM_0:
 	call ETR_26
 	mov r8,r14
 	mov r14,[rsp+8*0]
-;; %39~2t' %38~0t' %37~1t' 
+	lea rsp,[rsp+8*1]
+;; %40~2t' %39~0t' %37~1t' 
+; #31 0t' ⊢ 0t'
+	lea rsp,[rsp-8*2]
+	mov QWORD [rsp+8*0],r14
+	mov QWORD [rsp+8*1],r8
+; .mov_ptn 0t' ⊢ 0t'
+	mov r14,r13
+	mov r13,r14
+	call ETR_31
+	mov r14,[rsp+8*0]
+	mov r8,[rsp+8*1]
+	lea rsp,[rsp+8*2]
+;; %41~0t' %40~2t' %37~1t' 
+	push rdx 
+	push rcx
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov rsi,r13
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop rcx 
+	pop rdx
+;; %42~0t' %40~2t' %37~1t' 
+; #31 0t' ⊢ 0t'
+	lea rsp,[rsp-8*2]
+	mov QWORD [rsp+8*0],r14
+	mov QWORD [rsp+8*1],r8
+; .mov_ptn 0t' ⊢ 0t'
+	mov r14,r13
+	mov r13,r14
+	call ETR_31
+	mov r14,[rsp+8*0]
+	mov r8,[rsp+8*1]
+	lea rsp,[rsp+8*2]
+;; %43~0t' %40~2t' %37~1t' 
+	push rdx 
+	push rcx
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov rsi,r13
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop rcx 
+	pop rdx
+;; %44~0t' %40~2t' %37~1t' 
 ; ∎ { }
 ; .mov_ptn { } ⊢ { }
 	ret

@@ -45,6 +45,11 @@
   $ %[ 3r ] ⊢ y 
   $ %[ 4r ] ⊢ z 
   f0 z ⊢ z 
+  _emt x ⊢ x 
   f1 { x y } ⊢ { x y }
+  fact x ⊢ x 
+  _emt x ⊢ x 
+  fact x ⊢ x 
+  _emt x ⊢ x 
   ∎ {} 
   
