@@ -294,14 +294,32 @@ RTM_1:
 ;; 
 ; $ %[ 0r ] ⊢ %[ 0r ]
 ;; %45~%[ 0r ] 
-; _inc %[ 0r ] ⊢ 0t'
-	mov r13,1
-;; %46~0t' 
-; $ 0t' ⊢ 1t',2t',3t',
-	mov r14,r13
-	mov r8,r13
-	mov r9,r13
-;; %49~3t' %48~2t' %47~1t' 
+; $ %[ 0r ] ⊢ 0t',1t',2t',
+	mov rdi,0
+	mov r13,rdi
+	mov r14,rdi
+	mov r8,rdi
+;; %48~2t' %47~1t' %46~0t' 
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov rsi,r13
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+;; %49~0t' %48~2t' %47~1t' 
 	push rdx
 	push rcx
 	push r8
@@ -321,7 +339,7 @@ RTM_1:
 	pop r8
 	pop rcx
 	pop rdx
-;; %50~1t' %49~3t' %48~2t' 
+;; %50~1t' %49~0t' %48~2t' 
 	push rdx
 	push rcx
 	push r8
@@ -341,27 +359,7 @@ RTM_1:
 	pop r8
 	pop rcx
 	pop rdx
-;; %51~2t' %50~1t' %49~3t' 
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov rsi,r9
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
-;; %52~3t' %51~2t' %50~1t' 
+;; %51~2t' %50~1t' %49~0t' 
 ; ∎ { }
 ; .mov_ptn { } ⊢ { }
 	ret
