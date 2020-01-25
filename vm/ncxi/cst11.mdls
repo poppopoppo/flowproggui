@@ -54,7 +54,6 @@
   ∎ {} 
 § C1 « 
   $ %[ 0r ] ⊢ x 
-  _inc x ⊢ x 
   $ x ⊢ x0,x1,x2
   _emt x0 ⊢ x0 
   _emt x1 ⊢ x1 
