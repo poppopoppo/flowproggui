@@ -1,0 +1,49 @@
+§ @.fact x 
+  ∐ x'=0r . 
+    ∎ %[ 1r ] 
+  ∐ x'=1r . 
+    ∎ %[ 1r ]
+  ∐. . 
+    $ x ⊢ x,x0 
+    _dec x ⊢ x 
+    fact x ⊢ y 
+    _imul { x0 y } ⊢ { x0 y } 
+    ∎ x0 
+§ @.tak { x y z } 
+  ∐ x'=<y' . 
+    ∎ z
+  ∐. . 
+    $ x ⊢ x,x0 
+    $ y ⊢ y,y0 
+    $ z ⊢ z,z0 
+    _dec x0 ⊢ x0 
+    tak { x0 y0 z0 } ⊢ rx 
+    $ x ⊢ x,x0 
+    $ y ⊢ y,y0 
+    $ z ⊢ z,z0 
+    _dec y0 ⊢ y0 
+    tak { y0 z0 x0 } ⊢ ry
+    _dec z ⊢ z 
+    tak { z x y } ⊢ rz 
+    tak { rx ry rz } ⊢ r 
+    ∎ r 
+\[
+§ C0 « 
+  $ %[ 0r ] ⊢ x0,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11
+  _inc x11 ⊢ x11 
+  _inc x0 ⊢ x0  
+  _inc x0 ⊢ x0 
+  $ x0 ⊢ x0,x00
+  _imul { x0 x00 } ⊢ { x0 x00 }
+  _emt x0 ⊢ x0  
+  _emt x11 ⊢ x11 
+  _emt x10 ⊢ x10 
+  _emt x9 ⊢ x9 
+  ∎ {} 
+\]
+§ C1 « 
+  fact %[ 5r ] ⊢ y 
+  _emt y ⊢ y 
+  tak { %[ 9r ] %[ 8r ] %[ 0r ] } ⊢ r 
+  _emt r ⊢ r 
+  ∎ {} 
