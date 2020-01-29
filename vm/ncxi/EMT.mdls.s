@@ -45,9 +45,6 @@ LB_1:
 	lea rsp,[rsp-8*1]
 	mov QWORD [rsp+8*0],r14
 ; .mov_ptn2 0t' ⊢ 0t'
-	mov r14,r13
-; .mov_ptn 1t' ⊢ 0t'
-	mov r13,r14
 	call ETR_25
 	mov r14,[rsp+8*0]
 	lea rsp,[rsp+8*1]
@@ -169,9 +166,6 @@ LB_2:
 ;; rsp=0 , %28~0t' 
 ; ∎ 0t'
 ; .mov_ptn2 0t' ⊢ 0t'
-	mov r14,r13
-; .mov_ptn 1t' ⊢ 0t'
-	mov r13,r14
 	ret
 ETR_27: ; tak_v { 0t' 1t' 2t' } ⊢ { 0t' 1t' 2t' 3t' } : ({ _r64 _r64 _r64 }→{ _r64 _r64 _r64 _r64 })
 ;; rsp=0 , %31~2t' %30~1t' %29~0t' 
@@ -184,18 +178,6 @@ ETR_27: ; tak_v { 0t' 1t' 2t' } ⊢ { 0t' 1t' 2t' 3t' } : ({ _r64 _r64 _r64 }→
 ;; rsp=0 , %55~3t' %54~2t' %30~1t' %29~0t' 
 ; ∎ { 0t' 1t' 2t' 3t' }
 ; .mov_ptn2 { 0t' 1t' 2t' 3t' } ⊢ { 0t' 1t' 2t' 3t' }
-	mov r10,r9
-; .mov_ptn 4t' ⊢ 3t'
-	mov r9,r10
-	mov r11,r8
-; .mov_ptn 5t' ⊢ 2t'
-	mov r8,r11
-	mov rcx,r14
-; .mov_ptn 6t' ⊢ 1t'
-	mov r14,rcx
-	mov rdx,r13
-; .mov_ptn 7t' ⊢ 0t'
-	mov r13,rdx
 	ret
 LB_3:
 ;; rsp=0 , %31~2t' %30~1t' %29~0t' 
@@ -204,15 +186,6 @@ LB_3:
 ;; rsp=0 , %32~0t' %31~2t' %30~1t' 
 ; #27 { 0t' 1t' 2t' } ⊢ { 0t' 1t' 2t' 3t' }
 ; .mov_ptn2 { 0t' 1t' 2t' } ⊢ { 0t' 1t' 2t' }
-	mov r9,r8
-; .mov_ptn 3t' ⊢ 2t'
-	mov r8,r9
-	mov r10,r14
-; .mov_ptn 4t' ⊢ 1t'
-	mov r14,r10
-	mov r11,r13
-; .mov_ptn 5t' ⊢ 0t'
-	mov r13,r11
 	call ETR_27
 ;; rsp=0 , %36~3t' %35~2t' %34~1t' %33~0t' 
 ; _inc 0t' ⊢ 0t'
@@ -287,25 +260,26 @@ LB_3:
 ;; rsp=0 , %53~3t' %52~6t' %51~5t' %50~4t' %49~0t' %47~2t' %46~1t' 
 ; ∎ { 1t' 2t' 0t' 3t' }
 ; .mov_ptn2 { 1t' 2t' 0t' 3t' } ⊢ { 0t' 1t' 2t' 3t' }
-	mov r10,r9
-; .mov_ptn 4t' ⊢ 3t'
-	mov r9,r10
-	mov r11,r8
+	mov r10,r8
 ; .mov_ptn 0t' ⊢ 2t'
 	mov r8,r13
 ; .mov_ptn 1t' ⊢ 0t'
 	mov r13,r14
-; .mov_ptn 5t' ⊢ 1t'
-	mov r14,r11
+; .mov_ptn 4t' ⊢ 1t'
+	mov r14,r10
 	ret
 RTM_0:
 	push RTM_1
 ;; rsp=0 , 
-; #25 %[ 5r ] ⊢ 0t'
-; .mov_ptn2 %[ 5r ] ⊢ 0t'
-; .mov_ptn %[ 5r ] ⊢ 0t'
-	mov r13,5
-	call ETR_25
+; #26 { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ 0t'
+; .mov_ptn2 { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ { 0t' 1t' 2t' }
+; .mov_ptn %[ 0r ] ⊢ 2t'
+	mov r8,0
+; .mov_ptn %[ 10r ] ⊢ 1t'
+	mov r14,10
+; .mov_ptn %[ 20r ] ⊢ 0t'
+	mov r13,20
+	call ETR_26
 ;; rsp=0 , %56~0t' 
 	mov rsi,r13
 	push rdx
@@ -327,41 +301,6 @@ RTM_0:
 	pop rcx
 	pop rdx
 ;; rsp=0 , %57~0t' 
-; #27 { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ { 4t' 1t' 2t' 3t' }
-	lea rsp,[rsp-8*1]
-	mov QWORD [rsp+8*0],r13
-; .mov_ptn2 { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ { 0t' 1t' 2t' }
-; .mov_ptn %[ 0r ] ⊢ 2t'
-	mov r8,0
-; .mov_ptn %[ 10r ] ⊢ 1t'
-	mov r14,10
-; .mov_ptn %[ 20r ] ⊢ 0t'
-	mov r13,20
-	call ETR_27
-	mov r10,r13
-	mov r13,[rsp+8*0]
-	lea rsp,[rsp+8*1]
-;; rsp=0 , %61~3t' %60~2t' %59~1t' %58~4t' %57~0t' 
-	mov rsi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
-;; rsp=0 , %62~3t' %60~2t' %59~1t' %58~4t' %57~0t' 
 ; ∎ { }
 ; .mov_ptn2 { } ⊢ { }
 	ret
