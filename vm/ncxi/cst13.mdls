@@ -1,0 +1,32 @@
+§ f0 { x0 x1 x2 x3 x4 x5 x6 } : { _r64 _r64 _r64 _r64 _r64 _r64 _r64 }
+  ∎ { x5 x3 x6 x2 x0 x1 x4 }
+§ f1 x : _r64 
+  ∎ x 
+§ f2 { x y z } : { _r64 _r64 _r64 }
+  ∎ { y z x }
+§ C0 « 
+  $ %[ 0r ] ⊢ x0
+  $ %[ 1r ] ⊢ x1 
+  $ %[ 2r ] ⊢ x2 
+  $ %[ 3r ] ⊢ x3 
+  $ %[ 4r ] ⊢ x4 
+  $ %[ 5r ] ⊢ x5 
+  $ %[ 6r ] ⊢ x6 
+  $ %[ 7r ] ⊢ x7 
+  $ %[ 8r ] ⊢ x8 
+  $ %[ 9r ] ⊢ x9 
+  $ %[ 10r ] ⊢ x10  
+  f0 { x0 x1 x2 x3 x4 x5 x6 } ⊢ { x0 x1 x2 x3 x4 x5 x6 }
+  f2 { x8 x9 x10 } ⊢ { x8 x9 x10 }
+  _emt x0 ⊢ x0 
+  _emt x1 ⊢ x1 
+  _emt x2 ⊢ x2 
+  _emt x3 ⊢ x3 
+  _emt x4 ⊢ x4 
+  _emt x5 ⊢ x5 
+  _emt x6 ⊢ x6 
+  _emt x7 ⊢ x7  
+  _emt x8 ⊢ x8 
+  ##_emt x9 ⊢ x9 
+  ##_emt x10 ⊢ x10 
+  ∎ {}
