@@ -58,10 +58,10 @@
   ∎ {} 
 \]
 § C1 « 
-  ##fact %[ 5r ] ⊢ y 
-  ##_emt y ⊢ y 
+  fact %[ 5r ] ⊢ y 
+  _emt y ⊢ y 
   tak { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ r 
   _emt r ⊢ r 
-  ##tak_v { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ { rx ry rz v } 
-  ##_emt v ⊢ v 
+  tak_v { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ { rx ry rz v } 
+  _emt v ⊢ v 
   ∎ {} 
