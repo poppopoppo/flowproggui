@@ -391,7 +391,6 @@ module Ast = struct
   and eq_def =
     | Cst of Cst.t
     | ExStg of string | EqLn of abs_name
-    | SttArg of int | ExStgArg of int
   and exp_rcd =
     | Rcd of exp_rcd array
     | App of exp_rcd * exp_rcd
@@ -3017,24 +3016,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                 let pp =
                   tbs^"§ "^n0^" = "^(pnt_name nl)^"\n" in
                 ("","","",pp)
-              | SttArg i ->
-                let ep = sgn () in
-                !ns.ns_p <- (n0,ep)::!ns.ns_p;
-                let s0 = Sys.argv.(i) in
-                gns.ns <- (ep,ref(Ln(Axm Axm.stg)))::gns.ns;
-                gns.ns_e <- (ep,ref(Cst_Stt(Cst.S8 s0)))::gns.ns_e;
-                let pp =
-                  tbs^"§ "^n0^" = "^"\""^(String.escaped s0)^"\""^"\n" in
-                ("","","",pp)
-              | ExStgArg i ->
-                let ep = sgn () in
-                !ns.ns_p <- (n0,ep)::!ns.ns_p;
-                let s0 = Util.load_file (Sys.argv.(i)) in
-                gns.ns <- (ep,ref(Ln(Axm Axm.stg)))::gns.ns;
-                gns.ns_e <- (ep,ref(Cst_Stt(Cst.S8 s0)))::gns.ns_e;
-                let pp =
-                  tbs^"§ "^n0^" = "^"\""^(String.escaped s0)^"\""^"\n" in
-                ("","","",pp))
+              )
           | Etr_Out_Abs(n,y0) ->
             let ep = sgn () in
             !ns.ns_p <- (n,ep)::!ns.ns_p;
@@ -5465,13 +5447,15 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                         ( match ix with
                           | RP.R[|RP.A(R.Idx x0);RP.A(R.Idx x1)|] ->
                             let _ = mk_idx_iv iv ix (mk_idx_ptn y) in
-                            if x1<8 then
+                            (*if x1<8 then
                               c_l^
                               "\timul "^(emt_reg_x86 x0)^","^(emt_reg_x86 x1)^"\n"
-                            else
+                            else*)
                               c_l^
                               "\tmov rdi,"^(emt_reg_x86 x1)^"\n"^
-                              "\tadd "^(emt_reg_x86 x0)^",rdi\n"
+                              "\tmov rsi,"^(emt_reg_x86 x0)^"\n"^
+                              "\timul rsi,rdi\n"^
+                              "\tmov "^(emt_reg_x86 x0)^",rsi\n"
                           | RP.A(R.Idx xp) ->
                             let s0 = rset_iv iv in
                             s0.(xp)<-true;

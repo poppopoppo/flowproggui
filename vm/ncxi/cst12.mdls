@@ -27,6 +27,22 @@
     tak { z x y } ⊢ rz 
     tak { rx ry rz } ⊢ r 
     ∎ r 
+§ @.tak_v { x y z } 
+  ∐ x'=<y' . 
+    $ z ⊢ z,z0
+    ∎ { x y z z0 }
+  ∐. . 
+    _dec x ⊢ x 
+    tak_v { x y z } ⊢ { x y z rx } 
+    _inc x ⊢ x 
+    _dec y ⊢ y 
+    tak_v { y z x } ⊢ { y z x ry }
+    _inc y ⊢ y 
+    _dec z ⊢ z 
+    tak_v { z x y } ⊢ { z x y rz }
+    _inc z ⊢ z 
+    tak_v { rx ry rz } ⊢ { rx ry rz r } 
+    ∎ { x y z r } 
 \[
 § C0 « 
   $ %[ 0r ] ⊢ x0,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11
@@ -44,6 +60,8 @@
 § C1 « 
   fact %[ 5r ] ⊢ y 
   _emt y ⊢ y 
-  tak { %[ 9r ] %[ 8r ] %[ 0r ] } ⊢ r 
-  _emt r ⊢ r 
+  ##tak { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ r 
+  ##_emt r ⊢ r 
+  tak_v { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ { rx ry rz v } 
+  _emt v ⊢ v 
   ∎ {} 

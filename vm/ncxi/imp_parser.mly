@@ -141,7 +141,7 @@ grm_ord_act:
   | grm_rule_act grm_ord_act { $1::$2 }
   ;
 grm_rule_act:
-  | ord grm_ptns grm_prd SCL SRC reg_ptn_src CMM reg_ptn_src ir_lines grm_ord_act {
+  | ord grm_ptns grm_prd SCL SRC reg_ptn_src CMM reg_src ir_lines grm_ord_act {
     Grm.Act_Seq((sgn (),sgn (),sgn(),$8,($6,ref $9)),$1,$2,$3,$10)
   }
   | ord grm_ptns grm_prd SRC reg_ptn_src ir_lines {
@@ -300,9 +300,10 @@ eq_def:
   | STG { Cst(Cst.S8 $1) }
 (*  | S8_E eq_def_s8 S8_P { Cst(Cst.S8 $2) }  *)
   | R64 { Cst(Cst.R64 $1) }
-  | IDX { SttArg $1 }
+(*  | IDX { SttArg $1 }
   | ENV STG { ExStg $2 }
   | ENV IDX { ExStgArg $2 }
+  *)
   ;
 eq_def_s8:
   | { [] }
