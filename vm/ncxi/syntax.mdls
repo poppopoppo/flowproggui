@@ -4222,23 +4222,27 @@
 					$ l0 ⊢ 
 					∐ _cns◂{ n0 l0 } . 
 						_lod_q { a0 n0 } ⊢ { a0 n0 { p0 p1 } } 
-						$ vs0 ⊢ vs0,vs00 
-						stt_v.mk_rset_x p1 ⊢ { p1 vp1 } 
-						rset.and { vs00 vp1 } ⊢ { vs00 vp1 }
-						» "" _ ⊢ em0  
-						» 0r _ ⊢ i0 
-						lp0 { rsp vs1 vs00 i0 sl em0 } ⊢ { rsp vs1 vs00 sl em0 } 
-						rp8.of_s8 em0 ⊢ em0 
 						subst_ptn { p0 sl } ⊢ { p0 sl } 
-						stt_v.mk_rset_x p0 ⊢ { p0 vp0 } 
-						rset.sub { vs0 vp0 } ⊢ { vs0 vp0 } 
-						rset.sub { vs0 vp1 } ⊢ { vs0 vp1 } 
-						f { rsp vs0 p0 p1 } ⊢ { rsp vs0 er } 
-						rp8.of_s8 er ⊢ er 
-						rp8.cct { e0 em0 } ⊢ e0 
-						rp8.cct { e0 er } ⊢ er 
-						rset.or { vs0 vp1 } ⊢ { vs0 vp1 } 
-						f2_lp3 { rsp a0 vs0 vs1 l0 er sl } ⊢| 
+						∐ p0 ⊢ RP.atm◂v0; v0 ⊢ stt_v.hp◂{ r0 cf0 h0 }; p1 ⊢ RP.atm◂v1; v1 ⊢ stt_v.hp◂{ r1 cf1 h1 }; r0'=r1' .  
+							f2_lp3 { rsp a0 vs0 vs1 l0 e0 sl } ⊢| 
+						∐. . 
+							$ vs0 ⊢ vs0,vs00 
+							stt_v.mk_rset_x p1 ⊢ { p1 vp1 } 
+							rset.and { vs00 vp1 } ⊢ { vs00 vp1 }
+							» "" _ ⊢ em0  
+							» 0r _ ⊢ i0 
+							lp0 { rsp vs1 vs00 i0 sl em0 } ⊢ { rsp vs1 vs00 sl em0 } 
+							rp8.of_s8 em0 ⊢ em0 
+							subst_ptn { p0 sl } ⊢ { p0 sl } 
+							stt_v.mk_rset_x p0 ⊢ { p0 vp0 } 
+							rset.sub { vs0 vp0 } ⊢ { vs0 vp0 } 
+							rset.sub { vs0 vp1 } ⊢ { vs0 vp1 } 
+							f { rsp vs0 p0 p1 } ⊢ { rsp vs0 er } 
+							rp8.of_s8 er ⊢ er 
+								rp8.cct { e0 em0 } ⊢ e0 
+							rp8.cct { e0 er } ⊢ er 
+							rset.or { vs0 vp1 } ⊢ { vs0 vp1 } 
+							f2_lp3 { rsp a0 vs0 vs1 l0 er sl } ⊢| 
 					∐. _nil◂{} . 
 						∎ { rsp a0 vs0 vs1 e0 sl }
 				§ f2 { rsp v0 p0 p1 }
