@@ -4501,6 +4501,58 @@
 				∎ { irv rsp sr } 
 			§ push_c_regs = "\tpush rdx\n\tpush rcx\n\tpush r8\n\tpush r9\n\tpush r10\n\tpush r11\n" 
 			§ pop_c_regs = "\tpop r11\n\tpop r10\n\tpop r9\n\tpop r8\n\tpop rcx\n\tpop rdx\n" 					  
+			§§ dlt 
+				§ @.ptn { rsp p } 
+					∐ p ⊢ RP.rcd◂l . 
+						ptn_lst { rsp l } ⊢| 
+					∐. p ⊢ RP.atm◂a . 	
+						∐ a ⊢ stt_v.hp◂{ r cf h }; cf ⊢ stt_v.cf_f◂{} . 
+							∐ h ⊢ stt_v.ref◂{ a q }; q ⊢ stt_v.opq◂ol . 
+								reg { rsp r } ⊢ { rsp r er br } 
+								» _^ er ⊢ er,e 
+									push_c_regs 
+									"\tmov rdi," 0' 
+									`	xor rax,rax\n 
+									`	mov QWORD [rsp_tmp],rsp 
+									`	and rsp,~0xf 
+									`	call free 
+									`	mov rsp,QWORD [rsp_tmp] 
+									pop_c_regs 
+									//
+								rp8.of_s8 e ⊢ e 
+								∎ { rsp e } 
+							∐. . 
+								∎| 
+						∐. . 
+							rp8.e {} ⊢ e 
+							∎ { rsp e } 
+					@.ptn_lst { rsp l } 
+					$ l ⊢ 
+					∐ _cns◂{ p l } . 
+						ptn { rsp p } ⊢ { rsp ep } 
+						ptn_lst { rsp l } ⊢ { rsp el } 
+						rp8.cct { ep el } ⊢ e 
+						∎ { rsp e }
+					∐. _nil◂{} . 
+						rp8.e {} ⊢ e 
+						∎ { rsp e } 
+				§ @.f { rsp dl }
+					$ dl ⊢ 
+					∐ _cns◂{ p dl } . 
+						$ p ⊢ p,p0 
+						stt_v.pnt p0 ⊢ sp 
+						» _^ sp ⊢ sp,sc 
+							"; .dlt.ptn " 0' "\n" // 
+						rp8.of_s8 sc ⊢ sc 
+						ptn { rsp p } ⊢ { rsp ep } 
+						f { rsp dl } ⊢ { rsp e } 
+						rp8.cct { sc ep } ⊢ ep 
+						rp8.cct { ep e } ⊢ e 
+						∎ { rsp e }
+					∐. _nil◂{} . 
+						rp8.e {} ⊢ e 
+						∎ { rsp e }  
+				∎∎ 
 			§§ lc_code 
 				§ 
 					@.f { lb_n { ev evv } rsp { rv irv } tv lc ec0 rl { rsp_d pr } } 

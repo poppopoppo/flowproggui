@@ -1,0 +1,7 @@
+§ f9 {} 
+  $ %[ "HELLO WORLD!!" ] ⊢ s 
+  ∎ s  
+§ C0 « 
+  $ %[ "Foo Baa" ] ⊢ s 
+  $ %[ 1r ] ⊢ x 
+  ∎ {}

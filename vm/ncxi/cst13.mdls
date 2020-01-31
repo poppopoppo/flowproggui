@@ -26,6 +26,13 @@
 § f7 { x y } 
   _imul { x y } ⊢ { x y } 
   ∎ { x y }
+§ f8 { x y z } 
+  f7 { x y } ⊢ { _ y } 
+  _imul { y z } ⊢ { y _ } 
+  ∎ y 
+§ f9 {} 
+  $ %[ "HELLO WORLD!!" ] ⊢ s 
+  ∎ s 
 § C0 « 
   $ %[ 0r ] ⊢ x0
   $ %[ 1r ] ⊢ x1 

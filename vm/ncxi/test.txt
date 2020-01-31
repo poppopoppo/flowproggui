@@ -1107,3 +1107,9 @@ _lds_bd : { _s8 _r64 _r64 } ⊢ { _s8 _r64 _r64 _r8 }
 ; { src offset bound } 
 _lds_bd_im : _r64 ⊢⊢ { _s8 _r64 } ⊢ { _s8 _r64 _r8 }
 
+
+
+64-bit header 
+8bit              | 8bit       | 48bit
+GC,opq,arr .. agl | agl-number | len 
+                               | len | tag-bits
