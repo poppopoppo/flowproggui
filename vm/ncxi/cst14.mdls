@@ -1,7 +1,19 @@
+¶ sum ◂ a',b' 
+  ∐ in_l : a' 
+  ∐ in_r : b' 
 § f9 {} 
   $ %[ "HELLO WORLD!!" ] ⊢ s 
   ∎ s  
+§ f1 { x y } 
+  _imul { x y } ⊢ { x _ }
+  $ %[ 4r ] ⊢ z
+  _imul { x z } ⊢ { x z }
+  ∎ x 
 § C0 « 
   $ %[ "Foo Baa" ] ⊢ s 
   $ %[ 1r ] ⊢ x 
+  _emt x ⊢ x 
+  _emt s ⊢ s 
+  f9 {} ⊢ s2
+  _emt s2 ⊢ s2 
   ∎ {}

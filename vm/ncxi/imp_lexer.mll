@@ -11,7 +11,8 @@ let alpha = ['a'-'z' 'A'-'Z']
 let ascii = ['a'-'z' 'A'-'Z' '0'-'9' '(' ')' '!' '"' '#'
   '*' '+' ';' ':' '<' '>' ',' '.' '?' '/' '\\' '_'
   '$' '%' '&' '\'' '=' '~' '~' '|' '{' '}' '`' '@' '[' ']' ]
-let hex = [ 'a'-'f' 'A'-'F' '0'-'9' ]
+let hex = [ 'a'-'f' 'A'-'F' '0'-'9' '_' ] 
+let bin = [ '0' '1' '_' ]
 let alnum = digit | alpha
 let name = alpha+  ("_" | digit | alpha)*
 let r64 = "0r" digit+
@@ -28,6 +29,8 @@ rule token = parse
     | "0xr" (hex+ as lxm) { R64(Int64.of_string ("0x"^lxm)) }
     | (digit+ as lxm) "r" { R64(Int64.of_string lxm) }
     | "0x" (hex+ as lxm) "r" { R64(Int64.of_string ("0x"^lxm)) }
+    | "0b" (bin+ as lxm) "r" { R64(Int64.of_string ("0b"^lxm)) }
+    | "0c" (_ as lxm) "r" { R64(Int64.of_int(Char.code lxm)) }
     | "0rb" { R2(false) }
     | "1rb" { R2(true) }
     | "§"  { LCE }
