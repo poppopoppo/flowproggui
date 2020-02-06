@@ -19,6 +19,18 @@
   ∐. a ⊢ c1◂{} . 
     c0 {} ⊢ a 
     ∎ a 
+§§ bl 
+  ¶ t 
+    ∐ t : {} 
+    ∐ f : {} 
+  § and { b0 b1 } 
+    ∐ b0 ⊢ t◂{}; b1 ⊢ t◂{} . 
+      t {} ⊢ b 
+      ∎ b 
+    ∐. . 
+      f {} ⊢ b 
+      ∎ b 
+  ∎∎
 § C0 « 
   $ %[ "Foo Baa" ] ⊢ s 
   $ %[ 1r ] ⊢ x 
@@ -27,7 +39,9 @@
   f9 {} ⊢ s2
   _emt s2 ⊢ s2 
   ##in_l x ⊢ a 
-  _some x ⊢ a 
+  c0 {} ⊢ v 
+  f2 v ⊢ v 
+  ##_some x ⊢ a 
   ∎ {}
 \[
 § f2 x 
