@@ -20,7 +20,7 @@ let hr64 = "0xr" hex+
 let z = (('-' digit+)|digit+)
 rule token = parse
     | "." space* "\n" { DOT_END }
-    | '\"' (([^ '\"' '\\']|"\\\""|"\\\\"|"\\t"|"\\n"|"\\\'")* as lxm) '\"' { STG(Scanf.unescaped lxm) }
+    | '\"' (("\\\""|"\\\\"|"\\t"|"\\n"|"\\\'"|[^ '\"' '\\'])* as lxm) '\"' { STG(Scanf.unescaped lxm) }
     | '`' (([^ '\n']* '\n') as lxm) { LINE(lxm) }
     | "##" [^ '\n']* "\n" { Util.Log.add "start line comment\n"; token lexbuf }
     | "\\[" [' ' '\t' '\n']* "\n" { cmt_n := !cmt_n +1; blk_cmt lexbuf }
