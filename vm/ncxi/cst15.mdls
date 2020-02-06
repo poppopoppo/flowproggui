@@ -1,0 +1,60 @@
+§§ rp8 
+  §§ ax 
+    ¶ t 
+      ∐ e : {}
+      ∐ nl : {} 
+      ∐ tb : {} 
+      ∐ spc : {}
+    ∎∎  
+	¶ @.t 
+		∐ nd : { t _r64 t } 
+		∐ lf : _s8
+    ∐ ax : ax.t  
+  § e {} 
+		ax.e {} ⊢ e 
+    ax e ⊢ r 
+    ∎ r 
+  \[
+  § of_s8 s 
+		lf s ⊢ a 
+		∎ a 
+	\]
+  \[
+  § len r 
+		$ r ⊢ 
+		∐ nd◂{ r0 l r1 } .
+			$ l ⊢ l,l0 
+			nd { r0 l0 r1 } ⊢ r 
+			∎ { r l }
+		∐. lf◂s . 
+			_s8_len s ⊢ { s l } 
+			lf s ⊢ r 
+			∎ { r l }
+	\]
+  \[
+  § cct { r0 r1 }
+		len r0 ⊢ { r0 l0 } 
+		len r1 ⊢ { r1 l1 } 
+		_add { l0 l1 } ⊢ { l0 l1 } 
+		nd { r0 l0 r1 } ⊢ r 
+		∎ r 
+	§ @.mk_s8_i { r s i }
+		∐ r ⊢ nd◂{ r0 l r1 } .
+			mk_s8_i { r0 s i } ⊢ { r0 s i } 
+			mk_s8_i { r1 s i } ⊢ { r1 s i }
+			nd { r0 l r1 } ⊢ r 
+			∎ { r s i }
+		∐. r ⊢ lf◂s0 . 
+			_s8_len s0 ⊢ { s0 l0 } 
+			» 0r _ ⊢ i0 
+			_rep_movsb { l0 s0 i0 s i } ⊢ { l0 s0 i0 s i }
+			lf s0 ⊢ r 
+			∎ { r s i } 
+	§ mk_s8 r 
+		len r ⊢ { r l }
+		_mlc_s8 l ⊢ { l s }
+		» 0r _ ⊢ i 
+		mk_s8_i { r s i } ⊢ { r s i }
+		∎ { r s }
+	\]
+  ∎∎

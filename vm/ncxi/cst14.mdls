@@ -1,6 +1,9 @@
 ¶ sum ◂ a',b' 
   ∐ in_l : a' 
   ∐ in_r : b' 
+¶ a 
+  ∐ c0 : {} 
+  ∐ c1 : {} 
 § f9 {} 
   $ %[ "HELLO WORLD!!" ] ⊢ s 
   ∎ s  
@@ -9,6 +12,13 @@
   $ %[ 4r ] ⊢ z
   _imul { x z } ⊢ { x z }
   ∎ x 
+§ f2 a 
+  ∐ a ⊢ c0◂{} . 
+    c1 {} ⊢ a 
+    ∎ a 
+  ∐. a ⊢ c1◂{} . 
+    c0 {} ⊢ a 
+    ∎ a 
 § C0 « 
   $ %[ "Foo Baa" ] ⊢ s 
   $ %[ 1r ] ⊢ x 
@@ -16,4 +26,12 @@
   _emt s ⊢ s 
   f9 {} ⊢ s2
   _emt s2 ⊢ s2 
+  ##in_l x ⊢ a 
+  _some x ⊢ a 
   ∎ {}
+\[
+§ f2 x 
+  _inc x ⊢ x 
+  in_l x ⊢ a 
+  ∎ a 
+  \]

@@ -15,7 +15,7 @@ section .text
 global _start              
 _start:
 	jmp RTM_0
-ETR_27: ; f9 { } ⊢ 0f' : ({ }→_s8)
+ETR_29: ; f9 { } ⊢ 0f' : ({ }→_s8)
 ;; rsp=0 , 
 	push rdx
 	push rcx
@@ -58,7 +58,7 @@ ETR_27: ; f9 { } ⊢ 0f' : ({ }→_s8)
 ; ∎ 0f'
 ; .mov_ptn2 0f' ⊢ 0f'
 	ret
-ETR_28: ; f1 { 0t' 1t' } ⊢ 0t' : ({ _r64 _r64 }→_r64)
+ETR_30: ; f1 { 0t' 1t' } ⊢ 0t' : ({ _r64 _r64 }→_r64)
 ;; rsp=0 , %2~1t' %1~0t' 
 ; _imul { 0t' 1t' } ⊢ { 0t' 1t' }
 	imul r13,r14
@@ -73,6 +73,25 @@ ETR_28: ; f1 { 0t' 1t' } ⊢ 0t' : ({ _r64 _r64 }→_r64)
 ; ∎ 0t'
 ; .dlt.ptn 1t'
 ; .mov_ptn2 0t' ⊢ 0t'
+	ret
+ETR_31: ; f2 0'(<2)◂∐[ {} {} ] ⊢ 0'(<2)◂∐[ {} {} ] : (_t6→_t6)
+;; rsp=0 , %7~0'(<2)◂∐[ {} {} ] 
+;; 0'(<2)◂∐[ {} {} ] ⊢ 0(<2)◂{ }
+;; rsp=0 , 
+;; rsp=0 , %9~1(<2)◂{ } 
+; ∎ 1(<2)◂{ }
+; .mov_ptn2 1(<2)◂{ } ⊢ 0'(<2)◂∐[ {} {} ]
+; .mov_ptn 1(<2)◂{ } ⊢ 0'(<2)◂∐[ {} {} ]
+; .stt_agl ⊢ .dyn_agl ; 0
+	ret
+LB_0:
+;; 0'(<2)◂∐[ {} {} ] ⊢ 1(<2)◂{ }
+;; rsp=0 , 
+;; rsp=0 , %8~0(<2)◂{ } 
+; ∎ 0(<2)◂{ }
+; .mov_ptn2 0(<2)◂{ } ⊢ 0'(<2)◂∐[ {} {} ]
+; .mov_ptn 0(<2)◂{ } ⊢ 0'(<2)◂∐[ {} {} ]
+; .stt_agl ⊢ .dyn_agl ; 0
 	ret
 RTM_0:
 	push RTM_1
@@ -108,9 +127,9 @@ RTM_0:
 	mov BYTE [rax+8+5],97
 	mov BYTE [rax+8+6],97
 	mov r13,rax
-;; rsp=0 , %7~0f' 
+;; rsp=0 , %10~0f' 
 ; $ %[ 1r ] ⊢ %[ 1r ]
-;; rsp=0 , %8~%[ 1r ] %7~0f' 
+;; rsp=0 , %11~%[ 1r ] %10~0f' 
 	push rdx
 	push rcx
 	push r8
@@ -130,7 +149,7 @@ RTM_0:
 	pop r8
 	pop rcx
 	pop rdx
-;; rsp=0 , %9~%[ 1r ] %7~0f' 
+;; rsp=0 , %12~%[ 1r ] %10~0f' 
 	push rdx
 	push rcx
 	push r8
@@ -151,17 +170,17 @@ RTM_0:
 	pop r8
 	pop rcx
 	pop rdx
-;; rsp=0 , %10~0f' %9~%[ 1r ] 
-; rsp_d=0, #27 { } ⊢ 1f'
+;; rsp=0 , %13~0f' %12~%[ 1r ] 
+; rsp_d=0, #29 { } ⊢ 1f'
 	lea rsp,[rsp-8*1]
 	mov QWORD [rsp+8*0],r13
 ; .mov_ptn2 { } ⊢ { }
-	call ETR_27
+	call ETR_29
 	mov rax,QWORD [rsp-8+8*1]
 	mov r14,r13
 	mov r13,rax
 	lea rsp,[rsp+8*1]
-;; rsp=0 , %11~1f' %10~0f' %9~%[ 1r ] 
+;; rsp=0 , %14~1f' %13~0f' %12~%[ 1r ] 
 	push rdx
 	push rcx
 	push r8
@@ -182,8 +201,10 @@ RTM_0:
 	pop r8
 	pop rcx
 	pop rdx
-;; rsp=0 , %12~1f' %10~0f' %9~%[ 1r ] 
+;; rsp=0 , %15~1f' %13~0f' %12~%[ 1r ] 
+;; rsp=0 , %16~0(<2)◂%[ 1r ] %15~1f' %13~0f' 
 ; ∎ { }
+; .dlt.ptn 0(<2)◂%[ 1r ]
 ; .dlt.ptn 1f'
 	push rdx
 	push rcx
@@ -222,7 +243,6 @@ RTM_0:
 	pop r8
 	pop rcx
 	pop rdx
-; .dlt.ptn %[ 1r ]
 ; .mov_ptn2 { } ⊢ { }
 	ret
 RTM_1:

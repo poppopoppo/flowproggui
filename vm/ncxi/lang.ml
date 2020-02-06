@@ -1105,7 +1105,8 @@ and print_line p0 =
     | Seq (o,_) -> (print_nd o)^"\n"
     | Ret r -> "∎ "^(pnt_ptn r)^"\n"
     | Exn r -> "∎| "^(pnt_r r)^"\n"
-    | Mtc _ -> "\t∐\\ ..\n"
+    | Mtc ps -> 
+      Array.fold_left (fun s (m,_) -> s^" ∐ "^(pnt_mtc_ptn m)) "" ps 
     | IL_Glb_Call(n,r) -> (pnt_stt_name !n)^"\t"^(pnt_ptn r)^" ⊢|\n"
     | Clj _ -> err "print_line 0"  )
 and print_ir_coprds ps =
