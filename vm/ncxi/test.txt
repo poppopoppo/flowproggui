@@ -1113,3 +1113,70 @@ _lds_bd_im : _r64 ⊢⊢ { _s8 _r64 } ⊢ { _s8 _r64 _r8 }
 8bit              | 8bit       | 48bit
 GC,opq,arr .. agl | agl-number | len 
                                | len | tag-bits
+
+
+¶ @.t r' = RP.t◂(t_atm◂r') 
+				@.adt_id = _r64 
+        @.t_atm r'
+					∐ hp : { r' hp }
+					∐ hp_im : ast.cst_v  
+					∐ hp_im_e : _r64 
+					∐ dyn_adt : { adt_id r' _r64 r' _lst◂hp }
+					∐ stt_adt : { adt_id _r64 _r64 t◂r' } 
+				@.agl_p
+					∐ agl_unt : {} 
+					∐ agl_hp : hp   
+				@.hp 
+					∐ ref : { t_agl ref } 
+					∐ r64 : {} 
+					∐ unt : t_agl
+					∐ pv : {}
+          ∐ adt_id : adt_id
+				@.ref 
+					∐ arr : hp
+					∐ rcd : _arr◂hp 
+          ∐ ln : hp
+¶¶ t :: C ## type class 
+  foo : t 
+  baa : t→_r64 
+  ruu : a'→{ a' a' }
+  ∎∎
+¶ t  
+  ∐ 
+  ∐ .. 
+
+¶§ :: C 
+  ¶ s8 = _arr◂_r8 
+  $$ : _rpc◂t' ⊢⊢ t' ⊢ { t' t' }
+§ f◂◂R x : _rpc◂t' ⊢⊢ t' ⊢ { t' t' }
+  $$◂◂R x ⊢ x,x0
+
+  _rpc.r64 : _rpc◂r64 
+  _rpc.r32 
+  _rpc.r16 
+  _rpc.r8 
+  _rpc.s8 
+  _rpc.arr◂◂R : _rpc◂t' ⊢⊢ _rpc◂(_arr◂t') 
+  _rpc.spc◂◂R 
+
+¶ $$ t :: _pnt
+¶ a'::_pnt,_eq ∀ t ◂ a',b'
+
+generator = commom parts + special parts 
+parametric polymorphism ; pointer 
+ad hoc polymorphism ; pointer + call,ret 
+
+¶ t ◂ .. 
+  c0 : a' ⊢ _ 
+  c1 : _r64 ⊢ _ 
+  c2 : _ 
+  c3 : _
+  c4 : _r64 ⊢⊢ _ 
+  t_Eq :: Eq  
+  ∎
+¶ t =: t_Eq :: Eq ,
+¶§ t_Eq 
+  m0 = f 
+  m1 = g 
+  ∎∎ 
+  
