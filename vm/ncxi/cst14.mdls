@@ -31,6 +31,21 @@
       f {} ⊢ b 
       ∎ b 
   ∎∎
+¶ @.lst◂a' 
+  ∐ cns : { a' lst◂a' }
+  ∐ nil : {} 
+¶ @.lst_N◂a' 
+  ∐ cns_N : { a' lst_N◂{ a' a' } }
+  ∐ nil : {} 
+§§ lst 
+  § @.rev_i { l0 l1 } : { _lst◂_r64 _lst◂_r64 }
+    ∐ l0 ⊢ _cns◂{ a l0 } .
+      _cns { a l1 } ⊢ l1 
+      rev_i { l0 l1 } ⊢ l 
+      ∎ l 
+    ∐. . 
+      ∎ l1 
+  ∎∎
 § C0 « 
   $ %[ "Foo Baa" ] ⊢ s 
   $ %[ 1r ] ⊢ x 
@@ -39,9 +54,11 @@
   f9 {} ⊢ s2
   _emt s2 ⊢ s2 
   ##in_l x ⊢ a 
+  _nil {} ⊢ l 
+  _cns { %[ 0r ] l } ⊢ l 
   c0 {} ⊢ v 
   f2 v ⊢ v 
-  ##_some x ⊢ a 
+  _some x ⊢ a 
   ∎ {}
 \[
 § f2 x 
