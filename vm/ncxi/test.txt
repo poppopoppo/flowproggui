@@ -1179,4 +1179,7 @@ ad hoc polymorphism ; pointer + call,ret
   m0 = f 
   m1 = g 
   ∎∎ 
-  
+
+¶ @.t◂a' ~= t0
+  ∐ cns : { a' t0 } 
+  ∐ nil : {} 

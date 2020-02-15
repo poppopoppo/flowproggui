@@ -32,7 +32,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.opadl",
-					"match": "(◂|\\b_\\^\\b|\\b_\\b|\\$)"
+					"match": "(◂|=<|=|\\b_\\^\\b|\\b_\\b|\\$)"
 				}]
 		},
 		"csts": {
