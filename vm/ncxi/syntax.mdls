@@ -4648,7 +4648,7 @@
 												`	mov QWORD [rsi],0
 												"\tmov QWORD [rsi+8],rdi\n"
 												"\tmov BYTE [rsi+6]," 1d' "\n"
-												"\tmov " 0' ",rax\n" 
+												"\tmov " 0' ",rsi\n" 
 												// 
 											rp8.add_s8 { e0 ec1 } ⊢ e0 
 											∎ { e0 tav rsp vs0 }
@@ -8581,6 +8581,7 @@
 				» _^ _ ⊢ ec1 
 					`bits 64 
 					`%define SS_MAX 4000
+					`%define SS_NULL 0xffff_ffff_ffff_0000
 					`extern exit 
 					`extern printf 
 					`extern malloc 
@@ -8588,10 +8589,10 @@
 					`section .bss 
 					`	ret_vct: resq 64
 					` rsp_tmp: resq 1
-					`	SS_VCT: resq 16*SS_MAX
 					`	SS_TOP: resq 1
+					`	SS_VCT: resq 16*SS_MAX
+					`	SS_BTM: resq 1 
 					`section .data
-					`	SS_NULL: dq 0xffff_ffff_ffff_0000
 					`	err_n: dq 0
 					`	fmt_err_line: db "err:%d",10,0
 					`	fmt_r64: db "%dr",0
@@ -8619,8 +8620,7 @@
 					`	cmp rdi,SS_MAX 
 					`	jz SS_end 
 					`	add rdi,1 
-					`	mov rsi,rax 
-					`	add rsi,16 
+					`	lea rsi,[rax+8*16] 
 					`	mov QWORD [rax],rsi 
 					`	mov rax,rsi 
 					`	jmp SS_lp 
