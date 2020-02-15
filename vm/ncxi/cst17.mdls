@@ -7,26 +7,18 @@
 		lf s ⊢ a 
 		∎ a 
 
-  § E0 « 
-    ##e {} ⊢ e0 
-    ##lf %[ "Hello" ] ⊢ e1 
-    of_s8 %[ "World" ] ⊢ e2 
-		##_emt e1 ⊢ e1 
-		_emt e2 ⊢ e2 
-    ∎ {} 
-	\[
-  § len r 
-		$ r ⊢ 
-		∐ nd◂{ r0 l r1 } .
+	§ len r 
+		∐ r ⊢ nd◂{ r0 l r1 } .
 			$ l ⊢ l,l0 
 			nd { r0 l0 r1 } ⊢ r 
-			∎ { r l }
-		∐ lf◂s . 
+			∎ { r l } 
+		∐ r ⊢ lf◂s . 
 			_s8_len s ⊢ { s l } 
 			lf s ⊢ r 
 			∎ { r l }
-    ∐. e◂{} . 
-      ∎ %[ 0r ]
+    ∐. r ⊢ e◂{} . 
+			e {} ⊢ r 
+      ∎ { r %[ 0r ] } 
 	§ add_s8 { e s } 
 		_s8_len s ⊢ { s l } 
 		len e ⊢ { e le } 
@@ -40,8 +32,33 @@
 		_add { l0 l1 } ⊢ { l0 l1 } 
 		nd { r0 l0 r1 } ⊢ r 
 		∎ r 
-	\]
+	
   \[
+	§ E0 « 
+    e {} ⊢ e0 
+    lf %[ "Hello" ] ⊢ e1 
+    of_s8 %[ "World" ] ⊢ e2 
+		_emt e0 ⊢ e0 
+		_emt e1 ⊢ e1 
+		_emt e2 ⊢ e2 
+		_emt e2 ⊢  e2 
+		##_s8_len %[ "Foo" ] ⊢ { s0 r0 } 
+		##_emt r0 ⊢ r0 
+		_emt %[ 4r ] ⊢ r1 
+		len e2 ⊢ { e2 l2 } 
+		_emt l2 ⊢ l2 
+		cct { e1 e2 } ⊢ er 
+		_emt er ⊢ er 	
+    add_s8 { er %[ "!!" ] } ⊢ er 
+		_emt er ⊢ er 
+		∎ {} 
+	\]
+	§ E1 « 
+		e {} ⊢ e0 
+		add_s8 { e0 %[ "Foo" ] } ⊢ e0 
+		_emt e0 ⊢ e0
+		∎ {}  
+	\[
   § @.mk_s8_i { r s i }
 		∐ r ⊢ nd◂{ r0 l r1 } .
 			mk_s8_i { r0 s i } ⊢ { r0 s i } 

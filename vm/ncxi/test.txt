@@ -1183,3 +1183,17 @@ ad hoc polymorphism ; pointer + call,ret
 ¶ @.t◂a' ~= t0
   ∐ cns : { a' t0 } 
   ∐ nil : {} 
+
+
+%%cpu ## physical resion 
+etr0:
+  op0 r0 ⊢ r1 
+  op1 r4 ⊢ r5,r8 
+  op3 l5 ⊢ l7,l1 
+  op4 vr0 ⊢ vr1
+  op5 b2,b3 ⊢ b4,b5  
+  call etr3 
+  op6 .. 
+  ..
+  ret 
+%%cpu
