@@ -1,0 +1,46 @@
+§§+s8
+	@.stg_ltr
+	∐. "\"" stg_ltr_seq ⊢ { {} cl }
+		s8_of_r64_lst cl ⊢ s
+		_some s ⊢ a
+		∎ a
+	@.stg_ltr_seq
+	∐ "\n" !| ⊢ { xx } 
+		_none {} ⊢ a 
+		∎ a 
+	∐ "\\" stg_ltr_sp stg_ltr_seq ⊢ { {} c0 cl }
+		_cns { c0 cl } ⊢ cl
+		_some cl ⊢ a
+		∎ a
+	∐ "\"" ⊢ { {} }
+		_nil {} ⊢ cl
+		_some cl ⊢ a
+		∎ a
+	∐. _byt stg_ltr_seq ⊢ { c0 cl }
+		_cns { c0 cl } ⊢ cl
+		_some cl ⊢ a
+		∎ a
+	@.stg_ltr_sp
+	∐ "\\" ⊢ { {} }
+		» 92r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
+	∐ "\"" ⊢ { {} }
+		» 34r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
+	∐ "n" ⊢ { {} }
+		» 10r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
+	∐ "t" ⊢ { {} }
+		» 9r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
+	∐. "0" ⊢ { {} }
+		» 0r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
+§ E0 « 
+  stg_ltr.prs { %[ "Hoo" ] %[ 0r ] } ⊢ { s0 x0 a0 }
+  ∎ {} 

@@ -1184,7 +1184,11 @@ ad hoc polymorphism ; pointer + call,ret
   ∐ cns : { a' t0 } 
   ∐ nil : {} 
 
-
+  C.[ a' b' ] ∀ { a' b' } ⊢ { a' b' }
+¶¶ A.[ s' ] , B.[ t' ] ∀ C.[ s' t' u' ]
+  m0 : s' 
+  m1 : t' → u' 
+  ∎∎  
 %%cpu ## physical resion 
 etr0:
   op0 r0 ⊢ r1 

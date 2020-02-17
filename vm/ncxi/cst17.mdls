@@ -33,6 +33,33 @@
 		nd { r0 l0 r1 } ⊢ r 
 		∎ r 
 
+	\[
+	§ E1 « 
+		e {} ⊢ e0 
+		add_s8 { e0 %[ "Foo" ] } ⊢ e0 
+		_emt e0 ⊢ e0
+		∎ {}  
+	\]
+	§ @.mk_s8_i { r s i }
+		∐ r ⊢ nd◂{ r0 l r1 } .
+			mk_s8_i { r0 s i } ⊢ { r0 s i } 
+			mk_s8_i { r1 s i } ⊢ { r1 s i }
+			nd { r0 l r1 } ⊢ r 
+			∎ { r s i }
+			##∎| 
+		∐. r ⊢ lf◂s0 . 
+			_s8_len s0 ⊢ { s0 l0 } 
+			_rep_movsb { l0 s0 %[ 0r ] s i } ⊢ { l0 s0 i0 s i }
+			lf s0 ⊢ r 
+			_add { i l0 } ⊢ { i l0 } 
+			∎ { r s i }
+			##∎|  
+	§ mk_s8 r 
+		len r ⊢ { r l }
+		_mlc_s8 l ⊢ { l s }
+		mk_s8_i { r s %[ 0r ] } ⊢ { r s i }
+		∎ { r s }
+		##∎| 
 	§ E0 « 
     ##e {} ⊢ e0 
     lf %[ "Hello" ] ⊢ e1 
@@ -51,33 +78,8 @@
 		cct { e1 e2 } ⊢ er 
 		##_emt er ⊢ er 	
     add_s8 { er %[ "!!" ] } ⊢ er 
-		##_emt er ⊢ er 
+		_emt er ⊢ er 
+		mk_s8 er ⊢ { er sr } 
+		_emt sr ⊢ sr 
 		∎ {} 
-	\[
-	§ E1 « 
-		e {} ⊢ e0 
-		add_s8 { e0 %[ "Foo" ] } ⊢ e0 
-		_emt e0 ⊢ e0
-		∎ {}  
-	\]
-	\[
-  § @.mk_s8_i { r s i }
-		∐ r ⊢ nd◂{ r0 l r1 } .
-			mk_s8_i { r0 s i } ⊢ { r0 s i } 
-			mk_s8_i { r1 s i } ⊢ { r1 s i }
-			nd { r0 l r1 } ⊢ r 
-			∎ { r s i }
-		∐. r ⊢ lf◂s0 . 
-			_s8_len s0 ⊢ { s0 l0 } 
-			» 0r _ ⊢ i0 
-			_rep_movsb { l0 s0 i0 s i } ⊢ { l0 s0 i0 s i }
-			lf s0 ⊢ r 
-			∎ { r s i } 
-	§ mk_s8 r 
-		len r ⊢ { r l }
-		_mlc_s8 l ⊢ { l s }
-		» 0r _ ⊢ i 
-		mk_s8_i { r s i } ⊢ { r s i }
-		∎ { r s }
-    \]
 	∎∎

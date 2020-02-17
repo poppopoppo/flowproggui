@@ -29,6 +29,7 @@ extern exit
 extern free
 extern printf
 extern malloc
+extern calloc
 extern sprintf
 extern sscanf
 extern strtol
@@ -708,14 +709,15 @@ mlc_s8: ; rdi=size of bytes
   and rdi,~0111b
   add rdi,16
   xor rax,rax
+  mov rsi,1 
   push rdi
   mov QWORD [rsp_tmp],rsp
   and rsp,~0xf
-  call malloc
+  call calloc
   mov rsp,QWORD [rsp_tmp]
   pop rdi
   pop QWORD [rax]
-  mov QWORD [rax-8*1+rdi],0
+  ;mov QWORD [rax-8*1+rdi],0
   pop r11
   pop r10
   pop r9
