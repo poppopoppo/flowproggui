@@ -41,13 +41,14 @@
 		∎ {}  
 	\]
 	§ @.mk_s8_i { r s i }
-		∐ r ⊢ nd◂{ r0 l r1 } .
+		$ r ⊢ 
+		∐ nd◂{ r0 l r1 } .
 			mk_s8_i { r0 s i } ⊢ { r0 s i } 
 			mk_s8_i { r1 s i } ⊢ { r1 s i }
 			nd { r0 l r1 } ⊢ r 
 			∎ { r s i }
 			##∎| 
-		∐. r ⊢ lf◂s0 . 
+		∐. lf◂s0 . 
 			_s8_len s0 ⊢ { s0 l0 } 
 			_rep_movsb { l0 s0 %[ 0r ] s i } ⊢ { l0 s0 i0 s i }
 			lf s0 ⊢ r 
@@ -80,6 +81,6 @@
     add_s8 { er %[ "!!" ] } ⊢ er 
 		_emt er ⊢ er 
 		mk_s8 er ⊢ { er sr } 
-		_emt sr ⊢ sr 
+		_emt sr ⊢ sr
 		∎ {} 
 	∎∎
