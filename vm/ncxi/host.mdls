@@ -41,12 +41,13 @@
 		nd { r0 l0 r1 } ⊢ r 
 		∎ r 
 	§ @.mk_s8_i { r s i }
-		∐ r ⊢ nd◂{ r0 l r1 } .
+		$ r ⊢ 
+		∐ nd◂{ r0 l r1 } .
 			mk_s8_i { r0 s i } ⊢ { r0 s i } 
 			mk_s8_i { r1 s i } ⊢ { r1 s i }
 			nd { r0 l r1 } ⊢ r 
 			∎ { r s i }
-		∐. r ⊢ lf◂s0 . 
+		∐. lf◂s0 . 
 			_s8_len s0 ⊢ { s0 l0 } 
 			» 0r _ ⊢ i0 
 			_rep_movsb { l0 s0 i0 s i } ⊢ { l0 s0 i0 s i }
@@ -3019,9 +3020,11 @@
 			@.etr_k
 				∐ k_op : { _r64 stt_v.t◂_r64 _r64 stt_v.t◂_r64 }
 				∐ k_op_axm : _r64
+				∐ k_op_gnr : { _r64 _lst◂_r64 { stt_v.t◂_r64 stt_v.t◂_r64 } } 
 				∐ k_cst_v : ast.cst_v 
 				∐ k_ctr : { _r64 _r64 }  
 				∐ k_dyn_op : ast.lc_code◂_r64◂_r64
+			@.gnr = _lst◂{ _r64 _lst◂stt_v.hp }
 			@.cst_k = _r64
 			@.type_k_atm 
 				∐ dta : { _r64 _lst◂type_k }

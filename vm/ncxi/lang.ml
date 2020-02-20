@@ -3078,7 +3078,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
             let l_1 =
               List.fold_left
                 ( fun l (n,y2,y1,p0,r0,ep) ->
-                    (*Util.pnt true @@ "Etr "^n^"\n";*)
+                    Util.pnt true @@ "Etr "^n^"\n";
                     let y1_x = slv gns !ns 0 !p0 in
                     let _ = unify [] (Var y1) (inst 0 y1_x) in
                     (n,y2,y1,y1_x,p0,r0,ep)::l )

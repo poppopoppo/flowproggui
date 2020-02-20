@@ -1201,3 +1201,13 @@ etr0:
   ..
   ret 
 %%cpu
+
+¶ [ t◂a' ~= t_ , s◂b' ~= s_ ]
+  x : _r64 ⊢ t_  
+  y : _s8 ⊢ s_ 
+  X : rp8.t ⊢⊢ t_  
+  C0_t_s :: C0.[ t_ s_ ] 
+  ∎∎
+
+  ^ _ s0,s1 ⊢ s0,s1,sr 
+    "Hello" //
