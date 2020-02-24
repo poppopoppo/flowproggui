@@ -1,0 +1,12 @@
+§§+s8 
+	@.g0 
+		∐ "A" g0 ⊢ { {} a } 
+			_some {} ⊢ r 
+			∎ r 
+    ∐. "B" ⊢ { {} } 
+      _some {} ⊢ r 
+      ∎ r 
+§ E0 « 
+  g0.prs { %[ "AAAAAABcd" ] %[ 0r ] } ⊢ { s0 x0 a0 }
+  _emt { s0 x0 a0 } ⊢ { s0 x0 a0 }
+  ∎ {} 
