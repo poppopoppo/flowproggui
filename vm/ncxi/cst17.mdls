@@ -30,6 +30,25 @@
 		_add { l le } ⊢ { l le } 
 		lf s ⊢ s 
 		nd { e l s } ⊢ e 
+		∎ e
+	§ pfx_s8 { s e } 
+		_s8_len s ⊢ { s l } 
+		len e ⊢ { e le } 
+		_add { l le } ⊢ { l le } 
+		lf s ⊢ s 
+		nd { s l e } ⊢ e 
+		∎ e
+	§ add_chr { e c } 
+		len e ⊢ { e le } 
+		_inc le ⊢ le 
+		chr c ⊢ c 
+		nd { e le c } ⊢ e 
+		∎ e 
+	§ pfx_chr { c e } 
+		len e ⊢ { e le } 
+		_inc le ⊢ le 
+		chr c ⊢ c 
+		nd { c le e } ⊢ e 
 		∎ e 
 	§ cct { r0 r1 }
 		len r0 ⊢ { r0 l0 } 
@@ -103,6 +122,63 @@
 		_emt cs ⊢ cs 
 		chr %[ 44r ] ⊢ c1 
 		len c1 ⊢ { c1 l1 }  
-		_emt { c1 l1 } ⊢ { c1 l1 }  
+		_emt { c1 l1 } ⊢ { c1 l1 }
+		pfx_chr { %[ 44r ] er } ⊢ er  
 		∎ {} 
 	∎∎
+§§+s8 
+	@.g0 
+		∐. "A" g0 ⊢ { {} a } 
+			_some {} ⊢ r 
+			∎ r 
+
+\[
+§ @.fx0 l 
+	$ l ⊢ 
+	∐ _cns◂{ h l } . 
+		∎|
+	∐. . 
+		∎| 
+\]
+\[
+§§+s8
+	@.stg_ltr
+		∐. "\"" stg_ltr_seq ⊢ { {} cl }
+			_some cl ⊢ a
+			∎ a
+	@.stg_ltr_seq
+		∐ "\n" !| ⊢ { xx } 
+			_none {} ⊢ a 
+			∎ a 
+		∐ "\\" stg_ltr_sp stg_ltr_seq ⊢ { {} c0 cl }
+			rp8.pfx_chr { c0 cl } ⊢ cl
+			_some cl ⊢ a
+			∎ a
+		∐ "\"" ⊢ { {} }
+			rp8.e {} ⊢ cl 
+			_some cl ⊢ a
+			∎ a
+		∐. _byt stg_ltr_seq ⊢ { c0 cl }
+			rp8.pfx_chr { c0 cl } ⊢ cl
+			_some cl ⊢ a
+			∎ a
+	@.stg_ltr_sp
+		∐ "\\" ⊢ { {} }
+			_some %[ 92r ] ⊢ a0
+			∎ a0
+		∐ "\"" ⊢ { {} }
+			_some %[ 34r ] ⊢ a0
+			∎ a0
+		∐ "n" ⊢ { {} }
+			_some %[ 10r ] ⊢ a0
+			∎ a0
+		∐ "t" ⊢ { {} }
+			_some %[ 9r ] ⊢ a0
+			∎ a0	
+		∐. "0" ⊢ { {} }
+			_some %[ 0r ] ⊢ a0
+			∎ a0
+\]
+§ E1 « 
+  ##stg_ltr.prs { %[ "Hoo" ] %[ 0r ] } ⊢ { s0 x0 a0 }
+  ∎ {} 

@@ -1211,3 +1211,13 @@ etr0:
 
   ^ _ s0,s1 ⊢ s0,s1,sr 
     "Hello" //
+  \ R0
+  $ R0 ⊢ '{ x~x0 y~~ < R0 }
+  \ R0 x0 y
+  
+  compile-time\run-time computation 
+  F ◂◂ c r : .. ⊢⊢ .. ⊢ .. 
+§ { A B } =% 
+  ..
+  ∎ { %a %b } 
+  
