@@ -111,6 +111,10 @@
 			{
 				"name": "comment.line.opadl",
 				"match": "(##.*\\n?)"
+			},
+			{
+				"name": "comment.line.opadl.slsh",
+				"match": "(\\\\\\\\.*\\n?)"
 			}
 		]
 	},
