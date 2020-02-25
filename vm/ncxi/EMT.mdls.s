@@ -120,7 +120,6 @@ LB_7:
 	jmp LB_0
 LB_8:
 	mov QWORD [rsp+8*1],r14
-;;; 	jmp LB_11
 ;; rsp=1 , %0~8'(= r ) 
 ; #20 %[ 0r ] ⊢ 0(<2)◂%[ 0r ]
 ;; rsp=1 , %1~0(<2)◂%[ 0r ] %0~8'(= r ) 
@@ -140,7 +139,6 @@ LB_8:
 	lea rsp,[rsp+8*1]
 ;; ret 0
 	jmp LB_11
-;;; ret_f
 LB_11:
 	movzx rax,BYTE [r8+6]
 	cmp rax,0
@@ -182,7 +180,6 @@ LB_13:
 	jmp LB_12
 LB_14:
 	mov QWORD [rsp+8*0],r14
-;;; 	jmp LB_19
 ;; rsp=0 , 
 ; #20 %[ 1r ] ⊢ 0(<2)◂%[ 1r ]
 ;; rsp=0 , %2~0(<2)◂%[ 1r ] 
@@ -200,7 +197,6 @@ LB_14:
 	mov r8,rsi
 ;; ret 0
 	jmp LB_19
-;;; ret_f
 LB_19:
 	movzx rax,BYTE [r8+6]
 	cmp rax,0
@@ -267,7 +263,6 @@ LB_27:
 	jmp LB_20
 LB_28:
 	mov QWORD [rsp+8*1],r14
-;;; 	jmp LB_31
 ;; rsp=1 , %3~8'(= r ) 
 ; #20 8'(= r ) ⊢ 0(<2)◂8'(= r )
 ;; rsp=1 , %4~0(<2)◂8'(= r ) 
@@ -286,7 +281,6 @@ LB_28:
 	lea rsp,[rsp+8*1]
 ;; ret 0
 	jmp LB_31
-;;; ret_f
 LB_31:
 	movzx rax,BYTE [r8+6]
 	cmp rax,0
@@ -342,7 +336,6 @@ LB_37:
 	jmp LB_32
 LB_38:
 	mov QWORD [rsp+8*2],r14
-;;; 	jmp LB_41
 ;; rsp=2 , %6~9'(= r ) %5~8'(= r ) 
 ; _add { 8'(= r ) 9'(= r ) } ⊢ { 8'(= r ) 9'(= r ) }
 	mov rdi,QWORD [rsp-8+8*1]
@@ -366,7 +359,6 @@ LB_38:
 	lea rsp,[rsp+8*2]
 ;; ret 0
 	jmp LB_41
-;;; ret_f
 LB_41:
 	movzx rax,BYTE [r8+6]
 	cmp rax,0
@@ -438,10 +430,9 @@ LB_49:
 	pop r9 
 	pop r14
 	pop r13
-	ret 
+	ret
 LB_50:
 	mov QWORD [rsp+8*0],r14
-;;; 	jmp LB_55
 ;; rsp=0 , 
 ; #20 %[ 0r ] ⊢ 0(<2)◂%[ 0r ]
 ;; rsp=0 , %10~0(<2)◂%[ 0r ] 
@@ -459,7 +450,6 @@ LB_50:
 	mov r8,rsi
 ;; ret 0
 	jmp LB_55
-;;; ret_f
 LB_55:
 	movzx rax,BYTE [r8+6]
 	cmp rax,0
@@ -516,7 +506,6 @@ LB_61:
 	jmp LB_56
 LB_62:
 	mov QWORD [rsp+8*1],r14
-;;; 	jmp LB_67
 ;; rsp=1 , %11~8'(= r ) 
 ; #20 8'(= r ) ⊢ 0(<2)◂8'(= r )
 ;; rsp=1 , %12~0(<2)◂8'(= r ) 
@@ -535,7 +524,6 @@ LB_62:
 	lea rsp,[rsp+8*1]
 ;; ret 0
 	jmp LB_67
-;;; ret_f
 LB_67:
 	movzx rax,BYTE [r8+6]
 	cmp rax,0
