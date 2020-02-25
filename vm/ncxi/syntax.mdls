@@ -276,7 +276,7 @@
 	∎∎
 
 §§+s8
-	@.stg_ltr
+	§§+s@.stg_ltr
 	∐. "\"" stg_ltr_seq ⊢ { {} cl }
 		s8_of_r64_lst cl ⊢ s
 		_some s ⊢ a
@@ -5825,47 +5825,47 @@
 							_nil {} ⊢ l1 
 							∎ { ahl fl tav lb_n l0 l1 rsp irv rl e0 }
 					@.f { ahl fl tav lb_n is rsp irv rl e0 }
-					$ is ⊢ is,is0 
-					$ is0 ⊢ 
-					∐ RP.atm◂k . 
-						$ k ⊢ 
-						∐ stt_v.hp◂{ r0 h } . 
-							_nil {} ⊢ dl 
-							rset.ini {} ⊢ v0 
-							$ rl ⊢ rl,rl0 
-							stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
-							rset.min_f v0 ⊢ { v0 rm0 } 
-							brk_rsp { rsp rm0 } ⊢ { rsp rm0 eb0 } 
-							rp8.add_s8 { e0 eb0 } ⊢ e0 
-							$ h ⊢ h,h0
-							reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
-							reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
-							stt_v.hp { rm0 h0 } ⊢ p1 
-							RP.atm p1 ⊢ p1 
-							» _^ sr0 ⊢ sr0,s0 
-								"\tmov rdi," 0' "\n" // 
-							rp8.add_s8 { e0 s0 } ⊢ e0 
-							hp { ahl fl tav lb_n rsp h e0 } ⊢ { ahl fl tav lb_n rsp e0 }
-							» _^ srm0 ⊢ srm0,s0 
-								"\tmov " 0' ",rax\n" // 
-							rp8.add_s8 { e0 s0 } ⊢ e0
-							∎ { ahl fl tav lb_n is p1 rsp irv rl e0 } 
-						∐ stt_v.hp_im◂v0 .
-							$ is ⊢ is,id 
-							∎ { ahl fl tav lb_n is id rsp irv rl e0 } 
-						∐ stt_v.hp_im_e◂ev0 .
-							$ is ⊢ is,id 
-							∎ { ahl fl tav lb_n is id rsp irv rl e0 }
-						∐. stt_v.stt_adt◂{ ia na pa0 } . 
-							f { ahl fl tav lb_n pa0 rsp irv rl e0 } ⊢ { ahl fl tav lb_n pa0 id0 rsp irv rl e0 }
-							stt_v.stt_adt { ia na id0 } ⊢ p1 
-							RP.atm p1 ⊢ p1 
-							∎ { ahl fl tav lb_n is p1 rsp irv rl e0 }
-					∐. RP.rcd◂l0 . 
-						f_lst { ahl fl tav lb_n l0 rsp irv rl e0 } ⊢ { ahl fl tav lb_n l0 l1 rsp irv rl e0 }
-						RP.rcd l0 ⊢ p0 
-						RP.rcd l1 ⊢ p1 
-						∎ { ahl fl tav lb_n p0 p1 rsp irv rl e0 }						   					
+						$ is ⊢ is,is0 
+						$ is0 ⊢ 
+						∐ RP.atm◂k . 
+							$ k ⊢ 
+							∐ stt_v.hp◂{ r0 h } . 
+								_nil {} ⊢ dl 
+								rset.ini {} ⊢ v0 
+								$ rl ⊢ rl,rl0 
+								stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+								rset.min_f v0 ⊢ { v0 rm0 } 
+								brk_rsp { rsp rm0 } ⊢ { rsp rm0 eb0 } 
+								rp8.add_s8 { e0 eb0 } ⊢ e0 
+								$ h ⊢ h,h0
+								reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
+								reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+								stt_v.hp { rm0 h0 } ⊢ p1 
+								RP.atm p1 ⊢ p1 
+								» _^ sr0 ⊢ sr0,s0 
+									"\tmov rdi," 0' "\n" // 
+								rp8.add_s8 { e0 s0 } ⊢ e0 
+								hp { ahl fl tav lb_n rsp h e0 } ⊢ { ahl fl tav lb_n rsp e0 }
+								» _^ srm0 ⊢ srm0,s0 
+									"\tmov " 0' ",rax\n" // 
+								rp8.add_s8 { e0 s0 } ⊢ e0
+								∎ { ahl fl tav lb_n is p1 rsp irv rl e0 } 
+							∐ stt_v.hp_im◂v0 .
+								$ is ⊢ is,id 
+								∎ { ahl fl tav lb_n is id rsp irv rl e0 } 
+							∐ stt_v.hp_im_e◂ev0 .
+								$ is ⊢ is,id 
+								∎ { ahl fl tav lb_n is id rsp irv rl e0 }
+							∐. stt_v.stt_adt◂{ ia na pa0 } . 
+								f { ahl fl tav lb_n pa0 rsp irv rl e0 } ⊢ { ahl fl tav lb_n pa0 id0 rsp irv rl e0 }
+								stt_v.stt_adt { ia na id0 } ⊢ p1 
+								RP.atm p1 ⊢ p1 
+								∎ { ahl fl tav lb_n is p1 rsp irv rl e0 }
+						∐. RP.rcd◂l0 . 
+							f_lst { ahl fl tav lb_n l0 rsp irv rl e0 } ⊢ { ahl fl tav lb_n l0 l1 rsp irv rl e0 }
+							RP.rcd l0 ⊢ p0 
+							RP.rcd l1 ⊢ p1 
+							∎ { ahl fl tav lb_n p0 p1 rsp irv rl e0 }						   					
 				§ @.lp { ahl fl tav lb_n rsp irv rl is dpl ppl e0 } 
 					$ dpl ⊢ 
 					∐ _cns◂{ d0 dpl } . 
@@ -6367,6 +6367,10 @@
 							∐ ast.id_mtc◂ilm . 
 								id_mtc { ret { is sis } lb_n { ev evv } rsp { rv irv } tav tv_n tv ilm ec0 rl { rsp_d pr } } ⊢| 
 							∐. ast.id_line◂{ dl lc } . 
+								rpc.id { tav lb_n rsp irv sis is rl dl } ⊢ { tav lb_n rsp irv sis is rl e1 }
+								rp8.cct { ec0 e1 } ⊢ ec0 
+								ret_f { ret lb_n { ev evv } rsp { rv irv } tav tv_n tv lc ec0 rl { rsp_d pr } } ⊢|
+								\[
 								∐ dl ⊢ _cns◂{ d dl }; dl ⊢ _nil◂{} . 
 									$ is ⊢ is,is0 
 									∐ is0 ⊢ RP.atm◂a; a ⊢ stt_v.hp_im◂v; v ⊢ ast.s8◂s . 
@@ -6483,7 +6487,8 @@
 									∐. . 
 										» "lc_code.f id 0 " _ ⊢ se 
 										_emt se ⊢ se 
-										∎| 
+										∎|
+										\] 
 						∐ ast.ret◂s .
 							∐ rsp_d'=0r . 
 								csm_idx_ptn { irv s rl } ⊢ { irv is rl }
