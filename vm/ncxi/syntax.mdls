@@ -276,7 +276,7 @@
 	∎∎
 
 §§+s8
-	§§+s@.stg_ltr
+	@.stg_ltr
 	∐. "\"" stg_ltr_seq ⊢ { {} cl }
 		s8_of_r64_lst cl ⊢ s
 		_some s ⊢ a
@@ -1131,6 +1131,13 @@
 				∎ { dn sr }
 				
 	∎∎
+	§ @.mk_app { a l }
+		∐ l ⊢ _cns◂{ hd tl } .
+			ast.app { a hd } ⊢ a
+			mk_app { a tl } ⊢ a
+			∎ a
+		∐. l ⊢ _nil◂{} .
+			∎ a
 	§§ syntax
 	§§+s8 
 		@.wc 
@@ -1205,13 +1212,6 @@
 			» "" _ ⊢ sr 
 			∎ sr 
 			
-	§ @.mk_app { a l }
-		∐ l ⊢ _cns◂{ hd tl } .
-			ast.app { a hd } ⊢ a
-			mk_app { a tl } ⊢ a
-			∎ a
-		∐. l ⊢ _nil◂{} .
-			∎ a
 
 	§§+s8
 		@.mtc_ptn
@@ -5270,8 +5270,8 @@
 							∐ stt_v.opq◂{} . 
 								reg { rsp r } ⊢ { rsp r er br } 
 								» _^ er ⊢ er,e 
-									push_c_regs 
 									"\tmov rdi," 0' "\n"  
+									push_c_regs 
 									`	xor rax,rax
 									`	mov QWORD [rsp_tmp],rsp 
 									`	and rsp,~0xf 
@@ -5465,8 +5465,9 @@
 							∐ stt_v.hp◂{ r h } . 
 								reg { rsp r } ⊢ { rsp r sr b }
 								» _^ sr ⊢ sr,s0 
+									"\tmov rax," 0' "\n"
 									push_c_regs 
-									"\tmov r8," 0' "\n"
+									"\tmov r8,rax\n"
 									//		
 								rp8.add_s8 { e0 s0 } ⊢ e0 
 								hp { ahl fl tav lb_n rsp h e0 } ⊢ { ahl fl tav lb_n rsp e0 } 
@@ -5704,8 +5705,8 @@
 							∐. stt_v.rcd◂l0 .
 								» _^ _ ⊢ s0 
 									`	mov rsi,[SS_TOP] 
-									`	mov rdi,[rsi] 
-									`	mov QWORD [SS_TOP],rdi
+									`	mov rax,[rsi] 
+									`	mov QWORD [SS_TOP],rax
 									`	mov QWORD [rsi],0
 									// 
 								rp8.add_s8 { e0 s0 } ⊢ e0
@@ -6291,15 +6292,15 @@
 										stt_call { tav o lb_n rsp irv rl rsp_s p0 is } ⊢ { tav o lb_n rsp irv rl rsp_s er l v0 nb } 
 										pop_regs.f { rsp irv rl p1 l v0 nb } ⊢ { rsp irv rl p1 e1 v0 nb }
 										$ p1 ⊢ p1,p10 
+										stt_v.pnt.f p10 ⊢ sp1
 										_nil {} ⊢ dl 
 										crt_idx_ptn { irv d p1 rl dl } ⊢ { irv rl dl } 
 										dlt.f { lb_n rsp dl } ⊢ { lb_n rsp edl } 
 										rp8.mk_s8 edl ⊢ { edl sdl } 											
-										stt_v.pnt.f p10 ⊢ sp1
 										» _^ o,sis,sp1,rsp_d ⊢ o,sis,sp1,rsp_d,ec1 
 											"; rsp_d=" 3d' ", #" 0d' " " 1' " ⊢ " 2' "\n" //
 										rp8.add_s8 { ec0 ec1 } ⊢ ec0 
-										rp8.add_s8 { ec0 er } ⊢ ec0 
+										rp8.cct { ec0 er } ⊢ ec0 
 										rp8.add_s8 { ec0 e1 } ⊢ ec0 
 										rp8.cct { ec0 edl } ⊢ ec0 
 										ret_f { ret lb_n { ev evv } rsp { rv irv } tav tv_n tv lc ec0 rl { rsp_d pr } } ⊢|
@@ -6319,7 +6320,7 @@
 										» _^ o,sis,sp1,sp11 ⊢ o,sis,sp1,sp11,ec1 
 											"; #" 0d' " " 1' " ⊢ " 2' " / " 3' "\n" //
 										rp8.add_s8 { ec0 ec1 } ⊢ ec0 
-										rp8.add_s8 { ec0 er } ⊢ ec0 
+										rp8.cct { ec0 er } ⊢ ec0 
 										rp8.add_s8 { ec0 e1 } ⊢ ec0 
 										rp8.cct { ec0 edl } ⊢ ec0 
 										ret_f { ret lb_n { ev evv } rsp { rv irv } tav tv_n tv lc ec0 rl { rsp_d pr } } ⊢|
@@ -6548,11 +6549,13 @@
 							∎ { lb_n { ev evv } rsp { rv irv } tav tv_n tv ec0 rl { rsp_d pr } } 		
 
 					@.stt_call { tav o lb_n rsp irv rl rsp_s p0 is }
+						rp8.e {} ⊢ er 
 						∐ rsp_s'=0r . 
 							» REG_N _ ⊢ nb 
 							_add { nb rsp } ⊢ { nb rsp }
 							rset.ini {} ⊢ v0 
 							push_regs.f { rsp irv v0 rl } ⊢ { rsp irv v0 rl l e n }
+							rp8.add_s8 { er e } ⊢ er 
 							_inc rsp ⊢ rsp 
 							shft_ptn { p0 rsp } ⊢ { p0 rsp }
 							_dec rsp ⊢ rsp 
@@ -6561,15 +6564,22 @@
 							##_add { rsp00 rsp_s } ⊢ { rsp00 rsp_s }
 							_none {} ⊢ lb1 
 							mov_ptn.f2 { tav rsp00 v0 is p0 lb1 } ⊢ { tav rsp00 v0 em0 }
-							» _^ e,em0,o ⊢ e,em0,o,er 
-								0' 1' 
-								"\tcall ETR_" 2d' "\n" // 
+							rp8.add_s8 { er em0 } ⊢ er 
+							» _^ o ⊢ o,e1 
+								"\tcall ETR_" 0d' "\n" //
+							rp8.add_s8 { er e1 } ⊢ er 
 							∎ { tav o lb_n rsp irv rl rsp_s er l v0 nb } 
 						∐. . 
 							» REG_N _ ⊢ nb 
 							_add { nb rsp } ⊢ { nb rsp }
 							rset.ini {} ⊢ v0 
 							push_regs.f { rsp irv v0 rl } ⊢ { rsp irv v0 rl l e n }
+							rp8.add_s8 { er e } ⊢ er 
+							$ lb_n ⊢ lb_n,lbr 
+							_inc lb_n ⊢ lb_n 
+							» _^ lbr ⊢ lbr,s0 
+								"\tpush LB_" 0d' "\n" // 
+							rp8.add_s8 { er s0 } ⊢ er 
 							» REG_N _ ⊢ nb1 
 							_add { nb1 rsp } ⊢ { nb1 rsp } 
 							bl.t {} ⊢ bt0 
@@ -6577,20 +6587,18 @@
 							$ rsp ⊢ rsp,rsp00  
 							_inc rsp00 ⊢ rsp00 
 							shft_ptn { p0 rsp00 } ⊢ { p0 rsp00 }
-							sub_rsp rsp_s ⊢ { rsp_s ec2 }  
+							sub_rsp rsp_s ⊢ { rsp_s ec2 }
+							rp8.add_s8 { er ec2 } ⊢ er  
 							_add { rsp00 rsp_s } ⊢ { rsp00 rsp_s }
 							_none {} ⊢ lb1 
 							mov_ptn.f2 { tav rsp00 v0 is p0 lb1 } ⊢ { tav rsp00 v0 em0 }
+							rp8.add_s8 { er em0 } ⊢ er 
 							bl.f {} ⊢ bf0 
 							exc_q { v0 nb1 bf0 } ⊢ { v0 nb1 bf0 } 
-							» _^ e,em0,lb_n,o,ec2 ⊢ e,em0,lb_n,o,ec2,er 
-								0' 
-								"\tpush LB_" 2d' "\n" 
-								4'
-								1' 
-								"\tcall ETR_" 3d' "\n" 
-								"LB_" 2d' ":\n" // 
-							_inc lb_n ⊢ lb_n 
+							» _^ lbr,o ⊢ lbr,o,s0 
+								"\tcall ETR_" 1d' "\n" 
+								"LB_" 0d' ":\n" // 
+							rp8.add_s8 { er s0 } ⊢ er
 							∎ { tav o lb_n rsp irv rl rsp_s er l v0 nb } 
 					@.op_axm { tav lb_n a rsp rl irv is sis } 
 						∐ a'=e_axm.inc . 
@@ -7098,8 +7106,8 @@
 									c_call sf0 ⊢ { sf0 scf0 }
 									» _^ sis,sip1,sr0,srm0,scf0 ⊢ sis,sip1,sr0,srm0,scf0,sc0 
 										"; _mlc_s8 " 0' " ⊢ " 1' "\n" 
-										push_c_regs 
 										"\tmov rdi," 2' "\n" 
+										push_c_regs 
 										`	mov rsi,1 
 										`	xor rax,rax
 										`	push rdi
@@ -7167,9 +7175,12 @@
 									RP.rcd l0 ⊢ ip1 
 									$ ip1 ⊢ ip1,ip10 
 									stt_v.pnt.f ip10 ⊢ sip1 
+									resize_rsp { rsp rm0 } ⊢ { rsp rm0 er }
 									reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
 									reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
-									» _^ sis,sip1,sr0,srm0 ⊢ sis,sip1,sr0,srm0,sc0 
+									##rp8.add_s8 { sc0 er } ⊢ 0 
+									» _^ sis,sip1,sr0,srm0,er ⊢ sis,sip1,sr0,srm0,er,sc0 
+										4' 
 										"; _s8_len " 0' " ⊢ " 1' "\n" 
 										"\tmov rdi," 2' "\n" 
 										"\tmov rdi,QWORD [rdi]\n" 
@@ -10304,7 +10315,7 @@
 					`	push rdi 
 					`	push rsi 
 					`	and rsi,~111b
-					`	lea rdi,[rsi+8] 
+					`	lea rdi,[rsi+16] 
 					`	xor rax,rax 
 					`	mov QWORD [rsp_tmp],rsp 
 					`	and rsp,~0xf 
@@ -10315,7 +10326,7 @@
 					`	pop rsi 
 					`	add rsi,8
 					`	lea rdi,[rax+8]
-					`	std 
+					`	cld 
 					`	rep movsb
 					`	ret
 					`             
