@@ -21,12 +21,37 @@
     ∐. _byt "Y" ⊢ { b {} }
       _some b ⊢ a 
       ∎ a 
+  @.g3 
+    ∐ "A" ; ⊢ { {} },a 
+      _some a ⊢ r 
+      ∎ r 
+
+      ∐ "B" ⊢ { {} }
+        _some %[ 0r ] ⊢ r 
+        ∎ r 
+      ∐. "C" ; ⊢ { {} },a 
+        _some %[ 1r ] ⊢ r 
+        ∎ r 
+
+        ∐ "e" ⊢ { {} }
+          _some %[ 3r ] ⊢ r 
+          ∎ r 
+        ∐. g3 ⊢ { a } 
+          _some a ⊢ r 
+          ∎ r 
+    ∐. "D" ⊢ { {} } 
+      _some %[ 2r ] ⊢ r 
+      ∎ r 
 § E0 « 
   \\g0.prs { %[ "AAAAAABcd" ] %[ 0r ] } ⊢ { s0 x0 a0 }
   g1.prs { %[ "ABAB" ] %[ 0r ] } ⊢ { s0 x0 a0 } 
   _emt { s0 x0 a0 } ⊢ { s0 x0 a0 }
   g2.prs { %[ "sY" ] %[ 0r ] } ⊢ { s1 x1 a1 } 
   _emt { s1 x1 a1 } ⊢ { s1 x1 a1 }
+  g3.prs { %[ "AB" ] %[ 0r ] } ⊢ { s2 x2 a2 } 
+  _emt { s2 x2 a2 } ⊢ { s2 x2 a2 } 
+  g3.prs { %[ "ACACe" ] %[ 0r ] } ⊢ { s3 x3 a3 } 
+  _emt { s3 x3 a3 } ⊢ { s3 x3 a3 } 
   ##$ x0 ⊢ x0,r1,r2
   \\_emt { x0 r1 r2 } ⊢ { x0 r1 r2 }
   \\$ s0 ⊢ s0,s1,s2,s3
