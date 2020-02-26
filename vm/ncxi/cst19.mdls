@@ -64,6 +64,7 @@
   _emt { s3 x3 a3 } ⊢ { s3 x3 a3 } 
   g4.prs { %[ " a bc d" ] %[ 0r ] } ⊢ { s4 x4 a4 } 
   _emt { s4 x4 a4 } ⊢ { s4 x4 a4 } 
+  _emt %[ "dd\t\n\"J  " ] ⊢ sx 
   ##$ x0 ⊢ x0,r1,r2
   \\_emt { x0 r1 r2 } ⊢ { x0 r1 r2 }
   \\$ s0 ⊢ s0,s1,s2,s3
