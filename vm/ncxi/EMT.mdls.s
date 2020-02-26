@@ -2690,8 +2690,7 @@ LB_295:
 	ret
 LB_291:
 ;; rsp=4 , %51~9'(= a3◂ [ r] ) %50~10'(= r ) %49~11'(= {| l |} ) %45~6'(= a3◂ [ r] ) %44~7'(= r ) %43~8'(= {| l |} ) %39~3'(= a3◂ [ r] ) %38~4'(= r ) %37~5'(= {| l |} ) %33~2'(= a3◂ [ r] ) %32~1'(= r ) %31~0'(= {| l |} ) 
-; rsp_d=0, #30 { %[ " a b
- c d" ] %[ 0r ] } ⊢ { 14'(= {| l |} ) 13'(= r ) 12'(= a3◂ [ r] ) }
+; rsp_d=0, #30 { %[ " a bc d" ] %[ 0r ] } ⊢ { 14'(= {| l |} ) 13'(= r ) 12'(= a3◂ [ r] ) }
 	lea rsp,[rsp-8*8]
 	mov QWORD [rsp+8*0],r13
 	mov QWORD [rsp+8*1],r14
@@ -2701,29 +2700,27 @@ LB_291:
 	mov QWORD [rsp+8*5],r11
 	mov QWORD [rsp+8*6],rcx
 	mov QWORD [rsp+8*7],rdx
-; .mov_ptn2 { %[ " a b
- c d" ] %[ 0r ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
+; .mov_ptn2 { %[ " a bc d" ] %[ 0r ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
 ; .mov_ptn %[ 0r ] ⊢ 1'(= r )
 	mov r14,0
-; .mov_ptn %[ " a b
- c d" ] ⊢ 0'(= {| l |} )
+; .mov_ptn %[ " a bc d" ] ⊢ 0'(= {| l |} )
 	push rdx
 	push rcx
 	push r8
 	push r9
 	push r10
 	push r11
-	mov rdi,24
+	mov rdi,16
 	xor rax,rax
 	mov QWORD [rsp_tmp],rsp 
 	and rsp,~0xf 
 	call malloc
 	mov rsp,QWORD [rsp_tmp]  
-	mov rdi,9
+	mov rdi,7
 	mov rsi,0x_40_00_0000_0000_0000
 	or rdi,rsi
 	mov QWORD [rax],rdi
-	mov QWORD [rax+8*2],0
+	mov QWORD [rax+8*1],0
 	pop r11
 	pop r10
 	pop r9
@@ -2734,11 +2731,9 @@ LB_291:
 	mov BYTE [rax+8+1],97
 	mov BYTE [rax+8+2],32
 	mov BYTE [rax+8+3],98
-	mov BYTE [rax+8+4],10
+	mov BYTE [rax+8+4],99
 	mov BYTE [rax+8+5],32
-	mov BYTE [rax+8+6],99
-	mov BYTE [rax+8+7],32
-	mov BYTE [rax+8+8],100
+	mov BYTE [rax+8+6],100
 	mov r13,rax
 	call ETR_30
 	mov rdx,QWORD [rsp-8+8*8]
@@ -3068,7 +3063,75 @@ LB_323:
 	ret
 LB_319:
 ;; rsp=7 , %57~12'(= a3◂ [ r] ) %56~13'(= r ) %55~14'(= {| l |} ) %51~9'(= a3◂ [ r] ) %50~10'(= r ) %49~11'(= {| l |} ) %45~6'(= a3◂ [ r] ) %44~7'(= r ) %43~8'(= {| l |} ) %39~3'(= a3◂ [ r] ) %38~4'(= r ) %37~5'(= {| l |} ) %33~2'(= a3◂ [ r] ) %32~1'(= r ) %31~0'(= {| l |} ) 
+; _emt %[ "dd\t\n\"J  " ] ⊢ %[ "dd\t\n\"J  " ]
+	jmp LB_333
+LB_332: db 95,101,109,116,58,0
+LB_333:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_332
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_335
+LB_334: db 34,100,100,92,116,92,110,92,34,74,32,32,34,0
+LB_335:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_334
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_337
+LB_336: db 10,0
+LB_337:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_336
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_338
+LB_338:
+;; rsp=7 , %58~%[ "dd\t\n\"J  " ] %57~12'(= a3◂ [ r] ) %56~13'(= r ) %55~14'(= {| l |} ) %51~9'(= a3◂ [ r] ) %50~10'(= r ) %49~11'(= {| l |} ) %45~6'(= a3◂ [ r] ) %44~7'(= r ) %43~8'(= {| l |} ) %39~3'(= a3◂ [ r] ) %38~4'(= r ) %37~5'(= {| l |} ) %33~2'(= a3◂ [ r] ) %32~1'(= r ) %31~0'(= {| l |} ) 
 ; ∎ { }
+; .dlt.ptn %[ "dd\t\n\"J  " ]
 ; .dlt.ptn 12'(= a3◂ [ r] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 13'(= r )
