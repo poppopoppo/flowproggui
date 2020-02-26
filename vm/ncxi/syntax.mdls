@@ -9249,13 +9249,65 @@
 						_nil {} ⊢ g 
 						∎ { g i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gel { dd ep0 ec0 rtm_n lb_n } }
 			∎∎ 
-		§§ emt_grm 
+		§§ emt_grm  
 			§ 
-				@.rle { ret hl tav vs0 rsp_g e0 lb0 i0 evv lb_n gr }  
+				@.rf { lb_n rf } 
+					$ rf ⊢ 
+					∐ ast.grm.lex◂{} .
+						» "" _ ⊢ e 
+						∎ { lb_n e }   
+					∐ ast.grm.synt◂{} . 
+						$ lb_n ⊢ lb_n,lb0 
+						_inc lb_n ⊢ lb_n
+						$ lb_n ⊢ lb_n,lb1 
+						_inc lb_n ⊢ lb_n
+						$ lb_n ⊢ lb_n,lb2 
+						_inc lb_n ⊢ lb_n 
+						» _^ lb0,lb1,lb2 ⊢ lb0,lb1,lb2,s0 
+							"\tjmp LB_" 1d' "\n" 
+							"LB_" 0d' ":\n" 
+							`	add r14,1 
+							"LB_" 1d' ":\n" 
+							`	cmp r14,r9
+							"\tjge LB_" 2d' "\n" 
+							`	movzx rax,BYTE [r13+8+r14]
+							`	cmp rax,9 
+							"\tjz LB_" 0d' "\n" 
+							`	cmp rax,10 
+							"\tjz LB_" 0d' "\n" 
+							`	cmp rax,32 
+							"\tjz LB_" 0d' "\n"
+							"LB_" 2d' "\n" // 
+						∎ { lb_n s0 }
+					∐. ast.grm.line◂{} . 
+						$ lb_n ⊢ lb_n,lb0 
+						_inc lb_n ⊢ lb_n
+						$ lb_n ⊢ lb_n,lb1 
+						_inc lb_n ⊢ lb_n
+						$ lb_n ⊢ lb_n,lb2 
+						_inc lb_n ⊢ lb_n
+						» _^ lb0,lb1,lb2 ⊢ lb0,lb1,lb2,s0 
+							"\tjmp LB_" 1d' "\n" 
+							"LB_" 0d' ":\n" 
+							`	add r14,1 
+							"LB_" 1d' ":\n" 
+							`	cmp r14,r9
+							"\tjge LB_" 2d' "\n" 
+							`	movzx rax,BYTE [r13+8+r14]
+							`	cmp rax,9 
+							"\tjz LB_" 0d' "\n" 
+							`	cmp rax,32 
+							"\tjz LB_" 0d' "\n"
+							"LB_" 2d' "\n" // 
+						∎ { lb_n s0 }
+				@.rle { ret hl tav vs0 rsp_g e0 lb0 i0 evv lb_n rf gr }  
 					$ gr ⊢ 
 					∐ ast.grm.ptn_cut◂gc . 
-						rle_cut { ret hl tav vs0 rsp_g e0 i0 evv lb_n gc } ⊢|
+						rle_cut { ret hl tav vs0 rsp_g e0 i0 evv lb_n rf gc } ⊢|
 					∐ ast.grm.ptn_seq◂{ gp gr } .
+						$ rf ⊢ rf,rf0 
+						rf { lb_n rf0 } ⊢ { lb_n srf } 
+						rp8.add_s8 { e0 srf } ⊢ e0 
 						$ lb_n ⊢ lb_n,lb1 
 						_inc lb_n ⊢ lb_n 
 						$ lb_n ⊢ lb_n,lb2 
@@ -9277,12 +9329,15 @@
 						rp8.add_s8 { e0 s0 } ⊢ e0 
 						_cns { h hl } ⊢ hl 
 						_inc i0 ⊢ i0 
-						rle { ret hl tav vs0 rsp_g e0 lb0 i0 evv lb_n gr } ⊢| 
+						rle { ret hl tav vs0 rsp_g e0 lb0 i0 evv lb_n rf gr } ⊢| 
 					∐. ast.grm.ptn_end◂{} . 
 						∎ { ret hl tav vs0 rsp_g e0 i0 evv lb_n }
-				@.rle_cut { ret hl tav vs0 rsp_g e0 i0 evv lb_n gc } 
+				@.rle_cut { ret hl tav vs0 rsp_g e0 i0 evv lb_n rf gc } 
 					$ gc ⊢ 
 					∐ _cns◂{ gp gc } .
+						$ rf ⊢ rf,rf0 
+						rf { lb_n rf0 } ⊢ { lb_n srf } 
+						rp8.add_s8 { e0 srf } ⊢ e0 
 						$ lb_n ⊢ lb_n,lb1 
 						_inc lb_n ⊢ lb_n 
 						$ lb_n ⊢ lb_n,lb2 
@@ -9305,7 +9360,7 @@
 							"LB_" 0d' ":\n" // 
 						rp8.add_s8 { e0 s0 } ⊢ e0 
 						_cns { h hl } ⊢ hl 
-						rle_cut { ret hl tav vs0 rsp_g e0 i0 evv lb_n gc } ⊢| 
+						rle_cut { ret hl tav vs0 rsp_g e0 i0 evv lb_n rf gc } ⊢| 
 					∐. _nil◂{} . 
 						∎ { ret hl tav vs0 rsp_g e0 i0 evv lb_n }
 				@.rb_rle { rsp_g hl e0 } 
@@ -9698,7 +9753,7 @@
 					rset.set_t { vs0 ir1 } ⊢ { vs0 ir1 }
 					rset.set_t { vs0 ir3 } ⊢ { vs0 ir3 }
 					» 0r _ ⊢ rsp_g 
-					rle { ret hl tav vs0 rsp_g e0 olb0 i0 evv lb_n gr } ⊢ { ret hl tav vs0 rsp_g e0 i0 evv lb_n }  
+					rle { ret hl tav vs0 rsp_g e0 olb0 i0 evv lb_n rf gr } ⊢ { ret hl tav vs0 rsp_g e0 i0 evv lb_n }  
 					rp8.e {} ⊢ erb 
 					rb_rle { rsp_g hl erb } ⊢ { rsp_g hl erb } 
 					rp8.mk_s8 erb ⊢ { erb rb }
