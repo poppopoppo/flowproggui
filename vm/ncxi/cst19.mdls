@@ -41,7 +41,17 @@
           ∎ r 
     ∐. "D" ⊢ { {} } 
       _some %[ 2r ] ⊢ r 
+      ∎ r
+  @.g4 
+    ∐# "a" "b" "c" ⊢ { {} {} {} }
+      _some %[ 0r ] ⊢ r 
       ∎ r 
+    ∐* "x" g4 "z" ⊢ { {} a {} }
+      _some a ⊢ r 
+      ∎ r 
+    ∐. g4 "T" g3 ⊢ { a {} b }
+      _some b ⊢ r 
+      ∎ r  
 § E0 « 
   \\g0.prs { %[ "AAAAAABcd" ] %[ 0r ] } ⊢ { s0 x0 a0 }
   g1.prs { %[ "ABAB" ] %[ 0r ] } ⊢ { s0 x0 a0 } 
@@ -52,6 +62,8 @@
   _emt { s2 x2 a2 } ⊢ { s2 x2 a2 } 
   g3.prs { %[ "ACACe" ] %[ 0r ] } ⊢ { s3 x3 a3 } 
   _emt { s3 x3 a3 } ⊢ { s3 x3 a3 } 
+  g4.prs { %[ " a bc d" ] %[ 0r ] } ⊢ { s4 x4 a4 } 
+  _emt { s4 x4 a4 } ⊢ { s4 x4 a4 } 
   ##$ x0 ⊢ x0,r1,r2
   \\_emt { x0 r1 r2 } ⊢ { x0 r1 r2 }
   \\$ s0 ⊢ s0,s1,s2,s3
