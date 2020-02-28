@@ -1221,3 +1221,45 @@ etr0:
   ..
   ∎ { %a %b } 
   
+¶ lst2 ◂ a',b' 
+  ∐ cns0 : { a' lst2◂a'◂b' }
+  ∐ cns1 : { b' lst2◂a'◂b' }
+  ∐ _nil : {} 
+  _spc◂a' = _clr◂a' 
+  _alp : { _spc◂a' a' }→{ _spc◂a' _pt◂a' }
+  _frp : { _spc◂a' _pt◂a' }→{ _spc◂a' a' }
+  _ldp : { _spc◂a' _pt◂a' }→{ _spc◂a' _pt◂a' a' }
+  _spc.map 
+  _spc.fld 
+
+  _mlc_s8_im 
+trX : 128bit register
+hrX : 256bit register
+lrX : 512bit register
+wrX : 1024bit register
+drX : 2048bit register 
+rrX : 4096bit register
+
+rX : 64bit register 
+dX : 32bit register 
+wX : 16bit register 
+lX : 8bit register 
+hX : 4bit register 
+tX : 2bit register 
+bX : 1bit register
+uX : unit,token 
+
+mX : memory segment , 2K page size , 1 byte access
+cX : memory segment cluster 
+
+oX : output port 
+iX : input port  
+
+ETR: r0,r1,l0,l1,l2,w0,w1,w2,d0,d1,d2,d3,m0,m1,c0,u0,o0,o1
+  lds m0,r0 ⊢ m1,r1 
+  ..
+  $ r0 ⊢ _ \ to ground 
+  $ m0 ⊢ _ \ to ground 
+  ∎ .. \ .. ⊢| \ < 
+  ret \ jmp \ tbl-jmp \ cnd-jmp
+  

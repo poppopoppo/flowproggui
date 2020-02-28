@@ -1215,7 +1215,7 @@ and rcd_occurs (v1:v_rcd ref) (l1:t_rcd) =
 let rec unify ru t0 t1 =
   (*Util.pnt true "enter unify:";*)
   let se = (Types.print t0)^" ~ "^(Types.print t1) in
-  Util.Log.add ("enter unify:"^se^"\n");
+  (*Util.Log.add ("enter unify:"^se^"\n");*)
   (*  Util.pnt true ("enter unify:"^se^"\n"); *)
   if t0==t1 then ()
   else
@@ -1424,7 +1424,7 @@ and inst_mtc_atm gns (ns:ns_v) l e =
       y_ve
   )
 and slv (gns:g_ns_v) (ns:ns_v) l p0 =
-  Util.Log.add ("enter slv:"^(print_line p0)^"\n");
+  (*Util.Log.add ("enter slv:"^(print_line p0)^"\n");*)
   ( match p0 with
     | Ret r ->
       let y = inst_ptn gns (l+1) r in
@@ -1445,24 +1445,24 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
       let yy = Var(newvar_l (l+1)) in
       unify [] (Imp(yr,yy)) ye;
       gen (ref []) l ye;
-      Util.Log.add ("test 4:"^"\n");
+      (*Util.Log.add ("test 4:"^"\n");*)
       yy
     | Mtc pns ->
-      Util.Log.add "slv Mtc 3\n";
+      (*Util.Log.add "slv Mtc 3\n";*)
       let _ =
         Array.fold_left
           ( fun _ (e,_) ->
               let _ = inst_mtc_ptn gns ns l e in
               () )
           () pns in
-      Util.Log.add "slv Mtc 4\n";
+     (* Util.Log.add "slv Mtc 4\n";*)
       let (_,ys) =
         Array.fold_left
           ( fun (j,ys) (_,p) ->
               let y1 = slv gns ns l p in
               (j+1,ys |+| [|y1|]) )
           (0,[||]) pns in
-      Util.Log.add "slv Mtc 5\n";
+      (*Util.Log.add "slv Mtc 5\n";*)
       let tts = Array.map (fun y -> inst (l+1) y) ys in
       let rrt = Var (newvar_l (l+1)) in
       let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) rrt (Array.to_list tts) in
@@ -1503,7 +1503,7 @@ and slv (gns:g_ns_v) (ns:ns_v) l p0 =
                 let ts = Array.map (fun r -> inst_ptn gns (l+1) r) rs in
                 let t = inst_ptn gns (l+1) r in
                 let _ = List.fold_left (fun y1 y2 -> unify [] y1 y2; y2) t (Array.to_list ts) in
-                Util.Log.add "test 0";
+                (*Util.Log.add "test 0";*)
                 let _ = Array.map (fun t -> gen (ref []) l t) ts in
                 ()
               | IR_Id_Ax _ -> err "slv id 0" )
@@ -1536,7 +1536,7 @@ and slv_exp_atm gns (ns:ns_v) a =
   ( match a with
     | Name n ->
       let pf = slv_ns0 ns n in
-      Util.Log.add "X\n";
+      (*Util.Log.add "X\n";*)
       ( try Var(get_ns gns pf)
         with | Failure e -> err (e^":slv_exp_atm 3:") | _ -> err "slv_exp_atm 4" )
     | ExpCst (Cst.R64 _) -> Axm Axm.r64
@@ -1664,8 +1664,8 @@ and ir_of_id r rs =
   Array.fold_left ( fun rr rii -> mrg_idx_ptn rr rii) rp rsi
 
 and slv_r rv p0 =
-  let c_l = "enter slv_r:"^(print_line p0) in
-  Util.Log.add c_l;
+  (*let c_l = "enter slv_r:"^(print_line p0) in*)
+  (*Util.Log.add c_l;*)
   ( match p0 with
     | Ret r ->
       let r = csm_ptn_rv r rv in
@@ -1752,7 +1752,7 @@ and crt_ptn_rv r rv =
   let r = Rcd_Ptn.map (fun r0 -> crt_rv dl r0 rv) r in
   (!dl,r)
 and crt_mtc_ptn_rv (es,_) rv  =
-  Util.Log.add @@ "enter crt_mtc_ptn_rv:"^(pnt_rv rv);
+  (*Util.Log.add @@ "enter crt_mtc_ptn_rv:"^(pnt_rv rv);*)
   let (dl,es) =
     List.fold_left
       (fun (dl,es) (v0,e) ->
@@ -5480,7 +5480,7 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
       let s0 =
         ( match n with
           | IR_Id{ contents=IR_Id_C(r,[|r0|]) } ->
-            Util.Log.add "Id 0\n";
+            (*Util.Log.add "Id 0\n";*)
             let sv = rset_iv iv in
             let ir = csm_ptn_iv (mk_idx_ptn r) iv in
             let y0 = inst_ptn gns 0 r0 in 
