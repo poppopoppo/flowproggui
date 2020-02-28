@@ -8,6 +8,7 @@ extern malloc
 extern calloc
 extern free 
 section .bss 
+	tmp: resq 64
 	ret_vct: resq 64
  rsp_tmp: resq 1
 	SS_TOP: resq 1
@@ -113,7 +114,7 @@ RTM_0:
 	mov r13,rax
 	lea rdi,[rax+7+rdi]
 	std 
-	mov rax,rcx 
+	mov QWORD [tmp],rcx 
 	jmp LB_0
 	LB_1: db 10,0
 LB_0:
@@ -138,7 +139,7 @@ LB_6:
 	lea rsi,[LB_7+6-1]
 	mov rcx,6
 	rep movsb
-	mov rcx,rax 
+	mov rcx,QWORD [tmp] 
 ;; rsp=0 , %0~0'(= {| l |} ) 
 ; _emt 0'(= {| l |} ) ⊢ 0'(= {| l |} )
 	jmp LB_9
@@ -211,13 +212,25 @@ LB_12:
 ; » _^ .. ⊢ ..
 ; .. //
 	mov rdi,0
+	mov rsi,r13
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,[rsi] 
+	add rdi,rax 
+	push rax
+	push rsi
+	mov rsi,r13
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,[rsi] 
+	add rdi,rax 
+	push rax
+	push rsi
 	push rdx
 	push rcx
 	push r8
 	push r9
 	push r10
 	push r11
-	add rdi,0
+	add rdi,3
 	push rdi 
 	and rdi,~111b
 	add rdi,16
@@ -239,21 +252,27 @@ LB_12:
 	mov r14,rax
 	lea rdi,[rax+7+rdi]
 	std 
-	mov rax,rcx 
+	mov QWORD [tmp],rcx 
 	pop rsi 
 	pop rcx
 	lea rsi,[rsi+7+rcx]
+	rep movsb
+	jmp LB_13
+	LB_14: db 102,111,111,0
+LB_13:
+	lea rsi,[LB_14+3-1]
+	mov rcx,3
 	rep movsb
 	pop rsi 
 	pop rcx
 	lea rsi,[rsi+7+rcx]
 	rep movsb
-	mov rcx,rax 
+	mov rcx,QWORD [tmp] 
 ;; rsp=0 , %3~1'(= {| l |} ) %2~0'(= {| l |} ) 
 ; _emt 1'(= {| l |} ) ⊢ 1'(= {| l |} )
-	jmp LB_14
-LB_13: db 95,101,109,116,58,0
-LB_14:
+	jmp LB_16
+LB_15: db 95,101,109,116,58,0
+LB_16:
 	push rdx
 	push rcx
 	push r8
@@ -261,7 +280,7 @@ LB_14:
 	push r10
 	push r11
 	xor rax,rax  
-	mov rdi,LB_13
+	mov rdi,LB_15
 	mov QWORD [rsp_tmp],rsp 
 	and rsp,~0xf 
 	call printf 
@@ -294,9 +313,9 @@ LB_14:
 	pop r8
 	pop rcx
 	pop rdx
-	jmp LB_16
-LB_15: db 10,0
-LB_16:
+	jmp LB_18
+LB_17: db 10,0
+LB_18:
 	push rdx
 	push rcx
 	push r8
@@ -304,7 +323,7 @@ LB_16:
 	push r10
 	push r11
 	xor rax,rax  
-	mov rdi,LB_15
+	mov rdi,LB_17
 	mov QWORD [rsp_tmp],rsp 
 	and rsp,~0xf 
 	call printf 
@@ -315,8 +334,8 @@ LB_16:
 	pop r8
 	pop rcx
 	pop rdx
-	jmp LB_17
-LB_17:
+	jmp LB_19
+LB_19:
 ;; rsp=0 , %4~1'(= {| l |} ) %2~0'(= {| l |} ) 
 ; ∎ { }
 ; .dlt.ptn 1'(= {| l |} )
