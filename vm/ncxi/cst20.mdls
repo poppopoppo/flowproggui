@@ -3,6 +3,6 @@
     "Hello " " World " "!!" "\n" //
   _emt ss0 ⊢ ss0  
   ^ ss0 ⊢ ss0,ss1 
-    0' 0' //
+    0' "foo" 0' //
   _emt ss1 ⊢ ss1 
   ∎ {}
