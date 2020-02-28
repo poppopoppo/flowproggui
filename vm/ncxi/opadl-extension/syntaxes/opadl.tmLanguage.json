@@ -62,7 +62,7 @@
 			"patterns": [
 				{
 					"name": "support.class.opadl",
-					"match": "(\u25C2|_\\^|(\\b_\\b)|\\$|=<|=)"
+					"match": "(\u25C2|_\\^|(\\b_\\b)|\\$|=<|=|\\^)"
 				}
 			]
 		},

@@ -1,0 +1,8 @@
+§ E1 « 
+  ^ _ ⊢ ss0 
+    "Hello " " World " "!!" "\n" //
+  _emt ss0 ⊢ ss0  
+  ^ ss0 ⊢ ss0,ss1 
+    0' 0' //
+  _emt ss1 ⊢ ss1 
+  ∎ {}
