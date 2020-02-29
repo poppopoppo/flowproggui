@@ -6401,6 +6401,7 @@
 							$ lb_n ⊢ lb_n,lb1 
 							_inc lb_n ⊢ lb_n  
 							$ lb_n ⊢ lb_n,lb2
+							_inc lb_n ⊢ lb_n
 							» _^ lb0,lb1,dbs,l0,x0,lb2 ⊢ lb0,lb1,dbs,l0,x0,lb2,sr 
 								"\tjmp LB_" 0d' "\n"
 								"\tLB_" 1d' ": db " 2' "\n" 
@@ -6511,26 +6512,38 @@
 									∐. . 
 										∎|
 								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+									_s8_len s0 ⊢ { s0 l0 } 
 									reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
-									» _^ sr0 ⊢ sr0,s1 
+									» _^ sr0,l0 ⊢ sr0,l0,s1 
 										"\tmov rsi," 0' "\n" 
-										`	mov rax,0x0000_ffff_ffff_ffff 
-										`	and rax,[rsi] 
-										`	add rdi,rax 
-										`	push rax
 										`	push rsi
+										"\timul rsi," 1d' "\n" 
+										`	add rdi,rsi 
 										// 
 									_inc rsp ⊢ rsp 
-									_inc rsp ⊢ rsp
 									rp8.add_s8 { e0 s1 } ⊢ e0
 									lp1 { evv e0 ld lb_n rsp irv rl ar rr pl } ⊢ { evv e0 ld lb_n rsp irv rl ar }
 									_dec rsp ⊢ rsp 
-									_dec rsp ⊢ rsp 
-									» _^ _ ⊢ sr 
-										`	pop rsi 
-										`	pop rcx
-										`	lea rsi,[rsi+7+rcx]
-										`	rep movsb
+									» 0r _ ⊢ rs 
+									mk_db { s0 rs } ⊢ { s0 rs dbs } 
+									$ lb_n ⊢ lb_n,lb0 
+									_inc lb_n ⊢ lb_n 
+									$ lb_n ⊢ lb_n,lb1
+									_inc lb_n ⊢ lb_n  
+									$ lb_n ⊢ lb_n,lb2
+									_inc lb_n ⊢ lb_n  
+									» _^ lb0,lb1,dbs,l0,lb2 ⊢ lb0,lb1,dbs,l0,lb2,sr 
+										"\tjmp LB_" 0d' "\n"
+										"\tLB_" 1d' ": db " 2' "\n" 
+										"LB_" 0d' ":\n" 
+										`	pop rax 
+										"LB_" 4d' ":\n"
+										"\tlea rsi,[LB_" 1d' "+" 3d' "-1]\n" 
+										"\tmov rcx," 3d' "\n" 
+										`	rep movsb 
+										`	sub rax,1
+										`	cmp rax,0
+										"\tjnz LB_" 4d' "\n" 
 										//
 									rp8.add_s8 { e0 sr } ⊢ e0 
 									∎ { evv e0 ld lb_n rsp irv rl ar } 	 
