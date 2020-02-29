@@ -19,6 +19,8 @@ section .data
 	fmt_err_line: db "err:%d",10,0
 	fmt_r64: db "%dr",0
 	fmt_s8: db 34,"%s",34,0
+	fmt_d: db "%d",0
+	fmt_x: db "%x",0
 	unt: dq 0x0
 
 	unt_0: dq 0x0 
@@ -80,8 +82,7 @@ SS_end:
 	mov rsi,SS_NULL 
 	mov [rax],rsi
 	jmp RTM_0
-RTM_0:
-	push RTM_1
+ETR_26: ; f0 { } ⊢ { } : ({ }→{ })
 ;; rsp=0 , 
 ; » _^ .. ⊢ ..
 ; .. //
@@ -234,7 +235,7 @@ LB_13:
 	push r9
 	push r10
 	push r11
-	add rdi,7
+	add rdi,77
 	push rdi 
 	and rdi,~111b
 	add rdi,16
@@ -274,14 +275,31 @@ LB_18:
 	sub rax,1
 	cmp rax,0
 	jnz LB_18
+	jmp LB_19
+	LB_20: db 89,100,32,112,0
+LB_19:
+	mov rax,17
+LB_21:
+	lea rsi,[LB_20+4-1]
+	mov rcx,4
+	rep movsb 
+	sub rax,1
+	cmp rax,0
+	jnz LB_21
 	pop rsi 
 	pop rcx
 	lea rsi,[rsi+7+rcx]
 	rep movsb
-	jmp LB_19
-	LB_20: db 102,111,111,0
-LB_19:
-	lea rsi,[LB_20+3-1]
+	jmp LB_22
+	LB_23: db 49,55,0
+LB_22:
+	lea rsi,[LB_23+2-1]
+	mov rcx,2
+	rep movsb
+	jmp LB_24
+	LB_25: db 102,111,111,0
+LB_24:
+	lea rsi,[LB_25+3-1]
 	mov rcx,3
 	rep movsb
 	pop rsi 
@@ -289,11 +307,11 @@ LB_19:
 	lea rsi,[rsi+7+rcx]
 	rep movsb
 	mov rcx,QWORD [tmp] 
-;; rsp=0 , %5~1'(= {| l |} ) %4~%[ 3r ] %3~0'(= {| l |} ) 
+;; rsp=0 , %6~1'(= {| l |} ) %5~%[ 17r ] %4~%[ 3r ] %3~0'(= {| l |} ) 
 ; _emt 1'(= {| l |} ) ⊢ 1'(= {| l |} )
-	jmp LB_22
-LB_21: db 95,101,109,116,58,0
-LB_22:
+	jmp LB_27
+LB_26: db 95,101,109,116,58,0
+LB_27:
 	push rdx
 	push rcx
 	push r8
@@ -301,7 +319,7 @@ LB_22:
 	push r10
 	push r11
 	xor rax,rax  
-	mov rdi,LB_21
+	mov rdi,LB_26
 	mov QWORD [rsp_tmp],rsp 
 	and rsp,~0xf 
 	call printf 
@@ -334,9 +352,9 @@ LB_22:
 	pop r8
 	pop rcx
 	pop rdx
-	jmp LB_24
-LB_23: db 10,0
-LB_24:
+	jmp LB_29
+LB_28: db 10,0
+LB_29:
 	push rdx
 	push rcx
 	push r8
@@ -344,7 +362,7 @@ LB_24:
 	push r10
 	push r11
 	xor rax,rax  
-	mov rdi,LB_23
+	mov rdi,LB_28
 	mov QWORD [rsp_tmp],rsp 
 	and rsp,~0xf 
 	call printf 
@@ -355,9 +373,9 @@ LB_24:
 	pop r8
 	pop rcx
 	pop rdx
-	jmp LB_25
-LB_25:
-;; rsp=0 , %6~1'(= {| l |} ) %4~%[ 3r ] %3~0'(= {| l |} ) 
+	jmp LB_30
+LB_30:
+;; rsp=0 , %7~1'(= {| l |} ) %5~%[ 17r ] %4~%[ 3r ] %3~0'(= {| l |} ) 
 ; ∎ { }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
@@ -378,6 +396,7 @@ LB_25:
 	pop r8
 	pop rcx
 	pop rdx
+; .dlt.ptn %[ 17r ]
 ; .dlt.ptn %[ 3r ]
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
@@ -398,6 +417,17 @@ LB_25:
 	pop r8
 	pop rcx
 	pop rdx
+; .mov_ptn2 { } ⊢ { }
+;; ret 0
+	ret
+RTM_0:
+	push RTM_1
+;; rsp=0 , 
+; rsp_d=0, #26 { } ⊢ { }
+; .mov_ptn2 { } ⊢ { }
+	call ETR_26
+;; rsp=0 , 
+; ∎ { }
 ; .mov_ptn2 { } ⊢ { }
 ;; ret 0
 	ret
