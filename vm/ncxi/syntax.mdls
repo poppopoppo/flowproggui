@@ -6387,6 +6387,10 @@
 								//
 							rp8.add_s8 { e0 sr } ⊢ e0 
 							∎ { evv e0 ld lb_n rsp irv rl ar }
+						@.d { evv e0 ld lb_n rsp irv rl ar x0 rr pl }
+							» _^ x0 ⊢ x0,s0 
+								0d' // 
+							s8 { evv e0 ld lb_n rsp irv rl ar s0 rr pl } ⊢| 
 						@.s8_for { evv e0 ld lb_n rsp irv rl ar x0 s0 rr pl }
 							_s8_len s0 ⊢ { s0 l0 } 
 							$ l0 ⊢ l0,l00 
@@ -6475,12 +6479,46 @@
 									∐. . 
 										∎| 
 								∐ ast.exp_s8.d◂{} .
-									∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.s8◂s0 . 
-										∎| 
+									∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+										d { evv e0 ld lb_n rsp irv rl ar x0 rr pl } ⊢|									
 									∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im_e◂i0 . 
-										∎| 
-									∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.ref◂q0; q0 ⊢ stt_v.opq◂{} . 
-										∎| 
+										_lod_q { evv i0 } ⊢ { evv i0 k0 } 
+										∐ k0 ⊢ k_cst_v◂v0; v0 ⊢ ast.r64◂x0 . 
+											d { evv e0 ld lb_n rsp irv rl ar x0 rr pl } ⊢|									
+										∐. . 
+											∎|
+									∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+										reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
+										» "sprintf" _ ⊢ f0 
+										c_call f0 ⊢ { f0 sf0 } 
+										» _^ sr0,sf0 ⊢ sr0,sf0,s1 
+											`	sub rsp,128
+											`	mov rdi,rsp
+											`	mov rsi,fmt_d
+											"\tmov rdx," 0' "\n" 
+											`	mov QWORD [tmp],rdi
+											push_c_regs 
+											1' 
+											pop_c_regs 
+											`	push rax 
+											`	add rax,QWORD [tmp]
+											`	mov rdi,rax
+											// 
+										_inc rsp ⊢ rsp 
+										» 16r _ ⊢ w0 
+										_add { rsp w0 } ⊢ { rsp w0 }
+										rp8.add_s8 { e0 s1 } ⊢ e0
+										lp1 { evv e0 ld lb_n rsp irv rl ar rr pl } ⊢ { evv e0 ld lb_n rsp irv rl ar }
+										_dec rsp ⊢ rsp 
+										_sub { rsp w0 } ⊢ { rsp w0 }
+										» _^ _ ⊢ sr 
+											`	pop rcx
+											`	lea rsi,[rsp+rcx-1]
+											`	rep movsb
+											`	add rsp,128
+											//
+										rp8.add_s8 { e0 sr } ⊢ e0 
+										∎ { evv e0 ld lb_n rsp irv rl ar } 	 
 									∐. . 
 										∎| 
 								∐ ast.exp_s8.x◂{} .
@@ -10769,6 +10807,8 @@
 					`	fmt_err_line: db "err:%d",10,0
 					`	fmt_r64: db "%dr",0
 					`	fmt_s8: db 34,"%s",34,0
+					`	fmt_d: db "%d",0
+					`	fmt_x: db "%x",0
 					`	unt: dq 0x0
 					`
 					`	unt_0: dq 0x0 
