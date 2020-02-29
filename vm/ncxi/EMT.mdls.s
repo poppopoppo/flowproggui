@@ -209,6 +209,10 @@ LB_11:
 	jmp LB_12
 LB_12:
 ;; rsp=0 , %1~0'(= {| l |} ) 
+	jmp LB_13
+LB_13:
+; $ %[ 3r ] ⊢ %[ 3r ]
+;; rsp=0 , %2~%[ 3r ] %1~0'(= {| l |} ) 
 ; » _^ .. ⊢ ..
 ; .. //
 	mov rdi,0
@@ -230,7 +234,7 @@ LB_12:
 	push r9
 	push r10
 	push r11
-	add rdi,3
+	add rdi,7
 	push rdi 
 	and rdi,~111b
 	add rdi,16
@@ -253,14 +257,31 @@ LB_12:
 	lea rdi,[rax+7+rdi]
 	std 
 	mov QWORD [tmp],rcx 
+	jmp LB_14
+	LB_15: db 104,0
+LB_14:
+	lea rsi,[LB_15+1-1]
+	mov rcx,1
+	rep movsb
+	jmp LB_16
+	LB_17: db 103,0
+LB_16:
+	mov rax,3
+LB_18:
+	lea rsi,[LB_17+1-1]
+	mov rcx,1
+	rep movsb 
+	sub rax,1
+	cmp rax,0
+	jnz LB_18
 	pop rsi 
 	pop rcx
 	lea rsi,[rsi+7+rcx]
 	rep movsb
-	jmp LB_13
-	LB_14: db 102,111,111,0
-LB_13:
-	lea rsi,[LB_14+3-1]
+	jmp LB_19
+	LB_20: db 102,111,111,0
+LB_19:
+	lea rsi,[LB_20+3-1]
 	mov rcx,3
 	rep movsb
 	pop rsi 
@@ -268,11 +289,11 @@ LB_13:
 	lea rsi,[rsi+7+rcx]
 	rep movsb
 	mov rcx,QWORD [tmp] 
-;; rsp=0 , %3~1'(= {| l |} ) %2~0'(= {| l |} ) 
+;; rsp=0 , %5~1'(= {| l |} ) %4~%[ 3r ] %3~0'(= {| l |} ) 
 ; _emt 1'(= {| l |} ) ⊢ 1'(= {| l |} )
-	jmp LB_16
-LB_15: db 95,101,109,116,58,0
-LB_16:
+	jmp LB_22
+LB_21: db 95,101,109,116,58,0
+LB_22:
 	push rdx
 	push rcx
 	push r8
@@ -280,7 +301,7 @@ LB_16:
 	push r10
 	push r11
 	xor rax,rax  
-	mov rdi,LB_15
+	mov rdi,LB_21
 	mov QWORD [rsp_tmp],rsp 
 	and rsp,~0xf 
 	call printf 
@@ -313,9 +334,9 @@ LB_16:
 	pop r8
 	pop rcx
 	pop rdx
-	jmp LB_18
-LB_17: db 10,0
-LB_18:
+	jmp LB_24
+LB_23: db 10,0
+LB_24:
 	push rdx
 	push rcx
 	push r8
@@ -323,7 +344,7 @@ LB_18:
 	push r10
 	push r11
 	xor rax,rax  
-	mov rdi,LB_17
+	mov rdi,LB_23
 	mov QWORD [rsp_tmp],rsp 
 	and rsp,~0xf 
 	call printf 
@@ -334,9 +355,9 @@ LB_18:
 	pop r8
 	pop rcx
 	pop rdx
-	jmp LB_19
-LB_19:
-;; rsp=0 , %4~1'(= {| l |} ) %2~0'(= {| l |} ) 
+	jmp LB_25
+LB_25:
+;; rsp=0 , %6~1'(= {| l |} ) %4~%[ 3r ] %3~0'(= {| l |} ) 
 ; ∎ { }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
@@ -357,6 +378,7 @@ LB_19:
 	pop r8
 	pop rcx
 	pop rdx
+; .dlt.ptn %[ 3r ]
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
 	push rdx
