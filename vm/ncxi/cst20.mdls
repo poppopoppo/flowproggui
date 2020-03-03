@@ -10,6 +10,10 @@
 § E0 « 
   \\f0 {} ⊢ {} 
   \\$ %[ 3r ] ⊢ r0 
-  _mk_arr { %[ 5r ] %[ 6r ] } ⊢ { l0 x0 a0 }
+  _mk_arr { %[ 7r ] %[ "Fu" ] } ⊢ { l0 x0 a0 }
   _emt a0 ⊢ a0
+  _exc_q { a0 %[ 1r ] %[ "Xo" ] } ⊢ { a0 x1 s0 }
+  _emt x1 ⊢ x1
+  _emt s0 ⊢ s0
+  _emt { a0 x1 s0 } ⊢ { a0 x1 s0 }
   ∎ {} 

@@ -483,9 +483,7 @@ module Ast = struct
     { mutable root : (ns_v ref) option;
       mutable ns_p : (string * Sgn.t) list;
       mutable ns_t : (string * Types.v ref) list;
-      (*mutable ns_m : (string * ns_v ref) list; *) 
       mutable ns_m : (string , ns_v ref) Hashtbl.t;
-     (* mutable ns_m_t : (string * ns_m_k ref) list; *)
       mutable ns_m_t : (string, ns_m_k ref) Hashtbl.t;
     }
   let add_ns_m ns_m n m = 
@@ -3133,8 +3131,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                 let ds = List.map (fun (y,c) -> (mk_vars (ref []) !ns `Abs (ref a) y,c)) ds in
                 let yp = sgn () in
                 let ya = List.fold_left (fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
-                (*let yt = List.fold_left (fun yt (_,v) -> Abs(v,yt)) ya a in
-                  !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;*)
+               
                 !ns.ns_t <- (n,ref(Ln(Axm yp)))::!ns.ns_t;
                 let dl = List.length ds in
                 let (_,es,pp0) =
