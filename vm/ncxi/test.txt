@@ -1262,4 +1262,15 @@ ETR: r0,r1,l0,l1,l2,w0,w1,w2,d0,d1,d2,d3,m0,m1,c0,u0,o0,o1
   $ m0 ⊢ _ \ to ground 
   ∎ .. \ .. ⊢| \ < 
   ret \ jmp \ tbl-jmp \ cnd-jmp
-  
+
+ip[ N ] : entry-N type input pipe 
+op[ N ] : .. output pipe
+&.45 r0,r1,i[ 4 ],o[ 78 ] \ port declaration
+  ◂ f0 | f1 b0,r0,l0,m0 .. \ branch call 
+  ◂ f0,f1,f2 .. ,fn l0,r0,.. \ table call 
+
+#.23 a0,, 
+  ∎ b0,,
+
+  io[ 23 ] u0 ⊢ i[ 23 ],o[ 23 ]
+
