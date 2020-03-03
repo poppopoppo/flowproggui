@@ -485,10 +485,13 @@ module Ast = struct
       mutable ns_t : (string * Types.v ref) list;
       (*mutable ns_m : (string * ns_v ref) list; *) 
       mutable ns_m : (string , ns_v ref) Hashtbl.t;
-      mutable ns_m_t : (string * ns_m_k ref) list;
+     (* mutable ns_m_t : (string * ns_m_k ref) list; *)
+      mutable ns_m_t : (string, ns_m_k ref) Hashtbl.t;
     }
   let add_ns_m ns_m n m = 
     Hashtbl.add ns_m n m 
+  let add_ns_m_t ns_m_t n m = 
+    Hashtbl.add ns_m_t n m 
   type ns_vct_t = 
     | Prs_Dst | Etr_Dst 
   type g_ns_v = {
@@ -506,7 +509,7 @@ module Ast = struct
   let gbg_n = ref 0
 
   let init_ns () =
-    { root=None; ns_p=[];  ns_t=[]; ns_m=Hashtbl.create 10; ns_m_t=[];  }
+    { root=None; ns_p=[];  ns_t=[]; ns_m=Hashtbl.create 10; ns_m_t=Hashtbl.create 10;  }
   let init_gns () =
     { ns_vct_n=0; ns_vct=Array.make 1024 (RP.R[||],newvar (),Etr_Dst); ns=[]; ns_e=[]; ns_c=[]; ns_r_t=[]; ns_r_i=[];
     }
@@ -1029,7 +1032,7 @@ module Ast = struct
   let get_ns_t ns n =
     find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_t) with _ -> None)
   let get_ns_m_t ns n =
-    find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_m_t) with _ -> None)
+    find_ns `Fst ns n (fun ns n -> try Some((*List.assoc n ns.ns_m_t*)Hashtbl.find ns.ns_m_t n) with _ -> None)
   let get_ns_m ns n =
     find_ns `Fst ns n (fun ns n -> try Some((*List.assoc n ns.ns_m*)Hashtbl.find ns.ns_m n) with _ -> None)
   let get_ns_e gns n = (try List.assoc n gns.ns_e with _ -> err "get_ns_e 0" )
@@ -2945,17 +2948,20 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
             !ns.ns_t <- ns1.ns_t @ !ns.ns_t;
             (*!ns.ns_m <- ns1.ns_m@ !ns.ns_m;*)
             Util.merge !ns.ns_m ns1.ns_m;
-            !ns.ns_m_t <- ns1.ns_m_t@ !ns.ns_m_t;
+            (*!ns.ns_m_t <- ns1.ns_m_t@ !ns.ns_m_t;*)
+            Util.merge !ns.ns_m_t ns1.ns_m_t;
             ("","","","§ "^n^"._")
           | Mdl_Eq(n,m) ->
             let nsm = get_ns_m !ns m in
             let nsm_t = get_ns_m_t !ns m in
-            !ns.ns_m_t <- (n,nsm_t):: !ns.ns_m_t;
+            (*!ns.ns_m_t <- (n,nsm_t):: !ns.ns_m_t;*)
+            Hashtbl.add !ns.ns_m_t n nsm_t;
             (*!ns.ns_m <- (n,nsm)::!ns.ns_m;*) 
             Hashtbl.add !ns.ns_m n nsm;
             ("","","",tbs^"§§ "^n^" = "^(pnt_name m)^"\n")
           | Mdl(n,el0) ->
-            !ns.ns_m_t <- (n,ref Ast.M_WC):: !ns.ns_m_t;
+            (*!ns.ns_m_t <- (n,ref Ast.M_WC):: !ns.ns_m_t;*)
+            add_ns_m_t !ns.ns_m_t n (ref Ast.M_WC);
             let ns_1 = ref(init_ns ()) in
             !ns_1.root <- (Some ns);
             (*!ns.ns_m <- (n,ns_1)::!ns.ns_m;*)
@@ -3229,7 +3235,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                     ( match g with
                       | Grm.Cnc (n,rs) ->
                         let _ = (nla n) in
-                        !ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+                        (*!ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+                        add_ns_m_t !ns.ns_m_t n (ref (Ast.M_Prm "grm"));
                         let ns_g = ref(init_ns ()) in
                         !ns_g.root <- Some ns;
                         (*!ns.ns_m <- (n,ns_g)::!ns.ns_m;*) 
@@ -3244,7 +3251,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                         gv@[`P(n,rs,t_p,epv,ns_g)]
                       | Grm.Act(n,rs) ->
                         let _ = nla n in
-                        !ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+                        (*!ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+                        add_ns_m_t !ns.ns_m_t n (ref(Ast.M_Prm "grm")); 
                         let ns_g = ref(init_ns ()) in
                         !ns_g.root <- Some ns;
                         (*!ns.ns_m <- (n,ns_g)::!ns.ns_m;*) 
@@ -3395,7 +3403,8 @@ and init_prm () =
   !ns.ns_t <- ("_s8",ref(Ln(Axm Axm.stg)))::!ns.ns_t;
   !ns.ns_t <- ("_sgn",ref(Ln(Axm Axm.sgn_p)))::!ns.ns_t;
 
-  !ns.ns_m_t <- ("_byt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  (*!ns.ns_m_t <- ("_byt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+  add_ns_m_t !ns.ns_m_t "_byt" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_byt",ns_g)::!ns.ns_m;*)
@@ -3435,7 +3444,8 @@ and init_prm () =
     "\tret\n"
   in
 
-  !ns.ns_m_t <- ("_scf_d",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  (*!ns.ns_m_t <- ("_scf_d",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+  add_ns_m_t !ns.ns_m_t "_scf_d" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_scf_d",ns_g)::!ns.ns_m;*)
@@ -3478,7 +3488,8 @@ and init_prm () =
     "\tret\n" in
   gns.ns_c<-(epf,em)::gns.ns_c;
 
-  !ns.ns_m_t <- ("_chr",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  (*!ns.ns_m_t <- ("_chr",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+  add_ns_m_t !ns.ns_m_t "_chr" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_chr",ns_g)::!ns.ns_m;*) 
@@ -3519,7 +3530,8 @@ and init_prm () =
     "\tbts r12,2\n"^
     "\tret\n" in
 
-  !ns.ns_m_t <- ("_dgt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  (*!ns.ns_m_t <- ("_dgt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+  add_ns_m_t !ns.ns_m_t "_dgt" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_dgt",ns_g)::!ns.ns_m;*)
@@ -3550,7 +3562,8 @@ and init_prm () =
     "\tmov rax,0\n"^
     "\tret\n" in
 
-  !ns.ns_m_t <- ("_u_al",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  (*!ns.ns_m_t <- ("_u_al",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+  add_ns_m_t !ns.ns_m_t "_u_al" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_u_al",ns_g)::!ns.ns_m;*)
@@ -3581,7 +3594,8 @@ and init_prm () =
     "\tmov rax,0\n"^
     "\tret\n" in
 
-  !ns.ns_m_t <- ("_l_al",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;
+  (*!ns.ns_m_t <- ("_l_al",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+  add_ns_m_t !ns.ns_m_t "_l_al" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_l_al",ns_g)::!ns.ns_m;*)

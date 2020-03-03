@@ -6248,7 +6248,6 @@
 									`	pop rdi 
 									"\tmov " 3' ",rax\n" 
 									`	mov QWORD [rax],rdi 
-									"LB_" 1d' ":\n" 
 									`	cmp rdi,0 
 									"\tjz LB_" 2d' "\n" 
 									"\tmov " 4' ",rdi\n" 
@@ -6258,32 +6257,44 @@
 								_nil {} ⊢ fl
 								rp8.e {} ⊢ e1 
 								rpc.f { ahl fl tav lb_n a1 rsp irv vs1 e1 } ⊢ { ahl fl tav lb_n a1 p1 rsp irv vs1 e1 }					
+								$ ha0 ⊢ ha0,ha00 
+								rp8.e {} ⊢ eh 
+								rpc.hp { ahl fl tav lb_n ha00 eh } ⊢ { ahl fl tav lb_n eh }
 								rp8.e {} ⊢ e2 
 								rpc.adt_lp { ahl fl tav lb_n e2 } ⊢ { ahl tav lb_n e2 }
 								skip { lb_n e2 } ⊢ { lb_n e2 } 
 								rp8.cct { e0 e2 } ⊢ e0 
 								rp8.cct { e0 e1 } ⊢ e0 
 								$ rm1 ⊢ rm1,rm10
+								
 								stt_v.hp { rm10 h0 } ⊢ pt0 
 								RP.atm pt0 ⊢ pt0 
 								_none {} ⊢ lb1
 								mov_ptn.f2 { tav rsp vs1 p1 pt0 lb1 } ⊢ { tav rsp vs1 er0 }
 								rp8.cct { e0 er0 } ⊢ e0 
 								reg { rsp rm1 } ⊢ { rsp rm1 srm1 brm1 } 
-								» _^ srm0,srm1,srm2,lb2,lb3 ⊢ srm0,srm1,srm2,lb2,lb3,sc2	
+								rp8.mk_s8 eh ⊢ { eh seh }
+								» _^ srm0,srm1,srm2,lb2,lb3,seh ⊢ srm0,srm1,srm2,lb2,lb3,seh,sc2	
+									"LB_" 3d' ":\n" 
 									"\tmov rsi," 0' "\n" 
 									"\tmov rax," 1' "\n" 
 									"\tmov rdi," 2' "\n" 
 									`	mov QWORD [rsi+8*rdi],rax 
+									`	cmp rdi,1 
+									"\tjz LB_" 4d' "\n" 
 									`	sub rdi,1 
+									"\tmov " 2' ",rdi\n" 
+									`	mov rdi,rax
+									5' 
+									"\tmov " 1' ",rax\n"
 									"\tjmp LB_" 3d' "\n" 
 									"LB_" 4d' ":\n"
 									//	
 								rp8.add_s8 { e0 sc2 } ⊢ e0				
 								∎ { irv evv tav tv_n tv lb_n rl rsp e0 pd1 }
 							∐. .
-							» "mk_arr 0" _ ⊢ ee 
-									_emt ee ⊢ ee 
+								» "mk_arr 0" _ ⊢ ee 
+								_emt ee ⊢ ee 
 								∎| 
 						∐. . 
 						» "mk_arr 0" _ ⊢ ee 
