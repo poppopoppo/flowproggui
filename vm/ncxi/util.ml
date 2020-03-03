@@ -108,7 +108,11 @@ let rec string_of_list f p l =
   | x::tl -> (p x)^f^(string_of_list f p tl)
 exception OPEN_IN
 exception P_F
-
+let merge h0 h1 = 
+  Hashtbl.fold 
+    ( fun k a _ -> 
+      Hashtbl.add h0 k a )
+    h1 ()
 let open_in_close (s:string) (p:Pervasives.in_channel -> 'a) : 'a =
   let f = (try open_in s with _ -> raise @@ OPEN_IN) in
   let v = (try p f with _ -> raise @@ P_F) in
