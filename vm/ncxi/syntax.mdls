@@ -6959,14 +6959,14 @@
 						rp8.add_s8 { ec0 srl } ⊢ ec0 
 						 $ lc ⊢
 						∐ ast.jmp◂{ o x } . 
-							idx.csm_ptn { irv x rl } ⊢ { irv ix rl }
-							$ ix ⊢ ix,ix0 
-							stt_v.pnt.f ix0 ⊢ six
+							idx.csm_ptn { irv x rl } ⊢ { irv is rl }
+							$ is ⊢ is,is0 
+							stt_v.pnt.f is0 ⊢ sis
 							_lod_q { evv o } ⊢ { evv o k }
 							∐ k ⊢ k_op_axm◂a . 
-								$ six ⊢ six,sis 
+								$ sis ⊢ sis,sis0 
 								$ yr ⊢ yr,yr0 
-								op_axm { evv tav tv_n tv lb_n a rsp rl irv ix six yr0 } ⊢ { evv tav tv_n tv lb_n a rsp rl irv iy eo }
+								op_axm { evv tav tv_n tv lb_n a rsp rl irv is sis0 yr0 } ⊢ { evv tav tv_n tv lb_n a rsp rl irv iy eo }
 								rp8.add_s8 { ec0 eo } ⊢ ec0 
 								rset.ini {} ⊢ v0 
 								» REG_N _ ⊢ rbp 
@@ -6993,6 +6993,85 @@
 									rp8.add_s8 { ec0 es0 } ⊢ ec0 
 									rp8.cct { ec0 er } ⊢ ec0 
 									rp8.add_s8 { ec0 es1 } ⊢ ec0 
+									» _^ rsp ⊢ rsp,sc1 
+										"\tpush QWORD [rsp+8*" 0d' "]\n"  
+										// 
+									rp8.add_s8 { ec0 sc1 } ⊢ ec0 
+									rp8.add_s8 { ec0 ret } ⊢ ec0
+									∎ { lb_n { ev evv } rsp { rv irv } tav tv_n tv ec0 rl { rsp_d pr yr } } 
+							∐ k ⊢ k_ctr◂{ ia na } . 
+								stt_v.stt_adt { ia na is } ⊢ iy 
+								RP.atm iy ⊢ iy 
+								» _^ o,sis ⊢ o,sis,ec1 
+									"; #" 0d' " " 1' " ⊢|\n" //
+								rp8.add_s8 { ec0 ec1 } ⊢ ec0 
+								rset.ini {} ⊢ v0 
+								» REG_N _ ⊢ rbp 
+								_dec rbp ⊢ rbp 
+								_add { rbp rsp_d } ⊢ { rbp rsp_d } 
+								brk_rsp { rsp rbp } ⊢ { rsp rbp es0 } 
+								rp8.add_s8 { ec0 es0 } ⊢ ec0 
+								$ pr ⊢ pr,pr0 
+								_none {} ⊢ lb1 
+								mov_ptn.f2 { tav rsp v0 iy pr0 lb1 } ⊢ { tav rsp v0 er } 
+								rp8.cct { ec0 er } ⊢ ec0 
+								resize_rsp { rsp rbp } ⊢ { rsp rbp es1 } 
+								rp8.add_s8 { ec0 es1 } ⊢ ec0 
+								∐ rsp'=0r . 
+									rp8.add_s8 { ec0 ret } ⊢ ec0 
+									∎ { lb_n { ev evv } rsp { rv irv } tav tv_n tv ec0 rl { rsp_d pr yr } } 
+								∐. . 
+									» _^ rsp ⊢ rsp,sc1 
+										"\tpush QWORD [rsp+8*" 0d' "]\n"  
+										// 
+									rp8.add_s8 { ec0 sc1 } ⊢ ec0 
+									rp8.add_s8 { ec0 ret } ⊢ ec0
+									∎ { lb_n { ev evv } rsp { rv irv } tav tv_n tv ec0 rl { rsp_d pr yr } } 
+							∐ k ⊢ k_op◂{ rsp_s p0 rsp_d1 p1 } . 
+								∐ rsp_d1'=0r . 
+									stt_call { tav o lb_n rsp irv rl rsp_s p0 is } ⊢ { tav o lb_n rsp irv rl rsp_s er l v0 nb } 
+									$ p1 ⊢ p1,p10 
+									» _^ o,sis ⊢ o,sis,ec1 
+										"; rsp_d=0 , #" 0d' " " 1' " ⊢| " "\n" //
+									rp8.add_s8 { ec0 ec1 } ⊢ ec0 
+									rp8.cct { ec0 er } ⊢ ec0 
+									» REG_N _ ⊢ rbp0 
+									_dec rbp0 ⊢ rbp0 
+									_add { rbp0 rsp_d } ⊢ { rbp0 rsp_d }
+									brk_rsp { rsp rbp0 } ⊢ { rsp rbp0 sb0 }
+									rp8.add_s8 { ec0 sb0 } ⊢ ec0 
+									_none {} ⊢ o0 
+									rset.ini {} ⊢ vs0
+									$ pr ⊢ pr,pr0
+									mov_ptn.f2 { tav rsp vs0 p1 pr0 o0 } ⊢ { tav rsp vs0 er0 } 
+									resize_rsp { rsp rbp0 } ⊢ { rsp rbp0 sb0 } 
+									rp8.add_s8 { ec0 sb0 } ⊢ ec0
+									» _^ rsp ⊢ rsp,sc1 
+										"\tpush QWORD [rsp+8*" 0d' "]\n"  
+										// 
+									rp8.add_s8 { ec0 sc1 } ⊢ ec0 
+									rp8.add_s8 { ec0 ret } ⊢ ec0
+									∎ { lb_n { ev evv } rsp { rv irv } tav tv_n tv ec0 rl { rsp_d pr yr } } 
+								∐. . 
+									stt_call { tav o lb_n rsp irv rl rsp_s p0 is } ⊢ { tav o lb_n rsp irv rl rsp_s er l v0 nb } 
+									_inc rsp ⊢ rsp 
+									shft_ptn { p1 rsp } ⊢ { p1 rsp } 
+									_add { rsp rsp_d1 } ⊢ { rsp rsp_d1 } 
+									» _^ o,sis ⊢ o,sis,ec1 
+										"; #" 0d' " " 1' " ⊢| \n" //
+									rp8.add_s8 { ec0 ec1 } ⊢ ec0 
+									rp8.cct { ec0 er } ⊢ ec0 
+									» REG_N _ ⊢ rbp0 
+									_dec rbp0 ⊢ rbp0 
+									_add { rbp0 rsp_d } ⊢ { rbp0 rsp_d }
+									brk_rsp { rsp rbp0 } ⊢ { rsp rbp0 sb0 }
+									rp8.add_s8 { ec0 sb0 } ⊢ ec0 
+									_none {} ⊢ o0 
+									rset.ini {} ⊢ vs0
+									$ pr ⊢ pr,pr0
+									mov_ptn.f2 { tav rsp vs0 p1 pr0 o0 } ⊢ { tav rsp vs0 er0 } 
+									resize_rsp { rsp rbp0 } ⊢ { rsp rbp0 sb0 } 
+									rp8.add_s8 { ec0 sb0 } ⊢ ec0
 									» _^ rsp ⊢ rsp,sc1 
 										"\tpush QWORD [rsp+8*" 0d' "]\n"  
 										// 

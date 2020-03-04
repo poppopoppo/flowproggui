@@ -7,6 +7,8 @@
     0' "foo" 2d' 0' 2'*"Yd p" 1'*"g" "h" //
   _emt ss1 ⊢ ss1 
   ∎ {} 
+§ f1 x0 
+  _add { x0 %[ 3r ] } ⊢| 
 § E0 « 
   \\f0 {} ⊢ {} 
   \\$ %[ 3r ] ⊢ r0 
@@ -16,4 +18,7 @@
   _emt x1 ⊢ x1
   _emt s0 ⊢ s0
   _emt { a0 x1 s0 } ⊢ { a0 x1 s0 }
+  f1 %[ 8r ] ⊢ { r1 r2 }
+  _emt { r1 r2 } ⊢ R0
+  _emt R0 ⊢ _ 
   ∎ {} 
