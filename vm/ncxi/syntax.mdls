@@ -6229,9 +6229,7 @@
 						_emt ee ⊢ ee 
 						∎|  
 				§ mk_arr { is sis irv evv tav tv_n tv yd lb_n rl rsp }
-					$ rl ⊢ rl,rl0 
-					rset.ini {} ⊢ vs1 
-					stt_v.mk_rset_env { irv rl0 vs1 } ⊢ { irv vs1 }
+					stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs1 }
 					$ is ⊢ is,is0 
 					stt_v.mk_rset { is0 vs1 } ⊢ vs1 
 					rp8.e {} ⊢ e0 
@@ -7621,6 +7619,60 @@
 								∐. .
 									∎| 
 							∐. .
+								∎| 
+						∐ a'=e_axm.lod_q . 
+							rp8.e {} ⊢ e0 
+							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs0 }
+							$ is ⊢ is,is0 
+							stt_v.mk_rset { is0 vs0 } ⊢ vs0
+							∐ is ⊢ RP.rcd◂l0; l0 ⊢ _cns◂{ a0 l0 }; l0 ⊢ _cns◂{ a1 l0 }; l0 ⊢ _nil◂{}; a0 ⊢ RP.atm◂aa0; a1 ⊢ RP.atm◂aa1 .
+								$ aa0 ⊢ aa0,aa00 
+								RP.atm aa0 ⊢ a0 
+								$ aa1 ⊢ aa1,aa10 
+								RP.atm aa1 ⊢ a1 
+								r64_to_rax { rsp evv aa10 } ⊢ { rsp evv sc0 } 
+								rp8.add_s8 { e0 sc0 } ⊢ e0 
+								∐ aa00 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.ref◂q0; q0 ⊢ stt_v.arr◂ha0 . 
+									alc_vs vs0 ⊢ { vs0 rm0 } 
+									reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
+									» _^ sr0 ⊢ sr0,sc0 
+										"\tmov rdi," 0' "\n" 
+										`	mov rdi,[rdi+8+8*rax]
+										//
+									rp8.add_s8 { e0 sc0 } ⊢ e0 
+									rp8.e {} ⊢ eh 
+									$ ha0 ⊢ ha0,ha00 
+									_nil {} ⊢ ahl 
+									_nil {} ⊢ fl
+									rpc.hp { ahl fl tav lb_n ha00 eh } ⊢ { ahl fl tav lb_n eh }
+									rp8.e {} ⊢ e2 
+									rpc.adt_lp { ahl fl tav lb_n e2 } ⊢ { ahl tav lb_n e2 }
+									skip { lb_n e2 } ⊢ { lb_n e2 } 
+									rp8.cct { e0 e2 } ⊢ e0 
+									rp8.cct { e0 eh } ⊢ e0 
+									reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 }
+									» _^ srm0 ⊢ srm0,sc0 
+										"\tmov " 0' ",rax\n" //
+									rp8.add_s8 { e0 sc0 } ⊢ e0 
+									$ ha0 ⊢ ha0,ha00
+									stt_v.ptn_of_hp { vs0 ha00 } ⊢ { vs0 pt0 } 
+									$ rm0 ⊢ rm0,rm00 
+									stt_v.hp { rm00 ha0 } ⊢ ap0 
+									RP.atm ap0 ⊢ ip0 
+									$ pt0 ⊢ pt0,pt00
+									_nil {} ⊢ l0 
+									_cns { pt0 l0 } ⊢ l0 
+									_cns { a1 l0 } ⊢ l0 
+									_cns { a0 l0 } ⊢ l0 
+									RP.rcd l0 ⊢ p1 
+									_none {} ⊢ o0 
+									mov_ptn.f2 { tav rsp vs0 ip0 pt00 o0 } ⊢ { tav rsp vs0 er0 }
+									rp8.cct { e0 er0 } ⊢ e0 
+									rp8.mk_s8 e0 ⊢ { e0 s0 } 
+									∎ { evv tav tv_n tv lb_n a rsp rl irv p1 s0 }
+								∐. . 
+									∎| 
+							∐. . 
 								∎| 
 						∐. . 
 							» _^ a ⊢ a,ee1 
