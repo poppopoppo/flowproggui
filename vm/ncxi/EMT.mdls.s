@@ -187,6 +187,8 @@ SS_PT_end:
 	mov rsi,0xffff_ffff_ffff_0200 
 	mov [rax],rsi
 
+
+init_ss_rcd_1:
 	mov QWORD [SS_RCD_1_TOP],SS_RCD_1_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_1_VCT
@@ -201,6 +203,8 @@ ss_lp_rcd_1:
 ss_end_rcd_1:
 	mov rsi,-65535
 	mov [rax],rsi 
+
+init_ss_rcd_2:
 	mov QWORD [SS_RCD_2_TOP],SS_RCD_2_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_2_VCT
@@ -215,6 +219,8 @@ ss_lp_rcd_2:
 ss_end_rcd_2:
 	mov rsi,-65534
 	mov [rax],rsi 
+
+init_ss_rcd_3:
 	mov QWORD [SS_RCD_3_TOP],SS_RCD_3_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_3_VCT
@@ -229,6 +235,8 @@ ss_lp_rcd_3:
 ss_end_rcd_3:
 	mov rsi,-65533
 	mov [rax],rsi 
+
+init_ss_rcd_4:
 	mov QWORD [SS_RCD_4_TOP],SS_RCD_4_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_4_VCT
@@ -243,6 +251,8 @@ ss_lp_rcd_4:
 ss_end_rcd_4:
 	mov rsi,-65532
 	mov [rax],rsi 
+
+init_ss_rcd_5:
 	mov QWORD [SS_RCD_5_TOP],SS_RCD_5_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_5_VCT
@@ -257,6 +267,8 @@ ss_lp_rcd_5:
 ss_end_rcd_5:
 	mov rsi,-65531
 	mov [rax],rsi 
+
+init_ss_rcd_6:
 	mov QWORD [SS_RCD_6_TOP],SS_RCD_6_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_6_VCT
@@ -271,6 +283,8 @@ ss_lp_rcd_6:
 ss_end_rcd_6:
 	mov rsi,-65530
 	mov [rax],rsi 
+
+init_ss_rcd_7:
 	mov QWORD [SS_RCD_7_TOP],SS_RCD_7_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_7_VCT
@@ -285,6 +299,8 @@ ss_lp_rcd_7:
 ss_end_rcd_7:
 	mov rsi,-65529
 	mov [rax],rsi 
+
+init_ss_rcd_8:
 	mov QWORD [SS_RCD_8_TOP],SS_RCD_8_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_8_VCT
@@ -299,6 +315,8 @@ ss_lp_rcd_8:
 ss_end_rcd_8:
 	mov rsi,-65528
 	mov [rax],rsi 
+
+init_ss_rcd_9:
 	mov QWORD [SS_RCD_9_TOP],SS_RCD_9_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_9_VCT
@@ -313,6 +331,8 @@ ss_lp_rcd_9:
 ss_end_rcd_9:
 	mov rsi,-65527
 	mov [rax],rsi 
+
+init_ss_rcd_10:
 	mov QWORD [SS_RCD_10_TOP],SS_RCD_10_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_10_VCT
@@ -327,6 +347,8 @@ ss_lp_rcd_10:
 ss_end_rcd_10:
 	mov rsi,-65526
 	mov [rax],rsi 
+
+init_ss_rcd_11:
 	mov QWORD [SS_RCD_11_TOP],SS_RCD_11_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_11_VCT
@@ -341,6 +363,8 @@ ss_lp_rcd_11:
 ss_end_rcd_11:
 	mov rsi,-65525
 	mov [rax],rsi 
+
+init_ss_rcd_12:
 	mov QWORD [SS_RCD_12_TOP],SS_RCD_12_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_12_VCT
@@ -355,6 +379,8 @@ ss_lp_rcd_12:
 ss_end_rcd_12:
 	mov rsi,-65524
 	mov [rax],rsi 
+
+init_ss_rcd_13:
 	mov QWORD [SS_RCD_13_TOP],SS_RCD_13_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_13_VCT
@@ -369,6 +395,8 @@ ss_lp_rcd_13:
 ss_end_rcd_13:
 	mov rsi,-65523
 	mov [rax],rsi 
+
+init_ss_rcd_14:
 	mov QWORD [SS_RCD_14_TOP],SS_RCD_14_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_14_VCT
@@ -383,6 +411,8 @@ ss_lp_rcd_14:
 ss_end_rcd_14:
 	mov rsi,-65522
 	mov [rax],rsi 
+
+init_ss_rcd_15:
 	mov QWORD [SS_RCD_15_TOP],SS_RCD_15_VCT
 	mov rdi,0 
 	mov rax,SS_RCD_15_VCT
@@ -416,9 +446,9 @@ LB_83: ; 26 { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) } ⊢ 0'(= a2◂ [
 ; .mov_ptn2 { 3'(= a2◂ [ {| l |}] ) 0(<2)◂{ 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) } } ⊢ { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) }
 	mov r10,r14
 ; .mov_ptn 0(<2)◂{ 2'(= {| l |} ) 4'(= a2◂ [ {| l |}] ) } ⊢ 1'(= a2◂ [ {| l |}] )
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r14,rdi
 	mov r13,r8
@@ -463,9 +493,9 @@ LB_55: ; 26 { 0'(= a2◂ [ r] ) 1'(= a2◂ [ r] ) } ⊢ 0'(= a2◂ [ r] ) : ({ _
 ; .mov_ptn2 { 3'(= a2◂ [ r] ) 0(<2)◂{ 2'(= r ) 1'(= a2◂ [ r] ) } } ⊢ { 0'(= a2◂ [ r] ) 1'(= a2◂ [ r] ) }
 	mov r10,r14
 ; .mov_ptn 0(<2)◂{ 2'(= r ) 4'(= a2◂ [ r] ) } ⊢ 1'(= a2◂ [ r] )
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r14,rdi
 	mov r13,r8
@@ -1499,27 +1529,27 @@ LB_54:
 	mov rdi,unt_1
 	mov r14,rdi
 ; .mov_ptn 0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } ⊢ 0'(= a2◂ [ r] )
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r13,rdi
 	mov r8,8
 	mov rax,r8
 	mov rdi,r13
 	mov QWORD [rdi+8+8*0],rax
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r8,rdi
 	mov r9,3
 	mov rax,r9
 	mov rdi,r8
 	mov QWORD [rdi+8+8*0],rax
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r9,rdi
 	mov r10,0
@@ -1821,9 +1851,9 @@ LB_62:
 	mov rdi,unt_1
 	mov r14,rdi
 ; .mov_ptn 0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } ⊢ 0'(= a2◂ [ {| l |}] )
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r13,rdi
 	push rdx
@@ -1855,9 +1885,9 @@ LB_62:
 	mov rax,r8
 	mov rdi,r13
 	mov QWORD [rdi+8+8*0],rax
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r8,rdi
 	push rdx
@@ -1889,9 +1919,9 @@ LB_62:
 	mov rax,r9
 	mov rdi,r8
 	mov QWORD [rdi+8+8*0],rax
-	mov rdi,[SS_TOP]
+	mov rdi,[SS_RCD_2_TOP]
 	mov rsi,[rdi]
-	mov QWORD [SS_TOP],rsi
+	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rdi],0
 	mov r9,rdi
 	push rdx
