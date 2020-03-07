@@ -1,5 +1,5 @@
 bits 64 
-%define SS_MAX 4000
+%define SS_MAX 2000
 %define SS_NULL 0xffff_ffff_ffff_0000
 extern exit 
 extern printf 
@@ -11,9 +11,80 @@ section .bss
 	tmp: resq 64
 	ret_vct: resq 64
  rsp_tmp: resq 1
+
+; SS segments 
 	SS_TOP: resq 1
 	SS_VCT: resq 16*SS_MAX
 	SS_BTM: resq 1 
+
+	SS_LN_TOP: resq 1
+	SS_LN_VCT: resq 2*SS_MAX
+	SS_LN_BTM: resq 1  
+
+	SS_PT_TOP: resq 1
+	SS_PT_VCT: resq 3*SS_MAX
+	SS_PT_BTM: resq 1 
+
+SS_RCD_1_TOP: resq 1
+SS_RCD_1_VCT: resq 2*SS_MAX
+SS_RCD_1_BTM: resq 1
+
+SS_RCD_2_TOP: resq 1
+SS_RCD_2_VCT: resq 3*SS_MAX
+SS_RCD_2_BTM: resq 1
+
+SS_RCD_3_TOP: resq 1
+SS_RCD_3_VCT: resq 4*SS_MAX
+SS_RCD_3_BTM: resq 1
+
+SS_RCD_4_TOP: resq 1
+SS_RCD_4_VCT: resq 5*SS_MAX
+SS_RCD_4_BTM: resq 1
+
+SS_RCD_5_TOP: resq 1
+SS_RCD_5_VCT: resq 6*SS_MAX
+SS_RCD_5_BTM: resq 1
+
+SS_RCD_6_TOP: resq 1
+SS_RCD_6_VCT: resq 7*SS_MAX
+SS_RCD_6_BTM: resq 1
+
+SS_RCD_7_TOP: resq 1
+SS_RCD_7_VCT: resq 8*SS_MAX
+SS_RCD_7_BTM: resq 1
+
+SS_RCD_8_TOP: resq 1
+SS_RCD_8_VCT: resq 9*SS_MAX
+SS_RCD_8_BTM: resq 1
+
+SS_RCD_9_TOP: resq 1
+SS_RCD_9_VCT: resq 10*SS_MAX
+SS_RCD_9_BTM: resq 1
+
+SS_RCD_10_TOP: resq 1
+SS_RCD_10_VCT: resq 11*SS_MAX
+SS_RCD_10_BTM: resq 1
+
+SS_RCD_11_TOP: resq 1
+SS_RCD_11_VCT: resq 12*SS_MAX
+SS_RCD_11_BTM: resq 1
+
+SS_RCD_12_TOP: resq 1
+SS_RCD_12_VCT: resq 13*SS_MAX
+SS_RCD_12_BTM: resq 1
+
+SS_RCD_13_TOP: resq 1
+SS_RCD_13_VCT: resq 14*SS_MAX
+SS_RCD_13_BTM: resq 1
+
+SS_RCD_14_TOP: resq 1
+SS_RCD_14_VCT: resq 15*SS_MAX
+SS_RCD_14_BTM: resq 1
+
+SS_RCD_15_TOP: resq 1
+SS_RCD_15_VCT: resq 16*SS_MAX
+SS_RCD_15_BTM: resq 1
+
 section .data
 	err_n: dq 0
 	fmt_err_line: db "err:%d",10,0
@@ -83,6 +154,249 @@ SS_lp:
 SS_end:
 	mov rsi,SS_NULL 
 	mov [rax],rsi
+
+SS_LN_init:
+	mov QWORD [SS_LN_TOP],SS_LN_VCT
+	mov rdi,0 
+	mov rax,SS_LN_VCT 
+SS_LN_lp: 
+	cmp rdi,SS_MAX 
+	jz SS_LN_end 
+	add rdi,1 
+	lea rsi,[rax+8*2] 
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp SS_LN_lp 
+SS_LN_end:
+	mov rsi,0xffff_ffff_ffff_0100 
+	mov [rax],rsi
+
+SS_PT_init:
+	mov QWORD [SS_PT_TOP],SS_PT_VCT
+	mov rdi,0 
+	mov rax,SS_PT_VCT 
+SS_PT_lp: 
+	cmp rdi,SS_MAX 
+	jz SS_PT_end 
+	add rdi,1 
+	lea rsi,[rax+8*3] 
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp SS_PT_lp 
+SS_PT_end:
+	mov rsi,0xffff_ffff_ffff_0200 
+	mov [rax],rsi
+
+	mov QWORD [SS_RCD_1_TOP],SS_RCD_1_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_1_VCT
+ss_lp_rcd_1:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_1
+	add rdi,1 
+	lea rsi,[rax+8*2]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_1
+ss_end_rcd_1:
+	mov rsi,-65535
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_2_TOP],SS_RCD_2_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_2_VCT
+ss_lp_rcd_2:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_2
+	add rdi,1 
+	lea rsi,[rax+8*3]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_2
+ss_end_rcd_2:
+	mov rsi,-65534
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_3_TOP],SS_RCD_3_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_3_VCT
+ss_lp_rcd_3:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_3
+	add rdi,1 
+	lea rsi,[rax+8*4]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_3
+ss_end_rcd_3:
+	mov rsi,-65533
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_4_TOP],SS_RCD_4_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_4_VCT
+ss_lp_rcd_4:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_4
+	add rdi,1 
+	lea rsi,[rax+8*5]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_4
+ss_end_rcd_4:
+	mov rsi,-65532
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_5_TOP],SS_RCD_5_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_5_VCT
+ss_lp_rcd_5:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_5
+	add rdi,1 
+	lea rsi,[rax+8*6]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_5
+ss_end_rcd_5:
+	mov rsi,-65531
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_6_TOP],SS_RCD_6_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_6_VCT
+ss_lp_rcd_6:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_6
+	add rdi,1 
+	lea rsi,[rax+8*7]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_6
+ss_end_rcd_6:
+	mov rsi,-65530
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_7_TOP],SS_RCD_7_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_7_VCT
+ss_lp_rcd_7:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_7
+	add rdi,1 
+	lea rsi,[rax+8*8]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_7
+ss_end_rcd_7:
+	mov rsi,-65529
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_8_TOP],SS_RCD_8_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_8_VCT
+ss_lp_rcd_8:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_8
+	add rdi,1 
+	lea rsi,[rax+8*9]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_8
+ss_end_rcd_8:
+	mov rsi,-65528
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_9_TOP],SS_RCD_9_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_9_VCT
+ss_lp_rcd_9:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_9
+	add rdi,1 
+	lea rsi,[rax+8*10]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_9
+ss_end_rcd_9:
+	mov rsi,-65527
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_10_TOP],SS_RCD_10_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_10_VCT
+ss_lp_rcd_10:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_10
+	add rdi,1 
+	lea rsi,[rax+8*11]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_10
+ss_end_rcd_10:
+	mov rsi,-65526
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_11_TOP],SS_RCD_11_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_11_VCT
+ss_lp_rcd_11:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_11
+	add rdi,1 
+	lea rsi,[rax+8*12]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_11
+ss_end_rcd_11:
+	mov rsi,-65525
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_12_TOP],SS_RCD_12_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_12_VCT
+ss_lp_rcd_12:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_12
+	add rdi,1 
+	lea rsi,[rax+8*13]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_12
+ss_end_rcd_12:
+	mov rsi,-65524
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_13_TOP],SS_RCD_13_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_13_VCT
+ss_lp_rcd_13:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_13
+	add rdi,1 
+	lea rsi,[rax+8*14]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_13
+ss_end_rcd_13:
+	mov rsi,-65523
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_14_TOP],SS_RCD_14_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_14_VCT
+ss_lp_rcd_14:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_14
+	add rdi,1 
+	lea rsi,[rax+8*15]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_14
+ss_end_rcd_14:
+	mov rsi,-65522
+	mov [rax],rsi 
+	mov QWORD [SS_RCD_15_TOP],SS_RCD_15_VCT
+	mov rdi,0 
+	mov rax,SS_RCD_15_VCT
+ss_lp_rcd_15:
+	cmp rdi,SS_MAX
+	jz ss_end_rcd_15
+	add rdi,1 
+	lea rsi,[rax+8*16]
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp_rcd_15
+ss_end_rcd_15:
+	mov rsi,-65521
+	mov [rax],rsi 
 	jmp RTM_0
 LB_83: ; 26 { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) } ⊢ 0'(= a2◂ [ {| l |}] ) : ({ _lst◂_s8 _lst◂_s8 }→_lst◂_s8)
 ;; rsp=0 , %1~1'(= a2◂ [ {| l |}] ) %0~0'(= a2◂ [ {| l |}] ) 
