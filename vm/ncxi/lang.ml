@@ -482,7 +482,7 @@ module Ast = struct
   type ns_v =
     { mutable root : (ns_v ref) option;
       mutable ns_p : (string * Sgn.t) list;
-      mutable ns_t : (string * Types.v ref) list;
+      mutable ns_t : (string , Types.v ref) Hashtbl.t;
       mutable ns_m : (string , ns_v ref) Hashtbl.t;
       mutable ns_m_t : (string, ns_m_k ref) Hashtbl.t;
     }
@@ -497,19 +497,16 @@ module Ast = struct
     mutable ns_vct : (R.t * Types.v ref * ns_vct_t) array;
     mutable ns : (Sgn.t * Types.v ref) list;
     mutable ns_e : (Sgn.t * e_k_v ref) list;
-    mutable ns_c : (Sgn.t * string) list;
-    mutable ns_r_t : (Sgn.t * Types.v ref) list;
-    mutable ns_r_i : (Sgn.t * v_r) list;
+    mutable ns_c : (Sgn.t , string) Hashtbl.t;
+    mutable ns_r_t : (Sgn.t,Types.v ref) Hashtbl.t ;
+    mutable ns_r_i : (Sgn.t, v_r) Hashtbl.t;
   }
-  type glb_ns_v =
-    { mutable ns_e_vct : (e_k ref * Types.v ref) list;
-    }
   let gbg_n = ref 0
 
   let init_ns () =
-    { root=None; ns_p=[];  ns_t=[]; ns_m=Hashtbl.create 10; ns_m_t=Hashtbl.create 10;  }
+    { root=None; ns_p=[];  ns_t=Hashtbl.create 10; ns_m=Hashtbl.create 10; ns_m_t=Hashtbl.create 10;  }
   let init_gns () =
-    { ns_vct_n=0; ns_vct=Array.make 1024 (RP.R[||],newvar (),Etr_Dst); ns=[]; ns_e=[]; ns_c=[]; ns_r_t=[]; ns_r_i=[];
+    { ns_vct_n=0; ns_vct=Array.make 1024 (RP.R[||],newvar (),Etr_Dst); ns=[]; ns_e=[]; ns_c=Hashtbl.create 10; ns_r_t=Hashtbl.create 10; ns_r_i=Hashtbl.create 10;
     }
   module Axm = struct
     let _rpc = sgn ()
@@ -706,11 +703,11 @@ module Ast = struct
           l1 in
         let es1 =
           List.fold_left
-            (fun es1 h0 -> (f0 h0)@es1)
+            (fun es1 h0 -> List.rev_append (f0 h0) es1)
             [] es0 in
         let es1_f =
           List.fold_left
-            (fun es1_f h0 -> (f0_f h0)@es1_f)
+            (fun es1_f h0 -> List.rev_append (f0_f h0) es1_f)
             [] es0_f in
         (es1,es1_f)
       | P_Cst _ ->
@@ -825,7 +822,7 @@ module Ast = struct
       | ms0_hd::ms0_tl ->
         let l0 = mtc_and_ptn_lst ms0_hd ms1 in
         let l1 = mtc_and ms0_tl ms1 in
-        l0@l1
+        List.rev_append l0 l1
       | [] -> [] )
   and mtc_and_ptn_lst p0 ms1 =
     ( match ms1 with
@@ -872,30 +869,6 @@ module Ast = struct
       | RP.A(_,Mtc_R_Agl(i0,i_n,r)) -> RP.A(Mtc_Agl(i0,i_n,mk_mtc_set r))
       | RP.R rs -> RP.R(Array.map mk_mtc_set rs)
     )
-  (*and mtc_sub_ms ms0 ms1 =
-    List.fold_left
-      ( fun ms2 p1 -> mtc_sub_ms_ptn ms2 p1)
-      ms0 ms1
-    and mtc_sub_ms_ptn ms0 p1 =
-    List.fold_left
-      (fun ms2 p0 -> ms2@(mtc_sub_ptn_ptn p0 p1))
-      [] ms0
-
-    and mtc_sub ms0 ms1 =
-    ( match ms0,ms1 with
-      | [],_ -> []
-      | ms0_hd::ms0_tl,_ ->
-        let l0 = mtc_sub_ptn_lst ms0_hd ms1 in
-        let l1 = mtc_sub ms0_tl ms1 in
-        l0@l1 )
-    and mtc_sub_ptn_lst p0 ms1 =
-    ( match ms1 with
-      | [] -> [p0]
-      | ms1_hd::ms1_tl ->
-        let l0 = mtc_sub_ptn_ptn p0 ms1_hd in
-        let l1 = mtc_sub l0 ms1_tl in
-        l1
-    ) *)
   and mtc_sub_ptn_ptn p0 p1 =
     let c0 = (print_mtc_set p0)^","^(print_mtc_set p1)^"\n" in
     ( match p0,p1 with
@@ -914,7 +887,7 @@ module Ast = struct
         let l0 = l0 0 in
         let l1 = mtc_sub_ptn_ptn (RP.A Mtc_Top) pa in
         let l1 = List.map (fun a -> RP.A(Mtc_Agl(i0,i_n,a))) l1 in
-        l0@l1
+        List.rev_append l0 l1
       | RP.A(Mtc_Agl(i0,i0_n,pa0)),RP.A(Mtc_Agl(i1,i1_n,pa1)) ->
         if i0_n=i1_n then
           if i0=i1 then
@@ -940,7 +913,7 @@ module Ast = struct
                   List.map
                     (fun a -> RP.R(Array.init n (fun j -> if i=j then a else rs0.(j))))
                     li in
-                (i+1,l0@ai) )
+                (i+1,List.rev_append l0 ai) )
             (0,[]) rs_b in
         l0
       | _ -> err ("mtc_sub_ptn_ptn 7:"^c0) )
@@ -987,13 +960,13 @@ module Ast = struct
               List.map
                 (fun a -> Array.init n (fun j -> if i=j then a else v0.(j)))
                 li in
-            (i+1,l0@ai) )
+            (i+1,List.rev_append l0 ai) )
         (0,[]) rs_b in
     l0
   and sub_lst_vct vl v1 =
     List.fold_left
       (fun vl1 v0 ->
-         vl1@(sub_vct v0 v1))
+         List.rev_append vl1 (sub_vct v0 v1))
       [] vl
   and pnt_vct v0 =
     let (_,s) =
@@ -1015,7 +988,7 @@ module Ast = struct
               | None,`Snd -> err "find_ns 1" )
       | DotN(m,n0) ->
         ( try
-            let ns_m = (*List.assoc m ns.ns_m*)Hashtbl.find ns.ns_m m in
+            let ns_m = Hashtbl.find ns.ns_m m in
             find_ns `Snd !ns_m n0 g
           with _ ->
             ( match f with
@@ -1028,13 +1001,12 @@ module Ast = struct
   let get_ns_p ns n =
     find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_p) with _ -> None)
   let get_ns_t ns n =
-    find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_t) with _ -> None)
+    find_ns `Fst ns n (fun ns n -> try Some(Hashtbl.find ns.ns_t n) with _ -> None)
   let get_ns_m_t ns n =
-    find_ns `Fst ns n (fun ns n -> try Some((*List.assoc n ns.ns_m_t*)Hashtbl.find ns.ns_m_t n) with _ -> None)
+    find_ns `Fst ns n (fun ns n -> try Some(Hashtbl.find ns.ns_m_t n) with _ -> None)
   let get_ns_m ns n =
-    find_ns `Fst ns n (fun ns n -> try Some((*List.assoc n ns.ns_m*)Hashtbl.find ns.ns_m n) with _ -> None)
+    find_ns `Fst ns n (fun ns n -> try Some(Hashtbl.find ns.ns_m n) with _ -> None)
   let get_ns_e gns n = (try List.assoc n gns.ns_e with _ -> err "get_ns_e 0" )
-  (* find_ns `Fst ns n (fun ns n -> try Some(List.assoc n ns.ns_e) with _ -> None) *)
   let slv_ns0 ns n0 =
     ( match !n0 with
       | Stt_Name n ->
@@ -1219,7 +1191,7 @@ and rcd_occurs (v1:v_rcd ref) (l1:t_rcd) =
 let rec unify ru t0 t1 =
   (*Util.pnt true "enter unify:";*)
   let se = (Types.print t0)^" ~ "^(Types.print t1) in
-  (*Util.Log.add ("enter unify:"^se^"\n");*)
+  Util.Log.add ("enter unify:"^se^"\n");
   (*  Util.pnt true ("enter unify:"^se^"\n"); *)
   if t0==t1 then ()
   else
@@ -1382,10 +1354,10 @@ and inst_idx_ptn gns l p =
     | R_A p
     | R_WC p ->
       let v =
-        ( try List.assoc p gns.ns_r_t
+        ( try Hashtbl.find gns.ns_r_t p 
           with _ ->
             let v = newvar () in
-            gns.ns_r_t <- (p,v)::gns.ns_r_t;
+            Hashtbl.add gns.ns_r_t p v ;
             v ) in
       inst l (Var v))
 let rec inst_mtc_ptn gns ns l (es,_) =
@@ -1594,7 +1566,7 @@ and mk_var_grm_atm ns a =
       let mf = get_ns_m_t ns n in
       let ma = get_ns_m ns n in
       ( match !mf with
-        | M_Prm "grm" -> Var(try List.assoc "t" !ma.ns_t with _ -> err ("mk_var_grm_atm 3:"^(pnt_name n)) )
+        | M_Prm "grm" -> Var(try Hashtbl.find !ma.ns_t "t" with _ -> err ("mk_var_grm_atm 3:"^(pnt_name n)) )
         | _ -> err "mk_var_grm_atm 0" ) )
 let rec ir_of_exp r0 r1 e =
   let open Ast in
@@ -1807,7 +1779,7 @@ type iv = (Sgn.t, R.t) Hashtbl.t
 let pnt_iv gns iv =
   Hashtbl.fold
     (fun p r e ->
-       let v = List.assoc p gns.ns_r_t in
+       let v = Hashtbl.find gns.ns_r_t p in
        e^" %_"^(Sgn.print p)^"~"^(R.print r)^":"^(Types.print (Var v)) )
     iv ""
 let rec rset_iv iv =
@@ -1907,9 +1879,9 @@ and csm_ptn_iv r iv =
 and crt_iv gns r iv =
   ( match r with
     | R_A p ->
-      let v = List.assoc p gns.ns_r_t in
+      let v = Hashtbl.find gns.ns_r_t p in
       let i0 = alc_idx (rset_iv iv) v in
-      ( Hashtbl.add iv p i0; gns.ns_r_i <- (p,ref i0)::gns.ns_r_i; i0 )
+      ( Hashtbl.add iv p i0;(* gns.ns_r_i <- (p,ref i0)::gns.ns_r_i*)Hashtbl.add gns.ns_r_i p (ref i0); i0 )
     | R_WC _ -> RP.A(R.Idx (-1)) )
 and crt_ptn_iv gns r rv =
   ( match r with
@@ -2328,7 +2300,6 @@ and emt_rle gns ns l =
                     gns.ns_vct.(pvi)<-(i1,ref(Ln(App(Axm Axm.opn,Var t_v))),Prs_Dst);
                     gns.ns_vct_n<-pvi+1;
                     let e_pi = emt_ir i1 gns ns iv0 !pi in
-                    (*Util.pnt true "V None 00\n";*)
                     let lb1 = lb () in
                     let lb1_0 = lb () in
                     let lb1_1 = lb () in
@@ -2943,18 +2914,14 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
             let ns1 = get_ns_m !ns (EndN n) in
             let ns1 = !ns1 in
             !ns.ns_p <- ns1.ns_p @ !ns.ns_p;
-            !ns.ns_t <- ns1.ns_t @ !ns.ns_t;
-            (*!ns.ns_m <- ns1.ns_m@ !ns.ns_m;*)
+            Util.merge !ns.ns_t ns1.ns_t;
             Util.merge !ns.ns_m ns1.ns_m;
-            (*!ns.ns_m_t <- ns1.ns_m_t@ !ns.ns_m_t;*)
             Util.merge !ns.ns_m_t ns1.ns_m_t;
             ("","","","§ "^n^"._")
           | Mdl_Eq(n,m) ->
             let nsm = get_ns_m !ns m in
             let nsm_t = get_ns_m_t !ns m in
-            (*!ns.ns_m_t <- (n,nsm_t):: !ns.ns_m_t;*)
             Hashtbl.add !ns.ns_m_t n nsm_t;
-            (*!ns.ns_m <- (n,nsm)::!ns.ns_m;*) 
             Hashtbl.add !ns.ns_m n nsm;
             ("","","",tbs^"§§ "^n^" = "^(pnt_name m)^"\n")
           | Mdl(n,el0) ->
@@ -3132,7 +3099,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                 let yp = sgn () in
                 let ya = List.fold_left (fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
                
-                !ns.ns_t <- (n,ref(Ln(Axm yp)))::!ns.ns_t;
+                Hashtbl.add !ns.ns_t n (ref(Ln(Axm yp)));
                 let dl = List.length ds in
                 let (_,es,pp0) =
                   List.fold_left
@@ -3149,13 +3116,13 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                 (es,"","",tbs^"¶ "^n^(pnt_vs vs)^"\n"^pp0)
               | Ast.Def_Abs (n,a) ->
                 let (a0,_) = List.split a in
-                !ns.ns_t <- (n,ref(Ln(Axm (sgn ()))))::!ns.ns_t;
+                Hashtbl.add !ns.ns_t n (ref(Ln(Axm (sgn()))));
                 ("","","",tbs^"¶ "^n^(pnt_args `Hd a0)^"\n")
               | Ast.Def_EqT (n,a,y) ->
                 let (a0,_) = List.split a in
                 let ya = mk_vars (ref []) !ns `Abs (ref a) y in
                 let yt = List.fold_right ( fun (_,v) yt -> Abs(v,yt)) a ya in
-                !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;
+                Hashtbl.add !ns.ns_t n (ref(Ln yt));                
                 ("","","",tbs^"¶ "^n^(pnt_args `Hd a0)^" = "^(Types.print_t ya)^"\n")
               | _ -> err "slv_flows 1" )
           | Flow_Clq q ->
@@ -3170,10 +3137,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                           ( nl := n::!nl;
                             let (_,_) = List.split a in
                             let yp = sgn () in
-                            let ya = List.fold_left ( fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in
-                            (*let yt = List.fold_left ( fun yt (_,v) -> Abs(v,yt)) ya a in
-                              !ns.ns_t <- (n,ref(Ln yt))::!ns.ns_t;*)
-                            !ns.ns_t <- (n,ref(Ln(Axm yp)))::!ns.ns_t;
+                            let ya = List.fold_left ( fun ya (_,v) -> App(ya,Var v)) (Axm yp) a in                           
+                             Hashtbl.add !ns.ns_t n (ref(Ln(Axm yp)));                   
                             `CP(n,a,ds,ya) )
                       | Ast.Def_Abs (n,a) -> (`Abs (n,a))
                       | Ast.Def_EqT (n,a,y) ->
@@ -3181,7 +3146,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                         else
                           ( nl := n::!nl;
                             let v = newvar () in
-                            !ns.ns_t <- (n,v)::!ns.ns_t;
+                         Hashtbl.add !ns.ns_t n v;
+
                             (`EqT (n,a,y,v)) )
                       | _ -> err "slv_flows 1" )
                 ) q in
@@ -3195,7 +3161,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                         let dl = List.length ds in
                         let (_,eq,pp0) =
                           List.fold_left
-                            (fun (i,eq,pp0) (t,n) ->
+                            ( fun (i,eq,pp0) (t,n) ->
                                let tc = Imp(t,ya) in
                                let epi = sgn () in
                                !ns.ns_p <- (n,epi)::!ns.ns_p;
@@ -3232,14 +3198,13 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                     ( match g with
                       | Grm.Cnc (n,rs) ->
                         let _ = (nla n) in
-                        (*!ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
                         add_ns_m_t !ns.ns_m_t n (ref (Ast.M_Prm "grm"));
                         let ns_g = ref(init_ns ()) in
                         !ns_g.root <- Some ns;
-                        (*!ns.ns_m <- (n,ns_g)::!ns.ns_m;*) 
                         Hashtbl.add !ns.ns_m n ns_g;
                         let t_p = sgn () in
-                        !ns_g.ns_t <- ("t",ref(Ln(Axm t_p)))::!ns_g.ns_t;
+                        (*!ns_g.ns_t <- ("t",ref(Ln(Axm t_p)))::!ns_g.ns_t;*)
+                        Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm t_p)));
                         let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;(App(Axm Axm.opn,Axm t_p))])) in
                         let epv = sgn () in
                         !ns_g.ns_p <- ("prs",epv)::!ns_g.ns_p;
@@ -3255,7 +3220,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                         (*!ns.ns_m <- (n,ns_g)::!ns.ns_m;*) 
                         Hashtbl.add !ns.ns_m n ns_g;
                         let t_v = newvar_l 0 in
-                        !ns_g.ns_t <- ("t",t_v)::!ns_g.ns_t;
+                        (*!ns_g.ns_t <- ("t",t_v)::!ns_g.ns_t;*)
+                        Hashtbl.add !ns_g.ns_t "t" t_v;
                         let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;(App(Axm Axm.opn,Var t_v))])) in
                         let epv = sgn () in
                         gns.ns <- (epv,(ref(Ln yp)))::gns.ns;
@@ -3289,7 +3255,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                             gns.ns_e <-  (epv_i,ref(Ctr(i,rsl)))::gns.ns_e;
                             let rsl0 = List.length l in
                             let t_p0 = sgn () in
-                            !ns_g.ns_t <- (nc^"_t",ref(Ln(Axm t_p0)))::!ns_g.ns_t;
+                         Hashtbl.add !ns_g.ns_t "_t" (ref(Ln(Axm t_p0)));
+
                             let l0 = List.mapi (fun i e -> f0 i rsl0 t_p0 nc e) l in
                             (nc,t_p,t,epv_i,`Seq l0)
                           | Grm.Cnc_End(nc,_,r,rc) ->
@@ -3328,9 +3295,9 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                                   let y = inst lv (mk_var_grm !ns_g r) in
                                   let (r0,p0) = slv_r_grm_etr p_n p_r p_c (Some p_s) (r0,p0) in
                                   let y0 = inst_ptn gns lv r0 in
-                                  gns.ns_r_t<-(p_n,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
-                                  gns.ns_r_t<-(p_r,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
-                                  gns.ns_r_t<-(p_c,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
+                                  Hashtbl.add gns.ns_r_t p_n (ref(Ln(Axm Axm.r64)));
+                                  Hashtbl.add gns.ns_r_t p_r (ref(Ln(Axm Axm.r64)));                                  
+                                  Hashtbl.add gns.ns_r_t p_c (ref(Ln(Axm Axm.r64)));
                                   let y_s = inst_v_r gns (lv+1) p_s in 
                                   let _ = unify [] y_s (Var t_x) in 
                                   let _ = gen (ref []) lv y_s in 
@@ -3348,9 +3315,9 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                                   let y = inst lv (mk_var_grm !ns_g r) in
                                   let (r0,p0) = slv_r_grm_etr p_n p_r p_c None (r0,p0) in
                                   let y0 = inst_ptn gns lv r0 in
-                                  gns.ns_r_t<-(p_n,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
-                                  gns.ns_r_t<-(p_r,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
-                                  gns.ns_r_t<-(p_c,ref(Ln(Axm Axm.r64)))::gns.ns_r_t;
+                                   Hashtbl.add gns.ns_r_t p_n (ref(Ln(Axm Axm.r64)));
+                                  Hashtbl.add gns.ns_r_t p_r (ref(Ln(Axm Axm.r64)));
+                                  Hashtbl.add gns.ns_r_t p_c (ref(Ln(Axm Axm.r64)));
                                   let _ = unify [] y y0 in
                                   (*let _ = gen (ref []) (-1) y in *)
                                   let y1 = slv gns !ns lv !p0 in
@@ -3396,20 +3363,20 @@ and init_prm () =
   let ns = ref (init_ns ()) in
   let gns = init_gns () in
 
-  !ns.ns_t <- ("_r64",ref(Ln(Axm Axm.r64)))::!ns.ns_t;
-  !ns.ns_t <- ("_s8",ref(Ln(Axm Axm.stg)))::!ns.ns_t;
-  !ns.ns_t <- ("_sgn",ref(Ln(Axm Axm.sgn_p)))::!ns.ns_t;
+                Hashtbl.add !ns.ns_t "_r64" (ref(Ln(Axm Axm.r64)));
+                Hashtbl.add !ns.ns_t "_s8" (ref(Ln(Axm Axm.stg)));
+                Hashtbl.add !ns.ns_t "_sgn" (ref(Ln(Axm Axm.sgn_p)));
 
-  (*!ns.ns_m_t <- ("_byt",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
   add_ns_m_t !ns.ns_m_t "_byt" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
-  (*!ns.ns_m <- ("_byt",ns_g)::!ns.ns_m;*)
   add_ns_m !ns.ns_m "_byt" ns_g; 
-  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.r64)))::!ns_g.ns_t;
+  Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.r64)));
+
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.r64)])) in
   let epf = sgn () in
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
+  
   gns.ns <- (epf,ref(Ln yp))::gns.ns;
   gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|],(-1))))::gns.ns_e;
   let l_e = "NS_E_"^(Sgn.print epf) in
@@ -3441,13 +3408,13 @@ and init_prm () =
     "\tret\n"
   in
 
-  (*!ns.ns_m_t <- ("_scf_d",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
   add_ns_m_t !ns.ns_m_t "_scf_d" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_scf_d",ns_g)::!ns.ns_m;*)
   add_ns_m !ns.ns_m "_scf_d" ns_g;
-  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.r64)))::!ns_g.ns_t;
+                  Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.r64)));
+
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.r64)])) in
   let epf = sgn () in
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
@@ -3483,15 +3450,14 @@ and init_prm () =
     "\tbtr r12,3\n"^
     "\tbts r12,2\n"^
     "\tret\n" in
-  gns.ns_c<-(epf,em)::gns.ns_c;
-
-  (*!ns.ns_m_t <- ("_chr",ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
+  Hashtbl.add gns.ns_c epf em;
   add_ns_m_t !ns.ns_m_t "_chr" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_chr",ns_g)::!ns.ns_m;*) 
   add_ns_m !ns.ns_m "_chr" ns_g;
-  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
+                  Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.stg)));
+
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
@@ -3533,7 +3499,8 @@ and init_prm () =
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_dgt",ns_g)::!ns.ns_m;*)
   add_ns_m !ns.ns_m "_dgt" ns_g;
-  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
+                Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.stg)));
+
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
@@ -3565,7 +3532,8 @@ and init_prm () =
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_u_al",ns_g)::!ns.ns_m;*)
   add_ns_m !ns.ns_m "_u_al" ns_g;
-  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
+                  Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.stg)));
+
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
@@ -3595,9 +3563,9 @@ and init_prm () =
   add_ns_m_t !ns.ns_m_t "_l_al" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);
-  (*!ns.ns_m <- ("_l_al",ns_g)::!ns.ns_m;*)
   add_ns_m !ns.ns_m "_l_al" ns_g;
-  !ns_g.ns_t <- ("t",ref(Ln(Axm Axm.stg)))::!ns_g.ns_t;
+                Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.stg)));
+
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.stg)])) in
   let epf = sgn () in
   !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
@@ -3655,8 +3623,7 @@ and init_prm () =
     "\tpop "^(emt_reg_x86 0)^"\n"^
     "\tbtr r12,1\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._in_fn,em_in_fn)::gns.ns_c;
-
+  Hashtbl.add gns.ns_c Ast.Axm._in_fn em_in_fn;
   let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.stg]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.stg])))) in
   !ns.ns_p <- ("_emt_s8_to",Ast.Axm._emt_s8_to)::!ns.ns_p;
   gns.ns <- (Ast.Axm._emt_s8_to,v)::gns.ns;
@@ -3682,8 +3649,7 @@ and init_prm () =
     "\tmov rax,3\n"^
     "\tsyscall\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._emt_s8_to,em_emt_s8_to)::gns.ns_c;
-
+  Hashtbl.add gns.ns_c Ast.Axm._emt_s8_to em_emt_s8_to;
   let v = ref(Ln(Imp(Types.Axm Types.Axm.stg,Types.Axm Types.Axm.stg))) in
   !ns.ns_p <- ("_cd",Ast.Axm._cd)::!ns.ns_p;
   gns.ns <- (Ast.Axm._cd,v)::gns.ns;
@@ -3700,7 +3666,7 @@ and init_prm () =
     "\tcall system\n"^
     "\tmov rsp,QWORD [rsp_tmp]\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._cd,em_cd)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._cd em_cd;
 
   let v = ref(Ln(Imp(Types.Axm Types.Axm.r64,Rcd(rcd_cl [Types.Axm Types.Axm.r64;Types.Axm Types.Axm.stg])))) in
   !ns.ns_p <- ("_mlc_s8",Ast.Axm._mlc_s8)::!ns.ns_p;
@@ -3718,8 +3684,7 @@ and init_prm () =
     "\tpop "^(emt_reg_x86 0)^"\n"^
     "\tbtr r12,1\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._mlc_s8,em)::gns.ns_c;
-
+  Hashtbl.add gns.ns_c Ast.Axm._mlc_s8 em;
   let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64])))) in
   !ns.ns_p <- ("_lds",Ast.Axm._lds)::!ns.ns_p;
   gns.ns <- (Ast.Axm._lds,v)::gns.ns;
@@ -3738,7 +3703,7 @@ and init_prm () =
     "\tmov "^(emt_reg_x86 2)^",rax\n"^
     "\tbts r12,2\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._lds,em)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._lds em;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64])))) in
   !ns.ns_p <- ("_sts",Ast.Axm._sts)::!ns.ns_p;
@@ -3757,7 +3722,7 @@ and init_prm () =
     "\tmov rax,"^(emt_reg_x86 2)^"\n"^
     "\tmov BYTE [rdi+8+rsi],al\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._sts,em)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._sts em;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64;Types.Axm Types.Axm.r64])))) in
   !ns.ns_p <- ("_ecs",Ast.Axm._sts)::!ns.ns_p;
@@ -3777,7 +3742,7 @@ and init_prm () =
     "\txchg al,BYTE [rdi+8+rsi]\n"^
     "\tand rax,0xff\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._ecs,em)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._ecs em;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64]),Rcd(rcd_cl [Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64; Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64])))) in
   !ns.ns_p <- ("_rep_movsb",Ast.Axm._rep_movsb)::!ns.ns_p;
@@ -3807,7 +3772,7 @@ and init_prm () =
     "\tadd r8,1\n"^
     "\tadd r10,1\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._rep_movsb,em)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._rep_movsb em;
 
   let v = ref(Ln(Imp(Types.Axm Types.Axm.stg,Rcd(rcd_cl [Types.Axm Types.Axm.stg;Types.Axm Types.Axm.r64])))) in
   !ns.ns_p <- ("_s8_len",Ast.Axm._s8_len)::!ns.ns_p;
@@ -3822,7 +3787,7 @@ and init_prm () =
     "\tmov "^(emt_reg_x86 1)^",rdi\n"^
     "\tbts r12,1\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._s8_len,em_s8_len)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._s8_len em_s8_len;
 
   let v_q = newvar_q (-1) in
   let v = ref(Ln(Imp(Var v_q,Var v_q))) in
@@ -3877,7 +3842,8 @@ and init_prm () =
     "\tclc\n"^
     "\tret\n" in
 
-  !ns.ns_t <- ("_opn",ref(Ln(Axm Axm.opn)))::!ns.ns_t;
+                  Hashtbl.add !ns.ns_t "_opn" (ref(Ln(Axm Axm.opn)));
+
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(unt (),App(Axm Axm.opn,Var q0)))) in
   !ns.ns_p <- ("_none",Ast.Axm._none)::!ns.ns_p;
@@ -3889,7 +3855,8 @@ and init_prm () =
   gns.ns_e <- (Ast.Axm._some,ref(Ctr(0,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._some,v)::gns.ns;
 
-  !ns.ns_t <- ("_lst",ref(Ln(Axm Axm.lst)))::!ns.ns_t;
+                  Hashtbl.add !ns.ns_t "_lst" (ref(Ln(Axm Axm.lst)));
+
   let q0 = newvar_q (-1) in
   let v = ref(Ln(Imp(unt (),App(Axm Axm.lst,Var q0)))) in
   !ns.ns_p <- ("_nil",Ast.Axm._nil)::!ns.ns_p;
@@ -3901,7 +3868,8 @@ and init_prm () =
   gns.ns_e <- (Ast.Axm._cns,ref(Ctr(0,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._cns,v)::gns.ns;
 
-  !ns.ns_t <- ("_sum",ref(Ln(Axm Axm.sum)))::!ns.ns_t;
+                  Hashtbl.add !ns.ns_t "_sum" (ref(Ln(Axm Axm.sum)));
+
   let q0 = newvar_q (-1) in
   let q1 = newvar_q (-1) in
   let v = ref(Ln(Imp(Var q0,App(App(Axm Axm.sum,Var q0),Var q1)))) in
@@ -3913,7 +3881,8 @@ and init_prm () =
   gns.ns_e <- (Ast.Axm._in_r,ref(Ctr(1,2)))::gns.ns_e;
   gns.ns <- (Ast.Axm._in_r,v)::gns.ns;
 
-  !ns.ns_t <- ("_arr",ref(Ln(Axm Axm.arr)))::!ns.ns_t;
+                  Hashtbl.add !ns.ns_t "_arr" (ref(Ln(Axm Axm.arr)));
+
   !ns.ns_p <- ("_mk_arr",Ast.Axm._mk_arr)::!ns.ns_p;
   let q0 = newvar_q (-1) in
   gns.ns <- (Ast.Axm._mk_arr,ref(Ln(Imp(Axm Axm.r64,Rcd(rcd_cl [Axm Axm.r64;App(Axm Axm.arr,Var q0)])))))::gns.ns;
@@ -3929,7 +3898,7 @@ and init_prm () =
     "\tpop "^(emt_reg_x86 0)^"\n"^
     "\tbtr r12,1\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._mk_arr,em_mk_arr)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._mk_arr em_mk_arr;
 
   !ns.ns_p <- ("_set_q",Ast.Axm._set_q)::!ns.ns_p;
   let q0 = newvar_q (-1) in
@@ -3974,7 +3943,7 @@ and init_prm () =
     lb_err0^":\n"^
     "\tmov QWORD [err_n],7\n"^
     "\tjmp err\n" in
-  gns.ns_c <- (Ast.Axm._set_q,em_set_q)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._set_q em_set_q;
 
   !ns.ns_p <- ("_lod_q",Ast.Axm._lod_q)::!ns.ns_p;
   let q0 = newvar_q (-1) in
@@ -4028,7 +3997,7 @@ and init_prm () =
      lb_err0^":\n"^
      "\tmov QWORD [err_n],8\n"^
     "\tjmp err\n" in
-  gns.ns_c <- (Ast.Axm._lod_q,em_lod_q)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._lod_q em_lod_q;
 
   !ns.ns_p <- ("_get_q",Ast.Axm._get_q)::!ns.ns_p;
   let q0 = newvar_q (-1) in
@@ -4077,7 +4046,7 @@ and init_prm () =
     lb_err1^":\n"^
     "\tmov QWORD [err_n],8\n"^
     "\tjmp err\n" in
-  gns.ns_c <- (Ast.Axm._get_q,em_get_q)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._get_q em_get_q;
 
   !ns.ns_p <- ("_eq",Ast.Axm._eq)::!ns.ns_p;
   let q0 = newvar_q (-1) in
@@ -4115,7 +4084,7 @@ and init_prm () =
     "\tpop "^(emt_reg_x86 1)^"\n"^
     "\tpop "^(emt_reg_x86 0)^"\n"^
     "\tret\n" in
-  gns.ns_c <- (Ast.Axm._eq,em_eq)::gns.ns_c;
+  Hashtbl.add gns.ns_c Ast.Axm._eq em_eq;
 
   let v = ref(Ln(Imp(Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.r64;Axm Axm.r64;Axm Axm.r64])))) in
   !ns.ns_p <- ("_setge",Ast.Axm._setge)::!ns.ns_p;
@@ -4348,7 +4317,7 @@ and emt_exe m =
     "\tcall exec_out\n"^
     "\tjmp _end\n"^
     em_p^
-    (List.fold_right (fun (_,e) s -> e^s) gns.ns_c "")^
+    (Hashtbl.fold (fun _ s sr -> s^sr) gns.ns_c "")^
     em^
     em_t^
     "section .data\n"^
@@ -5003,6 +4972,16 @@ and emt_ir i1 gns (ns:ns_v ref) iv p =
                     let _ = mk_idx_iv iv0 iya (mk_idx_ptn ra) in
                     let e0 =
                       "\tmov rax,"^(emt_reg_x86 ia)^"\n"^
+                      "\tcmp rax,"^(string_of_int i0)^"\n"^
+                      "\tjnz "^lb1^"\n"^
+                      em in
+                    let (dl,e1) = emt_mtc_eq iv0 es_tl lb1 in
+                    (px::dl,e0^e1)
+                  | RP.A(R.AglStt(ia,_,pa)) -> 
+                     let em = emt_mov_ptn_to_ptn R.M_Gbg (rset_iv iv0) pa iya in
+                    let _ = mk_idx_iv iv0 iya (mk_idx_ptn ra) in
+                    let e0 =
+                      "\tmov rax,"^(string_of_int ia)^"\n"^
                       "\tcmp rax,"^(string_of_int i0)^"\n"^
                       "\tjnz "^lb1^"\n"^
                       em in
