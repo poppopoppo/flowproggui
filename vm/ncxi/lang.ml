@@ -3413,7 +3413,7 @@ and init_prm () =
   !ns_g.root <- (Some ns);
   (*!ns.ns_m <- ("_scf_d",ns_g)::!ns.ns_m;*)
   add_ns_m !ns.ns_m "_scf_d" ns_g;
-                  Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.r64)));
+  Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.r64)));
 
   let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.r64)])) in
   let epf = sgn () in
@@ -3451,6 +3451,50 @@ and init_prm () =
     "\tbts r12,2\n"^
     "\tret\n" in
   Hashtbl.add gns.ns_c epf em;
+  
+  add_ns_m_t !ns.ns_m_t "_scf_x" (ref(Ast.M_Prm "grm"));
+  let ns_g = ref(init_ns ()) in
+  !ns_g.root <- (Some ns);
+  add_ns_m !ns.ns_m "_scf_x" ns_g;
+  Hashtbl.add !ns_g.ns_t "t" (ref(Ln(Axm Axm.r64)));
+
+  let yp = Imp(Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64]),Rcd(rcd_cl [Axm Axm.stg;Axm Axm.r64;App(Axm Axm.opn,Axm Axm.r64)])) in
+  let epf = sgn () in
+  !ns_g.ns_p <- ("prs",epf)::!ns.ns_p;
+  gns.ns <- (epf,ref(Ln yp))::gns.ns;
+  gns.ns_e <- (epf,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|],(-1))))::gns.ns_e;
+  let l0 = "NS_E_"^(Sgn.print epf)^"_LB_0" in
+  let l_e = "NS_E_"^(Sgn.print epf) in
+  let l_e_rdi = "NS_E_RDI_"^(Sgn.print epf) in
+  let l_e_tbl = "NS_E_"^(Sgn.print epf)^"_ETR_TBL" in
+  let em =
+    l_e^":\n"^
+    l_e_rdi^":\n"^
+    l_e_tbl^":\n"^
+    "\tmov rdi,"^(emt_reg_x86 0)^"\n"^
+    "\tmov rsi,"^(emt_reg_x86 1)^"\n"^
+    push_all^
+    "\tcall scf_x\n"^
+    pop_all^
+    "\tcmp rdi,0\n"^
+    "\tjz "^l0^"\n"^
+    "\tmov "^(emt_reg_x86 1)^",rsi\n"^
+    "\tmov "^(emt_reg_x86 2)^",0\n"^
+    "\tmov "^(emt_reg_x86 3)^",rax\n"^
+    "\tbts r12,3\n"^
+    "\tbts r12,2\n"^
+    "\tret\n"^
+    l0^":\n"^
+    "\tmov "^(emt_reg_x86 2)^",1\n"^
+    (alc_blk_r 0)^
+    "\tmov rsi,0x0000_0000_0000_ffff\n"^
+    "\tmov QWORD [rax],rsi\n"^
+    "\tmov "^(emt_reg_x86 3)^",rax\n"^
+    "\tbtr r12,3\n"^
+    "\tbts r12,2\n"^
+    "\tret\n" in
+  Hashtbl.add gns.ns_c epf em;
+  
   add_ns_m_t !ns.ns_m_t "_chr" (ref(Ast.M_Prm "grm"));
   let ns_g = ref(init_ns ()) in
   !ns_g.root <- (Some ns);

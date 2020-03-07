@@ -12,7 +12,7 @@ bits 64
 %define NULL ~0
 %define SFLS_MAX 20000
 %define SFLS_0_MAX 80000 
-%define SFLS_1_MAX 40000 
+%define SFLS_1_MAX 80000 
 %define SFLS_2_MAX 60000
 %define SFLS_3_MAX 10000
 %define SFLS_4_MAX 5000
@@ -1629,23 +1629,44 @@ scf_d_scf:
 scf_d_err:
   mov rdi,0
   ret
+  
 scf_x:
-  ;
-  push rdi
   push rsi
-  mov QWORD [rsp_tmp],rsp
   lea rdi,[rdi+8+rsi]
-  mov rsi,fmt_x
-  mov rdx,fmt_x_r0
-  mov rax,0
+  push rdi
+  mov dil,BYTE [rdi]
+  and rdi,0xff
+  mov QWORD [rsp_tmp],rsp
   and rsp,~0xf
-  call sscanf
+  call isspace
   mov rsp,QWORD [rsp_tmp]
-  pop rsi
-  pop rdi
-  add rsi,rax
-  mov rax,QWORD [fmt_x_r0]
+  cmp rax,0
+  jz scf_x_scf
+  add rsp,16
+  mov rdi,0
   ret
+scf_x_scf:
+  mov rdi,QWORD [rsp]
+  sub rsp,8
+  mov rsi,rsp
+  mov rdx,16
+  mov rax,0
+  mov QWORD [rsp_tmp],rsp
+  and rsp,~0xf
+  call strtoul
+  mov rsp,QWORD [rsp_tmp]
+  pop rdx
+  pop rdi
+  pop rsi
+  sub rdx,rdi
+  jz scf_x_err
+  add rsi,rdx
+  mov rdi,1
+  ret
+scf_x_err:
+  mov rdi,0
+  ret
+
 scf_o:
   push rdi
   push rsi
