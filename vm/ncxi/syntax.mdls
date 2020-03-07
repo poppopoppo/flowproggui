@@ -1287,6 +1287,11 @@
 				ast.cst_v r ⊢ r 
 				_some r ⊢ a
 				∎ a
+			∐ "0x" _scf_x "r" ⊢ { {} x {} }
+				ast.r64 x ⊢ r 
+				ast.cst_v r ⊢ r 
+				_some r ⊢ a 
+				∎ a  
 			∐ stg_ltr ⊢ { s }
 				ast.s8 s ⊢ r
 				ast.cst_v r ⊢ r 
