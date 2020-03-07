@@ -5294,12 +5294,13 @@
 									rp8.cct { e0 ec1 } ⊢ e0   
 									∎ { e0 tav rsp vs0 }
 								∐. . 
+									lst.len l1 ⊢ { l1 nl1 } 
 									» 0r _ ⊢ i 
 									reg { rsp r1 } ⊢ { rsp r1 er1 br1 } 
-									» _^ er1 ⊢ er1,ec1 
-										"\tmov rdi,[SS_TOP]\n" 
+									» _^ er1,nl1 ⊢ er1,nl1,ec1 
+										"\tmov rdi,[SS_RCD_" 1d' "_TOP]\n" 
 										"\tmov rsi,[rdi]\n" 
-										"\tmov QWORD [SS_TOP],rsi\n"
+										"\tmov QWORD [SS_RCD_" 1d' "_TOP],rsi\n"
 										`	mov QWORD [rdi],0
 										"\tmov " 0' ",rdi\n" 
 										//
@@ -5347,9 +5348,9 @@
 									reg { rsp r00 } ⊢ { rsp r00 sr00 br00 } 
 									reg { rsp r01 } ⊢ { rsp r01 sr01 br01 } 
 									» _^ er1,sr00,sr01 ⊢ er1,sr00,sr01,ec1 
-										`	mov rdi,[SS_TOP] 
+										`	mov rdi,[SS_PT_TOP] 
 										`	mov rsi,[rdi] 
-										`	mov QWORD [SS_TOP],rsi
+										`	mov QWORD [SS_PT_TOP],rsi
 										`	mov QWORD [rdi],0
 										"\tmov " 0' ",rdi\n" 
 										"\tmov rsi," 1' "\n" 
@@ -5389,9 +5390,9 @@
 										∐. .
 											» _^ er1,ia0 ⊢ er1,ia0,ec1 
 												"\tmov rdi," 0' "\n" 
-												`	mov rsi,[SS_TOP]
+												`	mov rsi,[SS_LN_TOP]
 												`	mov rax,[rsi]
-												`	mov QWORD [SS_TOP],rax 
+												`	mov QWORD [SS_LN_TOP],rax 
 												`	mov QWORD [rsi],0
 												"\tmov QWORD [rsi+8],rdi\n"
 												"\tmov BYTE [rsi+6]," 1d' "\n"
@@ -6344,10 +6345,11 @@
 								_emt ee0 ⊢ _ 
 								∎|
 							∐. stt_v.rcd◂l0 .
-								» _^ _ ⊢ s0 
-									`	mov rsi,[SS_TOP] 
+								lst.len l0 ⊢ { l0 nl0 } 
+								» _^ nl0 ⊢ nl0,s0 
+									"\tmov rsi,[SS_RCD_" 0d' "_TOP]\n" 
 									`	mov rax,[rsi] 
-									`	mov QWORD [SS_TOP],rax
+									"\tmov QWORD [SS_RCD_" 0d' "_TOP],rax\n"
 									`	mov QWORD [rsi],0
 									// 
 								rp8.add_s8 { e0 s0 } ⊢ e0
@@ -6432,9 +6434,9 @@
 								rp8.add_s8 { e0 s0 } ⊢ e0 
 								hp { ahl fl tav lb_n h e0 } ⊢ { ahl fl tav lb_n e0 } 
 								» _^ lb1,j0 ⊢ lb1,j0,s0 
-									`	mov rsi,[SS_TOP] 
+									`	mov rsi,[SS_LN_TOP] 
 									`	mov rdi,[rsi] 
-									`	mov QWORD [SS_TOP],rdi
+									`	mov QWORD [SS_LN_TOP],rdi
 									`	mov QWORD [rsi+8],rax
 									"\tmov BYTE [rsi+6]," 1d' "\n"
 									`	mov rax,rsi
