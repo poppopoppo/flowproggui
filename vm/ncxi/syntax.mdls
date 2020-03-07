@@ -1828,10 +1828,21 @@
 			∐* nls "»" !| lc_exp_line lc_code ⊢ { nn {} l lc } 
 				$ lc ⊢ 
 				∐ prs_vld◂lc . 
-					ast.seq { l lc } ⊢ lc 
-					prs_vld lc ⊢ lc 
-					_some lc ⊢ a
-					∎ a
+					∐ l ⊢ ast.op_exp_cst◂{ c sp dp } . 
+						ast.im_reg c ⊢ s 
+						RP.atm s ⊢ s 
+						_nil {} ⊢ l 
+						_cns { dp l } ⊢ l 
+						ast.id_line { l lc } ⊢ il 
+						ast.op_id { s il } ⊢ lc 
+						prs_vld lc ⊢ lc 
+						_some lc ⊢ a 
+						∎ a 
+					∐. . 
+						ast.seq { l lc } ⊢ lc 
+						prs_vld lc ⊢ lc 
+						_some lc ⊢ a
+						∎ a
 				∐. prs_err◂e . 
 					prs_err e ⊢ e 
 					_some e ⊢ a 
