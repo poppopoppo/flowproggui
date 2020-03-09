@@ -19,6 +19,6 @@ let _ =
     let cd =
       "yasm -g dwarf2 -f elf64 "^(p^".s")^" -o out.o\n"^
       "gcc out.o -nostartfiles -no-pie -pg -g -o "^p^".exe\n"^
-      "cp syntax.mdls.exe opx\n" in
+      "ln -f syntax.mdls.exe opx\n" in
     let _ = Sys.command cd in
     exit 0
