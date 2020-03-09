@@ -11199,7 +11199,7 @@
 							"\tjmp LB_" 3d' "\n" 
 							"LB_" 2d' ":\n"
 							0'
-							`	pop rdi 
+							`	add rsp,8
 							`	pop r9 
 							`	pop r14 
 							`	pop r13
