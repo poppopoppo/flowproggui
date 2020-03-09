@@ -1,14 +1,15 @@
 open Util
 open Lang
 let _ =
+    Util.pnt true "enter nc\n";
     Util.Log.f := Util.Log.Off;
     let p = 
       let s = Sys.argv.(1) in 
       if s="-p" then 
         ( Util.Log.f := Util.Log.On; Sys.argv.(2) )
     else s in
-    let s = Util.load_file p in
-    let (_,el) = Implib.mdl_from_string s in
+    (*let s = Util.load_file p in*)
+    let (_,el) = Implib.mdl_from_file p in
     let (a,_) = emt_exe el in
     if !Util.Log.f=Util.Log.On then Util.Log.pnt ();
     let d = open_out (p^".s") in

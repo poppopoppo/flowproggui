@@ -80,6 +80,12 @@ let mdl_from_string (s:string) =
   (*let ms = Imp_parser.file Imp_lexer.token lexbuf in
     ("_",List.map (fun (n,el) -> Mdl(n,el)) ms) *)
   let ms = Imp_parser.file_top Imp_lexer.token lexbuf in
+  ("_",ms) 
+let mdl_from_file f = 
+  let c = open_in f in 
+  let lexbuf = Lexing.from_channel c in
+  let ms = Imp_parser.file_top Imp_lexer.token lexbuf in 
+  let _ = close_in c in 
   ("_",ms)
 exception Load
 let name_from_string s =
