@@ -52,8 +52,7 @@ module Rcd_Ptn = struct
   let rec to_list p =
     ( match p with
       | A r -> [r]
-      | R rs -> Array.fold_left (fun l r -> (to_list r) @ l) [] rs
-      (*| _ -> [] *))
+      | R rs -> Array.fold_left (fun l r -> List.rev_append (to_list r) l) [] rs )
   let rec map f p =
     ( match p with
       | A r -> A (f r)
@@ -763,9 +762,9 @@ module Ast = struct
             ( fun (i,l0,rsp) ri0 ->
                 let ri1 = rs1.(i) in
                 let (l1,ri_k) = mk_mtc_v_k_ptn ri0 ri1 in
-                (i+1,l0@l1,rsp |+| [|ri_k|]))
+                (i+1,List.rev_append l1 l0,rsp |+| [|ri_k|]))
             (0,[],[||]) rs0 in
-        (l0,RP.R rsp) )
+        (List.rev l0,RP.R rsp) )
   and mk_mtc_v_k p0 =
     ( match p0 with
       | RP.R rs -> RP.R (Array.map mk_mtc_v_k rs)
@@ -1557,8 +1556,8 @@ let rec mk_var_grm ns r =
               | Grm.Lst a -> App(Axm Axm.lst,mk_var_grm_atm ns a)
               | Grm.Opn a -> App(Axm Axm.opn,mk_var_grm_atm ns a)
               | Grm.Atm a -> mk_var_grm_atm ns a ) in
-          (i+1,ys@[y])) (0,[]) r in
-  Rcd(Types.rcd_cl ys)
+          (i+1, y::ys)) (0,[]) r in
+  Rcd(Types.rcd_cl (List.rev ys))
 and mk_var_grm_atm ns a =
   ( match a with
     | Grm.Txt _ -> Types.Rcd(Types.rcd_cl [])
@@ -1573,12 +1572,12 @@ let rec ir_of_exp r0 r1 e =
   let open Rcd_Ptn in
   let lp = ir_of_exp in
   ( match e with
-    | Rcd [||] -> []
+    | Rcd [||] -> Util.Tree.Nil
     | App(Name n,e2) ->
       let v1 = mk_v_r () in
       let l2 = lp r0 (RP.A v1) e2 in
       let n1 = IR_Glb_Call(n,RP.A v1,r1) in
-      l2@[n1]
+      Util.Tree.Seq(l2,Util.Tree.Atm n1)
     | App (e1,e2) ->
       let v0 = mk_v_r () in
       let v1 = mk_v_r () in
@@ -1588,13 +1587,13 @@ let rec ir_of_exp r0 r1 e =
       let l1 = lp (A v0) (A v0_r) e1 in
       let l2 = lp (A v1) (A v1_r) e2 in
       let n1 = IR_Glb_Call(ref(Stt_Axm Axm._app),RP.R[|RP.A v0_r;RP.A v1_r|],r1) in
-      [n0]@l1@l2@[n1]
+      Util.Tree.Seq(Util.Tree.Atm n0,Util.Tree.Seq(Util.Tree.Seq(l1,l2),Util.Tree.Atm n1))
     | ExpCst a ->
       let p1 = IR_Exp(ExpCst a,r0,r1) in
-      [p1]
+      Util.Tree.Atm p1
     | Name n ->
       let p1 = IR_Exp(Name n,r0,r1) in
-      [p1]
+      Util.Tree.Atm p1
     | Rcd es ->
       let vs = Array.map (fun _ -> mk_v_r ()) es in
       let rs0 = Array.map (fun v -> Rcd_Ptn.A v) vs in
@@ -1604,13 +1603,13 @@ let rec ir_of_exp r0 r1 e =
           (fun (ns,i,rs1) e ->
              let ri = RP.A (mk_v_r ()) in
              let l = lp rs0.(i) ri e in
-             (ns@l,i+1,rs1 |+| [|ri|]))
-          ([],0,[||]) es in
-      (n0::ns)@[IR_Id(ref(IR_Id_C(R rs1,[|r1|])))]
+             (Util.Tree.Seq(ns,l),i+1,rs1 |+| [|ri|]))
+          (Util.Tree.Nil,0,[||]) es in
+      Util.Tree.Seq(Util.Tree.Seq(Util.Tree.Atm n0,ns),Util.Tree.Atm(IR_Id(ref(IR_Id_C(R rs1,[|r1|])))))
   )
+let ir_of_exp r0 r1 e = Util.Tree.to_list (ir_of_exp r0 r1 e)
 
-
-and mrg_idx_ptn r0 r1 =
+let rec mrg_idx_ptn r0 r1 =
   ( match r0,r1 with
     | _,RP.A(R_WC _) -> mrg_idx_ptn_wc r0
     | RP.A (i0,a0),_ ->
@@ -1737,18 +1736,19 @@ and crt_mtc_ptn_rv (es,_) rv  =
            | Eq_Agl_N(_,r) ->
              let v1 = csm_rv v0 rv in
              let (dl1,_) = crt_ptn_rv r rv in
-             (dl1@dl,es@[(v1,e)])
+             (List.rev_append dl1 dl,(v1,e)::es)
            | P_Cst _ ->
              let rv_t = Hashtbl.copy rv in
              let v1 = csm_rv v0 rv_t in
-             (dl,es@[(v1,e)])
+             (dl,(v1,e)::es)
            | Eq_V ve ->
              let rv_t = Hashtbl.copy rv in
              let v1 = csm_rv v0 rv_t in
              let _ = csm_rv ve rv_t in
-             (dl,es@[(v1,e)])
+             (dl,(v1,e)::es)
          ))
       ([],[]) es in
+  let es = List.rev es in
   let d =
     Hashtbl.fold
       ( fun _ r d ->
@@ -3193,8 +3193,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
               else
                 nl := n::!nl in
             let gv =
-              List.fold_left
-                ( fun gv g ->
+              List.fold_right
+                ( fun g gv ->
                     ( match g with
                       | Grm.Cnc (n,rs) ->
                         let _ = (nla n) in
@@ -3210,7 +3210,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                         !ns_g.ns_p <- ("prs",epv)::!ns_g.ns_p;
                         gns.ns <- (epv,(ref(Ln yp)))::gns.ns;
                         gns.ns_e <- (epv,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|],(-1))))::gns.ns_e;
-                        gv@[`P(n,rs,t_p,epv,ns_g)]
+                        (`P(n,rs,t_p,epv,ns_g))::gv
                       | Grm.Act(n,rs) ->
                         let _ = nla n in
                         (*!ns.ns_m_t <- (n,ref(Ast.M_Prm "grm"))::!ns.ns_m_t;*)
@@ -3227,12 +3227,12 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                         gns.ns <- (epv,(ref(Ln yp)))::gns.ns;
                         !ns_g.ns_p <- ("prs",epv)::!ns_g.ns_p;
                         gns.ns_e <- (epv,ref(Ast.Etr_V(RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1)|],RP.R[|RP.A(R.Idx 0);RP.A(R.Idx 1);RP.A(R.Agl(2,2,RP.A(R.Idx 3)))|],(-1))))::gns.ns_e;
-                        gv@[`V(n,rs,t_v,epv,ns_g)]
+                        (`V(n,rs,t_v,epv,ns_g))::gv
                     ))
-                [] g in
+                g [] in
             let gv_0 =
-              List.fold_left
-                ( fun gv_0 rsi ->
+              List.fold_right
+                ( fun rsi gv_0 ->
                     match rsi with
                     | `P(n,rs,t_p,epv,ns_g) ->
                       let rsl = List.length rs in
@@ -3279,7 +3279,7 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                           ( fun i e ->
                               let (_,_,t,epv_i,_) = f0 i rsl t_p "" e in
                               (t,epv_i)) rs in
-                      gv_0@[`P(n,rs,rts,t_p,epv,ns_g)]
+                      (`P(n,rs,rts,t_p,epv,ns_g))::gv_0
                     | `V(n,rs,t_v,epv,ns_g) ->
                       let rec rts_f lv t_v rs =
                         List.fold_left
@@ -3325,8 +3325,8 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) =
                                   rts @ [y] ) )
                           [] rs in
                       let rts = rts_f 0 t_v rs in
-                      gv_0@[`V(n,rs,rts,t_v,epv,ns_g)] )
-                [] gv in
+                      (`V(n,rs,rts,t_v,epv,ns_g))::gv_0 )
+                gv [] in
             let _ =
               List.fold_left
                 (fun _ rsi ->

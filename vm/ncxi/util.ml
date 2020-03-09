@@ -1,3 +1,18 @@
+module Tree = struct 
+  type 'a t  = 
+    | Seq of 'a t * 'a t
+    | Atm of 'a 
+    | Nil 
+  let rec to_list a l = 
+    ( match a with 
+      | Seq(a0,a1) -> 
+        let l = to_list a0 l in 
+        to_list a1 l 
+      | Atm x -> 
+        x::l 
+      | Nil -> l )
+  let to_list a = List.rev (to_list a [])
+end 
 module Log = struct
   type flg =  | Off | On | Queue
     let v = Queue.create ()

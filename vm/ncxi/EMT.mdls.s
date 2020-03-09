@@ -137,6 +137,31 @@ esc_s8: ; rdi ⊢ rax
 	sub rsp,rax 
 esc_s8_lp0: 
 
+arr_of_lst: 
+	mov rsi,0 
+arr_of_lst_r:
+	movzx rax,BYTE [rdi+6]
+	cmp rax,1
+	jz arr_of_lst_end 
+	push QWORD [rdi+8] 
+	mov rdi,QWORD [rdi+16]
+	add rsi,1 
+	call arr_of_lst_r
+	sub rsi,1 
+	pop QWORD [rax+8+8*rsi]
+	ret 
+arr_of_lst_end: 
+	push rsi 
+	xor rax,rax
+	mov rdi,8
+	add rsi,1 
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call calloc
+	mov rsp,QWORD [rsp_tmp]
+	pop rsi 
+	mov QWORD [rax],rsi
+	ret 
  
 _start:
 SS_init:
@@ -428,7 +453,7 @@ ss_end_rcd_15:
 	mov rsi,-65521
 	mov [rax],rsi 
 	jmp RTM_0
-LB_83: ; 26 { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) } ⊢ 0'(= a2◂ [ {| l |}] ) : ({ _lst◂_s8 _lst◂_s8 }→_lst◂_s8)
+LB_83: ; 28 { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) } ⊢ 0'(= a2◂ [ {| l |}] ) : ({ _lst◂_s8 _lst◂_s8 }→_lst◂_s8)
 ;; rsp=0 , %1~1'(= a2◂ [ {| l |}] ) %0~0'(= a2◂ [ {| l |}] ) 
 ;; ? 0'(= a2◂ [ {| l |}] ) ⊢ 0(<2)◂{ 2'(= {| l |} ) 3'(= a2◂ [ {| l |}] ) }
 	mov rdi,r13
@@ -440,9 +465,9 @@ LB_83: ; 26 { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) } ⊢ 0'(= a2◂ [
 	mov rdi,r13
 	mov r9,QWORD [rdi+8+8*1]
 ;; rsp=0 , %3~3'(= a2◂ [ {| l |}] ) %2~2'(= {| l |} ) %1~1'(= a2◂ [ {| l |}] ) 
-; #19 { 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) } ⊢ 0(<2)◂{ 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) }
+; #21 { 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) } ⊢ 0(<2)◂{ 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) }
 ;; rsp=0 , %4~0(<2)◂{ 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) } %3~3'(= a2◂ [ {| l |}] ) 
-; rsp_d=0 , #26 { 3'(= a2◂ [ {| l |}] ) 0(<2)◂{ 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) } } ⊢| 
+; rsp_d=0 , #28 { 3'(= a2◂ [ {| l |}] ) 0(<2)◂{ 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) } } ⊢| 
 ; .mov_ptn2 { 3'(= a2◂ [ {| l |}] ) 0(<2)◂{ 2'(= {| l |} ) 1'(= a2◂ [ {| l |}] ) } } ⊢ { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) }
 	mov r10,r14
 ; .mov_ptn 0(<2)◂{ 2'(= {| l |} ) 4'(= a2◂ [ {| l |}] ) } ⊢ 1'(= a2◂ [ {| l |}] )
@@ -475,7 +500,7 @@ LB_84:
 ; .mov_ptn 1'(= a2◂ [ {| l |}] ) ⊢ 0'(= a2◂ [ {| l |}] )
 	mov r13,r14
 	ret
-LB_55: ; 26 { 0'(= a2◂ [ r] ) 1'(= a2◂ [ r] ) } ⊢ 0'(= a2◂ [ r] ) : ({ _lst◂_r64 _lst◂_r64 }→_lst◂_r64)
+LB_55: ; 28 { 0'(= a2◂ [ r] ) 1'(= a2◂ [ r] ) } ⊢ 0'(= a2◂ [ r] ) : ({ _lst◂_r64 _lst◂_r64 }→_lst◂_r64)
 ;; rsp=0 , %1~1'(= a2◂ [ r] ) %0~0'(= a2◂ [ r] ) 
 ;; ? 0'(= a2◂ [ r] ) ⊢ 0(<2)◂{ 2'(= r ) 3'(= a2◂ [ r] ) }
 	mov rdi,r13
@@ -487,9 +512,9 @@ LB_55: ; 26 { 0'(= a2◂ [ r] ) 1'(= a2◂ [ r] ) } ⊢ 0'(= a2◂ [ r] ) : ({ _
 	mov rdi,r13
 	mov r9,QWORD [rdi+8+8*1]
 ;; rsp=0 , %3~3'(= a2◂ [ r] ) %2~2'(= r ) %1~1'(= a2◂ [ r] ) 
-; #19 { 2'(= r ) 1'(= a2◂ [ r] ) } ⊢ 0(<2)◂{ 2'(= r ) 1'(= a2◂ [ r] ) }
+; #21 { 2'(= r ) 1'(= a2◂ [ r] ) } ⊢ 0(<2)◂{ 2'(= r ) 1'(= a2◂ [ r] ) }
 ;; rsp=0 , %4~0(<2)◂{ 2'(= r ) 1'(= a2◂ [ r] ) } %3~3'(= a2◂ [ r] ) 
-; rsp_d=0 , #26 { 3'(= a2◂ [ r] ) 0(<2)◂{ 2'(= r ) 1'(= a2◂ [ r] ) } } ⊢| 
+; rsp_d=0 , #28 { 3'(= a2◂ [ r] ) 0(<2)◂{ 2'(= r ) 1'(= a2◂ [ r] ) } } ⊢| 
 ; .mov_ptn2 { 3'(= a2◂ [ r] ) 0(<2)◂{ 2'(= r ) 1'(= a2◂ [ r] ) } } ⊢ { 0'(= a2◂ [ r] ) 1'(= a2◂ [ r] ) }
 	mov r10,r14
 ; .mov_ptn 0(<2)◂{ 2'(= r ) 4'(= a2◂ [ r] ) } ⊢ 1'(= a2◂ [ r] )
@@ -522,7 +547,7 @@ LB_56:
 ; .mov_ptn 1'(= a2◂ [ r] ) ⊢ 0'(= a2◂ [ r] )
 	mov r13,r14
 	ret
-LB_41: ; 27 { 0'(= {| l |} ) 1'(= {| l |} ) } ⊢ { 0'(= {| l |} ) 1'(= {| l |} ) } : ({ _s8 _s8 }→{ _s8 _s8 })
+LB_41: ; 29 { 0'(= {| l |} ) 1'(= {| l |} ) } ⊢ { 0'(= {| l |} ) 1'(= {| l |} ) } : ({ _s8 _s8 }→{ _s8 _s8 })
 ;; rsp=0 , %6~1'(= {| l |} ) %5~0'(= {| l |} ) 
 ; ∎ { 1'(= {| l |} ) 0'(= {| l |} ) }
 ; .mov_ptn2 { 1'(= {| l |} ) 0'(= {| l |} ) } ⊢ { 0'(= {| l |} ) 1'(= {| l |} ) }
@@ -532,7 +557,7 @@ LB_41: ; 27 { 0'(= {| l |} ) 1'(= {| l |} ) } ⊢ { 0'(= {| l |} ) 1'(= {| l |} 
 ; .mov_ptn 2'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov r14,r8
 	ret
-LB_14: ; 27 { 0'(= {| l |} ) 1'(= r ) } ⊢ { 0'(= r ) 1'(= {| l |} ) } : ({ _s8 _r64 }→{ _r64 _s8 })
+LB_14: ; 29 { 0'(= {| l |} ) 1'(= r ) } ⊢ { 0'(= r ) 1'(= {| l |} ) } : ({ _s8 _r64 }→{ _r64 _s8 })
 ;; rsp=0 , %6~1'(= r ) %5~0'(= {| l |} ) 
 ; ∎ { 1'(= r ) 0'(= {| l |} ) }
 ; .mov_ptn2 { 1'(= r ) 0'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -542,7 +567,7 @@ LB_14: ; 27 { 0'(= {| l |} ) 1'(= r ) } ⊢ { 0'(= r ) 1'(= {| l |} ) } : ({ _s8
 ; .mov_ptn 2'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov r14,r8
 	ret
-LB_0: ; 27 { 0'(= r ) 1'(= {| l |} ) } ⊢ { 0'(= {| l |} ) 1'(= r ) } : ({ _r64 _s8 }→{ _s8 _r64 })
+LB_0: ; 29 { 0'(= r ) 1'(= {| l |} ) } ⊢ { 0'(= {| l |} ) 1'(= r ) } : ({ _r64 _s8 }→{ _s8 _r64 })
 ;; rsp=0 , %6~1'(= {| l |} ) %5~0'(= r ) 
 ; ∎ { 1'(= {| l |} ) 0'(= r ) }
 ; .mov_ptn2 { 1'(= {| l |} ) 0'(= r ) } ⊢ { 0'(= {| l |} ) 1'(= r ) }
@@ -555,7 +580,7 @@ LB_0: ; 27 { 0'(= r ) 1'(= {| l |} ) } ⊢ { 0'(= {| l |} ) 1'(= r ) } : ({ _r64
 RTM_0:
 	push RTM_1
 ;; rsp=0 , 
-; rsp_d=0, #27 { %[ 0r ] %[ "HO" ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
+; rsp_d=0, #29 { %[ 0r ] %[ "HO" ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
 ; .mov_ptn2 { %[ 0r ] %[ "HO" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "HO" ] ⊢ 1'(= {| l |} )
 	push rdx
@@ -782,7 +807,7 @@ LB_13:
 	pop rcx
 	pop rdx
 ;; rsp=0 , 
-; rsp_d=0, #27 { %[ "Rii" ] %[ 3r ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
+; rsp_d=0, #29 { %[ "Rii" ] %[ 3r ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn2 { %[ "Rii" ] %[ 3r ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
 ; .mov_ptn %[ 3r ] ⊢ 1'(= r )
 	mov r14,3
@@ -1010,7 +1035,7 @@ LB_27:
 	pop rcx
 	pop rdx
 ;; rsp=0 , 
-; rsp_d=0, #27 { %[ 2r ] %[ "eWp" ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
+; rsp_d=0, #29 { %[ 2r ] %[ "eWp" ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
 ; .mov_ptn2 { %[ 2r ] %[ "eWp" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "eWp" ] ⊢ 1'(= {| l |} )
 	push rdx
@@ -1238,7 +1263,7 @@ LB_40:
 	pop rcx
 	pop rdx
 ;; rsp=0 , 
-; rsp_d=0, #27 { %[ "XmI" ] %[ "HO" ] } ⊢ { 0'(= {| l |} ) 1'(= {| l |} ) }
+; rsp_d=0, #29 { %[ "XmI" ] %[ "HO" ] } ⊢ { 0'(= {| l |} ) 1'(= {| l |} ) }
 ; .mov_ptn2 { %[ "XmI" ] %[ "HO" ] } ⊢ { 0'(= {| l |} ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "HO" ] ⊢ 1'(= {| l |} )
 	push rdx
@@ -1511,17 +1536,17 @@ LB_54:
 	pop rcx
 	pop rdx
 ;; rsp=0 , 
-; #18 { } ⊢ 1(<2)◂{ }
+; #20 { } ⊢ 1(<2)◂{ }
 ;; rsp=0 , %19~1(<2)◂{ } 
-; #19 { %[ 0r ] 1(<2)◂{ } } ⊢ 0(<2)◂{ %[ 0r ] 1(<2)◂{ } }
+; #21 { %[ 0r ] 1(<2)◂{ } } ⊢ 0(<2)◂{ %[ 0r ] 1(<2)◂{ } }
 ;; rsp=0 , %20~0(<2)◂{ %[ 0r ] 1(<2)◂{ } } 
-; #19 { %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } ⊢ 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } }
+; #21 { %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } ⊢ 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } }
 ;; rsp=0 , %21~0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } 
-; #19 { %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } ⊢ 0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } }
+; #21 { %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } ⊢ 0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } }
 ;; rsp=0 , %22~0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } 
-; #18 { } ⊢ 1(<2)◂{ }
+; #20 { } ⊢ 1(<2)◂{ }
 ;; rsp=0 , %23~1(<2)◂{ } %22~0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } 
-; rsp_d=0, #26 { 0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } 1(<2)◂{ } } ⊢ 0'(= a2◂ [ r] )
+; rsp_d=0, #28 { 0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } 1(<2)◂{ } } ⊢ 0'(= a2◂ [ r] )
 ; .mov_ptn2 { 0(<2)◂{ %[ 8r ] 0(<2)◂{ %[ 3r ] 0(<2)◂{ %[ 0r ] 1(<2)◂{ } } } } 1(<2)◂{ } } ⊢ { 0'(= a2◂ [ r] ) 1'(= a2◂ [ r] ) }
 ; .mov_ptn 1(<2)◂{ } ⊢ 1'(= a2◂ [ r] )
 	mov rdi,unt
@@ -1833,17 +1858,17 @@ LB_62:
 ; .dlt.ptn 0'(= a2◂ [ r] )
 ;	.dlt adt ⊢ _  
 ;; rsp=0 , 
-; #18 { } ⊢ 1(<2)◂{ }
+; #20 { } ⊢ 1(<2)◂{ }
 ;; rsp=0 , %26~1(<2)◂{ } 
-; #19 { %[ "O" ] 1(<2)◂{ } } ⊢ 0(<2)◂{ %[ "O" ] 1(<2)◂{ } }
+; #21 { %[ "O" ] 1(<2)◂{ } } ⊢ 0(<2)◂{ %[ "O" ] 1(<2)◂{ } }
 ;; rsp=0 , %27~0(<2)◂{ %[ "O" ] 1(<2)◂{ } } 
-; #19 { %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } ⊢ 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } }
+; #21 { %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } ⊢ 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } }
 ;; rsp=0 , %28~0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } 
-; #19 { %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } ⊢ 0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } }
+; #21 { %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } ⊢ 0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } }
 ;; rsp=0 , %29~0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } 
-; #18 { } ⊢ 1(<2)◂{ }
+; #20 { } ⊢ 1(<2)◂{ }
 ;; rsp=0 , %30~1(<2)◂{ } %29~0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } 
-; rsp_d=0, #26 { 0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } 1(<2)◂{ } } ⊢ 0'(= a2◂ [ {| l |}] )
+; rsp_d=0, #28 { 0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } 1(<2)◂{ } } ⊢ 0'(= a2◂ [ {| l |}] )
 ; .mov_ptn2 { 0(<2)◂{ %[ "y" ] 0(<2)◂{ %[ "N" ] 0(<2)◂{ %[ "O" ] 1(<2)◂{ } } } } 1(<2)◂{ } } ⊢ { 0'(= a2◂ [ {| l |}] ) 1'(= a2◂ [ {| l |}] ) }
 ; .mov_ptn 1(<2)◂{ } ⊢ 1'(= a2◂ [ {| l |}] )
 	mov rdi,unt
@@ -2228,35 +2253,272 @@ LB_110:
 LB_94:
 	ret
 LB_90:
-; .dlt.ptn 0'(= a2◂ [ {| l |}] )
-;	.dlt adt ⊢ _  
-;; rsp=0 , 
+;; rsp=0 , %32~0'(= a2◂ [ {| l |}] ) 
+	mov rdi,r13
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	call arr_of_lst 
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	mov r13,rax
+;; rsp=0 , %33~0'(= {| {| l |}|} ) 
+; _emt 0'(= {| {| l |}|} ) ⊢ 0'(= {| {| l |}|} )
+	jmp LB_112
+LB_111: db 95,101,109,116,58,0
+LB_112:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_111
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	mov rax,r13
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	jmp LB_114
+LB_113: db 123,124,32,0
+LB_114:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_113
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	mov rsi,[r8]
+	mov rax,0 
+LB_115:
+	cmp rsi,rax 
+	jz LB_116
+	push r8 
+	push rax 
+	push rsi 
+	mov r8,QWORD [r8+8+8*rax]
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_118
+LB_117: db 32,0
+LB_118:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_117
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	pop rsi 
+	pop rax 
+	pop r8 
+	add rax,1 
+	jmp LB_115
+LB_116:
+	jmp LB_120
+LB_119: db 124,125,0
+LB_120:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_119
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_122
+LB_121: db 10,0
+LB_122:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_121
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_123
+LB_123:
+;; rsp=0 , %34~0'(= {| {| l |}|} ) 
+; _arr_len 0'(= {| {| l |}|} ) ⊢ { 0'(= {| {| l |}|} ) 1'(= r ) }
+	mov rdi,r13
+	mov rdi,QWORD [rdi]
+	mov rsi,0x0000_ffff_ffff_ffff
+	and rdi,rsi
+	mov r14,rdi
+;; rsp=0 , %36~1'(= r ) %35~0'(= {| {| l |}|} ) 
+; _emt 1'(= r ) ⊢ 1'(= r )
+	jmp LB_125
+LB_124: db 95,101,109,116,58,0
+LB_125:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_124
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	mov rax,r14
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_127
+LB_126: db 10,0
+LB_127:
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax  
+	mov rdi,LB_126
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_128
+LB_128:
+; .dlt.ptn 1'(= r )
+;; rsp=0 , %35~0'(= {| {| l |}|} ) 
 ; ∎ { }
+; .dlt.ptn 0'(= {| {| l |}|} )
+; .dlt.hp 
 ; .mov_ptn2 { } ⊢ { }
 	ret
-ETR_28: ; f0 0'(= r ) ⊢ 0'(= q0 ) : (_r64→121'(0))
-;; rsp=0 , %33~0'(= r ) 
+ETR_30: ; f0 0'(= r ) ⊢ 0'(= q0 ) : (_r64→134'(0))
+;; rsp=0 , %38~0'(= r ) 
 ; _inc 0'(= r ) ⊢ 0'(= r )
 	add r13,1
-;; rsp=0 , %34~0'(= r ) 
-; rsp_d=0, #29 0'(= r ) ⊢ 0'(= q0 )
+;; rsp=0 , %39~0'(= r ) 
+; rsp_d=0, #31 0'(= r ) ⊢ 0'(= q0 )
 ; .mov_ptn2 0'(= r ) ⊢ 0'(= r )
-	call ETR_29
+	call ETR_31
 
-;; rsp=0 , %35~0'(= q0 ) 
+;; rsp=0 , %40~0'(= q0 ) 
 ; ∎ 0'(= q0 )
 ; .mov_ptn2 0'(= q0 ) ⊢ 0'(= q0 )
 	ret
-ETR_29: ; f1 0'(= r ) ⊢ 0'(= q0 ) : (_r64→121'(0))
-;; rsp=0 , %36~0'(= r ) 
+ETR_31: ; f1 0'(= r ) ⊢ 0'(= q0 ) : (_r64→134'(0))
+;; rsp=0 , %41~0'(= r ) 
 ; _sub 0'(= r ) ⊢ 0'(= r )
 	sub r13,1
-;; rsp=0 , %37~0'(= r ) 
-; rsp_d=0, #28 0'(= r ) ⊢ 0'(= q0 )
+;; rsp=0 , %42~0'(= r ) 
+; rsp_d=0, #30 0'(= r ) ⊢ 0'(= q0 )
 ; .mov_ptn2 0'(= r ) ⊢ 0'(= r )
-	call ETR_28
+	call ETR_30
 
-;; rsp=0 , %38~0'(= q0 ) 
+;; rsp=0 , %43~0'(= q0 ) 
 ; ∎ 0'(= q0 )
 ; .mov_ptn2 0'(= q0 ) ⊢ 0'(= q0 )
 	ret
