@@ -21,7 +21,7 @@
   xchg { %[ "XmI" ] %[ "HO" ] } ⊢ { a0 a1 } 
   _emt { a0 a1 } ⊢ _ 
   _nil {} ⊢ l0 
-  \\rev l0 ⊢ l0 
+  \\rev l0 ⊢ l0 1724
   _cns { %[ 0r ] l0 } ⊢ l0 
   _cns { %[ 3r ] l0 } ⊢ l0 
   _cns { %[ 8r ] l0 } ⊢ l0
@@ -34,7 +34,11 @@
   _cns { %[ "y" ] l0 } ⊢ l0
   _nil {} ⊢ l1 
   rev_i { l0 l1 } ⊢ l1 
-  _emt l1 ⊢ _ 
+  _emt l1 ⊢ l1 
+  _arr_of_lst l1 ⊢ a1 
+  _emt a1 ⊢ a1
+  _arr_len a1 ⊢ { a1 la1 }
+  _emt la1 ⊢ _ 
   \[
   $ { %[ 0r ] %[ 1r ] } ⊢ R0 
   xchg { R0 %[ "AAB" ] } ⊢ { R0 R1 }
