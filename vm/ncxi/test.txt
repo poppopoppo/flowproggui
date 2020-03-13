@@ -1335,3 +1335,13 @@ Fatal error: exception Failure("unify:2(_p6052)\226\151\130(_p31852) ~ _r64")
     ∏._ x 
       F x ⊢ x 
       LP◂◂{ F (N-1) } x ⊢| 
+
+§ op_x◂◂F x 
+  $ x ⊢ x,x0 
+  F x0 ⊢ y 
+  ∎ { x y } 
+  
+§ inc_x = op_x◂◂_inc
+
+  op_x : (a'→b') ⊢⊢ a' ⊢ { a' b' } 
+  op_x◂◂_inc x0 ⊢ { x0 x1 }
