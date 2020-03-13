@@ -10,17 +10,17 @@
 \\§ rev l0 
 \\  _nil {} ⊢ l1 
 \\  rev { l0 l1 } ⊢| 
-§ xchg { a b } 
-  ∎ { b a } 
+\\§ xchg { a b } 
+\\  ∎ { b a } 
 § A0 « 
-  xchg { %[ 0r ] %[ "HO" ] } ⊢ { a0 a1 } 
-  _emt { a0 a1 } ⊢ _ 
-  xchg { %[ "Rii" ] %[ 3r ] } ⊢ { a0 a1 } 
-  _emt { a0 a1 } ⊢ _ 
-  xchg { %[ 2r ] %[ "eWp" ] } ⊢ { a0 a1 } 
-  _emt { a0 a1 } ⊢ _ 
-  xchg { %[ "XmI" ] %[ "HO" ] } ⊢ { a0 a1 } 
-  _emt { a0 a1 } ⊢ _ 
+  \\xchg { %[ 0r ] %[ "HO" ] } ⊢ { a0 a1 } 
+  \\_emt { a0 a1 } ⊢ _ 
+  \\xchg { %[ "Rii" ] %[ 3r ] } ⊢ { a0 a1 } 
+  \\_emt { a0 a1 } ⊢ _ 
+  \\xchg { %[ 2r ] %[ "eWp" ] } ⊢ { a0 a1 } 
+  \\_emt { a0 a1 } ⊢ _ 
+  \\xchg { %[ "XmI" ] %[ "HO" ] } ⊢ { a0 a1 } 
+  \\_emt { a0 a1 } ⊢ _ 
   _nil {} ⊢ l0 
   \\rev l0 ⊢ l0 1724
   _cns { %[ 0r ] l0 } ⊢ l0 
@@ -29,6 +29,7 @@
   _nil {} ⊢ l1 
   rev_i { l0 l1 } ⊢ l1 
   _emt l1 ⊢ _
+  \[
   _nil {} ⊢ l0
   _cns { %[ "O" ] l0 } ⊢ l0 
   _cns { %[ "N" ] l0 } ⊢ l0 
@@ -40,6 +41,7 @@
   _emt a1 ⊢ a1
   _arr_len a1 ⊢ { a1 la1 }
   _emt la1 ⊢ _ 
+  \]
   \[
   $ { %[ 0r ] %[ 1r ] } ⊢ R0 
   xchg { R0 %[ "AAB" ] } ⊢ { R0 R1 }
@@ -47,6 +49,7 @@
   _emt R1 ⊢ _ 
   \]
   ∎ {} 
+\[
 § 
   @.f0 x 
     _inc x ⊢ x 
@@ -56,3 +59,5 @@
     _dec x ⊢ x 
     f0 x ⊢ x 
     ∎ x 
+    \]
+    
