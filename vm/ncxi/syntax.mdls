@@ -4063,6 +4063,30 @@
 				∐. _nil◂{} . 
 					_nil {} ⊢ l 
 					∎ { tv_n tv lv l } 
+		§ iug { tv_n tv lv y0 y1 } 
+			_inc lv ⊢ lv 
+			inst { tv_n tv lv y0 } ⊢ { tv_n tv lv y0 } 
+			inst { tv_n tv lv y1 } ⊢ { tv_n tv lv y1 } 
+			$ y0 ⊢ y0,y00 
+			$ y1 ⊢ y1,y10
+			unify.f { tv y00 y10 } ⊢ tv
+			_dec lv ⊢ lv 
+			gen { tv_n tv lv y0 } ⊢ { tv_n tv lv y0 }
+			∎ { tv_n tv lv y0 y1 }  
+		§ iug_imp { tv_n tv lv ys yd y1 } 
+			_inc lv ⊢ lv 
+			inst { tv_n tv lv ys } ⊢ { tv_n tv lv ys }
+			inst { tv_n tv lv yd } ⊢ { tv_n tv lv yd } 
+			inst { tv_n tv lv y1 } ⊢ { tv_n tv lv y1 }
+			$ ys ⊢ ys,ys0
+			$ yd ⊢ yd,yd0 
+			imp { ys0 yd0 } ⊢ yi 
+			RP.atm yi  ⊢ yi 
+			$ y1 ⊢ y1,y10
+			unify.f { tv yi y10 } ⊢ tv
+			_dec lv ⊢ lv 
+			gen { tv_n tv lv y1 } ⊢ { tv_n tv lv y1 }
+			∎ { tv_n tv lv ys yd y1 }  
 		§ 
 			@.inst_cl { tv_n tv y cl } 
 				$ y ⊢
@@ -5434,6 +5458,8 @@
 									rset.set_f { vs0 r10 } ⊢ { vs0 r10 }
 									∎ { e0 tav rsp vs0 }
 							∐. . 
+								stt_v.pnt.hp h1 ⊢ sh1 
+								_emt sh1 ⊢ _ 
 								» "ptn_to_r 0" _ ⊢ se 
 								_emt se ⊢ se 
 								∎| 
@@ -7497,6 +7523,12 @@
 							idx.csm_ptn { irv x rl } ⊢ { irv is rl }
 							$ is ⊢ is,is0 
 							stt_v.pnt.f is0 ⊢ sis
+							_lod_q { ev o } ⊢ { ev o yk } 
+							var yk ⊢ yk 
+							RP.atm yk ⊢ yk 
+							» 1r _ ⊢ lv 
+							$ yr ⊢ yr,yr0 
+							iug_imp { tv_n tv lv ys yr0 yk } ⊢ { tv_n tv lv ys _ yk } 
 							_lod_q { evv o } ⊢ { evv o k }
 							∐ k ⊢ k_op_axm◂a . 
 								$ sis ⊢ sis,sis0 
@@ -7740,6 +7772,7 @@
 							∐ ast.op_name◂{ o s d } .			
 								» "lc_codef.ret_f op_name d0" _ ⊢ ee0 
 								_emt ee0 ⊢ _ 
+								_emt o ⊢ o 
 								$ s ⊢ s,s0
 								crt_type_k.src_ptn { ev tv rv s0 } ⊢ { ev tv rv ys } 
 								idx.csm_ptn { irv s rl } ⊢ { irv is rl }
@@ -7747,15 +7780,24 @@
 								stt_v.pnt.f is0 ⊢ sis
 								$ d ⊢ d,d0 
 								crt_type_k.dst_ptn { tv rv d0 } ⊢ { tv rv yd }
-								$ yd ⊢ yd,yd0 
-								pnt_type_k { tv yd0 } ⊢ { tv syd }  
-								$ ys ⊢ ys,ys0 
-								pnt_type_k { tv ys0 } ⊢ { tv sys }  
-								_emt { sys syd } ⊢ _ 
+								##$ yd ⊢ yd,yd0 
+								##pnt_type_k { tv yd0 } ⊢ { tv syd }  
+								##$ ys ⊢ ys,ys0 
+								##pnt_type_k { tv ys0 } ⊢ { tv sys }  
+								##_emt { sys syd } ⊢ _ 
 								inst_cl { tv_n tv ys cl } ⊢ { tv_n tv ys cl }
 								inst_cl { tv_n tv yd cl } ⊢ { tv_n tv yd cl } 
 								» "lc_codef.ret_f op_name d1" _ ⊢ ee0 
 								_emt ee0 ⊢ _ 
+								##$ ys ⊢ ys,ys0 
+								##$ yd ⊢ yd,yd0 
+								##imp { ys0 yd0 } ⊢ yi 
+								##RP.atm yi ⊢ yi 
+								_lod_q { ev o } ⊢ { ev o yk } 
+								var yk ⊢ yk 
+								RP.atm yk ⊢ yk
+								» 1r _ ⊢ lv 
+								iug_imp { tv_n tv lv ys yd yk } ⊢ { tv_n tv lv ys yd yk } 
 								_lod_q { evv o } ⊢ { evv o k } 
 								∐ k ⊢ k_op_axm◂a .
 									op_axm { evv tav tv_n tv lb_n a rsp rl irv is sis yd } ⊢ { evv tav tv_n tv lb_n a rsp rl irv iy ec1 }
