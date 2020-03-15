@@ -1,0 +1,281 @@
+ 
+	\[
+  §§+s8 
+  		@.lc_code
+			∐* nls "∎|" ⊢ { nn {} }
+				ast.exn _n ⊢ c
+				prs_vld c ⊢ c 
+				_some c ⊢ a
+				∎ a
+			∐* nls "∎" !| ; ⊢ { nn {} },r
+				_some r ⊢ r 
+				∎ r  
+
+				∐* src_ptn ⊢ { r }
+					ast.ret r ⊢ c
+					prs_vld c ⊢ c 
+					_some c ⊢ a
+					∎ a
+				∐.* line_res ⊢ { b } 
+					» "lc_code ∎ .. " _ ⊢ se
+					_nil {} ⊢ l 
+					_cns { { _n _r se } l } ⊢ l 
+					prs_err l ⊢ e 
+					_some e ⊢ a 
+					∎ a 
+			∐* lc_mtc ⊢ { m }
+				$ m ⊢ 
+				∐ prs_vld◂m . 
+					ast.mtc m ⊢ m
+					prs_vld m ⊢ m 
+					_some m ⊢ a
+					∎ a
+				∐. prs_err◂e . 
+					prs_err e ⊢ e 
+					_some e ⊢ a 
+					∎ a 
+			∐# nls "$" !| ; ⊢ { nn {} },rr
+				$ rr ⊢ 
+				∐ prs_vld◂{ s il } .  
+					$ il ⊢ 
+					∐ prs_vld◂il . 
+						ast.op_id { s il } ⊢ l 
+						prs_vld l ⊢ l 
+						_some l ⊢ a 
+						∎ a
+					∐. prs_err◂e . 
+						prs_err e ⊢ e 
+						_some e ⊢ a 
+						∎ a 
+				∐. prs_err◂l . 
+					prs_err l ⊢ e 
+					_some e ⊢ a 
+					∎ a 
+
+				∐# src_ptn "⊢" !| ; ⊢ { s {} },il 
+					prs_vld { s il } ⊢ a 
+					_some a ⊢ a 
+					∎ a 
+					∐# "\n" lc_id_mtc ⊢ { {} m }
+						$ m ⊢ 
+						∐ prs_vld◂m . 
+							ast.id_mtc m ⊢ m 
+							prs_vld m ⊢ m 
+							_some m ⊢ a 
+							∎ a
+						∐. prs_err◂e . 
+							prs_err e ⊢ e 
+							_some e ⊢ a 
+							∎ a  
+					∐.# dst_ptn dst_ptn_tl "\n" lc_code ⊢ { r1 rs {} lc }
+						$ lc ⊢ 
+						∐ prs_vld◂lc . 
+							_cns { r1 rs } ⊢ rs
+							ast.id_line { rs lc } ⊢ e
+							prs_vld e ⊢ e 
+							_some e ⊢ a
+							∎ a
+						∐. prs_err◂e . 
+							prs_err e ⊢ e 
+							_some e ⊢ a 
+							∎ a 
+				∐# line_res lc_id_mtc ⊢ { { n r } lc }
+					$ lc ⊢ 
+					∐ prs_vld◂x . 
+						_nil {} ⊢ l 
+						» "glb_etr id_line line_res 0" _ ⊢ s
+						_cns { { n r s } l } ⊢ l 
+						prs_err l ⊢ l 
+						_some l ⊢ a 
+						∎ a
+					∐. prs_err◂l . 
+						» "glb_etr id_line line_res 1" _ ⊢ s
+						_cns { { n r s } l } ⊢ l 
+						prs_err l ⊢ l 
+						_some l ⊢ a 
+						∎ a
+				∐.# line_res lc_code ⊢ { { n r } lc } 
+					$ lc ⊢ 
+					∐ prs_vld◂x . 
+						_nil {} ⊢ l 
+						» "glb_etr id_line line_res 2" _ ⊢ s
+						_cns { { n r s } l } ⊢ l 
+						prs_err l ⊢ l 
+						_some l ⊢ a 
+						∎ a
+					∐. prs_err◂l . 
+						» "glb_etr id_line line_res 3" _ ⊢ s
+						_cns { { n r s } l } ⊢ l 
+						prs_err l ⊢ l 
+						_some l ⊢ a 
+						∎ a
+			∐# nls "^" !| lc_exp_s8_sd "\n" ⟦s8_ptn⟧ "//" lc_code ⊢ { nn {} { s d } {} ps {} lc }
+				rev ps ⊢ ps 
+				ast.op_exp_s8 { ps s d } ⊢ l 
+				$ lc ⊢ 
+				∐ prs_vld◂lc . 
+					ast.seq { l lc } ⊢ lc 
+					prs_vld lc ⊢ lc 
+					_some lc ⊢ a
+					∎ a
+				∐. prs_err◂e . 
+					prs_err e ⊢ e 
+					_some e ⊢ a 
+					∎ a 
+			∐* nls "»" !| lc_exp_line lc_code ⊢ { nn {} l lc } 
+				$ lc ⊢ 
+				∐ prs_vld◂lc . 
+					∐ l ⊢ ast.op_exp_cst◂{ c sp dp } . 
+						ast.im_reg c ⊢ s 
+						RP.atm s ⊢ s 
+						_nil {} ⊢ l 
+						_cns { dp l } ⊢ l 
+						ast.id_line { l lc } ⊢ il 
+						ast.op_id { s il } ⊢ lc 
+						prs_vld lc ⊢ lc 
+						_some lc ⊢ a 
+						∎ a 
+					∐. . 
+						ast.seq { l lc } ⊢ lc 
+						prs_vld lc ⊢ lc 
+						_some lc ⊢ a
+						∎ a
+				∐. prs_err◂e . 
+					prs_err e ⊢ e 
+					_some e ⊢ a 
+					∎ a 
+			∐* nls "◂" !| src "," src_ptn ; ⊢ { nn {} r0 {} r1},o
+				$ o ⊢ 
+				∐ prs_vld◂o . 
+					$ o ⊢ 
+					∐ _some◂{ d lc } . 
+						ast.op_app { r0 r1 d } ⊢ e
+						ast.seq { e lc } ⊢ c
+						prs_vld c ⊢ c 
+						_some c ⊢ a 
+						∎ a 
+					∐. _none◂{} . 
+						ast.app_jmp { r0 r1 } ⊢ c 
+						prs_vld c ⊢ c 
+						_some c ⊢ a 
+						∎ a
+				∐. prs_err◂e . 
+					prs_err e ⊢ e 
+					_some e ⊢ a 
+					∎ a   
+				
+				∐* "⊢|" !| ⊢ { {} } 
+					_none {} ⊢ o 
+					prs_vld o ⊢ o 
+					_some o ⊢ a 
+					∎ a  
+				∐.* "⊢" dst_ptn lc_code ⊢ { {} r2 lc }
+					$ lc ⊢ 
+					∐ prs_vld◂lc . 
+						_some { r2 lc } ⊢ a 
+						prs_vld a ⊢ a 
+						_some a ⊢ a 
+						∎ a
+					∐. prs_err◂e . 
+						prs_err e ⊢ e 
+						_some e ⊢ a 
+						∎ a  
+			∐# nls name src_ptn ; ⊢ { nn n r0 },o 
+				$ o ⊢ 
+				∐ prs_vld◂o . 
+					$ o ⊢ 
+					∐ _some◂{ y lc } .
+						ast.op_name { n r0 y } ⊢ e
+						ast.seq { e lc } ⊢ e 
+						prs_vld e ⊢ e 
+						_some e ⊢ a
+						∎ a	
+					∐. _none◂{} . 
+						ast.jmp { n r0 } ⊢ lc 
+						prs_vld lc ⊢ lc 
+						_some lc ⊢ a 
+						∎ a
+				∐. prs_err◂e . 
+					prs_err e ⊢ e 
+					_some e ⊢ a 
+					∎ a  
+				
+				∐* "⊢|" !| ⊢ { {} }
+					_none {} ⊢ o 
+					prs_vld o ⊢ o 
+					_some o ⊢ a 
+					∎ a  
+				∐# "⊢" !| dst_ptn "\n" lc_code ⊢ { {} r1 {} lc }
+					$ lc ⊢ 
+					∐ prs_vld◂lc . 
+						_some { r1 lc } ⊢ o
+						prs_vld o ⊢ o 
+						_some o ⊢ a 
+						∎ a
+					∐. prs_err◂e . 
+						prs_err e ⊢ e 
+						_some e ⊢ a 
+						∎ a 
+				∐.# line_res lc_code ⊢ { { nn rr } lc }
+					$ lc ⊢ 
+					∐ prs_vld◂lc . 
+						» "lc_code 20" _ ⊢ se 
+						_nil {} ⊢ e
+						_cns { { nn rr se } e } ⊢ e 
+						prs_err e ⊢ e 
+						_some e ⊢ a 
+						∎ a
+					∐. prs_err◂e . 
+						» "lc_code 21" _ ⊢ se 
+						_cns { { nn rr se } e } ⊢ e 
+						prs_err e ⊢ e 
+						_some e ⊢ a 
+						∎ a 
+			∐.* glb_etr_res_line ; ⊢ { r },lc
+				$ lc ⊢ 
+				∐ prs_vld◂lc . 			 
+					» "lc_code 9" _ ⊢ se 
+					mk_prs_err { _n _r se } ⊢ e
+					_some e ⊢ a 
+					∎ a
+				∐. prs_err◂e . 
+					» "lc_code 10" _ ⊢ se  
+					_cns { { _n _r se } e } ⊢ e
+					prs_err e ⊢ e 
+					_some e ⊢ a 
+					∎ a 
+				
+				∐* lc_code ⊢ { lc } 
+					_some lc ⊢ a 
+					∎ a
+				∐.* glb_etr_res_clq ⊢ { r } 
+					» "lc_code 11" _ ⊢ se 
+					_nil {} ⊢ l 
+					_cns { { _n _r se } l } ⊢ l 
+					prs_err l ⊢ e 
+					_some e ⊢ a 
+					∎ a
+        \]
+
+  §§+s8 @.g0 
+    ∐# "k" "F" ; ⊢ { {} {} },w 
+      _some w ⊢ a 
+      ∎ a 
+
+      ∐* _byt ⊢ { b }
+        _some b ⊢ a 
+        ∎ a  
+      ∐.# ⊢ { } 
+        _some %[ 0r ] ⊢ a 
+        ∎ a 
+    ∐.# _byt "JJ" ; ⊢ { b {} },c 
+      _add { c b } ⊢ { c b }  
+      _some c ⊢ a 
+      ∎ a 
+
+      ∐# ⊢ { } 
+        _some %[ 1r ] ⊢ a 
+        ∎ a 
+      ∐. ⊢ { } 
+        _some %[ 2r ] ⊢ a 
+        ∎ a 
