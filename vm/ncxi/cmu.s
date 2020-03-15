@@ -13,7 +13,7 @@ bits 64
 %define SFLS_MAX 20000
 %define SFLS_0_MAX 80000 
 %define SFLS_1_MAX 80000 
-%define SFLS_2_MAX 80000
+%define SFLS_2_MAX 160000
 %define SFLS_3_MAX 10000
 %define SFLS_4_MAX 5000
 %define SFLS_NULL 0xffff_ffff_ffff_0000 
