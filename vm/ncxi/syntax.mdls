@@ -12394,6 +12394,7 @@
 					`extern free 
 					`extern isspace 
 					`extern strtoul
+					`extern strlen
 					`section .bss 
 					`	tmp: resq 64
 					`	ret_vct: resq 64
@@ -12451,7 +12452,8 @@
 					`	push rdi 
 					`	push rsi 
 					`	and rsi,~111b
-					`	lea rdi,[rsi+16] 
+					`	lea rdi,[rsi+16]
+					`	mov rsi,1 
 					`	xor rax,rax 
 					`	mov QWORD [rsp_tmp],rsp 
 					`	and rsp,~0xf 
@@ -12474,7 +12476,7 @@
 					`	sub rsp,rax 
 					`esc_s8_lp0: 
 					`
-					`arr_of_lt: 
+					`arr_of_lst: 
 					`	mov rsi,0 
 					`arr_of_lst_r:
 					`	movzx rax,BYTE [rdi+6]
@@ -12570,6 +12572,37 @@
 					`	mov rax,0 
 					`	ret
 					`
+					`mlc_s8: ; rdi=len  
+					`	push rdi 
+					`	and rdi,~111b
+					`	lea rdi,[rdi+16] 
+					`	mov rsi,1 
+					`	xor rax,rax 
+					`	mov QWORD [rsp_tmp],rsp 
+					`	and rsp,~0xf 
+					`	call calloc 
+					`	mov rsp,QWORD [rsp_tmp]
+					`	pop QWORD [rax] 
+					`	ret
+					`
+					`s8_of_c_stg: 
+					`	push rdi
+  				`	mov QWORD [rsp_tmp],rsp
+  				`	and rsp,~0xf
+  				`	xor rax,rax
+  				`	call strlen
+  				`	mov rsp,QWORD [rsp_tmp]
+  				`	push rax
+  				`	mov rdi,rax
+  				`	call mlc_s8
+  				`	pop rcx
+  				`	pop rsi
+  				`	mov rdi,rax
+  				`	add rdi,8
+  				`	cld
+  				`	rep movsb
+  				`	ret
+					`
 					`_start:
 					`SS_init:
 					`	mov QWORD [SS_TOP],SS_VCT
@@ -12619,6 +12652,30 @@
 					`	mov rsi,0xffff_ffff_ffff_0200 
 					`	mov [rax],rsi
 					`
+					`; _args 
+					`	mov rdi,QWORD [rsp]
+					` lea rdi,[rdi+1]
+					`	mov rsi,8 
+					`	mov QWORD [rsp_tmp],rsp
+					`	and rsp,~0xf 
+					`	xor rax,rax 
+					`	call calloc 
+					`	mov rsp,QWORD [rsp_tmp]
+					`	pop r13
+					`	mov QWORD [rax],r13
+					`	xor r14,r14
+					`	mov r15,rax
+					`args_lp:
+					`	cmp r14,r13
+					`	jz args_lp_end
+					`	pop rdi
+					`	call s8_of_c_stg 
+					`	mov QWORD [r15+8+8*r14],rax
+					`	add r14,1 
+					`	jmp args_lp 
+					`args_lp_end:
+					`	mov r13,r15
+					`	
 					//
 				rp8.add_s8 { ec sc1 } ⊢ ec
 				» 1r _ ⊢ ssn0 
@@ -12650,6 +12707,35 @@
 				_nil {} ⊢ ns_r 
 				» 0r _ ⊢ rsp 
 				_nil {} ⊢ rl
+
+				» "_args" _ ⊢ nx0 
+				ast.dst_reg nx0 ⊢ dx0 
+				_nil {} ⊢ rs_n 
+				_cns { dx0 rs_n } ⊢ rs_n 
+
+				t_axm.s8 {} ⊢ y0 
+				t_axm.arr y0 ⊢ y0 
+				_nil {} ⊢ rs_t 
+				_cns { y0 rs_t } ⊢ rs_t 
+				
+				» 0r _ ⊢ lvx 
+				_inc lvx ⊢ lvx 
+				crt_dst_lst { lvx rv tv tv_n rv_n ns_r rs_n } ⊢ { lvx rv tv tv_n rv_n ns_r rs_n rs_t0 }
+				unify.f_lst { tv rs_t0 rs_t } ⊢ tv 
+				_dec lvx ⊢ lvx 
+						
+				_nil {} ⊢ rs_i 
+				stt_v.opq {} ⊢ q0 
+				stt_v.ref q0 ⊢ h0 
+				stt_v.arr h0 ⊢ h0 
+				stt_v.ref h0 ⊢ h0
+				» 0r _ ⊢ rx0 
+				stt_v.hp { rx0 h0 } ⊢ ax0 
+				RP.atm ax0 ⊢ px0 
+				_cns { px0 rs_i } ⊢ rs_i 
+				_nil {} ⊢ dl
+				emt.idx.crt_lst { irv rs_n rs_i rl dl } ⊢ { irv rl dl } 
+				
 				slv_file_lp { { rsp rl ns_r } i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gel gfl { dd ep ec rtm_n lb_n } } ⊢| 
 			@.slv_file_lp { { rsp rl ns_r } i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gel gfl { dd ep0 ec0 rtm_n lb_n } }
 				» "enter slv_file_lp" _ ⊢ sxe0 

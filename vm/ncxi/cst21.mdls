@@ -64,6 +64,7 @@
 § A2 « 
   $ %[ 0r ] ⊢ x0 
   _emt x0 ⊢ x0 
+  _emt _args ⊢ args 
   ∎ 
 §%  
   _inc x0 ⊢ x0 
