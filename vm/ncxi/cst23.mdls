@@ -279,3 +279,12 @@
       ∐. ⊢ { } 
         _some %[ 2r ] ⊢ a 
         ∎ a 
+§§+s8 
+  @.g1 
+    ∐. "I" "J" "h" "iioio" _byt _byt _byt _byt _byt _byt _byt _byt _byt ; ⊢ { {} {} {} {} b0 b1 b2 b3 b4 b5 b6 b7 b8 },{ a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 }
+      _some a5 ⊢ a 
+      ∎ a 
+
+      ∐. _byt _byt _byt "J" _byt _byt "j" "i" _byt _byt ⊢ { b0 b1 b2 {} b3 b4 {} {} b5 b6 }
+        _some { b0 b1 b2 b3 b4 b5 b6 %[ 9r ] %[ 3r ] %[ 0r ] } ⊢ a 
+        ∎ a 
