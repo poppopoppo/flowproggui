@@ -65,11 +65,11 @@
   $ %[ 0r ] ⊢ x0 
   _emt x0 ⊢ x0 
   ∎ 
-§ A3 « 
+§%  
   _inc x0 ⊢ x0 
   _emt x0 ⊢ x0 
   ∎ 
-§ A4 « 
+§~  
   $ %[ 4r ] ⊢ x1 
   _add { x0 x1 } ⊢ { x0 x1 }
   _emt { x0 x1 } ⊢ _ 

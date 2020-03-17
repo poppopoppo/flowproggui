@@ -1727,7 +1727,14 @@
 				∎ a 
 			∐.# ⊢ { } 
 				_some {} ⊢ a 
-				∎ a  
+				∎ a
+	§§+s8 @.rtm_sbl 
+		∐ "§~" ⊢ { {} } 
+			_some {} ⊢ a 
+			∎ a 
+		∐. "§%" ⊢ { {} } 
+			_some {} ⊢ a 
+			∎ a  
 	§§+s8 
 		@.lc_code
 			∐* nls "∎|" ⊢ { nn {} }
@@ -2393,6 +2400,19 @@
 					prs_err l ⊢ e 
 					_some e ⊢ a 
 					∎ a
+			∐# rtm_sbl "\n" lc_code ⊢ { {} {} lc }
+				$ lc ⊢ 
+				∐ prs_vld◂lc . 
+					ast.lc_cst lc ⊢ r
+					» "" _ ⊢ n 
+					ast.lc_etr { n r } ⊢ r 
+					prs_vld r ⊢ r 
+					_some r ⊢ a
+					∎ a
+				∐. prs_err◂e .	
+					prs_err e ⊢ e 
+					_some e ⊢ a 
+					∎ a  
 			∐* "§" !| ; ⊢ { {} },p 
 				_some p ⊢ a 
 				∎ a
