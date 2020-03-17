@@ -69,10 +69,13 @@
 §%  
   _inc x0 ⊢ x0 
   _emt x0 ⊢ x0 
+  _emt args ⊢ args
   ∎ 
 §~  
   $ %[ 4r ] ⊢ x1 
   _add { x0 x1 } ⊢ { x0 x1 }
   _emt { x0 x1 } ⊢ _ 
+  _in_fn %[ "cst21.mdls" ] ⊢ { f0 sf0 } 
+  _emt { f0 sf0 } ⊢ _  
   ∎ 
   
