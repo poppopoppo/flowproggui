@@ -2685,7 +2685,7 @@
 ∎∎
 § E {} 
 	» _^ _ ⊢ sf0
-		`§§ 
+		`§§ M0
 		`	∎∎ 
 		// 
 	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
