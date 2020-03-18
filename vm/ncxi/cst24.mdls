@@ -1,3 +1,9 @@
+§ smt o 
+	∐ o ⊢ _some◂a .
+		∎ a 
+	∐. . 
+		_emt %[ "smt 0" ] ⊢ _ 
+		∎| 
 §§ rp8 
 	¶ @.t 
 		∐ nd : { t _r64 t } 
@@ -2217,12 +2223,12 @@
 				_some gl ⊢ a
 				∎ a
 				∐* _byt !| ⊢ { b }
-					» "!!!" _ ⊢ xx 
+					» "file end" _ ⊢ xx 
 					_emt xx ⊢ xx 
 					_none {} ⊢ a 
 					∎ a   
 				∐.* ⊢ { } 
-					» "???" _ ⊢ xx 
+					» "file end nl" _ ⊢ xx 
 					_emt xx ⊢ xx 
 					_some {} ⊢ a 
 					∎ a 
@@ -2677,9 +2683,28 @@
 				∎ a		
     ∎∎
 ∎∎
-
-§% 
-	_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
+§ E {} 
+	» _^ _ ⊢ sf0
+		`§§ 
+		`	∎∎ 
+		// 
 	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
-	_emt r0 ⊢ r0 
+	_emt r0 ⊢ _ 
+	_emt a0 ⊢ a0 
+	$ a0 ⊢ 
+	∐ _some◂a0 . 
+		$ a0 ⊢ 
+		∐ OpADL.syntax.prs_vld◂a0 . 
+			_emt %[ "D0" ] ⊢ _ 
+			OpADL.ast.pnt { %[ 0r ] a0 } ⊢ { d0 sa0 }  
+			_emt d0 ⊢ _ 
+			_emt sa0 ⊢ _ 
+			∎ {} 
+		∐. OpADL.syntax.prs_err◂e0 .
+			∎|
+	∐. _none◂{} . 
+		∎|  
+§% 
+	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
+	E {} ⊢ _ 
 	∎ 
