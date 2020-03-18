@@ -2684,10 +2684,21 @@
     ∎∎
 ∎∎
 § E {} 
+	^ _ ⊢ ss0 
+    "Hello " 
+    " World " 
+    "!!" 
+    "\n" //
+  _emt ss0 ⊢ ss0  
 	» _^ _ ⊢ sf0
 		`§§ M0
 		`	∎∎ 
 		// 
+	» _^ _ ⊢ sf1 
+		"§§ M0\n" 
+		"\t∎∎\n" //
+	_emt sf1 ⊢ sf1 
+	_emt sf0 ⊢ sf0 
 	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
 	_emt r0 ⊢ _ 
 	_emt a0 ⊢ a0 

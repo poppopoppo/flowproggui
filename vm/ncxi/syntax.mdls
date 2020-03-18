@@ -1748,6 +1748,76 @@
 			_some {} ⊢ a 
 			∎ a  
 	§§+s8 
+		@.s8_ptn
+			∐* var_idx "*" !| stg_ltr ⊢ { i {} s }
+				ast.exp_s8.for { i s } ⊢ r
+				_some r ⊢ a
+				∎ a
+			∐* s8_ptn_line ⊢ { s }
+				ast.exp_s8.s8 s ⊢ r
+				_some r ⊢ a
+				∎ a
+			∐* stg_ltr ⊢ { s }
+				ast.exp_s8.s8 s ⊢ s
+				_some s ⊢ a
+				∎ a
+			∐* name ⊢ { n }
+				ast.cst_name n ⊢ c 
+				ast.exp_s8.cst c ⊢ n
+				_some n ⊢ a
+				∎ a
+			∐.* s8_fmt ⊢ { f }
+				ast.exp_s8.idx f ⊢ r
+				_some r ⊢ a
+				∎ a
+		@.var_idx
+			∐. _scf_d "'" ⊢ { x {} }
+				_some x ⊢ a
+				∎ a
+		@.s8_fmt
+			∐ _scf_d "d'" ⊢ { d {} }
+				ast.exp_s8.d {} ⊢ f
+				_some { f d } ⊢ a
+				∎ a
+			∐ _scf_d "x'" ⊢ { d {} }
+				ast.exp_s8.x {} ⊢ f
+				_some { f d } ⊢ a
+				∎ a
+			∐. _scf_d "'" ⊢ { d {} }
+				ast.exp_s8.s {} ⊢ f
+				_some { f d } ⊢ a
+				∎ a
+		@.s8_ptn_line
+			∐. "`" line ⊢ { {} l }
+				##s8_of_r64_lst l ⊢ s
+				rp8.mk_s8 l ⊢ { l s } 
+				_some s ⊢ a
+				∎ a
+		@.line
+			∐ "\n" ⊢ { {} }
+				» 10r _ ⊢ s
+				##_nil {} ⊢ l
+				##_cns { s l } ⊢ l
+				rp8.e {} ⊢ l 
+				rp8.pfx_chr { s l } ⊢ l 
+				_some l ⊢ a
+				∎ a
+			∐. _byt line ⊢ { b l }
+				##_cns { b l } ⊢ l
+				rp8.pfx_chr { b l } ⊢ l 
+				_some l ⊢ a
+				∎ a
+	§§+s8 
+      @.s8_ptn_lst 
+			∐# nls "//" ⊢ { nn {} } 
+				_nil {} ⊢ l 
+				_some l ⊢ a 
+				∎ a 
+			∐.# nls s8_ptn s8_ptn_lst ⊢ { nn p l } 
+				_cns { p l } ⊢ l 
+				_some l ⊢ a 
+				∎ a   
+	§§+s8 
 		@.lc_code
 			∐* nls "∎|" ⊢ { nn {} }
 				ast.exn _n ⊢ c
@@ -1863,8 +1933,8 @@
 						prs_err l ⊢ l 
 						_some l ⊢ a 
 						∎ a
-			∐# nls "^" !| lc_exp_s8_sd "\n" ⟦s8_ptn⟧ "//" lc_code ⊢ { nn {} { s d } {} ps {} lc }
-				rev ps ⊢ ps 
+			∐# nls "^" !| lc_exp_s8_sd "\n" s8_ptn_lst lc_code ⊢ { nn {} { s d } {} ps lc }
+				##rev ps ⊢ ps 
 				ast.op_exp_s8 { ps s d } ⊢ l 
 				$ lc ⊢ 
 				∐ prs_vld◂lc . 
@@ -2034,7 +2104,7 @@
 					_some e ⊢ a 
 					∎ a 
 		@.lc_exp_line
-			∐* "_^" !| lc_exp_s8_sd ⟦s8_ptn⟧ "//" ⊢ { {} { s d } ps {} }
+			∐* "_^" !| lc_exp_s8_sd s8_ptn_lst ⊢ { {} { s d } ps }
 				ast.op_exp_s8 { ps s d } ⊢ e
 				_some e ⊢ a
 				∎ a
@@ -2057,65 +2127,7 @@
 				_some { rs0 rs1 } ⊢ a
 				∎ a
 	
-		@.s8_ptn
-			∐* var_idx "*" !| stg_ltr ⊢ { i {} s }
-				ast.exp_s8.for { i s } ⊢ r
-				_some r ⊢ a
-				∎ a
-			∐* s8_ptn_line ⊢ { s }
-				ast.exp_s8.s8 s ⊢ r
-				_some r ⊢ a
-				∎ a
-			∐* stg_ltr ⊢ { s }
-				ast.exp_s8.s8 s ⊢ s
-				_some s ⊢ a
-				∎ a
-			∐* name ⊢ { n }
-				ast.cst_name n ⊢ c 
-				ast.exp_s8.cst c ⊢ n
-				_some n ⊢ a
-				∎ a
-			∐.* s8_fmt ⊢ { f }
-				ast.exp_s8.idx f ⊢ r
-				_some r ⊢ a
-				∎ a
-		@.var_idx
-			∐. _scf_d "'" ⊢ { x {} }
-				_some x ⊢ a
-				∎ a
-		@.s8_fmt
-			∐ _scf_d "d'" ⊢ { d {} }
-				ast.exp_s8.d {} ⊢ f
-				_some { f d } ⊢ a
-				∎ a
-			∐ _scf_d "x'" ⊢ { d {} }
-				ast.exp_s8.x {} ⊢ f
-				_some { f d } ⊢ a
-				∎ a
-			∐. _scf_d "'" ⊢ { d {} }
-				ast.exp_s8.s {} ⊢ f
-				_some { f d } ⊢ a
-				∎ a
-		@.s8_ptn_line
-			∐. "`" line ⊢ { {} l }
-				##s8_of_r64_lst l ⊢ s
-				rp8.mk_s8 l ⊢ { l s } 
-				_some s ⊢ a
-				∎ a
-		@.line
-			∐ "\n" ⊢ { {} }
-				» 10r _ ⊢ s
-				##_nil {} ⊢ l
-				##_cns { s l } ⊢ l
-				rp8.e {} ⊢ l 
-				rp8.pfx_chr { s l } ⊢ l 
-				_some l ⊢ a
-				∎ a
-			∐. _byt line ⊢ { b l }
-				##_cns { b l } ⊢ l
-				rp8.pfx_chr { b l } ⊢ l 
-				_some l ⊢ a
-				∎ a
+		
 		@.lc_mtc
 			∐* nls "∐." !| mtc_line lc_code ⊢ { nn {} l c0 }
 				$ l ⊢ 

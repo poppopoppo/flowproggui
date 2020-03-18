@@ -75,6 +75,9 @@
   ∎ 
 § E1 « 
   ^ _ ⊢ ss0 
-    "Hello " " World " "!!" "\n" //
+    "Hello " 
+    " World " 
+    "!!" 
+    "\n" //
   _emt ss0 ⊢ ss0  
   ∎
