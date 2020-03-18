@@ -7387,11 +7387,9 @@
 							_dec i ⊢ i 
 							_set_q { ar i ip } ⊢ { ar i } 
 							∎ { i irv rl dll ar rr } 
-						∐ sl ⊢ _nil◂{}; dl ⊢ _cns◂{ d dl }; dl ⊢ _nil◂{} . 
-							$ rl ⊢ rl,rl0 
-							rset.ini {} ⊢ v 
-							stt_v.mk_rset_env { irv rl0 v } ⊢ { irv v } 
-							rset.min_f v ⊢ { v rr }
+						∐ sl ⊢ _nil◂{}; dl ⊢ _cns◂{ d dl }; dl ⊢ _nil◂{} .  
+							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl v } 
+							alc_vs v ⊢ { v rr } 
 							stt_v.opq {} ⊢ q0 
 							stt_v.ref q0 ⊢ h0 
 							$ rr ⊢ rr,rr0 
@@ -7651,10 +7649,12 @@
 							rp8.add_s8 { e0 s1 } ⊢ e0 
 							∎ { evv e0 ld lb_n rsp irv rl ar }
 					§ f { evv lb_n rsp irv rl sl dl pl }
+						rp8.e {} ⊢ e0 
 						» 0r _ ⊢ i 
 						_nil {} ⊢ dll 
 						lp0 { i irv rl sl dl dll } ⊢ { i irv rl dll ar rr }
-						rp8.e {} ⊢ e0 
+						brk_rsp { rsp rr } ⊢ { rsp rr sb0 } 
+						rp8.add_s8 { e0 sb0 } ⊢ e0 
 						» 0r _ ⊢ ld 
 						» "\tmov rdi,0\n" _ ⊢ se0 
 						rp8.add_s8 { e0 se0 } ⊢ e0 

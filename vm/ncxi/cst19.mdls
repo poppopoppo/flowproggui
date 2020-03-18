@@ -72,9 +72,9 @@
   \\_emt l1 ⊢ l1 
   \\_emt { s0 s1 s2 s3 l1 } ⊢ { s0 s1 s2 s3 l1 }
   \\$ a0 ⊢ a0,a1
-  ∎ {} 
+  ∎ 
 § E1 « 
   ^ _ ⊢ ss0 
     "Hello " " World " "!!" "\n" //
   _emt ss0 ⊢ ss0  
-  ∎ {}
+  ∎
