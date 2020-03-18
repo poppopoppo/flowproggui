@@ -4567,16 +4567,24 @@
 				» "" _ ⊢ s 
 				∎ { n s } 
 			∐. . 
-				» _^ n ⊢ n,s 
-					"\tlea rsp,[rsp-8*" 0d' "]\n" // 
+				$ n ⊢ n,x 
+				» 3r _ ⊢ l 
+				_shl { x l } ⊢ { x _ } 
+				» _^ x ⊢ x,s 
+					##"\tlea rsp,[rsp-8*" 0d' "]\n"
+					"\tsub rsp," 0d' "\n" // 
 				∎ { n s }
 		§ add_rsp n 
 			∐ n'=0r . 
 				» "" _ ⊢ s 
 				∎ { n s } 
 			∐. . 
-				» _^ n ⊢ n,s 
-					"\tlea rsp,[rsp+8*" 0d' "]\n" // 
+				$ n ⊢ n,x 
+				» 3r _ ⊢ l 
+				_shl { x l } ⊢ { x _ }  
+				» _^ x ⊢ x,s 
+					##"\tlea rsp,[rsp+8*" 0d' "]\n" 
+					"\tadd rsp," 0d' "\n" // 
 				∎ { n s }	
 		§ set_rsp { rsp0 rsp1 } 
 			∐ rsp0'=rsp1' .
@@ -4631,13 +4639,13 @@
 				push_c_regs
 				`	mov rdi,1  
 				"\tmov rsi," 3d' "\n" 
-				"\txor rax,rax\n" 
+				`	xor rax,rax 
 				1'  
 				"\tmov rdi," 0d' "\n" 
-				"\tmov rsi,0x_40_00_0000_0000_0000\n" 
-				"\tor rdi,rsi\n" 
-				"\tmov QWORD [rax],rdi\n"
-				"\tmov QWORD [rax+8*" 2d' "],0\n"  
+				##"\tmov rsi,0x_40_00_0000_0000_0000\n" 
+				##"\tor rdi,rsi\n" 
+				`	mov QWORD [rax],rdi
+				##"\tmov QWORD [rax+8*" 2d' "],0\n"  
 				pop_c_regs 
 				//
 			∎ { l e }   
@@ -12548,6 +12556,12 @@
 					`	ret_vct: resq 64
 					` rsp_tmp: resq 1
 					`
+					`; emt buffer 
+					`	EMT_BUF_LEN: resq 1 
+					`	EMT_BUF_N: resq 1
+					` EMT_BUF: resq 256 
+					`	EMT_BUF_END: resq 1
+					` 
 					`; SS segments 
 					`	SS_TOP: resq 1
 					`	SS_VCT: resq 16*SS_MAX
@@ -12603,6 +12617,7 @@
 					`	fmt_arr_l: db "{| ",0
 					`	fmt_arr_r: db "|}",0
 					`	rt_err0: db "rt_err 0:",10,0 
+					` s8_e: dq 0,0
 					`	unt: dq 0x0
 					`
 					`	unt_0: dq 0x0 
