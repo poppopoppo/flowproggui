@@ -2677,3 +2677,9 @@
 				∎ a		
     ∎∎
 ∎∎
+
+§% 
+	_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
+	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
+	_emt r0 ⊢ r0 
+	∎ 
