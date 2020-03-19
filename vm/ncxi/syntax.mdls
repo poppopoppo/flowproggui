@@ -6286,14 +6286,8 @@
 					"\tjmp LB_" 1d' "\n" 
 					"LB_" 0d' ": db " 2' "\n"   
 					"LB_" 1d' ":\n" 
-					push_c_regs 
-					`	xor rax,rax  
 					"\tmov rdi,LB_" 0d' "\n" 
-					`	mov QWORD [rsp_tmp],rsp 
-					`	and rsp,~0xf 
-					`	call printf 
-					`	mov rsp,QWORD [rsp_tmp]
-					pop_c_regs 
+					`	call emt_stg
 					//
 				∎ { s lb_n s0 }
 			§§ cmp_s8
@@ -12542,6 +12536,7 @@
 					`bits 64 
 					`%define SS_MAX 2000
 					`%define SS_NULL 0xffff_ffff_ffff_0000
+					`%define EMT_BUF_MAX 2048
 					`extern exit 
 					`extern printf 
 					`extern sprintf
@@ -12557,10 +12552,9 @@
 					` rsp_tmp: resq 1
 					`
 					`; emt buffer 
-					`	EMT_BUF_LEN: resq 1 
-					`	EMT_BUF_N: resq 1
-					` EMT_BUF: resq 256 
-					`	EMT_BUF_END: resq 1
+					`	EMT_BUF_OFS: resq 1 
+					` EMT_BUF: resb EMT_BUF_MAX 
+					`	EMT_BUF_END: resb 1
 					` 
 					`; SS segments 
 					`	SS_TOP: resq 1
@@ -12832,6 +12826,83 @@
     			`	mov rax,3
     			`	syscall
     			`	ret
+					`
+					`emt_stg: ; rdi=stg 
+					`	push rdx
+					`	push rcx
+					`	push r8
+					`	push r9
+					`	push r10
+					`	push r11
+					`	xor rax,rax 
+					`	mov QWORD [rsp_tmp],rsp 
+					`	and rsp,~0xf 
+					`	call printf 
+					`	mov rsp,QWORD [rsp_tmp] 
+					`	pop r11
+					`	pop r10
+					`	pop r9
+					`	pop r8
+					`	pop rcx
+					`	pop rdx
+					`	ret
+					`
+					`emt_add: ; rdi=len rsi=stg
+					`	cld 
+					`	push rcx 
+					`	mov rcx,rdi 
+					`	mov rax,QWORD [EMT_BUF_OFS]
+					`	add rdi,rax
+					`	cmp rdi,EMT_BUF_MAX 
+					`	jge emt_add_buf 
+					`	mov BYTE [EMT_BUF+rdi],0
+					`	mov QWORD [EMT_BUF_OFS],rdi
+					`	lea rdi,[EMT_BUF+rax]
+					`	jmp emt_add_end 
+					`emt_add_buf:
+					`	push rsi 
+					`	call emt_buf 
+					`	pop rsi 
+					`	cmp rcx,EMT_BUF_MAX
+					`	jge emt_add_stg 
+					`	mov BYTE [EMT_BUF+rcx],0
+					`	mov QWORD [EMT_BUF_OFS],rcx 
+					`	mov rdi,EMT_BUF
+					`emt_add_end:
+					`	rep movsb 
+					`	pop rcx 
+					`	ret 
+					`emt_add_stg 
+					`	mov QWORD [EMT_BUF],0
+					`	mov QWORD [EMT_BUF_OFS],0
+					`	mov rdi,rsi 
+					`	call emt_stg 
+					`	pop rcx 
+					`	ret 
+					`
+					`emt_buf:
+					`	push rdx
+					`	push rcx
+					`	push r8
+					`	push r9
+					`	push r10
+					`	push r11
+					`	mov rdi,EMT_BUF 
+					`	xor rax,rax 
+					`	mov QWORD [rsp_tmp],rsp 
+					`	and rsp,~0xf 
+					`	call printf 
+					`	mov rsp,QWORD [rsp_tmp] 
+					`	pop r11
+					`	pop r10
+					`	pop r9
+					`	pop r8
+					`	pop rcx
+					`	pop rdx
+					`	mov QWORD [EMT_BUF_OFS],0
+					`	mov BYTE [EMT_BUF],0
+					`	ret 
+					`	 
 					`_start:
 					`SS_init:
 					`	mov QWORD [SS_TOP],SS_VCT
@@ -12880,6 +12951,10 @@
 					`SS_PT_end:
 					`	mov rsi,0xffff_ffff_ffff_0200 
 					`	mov [rax],rsi
+					`
+					`	mov rdi,0
+					`	mov QWORD [EMT_BUF],0
+					`	mov QWORD [EMT_BUF_OFS],0
 					`
 					`; _args 
 					`	mov rdi,QWORD [rsp]
