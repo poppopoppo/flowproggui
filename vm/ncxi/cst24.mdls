@@ -2690,16 +2690,16 @@
 		// 
 	_emt sf0 ⊢ sf0 
 	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
-	_emt r0 ⊢ _ 
-	_emt a0 ⊢ a0 
+	##_emt r0 ⊢ _ 
+	##_emt a0 ⊢ a0 
 	$ a0 ⊢ 
 	∐ _some◂a0 . 
 		$ a0 ⊢ 
 		∐ OpADL.syntax.prs_vld◂a0 . 
-			_emt %[ "D0" ] ⊢ _ 
-			OpADL.ast.pnt { %[ 0r ] a0 } ⊢ { d0 sa0 }  
-			_emt d0 ⊢ _ 
-			_emt sa0 ⊢ _ 
+			##_emt %[ "D0" ] ⊢ _ 
+			##OpADL.ast.pnt { %[ 0r ] a0 } ⊢ { d0 sa0 }  
+			##_emt d0 ⊢ _ 
+			##_emt sa0 ⊢ _ 
 			∎ {} 
 		∐. OpADL.syntax.prs_err◂e0 .
 			∎|
