@@ -73,6 +73,10 @@
   \\_emt { s0 s1 s2 s3 l1 } ⊢ { s0 s1 s2 s3 l1 }
   \\$ a0 ⊢ a0,a1
   ∎ 
+§ f2 x 
+  _inc x ⊢ x 
+  _inc x ⊢ x 
+  ∎ x 
 § E1 « 
   ^ _ ⊢ ss0 
     "Hello " 
@@ -80,4 +84,7 @@
     "!!" 
     "\n" //
   _emt ss0 ⊢ ss0  
+  f2 %[ 3r ] ⊢ l0
+  _mlc_s8 l0 ⊢ { l0 s6 } 
+  ##_emt { l0 s0 } ⊢ _ 
   ∎
