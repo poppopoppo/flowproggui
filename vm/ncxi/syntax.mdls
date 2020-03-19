@@ -4637,15 +4637,11 @@
 			c_call f ⊢ { f ef } 
 			» _^ l,ef,l1,l0 ⊢ l,ef,l1,l0,e 
 				push_c_regs
-				`	mov rdi,1  
-				"\tmov rsi," 3d' "\n" 
+				`	mov rsi,1  
+				"\tmov rdi," 3d' "\n" 
 				`	xor rax,rax 
 				1'  
-				"\tmov rdi," 0d' "\n" 
-				##"\tmov rsi,0x_40_00_0000_0000_0000\n" 
-				##"\tor rdi,rsi\n" 
-				`	mov QWORD [rax],rdi
-				##"\tmov QWORD [rax+8*" 2d' "],0\n"  
+				"\tmov QWORD [rax]," 0d' "\n"
 				pop_c_regs 
 				//
 			∎ { l e }   
@@ -8512,17 +8508,13 @@
 									rp8.add_s8 { e0 sb0 } ⊢ e0
 									reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
 									reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
-									» "calloc" _ ⊢ sf0 
-									c_call sf0 ⊢ { sf0 scf0 }
-									» _^ sis,sip1,sr0,srm0,scf0 ⊢ sis,sip1,sr0,srm0,scf0,sc0 
+									##» "calloc" _ ⊢ sf0 
+									##c_call sf0 ⊢ { sf0 scf0 }
+									» _^ sis,sip1,sr0,srm0 ⊢ sis,sip1,sr0,srm0,sc0 
 										"; _mlc_s8 " 0' " ⊢ " 1' "\n" 
 										"\tmov rdi," 2' "\n" 
 										push_c_regs 
-										`	mov rsi,1 
-										`	xor rax,rax
-										`	push rdi
-										4'
-										`	pop QWORD [rax] 
+										`	call mlc_s8
 										pop_c_regs 
 										"\tmov " 3' ",rax\n" // 
 									rp8.add_s8 { e0 sc0 } ⊢ e0 
