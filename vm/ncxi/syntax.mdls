@@ -8615,10 +8615,10 @@
 									» _^ o,sis,siy ⊢ o,sis,siy,el1 
 										"; _#" 0d' " " 1' " ⊢ " 2' "\n" //
 									rp8.add_s8 { ec0 el1 } ⊢ ec0 
+									rp8.add_s8 { ec0 ec1 } ⊢ ec0
 									_nil {} ⊢ dl 
 									idx.crt_ptn { irv d iy rl dl } ⊢ { irv rl dl } 
 									dlt.f { lb_n rsp dl } ⊢ { lb_n rsp edl } 
-									rp8.add_s8 { ec0 ec1 } ⊢ ec0
 									rp8.cct { ec0 edl } ⊢ ec0 
 									ret_f { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv lc ec0 rl ft } ⊢|
 								∐ k ⊢ k_ctr◂{ ia na } . 
@@ -13016,7 +13016,7 @@
 									"ETR_" 0d' ": ; " 1' " " 2' " ⊢ " 3' " : " 4' "\n" //
 								add_e { tv_n tv evv ev ev_n ns_e w k yx } ⊢ { tv_n tv evv ev ev_n ns_e }
 								rp8.add_s8 { ee0 ec1 } ⊢ ee0 
-								∐ rsp'=0r . 
+								∐ rsp_e'=0r . 
 									f_etr { rsp_d0 pr00 yr } ⊢ ft 
 									emt.lc_code.f { { gfl cl } lb_n { ev evv } rsp_e { rv irv } tav tv_n tv lc ee0 rl_e ft } ⊢ { { gfl cl } lb_n { ev evv } rsp_e { rv irv } tav tv_n tv ee0 rl_e ft } 
 									rp8.cct { ec0 ee0 } ⊢ ec0  

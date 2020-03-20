@@ -3007,7 +3007,6 @@ LB_353:
 ; ∎
 	jmp RTM_1
 ETR_35: ; f2 0'(= r ) ⊢ 0'(= r ) : (_r64→_r64)
-	add rsp,8
 ;; rsp=0 , %90~0'(= r ) 
 ; _#11 0'(= r ) ⊢ 0'(= r )
 	add r13,1
@@ -3161,6 +3160,147 @@ LB_366:
 	pop rdx
 	mov QWORD [rsp-8+8*1],rax
 ;; rsp=11 , %97~18'(= {| l |} ) %96~17'(= r ) %94~16'(= {| l |} ) %89~%[ "dd\t\n\"J  " ] %88~13'(= a3◂ [ r] ) %87~14'(= r ) %86~15'(= {| l |} ) %82~10'(= a3◂ [ r] ) %81~11'(= r ) %80~12'(= {| l |} ) %76~7'(= a3◂ [ r] ) %75~8'(= r ) %74~9'(= {| l |} ) %70~4'(= a3◂ [ r] ) %69~5'(= r ) %68~6'(= {| l |} ) %64~2'(= a3◂ [ r] ) %63~1'(= r ) %62~3'(= {| l |} ) %0~0'(= {| {| l |}|} ) 
+; _#10 { 17'(= r ) 3'(= {| l |} ) 18'(= {| l |} ) } ⊢ { 17'(= r ) 3'(= {| l |} ) 18'(= {| l |} ) }
+	jmp LB_368
+LB_367: db 95,101,109,116,58,0
+LB_368:
+	mov rdi,LB_367
+	call emt_stg
+	jmp LB_370
+LB_369: db 123,32,0
+LB_370:
+	mov rdi,LB_369
+	call emt_stg
+	mov rax,QWORD [rsp-8+8*2]
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_372
+LB_371: db 32,0
+LB_372:
+	mov rdi,LB_371
+	call emt_stg
+	mov rax,r9
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_374
+LB_373: db 32,0
+LB_374:
+	mov rdi,LB_373
+	call emt_stg
+	mov rax,QWORD [rsp-8+8*1]
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_376
+LB_375: db 32,0
+LB_376:
+	mov rdi,LB_375
+	call emt_stg
+	jmp LB_378
+LB_377: db 125,32,0
+LB_378:
+	mov rdi,LB_377
+	call emt_stg
+	jmp LB_380
+LB_379: db 10,0
+LB_380:
+	mov rdi,LB_379
+	call emt_stg
+	jmp LB_381
+LB_381:
+; .dlt.ptn { 17'(= r ) 3'(= {| l |} ) 18'(= {| l |} ) }
+	mov rdi,r9
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call free 
+	mov rsp,QWORD [rsp_tmp] 
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	mov rdi,QWORD [rsp-8+8*1]
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call free 
+	mov rsp,QWORD [rsp_tmp] 
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+;; rsp=11 , %94~16'(= {| l |} ) %89~%[ "dd\t\n\"J  " ] %88~13'(= a3◂ [ r] ) %87~14'(= r ) %86~15'(= {| l |} ) %82~10'(= a3◂ [ r] ) %81~11'(= r ) %80~12'(= {| l |} ) %76~7'(= a3◂ [ r] ) %75~8'(= r ) %74~9'(= {| l |} ) %70~4'(= a3◂ [ r] ) %69~5'(= r ) %68~6'(= {| l |} ) %64~2'(= a3◂ [ r] ) %63~1'(= r ) %0~0'(= {| {| l |}|} ) 
 ; ∎
 	jmp RTM_2
 RTM_2:
