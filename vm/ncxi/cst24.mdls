@@ -2683,21 +2683,28 @@
 				∎ a		
     ∎∎
 ∎∎
-§ E {} 
+§ E fn0
 	^ _ ⊢ sf0
 		`§§ M0
 		`	∎∎ 
 		// 
+	_s8_len sf0 ⊢ { sf0 lsf0 } 
+	_emt lsf0 ⊢ _ 
 	_emt sf0 ⊢ sf0 
-	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
+	##_in_fn %[ "cst28.mdls" ] ⊢ { _ sf1 }
+	_in_fn fn0 ⊢ { _ sf1 } 
+	##_emt sf1 ⊢ sf1 
+	OpADL.syntax.file.prs { sf1 %[ 0r ] } ⊢ { sf1 r0 a0 } 
 	_emt r0 ⊢ _ 
-	_emt a0 ⊢ a0 
+	_emt a0 ⊢ a0  
 	$ a0 ⊢ 
 	∐ _some◂a0 . 
 		$ a0 ⊢ 
 		∐ OpADL.syntax.prs_vld◂a0 . 
 			_emt %[ "D0" ] ⊢ _ 
 			OpADL.ast.pnt { %[ 0r ] a0 } ⊢ { d0 sa0 }  
+			_s8_len sa0 ⊢ { sa0 ls0 } 
+			_emt ls0 ⊢ _ 
 			_emt d0 ⊢ _ 
 			_emt sa0 ⊢ _ 
 			∎ {} 
@@ -2707,5 +2714,7 @@
 		∎|  
 §% 
 	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
-	E {} ⊢ _ 
+	_emt _args ⊢ args
+	_lod_q { args %[ 1r ] } ⊢ { args _ fn0 } 
+	E fn0 ⊢ _ 
 	∎ 

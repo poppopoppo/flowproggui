@@ -7798,9 +7798,7 @@
 									» _^ sr0,srm0 ⊢ sr0,srm0,sc0 
 										##"; _mlc_s8 " 0' " ⊢ " 1' "\n" 
 										"\tmov rdi," 0' "\n" 
-										push_c_regs 
 										`	call mlc_s8
-										pop_c_regs 
 										"\tmov " 1' ",rax\n" // 
 									rp8.add_s8 { e0 sc0 } ⊢ e0 
 									rp8.mk_s8 e0 ⊢ { e0 sc0 }
@@ -11690,6 +11688,12 @@
 						$ h0 ⊢ h0,h00 
 						$ kh0 ⊢ kh0,kh00 
 						act_mtc { gfl ret kh00 h00 { drl dp lc rf gr go } e0 ev evv rv irv tav tv tv_n lb_n } ⊢ { gfl ret e0 ev evv rv irv tav tv tv_n lb_n } 						
+						» _^ _ ⊢ s0 
+							`	mov r9,QWORD [rsp+8]
+							`	mov r14,QWORD [rsp+16]
+							`	mov r13,QWORD [rsp+24]
+							//
+						rp8.add_s8 { e0 s0 } ⊢ e0 
 						act_lp { gfl ret kh0 h0 ga e0 ev evv rv irv tav tv tv_n lb_n } ⊢| 
 					∐. ast.grm.act_end◂{ drl dp lc rf gr go } .
 						act_mtc { gfl ret kh0 h0 { drl dp lc rf gr go } e0 ev evv rv irv tav tv tv_n lb_n } ⊢ { gfl ret e0 ev evv rv irv tav tv tv_n lb_n } 						
@@ -12594,10 +12598,22 @@
 					`	lea rdi,[rdi+16] 
 					`	mov rsi,1 
 					`	xor rax,rax 
+					`	push rdx
+					`	push rcx
+					`	push r8
+					`	push r9
+					`	push r10
+					`	push r11
 					`	mov QWORD [rsp_tmp],rsp 
 					`	and rsp,~0xf 
 					`	call calloc 
 					`	mov rsp,QWORD [rsp_tmp]
+					`	pop r11 
+					`	pop r10 
+					`	pop r9 
+					`	pop r8 
+					`	pop rcx 
+					`	pop rdx 
 					`	pop QWORD [rax] 
 					`	ret
 					`
