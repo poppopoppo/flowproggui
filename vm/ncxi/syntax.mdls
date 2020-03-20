@@ -681,7 +681,22 @@
 				∐ s8 : _s8
 				∐ cst : cst◂e'
 				∐ idx : { fmt _r64 }
-				∐ for : { _r64 _s8 }
+				∐ for : { _r64 _s8 } 
+			§ pnt p 
+				$ p ⊢ 
+				∐ s8◂s0 .
+					∎ s0 
+				∐ cst◂c0 .
+					pnt_cst c0 ⊢ s 
+					∎ s 
+				∐ idx◂{ f x } . 
+					» _^ x ⊢ x,sr 
+						0d' "'" // 
+					∎ sr 
+				∐. for◂{ i s } . 
+					» _^ i,s ⊢ i,s,sr 
+						0d' "*" 1' // 
+					∎ sr 
 			∎∎
 		¶
 			@.lc_code r',e'
@@ -765,6 +780,18 @@
 				» _^ dn ⊢ dn,sr
 					0'*"\t" "∎|\n" //
 				∎ { dn sr }
+		@.pnt_s8_exp_lst { dn l } 
+			$ l ⊢ 
+			∐ _cns◂{ p l } . 
+				exp_s8.pnt p ⊢ sp 
+				pnt_s8_exp_lst { dn l } ⊢ { dn sl } 
+				» _^ sp,sl ⊢ sp,sl,sr 
+					0' " " 1' // 
+				∎ { dn sr }
+			∐. _nil◂{} . 
+				» _^ dn ⊢ dn,sr 
+					"//\n" //
+				∎ { dn sr }
 		@.pnt_lc_line { dn o }
 			∐ o ⊢ op_name◂{ n s d } .
 				pnt_src_ptn s ⊢ ss
@@ -789,9 +816,10 @@
 					0'*"\t" "» " 1' " " 2' " ⊢ " 3' "\n" //
 				∎ { dn sr }
 			∐. o ⊢ op_exp_s8◂{ l sl dl } .
-				» _^ dn ⊢ dn,sr
+				pnt_s8_exp_lst { dn l } ⊢ { dn se } 
+				» _^ dn,se ⊢ dn,se,sr
 					0'*"\t" "» _^ .." " ⊢ .." "\n"
-					" .. //\n" //
+					0'*"\t" "\t" 1' //
 				∎ { dn sr }
 		@.pnt_lc_mtc { dn m }
 			∐ m ⊢ p_cns◂{ { l e } m } .
@@ -5020,6 +5048,7 @@
 										mk_adt.f { ql0 pvl0 ipl0 } ⊢ ipl0 
 										$ ia1 ⊢ ia1,i1 
 										lst.nth { ipl0 i1 } ⊢ { ip0 ipl0 }
+										\[
 										lp_hp { { gl lb1 rsp } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 										∐ p1 ⊢ _some◂p1 . 
 											stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
@@ -5028,6 +5057,37 @@
 											∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 										∐. . 
 											∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
+											\]
+										∐ ip0 ⊢ stt_v.ref◂iq0 . 
+											stt_v.ref iq0 ⊢ ip0 
+											lp_hp { { gl lb1 rsp } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											∐ p1 ⊢ _some◂p1 . 
+												stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
+												RP.atm p1 ⊢ p1
+												_some p1 ⊢ p1  
+												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											∐. . 
+												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }												
+										∐. . 
+											alc_vs vs0 ⊢ { vs0 r2 } 
+											brk_rsp { rsp r2 } ⊢ { rsp r2 sb0 } 
+											rp8.add_s8 { e0 sb0 } ⊢ e0 
+											reg { rsp r2 } ⊢ { rsp r2 er2 br2 }
+											» _^ er2 ⊢ er2,ec1 
+												"\tmov rax,QWORD [rdi+8]\n" 
+												"\tmov " 0' ",rax\n" // 
+											rp8.add_s8 { e0 ec1 } ⊢ e0 
+											$ r2 ⊢ r2,r20 
+											$ ip0 ⊢ ip0,ip00 
+											_cns { { r20 ip00 } gl } ⊢ gl 
+											lp_hp { { gl lb1 rsp } r2 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											∐ p1 ⊢ _some◂p1 . 
+												stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
+												RP.atm p1 ⊢ p1
+												_some p1 ⊢ p1  
+												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
+											∐. . 
+												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 								∐. . 
 									» "mov_ptn.ptn_to_r d8" _ ⊢ ee0 
 										_emt ee0 ⊢ _ 
@@ -9007,7 +9067,7 @@
 									$ p1 ⊢ p1,p10 
 									stt_v.pnt.f p10 ⊢ sp1 
 									» _^ sisp,sp1 ⊢ sisp,sp1,ec1 
-										";; ? " 0' " ⊢ " 1' "\n" // 
+										";; ?; " 0' " ⊢ " 1' "\n" // 
 									rp8.add_s8 { ec0 ec1 } ⊢ ec0 
 									rp8.cct { ec0 e0 } ⊢ ec0
 									mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl ec0 rl } ⊢|
@@ -9277,7 +9337,7 @@
 								$ p1 ⊢ p1,p10 
 								stt_v.pnt.f p10 ⊢ sp1 
 								» _^ sis,sp1 ⊢ sis,sp1,ec1 
-									";; ? " 0' " ⊢ " 1' "\n" // 
+									";; ?. " 0' " ⊢ " 1' "\n" // 
 								rp8.add_s8 { ec0 ec1 } ⊢ ec0 
 								rp8.cct { ec0 e0 } ⊢ ec0 
 								mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl ec0 rl } ⊢ { vs0 gl dl lb_n { ev evv }  rsp { rv irv  } tav tv_n tv ec0 rl }
