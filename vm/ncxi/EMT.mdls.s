@@ -11,7 +11,7 @@ extern free
 extern isspace 
 extern strtoul
 extern strlen
-section .bss 
+section .bss
 	tmp: resq 64
 	ret_vct: resq 64
  rsp_tmp: resq 1
@@ -58,109 +58,65 @@ struc STAT
 	.__unused5  resd 1
 endstruc
 
-SS_RCD_1_TOP: resq 1
+	SS_RCD_1_TOP: resq 1
+	SS_RCD_1_VCT: resq 2*SS_MAX
+	SS_RCD_1_BTM: resq 1
 
-SS_RCD_1_VCT: resq 2*SS_MAX
+	SS_RCD_2_TOP: resq 1
+	SS_RCD_2_VCT: resq 3*SS_MAX
+	SS_RCD_2_BTM: resq 1
 
-SS_RCD_1_BTM: resq 1
+	SS_RCD_3_TOP: resq 1
+	SS_RCD_3_VCT: resq 4*SS_MAX
+	SS_RCD_3_BTM: resq 1
 
+	SS_RCD_4_TOP: resq 1
+	SS_RCD_4_VCT: resq 5*SS_MAX
+	SS_RCD_4_BTM: resq 1
 
-SS_RCD_2_TOP: resq 1
+	SS_RCD_5_TOP: resq 1
+	SS_RCD_5_VCT: resq 6*SS_MAX
+	SS_RCD_5_BTM: resq 1
 
-SS_RCD_2_VCT: resq 3*SS_MAX
+	SS_RCD_6_TOP: resq 1
+	SS_RCD_6_VCT: resq 7*SS_MAX
+	SS_RCD_6_BTM: resq 1
 
-SS_RCD_2_BTM: resq 1
+	SS_RCD_7_TOP: resq 1
+	SS_RCD_7_VCT: resq 8*SS_MAX
+	SS_RCD_7_BTM: resq 1
 
+	SS_RCD_8_TOP: resq 1
+	SS_RCD_8_VCT: resq 9*SS_MAX
+	SS_RCD_8_BTM: resq 1
 
-SS_RCD_3_TOP: resq 1
+	SS_RCD_9_TOP: resq 1
+	SS_RCD_9_VCT: resq 10*SS_MAX
+	SS_RCD_9_BTM: resq 1
 
-SS_RCD_3_VCT: resq 4*SS_MAX
+	SS_RCD_10_TOP: resq 1
+	SS_RCD_10_VCT: resq 11*SS_MAX
+	SS_RCD_10_BTM: resq 1
 
-SS_RCD_3_BTM: resq 1
+	SS_RCD_11_TOP: resq 1
+	SS_RCD_11_VCT: resq 12*SS_MAX
+	SS_RCD_11_BTM: resq 1
 
+	SS_RCD_12_TOP: resq 1
+	SS_RCD_12_VCT: resq 13*SS_MAX
+	SS_RCD_12_BTM: resq 1
 
-SS_RCD_4_TOP: resq 1
+	SS_RCD_13_TOP: resq 1
+	SS_RCD_13_VCT: resq 14*SS_MAX
+	SS_RCD_13_BTM: resq 1
 
-SS_RCD_4_VCT: resq 5*SS_MAX
+	SS_RCD_14_TOP: resq 1
+	SS_RCD_14_VCT: resq 15*SS_MAX
+	SS_RCD_14_BTM: resq 1
 
-SS_RCD_4_BTM: resq 1
-
-
-SS_RCD_5_TOP: resq 1
-
-SS_RCD_5_VCT: resq 6*SS_MAX
-
-SS_RCD_5_BTM: resq 1
-
-
-SS_RCD_6_TOP: resq 1
-
-SS_RCD_6_VCT: resq 7*SS_MAX
-
-SS_RCD_6_BTM: resq 1
-
-
-SS_RCD_7_TOP: resq 1
-
-SS_RCD_7_VCT: resq 8*SS_MAX
-
-SS_RCD_7_BTM: resq 1
-
-
-SS_RCD_8_TOP: resq 1
-
-SS_RCD_8_VCT: resq 9*SS_MAX
-
-SS_RCD_8_BTM: resq 1
-
-
-SS_RCD_9_TOP: resq 1
-
-SS_RCD_9_VCT: resq 10*SS_MAX
-
-SS_RCD_9_BTM: resq 1
-
-
-SS_RCD_10_TOP: resq 1
-
-SS_RCD_10_VCT: resq 11*SS_MAX
-
-SS_RCD_10_BTM: resq 1
-
-
-SS_RCD_11_TOP: resq 1
-
-SS_RCD_11_VCT: resq 12*SS_MAX
-
-SS_RCD_11_BTM: resq 1
-
-
-SS_RCD_12_TOP: resq 1
-
-SS_RCD_12_VCT: resq 13*SS_MAX
-
-SS_RCD_12_BTM: resq 1
-
-
-SS_RCD_13_TOP: resq 1
-
-SS_RCD_13_VCT: resq 14*SS_MAX
-
-SS_RCD_13_BTM: resq 1
-
-
-SS_RCD_14_TOP: resq 1
-
-SS_RCD_14_VCT: resq 15*SS_MAX
-
-SS_RCD_14_BTM: resq 1
-
-
-SS_RCD_15_TOP: resq 1
-
-SS_RCD_15_VCT: resq 16*SS_MAX
-
-SS_RCD_15_BTM: resq 1
+	SS_RCD_15_TOP: resq 1
+	SS_RCD_15_VCT: resq 16*SS_MAX
+	SS_RCD_15_BTM: resq 1
 
 section .data
 	err_n: dq 0
