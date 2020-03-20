@@ -2707,7 +2707,22 @@
 		∐. OpADL.syntax.prs_err◂e0 .
 			∎|
 	∐. _none◂{} . 
-		∎|  
+		∎| 
+§ E1 {} 
+	^ _ ⊢ sf0
+		"xy0"
+		// 
+	OpADL.syntax.dst_ptn.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
+	_emt r0 ⊢ _ 
+	_emt a0 ⊢ a0  
+	$ a0 ⊢ 
+	∐ _some◂a0 . 
+		_emt %[ "D0" ] ⊢ _ 
+		OpADL.ast.pnt_dst_ptn a0 ⊢ sa0  
+		_emt sa0 ⊢ _ 
+		∎ {} 
+	∐. _none◂{} . 
+		∎| 
 § f0 c
 	∐ 97r=<c'; c'=<122r . 
 		_some c ⊢ a
@@ -2716,6 +2731,10 @@
 		_none {} ⊢ a
 		∎ a
 §% 
+	OpADL.ast.dst_reg %[ "xy0" ] ⊢ r 
+	OpADL.RP.atm r ⊢ p 
+	OpADL.ast.pnt_dst_ptn p ⊢ sa0  
+	_emt sa0 ⊢ _ 
 	$ %[ "xyz0" ] ⊢ sx0 
 	prm_word.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 }
 	##OpADL.syntax.src.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 } 
@@ -2727,6 +2746,7 @@
 	_emt { sx0 r0 a0 } ⊢ _ 
 	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
 	_emt _args ⊢ args
+	E1 {} ⊢ _ 
 	_lod_q { args %[ 1r ] } ⊢ { args _ fn0 } 
 	E fn0 ⊢ _ 
 	∎ 
