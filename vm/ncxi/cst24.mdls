@@ -419,35 +419,31 @@
 
 §§+s8
 	@.word
-	∐. ch_a word_tl ⊢ { c0 cl }
-		##_cns { c0 cl } ⊢ cl
-		rp8.pfx_chr { c0 cl } ⊢ cl 
-		##s8_of_r64_lst cl ⊢ s
-		rp8.mk_s8 cl ⊢ { cl s } 
-		_some s ⊢ a
-		∎ a
+		∐. ch_a word_tl ⊢ { c0 cl }
+			rp8.pfx_chr { c0 cl } ⊢ cl 
+			rp8.mk_s8 cl ⊢ { cl s } 
+			_some s ⊢ a
+			∎ a
 	@.word_tl
-	∐ word_hd word_tl ⊢ { c tl }
-		##_cns { c tl } ⊢ l
-		rp8.pfx_chr { c tl } ⊢ l 
-		_some l ⊢ a
-		∎ a
-	∐. ⊢ { }
-		##_nil {} ⊢ l
-		rp8.e {} ⊢ l 
-		_some l ⊢ a 
-		∎ a
+		∐ word_hd word_tl ⊢ { c tl }
+			rp8.pfx_chr { c tl } ⊢ l 
+			_some l ⊢ a
+			∎ a
+		∐. ⊢ { }
+			rp8.e {} ⊢ l 
+			_some l ⊢ a 
+			∎ a
 	@.word_hd
-	∐ ch_a ⊢ { c }
-		_some c ⊢ a
-		∎ a
-	∐ dgt ⊢ { c }
-		_some c ⊢ a
-		∎ a
-	∐. "_" ⊢ { {} }
-		» 95r _ ⊢ c
-		_some c ⊢ a
-		∎ a
+		∐ ch_a ⊢ { c }
+			_some c ⊢ a
+			∎ a
+		∐ dgt ⊢ { c }
+			_some c ⊢ a
+			∎ a
+		∐. "_" ⊢ { {} }
+			» 95r _ ⊢ c
+			_some c ⊢ a
+			∎ a
 
 §§+s8
 	@.prm_word
@@ -2712,7 +2708,23 @@
 			∎|
 	∐. _none◂{} . 
 		∎|  
+§ f0 c
+	∐ 97r=<c'; c'=<122r . 
+		_some c ⊢ a
+		∎ a
+	∐. .
+		_none {} ⊢ a
+		∎ a
 §% 
+	$ %[ "xyz0" ] ⊢ sx0 
+	prm_word.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 }
+	##OpADL.syntax.src.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 } 
+	_emt { sx0 r0 a0 } ⊢ _ 
+	^ _ ⊢ sx0
+		`	∎ x 
+		// 
+	OpADL.syntax.lc_code.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 } 
+	_emt { sx0 r0 a0 } ⊢ _ 
 	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
 	_emt _args ⊢ args
 	_lod_q { args %[ 1r ] } ⊢ { args _ fn0 } 

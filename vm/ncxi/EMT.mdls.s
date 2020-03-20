@@ -3321,9 +3321,11 @@ LB_220
 ;; rsp=1 , %337~1'(= r ) %336~0'(= r ) %335~8'(= r ) 
 	mov rdi,48
 	cmp QWORD [rsp-8+8*1],rdi
-	jg LB_221
+;;48 =< .. 
+	jl LB_221
 	mov rdi,57
 	cmp QWORD [rsp-8+8*1],rdi
+;; .. =< 57
 	jg LB_221
 ;; rsp=1 , %337~1'(= r ) %336~0'(= r ) %335~8'(= r ) 
 ; #22 8'(= r ) ⊢ 0(<2)◂8'(= r )
@@ -3407,9 +3409,11 @@ LB_228
 ;; rsp=1 , %342~1'(= r ) %341~0'(= r ) %340~8'(= r ) 
 	mov rdi,97
 	cmp QWORD [rsp-8+8*1],rdi
-	jg LB_229
+;;97 =< .. 
+	jl LB_229
 	mov rdi,122
 	cmp QWORD [rsp-8+8*1],rdi
+;; .. =< 122
 	jg LB_229
 ;; rsp=1 , %342~1'(= r ) %341~0'(= r ) %340~8'(= r ) 
 ; #22 8'(= r ) ⊢ 0(<2)◂8'(= r )
@@ -3493,9 +3497,11 @@ LB_236
 ;; rsp=1 , %347~1'(= r ) %346~0'(= r ) %345~8'(= r ) 
 	mov rdi,65
 	cmp QWORD [rsp-8+8*1],rdi
-	jg LB_237
+;;65 =< .. 
+	jl LB_237
 	mov rdi,90
 	cmp QWORD [rsp-8+8*1],rdi
+;; .. =< 90
 	jg LB_237
 ;; rsp=1 , %347~1'(= r ) %346~0'(= r ) %345~8'(= r ) 
 ; #22 8'(= r ) ⊢ 0(<2)◂8'(= r )
@@ -20730,7 +20736,7 @@ LB_1780:
 ;; rsp=0 , %1410~2'(= {| l |} ) %1402~1'(= r ) %1401~0'(= r ) 
 ; ∎| 
 	jmp LB_1782
-LB_1781: db 101,120,110,32,51,52,49,53,57,58,10,0
+LB_1781: db 101,120,110,32,51,52,48,56,55,58,10,0
 LB_1782:
 	mov rdi,LB_1781
 	call emt_stg
@@ -20879,7 +20885,7 @@ LB_1796:
 ;; rsp=0 , %1416~2'(= {| l |} ) %1414~1'(= r ) %1413~0'(= r ) 
 ; ∎| 
 	jmp LB_1798
-LB_1797: db 101,120,110,32,51,52,51,48,56,58,10,0
+LB_1797: db 101,120,110,32,51,52,50,51,54,58,10,0
 LB_1798:
 	mov rdi,LB_1797
 	call emt_stg
@@ -21259,7 +21265,7 @@ LB_1848:
 ;; rsp=0 , %1436~2'(= {| l |} ) %1428~1'(= r ) %1427~0'(= r ) 
 ; ∎| 
 	jmp LB_1850
-LB_1849: db 101,120,110,32,51,52,55,49,56,58,10,0
+LB_1849: db 101,120,110,32,51,52,54,52,54,58,10,0
 LB_1850:
 	mov rdi,LB_1849
 	call emt_stg
@@ -22109,7 +22115,7 @@ LB_1959:
 ;; rsp=0 , %1484~%[ "line_res_c 0" ] %1482~1'(= r ) %1481~0'(= r ) 
 ; ∎| 
 	jmp LB_1961
-LB_1960: db 101,120,110,32,51,53,53,55,54,58,10,0
+LB_1960: db 101,120,110,32,51,53,53,48,52,58,10,0
 LB_1961:
 	mov rdi,LB_1960
 	call emt_stg
@@ -44063,7 +44069,7 @@ LB_4800:
 ;; rsp=4 , %2538~{ 0'(= r ) 1'(= r ) } %2537~%[ "grm_etr_act_act 0" ] %2532~10'(= a2◂ [ *{ rr{| l |}}] ) %2529~11'(= a26◂ [ a9◂ [ ]{| l |}] ) %2527~9'(= a8◂ [ a13◂ [ {| l |}]] ) %2526~8'(= a8◂ [ a13◂ [ {| l |}]] ) 
 ; ∎| 
 	jmp LB_4802
-LB_4801: db 101,120,110,32,53,55,54,57,54,58,10,0
+LB_4801: db 101,120,110,32,53,55,54,50,52,58,10,0
 LB_4802:
 	mov rdi,LB_4801
 	call emt_stg
@@ -44343,7 +44349,7 @@ LB_4850:
 ;; rsp=2 , %2549~{ 0'(= r ) 1'(= r ) } %2548~%[ "grm_etr_act_act 1" ] %2543~9'(= a2◂ [ *{ rr{| l |}}] ) %2539~8'(= a8◂ [ a13◂ [ {| l |}]] ) 
 ; ∎| 
 	jmp LB_4852
-LB_4851: db 101,120,110,32,53,55,57,54,53,58,10,0
+LB_4851: db 101,120,110,32,53,55,56,57,51,58,10,0
 LB_4852:
 	mov rdi,LB_4851
 	call emt_stg
@@ -50603,7 +50609,7 @@ LB_6360:
 ;; rsp=0 , %2668~3'(= a2◂ [ *{ rr{| l |}}] ) %2662~0'(= {| l |} ) %2659~1'(= {| l |} ) 
 ; ∎| 
 	jmp LB_6384
-LB_6383: db 101,120,110,32,54,48,53,51,51,58,10,0
+LB_6383: db 101,120,110,32,54,48,52,54,49,58,10,0
 LB_6384:
 	mov rdi,LB_6383
 	call emt_stg
@@ -50613,18 +50619,2379 @@ LB_6359:
 ;; rsp=0 , %2662~0'(= {| l |} ) %2659~1'(= {| l |} ) 
 ; ∎| 
 	jmp LB_6386
-LB_6385: db 101,120,110,32,54,48,53,54,48,58,10,0
+LB_6385: db 101,120,110,32,54,48,52,56,56,58,10,0
 LB_6386:
 	mov rdi,LB_6385
 	call emt_stg
 	jmp err
+ETR_274: ; f0 0'(= r ) ⊢ 0'(= a3◂ [ r] ) : (_r64→_opn◂_r64)
+;; rsp=0 , %2678~0'(= r ) 
+	mov rdi,97
+	cmp r13,rdi
+;;97 =< .. 
+	jl LB_6387
+	mov rdi,122
+	cmp r13,rdi
+;; .. =< 122
+	jg LB_6387
+;; rsp=0 , %2678~0'(= r ) 
+; #22 0'(= r ) ⊢ 0(<2)◂0'(= r )
+;; rsp=0 , %2679~0(<2)◂0'(= r ) 
+; ∎ 0(<2)◂0'(= r )
+; .mov_ptn2 0(<2)◂0'(= r ) ⊢ 0'(= a3◂ [ r] )
+	mov r14,r13
+; .mov_ptn 0(<2)◂1'(= r ) ⊢ 0'(= a3◂ [ r] )
+	mov rax,r14
+	mov rdi,rax
+	mov rax,[SS_LN_TOP]
+	mov rsi,[rax]
+	mov QWORD [SS_LN_TOP],rsi 
+	mov QWORD [rax],0
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],rdi
+	mov r13,rax
+	ret
+LB_6387:
+;; rsp=0 , %2678~0'(= r ) 
+; #23 { } ⊢ 1(<2)◂{ }
+;; rsp=0 , %2680~1(<2)◂{ } %2678~0'(= r ) 
+; ∎ 1(<2)◂{ }
+; .dlt.ptn 0'(= r )
+; .mov_ptn2 1(<2)◂{ } ⊢ 0'(= a3◂ [ r] )
+; .mov_ptn 1(<2)◂{ } ⊢ 0'(= a3◂ [ r] )
+	mov rax,unt 
+	mov rax,unt_1
+	mov r13,rax
+	ret
 RTM_0:
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
-; _#10 0'(= {| {| l |}|} ) ⊢ 0'(= {| {| l |}|} )
 	jmp LB_6388
-LB_6387: db 95,101,109,116,58,0
 LB_6388:
-	mov rdi,LB_6387
+; $ %[ "xyz0" ] ⊢ %[ "xyz0" ]
+;; rsp=0 , %2681~%[ "xyz0" ] %0~0'(= {| {| l |}|} ) 
+; rsp_d=0, #77 { %[ "xyz0" ] %[ 0r ] } ⊢ { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ {| l |}] ) }
+	sub rsp,8
+	mov QWORD [rsp+8*0],r13
+; .mov_ptn2 { %[ "xyz0" ] %[ 0r ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
+; .mov_ptn %[ 0r ] ⊢ 1'(= r )
+	mov rax,0
+	mov r14,rax
+; .mov_ptn %[ "xyz0" ] ⊢ 0'(= {| l |} )
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov rsi,1  
+	mov rdi,16
+	xor rax,rax 
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call calloc
+	mov rsp,QWORD [rsp_tmp]  
+	mov QWORD [rax],4
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	mov BYTE [rax+8+0],120
+	mov BYTE [rax+8+1],121
+	mov BYTE [rax+8+2],122
+	mov BYTE [rax+8+3],48
+	mov r13,rax
+	call ETR_77
+
+	mov rax,QWORD [rsp-8+8*1]
+	mov r9,r13
+	mov r13,rax
+	add rsp,8
+;; rsp=0 , %2684~2'(= a3◂ [ {| l |}] ) %2683~1'(= r ) %2682~3'(= {| l |} ) %0~0'(= {| {| l |}|} ) 
+; _#10 { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ {| l |}] ) } ⊢ { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ {| l |}] ) }
+	jmp LB_6390
+LB_6389: db 95,101,109,116,58,0
+LB_6390:
+	mov rdi,LB_6389
+	call emt_stg
+	jmp LB_6392
+LB_6391: db 123,32,0
+LB_6392:
+	mov rdi,LB_6391
+	call emt_stg
+	mov rax,r9
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_6394
+LB_6393: db 32,0
+LB_6394:
+	mov rdi,LB_6393
+	call emt_stg
+	mov rax,r14
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_6396
+LB_6395: db 32,0
+LB_6396:
+	mov rdi,LB_6395
+	call emt_stg
+	mov rax,r8
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	call LB_6397
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_6399
+LB_6398: db 32,0
+LB_6399:
+	mov rdi,LB_6398
+	call emt_stg
+	jmp LB_6401
+LB_6400: db 125,32,0
+LB_6401:
+	mov rdi,LB_6400
+	call emt_stg
+	jmp LB_6403
+LB_6402: db 10,0
+LB_6403:
+	mov rdi,LB_6402
+	call emt_stg
+	jmp LB_6404
+LB_6397:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6407+8*rax]
+LB_6407: dq LB_6405,LB_6406
+LB_6405:
+	jmp LB_6410
+LB_6409: db 39,48,226,151,130,0
+LB_6410:
+	mov rdi,LB_6409
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6408
+LB_6406:
+	jmp LB_6412
+LB_6411: db 39,49,226,151,130,0
+LB_6412:
+	mov rdi,LB_6411
+	call emt_stg
+	jmp LB_6414
+LB_6413: db 42,123,32,0
+LB_6414:
+	mov rdi,LB_6413
+	call emt_stg
+	jmp LB_6416
+LB_6415: db 125,32,0
+LB_6416:
+	mov rdi,LB_6415
+	call emt_stg
+	jmp LB_6408
+LB_6408:
+	ret
+LB_6404:
+; .dlt.ptn { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ {| l |}] ) }
+	mov rdi,r9
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call free 
+	mov rsp,QWORD [rsp_tmp] 
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+;	.dlt adt ⊢ _  
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; » _^ .. ⊢ ..
+; .. //
+	mov rdi,0
+	add rdi,8
+	push rdi 
+	call mlc_s8
+	pop rdi
+	mov r14,rax
+	lea rdi,[rax+7+rdi]
+	std 
+	mov QWORD [tmp],rcx 
+	jmp LB_6417
+	LB_6418: db 9,226,136,142,32,120,32,10,0
+LB_6417:
+	lea rsi,[LB_6418+8-1]
+	mov rcx,8
+	rep movsb
+	mov rcx,QWORD [tmp] 
+;; rsp=0 , %2686~1'(= {| l |} ) %0~0'(= {| {| l |}|} ) 
+; rsp_d=0, #234 { 1'(= {| l |} ) %[ 0r ] } ⊢ { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] ) }
+	sub rsp,8
+	mov QWORD [rsp+8*0],r13
+; .mov_ptn2 { 1'(= {| l |} ) %[ 0r ] } ⊢ { 0'(= {| l |} ) 1'(= r ) }
+; .mov_ptn 1'(= {| l |} ) ⊢ 0'(= {| l |} )
+	mov rax,r14
+	mov r13,rax
+; .mov_ptn %[ 0r ] ⊢ 1'(= r )
+	mov rax,0
+	mov r14,rax
+	call ETR_234
+
+	mov rax,QWORD [rsp-8+8*1]
+	mov r9,r13
+	mov r13,rax
+	add rsp,8
+;; rsp=0 , %2689~2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] ) %2688~1'(= r ) %2687~3'(= {| l |} ) %0~0'(= {| {| l |}|} ) 
+; _#10 { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] ) } ⊢ { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] ) }
+	jmp LB_6420
+LB_6419: db 95,101,109,116,58,0
+LB_6420:
+	mov rdi,LB_6419
+	call emt_stg
+	jmp LB_6422
+LB_6421: db 123,32,0
+LB_6422:
+	mov rdi,LB_6421
+	call emt_stg
+	mov rax,r9
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_6424
+LB_6423: db 32,0
+LB_6424:
+	mov rdi,LB_6423
+	call emt_stg
+	mov rax,r14
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_6426
+LB_6425: db 32,0
+LB_6426:
+	mov rdi,LB_6425
+	call emt_stg
+	mov rax,r8
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov r8,rax
+	call LB_6427
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+	jmp LB_6429
+LB_6428: db 32,0
+LB_6429:
+	mov rdi,LB_6428
+	call emt_stg
+	jmp LB_6431
+LB_6430: db 125,32,0
+LB_6431:
+	mov rdi,LB_6430
+	call emt_stg
+	jmp LB_6433
+LB_6432: db 10,0
+LB_6433:
+	mov rdi,LB_6432
+	call emt_stg
+	jmp LB_6434
+LB_6427:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6437+8*rax]
+LB_6437: dq LB_6435,LB_6436
+LB_6435:
+	jmp LB_6440
+LB_6439: db 39,48,226,151,130,0
+LB_6440:
+	mov rdi,LB_6439
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6441
+	jmp LB_6438
+LB_6436:
+	jmp LB_6443
+LB_6442: db 39,49,226,151,130,0
+LB_6443:
+	mov rdi,LB_6442
+	call emt_stg
+	jmp LB_6445
+LB_6444: db 42,123,32,0
+LB_6445:
+	mov rdi,LB_6444
+	call emt_stg
+	jmp LB_6447
+LB_6446: db 125,32,0
+LB_6447:
+	mov rdi,LB_6446
+	call emt_stg
+	jmp LB_6438
+LB_6438:
+	ret
+LB_6441:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6450+8*rax]
+LB_6450: dq LB_6448,LB_6449
+LB_6448:
+	jmp LB_6453
+LB_6452: db 39,48,226,151,130,0
+LB_6453:
+	mov rdi,LB_6452
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6454
+	jmp LB_6451
+LB_6449:
+	jmp LB_6456
+LB_6455: db 39,49,226,151,130,0
+LB_6456:
+	mov rdi,LB_6455
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6457
+	jmp LB_6451
+LB_6451:
+	ret
+LB_6457:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6460+8*rax]
+LB_6460: dq LB_6458,LB_6459
+LB_6458:
+	jmp LB_6463
+LB_6462: db 39,48,226,151,130,0
+LB_6463:
+	mov rdi,LB_6462
+	call emt_stg
+	jmp LB_6465
+LB_6464: db 42,123,32,0
+LB_6465:
+	mov rdi,LB_6464
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	jmp LB_6467
+LB_6466: db 42,123,32,0
+LB_6467:
+	mov rdi,LB_6466
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r8 
+	jmp LB_6469
+LB_6468: db 32,0
+LB_6469:
+	mov rdi,LB_6468
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r8 
+	jmp LB_6471
+LB_6470: db 32,0
+LB_6471:
+	mov rdi,LB_6470
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r8 
+	jmp LB_6473
+LB_6472: db 32,0
+LB_6473:
+	mov rdi,LB_6472
+	call emt_stg
+	jmp LB_6475
+LB_6474: db 125,32,0
+LB_6475:
+	mov rdi,LB_6474
+	call emt_stg
+	pop r8 
+	jmp LB_6477
+LB_6476: db 32,0
+LB_6477:
+	mov rdi,LB_6476
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6457
+	pop r8 
+	jmp LB_6479
+LB_6478: db 32,0
+LB_6479:
+	mov rdi,LB_6478
+	call emt_stg
+	jmp LB_6481
+LB_6480: db 125,32,0
+LB_6481:
+	mov rdi,LB_6480
+	call emt_stg
+	jmp LB_6461
+LB_6459:
+	jmp LB_6483
+LB_6482: db 39,49,226,151,130,0
+LB_6483:
+	mov rdi,LB_6482
+	call emt_stg
+	jmp LB_6485
+LB_6484: db 42,123,32,0
+LB_6485:
+	mov rdi,LB_6484
+	call emt_stg
+	jmp LB_6487
+LB_6486: db 125,32,0
+LB_6487:
+	mov rdi,LB_6486
+	call emt_stg
+	jmp LB_6461
+LB_6461:
+	ret
+LB_6454:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6495+8*rax]
+LB_6495: dq LB_6488,LB_6489,LB_6490,LB_6491,LB_6492,LB_6493,LB_6494
+LB_6488:
+	jmp LB_6498
+LB_6497: db 39,48,226,151,130,0
+LB_6498:
+	mov rdi,LB_6497
+	call emt_stg
+	jmp LB_6500
+LB_6499: db 42,123,32,0
+LB_6500:
+	mov rdi,LB_6499
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6501
+	pop r8 
+	jmp LB_6503
+LB_6502: db 32,0
+LB_6503:
+	mov rdi,LB_6502
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6504
+	pop r8 
+	jmp LB_6506
+LB_6505: db 32,0
+LB_6506:
+	mov rdi,LB_6505
+	call emt_stg
+	jmp LB_6508
+LB_6507: db 125,32,0
+LB_6508:
+	mov rdi,LB_6507
+	call emt_stg
+	jmp LB_6496
+LB_6489:
+	jmp LB_6510
+LB_6509: db 39,49,226,151,130,0
+LB_6510:
+	mov rdi,LB_6509
+	call emt_stg
+	jmp LB_6512
+LB_6511: db 42,123,32,0
+LB_6512:
+	mov rdi,LB_6511
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6513
+	pop r8 
+	jmp LB_6515
+LB_6514: db 32,0
+LB_6515:
+	mov rdi,LB_6514
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6504
+	pop r8 
+	jmp LB_6517
+LB_6516: db 32,0
+LB_6517:
+	mov rdi,LB_6516
+	call emt_stg
+	jmp LB_6519
+LB_6518: db 125,32,0
+LB_6519:
+	mov rdi,LB_6518
+	call emt_stg
+	jmp LB_6496
+LB_6490:
+	jmp LB_6521
+LB_6520: db 39,50,226,151,130,0
+LB_6521:
+	mov rdi,LB_6520
+	call emt_stg
+	jmp LB_6523
+LB_6522: db 42,123,32,0
+LB_6523:
+	mov rdi,LB_6522
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6524
+	pop r8 
+	jmp LB_6526
+LB_6525: db 32,0
+LB_6526:
+	mov rdi,LB_6525
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6454
+	pop r8 
+	jmp LB_6528
+LB_6527: db 32,0
+LB_6528:
+	mov rdi,LB_6527
+	call emt_stg
+	jmp LB_6530
+LB_6529: db 125,32,0
+LB_6530:
+	mov rdi,LB_6529
+	call emt_stg
+	jmp LB_6496
+LB_6491:
+	jmp LB_6532
+LB_6531: db 39,51,226,151,130,0
+LB_6532:
+	mov rdi,LB_6531
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6533
+	jmp LB_6496
+LB_6492:
+	jmp LB_6535
+LB_6534: db 39,52,226,151,130,0
+LB_6535:
+	mov rdi,LB_6534
+	call emt_stg
+	jmp LB_6537
+LB_6536: db 42,123,32,0
+LB_6537:
+	mov rdi,LB_6536
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6504
+	pop r8 
+	jmp LB_6539
+LB_6538: db 32,0
+LB_6539:
+	mov rdi,LB_6538
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6540
+	pop r8 
+	jmp LB_6542
+LB_6541: db 32,0
+LB_6542:
+	mov rdi,LB_6541
+	call emt_stg
+	jmp LB_6544
+LB_6543: db 125,32,0
+LB_6544:
+	mov rdi,LB_6543
+	call emt_stg
+	jmp LB_6496
+LB_6493:
+	jmp LB_6546
+LB_6545: db 39,53,226,151,130,0
+LB_6546:
+	mov rdi,LB_6545
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6504
+	jmp LB_6496
+LB_6494:
+	jmp LB_6548
+LB_6547: db 39,54,226,151,130,0
+LB_6548:
+	mov rdi,LB_6547
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6496
+LB_6496:
+	ret
+LB_6540:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6551+8*rax]
+LB_6551: dq LB_6549,LB_6550
+LB_6549:
+	jmp LB_6554
+LB_6553: db 39,48,226,151,130,0
+LB_6554:
+	mov rdi,LB_6553
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6555
+	jmp LB_6552
+LB_6550:
+	jmp LB_6557
+LB_6556: db 39,49,226,151,130,0
+LB_6557:
+	mov rdi,LB_6556
+	call emt_stg
+	jmp LB_6559
+LB_6558: db 42,123,32,0
+LB_6559:
+	mov rdi,LB_6558
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6560
+	pop r8 
+	jmp LB_6562
+LB_6561: db 32,0
+LB_6562:
+	mov rdi,LB_6561
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6454
+	pop r8 
+	jmp LB_6564
+LB_6563: db 32,0
+LB_6564:
+	mov rdi,LB_6563
+	call emt_stg
+	jmp LB_6566
+LB_6565: db 125,32,0
+LB_6566:
+	mov rdi,LB_6565
+	call emt_stg
+	jmp LB_6552
+LB_6552:
+	ret
+LB_6560:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6569+8*rax]
+LB_6569: dq LB_6567,LB_6568
+LB_6567:
+	jmp LB_6572
+LB_6571: db 39,48,226,151,130,0
+LB_6572:
+	mov rdi,LB_6571
+	call emt_stg
+	jmp LB_6574
+LB_6573: db 42,123,32,0
+LB_6574:
+	mov rdi,LB_6573
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6575
+	pop r8 
+	jmp LB_6577
+LB_6576: db 32,0
+LB_6577:
+	mov rdi,LB_6576
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6560
+	pop r8 
+	jmp LB_6579
+LB_6578: db 32,0
+LB_6579:
+	mov rdi,LB_6578
+	call emt_stg
+	jmp LB_6581
+LB_6580: db 125,32,0
+LB_6581:
+	mov rdi,LB_6580
+	call emt_stg
+	jmp LB_6570
+LB_6568:
+	jmp LB_6583
+LB_6582: db 39,49,226,151,130,0
+LB_6583:
+	mov rdi,LB_6582
+	call emt_stg
+	jmp LB_6585
+LB_6584: db 42,123,32,0
+LB_6585:
+	mov rdi,LB_6584
+	call emt_stg
+	jmp LB_6587
+LB_6586: db 125,32,0
+LB_6587:
+	mov rdi,LB_6586
+	call emt_stg
+	jmp LB_6570
+LB_6570:
+	ret
+LB_6575:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6590+8*rax]
+LB_6590: dq LB_6588,LB_6589
+LB_6588:
+	jmp LB_6593
+LB_6592: db 39,48,226,151,130,0
+LB_6593:
+	mov rdi,LB_6592
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6560
+	jmp LB_6591
+LB_6589:
+	jmp LB_6595
+LB_6594: db 39,49,226,151,130,0
+LB_6595:
+	mov rdi,LB_6594
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6596
+	jmp LB_6591
+LB_6591:
+	ret
+LB_6596:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6599+8*rax]
+LB_6599: dq LB_6597,LB_6598
+LB_6597:
+	jmp LB_6602
+LB_6601: db 39,48,226,151,130,0
+LB_6602:
+	mov rdi,LB_6601
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6603
+	jmp LB_6600
+LB_6598:
+	jmp LB_6605
+LB_6604: db 39,49,226,151,130,0
+LB_6605:
+	mov rdi,LB_6604
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6600
+LB_6600:
+	ret
+LB_6603:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6608+8*rax]
+LB_6608: dq LB_6606,LB_6607
+LB_6606:
+	jmp LB_6611
+LB_6610: db 39,48,226,151,130,0
+LB_6611:
+	mov rdi,LB_6610
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6609
+LB_6607:
+	jmp LB_6613
+LB_6612: db 39,49,226,151,130,0
+LB_6613:
+	mov rdi,LB_6612
+	call emt_stg
+	jmp LB_6615
+LB_6614: db 42,123,32,0
+LB_6615:
+	mov rdi,LB_6614
+	call emt_stg
+	jmp LB_6617
+LB_6616: db 125,32,0
+LB_6617:
+	mov rdi,LB_6616
+	call emt_stg
+	jmp LB_6609
+LB_6609:
+	ret
+LB_6555:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6620+8*rax]
+LB_6620: dq LB_6618,LB_6619
+LB_6618:
+	jmp LB_6623
+LB_6622: db 39,48,226,151,130,0
+LB_6623:
+	mov rdi,LB_6622
+	call emt_stg
+	jmp LB_6625
+LB_6624: db 42,123,32,0
+LB_6625:
+	mov rdi,LB_6624
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	jmp LB_6627
+LB_6626: db 42,123,32,0
+LB_6627:
+	mov rdi,LB_6626
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6628
+	pop r8 
+	jmp LB_6630
+LB_6629: db 32,0
+LB_6630:
+	mov rdi,LB_6629
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6631
+	pop r8 
+	jmp LB_6633
+LB_6632: db 32,0
+LB_6633:
+	mov rdi,LB_6632
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_6634
+	pop r8 
+	jmp LB_6636
+LB_6635: db 32,0
+LB_6636:
+	mov rdi,LB_6635
+	call emt_stg
+	jmp LB_6638
+LB_6637: db 125,32,0
+LB_6638:
+	mov rdi,LB_6637
+	call emt_stg
+	pop r8 
+	jmp LB_6640
+LB_6639: db 32,0
+LB_6640:
+	mov rdi,LB_6639
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6555
+	pop r8 
+	jmp LB_6642
+LB_6641: db 32,0
+LB_6642:
+	mov rdi,LB_6641
+	call emt_stg
+	jmp LB_6644
+LB_6643: db 125,32,0
+LB_6644:
+	mov rdi,LB_6643
+	call emt_stg
+	jmp LB_6621
+LB_6619:
+	jmp LB_6646
+LB_6645: db 39,49,226,151,130,0
+LB_6646:
+	mov rdi,LB_6645
+	call emt_stg
+	jmp LB_6648
+LB_6647: db 42,123,32,0
+LB_6648:
+	mov rdi,LB_6647
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6628
+	pop r8 
+	jmp LB_6650
+LB_6649: db 32,0
+LB_6650:
+	mov rdi,LB_6649
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6631
+	pop r8 
+	jmp LB_6652
+LB_6651: db 32,0
+LB_6652:
+	mov rdi,LB_6651
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_6634
+	pop r8 
+	jmp LB_6654
+LB_6653: db 32,0
+LB_6654:
+	mov rdi,LB_6653
+	call emt_stg
+	jmp LB_6656
+LB_6655: db 125,32,0
+LB_6656:
+	mov rdi,LB_6655
+	call emt_stg
+	jmp LB_6621
+LB_6621:
+	ret
+LB_6634:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6660+8*rax]
+LB_6660: dq LB_6657,LB_6658,LB_6659
+LB_6657:
+	jmp LB_6663
+LB_6662: db 39,48,226,151,130,0
+LB_6663:
+	mov rdi,LB_6662
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6533
+	jmp LB_6661
+LB_6658:
+	jmp LB_6665
+LB_6664: db 39,49,226,151,130,0
+LB_6665:
+	mov rdi,LB_6664
+	call emt_stg
+	jmp LB_6667
+LB_6666: db 42,123,32,0
+LB_6667:
+	mov rdi,LB_6666
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6504
+	pop r8 
+	jmp LB_6669
+LB_6668: db 32,0
+LB_6669:
+	mov rdi,LB_6668
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6555
+	pop r8 
+	jmp LB_6671
+LB_6670: db 32,0
+LB_6671:
+	mov rdi,LB_6670
+	call emt_stg
+	jmp LB_6673
+LB_6672: db 125,32,0
+LB_6673:
+	mov rdi,LB_6672
+	call emt_stg
+	jmp LB_6661
+LB_6659:
+	jmp LB_6675
+LB_6674: db 39,50,226,151,130,0
+LB_6675:
+	mov rdi,LB_6674
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6454
+	jmp LB_6661
+LB_6661:
+	ret
+LB_6631:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6678+8*rax]
+LB_6678: dq LB_6676,LB_6677
+LB_6676:
+	jmp LB_6681
+LB_6680: db 39,48,226,151,130,0
+LB_6681:
+	mov rdi,LB_6680
+	call emt_stg
+	jmp LB_6683
+LB_6682: db 42,123,32,0
+LB_6683:
+	mov rdi,LB_6682
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6684
+	pop r8 
+	jmp LB_6686
+LB_6685: db 32,0
+LB_6686:
+	mov rdi,LB_6685
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6631
+	pop r8 
+	jmp LB_6688
+LB_6687: db 32,0
+LB_6688:
+	mov rdi,LB_6687
+	call emt_stg
+	jmp LB_6690
+LB_6689: db 125,32,0
+LB_6690:
+	mov rdi,LB_6689
+	call emt_stg
+	jmp LB_6679
+LB_6677:
+	jmp LB_6692
+LB_6691: db 39,49,226,151,130,0
+LB_6692:
+	mov rdi,LB_6691
+	call emt_stg
+	jmp LB_6694
+LB_6693: db 42,123,32,0
+LB_6694:
+	mov rdi,LB_6693
+	call emt_stg
+	jmp LB_6696
+LB_6695: db 125,32,0
+LB_6696:
+	mov rdi,LB_6695
+	call emt_stg
+	jmp LB_6679
+LB_6679:
+	ret
+LB_6684:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6700+8*rax]
+LB_6700: dq LB_6697,LB_6698,LB_6699
+LB_6697:
+	jmp LB_6703
+LB_6702: db 39,48,226,151,130,0
+LB_6703:
+	mov rdi,LB_6702
+	call emt_stg
+	jmp LB_6705
+LB_6704: db 42,123,32,0
+LB_6705:
+	mov rdi,LB_6704
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6504
+	pop r8 
+	jmp LB_6707
+LB_6706: db 32,0
+LB_6707:
+	mov rdi,LB_6706
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6628
+	pop r8 
+	jmp LB_6709
+LB_6708: db 32,0
+LB_6709:
+	mov rdi,LB_6708
+	call emt_stg
+	jmp LB_6711
+LB_6710: db 125,32,0
+LB_6711:
+	mov rdi,LB_6710
+	call emt_stg
+	jmp LB_6701
+LB_6698:
+	jmp LB_6713
+LB_6712: db 39,49,226,151,130,0
+LB_6713:
+	mov rdi,LB_6712
+	call emt_stg
+	jmp LB_6715
+LB_6714: db 42,123,32,0
+LB_6715:
+	mov rdi,LB_6714
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6716
+	pop r8 
+	jmp LB_6718
+LB_6717: db 32,0
+LB_6718:
+	mov rdi,LB_6717
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6716
+	pop r8 
+	jmp LB_6720
+LB_6719: db 32,0
+LB_6720:
+	mov rdi,LB_6719
+	call emt_stg
+	jmp LB_6722
+LB_6721: db 125,32,0
+LB_6722:
+	mov rdi,LB_6721
+	call emt_stg
+	jmp LB_6701
+LB_6699:
+	jmp LB_6724
+LB_6723: db 39,50,226,151,130,0
+LB_6724:
+	mov rdi,LB_6723
+	call emt_stg
+	jmp LB_6726
+LB_6725: db 42,123,32,0
+LB_6726:
+	mov rdi,LB_6725
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6716
+	pop r8 
+	jmp LB_6728
+LB_6727: db 32,0
+LB_6728:
+	mov rdi,LB_6727
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6716
+	pop r8 
+	jmp LB_6730
+LB_6729: db 32,0
+LB_6730:
+	mov rdi,LB_6729
+	call emt_stg
+	jmp LB_6732
+LB_6731: db 125,32,0
+LB_6732:
+	mov rdi,LB_6731
+	call emt_stg
+	jmp LB_6701
+LB_6701:
+	ret
+LB_6716:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6735+8*rax]
+LB_6735: dq LB_6733,LB_6734
+LB_6733:
+	jmp LB_6738
+LB_6737: db 39,48,226,151,130,0
+LB_6738:
+	mov rdi,LB_6737
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6739
+	jmp LB_6736
+LB_6734:
+	jmp LB_6741
+LB_6740: db 39,49,226,151,130,0
+LB_6741:
+	mov rdi,LB_6740
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6736
+LB_6736:
+	ret
+LB_6739:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6744+8*rax]
+LB_6744: dq LB_6742,LB_6743
+LB_6742:
+	jmp LB_6747
+LB_6746: db 39,48,226,151,130,0
+LB_6747:
+	mov rdi,LB_6746
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6748
+	jmp LB_6745
+LB_6743:
+	jmp LB_6750
+LB_6749: db 39,49,226,151,130,0
+LB_6750:
+	mov rdi,LB_6749
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6501
+	jmp LB_6745
+LB_6745:
+	ret
+LB_6748:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6753+8*rax]
+LB_6753: dq LB_6751,LB_6752
+LB_6751:
+	jmp LB_6756
+LB_6755: db 39,48,226,151,130,0
+LB_6756:
+	mov rdi,LB_6755
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6754
+LB_6752:
+	jmp LB_6758
+LB_6757: db 39,49,226,151,130,0
+LB_6758:
+	mov rdi,LB_6757
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6754
+LB_6754:
+	ret
+LB_6628:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6761+8*rax]
+LB_6761: dq LB_6759,LB_6760
+LB_6759:
+	jmp LB_6764
+LB_6763: db 39,48,226,151,130,0
+LB_6764:
+	mov rdi,LB_6763
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6765
+	jmp LB_6762
+LB_6760:
+	jmp LB_6767
+LB_6766: db 39,49,226,151,130,0
+LB_6767:
+	mov rdi,LB_6766
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6768
+	jmp LB_6762
+LB_6762:
+	ret
+LB_6768:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6773+8*rax]
+LB_6773: dq LB_6769,LB_6770,LB_6771,LB_6772
+LB_6769:
+	jmp LB_6776
+LB_6775: db 39,48,226,151,130,0
+LB_6776:
+	mov rdi,LB_6775
+	call emt_stg
+	jmp LB_6778
+LB_6777: db 42,123,32,0
+LB_6778:
+	mov rdi,LB_6777
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6501
+	pop r8 
+	jmp LB_6780
+LB_6779: db 32,0
+LB_6780:
+	mov rdi,LB_6779
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6628
+	pop r8 
+	jmp LB_6782
+LB_6781: db 32,0
+LB_6782:
+	mov rdi,LB_6781
+	call emt_stg
+	jmp LB_6784
+LB_6783: db 125,32,0
+LB_6784:
+	mov rdi,LB_6783
+	call emt_stg
+	jmp LB_6774
+LB_6770:
+	jmp LB_6786
+LB_6785: db 39,49,226,151,130,0
+LB_6786:
+	mov rdi,LB_6785
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6739
+	jmp LB_6774
+LB_6771:
+	jmp LB_6788
+LB_6787: db 39,50,226,151,130,0
+LB_6788:
+	mov rdi,LB_6787
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6603
+	jmp LB_6774
+LB_6772:
+	jmp LB_6790
+LB_6789: db 39,51,226,151,130,0
+LB_6790:
+	mov rdi,LB_6789
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6774
+LB_6774:
+	ret
+LB_6765:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6793+8*rax]
+LB_6793: dq LB_6791,LB_6792
+LB_6791:
+	jmp LB_6796
+LB_6795: db 39,48,226,151,130,0
+LB_6796:
+	mov rdi,LB_6795
+	call emt_stg
+	jmp LB_6798
+LB_6797: db 42,123,32,0
+LB_6798:
+	mov rdi,LB_6797
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6628
+	pop r8 
+	jmp LB_6800
+LB_6799: db 32,0
+LB_6800:
+	mov rdi,LB_6799
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6765
+	pop r8 
+	jmp LB_6802
+LB_6801: db 32,0
+LB_6802:
+	mov rdi,LB_6801
+	call emt_stg
+	jmp LB_6804
+LB_6803: db 125,32,0
+LB_6804:
+	mov rdi,LB_6803
+	call emt_stg
+	jmp LB_6794
+LB_6792:
+	jmp LB_6806
+LB_6805: db 39,49,226,151,130,0
+LB_6806:
+	mov rdi,LB_6805
+	call emt_stg
+	jmp LB_6808
+LB_6807: db 42,123,32,0
+LB_6808:
+	mov rdi,LB_6807
+	call emt_stg
+	jmp LB_6810
+LB_6809: db 125,32,0
+LB_6810:
+	mov rdi,LB_6809
+	call emt_stg
+	jmp LB_6794
+LB_6794:
+	ret
+LB_6533:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6813+8*rax]
+LB_6813: dq LB_6811,LB_6812
+LB_6811:
+	jmp LB_6816
+LB_6815: db 39,48,226,151,130,0
+LB_6816:
+	mov rdi,LB_6815
+	call emt_stg
+	jmp LB_6818
+LB_6817: db 42,123,32,0
+LB_6818:
+	mov rdi,LB_6817
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	jmp LB_6820
+LB_6819: db 42,123,32,0
+LB_6820:
+	mov rdi,LB_6819
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6631
+	pop r8 
+	jmp LB_6822
+LB_6821: db 32,0
+LB_6822:
+	mov rdi,LB_6821
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6634
+	pop r8 
+	jmp LB_6824
+LB_6823: db 32,0
+LB_6824:
+	mov rdi,LB_6823
+	call emt_stg
+	jmp LB_6826
+LB_6825: db 125,32,0
+LB_6826:
+	mov rdi,LB_6825
+	call emt_stg
+	pop r8 
+	jmp LB_6828
+LB_6827: db 32,0
+LB_6828:
+	mov rdi,LB_6827
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6533
+	pop r8 
+	jmp LB_6830
+LB_6829: db 32,0
+LB_6830:
+	mov rdi,LB_6829
+	call emt_stg
+	jmp LB_6832
+LB_6831: db 125,32,0
+LB_6832:
+	mov rdi,LB_6831
+	call emt_stg
+	jmp LB_6814
+LB_6812:
+	jmp LB_6834
+LB_6833: db 39,49,226,151,130,0
+LB_6834:
+	mov rdi,LB_6833
+	call emt_stg
+	jmp LB_6836
+LB_6835: db 42,123,32,0
+LB_6836:
+	mov rdi,LB_6835
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6631
+	pop r8 
+	jmp LB_6838
+LB_6837: db 32,0
+LB_6838:
+	mov rdi,LB_6837
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6634
+	pop r8 
+	jmp LB_6840
+LB_6839: db 32,0
+LB_6840:
+	mov rdi,LB_6839
+	call emt_stg
+	jmp LB_6842
+LB_6841: db 125,32,0
+LB_6842:
+	mov rdi,LB_6841
+	call emt_stg
+	jmp LB_6814
+LB_6814:
+	ret
+LB_6524:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6847+8*rax]
+LB_6847: dq LB_6843,LB_6844,LB_6845,LB_6846
+LB_6843:
+	jmp LB_6850
+LB_6849: db 39,48,226,151,130,0
+LB_6850:
+	mov rdi,LB_6849
+	call emt_stg
+	jmp LB_6852
+LB_6851: db 42,123,32,0
+LB_6852:
+	mov rdi,LB_6851
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6501
+	pop r8 
+	jmp LB_6854
+LB_6853: db 32,0
+LB_6854:
+	mov rdi,LB_6853
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6504
+	pop r8 
+	jmp LB_6856
+LB_6855: db 32,0
+LB_6856:
+	mov rdi,LB_6855
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_6575
+	pop r8 
+	jmp LB_6858
+LB_6857: db 32,0
+LB_6858:
+	mov rdi,LB_6857
+	call emt_stg
+	jmp LB_6860
+LB_6859: db 125,32,0
+LB_6860:
+	mov rdi,LB_6859
+	call emt_stg
+	jmp LB_6848
+LB_6844:
+	jmp LB_6862
+LB_6861: db 39,49,226,151,130,0
+LB_6862:
+	mov rdi,LB_6861
+	call emt_stg
+	jmp LB_6864
+LB_6863: db 42,123,32,0
+LB_6864:
+	mov rdi,LB_6863
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6513
+	pop r8 
+	jmp LB_6866
+LB_6865: db 32,0
+LB_6866:
+	mov rdi,LB_6865
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6504
+	pop r8 
+	jmp LB_6868
+LB_6867: db 32,0
+LB_6868:
+	mov rdi,LB_6867
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_6575
+	pop r8 
+	jmp LB_6870
+LB_6869: db 32,0
+LB_6870:
+	mov rdi,LB_6869
+	call emt_stg
+	jmp LB_6872
+LB_6871: db 125,32,0
+LB_6872:
+	mov rdi,LB_6871
+	call emt_stg
+	jmp LB_6848
+LB_6845:
+	jmp LB_6874
+LB_6873: db 39,50,226,151,130,0
+LB_6874:
+	mov rdi,LB_6873
+	call emt_stg
+	jmp LB_6876
+LB_6875: db 42,123,32,0
+LB_6876:
+	mov rdi,LB_6875
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6739
+	pop r8 
+	jmp LB_6878
+LB_6877: db 32,0
+LB_6878:
+	mov rdi,LB_6877
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6504
+	pop r8 
+	jmp LB_6880
+LB_6879: db 32,0
+LB_6880:
+	mov rdi,LB_6879
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_6575
+	pop r8 
+	jmp LB_6882
+LB_6881: db 32,0
+LB_6882:
+	mov rdi,LB_6881
+	call emt_stg
+	jmp LB_6884
+LB_6883: db 125,32,0
+LB_6884:
+	mov rdi,LB_6883
+	call emt_stg
+	jmp LB_6848
+LB_6846:
+	jmp LB_6886
+LB_6885: db 39,51,226,151,130,0
+LB_6886:
+	mov rdi,LB_6885
+	call emt_stg
+	jmp LB_6888
+LB_6887: db 42,123,32,0
+LB_6888:
+	mov rdi,LB_6887
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6889
+	pop r8 
+	jmp LB_6891
+LB_6890: db 32,0
+LB_6891:
+	mov rdi,LB_6890
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6892
+	pop r8 
+	jmp LB_6894
+LB_6893: db 32,0
+LB_6894:
+	mov rdi,LB_6893
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_6895
+	pop r8 
+	jmp LB_6897
+LB_6896: db 32,0
+LB_6897:
+	mov rdi,LB_6896
+	call emt_stg
+	jmp LB_6899
+LB_6898: db 125,32,0
+LB_6899:
+	mov rdi,LB_6898
+	call emt_stg
+	jmp LB_6848
+LB_6848:
+	ret
+LB_6895:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6902+8*rax]
+LB_6902: dq LB_6900,LB_6901
+LB_6900:
+	jmp LB_6905
+LB_6904: db 39,48,226,151,130,0
+LB_6905:
+	mov rdi,LB_6904
+	call emt_stg
+	jmp LB_6907
+LB_6906: db 42,123,32,0
+LB_6907:
+	mov rdi,LB_6906
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6596
+	pop r8 
+	jmp LB_6909
+LB_6908: db 32,0
+LB_6909:
+	mov rdi,LB_6908
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6895
+	pop r8 
+	jmp LB_6911
+LB_6910: db 32,0
+LB_6911:
+	mov rdi,LB_6910
+	call emt_stg
+	jmp LB_6913
+LB_6912: db 125,32,0
+LB_6913:
+	mov rdi,LB_6912
+	call emt_stg
+	jmp LB_6903
+LB_6901:
+	jmp LB_6915
+LB_6914: db 39,49,226,151,130,0
+LB_6915:
+	mov rdi,LB_6914
+	call emt_stg
+	jmp LB_6917
+LB_6916: db 42,123,32,0
+LB_6917:
+	mov rdi,LB_6916
+	call emt_stg
+	jmp LB_6919
+LB_6918: db 125,32,0
+LB_6919:
+	mov rdi,LB_6918
+	call emt_stg
+	jmp LB_6903
+LB_6903:
+	ret
+LB_6892:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6922+8*rax]
+LB_6922: dq LB_6920,LB_6921
+LB_6920:
+	jmp LB_6925
+LB_6924: db 39,48,226,151,130,0
+LB_6925:
+	mov rdi,LB_6924
+	call emt_stg
+	jmp LB_6927
+LB_6926: db 42,123,32,0
+LB_6927:
+	mov rdi,LB_6926
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6513
+	pop r8 
+	jmp LB_6929
+LB_6928: db 32,0
+LB_6929:
+	mov rdi,LB_6928
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6892
+	pop r8 
+	jmp LB_6931
+LB_6930: db 32,0
+LB_6931:
+	mov rdi,LB_6930
+	call emt_stg
+	jmp LB_6933
+LB_6932: db 125,32,0
+LB_6933:
+	mov rdi,LB_6932
+	call emt_stg
+	jmp LB_6923
+LB_6921:
+	jmp LB_6935
+LB_6934: db 39,49,226,151,130,0
+LB_6935:
+	mov rdi,LB_6934
+	call emt_stg
+	jmp LB_6937
+LB_6936: db 42,123,32,0
+LB_6937:
+	mov rdi,LB_6936
+	call emt_stg
+	jmp LB_6939
+LB_6938: db 125,32,0
+LB_6939:
+	mov rdi,LB_6938
+	call emt_stg
+	jmp LB_6923
+LB_6923:
+	ret
+LB_6889:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6942+8*rax]
+LB_6942: dq LB_6940,LB_6941
+LB_6940:
+	jmp LB_6945
+LB_6944: db 39,48,226,151,130,0
+LB_6945:
+	mov rdi,LB_6944
+	call emt_stg
+	jmp LB_6947
+LB_6946: db 42,123,32,0
+LB_6947:
+	mov rdi,LB_6946
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6948
+	pop r8 
+	jmp LB_6950
+LB_6949: db 32,0
+LB_6950:
+	mov rdi,LB_6949
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6889
+	pop r8 
+	jmp LB_6952
+LB_6951: db 32,0
+LB_6952:
+	mov rdi,LB_6951
+	call emt_stg
+	jmp LB_6954
+LB_6953: db 125,32,0
+LB_6954:
+	mov rdi,LB_6953
+	call emt_stg
+	jmp LB_6943
+LB_6941:
+	jmp LB_6956
+LB_6955: db 39,49,226,151,130,0
+LB_6956:
+	mov rdi,LB_6955
+	call emt_stg
+	jmp LB_6958
+LB_6957: db 42,123,32,0
+LB_6958:
+	mov rdi,LB_6957
+	call emt_stg
+	jmp LB_6960
+LB_6959: db 125,32,0
+LB_6960:
+	mov rdi,LB_6959
+	call emt_stg
+	jmp LB_6943
+LB_6943:
+	ret
+LB_6948:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6965+8*rax]
+LB_6965: dq LB_6961,LB_6962,LB_6963,LB_6964
+LB_6961:
+	jmp LB_6968
+LB_6967: db 39,48,226,151,130,0
+LB_6968:
+	mov rdi,LB_6967
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_6966
+LB_6962:
+	jmp LB_6970
+LB_6969: db 39,49,226,151,130,0
+LB_6970:
+	mov rdi,LB_6969
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6739
+	jmp LB_6966
+LB_6963:
+	jmp LB_6972
+LB_6971: db 39,50,226,151,130,0
+LB_6972:
+	mov rdi,LB_6971
+	call emt_stg
+	jmp LB_6974
+LB_6973: db 42,123,32,0
+LB_6974:
+	mov rdi,LB_6973
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6975
+	pop r8 
+	jmp LB_6977
+LB_6976: db 32,0
+LB_6977:
+	mov rdi,LB_6976
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r8 
+	jmp LB_6979
+LB_6978: db 32,0
+LB_6979:
+	mov rdi,LB_6978
+	call emt_stg
+	jmp LB_6981
+LB_6980: db 125,32,0
+LB_6981:
+	mov rdi,LB_6980
+	call emt_stg
+	jmp LB_6966
+LB_6964:
+	jmp LB_6983
+LB_6982: db 39,51,226,151,130,0
+LB_6983:
+	mov rdi,LB_6982
+	call emt_stg
+	jmp LB_6985
+LB_6984: db 42,123,32,0
+LB_6985:
+	mov rdi,LB_6984
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rsi,r8
+	xor rax,rax  
+	mov rdi,fmt_r64
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r8 
+	jmp LB_6987
+LB_6986: db 32,0
+LB_6987:
+	mov rdi,LB_6986
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r8 
+	jmp LB_6989
+LB_6988: db 32,0
+LB_6989:
+	mov rdi,LB_6988
+	call emt_stg
+	jmp LB_6991
+LB_6990: db 125,32,0
+LB_6991:
+	mov rdi,LB_6990
+	call emt_stg
+	jmp LB_6966
+LB_6966:
+	ret
+LB_6975:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_6996+8*rax]
+LB_6996: dq LB_6992,LB_6993,LB_6994,LB_6995
+LB_6992:
+	jmp LB_6999
+LB_6998: db 39,48,226,151,130,0
+LB_6999:
+	mov rdi,LB_6998
+	call emt_stg
+	jmp LB_7001
+LB_7000: db 42,123,32,0
+LB_7001:
+	mov rdi,LB_7000
+	call emt_stg
+	jmp LB_7003
+LB_7002: db 125,32,0
+LB_7003:
+	mov rdi,LB_7002
+	call emt_stg
+	jmp LB_6997
+LB_6993:
+	jmp LB_7005
+LB_7004: db 39,49,226,151,130,0
+LB_7005:
+	mov rdi,LB_7004
+	call emt_stg
+	jmp LB_7007
+LB_7006: db 42,123,32,0
+LB_7007:
+	mov rdi,LB_7006
+	call emt_stg
+	jmp LB_7009
+LB_7008: db 125,32,0
+LB_7009:
+	mov rdi,LB_7008
+	call emt_stg
+	jmp LB_6997
+LB_6994:
+	jmp LB_7011
+LB_7010: db 39,50,226,151,130,0
+LB_7011:
+	mov rdi,LB_7010
+	call emt_stg
+	jmp LB_7013
+LB_7012: db 42,123,32,0
+LB_7013:
+	mov rdi,LB_7012
+	call emt_stg
+	jmp LB_7015
+LB_7014: db 125,32,0
+LB_7015:
+	mov rdi,LB_7014
+	call emt_stg
+	jmp LB_6997
+LB_6995:
+	jmp LB_7017
+LB_7016: db 39,51,226,151,130,0
+LB_7017:
+	mov rdi,LB_7016
+	call emt_stg
+	jmp LB_7019
+LB_7018: db 42,123,32,0
+LB_7019:
+	mov rdi,LB_7018
+	call emt_stg
+	jmp LB_7021
+LB_7020: db 125,32,0
+LB_7021:
+	mov rdi,LB_7020
+	call emt_stg
+	jmp LB_6997
+LB_6997:
+	ret
+LB_6513:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_7024+8*rax]
+LB_7024: dq LB_7022,LB_7023
+LB_7022:
+	jmp LB_7027
+LB_7026: db 39,48,226,151,130,0
+LB_7027:
+	mov rdi,LB_7026
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6739
+	jmp LB_7025
+LB_7023:
+	jmp LB_7029
+LB_7028: db 39,49,226,151,130,0
+LB_7029:
+	mov rdi,LB_7028
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_7025
+LB_7025:
+	ret
+LB_6504:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_7032+8*rax]
+LB_7032: dq LB_7030,LB_7031
+LB_7030:
+	jmp LB_7035
+LB_7034: db 39,48,226,151,130,0
+LB_7035:
+	mov rdi,LB_7034
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_7036
+	jmp LB_7033
+LB_7031:
+	jmp LB_7038
+LB_7037: db 39,49,226,151,130,0
+LB_7038:
+	mov rdi,LB_7037
+	call emt_stg
+	mov r8,QWORD [r8+8]
+	call LB_6513
+	jmp LB_7033
+LB_7033:
+	ret
+LB_7036:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_7041+8*rax]
+LB_7041: dq LB_7039,LB_7040
+LB_7039:
+	jmp LB_7044
+LB_7043: db 39,48,226,151,130,0
+LB_7044:
+	mov rdi,LB_7043
+	call emt_stg
+	jmp LB_7046
+LB_7045: db 42,123,32,0
+LB_7046:
+	mov rdi,LB_7045
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_6504
+	pop r8 
+	jmp LB_7048
+LB_7047: db 32,0
+LB_7048:
+	mov rdi,LB_7047
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_7036
+	pop r8 
+	jmp LB_7050
+LB_7049: db 32,0
+LB_7050:
+	mov rdi,LB_7049
+	call emt_stg
+	jmp LB_7052
+LB_7051: db 125,32,0
+LB_7052:
+	mov rdi,LB_7051
+	call emt_stg
+	jmp LB_7042
+LB_7040:
+	jmp LB_7054
+LB_7053: db 39,49,226,151,130,0
+LB_7054:
+	mov rdi,LB_7053
+	call emt_stg
+	jmp LB_7056
+LB_7055: db 42,123,32,0
+LB_7056:
+	mov rdi,LB_7055
+	call emt_stg
+	jmp LB_7058
+LB_7057: db 125,32,0
+LB_7058:
+	mov rdi,LB_7057
+	call emt_stg
+	jmp LB_7042
+LB_7042:
+	ret
+LB_6501:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_7061+8*rax]
+LB_7061: dq LB_7059,LB_7060
+LB_7059:
+	jmp LB_7064
+LB_7063: db 39,48,226,151,130,0
+LB_7064:
+	mov rdi,LB_7063
+	call emt_stg
+	jmp LB_7066
+LB_7065: db 42,123,32,0
+LB_7066:
+	mov rdi,LB_7065
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	pop r8 
+	jmp LB_7068
+LB_7067: db 32,0
+LB_7068:
+	mov rdi,LB_7067
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6501
+	pop r8 
+	jmp LB_7070
+LB_7069: db 32,0
+LB_7070:
+	mov rdi,LB_7069
+	call emt_stg
+	jmp LB_7072
+LB_7071: db 125,32,0
+LB_7072:
+	mov rdi,LB_7071
+	call emt_stg
+	jmp LB_7062
+LB_7060:
+	jmp LB_7074
+LB_7073: db 39,49,226,151,130,0
+LB_7074:
+	mov rdi,LB_7073
+	call emt_stg
+	mov rsi,r8
+	add rsi,8
+	xor rax,rax  
+	mov rdi,fmt_s8
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call printf 
+	mov rsp,QWORD [rsp_tmp]
+	jmp LB_7062
+LB_7062:
+	ret
+LB_6434:
+; .dlt.ptn { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] ) }
+	mov rdi,r9
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	xor rax,rax
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call free 
+	mov rsp,QWORD [rsp_tmp] 
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rcx
+	pop rdx
+;	.dlt adt ⊢ _  
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; _#10 0'(= {| {| l |}|} ) ⊢ 0'(= {| {| l |}|} )
+	jmp LB_7076
+LB_7075: db 95,101,109,116,58,0
+LB_7076:
+	mov rdi,LB_7075
 	call emt_stg
 	mov rax,r13
 	push rdx
@@ -50634,16 +53001,16 @@ LB_6388:
 	push r10
 	push r11
 	mov r8,rax
-	jmp LB_6390
-LB_6389: db 123,124,32,0
-LB_6390:
-	mov rdi,LB_6389
+	jmp LB_7078
+LB_7077: db 123,124,32,0
+LB_7078:
+	mov rdi,LB_7077
 	call emt_stg
 	mov rsi,[r8]
 	mov rax,0 
-LB_6391:
+LB_7079:
 	cmp rsi,rax 
-	jz LB_6392
+	jz LB_7080
 	push r8 
 	push rax 
 	push rsi 
@@ -50656,21 +53023,21 @@ LB_6391:
 	and rsp,~0xf 
 	call printf 
 	mov rsp,QWORD [rsp_tmp]
-	jmp LB_6394
-LB_6393: db 32,0
-LB_6394:
-	mov rdi,LB_6393
+	jmp LB_7082
+LB_7081: db 32,0
+LB_7082:
+	mov rdi,LB_7081
 	call emt_stg
 	pop rsi 
 	pop rax 
 	pop r8 
 	add rax,1 
-	jmp LB_6391
-LB_6392:
-	jmp LB_6396
-LB_6395: db 124,125,0
-LB_6396:
-	mov rdi,LB_6395
+	jmp LB_7079
+LB_7080:
+	jmp LB_7084
+LB_7083: db 124,125,0
+LB_7084:
+	mov rdi,LB_7083
 	call emt_stg
 	pop r11
 	pop r10
@@ -50678,20 +53045,20 @@ LB_6396:
 	pop r8
 	pop rcx
 	pop rdx
-	jmp LB_6398
-LB_6397: db 10,0
-LB_6398:
-	mov rdi,LB_6397
+	jmp LB_7086
+LB_7085: db 10,0
+LB_7086:
+	mov rdi,LB_7085
 	call emt_stg
-	jmp LB_6399
-LB_6399:
-;; rsp=0 , %2678~0'(= {| {| l |}|} ) 
+	jmp LB_7087
+LB_7087:
+;; rsp=0 , %2691~0'(= {| {| l |}|} ) 
 ; _#4 { 0'(= {| {| l |}|} ) %[ 1r ] } ⊢ { 0'(= {| {| l |}|} ) %[ 1r ] 2'(= {| l |} ) }
 	mov rax,1
 	mov rdi,r13
 	mov rdi,[rdi+8+8*rax]
-	jmp LB_6400
-LB_6400:
+	jmp LB_7088
+LB_7088:
 	push rdx
 	push rcx
 	push r8
@@ -50712,7 +53079,7 @@ LB_6400:
 	mov rax,r14
 	mov r8,rax
 ; .dlt.ptn %[ 1r ]
-;; rsp=0 , %2681~2'(= {| l |} ) %2679~0'(= {| {| l |}|} ) 
+;; rsp=0 , %2694~2'(= {| l |} ) %2692~0'(= {| {| l |}|} ) 
 ; rsp_d=0, #273 2'(= {| l |} ) ⊢ { }
 	sub rsp,8
 	mov QWORD [rsp+8*0],r13
@@ -50725,7 +53092,7 @@ LB_6400:
 	mov r13,QWORD [rsp-8+8*1]
 	add rsp,8
 ; .dlt.ptn { }
-;; rsp=0 , %2679~0'(= {| {| l |}|} ) 
+;; rsp=0 , %2692~0'(= {| {| l |}|} ) 
 ; ∎
 	jmp RTM_1
 RTM_1:
