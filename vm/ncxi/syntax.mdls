@@ -7457,24 +7457,24 @@
 							_sub { ld l00 } ⊢ { ld l00 }
 							» 0r _ ⊢ rs 
 							mk_db { s0 rs } ⊢ { s0 rs dbs } 
-							$ lb_n ⊢ lb_n,lb0 
-							_inc lb_n ⊢ lb_n 
-							$ lb_n ⊢ lb_n,lb1 
-							_inc lb_n ⊢ lb_n  
-							$ lb_n ⊢ lb_n,lb2
-							_inc lb_n ⊢ lb_n
-							» _^ lb0,lb1,dbs,l0,x0,lb2 ⊢ lb0,lb1,dbs,l0,x0,lb2,sr 
+							inc_x lb_n ⊢ { lb0 lb_n }
+							inc_x lb_n ⊢ { lb1 lb_n }  
+							inc_x lb_n ⊢ { lb2 lb_n }
+							inc_x lb_n ⊢ { lb3 lb_n }
+							» _^ lb0,lb1,dbs,l0,x0,lb2,lb3 ⊢ lb0,lb1,dbs,l0,x0,lb2,lb3,sr 
 								"\tjmp LB_" 0d' "\n"
 								"\tLB_" 1d' ": db " 2' "\n" 
 								"LB_" 0d' ":\n"
 								"\tmov rax," 4d' "\n" 
 								"LB_" 5d' ":\n"
+								`	cmp rax,0
+								"\tjz LB_" 6d' "\n" 
+								`	sub rax,1
 								"\tlea rsi,[LB_" 1d' "+" 3d' "-1]\n" 
 								"\tmov rcx," 3d' "\n" 
 								`	rep movsb 
-								`	sub rax,1
-								`	cmp rax,0
-								"\tjnz LB_" 5d' "\n" 
+								"\tjmp lB_" 5d' "\n" 
+								"LB_" 6d' ":\n"
 								//
 							rp8.add_s8 { e0 sr } ⊢ e0 
 							∎ { evv e0 ld lb_n rsp irv rl ar } 
@@ -7621,24 +7621,24 @@
 									_dec rsp ⊢ rsp 
 									» 0r _ ⊢ rs 
 									mk_db { s0 rs } ⊢ { s0 rs dbs } 
-									$ lb_n ⊢ lb_n,lb0 
-									_inc lb_n ⊢ lb_n 
-									$ lb_n ⊢ lb_n,lb1
-									_inc lb_n ⊢ lb_n  
-									$ lb_n ⊢ lb_n,lb2
-									_inc lb_n ⊢ lb_n  
-									» _^ lb0,lb1,dbs,l0,lb2 ⊢ lb0,lb1,dbs,l0,lb2,sr 
+									inc_x lb_n ⊢ { lb0 lb_n }
+									inc_x lb_n ⊢ { lb1 lb_n }  
+									inc_x lb_n ⊢ { lb2 lb_n }
+									inc_x lb_n ⊢ { lb3 lb_n }
+									» _^ lb0,lb1,dbs,l0,lb2,lb3 ⊢ lb0,lb1,dbs,l0,lb2,lb3,sr 
 										"\tjmp LB_" 0d' "\n"
 										"\tLB_" 1d' ": db " 2' "\n" 
 										"LB_" 0d' ":\n" 
 										`	pop rax 
 										"LB_" 4d' ":\n"
+										`	cmp rax,0
+										"\tjz LB_" 5d' "\n"
+										`	sub rax,1
 										"\tlea rsi,[LB_" 1d' "+" 3d' "-1]\n" 
 										"\tmov rcx," 3d' "\n" 
 										`	rep movsb 
-										`	sub rax,1
-										`	cmp rax,0
-										"\tjnz LB_" 4d' "\n" 
+										"\tjmp LB_" 4d' "\n" 
+										"LB_" 5d' ":\n" 
 										//
 									rp8.add_s8 { e0 sr } ⊢ e0 
 									∎ { evv e0 ld lb_n rsp irv rl ar } 	 
@@ -7646,22 +7646,14 @@
 									∎|
 						∐. _nil◂{} . 
 							reg { rsp rr } ⊢ { rsp rr srr brr }
-							» "calloc" _ ⊢ n0 
-							c_call n0 ⊢ { n0 cn0 } 
-							» _^ cn0,ld,srr ⊢ cn0,ld,srr,s1 
-								push_c_regs 
-								"\tadd rdi," 1d' "\n" 
+							##» "calloc" _ ⊢ n0 
+							##c_call n0 ⊢ { n0 cn0 } 
+							» _^ ld,srr ⊢ ld,srr,s1 
+								"\tadd rdi," 0d' "\n" 
 								`	push rdi 
-								`	and rdi,~111b
-								`	add rdi,16
-								`	mov rsi,rdi 
-								`	mov rdi,1
-								`	xor rax,rax 
-								0' 
-								`	pop rdi 
-								`	mov QWORD [rax],rdi
-								pop_c_regs
-								"\tmov " 2' ",rax\n" 
+								`	call mlc_s8
+								`	pop rdi
+								"\tmov " 1' ",rax\n" 
 								`	lea rdi,[rax+7+rdi]
 								`	std 
 								`	mov QWORD [tmp],rcx 
