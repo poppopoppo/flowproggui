@@ -1,4 +1,49 @@
 bits 64 
+; macros 
+%macro C_PUSH_REGS 0 
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+%endmacro
+
+%macro C_POP_REGS 0 
+	pop r11 
+	pop r10 
+	pop r9 
+	pop r8 
+	pop rcx 
+	pop rdx 
+%endmacro
+
+%macro C_CALL_SF 1 
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call %1 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11 
+	pop r10 
+	pop r9 
+	pop r8 
+	pop rcx 
+	pop rdx 
+%endmacro 
+
+%macro C_CALL 1 
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call %1 
+	mov rsp,QWORD [rsp_tmp]
+%endmacro 
+
 %define SS_MAX 2000
 %define SS_NULL 0xffff_ffff_ffff_0000
 %define EMT_BUF_MAX 2048
@@ -519,32 +564,14 @@ mlc_s8: ; rdi=len
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11 
-	pop r10 
-	pop r9 
-	pop r8 
-	pop rcx 
-	pop rdx 
+	C_CALL_SF calloc
 	pop QWORD [rax] 
 	ret
 
 s8_of_c_stg: 
 	push rdi
-	mov QWORD [rsp_tmp],rsp
-	and rsp,~0xf
 	xor rax,rax
-	call strlen
-	mov rsp,QWORD [rsp_tmp]
+	C_CALL strlen
 	push rax
 	mov rdi,rax
 	call mlc_s8
@@ -555,6 +582,10 @@ s8_of_c_stg:
 	cld
 	rep movsb
 	ret
+
+free_s8: ;rdi=ptr
+	C_CALL_SF free
+	ret 
 
 in_fn: 
 	mov rax,2
@@ -601,23 +632,22 @@ out_fn: ; rdi=fn,rsi=src
 	ret
 
 emt_stg: ; rdi=stg 
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_CALL_SF printf
+	ret
+
+emt_r64: ;rdi=r64
+	xor rax,rax 
+	mov rsi,rdi
+	mov rdi,fmt_r64
+	C_CALL_SF printf
+	ret
+
+emt_s8: ;rdi=s8
+	xor rax,rax 
+	lea rsi,[rdi+8]
+	mov rdi,fmt_s8
+	C_CALL_SF printf
 	ret
 
 emt_add: ; rdi=len rsi=stg
@@ -1883,23 +1913,7 @@ LB_18:
 ; .dlt.ptn %[ 0r ]
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= r )
 ; .dlt.ptn 4'(= r )
 ; .mov_ptn2 { 0'(= {| l |} ) 3'(= r ) } ⊢ { 0'(= {| l |} ) 1'(= r ) }
@@ -2020,26 +2034,13 @@ LB_34:
 	mov rax,QWORD [rsp-8+8*3]
 	mov r14,rax
 ; .mov_ptn %[ "\\n" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],92
 	mov BYTE [rax+8+1],110
 	mov r13,rax
@@ -2142,26 +2143,13 @@ LB_48:
 	mov rax,QWORD [rsp-8+8*3]
 	mov r14,rax
 ; .mov_ptn %[ "\\t" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],92
 	mov BYTE [rax+8+1],116
 	mov r13,rax
@@ -2264,26 +2252,13 @@ LB_62:
 	mov rax,QWORD [rsp-8+8*3]
 	mov r14,rax
 ; .mov_ptn %[ "\\\\" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],92
 	mov BYTE [rax+8+1],92
 	mov r13,rax
@@ -2386,26 +2361,13 @@ LB_76:
 	mov rax,QWORD [rsp-8+8*3]
 	mov r14,rax
 ; .mov_ptn %[ "\\\"" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],92
 	mov BYTE [rax+8+1],34
 	mov r13,rax
@@ -2505,26 +2467,13 @@ LB_89:
 	mov rax,QWORD [rsp-8+8*3]
 	mov r14,rax
 ; .mov_ptn %[ "\\0" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],92
 	mov BYTE [rax+8+1],48
 	mov r13,rax
@@ -4423,23 +4372,7 @@ LB_308:
 ; ∎ 0(<2)◂4'(= {| l |} )
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a5◂ [ ] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 1'(= r )
@@ -4582,42 +4515,10 @@ LB_318:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -4647,22 +4548,9 @@ ETR_87: ; pnt_cst_v 0'(= a10◂ [ ] ) ⊢ 0'(= {| l |} ) : (_t10→_s8)
 	mov rsi,fmt_d
 	mov rdx,r14
 	mov QWORD [tmp],rdi
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call sprintf
-	mov rsp,QWORD [rsp_tmp]  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_PUSH_REGS
+	C_CALL sprintf
+	C_POP_REGS
 	push rax 
 	add rax,QWORD [tmp]
 	mov rdi,rax
@@ -4736,42 +4624,10 @@ LB_325:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -4867,23 +4723,7 @@ LB_331:
 ; ∎ 1'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r14
@@ -4945,23 +4785,7 @@ LB_336:
 ; ∎ 1'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r14
@@ -5058,42 +4882,10 @@ LB_339:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -5109,26 +4901,13 @@ LB_341:
 ; ∎ %[ "" ]
 ; .mov_ptn2 %[ "" ] ⊢ 0'(= {| l |} )
 ; .mov_ptn %[ "" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r13,rax
 	ret
 ETR_99: ; pnt_dst_ptn 0'(= a8◂ [ a13◂ [ {| l |}]] ) ⊢ 0'(= {| l |} ) : (_t8◂_t13◂_s8→_s8)
@@ -5187,23 +4966,7 @@ LB_345:
 ; ∎ 1'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r14
@@ -5231,26 +4994,13 @@ LB_348:
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 %[ "_ " ] ⊢ 0'(= {| l |} )
 ; .mov_ptn %[ "_ " ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],95
 	mov BYTE [rax+8+1],32
 	mov r13,rax
@@ -5346,42 +5096,10 @@ LB_350:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -5397,26 +5115,13 @@ LB_352:
 ; ∎ %[ "" ]
 ; .mov_ptn2 %[ "" ] ⊢ 0'(= {| l |} )
 ; .mov_ptn %[ "" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r13,rax
 	ret
 ETR_101: ; pnt_mtc_ptn 0'(= a8◂ [ a14◂ [ a9◂ [ ]{| l |}]] ) ⊢ 0'(= {| l |} ) : (_t8◂_t14◂_s8◂_t9→_s8)
@@ -5535,19 +5240,9 @@ LB_368:
 	mov rax,rsi
 	jmp LB_371
 LB_369:
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	call rpc_s8  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+6],3
 	jmp LB_371
 LB_371:
@@ -5557,19 +5252,9 @@ LB_374:
 	jmp QWORD [LB_377+8*rsi]
 LB_377: dq LB_375,LB_376
 LB_375:
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	call rpc_s8  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+6],0
 	jmp LB_378
 LB_376:
@@ -5619,19 +5304,9 @@ LB_384:
 	mov rax,rsi
 	jmp LB_387
 LB_385:
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	call rpc_s8  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+6],1
 	jmp LB_387
 LB_387:
@@ -5648,19 +5323,9 @@ LB_388:
 	push rdi
 	push rsi
 	mov rdi,QWORD [rdi+8+8*0]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	call rpc_s8  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	pop rsi  
 	pop rdi 
 	mov QWORD [rsi+8+8*0],rax
@@ -5675,19 +5340,9 @@ LB_388:
 	mov BYTE [rax+6],0
 	jmp LB_391
 LB_389:
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	call rpc_s8  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+6],1
 	jmp LB_391
 LB_391:
@@ -5752,23 +5407,7 @@ LB_394:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0(<2)◂0'(= a2◂ [ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
@@ -5832,23 +5471,7 @@ LB_399:
 ; ∎ 1'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r14
@@ -5932,42 +5555,10 @@ LB_402:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -6012,23 +5603,7 @@ LB_405:
 ; ∎ 0'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 0'(= {| l |} ) ⊢ 0'(= {| l |} )
 	ret
 LB_404:
@@ -6045,26 +5620,13 @@ LB_407:
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 %[ "_" ] ⊢ 0'(= {| l |} )
 ; .mov_ptn %[ "_" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],1
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],95
 	mov r13,rax
 	ret
@@ -6150,42 +5712,10 @@ LB_409:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -6201,26 +5731,13 @@ LB_411:
 ; ∎ %[ "" ]
 ; .mov_ptn2 %[ "" ] ⊢ 0'(= {| l |} )
 ; .mov_ptn %[ "" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r13,rax
 	ret
 ETR_132: ; pnt_lc_code { 0'(= r ) 1'(= a17◂ [ a9◂ [ ]{| l |}] ) } ⊢ { 0'(= r ) 1'(= {| l |} ) } : ({ _r64 _t17◂_s8◂_t9 }→{ _r64 _s8 })
@@ -6334,42 +5851,10 @@ LB_420:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -6500,42 +5985,10 @@ LB_431:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -6616,42 +6069,10 @@ LB_421:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -6833,61 +6254,13 @@ LB_445:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 4'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r10
@@ -6977,42 +6350,10 @@ LB_453:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -7265,61 +6606,13 @@ LB_477:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 4'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r10
@@ -7491,61 +6784,13 @@ LB_490:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 4'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r10
@@ -7708,61 +6953,13 @@ LB_503:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 4'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r10
@@ -7960,42 +7157,10 @@ LB_523:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -8129,61 +7294,13 @@ LB_532:
 ; ∎ { 0'(= r ) 5'(= {| l |} ) }
 ; .dlt.ptn 4'(= {| l |} )
 	mov rdi,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 5'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -8277,42 +7394,10 @@ LB_538:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -8395,23 +7480,7 @@ LB_545:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -8531,42 +7600,10 @@ LB_554:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -8643,23 +7680,7 @@ LB_560:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -8829,61 +7850,13 @@ LB_570:
 ; ∎ { 0'(= r ) 5'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 5'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -9021,80 +7994,16 @@ LB_579:
 ; ∎ { 0'(= r ) 6'(= {| l |} ) }
 ; .dlt.ptn 5'(= {| l |} )
 	mov rdi,r11
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 6'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -9190,61 +8099,13 @@ LB_585:
 ; ∎ { 0'(= r ) 5'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 5'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -9350,42 +8211,10 @@ LB_592:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -9509,42 +8338,10 @@ LB_601:
 ; ∎ { 0'(= r ) 5'(= {| l |} ) }
 ; .dlt.ptn 4'(= {| l |} )
 	mov rdi,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 2'(= a8◂ [ a14◂ [ a9◂ [ ]{| l |}]] )
@@ -9625,23 +8422,7 @@ LB_607:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a2◂ [ a21◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 2'(= a8◂ [ a14◂ [ a9◂ [ ]{| l |}]] )
@@ -9782,61 +8563,13 @@ LB_616:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 4'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r10
@@ -9852,26 +8585,13 @@ LB_617:
 ; ∎ { 0'(= r ) %[ "" ] }
 ; .mov_ptn2 { 0'(= r ) %[ "" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "" ] ⊢ 1'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r14,rax
 	ret
 ETR_158: ; pnt_etr { 0'(= r ) 1'(= a24◂ [ a9◂ [ ]{| l |}] ) } ⊢ { 0'(= r ) 1'(= {| l |} ) } : ({ _r64 _t24◂_s8◂_t9 }→{ _r64 _s8 })
@@ -10001,23 +8721,7 @@ LB_625:
 ; ∎ { 0'(= r ) 6'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 5'(= a3◂ [ a25◂ [ a9◂ [ ]{| l |}]] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 4'(= a28◂ [ a9◂ [ ]] )
@@ -10275,61 +8979,13 @@ LB_640:
 ; ∎ { 0'(= r ) 8'(= {| l |} ) }
 ; .dlt.ptn 4'(= {| l |} )
 	mov rdi,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 7'(= a3◂ [ *{ a8◂ [ a13◂ [ {| l |}]]a26◂ [ a9◂ [ ]{| l |}]}] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 6'(= a28◂ [ a9◂ [ ]] )
@@ -10482,42 +9138,10 @@ LB_648:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 7'(= a3◂ [ *{ a8◂ [ a13◂ [ {| l |}]]a26◂ [ a9◂ [ ]{| l |}]}] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 6'(= a28◂ [ a9◂ [ ]] )
@@ -10559,26 +9183,13 @@ LB_650:
 	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rax],0
 	mov r14,rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],95
 	mov BYTE [rax+8+1],110
 	mov BYTE [rax+6],1
@@ -10589,26 +9200,13 @@ LB_650:
 	mov QWORD [SS_RCD_2_TOP],rsi
 	mov QWORD [rax],0
 	mov r8,rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],2
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],95
 	mov BYTE [rax+8+1],114
 	mov BYTE [rax+6],1
@@ -10641,26 +9239,13 @@ LB_652:
 ; ∎ { 0'(= r ) %[ "" ] }
 ; .mov_ptn2 { 0'(= r ) %[ "" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "" ] ⊢ 1'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r14,rax
 	ret
 LB_651:
@@ -10734,42 +9319,10 @@ LB_651:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -10906,42 +9459,10 @@ LB_670:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -11039,42 +9560,10 @@ LB_680:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -11152,23 +9641,7 @@ LB_687:
 ; ∎ { 0'(= r ) 2'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 2'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 2'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r8
@@ -11264,42 +9737,10 @@ LB_694:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 3'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r9
@@ -11377,23 +9818,7 @@ LB_701:
 ; ∎ { 0'(= r ) 2'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 2'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 2'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r8
@@ -11511,42 +9936,10 @@ LB_711:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= a2◂ [ {| l |}] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -11618,23 +10011,7 @@ LB_719:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= a23◂ [ ] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 1'(= a2◂ [ {| l |}] )
@@ -11712,23 +10089,7 @@ LB_725:
 ; ∎ { 0'(= r ) 2'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 2'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 2'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r8
@@ -11879,61 +10240,13 @@ LB_735:
 ; ∎ { 0'(= r ) 5'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= {| l |} )
 	mov rdi,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= a2◂ [ {| l |}] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 5'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -12015,42 +10328,10 @@ LB_743:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 5'(= a23◂ [ ] )
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 2'(= a2◂ [ {| l |}] )
@@ -12070,26 +10351,13 @@ LB_744:
 ; ∎ { 0'(= r ) %[ "" ] }
 ; .mov_ptn2 { 0'(= r ) %[ "" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "" ] ⊢ 1'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r14,rax
 	ret
 ETR_180: ; pnt_dt_etr { 0'(= r ) 1'(= a34◂ [ ] ) } ⊢ { 0'(= r ) 1'(= {| l |} ) } : ({ _r64 _t34 }→{ _r64 _s8 })
@@ -12156,23 +10424,7 @@ LB_746:
 ; ∎ { 0'(= r ) 1'(= {| l |} ) }
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= a2◂ [ {| l |}] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 1'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -12240,23 +10492,7 @@ LB_750:
 ; ∎ { 0'(= r ) 3'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= a2◂ [ {| l |}] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 3'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -12397,61 +10633,13 @@ LB_762:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 4'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r10
@@ -12467,26 +10655,13 @@ LB_763:
 ; ∎ { 0'(= r ) %[ "" ] }
 ; .mov_ptn2 { 0'(= r ) %[ "" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "" ] ⊢ 1'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r14,rax
 	ret
 ETR_182: ; pnt_type 0'(= a23◂ [ ] ) ⊢ 0'(= {| l |} ) : (_t23→_s8)
@@ -12545,23 +10720,7 @@ LB_767:
 ; ∎ 1'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r14
@@ -12648,42 +10807,10 @@ LB_770:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -12770,42 +10897,10 @@ LB_773:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -12866,23 +10961,7 @@ LB_776:
 ; ∎ 1'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 1'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r14
@@ -12970,42 +11049,10 @@ LB_779:
 ; ∎ 2'(= {| l |} )
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; .mov_ptn 2'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov rax,r8
@@ -13021,26 +11068,13 @@ LB_781:
 ; ∎ %[ "" ]
 ; .mov_ptn2 %[ "" ] ⊢ 0'(= {| l |} )
 ; .mov_ptn %[ "" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r13,rax
 	ret
 ETR_184: ; pnt_lc_etr { 0'(= r ) 1'(= a33◂ [ ] ) } ⊢ { 0'(= r ) 1'(= {| l |} ) } : ({ _r64 _t33 }→{ _r64 _s8 })
@@ -13190,61 +11224,13 @@ LB_788:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 4'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r10
@@ -13340,42 +11326,10 @@ LB_792:
 ; ∎ { 0'(= r ) 4'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= a3◂ [ a23◂ [ ]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 4'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -13444,23 +11398,7 @@ LB_797:
 ; ∎ { 0'(= r ) 2'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 2'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 2'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r8
@@ -13517,23 +11455,7 @@ LB_799:
 ; ∎ { 0'(= r ) 2'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 2'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 2'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,r8
@@ -13770,99 +11692,19 @@ LB_814:
 ; ∎ { 0'(= r ) 6'(= {| l |} ) }
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= {| l |} )
 	mov rdi,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 5'(= {| l |} )
 	mov rdi,r11
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { 0'(= r ) 6'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn 6'(= {| l |} ) ⊢ 1'(= {| l |} )
 	mov rax,rcx
@@ -14029,80 +11871,16 @@ LB_824:
 ; ∎ { 0'(= r ) 6'(= {| l |} ) }
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= {| l |} )
 	mov rdi,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= {| l |} )
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 5'(= a3◂ [ a23◂ [ ]] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 { 0'(= r ) 6'(= {| l |} ) } ⊢ { 0'(= r ) 1'(= {| l |} ) }
@@ -14120,26 +11898,13 @@ LB_825:
 ; ∎ { 0'(= r ) %[ "" ] }
 ; .mov_ptn2 { 0'(= r ) %[ "" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
 ; .mov_ptn %[ "" ] ⊢ 1'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r14,rax
 	ret
 ETR_186: ; mk_app { 0'(= a23◂ [ ] ) 1'(= a2◂ [ a23◂ [ ]] ) } ⊢ 0'(= a23◂ [ ] ) : ({ _t23 _lst◂_t23 }→_t23)
@@ -14791,20 +12556,10 @@ GRM_190:
 	mov QWORD [rsp+8],r9
 	cmp r14,r9
 	jge LB_918
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
  lea rdi,[r13+8+r14] 
 	call scf_d
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	cmp rax,0 
 	jz LB_918
 	add r14,rsi
@@ -14922,20 +12677,10 @@ LB_929:
 LB_930:
 	cmp r14,r9
 	jge LB_937
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
  lea rdi,[r13+8+r14] 
 	call scf_x
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	cmp rax,0 
 	jz LB_937
 	add r14,rsi
@@ -15444,22 +13189,9 @@ ETR_196: ; pnt_prs_err 0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= {| l |} ) : (_lst�
 	mov rsi,fmt_d
 	mov rdx,r8
 	mov QWORD [tmp],rdi
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call sprintf
-	mov rsp,QWORD [rsp_tmp]  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_PUSH_REGS
+	C_CALL sprintf
+	C_POP_REGS
 	push rax 
 	add rax,QWORD [tmp]
 	mov rdi,rax
@@ -15468,22 +13200,9 @@ ETR_196: ; pnt_prs_err 0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= {| l |} ) : (_lst�
 	mov rsi,fmt_d
 	mov rdx,r9
 	mov QWORD [tmp],rdi
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call sprintf
-	mov rsp,QWORD [rsp_tmp]  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_PUSH_REGS
+	C_CALL sprintf
+	C_POP_REGS
 	push rax 
 	add rax,QWORD [tmp]
 	mov rdi,rax
@@ -15552,42 +13271,10 @@ LB_999:
 ; ∎ 1'(= {| l |} )
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 4'(= {| l |} )
 	mov rdi,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 3'(= r )
 ; .dlt.ptn 2'(= r )
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 0'(= {| l |} )
@@ -15605,26 +13292,13 @@ LB_1001:
 ; ∎ %[ "" ]
 ; .mov_ptn2 %[ "" ] ⊢ 0'(= {| l |} )
 ; .mov_ptn %[ "" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],0
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r13,rax
 	ret
 ETR_197:
@@ -20929,27 +18603,11 @@ LB_1769:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_1770
@@ -20985,22 +18643,9 @@ LB_1774
 	mov rsi,fmt_d
 	mov rdx,r13
 	mov QWORD [tmp],rdi
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call sprintf
-	mov rsp,QWORD [rsp_tmp]  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_PUSH_REGS
+	C_CALL sprintf
+	C_POP_REGS
 	push rax 
 	add rax,QWORD [tmp]
 	mov rdi,rax
@@ -21009,22 +18654,9 @@ LB_1774
 	mov rsi,fmt_d
 	mov rdx,r14
 	mov QWORD [tmp],rdi
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call sprintf
-	mov rsp,QWORD [rsp_tmp]  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_PUSH_REGS
+	C_CALL sprintf
+	C_POP_REGS
 	push rax 
 	add rax,QWORD [tmp]
 	mov rdi,rax
@@ -21068,27 +18700,11 @@ LB_1779:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_1781
@@ -21440,27 +19056,11 @@ LB_1827:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_1828
@@ -21519,26 +19119,13 @@ LB_1833:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],9
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],98
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],107
@@ -22004,26 +19591,13 @@ LB_1891:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],9
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],98
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],107
@@ -24267,20 +21841,10 @@ GRM_227:
 	mov QWORD [rsp+8],r9
 	cmp r14,r9
 	jge LB_2232
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
  lea rdi,[r13+8+r14] 
 	call scf_d
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	cmp rax,0 
 	jz LB_2232
 	add r14,rsi
@@ -24368,20 +21932,10 @@ GRM_228:
 	mov QWORD [rsp+8],r9
 	cmp r14,r9
 	jge LB_2245
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
  lea rdi,[r13+8+r14] 
 	call scf_d
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	cmp rax,0 
 	jz LB_2245
 	add r14,rsi
@@ -24467,20 +22021,10 @@ LB_2242:
 	mov r13,QWORD [rsp+24]
 	cmp r14,r9
 	jge LB_2258
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
  lea rdi,[r13+8+r14] 
 	call scf_d
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	cmp rax,0 
 	jz LB_2258
 	add r14,rsi
@@ -24566,20 +22110,10 @@ LB_2255:
 	mov r13,QWORD [rsp+24]
 	cmp r14,r9
 	jge LB_2271
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
  lea rdi,[r13+8+r14] 
 	call scf_d
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	cmp rax,0 
 	jz LB_2271
 	add r14,rsi
@@ -26421,26 +23955,13 @@ LB_2542:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],15
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],108
 	mov BYTE [rax+8+1],99
 	mov BYTE [rax+8+2],95
@@ -28594,26 +26115,13 @@ LB_2810:
 	mov rax,QWORD [rsp-8+8*2]
 	mov rdi,r14
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],10
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],108
 	mov BYTE [rax+8+1],99
 	mov BYTE [rax+8+2],95
@@ -28689,26 +26197,13 @@ LB_2811:
 	mov rax,QWORD [rsp-8+8*2]
 	mov rdi,r9
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],10
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],108
 	mov BYTE [rax+8+1],99
 	mov BYTE [rax+8+2],95
@@ -29833,26 +27328,13 @@ LB_2941:
 	mov rax,QWORD [rsp-8+8*2]
 	mov rdi,r14
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,40
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],26
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -29944,26 +27426,13 @@ LB_2942:
 	mov rax,QWORD [rsp-8+8*2]
 	mov rdi,r9
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,40
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],26
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -30146,26 +27615,13 @@ LB_2961:
 	mov rax,QWORD [rsp-8+8*2]
 	mov rdi,r14
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,40
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],26
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -30257,26 +27713,13 @@ LB_2962:
 	mov rax,QWORD [rsp-8+8*2]
 	mov rdi,r9
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,40
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],26
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -30688,26 +28131,13 @@ LB_2998:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],10
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],108
 	mov BYTE [rax+8+1],99
 	mov BYTE [rax+8+2],95
@@ -30802,26 +28232,13 @@ LB_3004:
 	mov QWORD [rsp+8*0],r8
 ; .mov_ptn2 { 0'(= r ) 1'(= r ) %[ "lc_code 9" ] } ⊢ { 0'(= r ) 1'(= r ) 2'(= {| l |} ) }
 ; .mov_ptn %[ "lc_code 9" ] ⊢ 2'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],9
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],108
 	mov BYTE [rax+8+1],99
 	mov BYTE [rax+8+2],95
@@ -30891,26 +28308,13 @@ LB_3005:
 	mov rax,r14
 	mov rdi,r11
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],10
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],108
 	mov BYTE [rax+8+1],99
 	mov BYTE [rax+8+2],95
@@ -33351,26 +30755,13 @@ LB_3266:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],10
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],109
 	mov BYTE [rax+8+1],116
 	mov BYTE [rax+8+2],99
@@ -34625,26 +32016,13 @@ LB_3465:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],13
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],109
 	mov BYTE [rax+8+1],116
 	mov BYTE [rax+8+2],99
@@ -35727,26 +33105,13 @@ LB_3585:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],9
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],114
 	mov BYTE [rax+8+2],98
@@ -36067,23 +33432,7 @@ LB_3625:
 ; .dlt.ptn 0'(= r )
 ; .dlt.ptn 8'(= {| l |} )
 	mov rdi,QWORD [rsp-8+8*2]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 0(<2)◂1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov r13,r8
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
@@ -36185,26 +33534,13 @@ LB_3636:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],11
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -36495,26 +33831,13 @@ LB_3672:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],9
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -36809,26 +34132,13 @@ LB_3708:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],9
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -37347,23 +34657,7 @@ LB_3788
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 8'(= {| l |} )
 	mov rdi,QWORD [rsp-8+8*2]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 0(<2)◂{ } ⊢ 2'(= a3◂ [ *{ }] )
 ; .mov_ptn 0(<2)◂{ } ⊢ 2'(= a3◂ [ *{ }] )
 	mov rax,unt 
@@ -38445,26 +35739,13 @@ LB_3932:
 	mov rax,r14
 	mov rdi,r10
 	mov QWORD [rdi+8+8*1],rax
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,24
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],9
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],103
 	mov BYTE [rax+8+1],108
 	mov BYTE [rax+8+2],98
@@ -41073,23 +38354,7 @@ LB_4325:
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 9'(= {| l |} )
 	mov rdi,QWORD [rsp-8+8*5]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 8'(= a35◂ [ *{ }] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
@@ -41140,23 +38405,7 @@ LB_4324:
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 9'(= {| l |} )
 	mov rdi,QWORD [rsp-8+8*5]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 8'(= a35◂ [ *{ }] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 0(<2)◂1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
@@ -41217,23 +38466,7 @@ LB_4326:
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 9'(= {| l |} )
 	mov rdi,QWORD [rsp-8+8*3]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 8'(= a35◂ [ *{ }] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 0(<2)◂1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
@@ -41405,23 +38638,7 @@ LB_4344:
 ; .dlt.ptn 0'(= r )
 ; .dlt.ptn 8'(= {| l |} )
 	mov rdi,QWORD [rsp-8+8*2]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 0(<2)◂1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov r13,r8
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
@@ -42067,23 +39284,7 @@ LB_4427:
 ;	.dlt adt ⊢ _  
 ; .dlt.ptn 9'(= {| l |} )
 	mov rdi,QWORD [rsp-8+8*3]
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 8'(= a35◂ [ *{ }] )
 ;	.dlt adt ⊢ _  
 ; .mov_ptn2 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a2◂ [ *{ {| l |}a8◂ [ a13◂ [ {| l |}]]a3◂ [ a23◂ [ ]]a17◂ [ a9◂ [ ]{| l |}]}]]] )
@@ -44276,49 +41477,19 @@ LB_4735:
 	mov rdi,fmt_rcd_l 
 	call emt_stg 
 	mov rax,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rdi,fmt_rcd_r 
@@ -44527,49 +41698,19 @@ LB_4767:
 	mov rdi,fmt_rcd_l 
 	call emt_stg 
 	mov rax,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rdi,fmt_rcd_r 
@@ -46780,26 +43921,11 @@ LB_5074:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5076
@@ -46810,68 +43936,26 @@ LB_5076:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5077
 LB_5077:
 ;; rsp=0 , %2659~1'(= {| l |} ) %2654~0'(= {| l |} ) 
 ; _#24 0'(= {| l |} ) ⊢ { 0'(= {| l |} ) 2'(= {| l |} ) }
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rdi,r13
 	add rdi,8
 	call in_fn
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r8,rax
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ;; rsp=0 , %2661~2'(= {| l |} ) %2659~1'(= {| l |} ) 
 ; rsp_d=0, #243 { 2'(= {| l |} ) %[ 0r ] } ⊢ { 0'(= {| l |} ) 3'(= r ) 2'(= a3◂ [ a35◂ [ a2◂ [ a31◂ [ ]]]] ) }
 	sub rsp,8
@@ -46894,26 +43978,11 @@ LB_5077:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5078
@@ -46924,20 +43993,10 @@ LB_5078:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
 	call LB_5079
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5080
@@ -46994,38 +44053,22 @@ LB_5096:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*1]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*2]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47098,14 +44141,8 @@ LB_5109:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47131,14 +44168,8 @@ LB_5111:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47164,14 +44195,8 @@ LB_5113:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47207,14 +44232,8 @@ LB_5129:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47353,14 +44372,8 @@ LB_5147:
 LB_5148:
 	mov rdi,LB_5157
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5150
 LB_5150:
 	ret
@@ -47375,14 +44388,8 @@ LB_5158:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47398,14 +44405,8 @@ LB_5158:
 LB_5159:
 	mov rdi,LB_5163
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5161
 LB_5161:
 	ret
@@ -47458,14 +44459,8 @@ LB_5170:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47510,14 +44505,8 @@ LB_5176:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47555,14 +44544,8 @@ LB_5182:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -47708,13 +44691,8 @@ LB_5197:
 	mov rdi,LB_5211
 	call emt_stg 
 	mov r8,QWORD [r8+8]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	jmp LB_5199
 LB_5199:
 	ret
@@ -48008,14 +44986,8 @@ LB_5259:
 LB_5260:
 	mov rdi,LB_5265
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5262
 LB_5262:
 	ret
@@ -48045,25 +45017,14 @@ LB_5273:
 	mov rdi,LB_5277
 	call emt_stg 
 	mov r8,QWORD [r8+8]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	jmp LB_5276
 LB_5274:
 	mov rdi,LB_5278
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5276
 LB_5276:
 	ret
@@ -48124,14 +45085,8 @@ LB_5289:
 LB_5290:
 	mov rdi,LB_5297
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5292
 LB_5292:
 	ret
@@ -48142,14 +45097,8 @@ LB_5300: dq LB_5298,LB_5299
 LB_5298:
 	mov rdi,LB_5302
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5301
 LB_5299:
 	mov rdi,LB_5303
@@ -48413,14 +45362,8 @@ LB_5336:
 LB_5337:
 	mov rdi,LB_5341
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5339
 LB_5339:
 	ret
@@ -48499,14 +45442,8 @@ LB_5359: dq LB_5355,LB_5356,LB_5357,LB_5358
 LB_5355:
 	mov rdi,LB_5361
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5360
 LB_5356:
 	mov rdi,LB_5362
@@ -48527,13 +45464,8 @@ LB_5357:
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*1]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -48547,26 +45479,15 @@ LB_5358:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*1]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -48626,14 +45547,8 @@ LB_5376:
 LB_5377:
 	mov rdi,LB_5381
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5379
 LB_5379:
 	ret
@@ -48786,14 +45701,8 @@ LB_5415:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -49050,14 +45959,8 @@ LB_5462:
 LB_5463:
 	mov rdi,LB_5467
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5465
 LB_5465:
 	ret
@@ -49300,26 +46203,11 @@ LB_5504:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r10
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5505
@@ -49330,26 +46218,11 @@ LB_5505:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5506
@@ -49360,90 +46233,26 @@ LB_5506:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5507
 LB_5507:
 ; .dlt.ptn 2'(= {| l |} )
 	mov rdi,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ;; rsp=0 , %2662~0'(= {| l |} ) %2659~1'(= {| l |} ) 
 ; ∎ { }
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { } ⊢ { }
 	ret
 LB_5502:
@@ -49493,26 +46302,11 @@ LB_5510:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5512
@@ -49523,20 +46317,10 @@ LB_5512:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
 	call LB_5513
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5514
@@ -49591,14 +46375,8 @@ LB_5530:
 LB_5531:
 	mov rdi,LB_5536
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5533
 LB_5533:
 	ret
@@ -49609,14 +46387,8 @@ LB_5539: dq LB_5537,LB_5538
 LB_5537:
 	mov rdi,LB_5541
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5540
 LB_5538:
 	mov rdi,LB_5542
@@ -49701,71 +46473,23 @@ LB_5551:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5552
 LB_5552:
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ;; rsp=0 , %2679~0'(= {| l |} ) 
 ; ∎ { }
 ; .dlt.ptn 0'(= {| l |} )
 	mov rdi,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ; .mov_ptn2 { } ⊢ { }
 	ret
 LB_5549:
@@ -49824,26 +46548,13 @@ RTM_0:
 	mov QWORD [rsp+8*0],r13
 ; .mov_ptn2 1(<2)◂1(<2)◂%[ "xy0" ] ⊢ 0'(= a8◂ [ a13◂ [ {| l |}]] )
 ; .mov_ptn 1(<2)◂1(<2)◂%[ "xy0" ] ⊢ 0'(= a8◂ [ a13◂ [ {| l |}]] )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],3
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],120
 	mov BYTE [rax+8+1],121
 	mov BYTE [rax+8+2],48
@@ -49867,50 +46578,18 @@ RTM_0:
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5555
 LB_5555:
 ; .dlt.ptn 1'(= {| l |} )
 	mov rdi,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 	jmp LB_5556
 LB_5556:
@@ -49924,26 +46603,13 @@ LB_5556:
 	mov rax,0
 	mov r14,rax
 ; .mov_ptn %[ "xyz0" ] ⊢ 0'(= {| l |} )
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call calloc
-	mov rsp,QWORD [rsp_tmp]  
+	C_CALL calloc
 	mov QWORD [rax],4
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov BYTE [rax+8+0],120
 	mov BYTE [rax+8+1],121
 	mov BYTE [rax+8+2],122
@@ -49962,67 +46628,26 @@ LB_5556:
 	mov rdi,fmt_rcd_l 
 	call emt_stg 
 	mov rax,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
 	call LB_5557
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rdi,fmt_rcd_r 
@@ -50037,14 +46662,8 @@ LB_5561: dq LB_5559,LB_5560
 LB_5559:
 	mov rdi,LB_5563
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5562
 LB_5560:
 	mov rdi,LB_5564
@@ -50059,23 +46678,7 @@ LB_5562:
 LB_5558:
 ; .dlt.ptn { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ {| l |}] ) }
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ;	.dlt adt ⊢ _  
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 ; » _^ .. ⊢ ..
@@ -50120,67 +46723,26 @@ LB_5565:
 	mov rdi,fmt_rcd_l 
 	call emt_stg 
 	mov rax,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rax,r14
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rax,r8
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
 	call LB_5567
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov rdi,fmt_spc 
 	call emt_stg 
 	mov rdi,fmt_rcd_r 
@@ -50241,38 +46803,22 @@ LB_5584:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*1]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*2]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -50400,13 +46946,8 @@ LB_5596:
 	mov rdi,LB_5611
 	call emt_stg 
 	mov r8,QWORD [r8+8]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	jmp LB_5598
 LB_5598:
 	ret
@@ -50507,14 +47048,8 @@ LB_5634:
 LB_5635:
 	mov rdi,LB_5640
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5637
 LB_5637:
 	ret
@@ -50525,14 +47060,8 @@ LB_5643: dq LB_5641,LB_5642
 LB_5641:
 	mov rdi,LB_5645
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5644
 LB_5642:
 	mov rdi,LB_5646
@@ -50768,14 +47297,8 @@ LB_5680:
 LB_5681:
 	mov rdi,LB_5686
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5683
 LB_5683:
 	ret
@@ -50805,25 +47328,14 @@ LB_5694:
 	mov rdi,LB_5698
 	call emt_stg 
 	mov r8,QWORD [r8+8]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	jmp LB_5697
 LB_5695:
 	mov rdi,LB_5699
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5697
 LB_5697:
 	ret
@@ -50884,14 +47396,8 @@ LB_5710:
 LB_5711:
 	mov rdi,LB_5717
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5713
 LB_5713:
 	ret
@@ -51209,14 +47715,8 @@ LB_5766: dq LB_5762,LB_5763,LB_5764,LB_5765
 LB_5762:
 	mov rdi,LB_5768
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5767
 LB_5763:
 	mov rdi,LB_5769
@@ -51237,13 +47737,8 @@ LB_5764:
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*1]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -51257,26 +47752,15 @@ LB_5765:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	xor rax,rax  
-	mov rdi,fmt_r64
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8 
+	call emt_r64 
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
 	push r8
 	mov r8,QWORD [r8+8+8*1]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -51336,14 +47820,8 @@ LB_5783:
 LB_5784:
 	mov rdi,LB_5788
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5786
 LB_5786:
 	ret
@@ -51410,14 +47888,8 @@ LB_5802:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -51433,49 +47905,22 @@ LB_5802:
 LB_5803:
 	mov rdi,LB_5807
 	call emt_stg 
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	jmp LB_5805
 LB_5805:
 	ret
 LB_5568:
 ; .dlt.ptn { 3'(= {| l |} ) 1'(= r ) 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] ) }
 	mov rdi,r9
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
-	xor rax,rax
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call free 
-	mov rsp,QWORD [rsp_tmp] 
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	call free_s8 
 ;	.dlt adt ⊢ _  
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 ; _#10 0'(= {| {| l |}|} ) ⊢ 0'(= {| {| l |}|} )
 	mov rdi,fmt_emt
 	call emt_stg
 	mov rax,r13
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	mov r8,rax
 	mov rdi,fmt_arr_l 
 	call emt_stg 
@@ -51488,14 +47933,8 @@ LB_5808:
 	push rax 
 	push rsi 
 	mov r8,QWORD [r8+8+8*rax]
-	mov rsi,r8
-	add rsi,8
-	xor rax,rax  
-	mov rdi,fmt_s8
-	mov QWORD [rsp_tmp],rsp 
-	and rsp,~0xf 
-	call printf 
-	mov rsp,QWORD [rsp_tmp]
+	mov rdi,r8
+	call emt_s8
 	mov rdi,fmt_spc 
 	call emt_stg 
 	pop rsi 
@@ -51506,12 +47945,7 @@ LB_5808:
 LB_5809:
 	mov rdi,fmt_arr_r 
 	call emt_stg
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
 	jmp LB_5810
@@ -51533,19 +47967,9 @@ LB_5810:
 	mov rdi,[rdi+8+8*rax]
 	jmp LB_5811
 LB_5811:
-	push rdx
-	push rcx
-	push r8
-	push r9
-	push r10
-	push r11
+	C_PUSH_REGS
 	call rpc_s8  
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rcx
-	pop rdx
+	C_POP_REGS
 	mov r14,rax
 ; .mov_ptn2 1'(= {| l |} ) ⊢ 2'(= {| l |} )
 	mov r9,r8
