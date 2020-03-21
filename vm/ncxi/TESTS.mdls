@@ -1,0 +1,347 @@
+§ f0 x 
+  _inc x ⊢ x 
+  ∎ x
+§ f1 { x y } 
+  _inc x ⊢ x 
+  _inc y ⊢ y 
+  _inc y ⊢ y 
+  ∎ { x y }
+§ f2 { x y }
+  _imul { x y } ⊢ { x y }
+  _imul { %[ 4r ] y } ⊢ { z y }
+  ∎ { y x z }
+§ f3 x 
+  _inc x ⊢ x 
+  $ x ⊢ x,x0 
+  ∎ { x x0 }
+§ f4 x 
+  ∐ x'=0r .
+    _inc x ⊢ x 
+    ∎ x  
+  ∐ x'=1r .
+    $ x ⊢ x,x0 
+    _imul { x x0 } ⊢ { x x0 }
+    ∎ x 
+  ∐. . 
+    ∎|
+§ @.f5 x 
+  _dec x ⊢ x 
+  ∎ x 
+§ @.fact x 
+  ∐ x'=0r . 
+    ∎ %[ 1r ]
+  ∐ x'=1r . 
+    ∎ x 
+  ∐. . 
+    $ x ⊢ x,x0 
+    _dec x ⊢ x 
+    fact x ⊢ x 
+    _imul { x0 x } ⊢ { x0 x } 
+    ∎ x0 
+§ C0 « 
+  $ %[ 0r ] ⊢ x 
+  _inc x ⊢ x 
+  f0 x ⊢ x 
+  $ %[ 3r ] ⊢ y 
+  $ %[ 4r ] ⊢ z 
+  f0 z ⊢ _ 
+  _emt x ⊢ x 
+  f1 { x y } ⊢ { x _ }
+  fact x ⊢ x 
+  _emt x ⊢ x 
+  fact x ⊢ x 
+  _emt x ⊢ _ 
+  ∎ 
+§%  
+  $ %[ 0r ] ⊢ x 
+  $ x ⊢ x0,x1,x2,x3,x4,x5,x6,x7,x8
+  _emt x0 ⊢ _ 
+  _emt x1 ⊢ _ 
+  _emt x2 ⊢ _ 
+  $ { x3 x4 x5 x6 x7 x8 } ⊢ _ 
+  ∎ 
+§% 
+  » 17r _ ⊢ r 
+	» _^ r ⊢ _,sr 
+		0d' 0'*"KK" 0d' "\n" // 
+	_emt sr ⊢ _
+  ∎ 
+\[
+§ F « 
+  » _^ _ ⊢ s 
+    `TEST
+    ` JJJ FFF h h 
+    `OJF OIEJ OJ
+    //
+  » "rm -f FF.txt\n" _ ⊢ xx0
+  » "touch FF.txt\n" _ ⊢ xx1 
+  _cd xx0 ⊢ xx0 
+  _cd xx1 ⊢ xx1 
+  » "FF.txt" _ ⊢ f 
+  _emt_s8_to { f s } ⊢ { f s }
+  » "ls -a\n" _ ⊢ l0 
+  _cd l0 ⊢ l0 
+  ∎  
+  \]
+
+§ @.fact x 
+  ∐ x'=0r . 
+    ∎ %[ 1r ] 
+  ∐ x'=1r . 
+    ∎ %[ 1r ]
+  ∐. . 
+    $ x ⊢ x,x0 
+    _dec x ⊢ x 
+    fact x ⊢ y 
+    _imul { x0 y } ⊢ { x0 y } 
+    ∎ x0 
+§ @.tak { x y z } 
+  ∐ x'=<y' . 
+    ∎ z
+  ∐. . 
+    $ x ⊢ x,x0 
+    $ y ⊢ y,y0 
+    $ z ⊢ z,z0 
+    _dec x0 ⊢ x0 
+    tak { x0 y0 z0 } ⊢ rx 
+    $ x ⊢ x,x0 
+    $ y ⊢ y,y0 
+    $ z ⊢ z,z0 
+    _dec y0 ⊢ y0 
+    tak { y0 z0 x0 } ⊢ ry
+    _dec z ⊢ z 
+    tak { z x y } ⊢ rz 
+    tak { rx ry rz } ⊢ r 
+    ∎ r 
+§ @.tak_v { x y z } 
+  ∐ x'=<y' . 
+    $ z ⊢ z,z0
+    ∎ { x y z z0 }
+  ∐. . 
+    _dec x ⊢ x 
+    tak_v { x y z } ⊢ { x y z rx } 
+    _inc x ⊢ x 
+    _dec y ⊢ y 
+    tak_v { y z x } ⊢ { y z x ry }
+    _inc y ⊢ y 
+    _dec z ⊢ z 
+    tak_v { z x y } ⊢ { z x y rz }
+    _inc z ⊢ z 
+    tak_v { rx ry rz } ⊢ { rx ry rz r } 
+    ∎ { x y z r } 
+\[
+§ C0 « 
+  $ %[ 0r ] ⊢ x0,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11
+  _inc x11 ⊢ x11 
+  _inc x0 ⊢ x0  
+  _inc x0 ⊢ x0 
+  $ x0 ⊢ x0,x00
+  _imul { x0 x00 } ⊢ { x0 x00 }
+  _emt x0 ⊢ x0  
+  _emt x11 ⊢ x11 
+  _emt x10 ⊢ x10 
+  _emt x9 ⊢ x9 
+  ∎ {} 
+\]
+§ C1 « 
+  fact %[ 5r ] ⊢ y 
+  _emt y ⊢ _ 
+  tak { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ r 
+  _emt r ⊢ _ 
+  tak_v { %[ 20r ] %[ 10r ] %[ 0r ] } ⊢ { rx ry rz v } 
+  _emt { rx ry rz v } ⊢ _ 
+  ∎ 
+
+## TEST 13 
+§ f0 { x0 x1 x2 x3 x4 x5 x6 } : { _r64 _r64 _r64 _r64 _r64 _r64 _r64 }
+  ∎ { x5 x3 x6 x2 x0 x1 x4 }
+§ f1 x : _r64 
+  ∎ x 
+§ f2 { x y z } : { _r64 _r64 _r64 }
+  ∎ { y z x }
+§ f3 {} 
+  $ %[ 0r ] ⊢ x0
+  $ %[ 1r ] ⊢ x1 
+  $ %[ 2r ] ⊢ x2 
+  $ %[ 3r ] ⊢ x3 
+  $ %[ 4r ] ⊢ x4 
+  $ %[ 5r ] ⊢ x5 
+  $ %[ 6r ] ⊢ x6 
+  $ %[ 7r ] ⊢ x7 
+  $ %[ 8r ] ⊢ x8 
+  $ %[ 9r ] ⊢ x9 
+  $ %[ 10r ] ⊢ x10   
+  ∎ { x0 x1 x2 x3 x4 x5 x6 x7 x8 } 
+§ f4 { x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 } : { _r64 _r64 _r64 _r64 _r64 _r64 _r64 _r64 _r64 _r64 } 
+  ∎ {}
+§ f5 { x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 } : { _r64 _r64 _r64 _r64 _r64 _r64 _r64 _r64 _r64 _r64 } 
+  ∎ { x5 x3 x9 x7 x8 x0 x1 x6 x4 x2 }
+§ f6 { x y } 
+  _imul { x y } ⊢| 
+§ f7 { x y } 
+  _imul { x y } ⊢ { x y } 
+  ∎ { x y }
+§ f8 { x y z } 
+  f7 { x y } ⊢ { _ y } 
+  _imul { y z } ⊢ { y _ } 
+  ∎ y 
+§ f9 {} 
+  $ %[ "HELLO WORLD!!" ] ⊢ s 
+  ∎ s 
+§ C0 « 
+  $ %[ 0r ] ⊢ x0
+  $ %[ 1r ] ⊢ x1 
+  $ %[ 2r ] ⊢ x2 
+  $ %[ 3r ] ⊢ x3 
+  $ %[ 4r ] ⊢ x4 
+  $ %[ 5r ] ⊢ x5 
+  $ %[ 6r ] ⊢ x6 
+  $ %[ 7r ] ⊢ x7 
+  $ %[ 8r ] ⊢ x8 
+  $ %[ 9r ] ⊢ x9 
+  $ %[ 10r ] ⊢ x10  
+  f0 { x0 x1 x2 x3 x4 x5 x6 } ⊢ { x0 x1 x2 x3 x4 x5 x6 }
+  f2 { x8 x9 x10 } ⊢ { x8 x9 x10 }
+  f2 { x7 x4 x2 } ⊢ { x7 x4 x2 }
+  f3 {} ⊢ { y0 y1 y2 y3 y4 y5 y6 y7 y8 }
+  f4 { %[ 1r ] %[ 0r ] %[ 0r ] %[ 0r ] %[ 0r ] %[ 0r ] %[ 0r ] %[ 0r ] %[ 0r ] %[ 0r ] } ⊢ {} 
+  f5 { y0 x7 y3 x8 x6 x2 y1 y2 x9 x10 } ⊢ { y0 x7 y3 x8 x6 x2 y1 y2 x9 x10 } 
+  _emt x0 ⊢ _ 
+  _emt x1 ⊢ _
+  _emt x2 ⊢ _ 
+  _emt x3 ⊢ _ 
+  _emt x4 ⊢ _ 
+  _emt x5 ⊢ _ 
+  _emt x6 ⊢ _ 
+  _emt x7 ⊢ _  
+  _emt x8 ⊢ _ 
+  _emt x9 ⊢ _ 
+  _emt x10 ⊢ _ 
+  _emt y0 ⊢ _ 
+  _emt y1 ⊢ _ 
+  _emt y2 ⊢ _ 
+  _emt y3 ⊢ _ 
+  _emt { y4 y5 y6 y7 y8 } ⊢ _ 
+  ∎ 
+
+## TEST 19 
+§§+s8 
+	@.g0 
+		∐ "A" g0 ⊢ { {} a } 
+			_some %[ 0r ] ⊢ r 
+			∎ r 
+    ∐. "B" ⊢ { {} } 
+      _some %[ 1r ] ⊢ r 
+      ∎ r 
+  @.g1 
+    ∐ "c" g0 ⊢ { {} a }
+      _some a ⊢ r 
+      ∎ r 
+    ∐. g0 g0 ⊢ { a0 a1 } 
+      _add { a0 a1 } ⊢ { a0 a1 } 
+      _some a0 ⊢ r 
+      ∎ r 
+  @.g2 
+    ∐ "s" !| "X" ⊢ { {} {} } 
+      _some %[ 0r ] ⊢ a 
+      ∎ a 
+    ∐. _byt "Y" ⊢ { b {} }
+      _some b ⊢ a 
+      ∎ a 
+  @.g3 
+    ∐ "A" ; ⊢ { {} },a 
+      _some a ⊢ r 
+      ∎ r 
+
+      ∐ "B" ⊢ { {} }
+        _some %[ 0r ] ⊢ r 
+        ∎ r 
+      ∐. "C" ; ⊢ { {} },a 
+        _some %[ 1r ] ⊢ r 
+        ∎ r 
+
+        ∐ "e" ⊢ { {} }
+          _some %[ 3r ] ⊢ r 
+          ∎ r 
+        ∐. g3 ⊢ { a } 
+          _some a ⊢ r 
+          ∎ r 
+    ∐. "D" ⊢ { {} } 
+      _some %[ 2r ] ⊢ r 
+      ∎ r
+  @.g4 
+    ∐# "a" "b" "c" ⊢ { {} {} {} }
+      _some %[ 0r ] ⊢ r 
+      ∎ r 
+    ∐* "x" g4 "z" ⊢ { {} a {} }
+      _some a ⊢ r 
+      ∎ r 
+    ∐. g4 "T" g3 ⊢ { a {} b }
+      _some b ⊢ r 
+      ∎ r  
+§ E0 « 
+  \\g0.prs { %[ "AAAAAABcd" ] %[ 0r ] } ⊢ { s0 x0 a0 }
+  g1.prs { %[ "ABAB" ] %[ 0r ] } ⊢ { s0 x0 a0 } 
+  _emt { s0 x0 a0 } ⊢ _
+  g2.prs { %[ "sY" ] %[ 0r ] } ⊢ { s1 x1 a1 } 
+  _emt { s1 x1 a1 } ⊢ _
+  g3.prs { %[ "AB" ] %[ 0r ] } ⊢ { s2 x2 a2 } 
+  _emt { s2 x2 a2 } ⊢ _ 
+  g3.prs { %[ "ACACe" ] %[ 0r ] } ⊢ { s3 x3 a3 } 
+  _emt { s3 x3 a3 } ⊢ _ 
+  g4.prs { %[ " a bc d" ] %[ 0r ] } ⊢ { s4 x4 a4 } 
+  _emt { s4 x4 a4 } ⊢ _ 
+  _emt %[ "dd\t\n\"J  " ] ⊢ _
+  ##$ x0 ⊢ x0,r1,r2
+  \\_emt { x0 r1 r2 } ⊢ { x0 r1 r2 }
+  \\$ s0 ⊢ s0,s1,s2,s3
+  \\_s8_len s1 ⊢ { s1 l1 } 
+  \\_emt l1 ⊢ l1 
+  \\_emt { s0 s1 s2 s3 l1 } ⊢ { s0 s1 s2 s3 l1 }
+  \\$ a0 ⊢ a0,a1
+  ∎ 
+§ f2 x 
+  _inc x ⊢ x 
+  _inc x ⊢ x 
+  ∎ x 
+§ E1 « 
+  ^ _ ⊢ ss0 
+    "Hello " 
+    " World " 
+    "!!" 
+    "\n" //
+  _emt ss0 ⊢ _  
+  f2 %[ 3r ] ⊢ l0
+  _mlc_s8 l0 ⊢ { l0 s6 } 
+  _emt { l0 s6 } ⊢ _ 
+  ∎
+
+## TEST 20 
+§ f0 {}
+  ^ _ ⊢ ss0 
+    "Hello " " World " "!!" "\n" //
+  _emt ss0 ⊢ ss0  
+  $ %[ 3r ] ⊢ x0
+  ^ ss0,x0,%[ 17r ] ⊢ ss0,x0,x1,ss1 
+    0' "foo" 2d' 0' 2'*"Yd p" 1'*"g" "h" //
+  _emt ss1 ⊢ ss1 
+  ∎ {} 
+§ f1 x0 
+  _add { x0 %[ 3r ] } ⊢| 
+§ E0 « 
+  \\f0 {} ⊢ {} 
+  \\$ %[ 3r ] ⊢ r0 
+  _mk_arr { %[ 7r ] %[ "Fu" ] } ⊢ { _ _ a0 }
+  _emt a0 ⊢ a0
+  _exc_q { a0 %[ 1r ] %[ "Xo" ] } ⊢ { a0 _ _ }
+  \\_emt x1 ⊢ x1
+  \\_emt s0 ⊢ s0
+  \\_emt { a0 x1 s0 } ⊢ { a0 x1 s0 }
+  f1 %[ 8r ] ⊢ { r1 r2 }
+  \\_emt { r1 r2 } ⊢ R0
+  \\_emt R0 ⊢ _  
+  _lod_q { a0 %[ 3r ] } ⊢ { a0 _ s2 }
+  _emt { a0 s2 } ⊢ { a0 _ }
+  ∎
+\[
+  \]
