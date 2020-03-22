@@ -6103,12 +6103,14 @@
 										∐. .
 											» _^ ia0 ⊢ ia0,ec1 
 												`	mov rdi,rax
-												`	mov rax,[SS_LN_TOP]
-												`	mov rsi,[rax]
-												`	mov QWORD [SS_LN_TOP],rsi 
+												##`	mov rax,[SS_LN_TOP]
+												`	mov rax,r15
+												##`	mov rsi,[rax]
+												##`	mov QWORD [SS_LN_TOP],rsi 
+												`	mov r15,QWORD [r15] 
 												`	mov QWORD [rax],0
 												"\tmov BYTE [rax+6]," 0d' "\n"
-												"\tmov QWORD [rax+8],rdi\n"
+												`	mov QWORD [rax+8],rdi
 												// 
 											rp8.add_s8 { e0 ec1 } ⊢ e0 
 											∎ { e0 tav rsp vs0 }
@@ -7167,9 +7169,11 @@
 								rp8.add_s8 { e0 s0 } ⊢ e0 
 								hp { ahl fl tav lb_n h e0 } ⊢ { ahl fl tav lb_n e0 } 
 								» _^ lb1,j0 ⊢ lb1,j0,s0 
-									`	mov rsi,[SS_LN_TOP] 
-									`	mov rdi,[rsi] 
-									`	mov QWORD [SS_LN_TOP],rdi
+									##`	mov rsi,[SS_LN_TOP] 
+									`	mov rsi,r15 
+									##`	mov rdi,[rsi] 
+									##`	mov QWORD [SS_LN_TOP],rdi
+									`	mov r15,QWORD [r15]
 									`	mov QWORD [rsi+8],rax
 									"\tmov BYTE [rsi+6]," 1d' "\n"
 									`	mov rax,rsi
@@ -11762,7 +11766,6 @@
 											emt.mov_ptn.f3 { tav rsp_g v0 iy ipp0 e0 } ⊢ { tav rsp_g v0 e0 } 
 											» "emt_grm DX4" _ ⊢ ex0 
 											_emt ex0 ⊢ _  
-											rp8.cct { e0 er } ⊢ e0
 											∎ { a0 tav vs0 rsp_g e0 lb0 i0 evv lb_n }
 									∐. . 
 										» "emt_grm 3" _ ⊢ ee0 
@@ -12041,7 +12044,7 @@
 					∐. ast.grm.act_end◂{ drl dp lc rf gr go } .
 						act_mtc { gfl ret kh0 h0 { drl dp lc rf gr go } { eds e0 } ev evv rv irv tav tv tv_n lb_n } ⊢ { gfl ret { eds e0 } ev evv rv irv tav tv tv_n lb_n } 						
 						» _^ _ ⊢ s0 
-							`	pop rdi
+							`	add rsp,8
 							`	pop r9 
 							`	pop r14
 							`	pop r13
@@ -13026,6 +13029,7 @@
 					`
 					`SS_LN_init:
 					`	mov QWORD [SS_LN_TOP],SS_LN_VCT
+					`	mov r15,SS_LN_VCT 
 					`	mov rdi,0 
 					`	mov rax,SS_LN_VCT 
 					`SS_LN_lp: 
@@ -13069,17 +13073,17 @@
 					`	pop r13
 					`	mov QWORD [rax],r13
 					`	xor r14,r14
-					`	mov r15,rax
+					`	mov r8,rax
 					`args_lp:
 					`	cmp r14,r13
 					`	jz args_lp_end
 					`	pop rdi
 					`	call s8_of_c_stg 
-					`	mov QWORD [r15+8+8*r14],rax
+					`	mov QWORD [r8+8+8*r14],rax
 					`	add r14,1 
 					`	jmp args_lp 
 					`args_lp_end:
-					`	mov r13,r15
+					`	mov r13,r8
 					`	
 					//
 				rp8.add_s8 { ec sc1 } ⊢ ec
