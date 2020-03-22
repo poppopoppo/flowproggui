@@ -11353,12 +11353,9 @@
 						» "" _ ⊢ e 
 						∎ { lb_n e }   
 					∐ ast.grm.synt◂{} . 
-						$ lb_n ⊢ lb_n,lb0 
-						_inc lb_n ⊢ lb_n
-						$ lb_n ⊢ lb_n,lb1 
-						_inc lb_n ⊢ lb_n
-						$ lb_n ⊢ lb_n,lb2 
-						_inc lb_n ⊢ lb_n 
+						inc_x lb_n ⊢ { lb0 lb_n } 
+						inc_x lb_n ⊢ { lb1 lb_n } 
+						inc_x lb_n ⊢ { lb2 lb_n } 
 						» _^ lb0,lb1,lb2 ⊢ lb0,lb1,lb2,s0 
 							"\tjmp LB_" 1d' "\n" 
 							"LB_" 0d' ":\n" 
@@ -11366,22 +11363,13 @@
 							"LB_" 1d' ":\n" 
 							`	cmp r14,r9
 							"\tjge LB_" 2d' "\n" 
-							`	movzx rax,BYTE [r13+8+r14]
-							`	cmp rax,9 
-							"\tjz LB_" 0d' "\n" 
-							`	cmp rax,10 
-							"\tjz LB_" 0d' "\n" 
-							`	cmp rax,32 
-							"\tjz LB_" 0d' "\n"
+							"\tJZ_SPC BYTE [r13+8+r14], LB_" 0d' "\n"  
 							"LB_" 2d' "\n" // 
 						∎ { lb_n s0 }
 					∐. ast.grm.line◂{} . 
-						$ lb_n ⊢ lb_n,lb0 
-						_inc lb_n ⊢ lb_n
-						$ lb_n ⊢ lb_n,lb1 
-						_inc lb_n ⊢ lb_n
-						$ lb_n ⊢ lb_n,lb2 
-						_inc lb_n ⊢ lb_n
+						inc_x lb_n ⊢ { lb0 lb_n } 
+						inc_x lb_n ⊢ { lb1 lb_n } 
+						inc_x lb_n ⊢ { lb2 lb_n } 
 						» _^ lb0,lb1,lb2 ⊢ lb0,lb1,lb2,s0 
 							"\tjmp LB_" 1d' "\n" 
 							"LB_" 0d' ":\n" 
@@ -11389,11 +11377,7 @@
 							"LB_" 1d' ":\n" 
 							`	cmp r14,r9
 							"\tjge LB_" 2d' "\n" 
-							`	movzx rax,BYTE [r13+8+r14]
-							`	cmp rax,9 
-							"\tjz LB_" 0d' "\n" 
-							`	cmp rax,32 
-							"\tjz LB_" 0d' "\n"
+							"\tJZ_LINE_SPC BYTE [r13+8+r14], LB_" 0d' "\n"
 							"LB_" 2d' "\n" // 
 						∎ { lb_n s0 }
 				@.rle { ret hl tav vs0 rsp_g e0 lb0 i0 evv lb_n rf gr }  
@@ -11404,10 +11388,8 @@
 						$ rf ⊢ rf,rf0 
 						rf { lb_n rf0 } ⊢ { lb_n srf } 
 						rp8.add_s8 { e0 srf } ⊢ e0 
-						$ lb_n ⊢ lb_n,lb1 
-						_inc lb_n ⊢ lb_n 
-						$ lb_n ⊢ lb_n,lb2 
-						_inc lb_n ⊢ lb_n 
+						inc_x lb_n ⊢ { lb1 lb_n } 
+						inc_x lb_n ⊢ { lb2 lb_n } 
 						$ lb1 ⊢ lb1,olb1 
 						_some olb1 ⊢ olb1 
 						$ rsp_g ⊢ rsp_g,rsp_g0
@@ -11434,10 +11416,8 @@
 						$ rf ⊢ rf,rf0 
 						rf { lb_n rf0 } ⊢ { lb_n srf } 
 						rp8.add_s8 { e0 srf } ⊢ e0 
-						$ lb_n ⊢ lb_n,lb1 
-						_inc lb_n ⊢ lb_n 
-						$ lb_n ⊢ lb_n,lb2 
-						_inc lb_n ⊢ lb_n 
+						inc_x lb_n ⊢ { lb1 lb_n } 
+						inc_x lb_n ⊢ { lb2 lb_n } 
 						$ lb1 ⊢ lb1,olb1 
 						_some olb1 ⊢ olb1 
 						$ rsp_g ⊢ rsp_g,rsp_g0
@@ -11464,7 +11444,6 @@
 					» 3r _ ⊢ sn 
 					_shl { rn sn } ⊢ { rn _ }
 					» _^ rn ⊢ rn,s0 
-						##"\tlea rsp,[rsp+8*" 0d' "]\n" 
 						"\tadd rsp," 0d' "\n" // 
 					rp8.add_s8 { e0 s0 } ⊢ e0 
 					∎ { rsp_g hl e0 } 
@@ -11760,7 +11739,6 @@
 										rset.max_t vs0 ⊢ { vs0 rbp }
 										emt.brk_rsp { rsp_g rbp } ⊢ { rsp_g rbp es1 } 
 										rp8.add_s8 { e0 es1 } ⊢ e0 
-										_none {} ⊢ olb1 
 										» 2r _ ⊢ r0 
 										∐ iap0 ⊢ stt_v.ref◂iq0 .
 											stt_v.ref iq0 ⊢ iap0 
@@ -11769,8 +11747,7 @@
 											$ ipp0 ⊢ ipp0,a0 
 											» "emt_grm DX3" _ ⊢ ex0 
 											_emt ex0 ⊢ _  
-											emt.mov_ptn.f2 { tav rsp_g v0 iy ipp0 olb1 } ⊢ { tav rsp_g v0 er }  
-											rp8.cct { e0 er } ⊢ e0
+											emt.mov_ptn.f3 { tav rsp_g v0 iy ipp0 e0 } ⊢ { tav rsp_g v0 e0 }  
 											∎ { a0 tav vs0 rsp_g e0 lb0 i0 evv lb_n }
 										∐. . 
 											» _^ en ⊢ en,s0 
@@ -11782,7 +11759,7 @@
 											$ ipp0 ⊢ ipp0,a0 
 											» "emt_grm DX2" _ ⊢ ex0 
 											_emt ex0 ⊢ _  
-											emt.mov_ptn.f2 { tav rsp_g v0 iy ipp0 olb1 } ⊢ { tav rsp_g v0 er } 
+											emt.mov_ptn.f3 { tav rsp_g v0 iy ipp0 e0 } ⊢ { tav rsp_g v0 e0 } 
 											» "emt_grm DX4" _ ⊢ ex0 
 											_emt ex0 ⊢ _  
 											rp8.cct { e0 er } ⊢ e0
@@ -13440,6 +13417,24 @@
 				`	mov rsp,QWORD [rsp_tmp]
 				`%endmacro 
 				`
+				`%macro JZ_SPC 2
+				`	movzx rax,%1
+				`	cmp rax,9 
+				`	jz %2
+				`	cmp rax,10 
+				`	jz %2
+				`	cmp rax,32 
+				`	jz %2
+				`%endmacro
+				` 
+				`%macro JZ_LINE_SPC 2
+				`	movzx rax,%1 
+				`	cmp rax,9 
+				`	jz %2
+				`	cmp rax,32 
+				`	jz %2
+				`%endmacro
+				` 
 				`%define SS_MAX 2000
 				`%define SS_NULL 0xffff_ffff_ffff_0000
 				`%define EMT_BUF_MAX 2048
