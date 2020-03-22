@@ -813,6 +813,7 @@ SS_end:
 
 SS_LN_init:
 	mov QWORD [SS_LN_TOP],SS_LN_VCT
+	mov r15,SS_LN_VCT 
 	mov rdi,0 
 	mov rax,SS_LN_VCT 
 SS_LN_lp: 
@@ -856,17 +857,17 @@ SS_PT_end:
 	pop r13
 	mov QWORD [rax],r13
 	xor r14,r14
-	mov r15,rax
+	mov r8,rax
 args_lp:
 	cmp r14,r13
 	jz args_lp_end
 	pop rdi
 	call s8_of_c_stg 
-	mov QWORD [r15+8+8*r14],rax
+	mov QWORD [r8+8+8*r14],rax
 	add r14,1 
 	jmp args_lp 
 args_lp_end:
-	mov r13,r15
+	mov r13,r8
 	
 
 init_ss_rcd_1:
@@ -1187,9 +1188,8 @@ LB_3:
 ; .mov_ptn 3(<4)◂1'(= r ) ⊢ 0'(= a5◂ [ ] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],3
 	mov QWORD [rax+8],rdi
@@ -1378,9 +1378,8 @@ ETR_39: ; add_chr { 0'(= a5◂ [ ] ) 1'(= r ) } ⊢ 0'(= a5◂ [ ] ) : ({ _t5 _r
 	mov QWORD [r10+8+8*1],rax
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],3
 	mov QWORD [rax+8],rdi
@@ -1423,9 +1422,8 @@ ETR_40: ; pfx_chr { 0'(= r ) 1'(= a5◂ [ ] ) } ⊢ 0'(= a5◂ [ ] ) : ({ _r64 _
 	mov r10,rax
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],3
 	mov QWORD [rax+8],rdi
@@ -1603,9 +1601,8 @@ LB_7:
 ; .mov_ptn 3(<4)◂3'(= r ) ⊢ 0'(= a5◂ [ ] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],3
 	mov QWORD [rax+8],rdi
@@ -2110,9 +2107,8 @@ LB_34:
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -2215,9 +2211,8 @@ LB_48:
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -2320,9 +2315,8 @@ LB_62:
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -2425,9 +2419,8 @@ LB_76:
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -2528,9 +2521,8 @@ LB_89:
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -2568,9 +2560,8 @@ LB_88:
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -2606,9 +2597,8 @@ LB_92
 	mov rax,unt 
 	mov rax,unt_2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -2952,9 +2942,8 @@ LB_137
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3012,9 +3001,8 @@ LB_146
 	mov rax,unt 
 	mov rax,unt_2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3100,9 +3088,8 @@ LB_157
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3173,9 +3160,8 @@ LB_167:
 ; .mov_ptn 0(<2)◂%[ 92r ] ⊢ 2'(= a3◂ [ r] )
 	mov rax,92
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3234,9 +3220,8 @@ LB_177:
 ; .mov_ptn 0(<2)◂%[ 34r ] ⊢ 2'(= a3◂ [ r] )
 	mov rax,34
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3295,9 +3280,8 @@ LB_187:
 ; .mov_ptn 0(<2)◂%[ 10r ] ⊢ 2'(= a3◂ [ r] )
 	mov rax,10
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3356,9 +3340,8 @@ LB_197:
 ; .mov_ptn 0(<2)◂%[ 9r ] ⊢ 2'(= a3◂ [ r] )
 	mov rax,9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3417,9 +3400,8 @@ LB_207:
 ; .mov_ptn 0(<2)◂%[ 0r ] ⊢ 2'(= a3◂ [ r] )
 	mov rax,0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3488,9 +3470,8 @@ LB_214
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3575,9 +3556,8 @@ LB_222
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3662,9 +3642,8 @@ LB_230
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3743,9 +3722,8 @@ LB_238
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -3797,9 +3775,8 @@ LB_245
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -4018,9 +3995,8 @@ LB_267
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -4056,9 +4032,8 @@ LB_270
 	mov rax,unt 
 	mov rax,unt_2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -4121,9 +4096,8 @@ LB_277
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -4175,9 +4149,8 @@ LB_284
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -4237,9 +4210,8 @@ LB_294:
 ; .mov_ptn 0(<2)◂%[ 95r ] ⊢ 2'(= a3◂ [ r] )
 	mov rax,95
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -5110,9 +5082,8 @@ LB_350: dq LB_348,LB_349
 LB_348:
 	mov rdi,QWORD [rdi+8]
 	call LB_342
-	mov rsi,[SS_LN_TOP] 
-	mov rdi,[rsi] 
-	mov QWORD [SS_LN_TOP],rdi
+	mov rsi,r15 
+	mov r15,QWORD [r15]
 	mov QWORD [rsi+8],rax
 	mov BYTE [rsi+6],0
 	mov rax,rsi
@@ -5120,9 +5091,8 @@ LB_348:
 LB_349:
 	mov rdi,QWORD [rdi+8]
 	call LB_352
-	mov rsi,[SS_LN_TOP] 
-	mov rdi,[rsi] 
-	mov QWORD [SS_LN_TOP],rdi
+	mov rsi,r15 
+	mov r15,QWORD [r15]
 	mov QWORD [rsi+8],rax
 	mov BYTE [rsi+6],1
 	mov rax,rsi
@@ -5158,9 +5128,8 @@ LB_353:
 LB_354:
 	mov rdi,QWORD [rdi+8]
 	call LB_360
-	mov rsi,[SS_LN_TOP] 
-	mov rdi,[rsi] 
-	mov QWORD [SS_LN_TOP],rdi
+	mov rsi,r15 
+	mov r15,QWORD [r15]
 	mov QWORD [rsi+8],rax
 	mov BYTE [rsi+6],1
 	mov rax,rsi
@@ -5168,9 +5137,8 @@ LB_354:
 LB_355:
 	mov rdi,QWORD [rdi+8]
 	call LB_361
-	mov rsi,[SS_LN_TOP] 
-	mov rdi,[rsi] 
-	mov QWORD [SS_LN_TOP],rdi
+	mov rsi,r15 
+	mov r15,QWORD [r15]
 	mov QWORD [rsi+8],rax
 	mov BYTE [rsi+6],2
 	mov rax,rsi
@@ -5206,9 +5174,8 @@ LB_368: dq LB_366,LB_367
 LB_366:
 	mov rdi,QWORD [rdi+8]
 	call LB_370
-	mov rsi,[SS_LN_TOP] 
-	mov rdi,[rsi] 
-	mov QWORD [SS_LN_TOP],rdi
+	mov rsi,r15 
+	mov r15,QWORD [r15]
 	mov QWORD [rsi+8],rax
 	mov BYTE [rsi+6],0
 	mov rax,rsi
@@ -5216,9 +5183,8 @@ LB_366:
 LB_367:
 	mov rdi,QWORD [rdi+8]
 	call LB_359
-	mov rsi,[SS_LN_TOP] 
-	mov rdi,[rsi] 
-	mov QWORD [SS_LN_TOP],rdi
+	mov rsi,r15 
+	mov r15,QWORD [r15]
 	mov QWORD [rsi+8],rax
 	mov BYTE [rsi+6],1
 	mov rax,rsi
@@ -5232,9 +5198,8 @@ LB_373: dq LB_371,LB_372
 LB_371:
 	mov rdi,QWORD [rdi+8]
 	mov rax,rdi
-	mov rsi,[SS_LN_TOP] 
-	mov rdi,[rsi] 
-	mov QWORD [SS_LN_TOP],rdi
+	mov rsi,r15 
+	mov r15,QWORD [r15]
 	mov QWORD [rsi+8],rax
 	mov BYTE [rsi+6],0
 	mov rax,rsi
@@ -5779,9 +5744,8 @@ LB_392:
 ; .mov_ptn 1(<2)◂2'(= a12◂ [ a9◂ [ ]{| l |}] ) ⊢ 0'(= a8◂ [ a12◂ [ a9◂ [ ]{| l |}]] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -6477,9 +6441,8 @@ LB_429:
 ; .mov_ptn 1(<2)◂2'(= a12◂ [ a9◂ [ ]{| l |}] ) ⊢ 0'(= a8◂ [ a12◂ [ a9◂ [ ]{| l |}]] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -11846,9 +11809,8 @@ LB_745
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -11910,9 +11872,8 @@ LB_755
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12004,23 +11965,20 @@ LB_768
 ; .mov_ptn 0(<2)◂0(<2)◂0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ a11◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12124,23 +12082,20 @@ LB_787
 ; .mov_ptn 0(<2)◂0(<2)◂0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ a11◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12196,16 +12151,14 @@ LB_794
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12259,16 +12212,14 @@ LB_801
 ; .mov_ptn 0(<2)◂1(<2)◂8'(= a9◂ [ ] ) ⊢ 2'(= a3◂ [ a11◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12373,9 +12324,8 @@ LB_820
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12439,9 +12389,8 @@ LB_832
 ; .mov_ptn 0(<2)◂%[ 1r ] ⊢ 2'(= a3◂ [ r] )
 	mov rax,1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12497,9 +12446,8 @@ ETR_195: ; mk_prs_err { 0'(= r ) 1'(= r ) 2'(= {| l |} ) } ⊢ 0'(= a35◂ [ q0]
 	mov rax,r10
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -12760,16 +12708,14 @@ LB_866
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a2◂ [ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]] ) ⊢ 2'(= a3◂ [ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12831,16 +12777,14 @@ LB_876
 ; .mov_ptn 0(<2)◂1(<2)◂8'(= a14◂ [ a9◂ [ ]{| l |}] ) ⊢ 2'(= a3◂ [ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12950,9 +12894,8 @@ LB_893
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -12989,9 +12932,8 @@ LB_896
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13138,9 +13080,8 @@ LB_922
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13177,9 +13118,8 @@ LB_925
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13322,9 +13262,8 @@ LB_951
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13456,16 +13395,14 @@ LB_979
 ; .mov_ptn 0(<2)◂1(<4)◂8'(= a11◂ [ a9◂ [ ]] ) ⊢ 2'(= a3◂ [ a14◂ [ a9◂ [ ]{| l |}]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13561,9 +13498,8 @@ LB_998
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],3
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13625,9 +13561,8 @@ LB_1008
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],3
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13696,16 +13631,14 @@ LB_1020
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],2
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13838,16 +13771,14 @@ LB_1048
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a2◂ [ a8◂ [ a12◂ [ a9◂ [ ]{| l |}]]] ) ⊢ 2'(= a3◂ [ a8◂ [ a12◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -13909,16 +13840,14 @@ LB_1058
 ; .mov_ptn 0(<2)◂1(<2)◂8'(= a12◂ [ a9◂ [ ]{| l |}] ) ⊢ 2'(= a3◂ [ a8◂ [ a12◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14028,9 +13957,8 @@ LB_1075
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14067,9 +13995,8 @@ LB_1078
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14216,9 +14143,8 @@ LB_1104
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14255,9 +14181,8 @@ LB_1107
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14392,16 +14317,14 @@ LB_1135
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a11◂ [ a9◂ [ ]] ) ⊢ 2'(= a3◂ [ a12◂ [ a9◂ [ ]{| l |}]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14481,9 +14404,8 @@ LB_1148
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14545,9 +14467,8 @@ LB_1158
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14681,16 +14602,14 @@ LB_1186
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a2◂ [ a8◂ [ a13◂ [ {| l |}]]] ) ⊢ 2'(= a3◂ [ a8◂ [ a13◂ [ {| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14752,16 +14671,14 @@ LB_1196
 ; .mov_ptn 0(<2)◂1(<2)◂8'(= a13◂ [ {| l |}] ) ⊢ 2'(= a3◂ [ a8◂ [ a13◂ [ {| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14871,9 +14788,8 @@ LB_1213
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -14910,9 +14826,8 @@ LB_1216
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15059,9 +14974,8 @@ LB_1242
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15098,9 +15012,8 @@ LB_1245
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15247,9 +15160,8 @@ LB_1271
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15286,9 +15198,8 @@ LB_1274
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15379,9 +15290,8 @@ LB_1287
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15435,9 +15345,8 @@ LB_1294
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15498,16 +15407,14 @@ LB_1303
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15669,9 +15576,8 @@ LB_1327
 	mov rax,r14
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15691,9 +15597,8 @@ LB_1328:
 ; .mov_ptn 0(<2)◂0'(= a23◂ [ ] ) ⊢ 2'(= a3◂ [ a23◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15803,9 +15708,8 @@ LB_1345
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15842,9 +15746,8 @@ LB_1348
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15951,16 +15854,14 @@ LB_1367
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a23◂ [ ] ) ⊢ 2'(= a3◂ [ a3◂ [ a23◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -15997,9 +15898,8 @@ LB_1370
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16142,9 +16042,8 @@ LB_1396
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16181,9 +16080,8 @@ LB_1399
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16398,16 +16296,14 @@ LB_1427
 ; .mov_ptn 0(<2)◂0(<5)◂0'(= a2◂ [ a23◂ [ ]] ) ⊢ 2'(= a3◂ [ a23◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16526,9 +16422,8 @@ LB_1458
 ; .mov_ptn 0(<2)◂8'(= a23◂ [ ] ) ⊢ 2'(= a3◂ [ a23◂ [ ]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16590,9 +16485,8 @@ LB_1468
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],4
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16654,16 +16548,14 @@ LB_1478
 ; .mov_ptn 0(<2)◂3(<5)◂8'(= a9◂ [ ] ) ⊢ 2'(= a3◂ [ a23◂ [ ]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],3
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16855,9 +16747,8 @@ LB_1510
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -16994,9 +16885,8 @@ LB_1536
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -17133,9 +17023,8 @@ LB_1562
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -17374,9 +17263,8 @@ LB_1602:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ }*{ }}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -17401,9 +17289,8 @@ LB_1601:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ }*{ }}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -17433,9 +17320,8 @@ LB_1603:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ }*{ }}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -17489,9 +17375,8 @@ LB_1599
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -17665,9 +17550,8 @@ LB_1620
 ; .mov_ptn 0(<2)◂3'(= a35◂ [ *{ }] ) ⊢ 2'(= a3◂ [ a35◂ [ *{ }]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -17703,9 +17587,8 @@ LB_1623
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -17905,9 +17788,8 @@ LB_1660
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -18020,16 +17902,14 @@ LB_1667:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -18082,9 +17962,8 @@ LB_1671
 ; .mov_ptn 0(<2)◂3'(= a35◂ [ *{ }] ) ⊢ 2'(= a3◂ [ a35◂ [ *{ }]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -18319,9 +18198,8 @@ LB_1711
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -18380,9 +18258,8 @@ LB_1721
 ; .mov_ptn 0(<2)◂8'(= a35◂ [ *{ }] ) ⊢ 2'(= a3◂ [ a35◂ [ *{ }]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -18459,16 +18336,14 @@ LB_1725:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -18569,9 +18444,8 @@ LB_1744
 ; .mov_ptn 0(<2)◂8'(= a35◂ [ *{ }] ) ⊢ 2'(= a3◂ [ a35◂ [ *{ }]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -18655,9 +18529,8 @@ LB_1761
 ; .mov_ptn 0(<2)◂9'(= a35◂ [ *{ }] ) ⊢ 2'(= a3◂ [ a35◂ [ *{ }]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -20138,9 +20011,8 @@ LB_2022
 	mov rax,r13
 	mov BYTE [rax+6],3
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -20202,9 +20074,8 @@ LB_2032
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -20266,9 +20137,8 @@ LB_2042
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -20332,23 +20202,20 @@ LB_2052
 ; .mov_ptn 0(<2)◂1(<4)◂1(<2)◂8'(= a9◂ [ ] ) ⊢ 2'(= a3◂ [ a16◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -20425,9 +20292,8 @@ LB_2062
 	mov rax,r13
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -20515,9 +20381,8 @@ LB_2075
 ; .mov_ptn 0(<2)◂8'(= r ) ⊢ 2'(= a3◂ [ r] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -20982,9 +20847,8 @@ LB_2137:
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -21070,9 +20934,8 @@ LB_2148
 ; .mov_ptn 0(<2)◂0'(= a5◂ [ ] ) ⊢ 2'(= a3◂ [ a5◂ [ ]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -21180,9 +21043,8 @@ LB_2167
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -21308,9 +21170,8 @@ LB_2191
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -21467,9 +21328,8 @@ LB_2217
 	mov rax,r13
 	mov BYTE [rax+6],3
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -21633,9 +21493,8 @@ LB_2252
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -21645,9 +21504,8 @@ LB_2252
 	mov rax,r13
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -22121,23 +21979,20 @@ LB_2337
 ; .mov_ptn 0(<2)◂0(<2)◂6(<7)◂0'(= r ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],6
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -22265,23 +22120,20 @@ LB_2365
 ; .mov_ptn 0(<2)◂0(<2)◂5(<7)◂8'(= a8◂ [ a12◂ [ a9◂ [ ]{| l |}]] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],5
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -22396,16 +22248,14 @@ LB_2376:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -22461,9 +22311,8 @@ LB_2380
 ; .mov_ptn 0(<2)◂3'(= a35◂ [ a17◂ [ a9◂ [ ]{| l |}]] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -22801,16 +22650,14 @@ LB_2429
 	mov rax,r14
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -22839,16 +22686,14 @@ LB_2433:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23081,16 +22926,14 @@ LB_2486
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23231,16 +23074,14 @@ LB_2512
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23266,16 +23107,14 @@ LB_2513:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a3◂ [ *{ a8◂ [ a13◂ [ {| l |}]]a17◂ [ a9◂ [ ]{| l |}]}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23377,16 +23216,14 @@ LB_2517
 	mov rax,r13
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23421,16 +23258,14 @@ LB_2519:
 	mov rax,r13
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23460,16 +23295,14 @@ LB_2518:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23666,16 +23499,14 @@ LB_2552
 	mov r14,rax
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -23706,16 +23537,14 @@ LB_2552
 	mov rax,r14
 	mov BYTE [rax+6],4
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23750,16 +23579,14 @@ LB_2554:
 	mov rax,r14
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23787,16 +23614,14 @@ LB_2553:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -23953,16 +23778,14 @@ LB_2589
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24145,16 +23968,14 @@ LB_2624
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24180,16 +24001,14 @@ LB_2625:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a3◂ [ *{ a8◂ [ a13◂ [ {| l |}]]a17◂ [ a9◂ [ ]{| l |}]}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24335,16 +24154,14 @@ LB_2644:
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24409,16 +24226,14 @@ LB_2645:
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24520,16 +24335,14 @@ LB_2649
 	mov rax,r13
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24564,16 +24377,14 @@ LB_2651:
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24603,16 +24414,14 @@ LB_2650:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24684,23 +24493,20 @@ LB_2661
 ; .mov_ptn 0(<2)◂0(<2)◂3(<7)◂0'(= a7◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],3
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24724,16 +24530,14 @@ LB_2662:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24959,23 +24763,20 @@ LB_2717
 ; .mov_ptn 0(<2)◂0(<2)◂0(<2)◂0'(= a7◂ [ *{ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}] ) ⊢ 2'(= a3◂ [ a35◂ [ a18◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -24999,16 +24800,14 @@ LB_2718:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a18◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25184,16 +24983,14 @@ LB_2751
 	mov rax,r14
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25221,16 +25018,14 @@ LB_2752:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a18◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25296,9 +25091,8 @@ LB_2756
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25460,16 +25254,14 @@ LB_2775:
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25550,16 +25342,14 @@ LB_2776:
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25721,16 +25511,14 @@ LB_2795:
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25811,16 +25599,14 @@ LB_2796:
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25909,16 +25695,14 @@ LB_2800
 	mov rax,r14
 	mov BYTE [rax+6],4
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25945,16 +25729,14 @@ LB_2802:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -25980,16 +25762,14 @@ LB_2801:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26075,9 +25855,8 @@ LB_2821
 ; .mov_ptn 0(<2)◂8'(= a35◂ [ a17◂ [ a9◂ [ ]{| l |}]] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26178,16 +25957,14 @@ LB_2832:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26277,9 +26054,8 @@ LB_2838:
 ; .mov_ptn 0(<2)◂0'(= a35◂ [ q0] ) ⊢ 2'(= a3◂ [ a35◂ [ a17◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26342,16 +26118,14 @@ LB_2839:
 	mov rax,r10
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26434,23 +26208,20 @@ LB_2849
 ; .mov_ptn 0(<2)◂0(<2)◂0(<2)◂0'(= a7◂ [ *{ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}] ) ⊢ 2'(= a3◂ [ a35◂ [ a18◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26474,16 +26245,14 @@ LB_2850:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a18◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26629,16 +26398,14 @@ LB_2874
 	mov rax,r14
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26666,16 +26433,14 @@ LB_2875:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a18◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -26882,9 +26647,8 @@ LB_2911:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -26911,9 +26675,8 @@ LB_2910:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -26943,9 +26706,8 @@ LB_2912:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -27007,9 +26769,8 @@ LB_2908
 	mov QWORD [r13+8+8*0],rax
 	mov rax,r10
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],2
 	mov QWORD [rax+8],rdi
@@ -27017,16 +26778,14 @@ LB_2908
 	mov rax,r13
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -27051,16 +26810,14 @@ LB_2913:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a7◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -27268,9 +27025,8 @@ LB_2956:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}a7◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -27297,9 +27053,8 @@ LB_2955:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}a7◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -27329,9 +27084,8 @@ LB_2957:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}a7◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -27423,9 +27177,8 @@ LB_2953
 	mov QWORD [r14+8+8*0],rax
 	mov rax,r11
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],2
 	mov QWORD [rax+8],rdi
@@ -27437,16 +27190,14 @@ LB_2953
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -27471,16 +27222,14 @@ LB_2958:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a7◂ [ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -27725,9 +27474,8 @@ LB_2998
 	mov QWORD [r13+8+8*1],rax
 	mov rax,r10
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],2
 	mov QWORD [rax+8],rdi
@@ -27735,16 +27483,14 @@ LB_2998
 	mov rax,r13
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -27771,16 +27517,14 @@ LB_2999:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a7◂ [ *{ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -28014,9 +27758,8 @@ LB_3049:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}a7◂ [ *{ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -28043,9 +27786,8 @@ LB_3048:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}a7◂ [ *{ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -28075,9 +27817,8 @@ LB_3050:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ *{ a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a17◂ [ a9◂ [ ]{| l |}]}a7◂ [ *{ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -28171,9 +27912,8 @@ LB_3046
 	mov QWORD [r14+8+8*1],rax
 	mov rax,r11
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],2
 	mov QWORD [rax+8],rdi
@@ -28185,16 +27925,14 @@ LB_3046
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -28221,16 +27959,14 @@ LB_3051:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a7◂ [ *{ a8◂ [ a14◂ [ a9◂ [ ]{| l |}]]a2◂ [ a21◂ [ a9◂ [ ]{| l |}]]a20◂ [ a9◂ [ ]{| l |}]}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -28342,16 +28078,14 @@ LB_3068
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -28450,16 +28184,14 @@ LB_3089
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -28568,16 +28300,14 @@ LB_3100:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -28804,9 +28534,8 @@ LB_3142
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -28814,9 +28543,8 @@ LB_3142
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -28946,9 +28674,8 @@ LB_3168
 	mov rax,r13
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29076,9 +28803,8 @@ LB_3194
 	mov rax,r13
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29226,9 +28952,8 @@ LB_3220
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29325,9 +29050,8 @@ LB_3241
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29476,16 +29200,14 @@ LB_3267
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29584,16 +29306,14 @@ LB_3288
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29705,16 +29425,14 @@ LB_3299:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29802,9 +29520,8 @@ LB_3312
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -29858,16 +29575,14 @@ LB_3319
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a11◂ [ a9◂ [ ]] ) ⊢ 2'(= a3◂ [ a22◂ [ a9◂ [ ]{| l |}]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30030,9 +29745,8 @@ LB_3346:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a31◂ [ ]a2◂ [ a31◂ [ ]]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -30059,9 +29773,8 @@ LB_3345:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a31◂ [ ]a2◂ [ a31◂ [ ]]}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -30091,9 +29804,8 @@ LB_3347:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a31◂ [ ]a2◂ [ a31◂ [ ]]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -30156,16 +29868,14 @@ LB_3343
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30190,16 +29900,14 @@ LB_3348:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a2◂ [ a31◂ [ ]]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30400,16 +30108,14 @@ LB_3380
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30583,23 +30289,20 @@ LB_3408
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30699,16 +30402,14 @@ LB_3419:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30761,9 +30462,8 @@ LB_3423
 ; .mov_ptn 0(<2)◂3'(= a35◂ [ a31◂ [ ]] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30935,16 +30635,14 @@ LB_3458
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -30971,16 +30669,14 @@ LB_3459:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31082,16 +30778,14 @@ LB_3470:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31146,9 +30840,8 @@ LB_3474
 ; .mov_ptn 0(<2)◂3'(= a35◂ [ a31◂ [ ]] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31244,9 +30937,8 @@ LB_3495
 ; .mov_ptn 0(<2)◂8'(= a35◂ [ a31◂ [ ]] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31346,16 +31038,14 @@ LB_3506:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31408,9 +31098,8 @@ LB_3510
 ; .mov_ptn 0(<2)◂3'(= a35◂ [ a31◂ [ ]] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31507,16 +31196,14 @@ LB_3531
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a31◂ [ ] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31616,16 +31303,14 @@ LB_3542:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -31678,9 +31363,8 @@ LB_3546
 ; .mov_ptn 0(<2)◂3'(= a35◂ [ a31◂ [ ]] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -32424,23 +32108,20 @@ LB_3689
 ; .mov_ptn 0(<2)◂0(<2)◂1(<2)◂8'(= a9◂ [ ] ) ⊢ 2'(= a3◂ [ a35◂ [ a32◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*2]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -32540,23 +32221,20 @@ LB_3706
 ; .mov_ptn 0(<2)◂0(<2)◂0(<2)◂0'(= a2◂ [ a31◂ [ ]] ) ⊢ 2'(= a3◂ [ a35◂ [ a32◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -32582,16 +32260,14 @@ LB_3707:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a32◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -32738,16 +32414,14 @@ LB_3733
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -32905,16 +32579,14 @@ LB_3757
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -32939,16 +32611,14 @@ LB_3758:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a2◂ [ a31◂ [ ]]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -33040,16 +32710,14 @@ LB_3766:
 	mov rax,r9
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -33246,16 +32914,14 @@ LB_3801
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],5
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -33332,9 +32998,8 @@ LB_3811
 	mov rax,r13
 	mov BYTE [rax+6],4
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -33995,9 +33660,8 @@ LB_3939
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34098,9 +33762,8 @@ LB_3956
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34137,9 +33800,8 @@ LB_3959
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34285,9 +33947,8 @@ LB_3985
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34324,9 +33985,8 @@ LB_3988
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34549,9 +34209,8 @@ LB_4030
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34588,9 +34247,8 @@ LB_4033
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34841,9 +34499,8 @@ LB_4082
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -34880,9 +34537,8 @@ LB_4085
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -35246,23 +34902,20 @@ LB_4157
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],3
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -35296,16 +34949,14 @@ LB_4159:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -35347,16 +34998,14 @@ LB_4158:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -35408,16 +35057,14 @@ LB_4160:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -35524,16 +35171,14 @@ LB_4177
 	mov rax,r14
 	mov BYTE [rax+6],2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -35560,16 +35205,14 @@ LB_4178:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a31◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -35971,9 +35614,8 @@ LB_4259:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a2◂ [ *{ {| l |}a8◂ [ a13◂ [ {| l |}]]a3◂ [ a23◂ [ ]]a17◂ [ a9◂ [ ]{| l |}]}]a17◂ [ a9◂ [ ]{| l |}]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -36000,9 +35642,8 @@ LB_4258:
 ; .mov_ptn 1(<2)◂2'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a2◂ [ *{ {| l |}a8◂ [ a13◂ [ {| l |}]]a3◂ [ a23◂ [ ]]a17◂ [ a9◂ [ ]{| l |}]}]a17◂ [ a9◂ [ ]{| l |}]}] )
 	mov rax,r8
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -36032,9 +35673,8 @@ LB_4260:
 ; .mov_ptn 1(<2)◂1'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 0'(= a35◂ [ *{ a2◂ [ *{ {| l |}a8◂ [ a13◂ [ {| l |}]]a3◂ [ a23◂ [ ]]a17◂ [ a9◂ [ ]{| l |}]}]a17◂ [ a9◂ [ ]{| l |}]}] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
@@ -36110,16 +35750,14 @@ LB_4256
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36151,16 +35789,14 @@ LB_4261:
 ; .mov_ptn 0(<2)◂1(<2)◂3'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a2◂ [ *{ {| l |}a8◂ [ a13◂ [ {| l |}]]a3◂ [ a23◂ [ ]]a17◂ [ a9◂ [ ]{| l |}]}]]] )
 	mov rax,r9
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36199,16 +35835,14 @@ LB_4264
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36315,16 +35949,14 @@ LB_4283
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a23◂ [ ] ) ⊢ 2'(= a3◂ [ a3◂ [ a23◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36361,9 +35993,8 @@ LB_4286
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36506,23 +36137,20 @@ LB_4314
 ; .mov_ptn 0(<2)◂0(<2)◂1(<3)◂8'(= a11◂ [ a9◂ [ ]] ) ⊢ 2'(= a3◂ [ a35◂ [ a33◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36664,23 +36292,20 @@ LB_4342
 ; .mov_ptn 0(<2)◂0(<2)◂2(<3)◂0'(= a17◂ [ a9◂ [ ]{| l |}] ) ⊢ 2'(= a3◂ [ a35◂ [ a33◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],2
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36704,16 +36329,14 @@ LB_4343:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a33◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36879,16 +36502,14 @@ LB_4376
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -36916,16 +36537,14 @@ LB_4377:
 ; .mov_ptn 0(<2)◂1(<2)◂0'(= a2◂ [ *{ rr{| l |}}] ) ⊢ 2'(= a3◂ [ a35◂ [ a33◂ [ ]]] )
 	mov rax,r13
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -37211,9 +36830,8 @@ LB_4429
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -37250,9 +36868,8 @@ LB_4432
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -37325,16 +36942,14 @@ LB_4442
 ; .mov_ptn 0(<2)◂1(<2)◂8'(= a26◂ [ a9◂ [ ]{| l |}] ) ⊢ 2'(= a3◂ [ a24◂ [ a9◂ [ ]{| l |}]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -37396,16 +37011,14 @@ LB_4452
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a25◂ [ a9◂ [ ]{| l |}] ) ⊢ 2'(= a3◂ [ a24◂ [ a9◂ [ ]{| l |}]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -37580,9 +37193,8 @@ LB_4476
 	mov rax,r14
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -37765,9 +37377,8 @@ LB_4507
 	mov rax,r14
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -38410,16 +38021,14 @@ LB_4622
 ; .mov_ptn 0(<2)◂0(<3)◂8'(= a2◂ [ a29◂ [ a9◂ [ ]]] ) ⊢ 2'(= a3◂ [ a28◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -38517,9 +38126,8 @@ LB_4639
 	mov rax,r13
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -38556,9 +38164,8 @@ LB_4642
 	mov rax,unt 
 	mov rax,unt_2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -38667,9 +38274,8 @@ LB_4659
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -38706,9 +38312,8 @@ LB_4662
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -38849,16 +38454,14 @@ LB_4690
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a30◂ [ a9◂ [ ]] ) ⊢ 2'(= a3◂ [ a29◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -38920,16 +38523,14 @@ LB_4700
 ; .mov_ptn 0(<2)◂1(<2)◂8'(= a30◂ [ a9◂ [ ]] ) ⊢ 2'(= a3◂ [ a29◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39003,9 +38604,8 @@ LB_4710
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39067,16 +38667,14 @@ LB_4720
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a9◂ [ ] ) ⊢ 2'(= a3◂ [ a30◂ [ a9◂ [ ]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39161,9 +38759,8 @@ LB_4732
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39235,9 +38832,8 @@ LB_4744
 	mov rax,unt 
 	mov rax,unt_2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39307,9 +38903,8 @@ LB_4756
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39395,9 +38990,8 @@ LB_4768
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39471,9 +39065,8 @@ LB_4780
 	mov rax,unt 
 	mov rax,unt_2
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39545,9 +39138,8 @@ LB_4792
 	mov rax,unt 
 	mov rax,unt_0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39724,9 +39316,8 @@ LB_4823
 	mov rax,r13
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -39908,9 +39499,8 @@ LB_4861
 	mov rax,r13
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -40014,16 +39604,14 @@ LB_4880
 ; .mov_ptn 0(<2)◂0(<2)◂8'(= a25◂ [ a9◂ [ ]{| l |}] ) ⊢ 2'(= a3◂ [ a3◂ [ a25◂ [ a9◂ [ ]{| l |}]]] )
 	mov rax,QWORD [rsp-8+8*1]
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -40060,9 +39648,8 @@ LB_4883
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -40165,9 +39752,8 @@ LB_4902
 	mov rax,QWORD [rsp-8+8*1]
 	mov BYTE [rax+6],0
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -40204,9 +39790,8 @@ LB_4905
 	mov rax,unt 
 	mov rax,unt_1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -42748,9 +42333,8 @@ ETR_275: ; f0 0'(= r ) ⊢ 0'(= a3◂ [ r] ) : (_r64→_opn◂_r64)
 ; .mov_ptn 0(<2)◂1'(= r ) ⊢ 0'(= a3◂ [ r] )
 	mov rax,r14
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],0
 	mov QWORD [rax+8],rdi
@@ -42789,9 +42373,8 @@ RTM_0:
 	mov BYTE [rax+8+2],48
 	mov BYTE [rax+6],1
 	mov rdi,rax
-	mov rax,[SS_LN_TOP]
-	mov rsi,[rax]
-	mov QWORD [SS_LN_TOP],rsi 
+	mov rax,r15
+	mov r15,QWORD [r15] 
 	mov QWORD [rax],0
 	mov BYTE [rax+6],1
 	mov QWORD [rax+8],rdi
