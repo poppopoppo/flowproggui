@@ -2691,8 +2691,8 @@
 	##_s8_len sf0 ⊢ { sf0 lsf0 } 
 	##_emt lsf0 ⊢ _ 
 	_emt sf0 ⊢ sf0 
-	_in_fn %[ "cst24.mdls" ] ⊢ { _ sf1 }
-	##_in_fn fn0 ⊢ { _ sf1 } 
+	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf1 }
+	_in_fn fn0 ⊢ { _ sf1 } 
 	##_emt sf1 ⊢ sf1 
 	OpADL.syntax.file.prs { sf1 %[ 0r ] } ⊢ { sf1 r0 a0 } 
 	_emt r0 ⊢ _ 
