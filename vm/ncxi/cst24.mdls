@@ -249,7 +249,9 @@
 		$ l ⊢ 
 		∐ _cns◂{ x l } . 	
 			∐ x'=a' . 
-				csm { l a } ⊢| 
+				##csm { l a } ⊢|
+				csm { l a } ⊢ { l a } 
+				∎ { l a } 
 			∐. . 
 				csm { l a } ⊢ { l a } 
 				_cns { x l } ⊢ l 
@@ -497,7 +499,9 @@
 		§ pnt_cst c
 			$ c ⊢
 			∐ cst_v◂v .
-				pnt_cst_v v ⊢|  
+				##pnt_cst_v v ⊢|  
+				pnt_cst_v v ⊢ s 
+				∎ s 
 			∐. cst_name◂n .
 				pnt_name n ⊢ sr
 				∎ sr
@@ -2684,13 +2688,13 @@
 		`§§ M0
 		`	∎∎ 
 		// 
-	_s8_len sf0 ⊢ { sf0 lsf0 } 
-	_emt lsf0 ⊢ _ 
+	##_s8_len sf0 ⊢ { sf0 lsf0 } 
+	##_emt lsf0 ⊢ _ 
 	_emt sf0 ⊢ sf0 
 	##_in_fn %[ "cst28.mdls" ] ⊢ { _ sf1 }
-	_in_fn fn0 ⊢ { _ sf1 } 
+	##_in_fn fn0 ⊢ { _ sf1 } 
 	##_emt sf1 ⊢ sf1 
-	OpADL.syntax.file.prs { sf1 %[ 0r ] } ⊢ { sf1 r0 a0 } 
+	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { sf0 r0 a0 } 
 	_emt r0 ⊢ _ 
 	_emt a0 ⊢ a0  
 	$ a0 ⊢ 
@@ -2731,17 +2735,31 @@
 		_none {} ⊢ a
 		∎ a
 §% 
-	OpADL.ast.dst_reg %[ "xy0" ] ⊢ r 
-	OpADL.RP.atm r ⊢ p 
-	OpADL.ast.pnt_dst_ptn p ⊢ sa0  
-	_emt sa0 ⊢ _ 
-	$ %[ "xyz0" ] ⊢ sx0 
-	prm_word.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 }
+^ _ ⊢ sf0
+		`§§ M0
+		`	∎∎ 
+		// 
+	##_s8_len sf0 ⊢ { sf0 lsf0 } 
+	##_emt lsf0 ⊢ _ 
+	_emt sf0 ⊢ sf0 
+	##_in_fn %[ "cst28.mdls" ] ⊢ { _ sf1 }
+	##_in_fn fn0 ⊢ { _ sf1 } 
+	##_emt sf1 ⊢ sf1 
+	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ _ 
+	∎
+§% 
+	##OpADL.ast.dst_reg %[ "xy0" ] ⊢ r 
+	##OpADL.RP.atm r ⊢ p 
+	##OpADL.ast.pnt_dst_ptn p ⊢ sa0  
+	##_emt sa0 ⊢ _ 
+	##$ %[ "xyz0" ] ⊢ sx0 
+	##prm_word.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 }
 	##OpADL.syntax.src.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 } 
-	_emt { sx0 r0 a0 } ⊢ _ 
+	##_emt { sx0 r0 a0 } ⊢ _ 
 	^ _ ⊢ sx0
 		`	∎ x 
 		// 
+	##_emt sx0 ⊢ sx0 
 	OpADL.syntax.lc_code.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 } 
 	_emt { sx0 r0 a0 } ⊢ _ 
 	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
