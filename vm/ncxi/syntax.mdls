@@ -9455,8 +9455,8 @@
 								$ o ⊢ o,o0 
 								gnr_lc_code { { o0 ys yr0 dp } { gfl cl } lb_n { ev evv } rv tav tv_n tv lcg } ⊢ { { eeg0 eds0 ee0 } R0 { gfl cl } lb_n { ev evv } rv tav tv_n tv }
 								$ R0 ⊢ { lb ig y1 rsp_g0 p0 rsp_g1 p1 }
-								rp8.cct { ee0 ec0 } ⊢ ec0 
 								rp8.cct { eg0 eeg0 } ⊢ eg0 
+								rp8.cct { eg0 ee0 } ⊢ eg0 
 								rp8.cct { eds eds0 } ⊢ eds 
 								» _^ lb ⊢ lb,se0 
 									"LB_" 0d' // 
