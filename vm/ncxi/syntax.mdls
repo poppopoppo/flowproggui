@@ -8902,10 +8902,9 @@
 										2' 
 										##"; _s8_len " 0' " ⊢ " 1' "\n" 
 										"\tmov rdi," 0' "\n" 
-										`	mov rdi,QWORD [rdi] 
 										`	mov rsi,0x0000_ffff_ffff_ffff
-										`	and rdi,rsi 
-										"\tmov " 1' ",rdi\n" // 
+										`	and rsi,[rdi] 
+										"\tmov " 1' ",rsi\n" // 
 										rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 									∎ { gfl evv tav tv_n tv lb_n a rsp rl irv ip1 { eg0 eds ec0 } }
 								∐. . 
@@ -12634,7 +12633,9 @@
 			» _^ nl ⊢ nl,null 
 				0d' //
 			» _^ n ⊢ n,etr 
-				"\ninit_ss_rcd_" 0d' ":\n" // 
+				"\ninit_ss_rcd_" 0d' ":\n"
+				"\tmov QWORD [SS_RCD_" 0d' "_N],0\n"
+				"\tmov QWORD [SS_RCD_" 0d' "_C],0\n" // 
 			rp8.add_s8 { e etr } ⊢ e  
 			_inc n ⊢ n  
 			ss_init_n { lb top vct null n m e } ⊢ { lb top vct null n m e }
@@ -13958,20 +13959,20 @@
 				`%endmacro 
 				`
 				`%macro JZ_SPC 2
-				`	movzx rax,%1
-				`	cmp rax,9 
+				`	movzx MCR_REG,%1
+				`	cmp MCR_REG,9 
 				`	jz %2
-				`	cmp rax,10 
+				`	cmp MCR_REG,10 
 				`	jz %2
-				`	cmp rax,32 
+				`	cmp MCR_REG,32 
 				`	jz %2
 				`%endmacro
 				` 
 				`%macro JZ_LINE_SPC 2
-				`	movzx rax,%1 
-				`	cmp rax,9 
+				`	movzx MCR_REG,%1 
+				`	cmp MCR_REG,9 
 				`	jz %2
-				`	cmp rax,32 
+				`	cmp MCR_REG,32 
 				`	jz %2
 				`%endmacro
 				` 
@@ -14002,12 +14003,21 @@
 				`	mov r13,QWORD [rsp+24]
 				`%endmacro 
 				`
-				`%macro ALC_RCD 2 
+				`%macro ALC_RCD 2 ; n,reg-name!=rbx 
+				`	add QWORD [SS_RCD_C],1
+				`	add QWORD [SS_RCD_N],1 
 				`	mov %2,[SS_RCD_%1_TOP]
-				`	mov rax,[%2]
-				`	mov QWORD [SS_RCD_%1_TOP],rax
+				`	mov MCR_REG,[%2]
+				`	mov QWORD [SS_RCD_%1_TOP],MCR_REG
 				`%endmacro 
 				`
+				`%macro FREE_RCD 2 ; n,reg-name!=rbx 
+				`	sub QWORD [SS_RCD_N],1
+				`	mov rbx,QWORD [SS_RCD_%1_TOP] 
+				`	mov QWORD [%2],rbx
+				`	mov QWORD [SS_RCD_%1_TOP],%2
+				`%endmacro
+				`				
 				`%macro FREE_LN 1 
 				##`	sub QWORD [SS_LN_N],1
 				`	sub SS_LN_N,1 
@@ -14036,12 +14046,19 @@
 				`%macro MOV_RDI 2 
 				`	mov rdi,%2 
 				`	mov %1,rdi
-				`	%endmacro
+				`%endmacro
+				`
+				`%macro MOV_RBX 2 
+				`	mov rbx,%2
+				`	mov %1,rbx
+				`%endmacro
 				`
 				`%macro BSS_SS_RCD 2 
 				`	SS_RCD_%1_TOP: resq 1 
 				`	SS_RCD_%1_VCT: resq (%1+1)*%2
-				`	Ss_RCD_%1_BTM: resq 1 
+				`	SS_RCD_%1_BTM: resq 1
+				`	SS_RCD_%1_C: resq 1 
+				`	SS_RCD_%1_N: resq 1
 				`%endmacro 
 				`
 				##`%macro BSS_INIT_SS_RCD 2 
@@ -14051,6 +14068,7 @@
 				`%define SS_NULL 0xffff_ffff_ffff_0000
 				`%define EMT_BUF_MAX 2048
 				`%define SS_LN_REG r15
+				`%define MCR_REG rbx
 				`%define SS_LN_N rbp
 				`extern exit 
 				`extern printf 
