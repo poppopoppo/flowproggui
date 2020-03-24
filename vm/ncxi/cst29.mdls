@@ -32,4 +32,12 @@
     _emt %[ "end info test" ] ⊢ _  
     ∎ 
   ∎∎ 
+
+## test getchar 
+§% 
+  _getchar {} ⊢ x0 
+  _emt x0 ⊢ _ 
+  _getchar {} ⊢ x 
+  _emt x ⊢ _ 
+  ∎ 
   

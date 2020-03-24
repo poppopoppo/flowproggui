@@ -319,6 +319,7 @@
 		mk_s8_i { r s %[ 0r ] } ⊢ { r s i }
 		∎ { r s }
 		##∎| 
+
 	§ E0 « 
     ##e {} ⊢ e0 
     lf %[ "Hello" ] ⊢ e1 
@@ -335,13 +336,14 @@
 		##len e2 ⊢ { e2 l2 } 
 		##_emt l2 ⊢ l2 
 		cct { e1 e2 } ⊢ er 
-		##_emt er ⊢ er 	
+		_emt er ⊢ er 	
     add_s8 { er %[ "!!" ] } ⊢ er 
+    _emt er ⊢ er 
 		chr %[ 44r ] ⊢ c0 
 		cct { er c0 } ⊢ er 
 		_emt er ⊢ er  
-		mk_s8 er ⊢ { _ sr } 
-		_emt sr ⊢ _
+		##mk_s8 er ⊢ { _ sr } 
+		##_emt sr ⊢ _
 		##_sts { %[ "Foo Boo" ] %[ 6r ] %[ 44r ] } ⊢ { ss os cs } 
 		##_emt ss ⊢ _ 
 		##_emt os ⊢ _ 
@@ -350,8 +352,11 @@
 		##len c1 ⊢ { c1 l1 }  
 		##_emt { c1 l1 } ⊢ _
 		##pfx_chr { %[ 44r ] er } ⊢ _
+\[
+    \]
 		∎
 	∎∎
+\[
 §§+s8 
 	@.g0 
 		∐. "A" g0 ⊢ { {} a } 
@@ -533,7 +538,7 @@
   \\f0 {} ⊢ {} 
   \\$ %[ 3r ] ⊢ r0 
   _mk_arr { %[ 7r ] %[ "Fu" ] } ⊢ { _ _ a0 }
-  _emt a0 ⊢ a0
+  \\_emt a0 ⊢ a0
   _exc_q { a0 %[ 1r ] %[ "Xo" ] } ⊢ { a0 _ _ }
   \\_emt x1 ⊢ x1
   \\_emt s0 ⊢ s0
@@ -571,3 +576,4 @@
   ∎∎ 
 \[
   \]
+\]

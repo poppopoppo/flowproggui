@@ -3623,6 +3623,7 @@
 			§ dlt = 35r 
 			§ info = 36r 
 			§ rpc = 37r
+			§ getchar = 38r 
 			∎∎
 		§ @.pnt_type_k { tv k } 
 			$ k ⊢ 
@@ -9068,7 +9069,7 @@
 										"\tmov rdi," 0' "\n" 
 										`	mov rsi,0x0000_ffff_ffff_ffff 
 										`	and rsi,QWORD [rdi]
-										"\tmov " 1' ",rdi\n" // 
+										"\tmov " 1' ",rsi\n" // 
 									rp8.add_s8 { e0 sc0 } ⊢ e0 
 									rp8.cct { ec0 e0 } ⊢ ec0  
 									∎ { gfl evv tav tv_n tv lb_n a rsp rl irv ip1 { eg0 eds ec0 } }
@@ -9085,6 +9086,22 @@
 							rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 							$ is ⊢ p1
 							∎ { gfl evv tav tv_n tv lb_n a rsp rl irv p1 { eg0 eds ec0 } }
+						∐ a'=e_axm.getchar . 
+							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl v0 } 
+							$ is ⊢ is,is0 
+							stt_v.mk_rset { is0 v0 } ⊢ v0 
+							alc_vs v0 ⊢ { v0 rm0 } 
+							brk_rsp_e { rsp rm0 ec0 } ⊢ { rsp rm0 ec0 } 
+							reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+							» _^ srm0 ⊢ srm0,sc0 
+								`	mov rdi,fmt_getchar 
+								`	call emt_stg 
+								`	xor rax,rax 
+								`	C_CALL_SF getchar 
+								"\tmov " 0' ",rax\n" // 
+							rp8.add_s8 { ec0 sc0 } ⊢ ec0 
+							stt_v.r64_reg rm0 ⊢ p1 
+							∎ { gfl evv tav tv_n tv lb_n a rsp rl irv p1 { eg0 eds ec0 } }						
 						∐ a'=e_axm.in_fn . 
 							rp8.e {} ⊢ e0 
 							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs0 }
@@ -13118,6 +13135,16 @@
 				k_op_axm k0 ⊢ k 
 				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
 							
+					_nil {} ⊢ l0 
+				RP.rcd l0 ⊢ y0 
+				t_axm.r64 {} ⊢ y1 
+				imp { y0 y1 } ⊢ yx 
+				RP.atm yx ⊢ yx 
+				» "_getchar" _ ⊢ se 
+				» e_axm.getchar _ ⊢ k0 
+				k_op_axm k0 ⊢ k 
+				add_e { tv_n tv evv ev ev_n ns_e se k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
+					
 				newvar_q { tv_n tv lv } ⊢ { tv_n tv lv y0 }
 				t_axm.lst y0 ⊢ y0  
 				_nil {} ⊢ l0 
@@ -13229,6 +13256,7 @@
 					`	fmt_nl: db 10,0
 					`	fmt_spc: db " ",0
 					`	fmt_emt: db "_emt:",0
+					`	fmt_getchar: db "_getchar:",0
 					`	rt_err0: db "rt_err 0:",10,0 
 					` s8_e: dq 0,0
 					`
@@ -13266,6 +13294,11 @@
 					`	C_CALL printf 
 					`	C_POP_REGS 
 					`	ret
+					`;getchar:
+					`;	xor rax,rax 
+					`;	C_CALL_SF getchar 
+					`;	ret
+					`
 					`rpc_s8: ; rdi ⊢ rax
 					`	push rdi 
 					`	mov rsi,0x0000_ffff_ffff_ffff
@@ -14028,6 +14061,7 @@
 				`extern isspace 
 				`extern strtoul
 				`extern strlen
+				`extern getchar
 				`section .bss
 				`	tmp: resq 64
 				`	ret_vct: resq 64
