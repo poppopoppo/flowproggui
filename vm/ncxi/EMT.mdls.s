@@ -247,6 +247,19 @@ section .data
 	unt_8: dq 0x00_08_0000_0000_0000 
 
 LB_3: db 34,100,108,116,32,97,114,114,97,121,34,0
+LB_10: db 34,115,116,97,114,116,32,105,110,102,111,32,116,101,115,116,34,0
+LB_14: db 59,32,226,136,142,124,10,101,120,110,32,51,54,55,58,10,0
+LB_21: db 39,48,226,151,130,0
+LB_23: db 39,49,226,151,130,0
+LB_28: db 39,48,226,151,130,0
+LB_30: db 39,49,226,151,130,0
+LB_35: db 39,48,226,151,130,0
+LB_37: db 39,49,226,151,130,0
+LB_42: db 39,48,226,151,130,0
+LB_44: db 39,49,226,151,130,0
+LB_49: db 39,48,226,151,130,0
+LB_50: db 39,49,226,151,130,0
+LB_76: db 34,101,110,100,32,105,110,102,111,32,116,101,115,116,34,0
 section .text
 global _start
 
@@ -999,7 +1012,297 @@ LB_9:
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 ; ∎
 	jmp RTM_1
+LB_12: ;; #31 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) ⊢ 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) : (_opn◂_opn◂_opn◂_opn◂_opn◂_r64→_opn◂_opn◂_opn◂_opn◂_opn◂_r64)
+;; rsp=0 , %13~0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) 
+;; ? 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) ⊢ 0(<2)◂1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] )
+	mov rdi,r13
+	cmp BYTE [rdi+6],0
+	jnz LB_13
+	mov QWORD [GBG_VCT+8*0],rdi
+	mov r14,QWORD [rdi+8]
+	mov rdi,QWORD [GBG_VCT+8*0]
+	FREE_LN rdi
+;; rsp=0 , %14~1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] ) 
+; #23 1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] ) ⊢ 0(<2)◂1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] )
+;; rsp=0 , %15~0(<2)◂1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] ) 
+; ∎ 0(<2)◂1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] )
+; .mov_ptn2 0(<2)◂1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] ) ⊢ 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] )
+; .mov_ptn 0(<2)◂1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]] ) ⊢ 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] )
+	mov rax,r14
+	mov rdi,rax
+	ALC_LN rax
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],rdi
+	mov r13,rax
+	ret
+LB_13:
+;; ?. 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) ⊢ 1(<2)◂{ }
+;; rsp=0 , 
+	mov rdi,LB_14
+	call emt_stg 
+	jmp err
+LB_15:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_19+8*rax]
+LB_19: dq LB_17,LB_18
+LB_17:
+	mov rdi,LB_21
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_22
+	jmp LB_20
+LB_18:
+	mov rdi,LB_23
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_20
+LB_20:
+	ret
+LB_22:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_26+8*rax]
+LB_26: dq LB_24,LB_25
+LB_24:
+	mov rdi,LB_28
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_29
+	jmp LB_27
+LB_25:
+	mov rdi,LB_30
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_27
+LB_27:
+	ret
+LB_29:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_33+8*rax]
+LB_33: dq LB_31,LB_32
+LB_31:
+	mov rdi,LB_35
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_36
+	jmp LB_34
+LB_32:
+	mov rdi,LB_37
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_34
+LB_34:
+	ret
+LB_36:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_40+8*rax]
+LB_40: dq LB_38,LB_39
+LB_38:
+	mov rdi,LB_42
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_43
+	jmp LB_41
+LB_39:
+	mov rdi,LB_44
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_41
+LB_41:
+	ret
+LB_43:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_47+8*rax]
+LB_47: dq LB_45,LB_46
+LB_45:
+	mov rdi,LB_49
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	mov rdi,r8 
+	call emt_r64 
+	jmp LB_48
+LB_46:
+	mov rdi,LB_50
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_48
+LB_48:
+	ret
+LB_51:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_54+8*rax]
+LB_54: dq LB_52,LB_53
+LB_52:
+	FREE_LN r8 
+	mov r8,QWORD [r8+8]
+	call LB_56
+	jmp LB_55
+LB_53:
+	jmp LB_55
+LB_55:
+	ret
+LB_56:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_59+8*rax]
+LB_59: dq LB_57,LB_58
+LB_57:
+	FREE_LN r8 
+	mov r8,QWORD [r8+8]
+	call LB_61
+	jmp LB_60
+LB_58:
+	jmp LB_60
+LB_60:
+	ret
+LB_61:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_64+8*rax]
+LB_64: dq LB_62,LB_63
+LB_62:
+	FREE_LN r8 
+	mov r8,QWORD [r8+8]
+	call LB_66
+	jmp LB_65
+LB_63:
+	jmp LB_65
+LB_65:
+	ret
+LB_66:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_69+8*rax]
+LB_69: dq LB_67,LB_68
+LB_67:
+	FREE_LN r8 
+	mov r8,QWORD [r8+8]
+	call LB_71
+	jmp LB_70
+LB_68:
+	jmp LB_70
+LB_70:
+	ret
+LB_71:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_74+8*rax]
+LB_74: dq LB_72,LB_73
+LB_72:
+	FREE_LN r8 
+	mov r8,QWORD [r8+8]
+	jmp LB_75
+LB_73:
+	jmp LB_75
+LB_75:
+	ret
 RTM_1:
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; #10 %[ "start info test" ] ⊢ %[ "start info test" ]
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,LB_10
+	call emt_stg 
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_11
+LB_11:
+; .dlt.ptn %[ "start info test" ]
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; #20 { } ⊢ { }
+	call info
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; #23 %[ 8r ] ⊢ 0(<2)◂%[ 8r ]
+;; rsp=0 , %17~0(<2)◂%[ 8r ] %0~0'(= {| {| l |}|} ) 
+; #23 0(<2)◂%[ 8r ] ⊢ 0(<2)◂0(<2)◂%[ 8r ]
+;; rsp=0 , %18~0(<2)◂0(<2)◂%[ 8r ] %0~0'(= {| {| l |}|} ) 
+; #23 0(<2)◂0(<2)◂%[ 8r ] ⊢ 0(<2)◂0(<2)◂0(<2)◂%[ 8r ]
+;; rsp=0 , %19~0(<2)◂0(<2)◂0(<2)◂%[ 8r ] %0~0'(= {| {| l |}|} ) 
+; #23 0(<2)◂0(<2)◂0(<2)◂%[ 8r ] ⊢ 0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ]
+;; rsp=0 , %20~0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ] %0~0'(= {| {| l |}|} ) 
+; #23 0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ] ⊢ 0(<2)◂0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ]
+;; rsp=0 , %21~0(<2)◂0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ] %0~0'(= {| {| l |}|} ) 
+; #31 0(<2)◂0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ] ⊢ 1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] )
+	sub rsp,8
+	mov QWORD [rsp+8*0],r13
+; .mov_ptn2 0(<2)◂0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ] ⊢ 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] )
+; .mov_ptn 0(<2)◂0(<2)◂0(<2)◂0(<2)◂0(<2)◂%[ 8r ] ⊢ 0'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] )
+	mov rax,8
+	mov rdi,rax
+	ALC_LN rax
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],rdi
+	mov rdi,rax
+	ALC_LN rax
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],rdi
+	mov rdi,rax
+	ALC_LN rax
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],rdi
+	mov rdi,rax
+	ALC_LN rax
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],rdi
+	mov rdi,rax
+	ALC_LN rax
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],rdi
+	mov r13,rax
+	call LB_12
+	mov r14,r13
+	mov r13,QWORD [rsp-8+8*1]
+	add rsp,8
+;; rsp=0 , %22~1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) %0~0'(= {| {| l |}|} ) 
+; #20 { } ⊢ { }
+	call info
+;; rsp=0 , %22~1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) %0~0'(= {| {| l |}|} ) 
+; #10 1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] ) ⊢ 1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,r14
+	C_PUSH_REGS
+	mov r8,rdi
+	call LB_15
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_16
+LB_16:
+; .dlt.ptn 1'(= a3◂ [ a3◂ [ a3◂ [ a3◂ [ a3◂ [ r]]]]] )
+	mov rdi,r14
+	C_PUSH_REGS
+	mov r8,rdi
+	call LB_51
+	C_POP_REGS
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; #20 { } ⊢ { }
+	call info
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; #10 %[ "end info test" ] ⊢ %[ "end info test" ]
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,LB_76
+	call emt_stg 
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_77
+LB_77:
+; .dlt.ptn %[ "end info test" ]
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; ∎
+	jmp RTM_2
+RTM_2:
 	mov rdi,0
 	mov QWORD rdi,rsp
 	and rsp,~0xf
