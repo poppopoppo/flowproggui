@@ -321,6 +321,7 @@
 		##∎| 
 
 	§ E0 « 
+    _info {} ⊢ {} 
     ##e {} ⊢ e0 
     lf %[ "Hello" ] ⊢ e1 
     of_s8 %[ "World" ] ⊢ e2 
@@ -335,8 +336,11 @@
 		##_emt %[ 4r ] ⊢ r1 
 		##len e2 ⊢ { e2 l2 } 
 		##_emt l2 ⊢ l2 
-		cct { e1 e2 } ⊢ er 
+		_getchar {} ⊢ _ 
+    cct { e1 e2 } ⊢ er 
+    _info {} ⊢ {} 
 		_emt er ⊢ er 	
+    _getchar {} ⊢ _ 
     add_s8 { er %[ "!!" ] } ⊢ er 
     _emt er ⊢ er 
 		chr %[ 44r ] ⊢ c0 
@@ -352,11 +356,8 @@
 		##len c1 ⊢ { c1 l1 }  
 		##_emt { c1 l1 } ⊢ _
 		##pfx_chr { %[ 44r ] er } ⊢ _
-\[
-    \]
 		∎
 	∎∎
-\[
 §§+s8 
 	@.g0 
 		∐. "A" g0 ⊢ { {} a } 
@@ -574,6 +575,3 @@
     _emt %[ "end info test" ] ⊢ _  
     ∎ 
   ∎∎ 
-\[
-  \]
-\]
