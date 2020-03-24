@@ -1,10 +1,10 @@
 §% 
   _mk_arr { %[ 7r ] %[ "Fu" ] } ⊢ { _ _ a0 }
-  _emt a0 ⊢ a0
+  ##_emt a0 ⊢ a0
   _exc_q { a0 %[ 1r ] %[ "Xo" ] } ⊢ { a0 _ _ }
-  _lod_q { a0 %[ 3r ] } ⊢ { a0 _ s2 }
-  _emt s2 ⊢ _
-  _emt %[ "dlt array" ] ⊢ _
+  ##_lod_q { a0 %[ 3r ] } ⊢ { a0 _ s2 }
+  ##_emt s2 ⊢ _
+  ##_emt %[ "dlt array" ] ⊢ _
   _emt a0 ⊢ _ 
   ∎
 \[
