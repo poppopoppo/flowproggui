@@ -246,7 +246,6 @@ section .data
 	unt_7: dq 0x00_07_0000_0000_0000 
 	unt_8: dq 0x00_08_0000_0000_0000 
 
-LB_6: db 34,100,108,116,32,97,114,114,97,121,34,0
 section .text
 global _start
 
@@ -848,6 +847,43 @@ LB_1:
 ; .dlt.ptn %[ "Fu" ]
 ; .dlt.ptn %[ 7r ]
 ;; rsp=0 , %3~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
+; #1 { 1'(= {| {| l |}|} ) %[ 1r ] %[ "Xo" ] } ⊢ { 1'(= {| {| l |}|} ) %[ 1r ] 3'(= {| l |} ) }
+; .mov_ptn2 %[ "Xo" ] ⊢ 2'(= {| l |} )
+	mov r9,r8
+; .mov_ptn %[ "Xo" ] ⊢ 2'(= {| l |} )
+	mov rsi,1  
+	mov rdi,16
+	xor rax,rax 
+	C_CALL_SF calloc
+	mov QWORD [rax],2
+	mov BYTE [rax+8+0],88
+	mov BYTE [rax+8+1],111
+	mov r8,rax
+	mov rax,1
+	mov rdi,r14
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	cmp rax,rsi 
+	jge err
+	lea rdi,[rdi+8+8*rax]
+	mov rax,QWORD [rdi]
+	mov rsi,r8
+	mov QWORD [rdi],rsi 
+	mov r8,rax
+; .mov_ptn2 2'(= {| l |} ) ⊢ 3'(= {| l |} )
+	mov r10,r9
+; .mov_ptn 2'(= {| l |} ) ⊢ 3'(= {| l |} )
+	mov rax,r8
+	mov r9,rax
+; .dlt.ptn 3'(= {| l |} )
+	mov rdi,r9
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rdi,r8
+	call free_s8
+	C_POP_REGS
+; .dlt.ptn %[ 1r ]
+;; rsp=0 , %4~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
 ; #10 1'(= {| {| l |}|} ) ⊢ 1'(= {| {| l |}|} )
 	mov rdi,fmt_emt
 	call emt_stg
@@ -882,126 +918,15 @@ LB_3:
 	call emt_stg
 	jmp LB_4
 LB_4:
-;; rsp=0 , %4~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
-; #1 { 1'(= {| {| l |}|} ) %[ 1r ] %[ "Xo" ] } ⊢ { 1'(= {| {| l |}|} ) %[ 1r ] 3'(= {| l |} ) }
-; .mov_ptn2 %[ "Xo" ] ⊢ 2'(= {| l |} )
-	mov r9,r8
-; .mov_ptn %[ "Xo" ] ⊢ 2'(= {| l |} )
-	mov rsi,1  
-	mov rdi,16
-	xor rax,rax 
-	C_CALL_SF calloc
-	mov QWORD [rax],2
-	mov BYTE [rax+8+0],88
-	mov BYTE [rax+8+1],111
-	mov r8,rax
-	mov rax,1
-	mov rdi,r14
-	lea rdi,[rdi+8+8*rax]
-	mov rax,QWORD [rdi]
-	mov rsi,r8
-	mov QWORD [rdi],rsi 
-	mov r8,rax
-; .dlt.ptn 3'(= {| l |} )
-	mov rdi,r9
-	C_PUSH_REGS
-	mov r8,rdi
-	mov rdi,r8
-	call free_s8
-	C_POP_REGS
-; .dlt.ptn %[ 1r ]
-;; rsp=0 , %5~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
-; #4 { 1'(= {| {| l |}|} ) %[ 3r ] } ⊢ { 1'(= {| {| l |}|} ) %[ 3r ] 3'(= {| l |} ) }
-	mov rax,3
-	mov rdi,r14
-	mov rdi,[rdi+8+8*rax]
-	C_PUSH_REGS
-	mov rdi,r8  
-	call rpc_s8  
-	C_POP_REGS
-	mov r8,rax
-; .mov_ptn2 2'(= {| l |} ) ⊢ 3'(= {| l |} )
-	mov r10,r9
-; .mov_ptn 2'(= {| l |} ) ⊢ 3'(= {| l |} )
-	mov rax,r8
-	mov r9,rax
-; .dlt.ptn %[ 3r ]
-;; rsp=0 , %10~3'(= {| l |} ) %8~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
-; #10 3'(= {| l |} ) ⊢ 3'(= {| l |} )
-	mov rdi,fmt_emt
-	call emt_stg
-	mov rdi,r9
-	C_PUSH_REGS
-	mov r8,rdi
-	mov rdi,r8
-	call emt_s8
-	C_POP_REGS
-	mov rdi,fmt_nl
-	call emt_stg
-	jmp LB_5
-LB_5:
-; .dlt.ptn 3'(= {| l |} )
-	mov rdi,r9
-	C_PUSH_REGS
-	mov r8,rdi
-	mov rdi,r8
-	call free_s8
-	C_POP_REGS
-;; rsp=0 , %8~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
-; #10 %[ "dlt array" ] ⊢ %[ "dlt array" ]
-	mov rdi,fmt_emt
-	call emt_stg
-	mov rdi,LB_6
-	call emt_stg 
-	mov rdi,fmt_nl
-	call emt_stg
-	jmp LB_7
-LB_7:
-; .dlt.ptn %[ "dlt array" ]
-;; rsp=0 , %8~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
-; #10 1'(= {| {| l |}|} ) ⊢ 1'(= {| {| l |}|} )
-	mov rdi,fmt_emt
-	call emt_stg
-	mov rdi,r14
-	C_PUSH_REGS
-	mov r8,rdi
-	mov rdi,fmt_arr_l 
-	call emt_stg 
-	mov rsi,[r8]
-	mov rax,0 
-LB_8:
-	cmp rsi,rax 
-	jz LB_9
-	push r8 
-	push rsi 
-	push rax 
-	mov r8,QWORD [r8+8+8*rax]
-	mov rdi,r8
-	call emt_s8
-	mov rdi,fmt_spc 
-	call emt_stg 
-	pop rax 
-	pop rsi 
-	pop r8 
-	add rax,1 
-	jmp LB_8
-LB_9:
-	mov rdi,fmt_arr_r 
-	call emt_stg
-	C_POP_REGS
-	mov rdi,fmt_nl
-	call emt_stg
-	jmp LB_10
-LB_10:
 ; .dlt.ptn 1'(= {| {| l |}|} )
 	mov rdi,r14
 	C_PUSH_REGS
 	mov r8,rdi
 	GET_LEN rsi,r8
 	mov rax,0 
-LB_11:
+LB_5:
 	cmp rsi,rax 
-	jz LB_12
+	jz LB_6
 	push r8 
 	push rsi 
 	push rax 
@@ -1012,8 +937,8 @@ LB_11:
 	pop rsi 
 	pop r8 
 	add rax,1 
-	jmp LB_11
-LB_12:
+	jmp LB_5
+LB_6:
 	C_POP_REGS
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 ; ∎
