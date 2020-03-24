@@ -246,6 +246,7 @@ section .data
 	unt_7: dq 0x00_07_0000_0000_0000 
 	unt_8: dq 0x00_08_0000_0000_0000 
 
+LB_3: db 34,100,108,116,32,97,114,114,97,121,34,0
 section .text
 global _start
 
@@ -884,6 +885,61 @@ LB_1:
 	C_POP_REGS
 ; .dlt.ptn %[ 1r ]
 ;; rsp=0 , %4~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
+; #4 { 1'(= {| {| l |}|} ) %[ 3r ] } ⊢ { 1'(= {| {| l |}|} ) %[ 3r ] 3'(= {| l |} ) }
+	mov rax,3
+	mov rdi,r14
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	cmp rax,rsi 
+	jge err 
+	mov rdi,[rdi+8+8*rax]
+	C_PUSH_REGS
+	mov r8,rdi
+	C_PUSH_REGS
+	mov rdi,r8  
+	call rpc_s8  
+	C_POP_REGS
+	C_POP_REGS
+	mov r8,rax
+; .mov_ptn2 2'(= {| l |} ) ⊢ 3'(= {| l |} )
+	mov r10,r9
+; .mov_ptn 2'(= {| l |} ) ⊢ 3'(= {| l |} )
+	mov rax,r8
+	mov r9,rax
+; .dlt.ptn %[ 3r ]
+;; rsp=0 , %9~3'(= {| l |} ) %7~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
+; #10 3'(= {| l |} ) ⊢ 3'(= {| l |} )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,r9
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_2
+LB_2:
+; .dlt.ptn 3'(= {| l |} )
+	mov rdi,r9
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rdi,r8
+	call free_s8
+	C_POP_REGS
+;; rsp=0 , %7~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
+; #10 %[ "dlt array" ] ⊢ %[ "dlt array" ]
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,LB_3
+	call emt_stg 
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_4
+LB_4:
+; .dlt.ptn %[ "dlt array" ]
+;; rsp=0 , %7~1'(= {| {| l |}|} ) %0~0'(= {| {| l |}|} ) 
 ; #10 1'(= {| {| l |}|} ) ⊢ 1'(= {| {| l |}|} )
 	mov rdi,fmt_emt
 	call emt_stg
@@ -894,9 +950,9 @@ LB_1:
 	call emt_stg 
 	mov rsi,[r8]
 	mov rax,0 
-LB_2:
+LB_5:
 	cmp rsi,rax 
-	jz LB_3
+	jz LB_6
 	push r8 
 	push rsi 
 	push rax 
@@ -909,24 +965,24 @@ LB_2:
 	pop rsi 
 	pop r8 
 	add rax,1 
-	jmp LB_2
-LB_3:
+	jmp LB_5
+LB_6:
 	mov rdi,fmt_arr_r 
 	call emt_stg
 	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
-	jmp LB_4
-LB_4:
+	jmp LB_7
+LB_7:
 ; .dlt.ptn 1'(= {| {| l |}|} )
 	mov rdi,r14
 	C_PUSH_REGS
 	mov r8,rdi
 	GET_LEN rsi,r8
 	mov rax,0 
-LB_5:
+LB_8:
 	cmp rsi,rax 
-	jz LB_6
+	jz LB_9
 	push r8 
 	push rsi 
 	push rax 
@@ -937,8 +993,8 @@ LB_5:
 	pop rsi 
 	pop r8 
 	add rax,1 
-	jmp LB_5
-LB_6:
+	jmp LB_8
+LB_9:
 	C_POP_REGS
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 ; ∎
