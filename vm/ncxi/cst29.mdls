@@ -7,7 +7,7 @@
   _emt %[ "dlt array" ] ⊢ _
   _emt a0 ⊢ _ 
   ∎
-\[
+
 ## test info 
 §§ test_info
   § f0 o 
@@ -32,5 +32,4 @@
     _emt %[ "end info test" ] ⊢ _  
     ∎ 
   ∎∎ 
-  \]
   
