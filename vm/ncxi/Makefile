@@ -13,7 +13,7 @@ gui: peg.ml lang.ml imp_parser_header.ml imp_lexer.mll imp_parser.mly implib.ml 
 run: gui evo
 	./gui
 	gprof ./evo_tkn.exe > evo_tkn.prf.txt
-nc: util.ml lang.ml nc.ml imp_lexer.mll imp_parser.mly
+nc: util.ml lang.ml nc.ml imp_lexer.mll imp_parser.mly 
 	rm -f imp_parser.ml 
 	ocamllex imp_lexer.mll
 	menhir --explain imp_parser.mly
