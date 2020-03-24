@@ -529,6 +529,7 @@
 § f1 x0 
   _add { x0 %[ 3r ] } ⊢| 
 § E0 « 
+  \\f1 %[ 8r ] ⊢ { r1 r2 }
   \\f0 {} ⊢ {} 
   \\$ %[ 3r ] ⊢ r0 
   _mk_arr { %[ 7r ] %[ "Fu" ] } ⊢ { _ _ a0 }
@@ -537,11 +538,36 @@
   \\_emt x1 ⊢ x1
   \\_emt s0 ⊢ s0
   \\_emt { a0 x1 s0 } ⊢ { a0 x1 s0 }
-  f1 %[ 8r ] ⊢ { r1 r2 }
   \\_emt { r1 r2 } ⊢ R0
   \\_emt R0 ⊢ _  
   _lod_q { a0 %[ 3r ] } ⊢ { a0 _ s2 }
-  _emt { a0 s2 } ⊢ { a0 _ }
+  _emt s2 ⊢ _
+  _emt %[ "dlt array" ] ⊢ _
+  _emt a0 ⊢ _ 
   ∎
+## test info 
+§§ test_info
+  § f0 o 
+    $ o ⊢ 
+    ∐ _some◂x . 
+      _some x ⊢ o 
+      ∎ o 
+    ∐. _none◂{} . 
+      ∎| 
+  §% 
+    _emt %[ "start info test" ] ⊢ _ 
+    _info {} ⊢ {} 
+    _some %[ 8r ] ⊢ o 
+    _some o ⊢ o 
+    _some o ⊢ o 
+    _some o ⊢ o 
+    _some o ⊢ o 
+    f0 o ⊢ o 
+    _info {} ⊢ {} 
+    _emt o ⊢ _ 
+    _info {} ⊢ {}
+    _emt %[ "end info test" ] ⊢ _  
+    ∎ 
+  ∎∎ 
 \[
   \]
