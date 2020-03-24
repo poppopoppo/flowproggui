@@ -1,0 +1,36 @@
+§% 
+  _mk_arr { %[ 7r ] %[ "Fu" ] } ⊢ { _ _ a0 }
+  _emt a0 ⊢ a0
+  _exc_q { a0 %[ 1r ] %[ "Xo" ] } ⊢ { a0 _ _ }
+  _lod_q { a0 %[ 3r ] } ⊢ { a0 _ s2 }
+  _emt s2 ⊢ _
+  _emt %[ "dlt array" ] ⊢ _
+  _emt a0 ⊢ _ 
+  ∎
+\[
+## test info 
+§§ test_info
+  § f0 o 
+    $ o ⊢ 
+    ∐ _some◂x . 
+      _some x ⊢ o 
+      ∎ o 
+    ∐. _none◂{} . 
+      ∎| 
+  §% 
+    _emt %[ "start info test" ] ⊢ _ 
+    _info {} ⊢ {} 
+    _some %[ 8r ] ⊢ o 
+    _some o ⊢ o 
+    _some o ⊢ o 
+    _some o ⊢ o 
+    _some o ⊢ o 
+    f0 o ⊢ o 
+    _info {} ⊢ {} 
+    _emt o ⊢ _ 
+    _info {} ⊢ {}
+    _emt %[ "end info test" ] ⊢ _  
+    ∎ 
+  ∎∎ 
+  \]
+  
