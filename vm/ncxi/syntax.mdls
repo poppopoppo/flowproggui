@@ -13267,6 +13267,11 @@
 					`		db "SS_LN_N=%d",10
 					`		db 0
 					`
+					`fmt_sig_hdl:
+					`	db "sgi_hdl:",10
+					`	db "signal number=%d",10
+					`	db 0
+					`
 					`	unt: dq 0x0
 					`
 					`	unt_0: dq 0x0 
@@ -13299,6 +13304,18 @@
 					`;	xor rax,rax 
 					`;	C_CALL_SF getchar 
 					`;	ret
+					`
+					`sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void*
+					`	push rdi 
+					`	push rsi 
+					`	push rdx 
+					`	xor rax,rax 
+					`	mov rsi,rdi 
+					`	mov rdi,fmt_sig_hdl
+					`	C_CALL printf 
+					`	call info 
+					`	call exit 
+					`	jmp err
 					`
 					`rpc_s8: ; rdi ⊢ rax
 					`	push rdi 
@@ -13537,6 +13554,11 @@
 					`	ret 
 					`	 
 					`_start:
+					`; set signal handler 
+					`	mov rdi,SIG_SEGV 
+					`	mov rsi,sig_hdl 
+					`	C_CALL set_handler 
+					`
 					`SS_init:
 					`	mov QWORD [SS_TOP],SS_VCT
 					`	mov rdi,0 
@@ -14004,15 +14026,15 @@
 				`%endmacro 
 				`
 				`%macro ALC_RCD 2 ; n,reg-name!=rbx 
-				`	add QWORD [SS_RCD_C],1
-				`	add QWORD [SS_RCD_N],1 
+				`	add QWORD [SS_RCD_%1_C],1
+				`	add QWORD [SS_RCD_%1_N],1 
 				`	mov %2,[SS_RCD_%1_TOP]
 				`	mov MCR_REG,[%2]
 				`	mov QWORD [SS_RCD_%1_TOP],MCR_REG
 				`%endmacro 
 				`
 				`%macro FREE_RCD 2 ; n,reg-name!=rbx 
-				`	sub QWORD [SS_RCD_N],1
+				`	sub QWORD [SS_RCD_%1_N],1
 				`	mov rbx,QWORD [SS_RCD_%1_TOP] 
 				`	mov QWORD [%2],rbx
 				`	mov QWORD [SS_RCD_%1_TOP],%2
@@ -14063,6 +14085,8 @@
 				`
 				##`%macro BSS_INIT_SS_RCD 2 
 
+				`%define SIG_INT 2
+				`%define SIG_SEGV 11
 				`%define SS_MAX 2000
 				`%define SS_LN_MAX 4000
 				`%define SS_NULL 0xffff_ffff_ffff_0000
@@ -14080,6 +14104,7 @@
 				`extern strtoul
 				`extern strlen
 				`extern getchar
+				`extern set_handler
 				`section .bss
 				`	tmp: resq 64
 				`	ret_vct: resq 64
@@ -14187,7 +14212,7 @@
 					_emt_s8_to { ff0 sec0 } ⊢ { ff0 sec0 } 
 					» _^ _ ⊢ sx0 
 						`yasm -g dwarf2 -f elf64 EMT.mdls.s -o out.o
-      			`gcc out.o -nostartfiles -no-pie -pg -g -o EMT.mdls.exe 
+      			`gcc stub.c out.o -nostartfiles -no-pie -pg -g -o EMT.mdls.exe 
 						`ln -f EMT.mdls.exe EMT 
 						//
 					_cd sx0 ⊢ sx0 
