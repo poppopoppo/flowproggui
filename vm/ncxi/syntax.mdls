@@ -7301,7 +7301,6 @@
 							"; .dlt.ptn " 0' "\n" // 
 						rp8.add_s8 { e0 sc } ⊢ e0 
 						ptn { gfl fl tav lb_n rsp p { eds e0 } } ⊢ { gfl fl tav lb_n rsp { eds e0 } }
-						##rp8.cct { e0 ep } ⊢ e0 
 						f { gfl fl tav lb_n rsp dl { eds e0 } } ⊢| 
 					∐. _nil◂{} . 
 						∎ { gfl fl tav lb_n rsp { eds e0 } } 
@@ -7813,11 +7812,11 @@
 						∐. . 
 							∎ { ahl tav lb_n e0 }  
 				§ 
-					@.f_lst { ahl fl tav lb_n l0 rsp irv v0 e0 }   					
+					@.ptn_lst { ahl fl tav lb_n l0 rsp irv v0 e0 }   					
 						$ l0 ⊢
 						∐ _cns◂{ p0 l0 } . 
-							f { ahl fl tav lb_n p0 rsp irv v0 e0 } ⊢ { ahl fl tav lb_n p0 p1 rsp irv v0 e0 }
-							f_lst { ahl fl tav lb_n l0 rsp irv v0 e0 } ⊢ { ahl fl tav lb_n l0 l1 rsp irv v0 e0 } 
+							ptn { ahl fl tav lb_n p0 rsp irv v0 e0 } ⊢ { ahl fl tav lb_n p0 p1 rsp irv v0 e0 }
+							ptn_lst { ahl fl tav lb_n l0 rsp irv v0 e0 } ⊢ { ahl fl tav lb_n l0 l1 rsp irv v0 e0 } 
 							_cns { p0 l0 } ⊢ l0 
 							_cns { p1 l1 } ⊢ l1 
 							∎ { ahl fl tav lb_n l0 l1 rsp irv v0 e0 }
@@ -7825,7 +7824,7 @@
 							_nil {} ⊢ l0
 							_nil {} ⊢ l1 
 							∎ { ahl fl tav lb_n l0 l1 rsp irv v0 e0 }
-					@.f { ahl fl tav lb_n is rsp irv vs0 e0 }
+					@.ptn { ahl fl tav lb_n is rsp irv vs0 e0 }
 						$ is ⊢ is,is0 
 						$ is0 ⊢ 
 						∐ RP.atm◂k . 
@@ -7833,8 +7832,7 @@
 							∐ stt_v.hp◂{ r0 h } . 
 								_nil {} ⊢ dl 
 								alc_vs vs0 ⊢ { vs0 rm0 } 
-								brk_rsp { rsp rm0 } ⊢ { rsp rm0 eb0 } 
-								rp8.add_s8 { e0 eb0 } ⊢ e0 
+								brk_rsp_e { rsp rm0 e0 } ⊢ { rsp rm0 e0 } 
 								$ h ⊢ h,h0
 								reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
 								reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 }
@@ -7862,20 +7860,20 @@
 								_emt ee0 ⊢ _ 
 								∎|
 							∐. stt_v.stt_adt◂{ ia na pa0 } . 
-								f { ahl fl tav lb_n pa0 rsp irv vs0 e0 } ⊢ { ahl fl tav lb_n pa0 id0 rsp irv vs0 e0 }
+								ptn { ahl fl tav lb_n pa0 rsp irv vs0 e0 } ⊢ { ahl fl tav lb_n pa0 id0 rsp irv vs0 e0 }
 								stt_v.stt_adt { ia na id0 } ⊢ p1 
 								RP.atm p1 ⊢ p1 
 								∎ { ahl fl tav lb_n is p1 rsp irv vs0 e0 }
 						∐. RP.rcd◂l0 . 
-							f_lst { ahl fl tav lb_n l0 rsp irv vs0 e0 } ⊢ { ahl fl tav lb_n l0 l1 rsp irv vs0 e0 }
+							ptn_lst { ahl fl tav lb_n l0 rsp irv vs0 e0 } ⊢ { ahl fl tav lb_n l0 l1 rsp irv vs0 e0 }
 							RP.rcd l0 ⊢ p0 
 							RP.rcd l1 ⊢ p1 
 							∎ { ahl fl tav lb_n p0 p1 rsp irv vs0 e0 }						   					
-				§ @.lp { ahl fl tav lb_n rsp irv rl is dpl ppl e0 } 
+				§ @.lp { v0 gfl fl tav lb_n rsp irv rl is dpl ppl { eg0 eds e0 } } 
 					$ dpl ⊢ 
 					∐ _cns◂{ d0 dpl } . 
-						stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl v0 } 
-						f { ahl fl tav lb_n is rsp irv v0 e0 } ⊢ { ahl fl tav lb_n is id rsp irv v0 e0 } 
+						##stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl v0 } 
+						ptn { gfl fl tav lb_n is rsp irv v0 e0 } ⊢ { gfl fl tav lb_n is id rsp irv v0 e0 } 
 						$ id ⊢ id,id0 
 						stt_v.pnt.f id0 ⊢ sid 
 						» _^ sid ⊢ sid,s0 
@@ -7883,17 +7881,19 @@
 						rp8.add_s8 { ppl s0 } ⊢ ppl
 						_nil {} ⊢ dl 
 						idx.crt_ptn { irv d0 id rl dl } ⊢ { irv rl dl } 
-						lp { ahl fl tav lb_n rsp irv rl is dpl ppl e0 } ⊢| 
+						dlt.f { gfl tav lb_n rsp dl { eg0 eds e0 } } ⊢ { gfl tav lb_n rsp { eg0 eds e0 } }
+						lp { v0 gfl fl tav lb_n rsp irv rl is dpl ppl { eg0 eds e0 } } ⊢| 
 					∐. _nil◂{} . 
 						» "\n" _ ⊢ s0 
 						rp8.add_s8 { ppl s0 } ⊢ ppl 
 						rp8.cct { ppl e0 } ⊢ e0
-						∎ { ahl fl tav lb_n rsp irv rl is e0 }
+						∎ { v0 gfl fl tav lb_n rsp irv rl is { eg0 eds e0 } }
 						
-				§ id { gfl tav lb_n rsp irv sis is rl dpl } 
+				§ id { v0 gfl tav lb_n rsp irv sis is rl dpl } 
 					∐ dpl ⊢ _cns◂{ d0 dpl } . 
 						rp8.e {} ⊢ e0 
 						rp8.e {} ⊢ eg0 
+						rp8.e {} ⊢ eds 
 						» _^ sis ⊢ sis,ppl 
 							"; $ " 0' " ⊢ " 0' // 
 						rp8.of_s8 ppl ⊢ ppl 
@@ -7901,9 +7901,10 @@
 				 		$ is ⊢ is,is0 
 						idx.crt_ptn { irv d0 is0 rl dl } ⊢ { irv rl dl } 
 						_nil {} ⊢ fl
-						lp { gfl fl tav lb_n rsp irv rl is dpl ppl e0 } ⊢ { gfl fl tav lb_n rsp irv rl is e0 } 
+						lp { v0 gfl fl tav lb_n rsp irv rl is dpl ppl { eg0 eds e0 } } ⊢ { v0 gfl fl tav lb_n rsp irv rl is { eg0 eds e0 } } 
+						dlt.f { gfl tav lb_n rsp dl { eg0 eds e0 } } ⊢ { gfl tav lb_n rsp { eg0 eds e0 } }
 						adt_lp { gfl fl tav lb_n eg0 } ⊢ { gfl tav lb_n eg0 }
-						∎ { gfl tav lb_n rsp irv sis is rl { eg0 e0 } }
+						∎ { v0 gfl tav lb_n rsp irv sis is rl { eg0 eds e0 } }
 					∐. . 
 					» "id 0" _ ⊢ ee 
 									_emt ee ⊢ ee 
@@ -7987,7 +7988,7 @@
 									//
 								rp8.add_s8 { e0 s0 } ⊢ e0 
 								_nil {} ⊢ fl
-								rpc.f { gfl fl tav lb_n a1 rsp irv vs1 e0 } ⊢ { gfl fl tav lb_n a1 p1 rsp irv vs1 e0 }					
+								rpc.ptn { gfl fl tav lb_n a1 rsp irv vs1 e0 } ⊢ { gfl fl tav lb_n a1 p1 rsp irv vs1 e0 }					
 								rpc.adt_lp { gfl fl tav lb_n eg0 } ⊢ { gfl tav lb_n eg0 }
 								mov_ptn.f3 { tav rsp vs1 p1 pt0 e0 } ⊢ { tav rsp vs1 e0 }
 								set_rsp { rsp rsp0 e0 } ⊢ { rsp e0 } 
@@ -9646,6 +9647,9 @@
 							idx.csm_ptn { irv sp rl } ⊢ { irv is rl }
 							$ is ⊢ is,is0 
 							stt_v.pnt.f is0 ⊢ sis
+							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl v0 } 
+							$ is ⊢ is,is0 
+							stt_v.mk_rset { is0 v0 } ⊢ v0 
 							$ ll ⊢ 
 							∐ ast.id_mtc◂ilm . 
 								∐ ft ⊢ f_rtm◂ret0 . 
@@ -9653,7 +9657,8 @@
 								∐. . 
 									id_mtc { { gfl cl } { is sis } lb_n { ev evv } rsp { rv irv } tav tv_n tv ilm { eg0 eds ec0 } rl ft } ⊢| 
 							∐. ast.id_line◂{ dl lc } . 
-								rpc.id { gfl tav lb_n rsp irv sis is rl dl } ⊢ { gfl tav lb_n rsp irv sis is rl { eg1 e1 } }
+								rpc.id { v0 gfl tav lb_n rsp irv sis is rl dl } ⊢ { v0 gfl tav lb_n rsp irv sis is rl { eg1 eds1 e1 } }
+								rp8.cct { eds eds1 } ⊢ eds 
 								rp8.cct { ec0 e1 } ⊢ ec0 
 								rp8.cct { eg0 eg1 } ⊢ eg0 
 								ret_f { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv lc { eg0 eds ec0 } rl ft } ⊢|
@@ -13266,9 +13271,9 @@
 					`		db "SS_LN_C=%d",10
 					`		db "SS_LN_N=%d",10
 					`		db 0
-					`
+					`	
 					`fmt_sig_hdl:
-					`	db "sgi_hdl:",10
+					`	db "sig_hdl:",10
 					`	db "signal number=%d",10
 					`	db 0
 					`
@@ -14131,6 +14136,9 @@
 				`	SS_PT_TOP: resq 1
 				`	SS_PT_VCT: resq 3*SS_MAX
 				`	SS_PT_BTM: resq 1 
+				`
+				`	SS_RCD_N: resq 64 
+				`	SS_RCD_C: resq 64
 				`
 				`stat: resb 144
   			`struc STAT
