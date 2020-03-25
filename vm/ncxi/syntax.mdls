@@ -3413,9 +3413,10 @@
 						pnt n ⊢ { n sn } 
 						» _^ sn,nr ⊢ _,_,sr 
 							"\tmov rdi," 0' "\n" 
-							"\tmov rax,[SS_RCD_" 1d' "_TOP]\n" 
-							`	mov QWORD [rdi],rax 
-							"\tmov QWORD [SS_RCD_" 1d' "_TOP],rdi\n" 
+							"\tFREE_RCD " 1d' ",rdi\n"
+							##"\tmov rax,[SS_RCD_" 1d' "_TOP]\n" 
+							##`	mov QWORD [rdi],rax 
+							##"\tmov QWORD [SS_RCD_" 1d' "_TOP],rdi\n" 
 							// 
 						rp8.add_s8 { e sr } ⊢ e 
 						dlt { gl e } ⊢|
@@ -6545,7 +6546,15 @@
 							_inc i ⊢ i 
 							r_to_rcd { e0 tav i rsp vs0 r0 l0 l1 lb1 } ⊢| 
 						∐ l0 ⊢ _nil◂{}; l1 ⊢ _nil◂{} . 
-							∎ { e0 tav rsp vs0 }
+							∐ i'=0r . 
+								∎ { e0 tav rsp vs0 } 
+							∐. . 
+								reg { rsp r0 } ⊢ { rsp r0 er0 erb } 
+								» _^ er0,i ⊢ _,_,sc0 
+									"\tmov rdi," 0' "\n" 
+									"\tFREE_RCD " 1d' ",rdi\n" // 
+								rp8.add_s8 { e0 sc0 } ⊢ e0 
+								∎ { e0 tav rsp vs0 }
 						∐. . 
 							» "r_to_rcd" _ ⊢ se 
 							_emt se ⊢ se 
@@ -7221,9 +7230,13 @@
 							_inc i0 ⊢ i0 
 							hp_rcd { ahl fl tav lb_n l0 i0 e0 } ⊢| 
 						∐. _nil◂{} . 
-							##» _^ i0 ⊢ i0,s0 
-							##	"\tFREE_RCD " 0d' ", r8\n" //
-							∎ { ahl fl tav lb_n e0 }
+							∐ i0'=0r . 
+								∎ { ahl fl tav lb_n e0 }
+							∐. . 
+								» _^ i0 ⊢ i0,s0 
+									"\tFREE_RCD " 0d' ", r8\n" //
+								rp8.add_s8 { e0 s0 } ⊢ e0 
+								∎ { ahl fl tav lb_n e0 }
 					@.ptn_lst { ahl fl tav lb_n rsp l0 { eds e0 } } 
 						$ l0 ⊢ 
 						∐ _cns◂{ p0 l0 } . 
@@ -14110,10 +14123,8 @@
 				`
 				`%macro BSS_SS_RCD 2 
 				`	SS_RCD_%1_TOP: resq 1 
-				`	SS_RCD_%1_VCT: resq (%1+1)*%2
+				`	SS_RCD_%1_VCT: resq (%1+1)*(%2+4)
 				`	SS_RCD_%1_BTM: resq 1
-				`	SS_RCD_%1_C: resq 1 
-				`	SS_RCD_%1_N: resq 1
 				`%endmacro 
 				`
 				##`%macro BSS_INIT_SS_RCD 2 
