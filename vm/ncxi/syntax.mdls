@@ -7221,6 +7221,8 @@
 							_inc i0 ⊢ i0 
 							hp_rcd { ahl fl tav lb_n l0 i0 e0 } ⊢| 
 						∐. _nil◂{} . 
+							##» _^ i0 ⊢ i0,s0 
+							##	"\tFREE_RCD " 0d' ", r8\n" //
 							∎ { ahl fl tav lb_n e0 }
 					@.ptn_lst { ahl fl tav lb_n rsp l0 { eds e0 } } 
 						$ l0 ⊢ 
@@ -12643,8 +12645,8 @@
 				0d' //
 			» _^ n ⊢ n,etr 
 				"\ninit_ss_rcd_" 0d' ":\n"
-				"\tmov QWORD [SS_RCD_" 0d' "_N],0\n"
-				"\tmov QWORD [SS_RCD_" 0d' "_C],0\n" // 
+				"\tmov QWORD [SS_RCD_N+8*" 0d' "],0\n"
+				"\tmov QWORD [SS_RCD_C+8*" 0d' "],0\n" // 
 			rp8.add_s8 { e etr } ⊢ e  
 			_inc n ⊢ n  
 			ss_init_n { lb top vct null n m e } ⊢ { lb top vct null n m e }
@@ -12657,6 +12659,7 @@
 				ss_init_rcd { n m e } ⊢ { n m e }
 				_inc n ⊢ n 
 				ss_init_rcd_lp { n m N e } ⊢| 
+		§ RCD_N = 16r 
 		§
 			@.slv_file gel
 				» t_axm.N0 _ ⊢ tx_n 
@@ -13275,7 +13278,12 @@
 					`		db "SS_LN_C=%d",10
 					`		db "SS_LN_N=%d",10
 					`		db 0
-					`	
+					`	fmt_info_rcd:
+					`		db "rcd %d",10
+					`		db "SS_RCD_C=%d",10
+					`		db "SS_RCD_N=%d",10
+					`		db 0
+					`
 					`fmt_sig_hdl:
 					`	db "sig_hdl:",10
 					`	db "signal number=%d",10
@@ -13306,7 +13314,22 @@
 					`	mov rsi,QWORD [SS_LN_C]
 					`	mov rdx,SS_LN_N 
 					`	xor rax,rax 
+					`	C_CALL printf
+					`	mov rax,0
+					`info_rcd:
+					`	push rax 
+					`	mov rdi,fmt_info_rcd
+					`	mov rsi,rax 
+					`	mov rdx,QWORD [SS_RCD_C+8*rax]
+					`	mov rcx,QWORD [SS_RCD_N+8*rax]
+					`	xor rax,rax
 					`	C_CALL printf 
+					`	pop rax 
+					`	cmp rax,RCD_N 
+					`	jz info_rcd_end 
+					`	add rax,1 
+					`	jmp info_rcd 
+					`info_rcd_end:
 					`	C_POP_REGS 
 					`	ret
 					`;getchar:
@@ -13649,7 +13672,7 @@
 				» 1r _ ⊢ ssn0 
 				##» 1r _ ⊢ rnx 
 				» "SS_MAX" _ ⊢ rmx 
-				» 16r _ ⊢ ssN 
+				» RCD_N _ ⊢ ssN 
 				ss_init_rcd_lp { ssn0 rmx ssN ec } ⊢ { rmx ssN ec } 
 	
 				» "\tjmp RTM_0\n" _ ⊢ sc1 
@@ -13942,7 +13965,8 @@
 					∎ { { rsp rl ns_r } i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gfl { eds dd ep0 ec0 rtm_n lb_n } }
 		§ emt_rtm a0 
 			slv_file a0 ⊢ { { rsp rl ns_r } i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gfl { eds dd ep0 ec0 rtm_n lb_n } }		
-			» _^ _ ⊢ eh 
+			» RCD_N _ ⊢ ssN 
+			» _^ ssN ⊢ ssN,eh 
 				`bits 64 
 				`; macros 
 				`%macro C_PUSH_REGS 0 
@@ -14035,15 +14059,15 @@
 				`%endmacro 
 				`
 				`%macro ALC_RCD 2 ; n,reg-name!=rbx 
-				`	add QWORD [SS_RCD_%1_C],1
-				`	add QWORD [SS_RCD_%1_N],1 
+				`	add QWORD [SS_RCD_C+8*%1],1
+				`	add QWORD [SS_RCD_N+8*%1],1 
 				`	mov %2,[SS_RCD_%1_TOP]
 				`	mov MCR_REG,[%2]
 				`	mov QWORD [SS_RCD_%1_TOP],MCR_REG
 				`%endmacro 
 				`
 				`%macro FREE_RCD 2 ; n,reg-name!=rbx 
-				`	sub QWORD [SS_RCD_%1_N],1
+				`	sub QWORD [SS_RCD_N+8*%1],1
 				`	mov rbx,QWORD [SS_RCD_%1_TOP] 
 				`	mov QWORD [%2],rbx
 				`	mov QWORD [SS_RCD_%1_TOP],%2
@@ -14098,6 +14122,7 @@
 				`%define SIG_SEGV 11
 				`%define SS_MAX 2000
 				`%define SS_LN_MAX 4000
+				"%define RCD_N " 0d' "\n"
 				`%define SS_NULL 0xffff_ffff_ffff_0000
 				`%define EMT_BUF_MAX 2048
 				`%define SS_LN_REG r15
@@ -14141,8 +14166,8 @@
 				`	SS_PT_VCT: resq 3*SS_MAX
 				`	SS_PT_BTM: resq 1 
 				`
-				`	SS_RCD_N: resq 64 
-				`	SS_RCD_C: resq 64
+				`	SS_RCD_N: resq (RCD_N+1) 
+				`	SS_RCD_C: resq (RCD_N+1)
 				`
 				`stat: resb 144
   			`struc STAT
@@ -14173,7 +14198,6 @@
 			
 			» 1r _ ⊢ rnx 
 			» "SS_MAX" _ ⊢ rmx 
-			» 16r _ ⊢ ssN 
 			ss_rcd_n_lp { rnx ssN rmx eh } ⊢ { ssN rmx eh }
 			
 			rp8.cct { eh eds } ⊢ eds 
