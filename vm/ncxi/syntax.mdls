@@ -12275,7 +12275,9 @@
 											∎ { a0 tav vs0 rsp_g e0 lb0 i0 evv lb_n }
 										∐. . 
 											» _^ en ⊢ en,s0 
-												"\tmov r8,[r8+8]\n" 
+												`	mov rdi,[r8+8]
+												`	FREE_LN r8 
+												`	mov r8,rdi
 												 // 
 											rp8.add_s8 { e0 s0 } ⊢ e0 
 											stt_v.hp { r0 iap0 } ⊢ iy 
@@ -12451,7 +12453,9 @@
 								∎ { gfl rb ret rsp_g { eg0 eds e0 } ev evv rv irv tav tv tv_n rl lb_n } 
 							∐. . 
 								» _^ _ ⊢ s0 
-									"\tmov r8,[r8+8]\n" 
+									`	mov rdi,[r8+8]
+									`	FREE_LN r8 
+									`	mov r8,rdi 
 									 // 
 								rp8.add_s8 { e0 s0 } ⊢ e0 
 								stt_v.hp { x2 hk0 } ⊢ a0 

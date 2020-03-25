@@ -3645,7 +3645,9 @@ LB_88:
 	jmp LB_86
 LB_89:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= a5◂ [ ] ) ⊢ 8'(= a5◂ [ ] )
 ; .mov_ptn 2'(= a5◂ [ ] ) ⊢ 8'(= a5◂ [ ] )
 	mov rax,r8
@@ -3784,7 +3786,9 @@ LB_110:
 	jmp LB_108
 LB_111:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 8'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 8'(= r )
 	mov rax,r8
@@ -3802,7 +3806,9 @@ LB_114:
 	jmp LB_112
 LB_115:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= a5◂ [ ] ) ⊢ 9'(= a5◂ [ ] )
 ; .mov_ptn 2'(= a5◂ [ ] ) ⊢ 9'(= a5◂ [ ] )
 	mov rax,r8
@@ -3948,7 +3954,9 @@ LB_134:
 	jmp LB_132
 LB_135:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= a5◂ [ ] ) ⊢ 9'(= a5◂ [ ] )
 ; .mov_ptn 2'(= a5◂ [ ] ) ⊢ 9'(= a5◂ [ ] )
 	mov rax,r8
@@ -4548,7 +4556,9 @@ LB_209:
 	jmp LB_207
 LB_210:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 8'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 8'(= r )
 	mov rax,r8
@@ -4694,7 +4704,9 @@ LB_231:
 	jmp LB_229
 LB_232:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 8'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 8'(= r )
 	mov rax,r8
@@ -4748,7 +4760,9 @@ LB_238:
 	jmp LB_236
 LB_239:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 8'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 8'(= r )
 	mov rax,r8
@@ -4766,7 +4780,9 @@ LB_242:
 	jmp LB_240
 LB_243:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 9'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 9'(= r )
 	mov rax,r8
@@ -5158,7 +5174,9 @@ LB_311:
 	jmp LB_309
 LB_312:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 8'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 8'(= r )
 	mov rax,r8
@@ -5215,7 +5233,9 @@ LB_315:
 	jmp LB_281
 LB_316:
 	mov QWORD [rsp+8*0],r14
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi 
 ; .mov_ptn2 2'(= r ) ⊢ 3'(= r )
 	mov r10,r9
 ; .mov_ptn 2'(= r ) ⊢ 3'(= r )
@@ -5271,7 +5291,9 @@ LB_319:
 	ret
 LB_320:
 	mov QWORD [rsp+8*0],r14
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi 
 ; .mov_ptn2 2'(= r ) ⊢ 3'(= r )
 	mov r10,r9
 ; .mov_ptn 2'(= r ) ⊢ 3'(= r )
@@ -5547,7 +5569,9 @@ LB_377:
 	jmp LB_375
 LB_378:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 8'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 8'(= r )
 	mov rax,r8
@@ -5631,7 +5655,9 @@ LB_393:
 	jmp LB_391
 LB_394:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 8'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 8'(= r )
 	mov rax,r8
@@ -5671,7 +5697,9 @@ LB_403:
 	jmp LB_401
 LB_404:
 	sub rsp,8
-	mov r8,[r8+8]
+	mov rdi,[r8+8]
+	FREE_LN r8 
+	mov r8,rdi
 ; .mov_ptn2 2'(= r ) ⊢ 9'(= r )
 ; .mov_ptn 2'(= r ) ⊢ 9'(= r )
 	mov rax,r8
