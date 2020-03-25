@@ -570,8 +570,11 @@
     _some o ⊢ o 
     f0 o ⊢ o 
     _info {} ⊢ {} 
+    $ o ⊢ o,o0,o1,_ 
+    _info {} ⊢ {} 
     _emt o ⊢ _ 
     _info {} ⊢ {}
     _emt %[ "end info test" ] ⊢ _  
     ∎ 
   ∎∎ 
+
