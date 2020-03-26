@@ -1,0 +1,33 @@
+  § f x 
+  rp8.e {} ⊢ cl h 
+  _some cl ⊢ a 
+  ∎ a 
+
+\[
+§§+s8
+	@.stg_ltr
+	∐. "\"" stg_ltr_seq ⊢ { {} cl }
+		##s8_of_r64_lst cl ⊢ s
+		rp8.mk_s8 cl ⊢ { cl s }
+		_some s ⊢ a
+		∎ a
+	@.stg_ltr_seq
+	∐ "\n" !| ⊢ { xx } 
+		_none {} ⊢ a 
+		∎ a 
+	∐ "\\" stg_ltr_sp stg_ltr_seq ⊢ { {} c0 cl }
+		##_cns { c0 cl } ⊢ cl
+		rp8.pfx_chr { c0 cl } ⊢ cl 
+		_some cl ⊢ a
+		∎ a
+	∐ "\"" ⊢ { {} }
+		rp8.e {} ⊢ cl h
+		_some cl ⊢ a
+		∎ a
+	∐. _byt stg_ltr_seq ⊢ { c0 cl }
+		rp8.pfx_chr { c0 cl } ⊢ cl 
+		##_cns { c0 cl } ⊢ cl
+		_some cl ⊢ a
+		∎ a
+    \]
+    
