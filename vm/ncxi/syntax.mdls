@@ -3897,6 +3897,17 @@
 				∐. . 
 					bl.f {} ⊢ b 
 					∎ { tv b cl } 				
+			§ eqv { tv y0 y1 } 
+				_nil {} ⊢ cl 
+				$ y0 ⊢ y0,y0_0
+				$ y1 ⊢ y1,y1_0 
+				f { tv y0_0 y1_0 cl } ⊢ { tv bl _ }
+				_nil {} ⊢ cl 
+				$ y0 ⊢ y0,y0_0
+				$ y1 ⊢ y1,y1_0 
+				f { tv y1_0 y0_0 cl } ⊢ { tv br _ }
+				bl.and { bl br } ⊢ b 
+				∎ { tv y0 y1 b }
 			∎∎
 		§ @.find_gf { tv gfl i0 y0 } 
 			$ gfl ⊢ 
@@ -3905,10 +3916,11 @@
 					∐ i0'=i1' . 
 						##» "find_gf D0" _ ⊢ dd0
 						##_emt dd0 ⊢ _ 
-						$ y0 ⊢ y0,y00 
-						$ y1 ⊢ y1,y10
-						_nil {} ⊢ cl
-						cmp_t.f { tv y00 y10 cl } ⊢ { tv b cl } 
+						##$ y0 ⊢ y0,y00 
+						##$ y1 ⊢ y1,y10
+						##_nil {} ⊢ cl
+						##cmp_t.f { tv y00 y10 cl } ⊢ { tv b cl } 
+						cmp_t.eqv { tv y0 y1 } ⊢ { tv y0 y1 b } 
 						∐ b ⊢ bl.t◂{} . 
 							$ { lb i1 y1 rsp_s p0 rsp_d p1 } ⊢ A0,A1 
 							gnr_etr A0 ⊢ A0 
@@ -9821,6 +9833,8 @@
 						$ p0 ⊢ p0,p00 
 						emt.mk_rsp p00 ⊢ rsp 
 
+						$ dp ⊢ dp,dp0 
+						crt_type_k.dst_ptn { tv rv dp0 } ⊢ { tv rv dk }
 						$ p0 ⊢ p0,p00 
 						_nil {} ⊢ dl 
 						_nil {} ⊢ rl 
@@ -9834,8 +9848,6 @@
 						$ gyd ⊢ gyd,gyd0 
 						imp { gys0 gyd0 } ⊢ yx 
 						RP.atm yx ⊢ yx 
-						$ yx ⊢ yx,yx0 
-						pnt_type_k { tv yx0 } ⊢ { tv syx } 
 						##» "gnr_lc_code D1" _ ⊢ dd0
 						##_emt dd0 ⊢ _ 
 						_lod_q { ev o } ⊢ { ev o yi } 
@@ -9849,15 +9861,21 @@
 						_nil {} ⊢ clg 
 						##cmp_t.f { tv yx yi clg } ⊢ { tv b clg }
 						» 1r _ ⊢ lvg 
-						inst_al { tv_n tv lvg yx clg } ⊢ { tv_n tv lvg yx clg }
-						inst_al { tv_n tv lvg yi clg } ⊢ { tv_n tv lvg yi clg }
-						$ yx ⊢ yx,yx0 
-						unify.f { tv yx0 yi } ⊢ tv 
+						##inst_al { tv_n tv lvg yx clg } ⊢ { tv_n tv lvg yx clg }
+						##inst_al { tv_n tv lvg yi clg } ⊢ { tv_n tv lvg yi clg }
+						$ gys ⊢ gys,gys0 
+						inst { tv_n tv lvg gys0 } ⊢ { tv_n tv lvg gys0 } 
+						inst_al { tv_n tv lvg dk clg } ⊢ { tv_n tv lvg dk clg } 
+
+						$ dk ⊢ dk,dk0 
+						unify.f { tv dk0 gys0 } ⊢ tv 
 						_dec lvg ⊢ lvg 
-						gen { tv_n tv lvg yx } ⊢ { tv_n tv lvg yx } 
+						gen { tv_n tv lvg dk } ⊢ { tv_n tv lvg dk } 
 						##∐ b ⊢ bl.t◂{} . 
 						##» "gnr_lc_code D3" _ ⊢ dd0
 						##_emt dd0 ⊢ _ 
+						$ yx ⊢ yx,yx0 
+						pnt_type_k { tv yx0 } ⊢ { tv syx } 
 						» _^ lbg,o,sp0,spr0,syx ⊢ lbg,o,sp0,spr0,syx,ec1 
 							"LB_" 0d' ": ;; #" 1d' " " 2' " ⊢ " 3' " : " 4' "\n" //
 						_emt ec1 ⊢ ec1 
@@ -14413,12 +14431,17 @@
 					_emt sep0 ⊢ sep0 
 					rp8.mk_s8 ec0 ⊢ { ec0 sec0 }
 					_emt sec0 ⊢ sec0 
-					» "rm -f EMT.mdls.s\n" _ ⊢ sxx
-					_cd sxx ⊢ sxx  
-					» "touch EMT.mdls.s\n" _ ⊢ sxx1 
-					_cd sxx1 ⊢ sxx1 
+					» _^ _ ⊢ sx0 
+						`rm -f EMT.mdls.s
+						`touch EMT.mdls.s
+						`rm -f SGN.txt 
+						`touch SGN.txt
+						//  
+					_cd sx0 ⊢ _ 
 					» "EMT.mdls.s" _ ⊢ ff0 
 					_emt_s8_to { ff0 sec0 } ⊢ { ff0 sec0 } 
+					» "SGN.txt" _ ⊢ ff1 
+					_emt_s8_to { ff1 sep0 } ⊢ _ 
 					» _^ _ ⊢ sx0 
 						`yasm -g dwarf2 -f elf64 EMT.mdls.s -o out.o
       			`gcc stub.c out.o -nostartfiles -no-pie -pg -g -o EMT.mdls.exe 
