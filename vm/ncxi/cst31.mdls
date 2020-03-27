@@ -1,9 +1,20 @@
-\[
-§ f x 
-  rp8.e {} ⊢ cl 
-  _some cl ⊢ a 
-  ∎ a 
-\]
-§ f1 a 
-  _lod_q { a %[ 4r ] } ⊢ { a _ x } 
-  ∎ { a x }
+§ f0 x 
+  _emt x ⊢ x 
+  ∎ x 
+§ f1 x 
+  f0 x ⊢ x 
+  ∎ x 
+§ f2 x 
+  f1 x ⊢ x 
+  ∎ x 
+
+§% 
+  f2 %[ 3r ] ⊢ _ 
+  f2 %[ "HOO" ] ⊢ s 
+  _nil {} ⊢ l 
+  f2 l ⊢ l
+  _cns { %[ 7r ] l } ⊢ l 
+  f2 l ⊢ _  
+  f2 s ⊢ _ 
+  f2 %[ 5r ] ⊢ _ 
+  ∎ 
