@@ -1350,4 +1350,48 @@ Fatal error: exception Failure("unify:2(_p6052)\226\151\130(_p31852) ~ _r64")
   _nil {} ⊢ v 
   ∎ v 
   _cns { %[ 0r ] %[ nlv ] } ⊢ l0 
-  
+¶¶ _r_t 
+  ∐ _r_t64 
+  ∐ _r_t32 
+  ∐ _r_t16 
+  ∐ _r_t8 
+¶¶+ _rpc_pf 
+  _rpc :: * → _std
+
+  ∎∎ 
+
+¶¶+ _ctn_pf
+  _ctn :: { * _std _std } → _std 
+  ∎∎ 
+
+¶+ _ctn_arr :: _ctn_pf 
+  _ctn◂{ * c' i' } = _arr 
+  ∎∎
+
+_rX :: _r_t → _std    
+¶ _rX◂_r_t64 = _r64  
+_rpc :: _rpc_pf → _std
+_S8 :: _s8_v → _std 
+  t'::rpc_pf ∀ _rpc◂t' → _rpc◂t' 
+  ctn.lod : t'::ctn_pf ∀ { _ctn◂{ i' c' t' } i' } → { ctn◂{ i' c' t' } i' c' } 
+
+
+;; #345 
+{ 
+  0'(= a17◂ [ ] ) 
+  1'(= {| a2◂ [ *{ {| l |} a3◂ [ r]} ] |} ) 
+  2'(= a2◂ [ *{ {| l |} a3◂ [ r]}] ) 
+  3'(= a2◂ [ *{ q0 a2◂ [ *{ {| l |}a3◂ [ r] } ] q1 q2 } ] ) 
+  } 
+⊢ 
+{ 
+  0'(= {| a2◂ [ *{ {| l |}a3◂ [ r]}]|} ) 
+  1'(= a2◂ [ *{ {| l |}a3◂ [ r]}] ) 
+  2'(= a2◂ [ *{ q0a2◂ [ *{ {| l |}a3◂ [ r]}]q1q2}] ) 
+  3'(= r ) } 
+: 
+({ _t17 _arr◂_lst◂{ _s8 _opn◂_r64 } _lst◂{ _s8 _opn◂_r64 } _lst◂67109'(={ 67113'(1) _lst◂{ _s8 _opn◂_r64 } 67114'(1) 67115'(1) }) }
+→{ 
+  _arr◂_lst◂{ _s8 _opn◂_r64 } 
+  _lst◂{ _s8 _opn◂_r64 }
+  _lst◂{ 67110'(=67113'(1)) _lst◂{ _s8 _opn◂_r64 } 67111'(=67114'(1)) 67112'(=67115'(1)) } _r64 })
