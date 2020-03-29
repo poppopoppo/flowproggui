@@ -9566,9 +9566,8 @@
 							##sub_rsp rsp_s ⊢ { rsp_s ec2 } 
 							$ rsp ⊢ rsp,rsp00 
 							##_add { rsp00 rsp_s } ⊢ { rsp00 rsp_s }
-							_none {} ⊢ lb1 
-							mov_ptn.f2 { tav rsp00 v0 is p0 lb1 } ⊢ { tav rsp00 v0 em0 }
-							rp8.cct { er em0 } ⊢ er 
+							mov_ptn.f3 { tav rsp00 v0 is p0 er } ⊢ { tav rsp00 v0 er }
+							set_rsp { rsp00 rsp er } ⊢ { rsp er } 
 							» _^ o ⊢ o,e1 
 								"\tcall " 0' "\n" //
 							rp8.add_s8 { er e1 } ⊢ er 
@@ -9579,8 +9578,7 @@
 							rset.ini {} ⊢ v0 
 							push_regs.f { rsp irv v0 rl } ⊢ { rsp irv v0 rl l e n }
 							rp8.cct { er e } ⊢ er 
-							$ lb_n ⊢ lb_n,lbr 
-							_inc lb_n ⊢ lb_n 
+							inc_x lb_n ⊢ { lbr lb_n }  
 							» _^ lbr ⊢ lbr,s0 
 								"\tpush LB_" 0d' "\n" // 
 							rp8.add_s8 { er s0 } ⊢ er 
@@ -9590,10 +9588,12 @@
 							$ rsp ⊢ rsp,rsp00  
 							_inc rsp00 ⊢ rsp00 
 							shft_ptn { p0 rsp00 } ⊢ { p0 rsp00 }
+							_add { rsp00 rsp_s } ⊢ { rsp00 rsp_s }
 							sub_rsp rsp_s ⊢ { rsp_s ec2 }
 							rp8.add_s8 { er ec2 } ⊢ er  
-							_add { rsp00 rsp_s } ⊢ { rsp00 rsp_s }
+							$ rsp00 ⊢ rsp00,rsp00_0
 							mov_ptn.f3 { tav rsp00 v0 is p0 er } ⊢ { tav rsp00 v0 er }
+							set_rsp { rsp00 rsp00_0 er } ⊢ { rsp00 er } 
 							rset.set_f { v0 nb1 } ⊢ { v0 nb1 } 
 							» _^ lbr,o ⊢ lbr,o,s0 
 								"\tcall " 1' "\n" 
@@ -9674,8 +9674,8 @@
 							» _^ o,sis ⊢ o,sis,ec1 
 								"; #" 0d' " " 1' " ⊢|\n" //
 							rp8.add_s8 { ec0 ec1 } ⊢ ec0 
-							##dlt.env { gfl irv tav lb_n rsp rl { eg0 eds ec0 } } ⊢ { gfl irv tav lb_n rsp { eg0 eds ec0 } } 
-							##_nil {} ⊢ rl 
+							dlt.env { gfl irv tav lb_n rsp rl { eg0 eds ec0 } } ⊢ { gfl irv tav lb_n rsp { eg0 eds ec0 } } 
+							_nil {} ⊢ rl 
 							_lod_q { ev o } ⊢ { ev o yk } 
 							var yk ⊢ yk 
 							RP.atm yk ⊢ yk 
