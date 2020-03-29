@@ -4686,6 +4686,36 @@
 			§ rcx = 6r 
 			§ rdx = 7r 
 			∎∎ 
+		§ lb_etr { lb e } 
+			» _^ lb ⊢ lb,s 
+				"LB_" 0d' ":\n" // 
+			rp8.add_s8 { e s } ⊢ e 
+			∎ { lb e }
+		§ jmp_lb { lb e } 
+			» _^ lb ⊢ lb,s0 
+				"\tjmp LB_" 0d' "\n" // 
+			rp8.add_s8 { e s0 } ⊢ e 
+			∎ { lb e } 
+		§ jg_lb { lb e } 
+			» _^ lb ⊢ lb,s0 
+				"\tjg LB_" 0d' "\n" // 
+			rp8.add_s8 { e s0 } ⊢ e 
+			∎ { lb e } 
+		§ jnz_lb { lb e } 
+			» _^ lb ⊢ lb,s0 
+				"\tjnz LB_" 0d' "\n" // 
+			rp8.add_s8 { e s0 } ⊢ e 
+			∎ { lb e } 
+		§ jz_lb { lb e } 
+			» _^ lb ⊢ lb,s0 
+				"\tjz LB_" 0d' "\n" // 
+			rp8.add_s8 { e s0 } ⊢ e 
+			∎ { lb e } 
+		§ jl_lb { lb e } 
+			» _^ lb ⊢ lb,s0 
+				"\tjl LB_" 0d' "\n" // 
+			rp8.add_s8 { e s0 } ⊢ e 
+			∎ { lb e } 
 		§ skip { lb_n e0 }
 			rp8.e {} ⊢ e1 
 			$ lb_n ⊢ lb_n,lb0 
@@ -4806,6 +4836,10 @@
 			set_rsp { rsp0 rsp1 } ⊢ { rsp0 rsp1 e1 }
 			rp8.add_s8 { e0 e1 } ⊢ e0 
 			∎ { rsp1 e0 } 
+		§ rb_rsp { rsp rsp0 lb0 e }
+			set_rsp { rsp rsp0 e } ⊢ { rsp0 e } 
+			jmp_lb { lb0 e } ⊢ { lb0 e } 
+			∎ { rsp0 lb0 e } 
 		§ c_call e 
 			» _^ e ⊢ e,r 				
 				"\tC_CALL " 0' "\n" 
@@ -5469,21 +5503,41 @@
 							∎ { rsp r0 r1 x e0 }
 			∎∎ 
 		§§ cmp 
+			§ idx_idx { rsp r0 r1 e }
+				reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
+				reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
+				∐ b1 ⊢ bl.t◂{} . 
+					» _^ sr0,sr1 ⊢ sr0,sr1,sc 
+						"\tcmp " 0' "," 1' "\n" //
+					rp8.add_s8 { e sc } ⊢ e
+					∎ { rsp r0 r1 e }  
+				∐. . 
+					» _^ sr0,sr1 ⊢ sr0,sr1,sc 
+						"\tmov rdi," 1' "\n" 
+						"\tcmp " 0' ",rdi\n" //
+					rp8.add_s8 { e sc } ⊢ e
+					∎ { rsp r0 r1 e }
+			§ idx_im { rsp r0 x e }
+				reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
+				» _^ sr0,x ⊢ sr0,x,sc 
+					"\tcmp " 0' "," 1d' "\n" //
+				rp8.add_s8 { e sc } ⊢ e
+				∎ { rsp r0 x e }   
 			∎∎
 		§§ alc_mtc_ptn 
-		§ @.lp { { gl lb1 rsp } isp mp rl evv rv irv tav tv_n tv vs0 e0 dl }
+		§ @.lp { { gl lb1 rsp lb_n } isp mp rl evv rv irv tav tv_n tv vs0 e0 dl }
 			$ mp ⊢ 
 			∐ RP.rcd◂l1 . 
 				$ isp ⊢ 
 				∐ RP.rcd◂l0 . 
-					lp_lst { { gl lb1 rsp } l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl lr } 
+					lp_lst { { gl lb1 rsp lb_n } l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl lr } 
 					∐ lr ⊢ _some◂lr . 
 						RP.rcd lr ⊢ p1 
 						_some p1 ⊢ p1  
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 					∐. . 
 						_none {} ⊢ p1 
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
 				∐. RP.atm◂a0 . 		
 					∐ a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.ref◂q0; q0 ⊢ stt_v.rcd◂l0 . 
 						$ r0 ⊢ r0,r00 
@@ -5493,13 +5547,13 @@
 						##_cns { { r00 h0 } gl } ⊢ gl 
 						» 0r _ ⊢ j0 
 						$ r0 ⊢ r0,r0_0 
-						lp_hp_lst { { gl lb1 rsp } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l }
+						lp_hp_lst { { gl lb1 rsp lb_n } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l }
 						∐ l ⊢ _some◂l . 
 							∐ l ⊢ _nil◂{} . 
 								_nil {} ⊢ l 
 								RP.rcd l ⊢ p1
 								_some p1 ⊢ p1  
-								∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+								∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 							∐. . 
 								$ gl ⊢ { gl_n gl } 
 								gbg.pnt gl_n ⊢ { gl_n sg } 
@@ -5511,10 +5565,10 @@
 								$ { gl_n gl } ⊢ gl 
 								RP.rcd l ⊢ p1
 								_some p1 ⊢ p1  
-								∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+								∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 						∐. . 
 							_none {} ⊢ p1 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 					∐. .  
 						» "mov_ptn.ptn_to_r d9" _ ⊢ ee0 
 						_emt ee0 ⊢ _ 
@@ -5528,7 +5582,7 @@
 						$ isp ⊢ isp,isp0 
 						_cns { isp0 dl } ⊢ dl 
 						_some isp ⊢ isp 
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
 					∐. . 
 						∎| 
 				∐ ast.mtc_reg◂r1 . 
@@ -5536,19 +5590,19 @@
 					_set_q { irv r1 isp0 } ⊢ { irv r1 }  
 					_cns { r1 rl } ⊢ rl
 					_some isp ⊢ isp
-					∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
+					∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
 				∐ ast.mtc_cst◂c1 . 
 					$ c1 ⊢ 
 					∐ ast.cst_v◂v1 . 
 						stt_v.hp_im v1 ⊢ h 
 						RP.atm h ⊢ p1
 						_some p1 ⊢ p1  
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 					∐. ast.cst_name◂e1 . 
 						stt_v.hp_im_e e1 ⊢ h 
 						RP.atm h ⊢ p1 
 						_some p1 ⊢ p1 
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 				∐. ast.mtc_agl◂{ ea1 mpa1 } . 
 					_lod_q { evv ea1 } ⊢ { evv ea1 k1 } 
 					∐ k1 ⊢ k_ctr◂{ ia1 na1 } .  
@@ -5557,29 +5611,36 @@
 							∐ a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.adt◂{ ax0 ql0 } . 
 								_lod_q { tav ax0 } ⊢ { tav ax0 { aw o0 } } 
 								∐ o0 ⊢ _some◂{ vl0 kl0 pvl0 ipl0 } . 
-									∐ lb1 ⊢ _some◂lb1 . 
+									∐ lb1 ⊢ _some◂{ lb1 rsp0 } . 
 										reg { rsp r0 } ⊢ { rsp r0 er0 br0 } 
 										##» 6r _ ⊢ x0
 										##mov.cmp_BYTE_lea_im { rsp r0 x0 ia1 } ⊢ { rsp sc0 } 
-										» _^ er0,ia1,lb1 ⊢ er0,ia1,lb1,ec1 
+										inc_x lb_n ⊢ { lb2 lb_n } 
+										inc_x lb_n ⊢ { lb3 lb_n }
+										» _^ er0,ia1,lb2 ⊢ er0,ia1,lb2,ec1 
 											"\tmov rdi," 0' "\n" 
 											"\tcmp BYTE [rdi+6]," 1d' "\n" 
 											"\tjnz LB_" 2d' "\n" //
-										_some lb1 ⊢ lb1 
 										rp8.add_s8 { e0 ec1 } ⊢ e0 
+										jmp_lb { lb3 e0 } ⊢ { lb3 e0 }
+										lb_etr { lb2 e0 } ⊢ { lb2 e0 } 
+										$ rsp ⊢ rsp,rsp1 
+										rb_rsp { rsp1 rsp0 lb1 e0 } ⊢ { rsp0 lb1 e0 }
+										lb_etr { lb3 e0 } ⊢ { lb3 e0 } 
+										_some { lb1 rsp0 } ⊢ lb1 
 										mk_adt.f { ql0 pvl0 ipl0 } ⊢ ipl0 
 										$ ia1 ⊢ ia1,i1 
 										lst.nth { ipl0 i1 } ⊢ { ip0 ipl0 }
 										∐ ip0 ⊢ stt_v.ref◂iq0 . 
 											stt_v.ref iq0 ⊢ ip0 
-											lp_hp { { gl lb1 rsp } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											lp_hp { { gl lb1 rsp lb_n } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 											∐ p1 ⊢ _some◂p1 . 
 												stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 												RP.atm p1 ⊢ p1
 												_some p1 ⊢ p1  
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 											∐. . 
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }												
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }												
 										∐. . 
 											alc_vs vs0 ⊢ { vs0 r2 } 
 											brk_rsp { rsp r2 } ⊢ { rsp r2 sb0 } 
@@ -5599,38 +5660,38 @@
 											$ r2 ⊢ r2,r20 
 											$ ip0 ⊢ ip0,ip00 
 											##_cns { { r20 ip00 } gl } ⊢ gl 
-											lp_hp { { gl lb1 rsp } r2 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											lp_hp { { gl lb1 rsp lb_n } r2 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 											∐ p1 ⊢ _some◂p1 . 
 												stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 												RP.atm p1 ⊢ p1
 												_some p1 ⊢ p1  
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
 											∐. . 
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 									∐. . 
 										mk_adt.f { ql0 pvl0 ipl0 } ⊢ ipl0 
 										$ ia1 ⊢ ia1,i1 
 										lst.nth { ipl0 i1 } ⊢ { ip0 ipl0 }
 										\[
-										lp_hp { { gl lb1 rsp } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+										lp_hp { { gl lb1 rsp lb_n } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 										∐ p1 ⊢ _some◂p1 . 
 											stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 											RP.atm p1 ⊢ p1 
 											_some p1 ⊢ p1 
-											∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 										∐. . 
-											∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
+											∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
 											\]
 										∐ ip0 ⊢ stt_v.ref◂iq0 . 
 											stt_v.ref iq0 ⊢ ip0 
-											lp_hp { { gl lb1 rsp } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											lp_hp { { gl lb1 rsp lb_n } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 											∐ p1 ⊢ _some◂p1 . 
 												stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 												RP.atm p1 ⊢ p1
 												_some p1 ⊢ p1  
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 											∐. . 
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }												
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }												
 										∐. . 
 											alc_vs vs0 ⊢ { vs0 r2 } 
 											brk_rsp { rsp r2 } ⊢ { rsp r2 sb0 } 
@@ -5649,36 +5710,38 @@
 											$ r2 ⊢ r2,r20 
 											$ ip0 ⊢ ip0,ip00 
 											##_cns { { r20 ip00 } gl } ⊢ gl 
-											lp_hp { { gl lb1 rsp } r2 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+											lp_hp { { gl lb1 rsp lb_n } r2 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 											∐ p1 ⊢ _some◂p1 . 
 												stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 												RP.atm p1 ⊢ p1
 												_some p1 ⊢ p1  
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }											
 											∐. . 
-												∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+												∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 								∐. . 
 									» "mov_ptn.ptn_to_r d8" _ ⊢ ee0 
 										_emt ee0 ⊢ _ 
 									∎| 
 							∐ a0 ⊢ stt_v.stt_adt◂{ ia0 rn0 pa0 } . 
 								∐ ia0'=ia1' . 
-									lp { { gl lb1 rsp } pa0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+									lp { { gl lb1 rsp lb_n } pa0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 									∐ p1 ⊢ _some◂p1 . 
 										stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 										RP.atm p1 ⊢ p1 
 										_some p1 ⊢ p1 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 									∐. . 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }										
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }										
 								∐. . 
-									∐ lb1 ⊢ _some◂lb1 . 
-										» _^ lb1 ⊢ lb1,ec1 
-											"\tjmp LB_" 0d' "\n" //
-										rp8.add_s8 { e0 ec1 } ⊢ e0 
-										_some lb1 ⊢ lb1 
+									∐ lb1 ⊢ _some◂{ lb1 rsp0 } . 
+										$ rsp ⊢ rsp,rsp1 
+										rb_rsp { rsp1 rsp0 lb1 e0 } ⊢ { rsp0 lb1 e0 }
+										##» _^ lb1 ⊢ lb1,ec1 
+										##	"\tjmp LB_" 0d' "\n" //
+										##rp8.add_s8 { e0 ec1 } ⊢ e0 
+										_some { lb1 rsp0 } ⊢ lb1 
 										_none {} ⊢ p1 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 											
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 											
 									∐. . 
 										» _^ _ ⊢ ec1
 											`	mov rdi,rt_err0 
@@ -5688,7 +5751,7 @@
 											// 
 										rp8.add_s8 { e0 ec1 } ⊢ e0 
 										_none {} ⊢ p1 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 											
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 											
 							∐. .
 								» "mov_ptn.ptn_to_r d6" _ ⊢ ee0 
 								_emt ee0 ⊢ _ 
@@ -5701,7 +5764,7 @@
 						» "alc_mtc_ptn 6" _ ⊢ se 
 						_emt se ⊢ se  
 						∎|
-			@.lp_hp { { gl lb1 rsp } r0 hp mp rl evv rv irv tav tv_n tv vs0 e0 dl }
+			@.lp_hp { { gl lb1 rsp lb_n } r0 hp mp rl evv rv irv tav tv_n tv vs0 e0 dl }
 				$ mp ⊢ 
 				∐ RP.rcd◂l1 . 
 					∐ hp ⊢ stt_v.ref◂q0; q0 ⊢ stt_v.rcd◂l0 . 
@@ -5711,13 +5774,13 @@
 						stt_v.ref q0 ⊢ h0 
 						##_cns { { r00 h0 } gl } ⊢ gl 
 						» 0r _ ⊢ j0 
-						lp_hp_lst { { gl lb1 rsp } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l }
+						lp_hp_lst { { gl lb1 rsp lb_n } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l }
 						∐ l ⊢ _some◂l . 
 							∐ l ⊢ _nil◂{} . 
 								_nil {} ⊢ l
 								RP.rcd l ⊢ p1 
 								_some p1 ⊢ p1 
-								∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+								∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 							∐. . 
 								$ gl ⊢ { gl_n gl } 
 								gbg.pnt gl_n ⊢ { gl_n sg } 
@@ -5729,18 +5792,20 @@
 								$ { gl_n gl } ⊢ gl 
 								RP.rcd l ⊢ p1 
 								_some p1 ⊢ p1 
-								∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+								∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 						∐. . 
 							_none {} ⊢ p1 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }							
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }							
 					∐ hp ⊢ stt_v.pv◂pv . 
-						∐ lb1 ⊢ _some◂lb1 . 
-							» _^ lb1 ⊢ lb1,se0 
-								"\tjmp LB_" 0d' "\n" //
-							rp8.add_s8 { e0 se0 } ⊢ e0
+						∐ lb1 ⊢ _some◂{ lb1 rsp0 } . 
+							##» _^ lb1 ⊢ lb1,se0 
+							##	"\tjmp LB_" 0d' "\n" //
+							##rp8.add_s8 { e0 se0 } ⊢ e0
+							$ rsp0 ⊢ rsp0,rsp00 
+							rb_rsp { rsp rsp00 lb1 e0 } ⊢ { rsp lb1 e0 }
 							_none {} ⊢ p1 
-							_some lb1 ⊢ lb1 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }							
+							_some { lb1 rsp0 } ⊢ lb1 
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }							
 						∐. . 	
 							» "alc_mtc_ptn.ptn_to_r d7" _ ⊢ ee0 
 							_emt ee0 ⊢ _ 
@@ -5764,7 +5829,7 @@
 							$ isp ⊢ isp,isp0 
 							_cns { isp0 dl } ⊢ dl
 							_some isp ⊢ isp 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
 						∐. . 
 							» "mov_ptn.ptn_to_r d4" _ ⊢ ee0 
 										_emt ee0 ⊢ _ 
@@ -5780,56 +5845,62 @@
 						_set_q { irv r1 isp0 } ⊢ { irv r1 }  
 						_cns { r1 rl } ⊢ rl
 						_some isp ⊢ isp 
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl isp }
 					∐ ast.mtc_cst◂c1 . 
 						$ c1 ⊢ 
 						∐ ast.cst_v◂v1 . 
 							stt_v.hp_im v1 ⊢ h 
 							RP.atm h ⊢ p1 
 							_some p1 ⊢ p1 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 						∐. ast.cst_name◂e1 . 
 							stt_v.hp_im_e e1 ⊢ h 
 							RP.atm h ⊢ p1 
 							_some p1 ⊢ p1 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 					∐. ast.mtc_agl◂{ ea1 mpa1 } . 
 						_lod_q { evv ea1 } ⊢ { evv ea1 k1 } 
 						∐ k1 ⊢ k_ctr◂{ ia1 na1 }; hp ⊢ stt_v.adt◂{ ax0 ql0 } . 
 							_lod_q { tav ax0 } ⊢ { tav ax0 { aw0 o0 } } 
 							∐ o0 ⊢ _some◂{ vl0 kl0 pvl0 ipl0 } . 
-								∐ lb1 ⊢ _some◂lb1 . 
+								∐ lb1 ⊢ _some◂{ lb1 rsp0 } . 
 									reg { rsp r0 } ⊢ { rsp r0 er0 br0 } 
-									» _^ er0,ia1,lb1 ⊢ er0,ia1,lb1,ec1 
+									inc_x lb_n ⊢ { lb2 lb_n } 
+									inc_x lb_n ⊢ { lb3 lb_n }
+									» _^ er0,ia1,lb2 ⊢ er0,ia1,lb2,ec1 
 										"\tmov rdi," 0' "\n" 
 										"\tcmp BYTE [rdi+6]," 1d' "\n" 
 										"\tjnz LB_" 2d' "\n" //
-									_some lb1 ⊢ lb1 
-									rp8.of_s8 ec1 ⊢ ec1 
-									rp8.cct { e0 ec1 } ⊢ e0 
+									rp8.add_s8 { e0 ec1 } ⊢ e0 
+									jmp_lb { lb3 e0 } ⊢ { lb3 e0 }
+									lb_etr { lb2 e0 } ⊢ { lb2 e0 } 
+									$ rsp ⊢ rsp,rsp1 
+									rb_rsp { rsp1 rsp0 lb1 e0 } ⊢ { rsp0 lb1 e0 }
+									lb_etr { lb3 e0 } ⊢ { lb3 e0 } 
+									_some { lb1 rsp0 } ⊢ lb1 
 									mk_adt.f { ql0 pvl0 ipl0 } ⊢ ipl0 
 									$ ia1 ⊢ ia1,i1 
 									lst.nth { ipl0 i1 } ⊢ { ip0 ipl0 }
-									lp_hp { { gl lb1 rsp } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+									lp_hp { { gl lb1 rsp lb_n } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 									∐ p1 ⊢ _some◂p1 . 
 										stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 										RP.atm p1 ⊢ p1 
 										_some p1 ⊢ p1 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 									∐. . 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }										
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }										
 								∐. . 
 									mk_adt.f { ql0 pvl0 ipl0 } ⊢ ipl0 
 									$ ia1 ⊢ ia1,i1 
 									lst.nth { ipl0 i1 } ⊢ { ip0 ipl0 }
-									lp_hp { { gl lb1 rsp } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+									lp_hp { { gl lb1 rsp lb_n } r0 ip0 mpa1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 									∐ p1 ⊢ _some◂p1 . 
 										stt_v.stt_adt { ia1 na1 p1 } ⊢ p1 
 										RP.atm p1 ⊢ p1 
 										_some p1 ⊢ p1 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 									∐. . 
-										∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
+										∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 }
 							∐. . 
 								» "mov_ptn.ptn_to_r d2" _ ⊢ ee0 
 										_emt ee0 ⊢ _ 
@@ -5838,30 +5909,30 @@
 							» "alc_mtc_ptn 6" _ ⊢ se 
 							_emt se ⊢ se  
 							∎|
-			@.lp_lst { { gl lb1 rsp } l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl }
+			@.lp_lst { { gl lb1 rsp lb_n } l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl }
 				∐ l0 ⊢ _cns◂{ p0 l0 }; l1 ⊢ _cns◂{ p1 l1 } . 
-					lp { { gl lb1 rsp } p0 p1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
+					lp { { gl lb1 rsp lb_n } p0 p1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
 					∐ p1 ⊢ _some◂p1 . 
-						lp_lst { { gl lb1 rsp } l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
+						lp_lst { { gl lb1 rsp lb_n } l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
 						∐ l ⊢ _some◂l . 
 							_cns { p1 l } ⊢ l 
 							_some l ⊢ l
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
 						∐. . 
 							##_none {} ⊢ l 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
 					∐. . 
 						_none {} ⊢ l 
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l } 					
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l } 					
 				∐ l0 ⊢ _nil◂{}; l1 ⊢ _nil◂{} . 
 					_nil {} ⊢ l 
 					_some l ⊢ l 
-					∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l }
+					∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l }
 				∐. . 
 					» "mov_ptn.ptn_to_r d1" _ ⊢ ee0 
 										_emt ee0 ⊢ _ 
 					∎|
-			@.lp_hp_lst { { gl lb1 rsp } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl }
+			@.lp_hp_lst { { gl lb1 rsp lb_n } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl }
 				∐ l0 ⊢ _cns◂{ h0 l0 }; l1 ⊢ _cns◂{ p1 l1 } . 
 					alc_vs vs0 ⊢ { vs0 r2 } 
 					brk_rsp { rsp r2 } ⊢ { rsp r2 sb0 } 
@@ -5881,31 +5952,31 @@
 					» 8r _ ⊢ an 
 					_add { xn an } ⊢ { xn _ }
 					mov.idx_lea_idx_x { rsp r2 r0 xn e0 } ⊢ { rsp r2 r0 _ e0 }		
-					lp_hp { { gl lb1 rsp } r2 h0 p1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
+					lp_hp { { gl lb1 rsp lb_n } r2 h0 p1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
 					∐ p1 ⊢ _some◂p1 . 
 						_inc j0 ⊢ j0 
-						lp_hp_lst { { gl lb1 rsp } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l }
+						lp_hp_lst { { gl lb1 rsp lb_n } j0 r0 l0 l1 rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l }
 						∐ l ⊢ _some◂l . 
 							_cns { p1 l } ⊢ l 
 							_some l ⊢ l 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
 						∐. . 
 							##_none {} ⊢ l 
-							∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
+							∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
 					∐. . 
 						_none {} ⊢ l 
-						∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
+						∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l } 
 				∐ l0 ⊢ _nil◂{}; l1 ⊢ _nil◂{} . 
 					_nil {} ⊢ l 
 					_some l ⊢ l 
-					∎ { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl l }
+					∎ { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl l }
 				∐. .
 					» "alc_mtc_ptn d0" _ ⊢ ee0 
 										_emt ee0 ⊢ _  
 					∎|			
-		§ f { { gl lb1 rsp } rl evv rv irv tav tv_n tv vs0 isp mp dl }
+		§ f { { gl lb1 rsp lb_n } rl evv rv irv tav tv_n tv vs0 isp mp dl }
 			rp8.e {} ⊢ e0 
-			lp { { gl lb1 rsp } isp mp rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢| 
+			lp { { gl lb1 rsp lb_n } isp mp rl evv rv irv tav tv_n tv vs0 e0 dl } ⊢| 
 		∎∎
 	§§ idx 
 		§ crt { irv d ip rl dl }
@@ -9591,7 +9662,7 @@
 						##» "ret_f D0" _ ⊢ eed 
 						##_emt eed ⊢ _ 
 						##_emt srl ⊢ srl
-						##rp8.add_s8 { ec0 srl } ⊢ ec0 
+						rp8.add_s8 { ec0 srl } ⊢ ec0 
 						$ lc ⊢
 						∐ ast.jmp◂{ o x } . 
 								$ x ⊢ x,s0
@@ -9910,11 +9981,6 @@
 					@.mtc { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv lm { eg0 eds ec0 } rl ft } 
 						$ lm ⊢ 
 						∐ p_cns◂{ { tl me } lm } .  
-							$ lb_n ⊢ lb_n,lb0 
-							» _^ lb0 ⊢ lb0,slb0 
-								"LB_" 0d' ":\n" //
-							_inc lb_n ⊢ lb_n 
-							_some lb0 ⊢ o0 
 							_nil {} ⊢ gl 
 							» 0r _ ⊢ gl_n 
 							$ { gl_n gl } ⊢ gl 
@@ -9922,6 +9988,11 @@
 							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs0 }
 							$ rl ⊢ rl,rl0 
 							$ rsp ⊢ rsp,rsp0 
+							$ rsp ⊢ rsp,rsp1
+							inc_x lb_n ⊢ { lb0 lb_n } 
+							» _^ lb0 ⊢ lb0,slb0 
+								"LB_" 0d' ":\n" //
+							_some { lb0 rsp1 } ⊢ o0 
 							mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp0 { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl0 } ⊢ { vs0 gl dl lb_n { ev evv } rsp0 { rv irv } tav tv_n tv { eg0 eds ec0 } rl0 } 
 							$ gl ⊢ { _ gl } 
 							gbg.dlt { gl ec0 } ⊢ ec0 
@@ -9960,7 +10031,7 @@
 								$ isp ⊢ isp,isp0 
 								stt_v.pnt.f isp0 ⊢ sisp 
 								$ isp ⊢ isp,isp0
-								alc_mtc_ptn.f { { gl o0 rsp } rl evv rv irv tav tv_n tv vs0 isp0 mp dl } ⊢ { { gl o0 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
+								alc_mtc_ptn.f { { gl o0 rsp lb_n } rl evv rv irv tav tv_n tv vs0 isp0 mp dl } ⊢ { { gl o0 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
 								∐ p1 ⊢ _some◂p1 . 
 									$ p1 ⊢ p1,p10 
 									stt_v.pnt.f p10 ⊢ sp1 
@@ -9973,265 +10044,247 @@
 									∎ { vs0 gl dl lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl }
 							∐ ast.mtc_cmp_test◂{ v0 v1 } .  
 								$ o0 ⊢ 
-								∐ _some◂lb0 . 
+								∐ _some◂{ lb0 rsp0 } . 
 									$ lb0 ⊢ lb0,lb00 
-									_some lb00 ⊢ o0 
-									∐ v0 ⊢ ast.test_var◂i0 . 
-										∐ v1 ⊢ ast.test_cst◂c1 . 
-											bl.t {} ⊢ bf0 
-											mtc_line_cmp_var_cst { bf0 i0 c1 lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl } ⊢ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
-											mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢| 
-										∐. v1 ⊢ ast.test_var◂i1 . 
-											_lod_q { irv i0 } ⊢ { irv i0 p0 } 
-											_lod_q { irv i1 } ⊢ { irv i1 p1 }
-											$ p0 ⊢ p0,p00 
-											stt_v.pnt.f p00 ⊢ sp0 
-											$ p1 ⊢ p1,p10 
-											stt_v.pnt.f p10 ⊢ sp1 
-											∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 } .
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
-													∐ h0 ⊢ stt_v.r64◂{} . 
-														reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-														reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
-														» _^ sr0,sr1,lb0,sp0,sp1 ⊢ sr0,sr1,lb0,sp0,sp1,e0 
-															";;" 3' "=<" 4' "\n" 
-															"\tmov rdi," 1' "\n" 
-															"\tcmp " 0' ",rdi\n" 
-															"\tjg LB_" 2d' "\n" // 
-														rp8.add_s8 { ec0 e0 } ⊢ ec0 
-														mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-													∐. . 
-														» "ret_f D668" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎|
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
-													reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-													» _^ sr0,x1,lb0 ⊢ sr0,x1,lb0,e0 
-														";; .. = ..\n" 
-														"\tmov rdi," 1d' "\n" 
-														"\tcmp " 0' ",rdi\n" 
-														"\tjg LB_" 2d' "\n" // 
-													rp8.add_s8 { ec0 e0 } ⊢ ec0 
-													mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|													
-												∐. . 
-													» "ret_f D669" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎|												
-											∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x0 . 
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
-													reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
-													» _^ x0,sr1,lb0 ⊢ x0,sr1,lb0,e0 
-														";; ..=.. \n" 
-														"\tmov rdi," 0d' "\n" 
-														"\tcmp " 1' ",rdi\n" 
-														"\tjg LB_" 2d' "\n" // 
-													rp8.add_s8 { ec0 e0 } ⊢ ec0 
-													mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
-													_setge { x1 x0 } ⊢ { x2 x0 bc } 
-													∐ bc'=1r .  
-														» _^ _ ⊢ ec1 
-															";; ..=..\n" // 
-														mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-													∐. . 
-														» _^ lb0 ⊢ lb0,e0 
-															";; .. = . \n" 
-															"\tjmp LB_" 0d' "\n" //
-														rp8.add_s8 { ec0 e0 } ⊢ ec0 
-														mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|						
-												∐. . 
-												» "ret_f D670" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎|	
-											∐. . 
-												» "ret_f D671" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎|
-									∐. v0 ⊢ ast.test_cst◂c0 . 
-										∐ v1 ⊢ ast.test_var◂i1 . 
-											bl.f {} ⊢ bf0 
-											mtc_line_cmp_var_cst { bf0 i1 c0 lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl } ⊢ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
-											mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-										∐. v1 ⊢ ast.test_cst◂c1 . 
-											∐ c1 ⊢ ast.cst_v◂cv1 . 
-												» "ret_f D672" _ ⊢ ee0 
-												_emt ee0 ⊢ _ 
-												∎|
-											∐ c1 ⊢ ast.cst_name◂in1 . 
-												» "ret_f D680" _ ⊢ ee0 
-												_emt ee0 ⊢ _ 
-												∎|
-											∐. .
-												» "ret_f D681" _ ⊢ ee0 
-												_emt ee0 ⊢ _ 
-												∎|
+									$ rsp0 ⊢ rsp0,rsp00
+									inc_x lb_n ⊢ { lb_t lb_n } 
+									inc_x lb_n ⊢ { lb_f lb_n }			 
+									_some { lb00 rsp00 } ⊢ o0 
+									cmp_test { rsp lb_n irv lb_t lb_f v0 v1 ec0 } ⊢ { rsp lb_n irv lb_t lb_f ec0 }
+									lb_etr { lb_f ec0 } ⊢ { lb_f ec0 } 
+									$ rsp ⊢ rsp,rsp1 
+									rb_rsp { rsp1 rsp0 lb0 ec0 } ⊢ { rsp0 lb0 ec0 }
+									lb_etr { lb_t ec0 } ⊢ { lb_t ec0 } 											
+									mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|		
 								∐. _none◂{} . 
 									_none {} ⊢ o0 
 									mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
 							∐. ast.mtc_test◂{ v0 v1 } .  
 								$ o0 ⊢ 
-								∐ _some◂lb0 . 
+								∐ _some◂{ lb0 rsp0 } . 
 									$ lb0 ⊢ lb0,lb00 
-									_some lb00 ⊢ o0 
-									∐ v0 ⊢ ast.test_var◂i0 . 
-										∐ v1 ⊢ ast.test_cst◂c1 . 
-											mtc_line_eq_var_cst { i0 c1 lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl } ⊢ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
-											mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢| 
-										∐. v1 ⊢ ast.test_var◂i1 . 
-											_lod_q { irv i0 } ⊢ { irv i0 p0 } 
-											_lod_q { irv i1 } ⊢ { irv i1 p1 }
-											∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 } .
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
-													∐ h0 ⊢ stt_v.r64◂{} . 
-														reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-														reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
-														» _^ sr0,sr1,lb0 ⊢ sr0,sr1,lb0,e0 
-														"\tmov rdi," 1' "\n" 
-														"\tcmp " 0' ",rdi\n" 
-														"\tjnz LB_" 2d' "\n" // 
-														rp8.add_s8 { ec0 e0 } ⊢ ec0 
-														mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-													∐ h0 ⊢ stt_v.ref◂q0 . 	
-														∐ q0 ⊢ stt_v.opq◂{} . 
-															reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-															reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
-															» _^ sr0,sr1,lb0 ⊢ sr0,sr1,lb0,e0 
-															"\tmov rdi," 1' "\n"
-															"\tmov rsi," 0' "\n" 
-															`	call eq_s8  
-															"\tcmp rax,1\n" 
-															"\tjnz LB_" 2d' "\n" // 
-															rp8.add_s8 { ec0 e0 } ⊢ ec0 
-															mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-														∐. . 
-															» "ret_f D683" _ ⊢ ee0 
-															_emt ee0 ⊢ _ 
-															∎| 
-													∐. . 
-														» "ret_f D673" _ ⊢ ee0 
-														_emt ee0 ⊢ _ 
-														∎|
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
-													reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-													» _^ sr0,x1,lb0 ⊢ sr0,x1,lb0,e0 
-													"\tmov rdi," 1d' "\n" 
-													"\tcmp " 0' ",rdi\n" 
-													"\tjnz LB_" 2d' "\n" // 
-													rp8.add_s8 { ec0 e0 } ⊢ ec0 
-													mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|													
-												∐. . 
-													» "ret_f D674" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎|												
-											∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x0 . 
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
-													reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
-													» _^ x0,sr1,lb0 ⊢ x0,sr1,lb0,e0 
-														"\tmov rdi," 0d' "\n" 
-														"\tcmp " 1' ",rdi\n" 
-														"\tjnz LB_" 2d' "\n" // 
-													rp8.add_s8 { ec0 e0 } ⊢ ec0 
-													mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-												∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
-													∐ x0'=x1' . 
-														mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-													∐. . 
-														» _^ lb0 ⊢ lb0,e0 
-															"\tjmp LB_" 0d' "\n" //
-														rp8.add_s8 { ec0 e0 } ⊢ ec0 
-														mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|						
-												∐. . 
-													» "ret_f D675" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎| 	
-											∐. . 
-												» "ret_f D676" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎| 	
-									∐. v0 ⊢ ast.test_cst◂c0 . 
-										∐ v1 ⊢ ast.test_var◂i1 . 
-											mtc_line_eq_var_cst { i1 c0 lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl } ⊢ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
-											mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
-										∐. v1 ⊢ ast.test_cst◂c1 . 
-											∐ c1 ⊢ ast.cst_v◂cv1 . 
-												» "ret_f D677" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎| 
-											∐. .
-												» "ret_f D678" _ ⊢ ee0 
-									_emt ee0 ⊢ _ 
-									∎|
+									$ rsp0 ⊢ rsp0,rsp00
+									inc_x lb_n ⊢ { lb_t lb_n } 
+									inc_x lb_n ⊢ { lb_f lb_n }			 
+									_some { lb00 rsp00 } ⊢ o0 
+									eq_test { rsp lb_n irv lb_t lb_f v0 v1 ec0 } ⊢ { rsp lb_n irv lb_t lb_f ec0 }
+									lb_etr { lb_f ec0 } ⊢ { lb_f ec0 } 
+									$ rsp ⊢ rsp,rsp1 
+									rb_rsp { rsp1 rsp0 lb0 ec0 } ⊢ { rsp0 lb0 ec0 }
+									lb_etr { lb_t ec0 } ⊢ { lb_t ec0 } 											
+									mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|		
 								∐. _none◂{} . 
 									_none {} ⊢ o0 
 									mtc_line { vs0 gl dl lb_n o0 { ev evv } rsp { rv irv } tav tv_n tv tl { eg0 eds ec0 } rl } ⊢|
 						∐. _nil◂{} . 
 							∎ { vs0 gl dl lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl }
-					@.mtc_line_eq_var_cst { i0 c1 lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+					@.cmp_test { rsp lb_n irv lb_t lb_f v0 v1 ec0 }
+						∐ v0 ⊢ ast.test_var◂i0 . 
+							∐ v1 ⊢ ast.test_cst◂c1 . 
+								bl.t {} ⊢ bf0 
+								cmp_var_cst { bf0 i0 c1 rsp lb_n irv lb_t lb_f ec0 } ⊢| 
+							∐. v1 ⊢ ast.test_var◂i1 . 
+								_lod_q { irv i0 } ⊢ { irv i0 p0 } 
+								_lod_q { irv i1 } ⊢ { irv i1 p1 }
+								$ p0 ⊢ p0,p00 
+								stt_v.pnt.f p00 ⊢ sp0 
+								$ p1 ⊢ p1,p10 
+								stt_v.pnt.f p10 ⊢ sp1 
+								» _^ sp0,sp1 ⊢ sp0,sp1,e0 
+									";;" 0' "=<" 1' "\n" //
+								rp8.add_s8 { ec0 e0 } ⊢ ec0 
+								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 } .
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
+										∐ h0 ⊢ stt_v.r64◂{} . 
+											cmp.idx_idx { rsp r0 r1 ec0 } ⊢ { rsp r0 r1 ec0 } 
+											jg_lb { lb_f ec0 } ⊢ { lb_f ec0 }
+											jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+											∎ { rsp lb_n irv lb_t lb_f ec0 }
+										∐. . 
+											» "ret_f D668" _ ⊢ ee0 
+											_emt ee0 ⊢ _ 
+											∎|
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
+										cmp.idx_im { rsp r0 x1 ec0 } ⊢ { rsp r0 x1 ec0 } 
+										jg_lb { lb_f ec0 } ⊢ { lb_f ec0 }
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+										∎	{ rsp lb_n irv lb_t lb_f ec0 }
+									∐. . 
+										» "ret_f D669" _ ⊢ ee0 
+										_emt ee0 ⊢ _ 
+										∎|												
+								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x0 . 
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
+										cmp.idx_im { rsp r1 x0 ec0 } ⊢ { rsp _ _ ec0 } 
+										jl_lb { lb_f ec0 } ⊢ { lb_f ec0 }
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 	
+										∎ { rsp lb_n irv lb_t lb_f ec0 }									
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
+										_setge { x1 x0 } ⊢ { x2 x0 bc } 
+										∐ bc'=1r .  
+											jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+											∎ { rsp lb_n irv lb_t lb_f ec0 }
+										∐. . 
+											jmp_lb { lb_f ec0 } ⊢ { lb_f ec0 }
+											∎ { rsp lb_n irv lb_t lb_f ec0 } 
+									∐. . 
+										» "ret_f D670" _ ⊢ ee0 
+										_emt ee0 ⊢ _ 
+										∎|	
+								∐. . 
+									» "ret_f D671" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎|
+						∐. v0 ⊢ ast.test_cst◂c0 . 
+							∐ v1 ⊢ ast.test_var◂i1 . 
+								bl.f {} ⊢ bf0 
+								cmp_var_cst { bf0 i1 c0 rsp lb_n irv lb_t lb_f ec0 } ⊢| 
+							∐. v1 ⊢ ast.test_cst◂c1 . 
+								∐ c1 ⊢ ast.cst_v◂cv1 . 
+									» "ret_f D672" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎|
+								∐ c1 ⊢ ast.cst_name◂in1 . 
+									» "ret_f D680" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎|
+								∐. .
+									» "ret_f D681" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎|
+					@.eq_test { rsp lb_n irv lb_t lb_f v0 v1 ec0 }
+						∐ v0 ⊢ ast.test_var◂i0 . 
+							∐ v1 ⊢ ast.test_cst◂c1 . 
+								eq_var_cst { i0 c1 rsp lb_n irv lb_t lb_f ec0 } ⊢|
+							∐. v1 ⊢ ast.test_var◂i1 . 
+								_lod_q { irv i0 } ⊢ { irv i0 p0 } 
+								_lod_q { irv i1 } ⊢ { irv i1 p1 }
+								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 } .
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
+										∐ h0 ⊢ stt_v.r64◂{} . 
+											cmp.idx_idx { rsp r0 r1 ec0 } ⊢ { rsp r0 r1 ec0 } 
+											jnz_lb { lb_f ec0 } ⊢ { lb_f ec0 }		
+											jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+											∎ { rsp lb_n irv lb_t lb_f ec0 }
+										∐ h0 ⊢ stt_v.ref◂q0 . 	
+											∐ q0 ⊢ stt_v.opq◂{} . 
+												reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
+												reg { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
+												» _^ sr0,sr1,lb_f ⊢ sr0,sr1,lb_f,e0 
+													"\tmov rdi," 1' "\n"
+													"\tmov rsi," 0' "\n" 
+													`	call eq_s8  
+													"\tcmp rax,1\n" 
+													"\tjnz LB_" 2d' "\n" // 
+												rp8.add_s8 { ec0 e0 } ⊢ ec0 
+												jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 }
+												∎ { rsp lb_n irv lb_t lb_f ec0 }
+											∐. . 
+												» "ret_f D683" _ ⊢ ee0 
+												_emt ee0 ⊢ _ 
+												∎| 
+										∐. . 
+											» "ret_f D673" _ ⊢ ee0 
+											_emt ee0 ⊢ _ 
+											∎|
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
+										cmp.idx_im { rsp r0 x1 ec0 } ⊢ { rsp _ _ ec0 } 
+										jnz_lb { lb_f ec0 } ⊢ { lb_f ec0 } 
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
+									∐. . 
+										» "ret_f D674" _ ⊢ ee0 
+										_emt ee0 ⊢ _ 
+										∎|												
+								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x0 . 
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp◂{ r1 h1 } .
+										cmp.idx_im { rsp r1 x0 ec0 } ⊢ { rsp r1 x0 ec0 } 
+										jnz_lb { lb_f ec0 } ⊢ { lb_f ec0 } 
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
+									∐ p1 ⊢ RP.atm◂a1; a1 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x1 .
+										∐ x0'=x1' . 
+											jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 }
+											∎ { rsp lb_n irv lb_t lb_f ec0 } 
+										∐. . 
+											jmp_lb { lb_f ec0 } ⊢ { lb_f ec0 }
+											∎ { rsp lb_n irv lb_t lb_f ec0 } 
+									∐. . 
+										» "ret_f D675" _ ⊢ ee0 
+										_emt ee0 ⊢ _ 
+										∎| 	
+								∐. . 
+									» "ret_f D676" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎| 	
+						∐. v0 ⊢ ast.test_cst◂c0 . 
+							∐ v1 ⊢ ast.test_var◂i1 . 
+								eq_var_cst { i1 c0 rsp lb_n irv lb_t lb_f ec0 } ⊢|
+							∐. v1 ⊢ ast.test_cst◂c1 . 
+								∐ c1 ⊢ ast.cst_v◂cv1 . 
+									» "ret_f D677" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎| 
+								∐. .
+									» "ret_f D678" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎|	
+					@.eq_var_cst { i0 c1 rsp lb_n irv lb_t lb_f ec0 }
 						_lod_q { irv i0 } ⊢ { irv i0 p0 } 
 						∐ c1 ⊢ ast.cst_v◂cv1 . 
 							$ cv1 ⊢ 
 							∐ ast.r64◂x1 . 
 								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 } .
-									reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-									» _^ sr0,x1,lb0 ⊢ sr0,x1,lb0,e0 
-										"\tmov rdi," 1d' "\n" 
-										"\tcmp " 0' ",rdi\n" 
-										"\tjnz LB_" 2d' "\n" // 
-									rp8.add_s8 { ec0 e0 } ⊢ ec0 
-									∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+									cmp.idx_im { rsp r0 x1 ec0 } ⊢ { rsp r0 x1 ec0 } 
+									jnz_lb { lb_f ec0 } ⊢ { lb_f ec0 } 
+									jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+									∎ { rsp lb_n irv lb_t lb_f ec0 }
 								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x0 . 
 									∐ x0'=x1' . 
-										∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 } 
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
 									∐. . 
-										» _^ lb0 ⊢ lb0,e0 
-											"\tjmp LB_" 0d' "\n" //
-										rp8.add_s8 { ec0 e0 } ⊢ ec0 
-										∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+										jmp_lb { lb_f ec0 } ⊢ { lb_f ec0 } 
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
 								∐. . 
 									» "ret_f D679" _ ⊢ ee0 
 									_emt ee0 ⊢ _ 
 									∎|	
 							∐. ast.s8◂s1 . 
-								∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+								» "ret_f D679" _ ⊢ ee0 
+									_emt ee0 ⊢ _ 
+									∎|
 						∐. .
 							» "ret_f D680" _ ⊢ ee0 
 									_emt ee0 ⊢ _ 
 									∎|
-					@.mtc_line_cmp_var_cst { bf i0 c1 lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+					@.cmp_var_cst { bf i0 c1 rsp lb_n irv lb_t lb_f ec0 }
 						_lod_q { irv i0 } ⊢ { irv i0 p0 } 
 						∐ c1 ⊢ ast.cst_v◂cv1 . 
 							$ cv1 ⊢ 
 							∐ ast.r64◂x1 . 
 								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 } .
-									reg { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-									» _^ sr0,x1,lb0 ⊢ sr0,x1,lb0,e0 
-										"\tmov rdi," 1d' "\n" 
-										"\tcmp " 0' ",rdi\n" // 
-									rp8.add_s8 { ec0 e0 } ⊢ ec0 
+									cmp.idx_im { rsp r0 x1 ec0 } ⊢ { rsp r0 x1 ec0 }
 									$ bf ⊢ 
 									∐ bl.t◂{} . 
-										» _^ lb0,x1 ⊢ lb0,x1,e0 
-											";;" " .. =< " 1d' "\n" 
-											"\tjg LB_" 0d' "\n" // 
-										rp8.add_s8 { ec0 e0 } ⊢ ec0 
-										∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+										jg_lb { lb_f ec0 } ⊢ { lb_f ec0 } 
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 }	
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
 									∐. bl.f◂{} . 
-										» _^ lb0,x1 ⊢ lb0,x1,e0 
-											";;"  1d' " =< .. " "\n"  
-											"\tjl LB_" 0d' "\n" // 
-										rp8.add_s8 { ec0 e0 } ⊢ ec0 
-										∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+										jl_lb { lb_f ec0 } ⊢ { lb_f ec0 } 
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 }
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
 								∐ p0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂iv; iv ⊢ ast.r64◂x0 . 
 									_setge { x1 x0 } ⊢ { x1 x0 bc } 
 									∐ bf ⊢ bl.t◂{}; bc'=1r . 
-										∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 }
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
 									∐ bf ⊢ bl.f◂{}; bc'=0r . 
-										∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+										jmp_lb { lb_t ec0 } ⊢ { lb_t ec0 }
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
 									∐. . 
-										» _^ lb0 ⊢ lb0,e0 
-											"\tjmp LB_" 0d' "\n" //
-										rp8.add_s8 { ec0 e0 } ⊢ ec0 
-										∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
+										jmp_lb { lb_f ec0 } ⊢ { lb_f ec0 }
+										∎ { rsp lb_n irv lb_t lb_f ec0 }
 								∐. . 
 									» "ret_f D681" _ ⊢ ee0 
 									_emt ee0 ⊢ _ 
@@ -10240,7 +10293,6 @@
 								» "ret_f D682" _ ⊢ ee0 
 									_emt ee0 ⊢ _ 
 									∎| 
-								##∎ { lb_n lb0 { ev evv } rsp { rv irv } tv tl ec0 rl }
 						∐. .
 							» "ret_f D683" _ ⊢ ee0 
 									_emt ee0 ⊢ _ 
@@ -10248,10 +10300,6 @@
 					@.id_mtc { { gfl cl } { is sis } lb_n { ev evv } rsp { rv irv } tav tv_n tv ilm { eg0 eds ec0 } rl ft } 
 						$ ilm ⊢ 
 						∐ p_cns◂{ { mp tl me } ilm } .
-							inc_x lb_n ⊢ { lb0 lb_n } 
-							» _^ lb0 ⊢ lb0,slb0 
-								"LB_" 0d' ":\n" // 
-							_some lb0 ⊢ o0 
 							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs0 }
 							$ is ⊢ is,is0 
 							stt_v.mk_rset { is0 vs0 } ⊢ vs0 
@@ -10260,7 +10308,12 @@
 							$ rl ⊢ rl,rl0 
 							$ is ⊢ is,is0 
 							$ rsp ⊢ rsp,rsp0 
-							alc_mtc_ptn.f { { gl o0 rsp0 } rl0 evv rv irv tav tv_n tv vs0 is0 mp dl } ⊢ { { gl o0 rsp0 } rl0 evv rv irv tav tv_n tv vs0 e0 dl p1 } 
+							$ rsp ⊢ rsp,rsp00
+							inc_x lb_n ⊢ { lb0 lb_n } 
+							» _^ lb0 ⊢ lb0,slb0 
+								"LB_" 0d' ":\n" // 
+							_some { lb0 rsp00 } ⊢ o0 
+							alc_mtc_ptn.f { { gl o0 rsp0 lb_n } rl0 evv rv irv tav tv_n tv vs0 is0 mp dl } ⊢ { { gl o0 rsp0 lb_n } rl0 evv rv irv tav tv_n tv vs0 e0 dl p1 } 
 							∐ p1 ⊢ _some◂p1 . 
 								$ p1 ⊢ p1,p10 
 								stt_v.pnt.f p10 ⊢ sp1 
@@ -10285,7 +10338,7 @@
 							_nil {} ⊢ dl
 							_none {} ⊢ o0
 							##$ rl ⊢ rl,rl0  
-							alc_mtc_ptn.f { { gl o0 rsp } rl evv rv irv tav tv_n tv vs0 is mp dl } ⊢ { { gl o0 rsp } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
+							alc_mtc_ptn.f { { gl o0 rsp lb_n } rl evv rv irv tav tv_n tv vs0 is mp dl } ⊢ { { gl o0 rsp lb_n } rl evv rv irv tav tv_n tv vs0 e0 dl p1 } 
 							∐ p1 ⊢ _some◂p1 . 
 								$ p1 ⊢ p1,p10 
 								stt_v.pnt.f p10 ⊢ sp1 
@@ -13983,6 +14036,10 @@
 					`	unt_6: dq 0x00_06_0000_0000_0000 
 					`	unt_7: dq 0x00_07_0000_0000_0000 
 					`	unt_8: dq 0x00_08_0000_0000_0000 
+					`	unt_9: dq 0x00_08_0000_0000_0000 
+					`	unt_10: dq 0x00_08_0000_0000_0000 
+					`	unt_11: dq 0x00_08_0000_0000_0000 
+					`	unt_12: dq 0x00_08_0000_0000_0000 
 					`
 					//
 				rp8.of_s8 eds ⊢ eds 
@@ -14621,6 +14678,7 @@
 				`	tmp: resq 64
 				`	ret_vct: resq 64
 				` rsp_tmp: resq 1
+				`	RB: resq 1 
 				`
 				`; emt buffer 
 				`	EMT_BUF_OFS: resq 1 

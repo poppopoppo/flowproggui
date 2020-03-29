@@ -3283,6 +3283,8 @@
 						∎|  
 		§ 
 			@.slv_file_lp { RTM_ST i il MV LCV tx_n NS gel gfl EC } 
+				_emt gel ⊢ gel 
+				_getchar {} ⊢ _ 
 				$ gel ⊢
 				∐ _cns◂{ e gel } . 
 					$ e ⊢
@@ -5152,6 +5154,7 @@
 		∐ OpADL.syntax.prs_vld◂a0 . 
 			_emt %[ "D0" ] ⊢ _ 
 			##OpADL.ast.pnt { %[ 0r ] a0 } ⊢ { d0 sa0 }  
+			_emt a0 ⊢ a0
 			OpADL.slv_file a0 ⊢ M 
 			##_s8_len sa0 ⊢ { sa0 ls0 } 
 			\\_emt ls0 ⊢ _ 
@@ -5198,6 +5201,8 @@
 	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ _ 
 	∎
 §% 
+	_nil {} ⊢ a0 
+	OpADL.slv_file a0 ⊢ _
 	##OpADL.ast.dst_reg %[ "xy0" ] ⊢ r 
 	##OpADL.RP.atm r ⊢ p 
 	##OpADL.ast.pnt_dst_ptn p ⊢ sa0  
