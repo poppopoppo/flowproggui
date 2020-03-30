@@ -5566,7 +5566,19 @@
 							"\tmov QWORD [rbx+" 1d' "],rax\n" 
 							// 
 						rp8.add_s8 { e sc0 } ⊢ e
-						∎ { rsp r x e }
+						∎ { rsp r x e } 
+				§ lea_reg_idx { rsp s x i e } 
+					emt_reg { rsp i } ⊢ { rsp i si bi } 
+					∐ bi ⊢ bl.t◂{} . 
+						» _^ s,x,si ⊢ s,x,_,sc0 
+							"\tmov QWORD [" 0' "+" 1d' "]," 2' "\n" //
+						rp8.add_s8 { e sc0 } ⊢ e 
+						∎ { rsp s x i e } 
+					∐. . 
+						» _^ s,x,si ⊢ s,x,_,sc0 
+							"\tMOV_RDI QWORD [" 0' "+" 1d' "]," 2' "\n" //
+						rp8.add_s8 { e sc0 } ⊢ e 
+						∎ { rsp s x i e } 
 				§ idx_rax { rsp r0 e } 
 					emt_reg { rsp r0 } ⊢ { rsp r0 sr br }
 					» _^ sr ⊢ _,sc0 
@@ -7351,53 +7363,43 @@
 					∎ { tav rsp v0 ec0 }
 				∎∎
 			§§ push_regs 
-				§ @.lp { rsp irv vv v i n l e } 
+				§ @.lp { rsp irv v i n l e } 
 					∐ i' = REG_N . 
 						sub_rsp n ⊢ { n e1 } 
 						rp8.pfx_s8 { e1 e } ⊢ e 
-						∎ { rsp irv vv v i n l e } 
+						∎ { rsp irv v i n l e } 
 					∐. . 
 						_lod_q { v i } ⊢ { v i b } 
 						$ b ⊢ 
 						∐ bl.f◂{} . 
 							_inc i ⊢ i 
-							lp { rsp irv vv v i n l e } ⊢| 
+							lp { rsp irv v i n l e } ⊢| 
 						∐. bl.t◂{} . 
 							» REG_N _ ⊢ m0 
 							_add { m0 rsp } ⊢ { m0 rsp } 
-							##_add { m0 n } ⊢ { m0 n } 
-							rset.set_t { vv m0 } ⊢ { vv m0 } 
+							rset.set_f { v i } ⊢ { v i } 
+							rset.set_t { v m0 } ⊢ { v m0 } 
 							 $ i ⊢ i,i0 
 							_cns { i0 l } ⊢ l 
-							reg { rsp i } ⊢ { rsp i si b0 } 
-							∐ b0 ⊢ bl.t◂{} . 
-								» _^ n,si ⊢ n,si,e1 
-									"\tmov QWORD [rsp+8*" 0d' "]," 1' "\n" 
-									//
-								rp8.add_s8 { e e1 } ⊢ e 
-								_inc i ⊢ i 
-								_inc n ⊢ n 
-								_inc rsp ⊢ rsp 
-								lp { rsp irv vv v i n l e } ⊢| 
-							∐. . 
-								» _^ n,si ⊢ n,si,e1 
-									##"\tmov rdi," 1' "\n" 
-									##"\tmov QWORD [rsp+8*" 0d' "],rdi\n" 
-									"\tMOV_RDI QWORD [rsp+8*" 0d' "], " 1' "\n"
-									//
-								rp8.add_s8 { e e1 } ⊢ e 
-								_inc i ⊢ i 
-								_inc n ⊢ n 
-								_inc rsp ⊢ rsp 
-								lp { rsp irv vv v i n l e } ⊢| 
-				§ f { rsp irv vv rl } 
+							##reg { rsp i } ⊢ { rsp i si b0 } 
+							» "rsp" _ ⊢ si 
+							» 3r _ ⊢ xa 
+							_shl { n xa } ⊢ { n xa } 
+							mov.lea_reg_idx { rsp si n i e } ⊢ { rsp _ n i e } 
+							_shr { n xa } ⊢ { n _ } 
+							_inc i ⊢ i 
+							_inc n ⊢ n 
+							_inc rsp ⊢ rsp 
+							lp { rsp irv v i n l e } ⊢| 
+				§ f { rsp irv rl er } 
 					stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl v } 
 					» 0r _ ⊢ i 
 					» 0r _ ⊢ n 
 					_nil {} ⊢ l 
 					rp8.e {} ⊢ e 
-					lp { rsp irv vv v i n l e } ⊢ { rsp irv vv v i n l e }
-					∎ { rsp irv vv rl l e n }
+					lp { rsp irv v i n l e } ⊢ { rsp irv v i n l e }
+					rp8.cct { er e } ⊢ er 
+					∎ { rsp irv v rl er n l }
 				∎∎
 			§ shft { i n } 
 				» REG_N _ ⊢ j 
@@ -10074,12 +10076,10 @@
 				§ 
 					@.stt_call { tav o lb_n rsp irv rl rsp_s p0 is }
 						rp8.e {} ⊢ er 
+						» REG_N _ ⊢ nb 
+						_add { nb rsp } ⊢ { nb rsp }
+						push_regs.f { rsp irv rl er } ⊢ { rsp irv v0 rl er n l }
 						∐ rsp_s'=0r . 
-							» REG_N _ ⊢ nb 
-							_add { nb rsp } ⊢ { nb rsp }
-							rset.ini {} ⊢ v0 
-							push_regs.f { rsp irv v0 rl } ⊢ { rsp irv v0 rl l e n }
-							rp8.cct { er e } ⊢ er 
 							_inc rsp ⊢ rsp 
 							shft_ptn { p0 rsp } ⊢ { p0 rsp }
 							_dec rsp ⊢ rsp 
@@ -10093,11 +10093,6 @@
 							rp8.add_s8 { er e1 } ⊢ er 
 							∎ { tav o lb_n rsp irv rl rsp_s er l v0 nb } 
 						∐. . 
-							» REG_N _ ⊢ nb 
-							_add { nb rsp } ⊢ { nb rsp }
-							rset.ini {} ⊢ v0 
-							push_regs.f { rsp irv v0 rl } ⊢ { rsp irv v0 rl l e n }
-							rp8.cct { er e } ⊢ er 
 							inc_x lb_n ⊢ { lbr lb_n }  
 							» _^ lbr ⊢ lbr,s0 
 								"\tpush LB_" 0d' "\n" // 
