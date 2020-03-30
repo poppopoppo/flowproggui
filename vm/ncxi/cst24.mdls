@@ -2729,6 +2729,27 @@
 				bl.f {} ⊢ b 
 				_mk_arr { %[ 64r ] b } ⊢ { _ _ v } 
 				∎ v 
+			§ @.max_t v 
+					» 0r _ ⊢ i 
+					» 0r _ ⊢ j 
+					max_t_lp { v i j } ⊢| 
+				@.max_t_lp { v i j } 
+					∐ i'=64r . 
+						∎ { v j } 
+					∐. . 
+						_lod_q { v i } ⊢ { v i b } 
+						$ b ⊢ 
+						∐ bl.f◂{} . 
+							_inc i ⊢ i 
+							max_t_lp { v i j } ⊢| 
+						∐. bl.t◂{} . 
+							$ i ⊢ i,i0
+							_inc i ⊢ i 
+							max_t_lp { v i i0 } ⊢| 
+			\[
+			§ pnt v 
+				max_t v ⊢ { v i } 
+			\]
 			§ set_t { v0 i } 
 				bl.t {} ⊢ b 
 				_exc_q { v0 i b } ⊢ { v0 i _ } 
@@ -2803,23 +2824,6 @@
 						∐. bl.f◂{} . 
 							_inc i ⊢ i 
 							min_f_lp { v i } ⊢| 	
-			§ @.max_t v 
-					» 0r _ ⊢ i 
-					» 0r _ ⊢ j 
-					max_t_lp { v i j } ⊢| 
-				@.max_t_lp { v i j } 
-					∐ i'=64r . 
-						∎ { v j } 
-					∐. . 
-						_lod_q { v i } ⊢ { v i b } 
-						$ b ⊢ 
-						∐ bl.f◂{} . 
-							_inc i ⊢ i 
-							max_t_lp { v i j } ⊢| 
-						∐. bl.t◂{} . 
-							$ i ⊢ i,i0
-							_inc i ⊢ i 
-							max_t_lp { v i i0 } ⊢| 
 			§ @.is_zero_lp { v i }  
 				∐ i'=64r .
 					bl.t {} ⊢ b 
