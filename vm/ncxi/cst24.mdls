@@ -3284,7 +3284,7 @@
 		§ 
 			@.slv_file_lp { RTM_ST i il MV LCV tx_n NS gel gfl EC } 
 				_emt gel ⊢ gel 
-				_getchar {} ⊢ _ 
+				\\_getchar {} ⊢ _ 
 				$ gel ⊢
 				∐ _cns◂{ e gel } . 
 					$ e ⊢
@@ -3301,8 +3301,11 @@
 							_nil {} ⊢ ns_t 
 							iso { ns_m ns_e ns_t } ⊢ NS0 
 							iso { mmv mev mtv mv_n } ⊢ MV 
+							_emt %[ "Dx0" ] ⊢ _ 
+							_emt gel0 ⊢ gel0 
+							_emt gel ⊢ gel 
 							slv_file_lp { RTM_ST i0 il MV LCV tx_n NS0 gel0 gfl EC } ⊢ { RTM_ST i0 il MV LCV tx_n NS0 gfl EC }
-							##slv_file_lp { RTM_ST i0 il { mmv mev mtv mv_n } LCV tx_n { ns_m ns_e ns_t } gel0 gfl { eds dd ep0 ec0 rtm_n lb_n } } ⊢ { RTM_ST mv_n_0 il { mmv mev mtv mv_n } LCV tx_n { ns_m ns_e ns_t } gfl { eds dd ep0 ec0 rtm_n lb_n } }
+							_emt gel ⊢ gel 
 							inv MV ⊢ { mmv mev mtv mv_n } 
 							inv NS0 ⊢ { ns_m ns_e ns_t } 
 							_exc_q { mmv i0 ns_m } ⊢ { mmv i0 _ } 
@@ -3318,6 +3321,7 @@
 								_cns { { w o } ns_m } ⊢ ns_m
 								iso { mmv mev mtv mv_n } ⊢ MV 
 								iso { ns_m ns_e ns_t } ⊢ NS 
+								\\_emt gel ⊢ gel
 								slv_file_lp { RTM_ST i il MV LCV tx_n NS gel gfl EC } ⊢|
 							∐. _nil◂{} . 
 								» "slv_file_lp 0" _ ⊢ se 
@@ -5137,22 +5141,23 @@
 	^ _ ⊢ sf0
 		`§§ M0
 		`	∎∎ 
+		`§§ M1 = M0
 		// 
 	##_s8_len sf0 ⊢ { sf0 lsf0 } 
 	##_emt lsf0 ⊢ _ 
-	_emt sf0 ⊢ sf0 
+	\\_emt sf0 ⊢ sf0 
 	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf1 }
+	\\_info {} ⊢ {} 
 	_in_fn fn0 ⊢ { _ sf1 } 
-	##_emt sf1 ⊢ sf1 
-	_info {} ⊢ {} 
-	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { _ r0 a0 } 
+	_emt sf1 ⊢ sf1 
+	OpADL.syntax.file.prs { sf1 %[ 0r ] } ⊢ { _ r0 a0 } 
 	_emt r0 ⊢ _ 
 	_emt a0 ⊢ a0  
 	$ a0 ⊢ 
 	∐ _some◂a0 . 
 		$ a0 ⊢ 
 		∐ OpADL.syntax.prs_vld◂a0 . 
-			_emt %[ "D0" ] ⊢ _ 
+			_emt %[ "D1" ] ⊢ _ 
 			##OpADL.ast.pnt { %[ 0r ] a0 } ⊢ { d0 sa0 }  
 			_emt a0 ⊢ a0
 			OpADL.slv_file a0 ⊢ M 
@@ -5188,21 +5193,23 @@
 		_none {} ⊢ a
 		∎ a
 §% 
-^ _ ⊢ sf0
+	^ _ ⊢ sf0
 		`§§ M0
 		`	∎∎ 
+		`§§ M1 = M0
 		// 
 	##_s8_len sf0 ⊢ { sf0 lsf0 } 
 	##_emt lsf0 ⊢ _ 
-	_emt sf0 ⊢ sf0 
+	\\_emt sf0 ⊢ sf0 
 	##_in_fn %[ "cst28.mdls" ] ⊢ { _ sf1 }
 	##_in_fn fn0 ⊢ { _ sf1 } 
 	##_emt sf1 ⊢ sf1 
-	OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ _ 
+	\\OpADL.syntax.file.prs { sf0 %[ 0r ] } ⊢ { _ _ a0 }
+	\\_emt a0 ⊢ a0  
 	∎
 §% 
-	_nil {} ⊢ a0 
-	OpADL.slv_file a0 ⊢ _
+	\\_nil {} ⊢ a0 
+	\\OpADL.slv_file a0 ⊢ _
 	##OpADL.ast.dst_reg %[ "xy0" ] ⊢ r 
 	##OpADL.RP.atm r ⊢ p 
 	##OpADL.ast.pnt_dst_ptn p ⊢ sa0  
@@ -5215,8 +5222,8 @@
 		`	∎ x 
 		// 
 	##_emt sx0 ⊢ sx0 
-	OpADL.syntax.lc_code.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 } 
-	_emt { sx0 r0 a0 } ⊢ _ 
+	\\OpADL.syntax.lc_code.prs { sx0 %[ 0r ] } ⊢ { sx0 r0 a0 } 
+	\\_emt { sx0 r0 a0 } ⊢ _ 
 	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf0 }
 	##E1 {} ⊢ _ 
 	_emt _args ⊢ args
