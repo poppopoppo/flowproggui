@@ -60,9 +60,7 @@ name:
 file:
   | EOF { [] }
 (*  | LCE WC EQ name EOF { (Some $4,[]) } *)
-  | def_mdl file {
-    let ms = $2 in
-    $1::ms }
+  | def_mdl file { $1::$2 }
   ;
 file_top:
   | gl_etr_lst EOF { $1 }

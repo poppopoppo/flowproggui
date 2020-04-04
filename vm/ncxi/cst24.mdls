@@ -21,7 +21,11 @@
 	$ a ⊢ 
 	∐. iso◂a . 
 		∎ a 
-	
+§ setge { x y } 
+	∐ y'=<x' .
+		∎ { x y %[ 1r ] }
+	∐. . 
+		∎ { x y %[ 0r ] }
 § KB = 1024r 
 §§ rp8 
 	¶ @.t 
@@ -3919,7 +3923,6 @@
 					∎|  
 				
 			@.f_l0 { tv i0 y1 }   
-				\\_lod_q { tv i0 } ⊢ { tv i0 v0 } 
 				lod_o { tv i0 } ⊢ { tv i0 v0 } 
 				∐ v0 ⊢ var_ln◂y2 . 
 					f { tv y2 y1 } ⊢|
@@ -3934,28 +3937,21 @@
 					∐ i0'=i1' . 
 						∎ tv 
 					∐. .
-						\\_lod_q { tv i1 } ⊢ { tv i1 v1 }
 						lod_o { tv i1 } ⊢ { tv i1 v1 } 
 						∐ v1 ⊢ var_ln◂y2 . 
 							f_l1 { tv i0 lv y2 } ⊢|  
 						∐ v1 ⊢ var_l◂lv1 . 
-							\\_setge { lv lv1 } ⊢ { lv lv1 b }
 							∐ lv1'=<lv' . 
 								var i1 ⊢ yv 
 								RP.atm yv ⊢ yv 
 								var_ln yv ⊢ v2 
-								\\_get_q { tv i0 } ⊢ { tv i0 vt } 
-								\\_set_q { tv i0 v2 } ⊢ { tv i0 } 
 								set_o { tv i0 v2 } ⊢ { tv i0 } 
 								∎ tv
 							∐. .  
 								var i0 ⊢ yv 
 								RP.atm yv ⊢ yv 
 								var_ln yv ⊢ v2 
-								\\_get_q { tv i1 } ⊢ { tv i1 vt } 
-								\\_set_q { tv i1 v2 } ⊢ { tv i1 } 
 								set_o { tv i1 v2 } ⊢ { tv i1 } 
-				∐ imp◂{ y0 y1 } . 
 								∎ tv 
 						∐. . 
 							» "unify 4" _ ⊢ se 
@@ -3965,8 +3961,6 @@
 					$ y1 ⊢ y1,y1_0 
 					occurs { tv i0 lv y1 } ⊢ { tv i0 lv }
 					var_ln y1_0 ⊢ vy 
-					\\_get_q { tv i0 } ⊢ { tv i0 vt }
-					\\_set_q { tv i0 vy } ⊢ { tv i0 }  
 					set_o { tv i0 vy } ⊢ { tv i0 } 
 					∎ tv
 			∎∎ 
@@ -3992,6 +3986,7 @@
 					dta { a l } ⊢ y 
 					RP.atm y ⊢ y 
 					∎ { tv_n tv lv y al } 
+				∐ imp◂{ y0 y1 } .
 					inst_al { tv_n tv lv y0 al } ⊢ { tv_n tv lv y0 al } 
 					inst_al { tv_n tv lv y1 al } ⊢ { tv_n tv lv y1 al } 
 					imp { y0 y1 } ⊢ y2 
@@ -5086,214 +5081,7 @@
 					
 			∎∎
 		§§ mov 
-			¶ o 
-				∐ o8 : {} 
-				∐ o4 : {} 
-				∐ o2 : {} 
-				∐ o1 : {} 
-			§ pnt_o o 
-				$ o ⊢ 
-				∐ o8◂{} . 
-					» "8*" _ ⊢ s 
-					∎ s 
-				∐ o4◂{} . 
-					» "4*" _ ⊢ s 
-					∎ s
-				∐ o2◂{} . 
-					» "2*" _ ⊢ s 
-					∎ s
-				∐. o1◂{} . 
-					» "1*" _ ⊢ s 
-					∎ s
-			¶ w 
-				∐ w64 : {} 
-				∐ w32 : {}
-				∐ w16 : {} 
-				∐ w8 : {}
-			§ pnt_w w 
-				$ w ⊢ 
-				∐ w64◂{} . 
-					» "QWORD" _ ⊢ s 
-					∎ s 
-				∐ w32◂{} . 
-					» "DWORD" _ ⊢ s 
-					∎ s 
-				∐ w16◂{} . 
-					» "WORD" _ ⊢ s 
-					∎ s 
-				∐. w8◂{} . 
-					» "BYTE" _ ⊢ s 
-					∎ s  
 			§ emt_reg = reg 
-			¶ ea 
-				∐ reg : reg.t 
-				∐ lea : { w reg.t _r64 _opn◂{ o reg.t } } 
-			§ pnt { rsp ea } 
-				$ ea ⊢ 
-				∐ reg◂r . 
-					reg.pnt { rsp r } ⊢ { rsp r sr br } 
-					∎ { rsp sr br }
-				∐. lea◂{ w r0 x oo } . 
-					reg.pnt { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
-					pnt_w w ⊢ sw 
-					∐ oo ⊢ _some◂{ o r1 } . 
-						pnt_o o ⊢ so 
-						reg.pnt { rsp r1 } ⊢ { rsp r1 sr1 br1 } 
-						» _^ sw,x,sr0,so,sr1 ⊢ _,_,_,_,_,sc0 
-							0' " [" 2' "+" 1d' "+" 3' 4' "]" // 
-						bl.f {} ⊢ b 
-						∎ { rsp sc0 b }
-					∐. . 
-						» _^ sw,x,sr0 ⊢ _,_,_,sc0 
-							0' " [" 2' "+" 1d' "]" // 
-						bl.f {} ⊢ b 
-						∎ { rsp sc0 b }
-			§ to_reg { rsp m r e }
-				reg.pnt { rsp r } ⊢ { rsp r sr b } 
-				∐ b ⊢ bl.f◂{} . 
-					reg.alc_r m ⊢ { m rt } 
-					reg.pnt { rsp rt } ⊢ { rsp rt srt brt }
-					» _^ sr,srt ⊢ sr,srt,sc0 
-						"\tmov " 0' "," 1' "\n" //
-					rp8.add_s8 { e sc0 } ⊢ e 
-					∎ { rsp m rt e } 
-				∐. . 
-					∎ { rsp m r e }
-			§ mov { rsp ea0 ea1 } 
-				rp8.e {} ⊢ e0 
-				$ ea0 ⊢ 
-				∐ reg◂r0 . 
-					reg.pnt { rsp r0 } ⊢ { rsp r0 sr0 b0 } 
-					$ ea1 ⊢ 
-					∐ reg◂r1 . 
-						reg.pnt { rsp r1 } ⊢ { rsp r1 sr1 b1 } 
-						reg.eq { r0 r1 } ⊢ { r0 r1 b }
-						$ b ⊢ 
-						∐ bl.t◂{} . 
-							∎ { rsp e0 } 
-						∐. bl.f◂{} . 
-							∐ b0 ⊢ bl.f◂{}; b1 ⊢ bl.f◂{} . 
-								» _^ sr0,sr1 ⊢ sr0,sr1,sc0 
-									"\tmov rdi," 0' "\n" 
-									"\tmov " 1' ",rdi\n" // 
-								rp8.add_s8 { e0 sc0 } ⊢ e0
-								∎ { rsp e0 } 
-							∐. . 
-								» _^ sr0,sr1 ⊢ sr0,sr1,sc0 
-									"\tmov " 1' "," 0' "\n" //
-								rp8.add_s8 { e0 sc0 } ⊢ e0
-								∎ { rsp e0 }
-					∐. lea◂{ w1 r1_0 x1 oo1 } . 
-						pnt_w w1 ⊢ sw 
-						reg.msk_ini {} ⊢ m0 
-						reg.msk_r { m0 r0 } ⊢ { m0 r0 } 
-						reg.msk_r { m0 r1_0 } ⊢ { m0 r1_0 } 
-						to_reg { rsp m0 r1_0 e0 } ⊢ { rsp m0 rt1_0 e0 } 
-						reg.pnt { rsp rt1_0 } ⊢ { rsp rt1_0 srt1_0 _ }
-						∐ oo1 ⊢ _some◂{ o1 r1_1 } . 
-							pnt_o o1 ⊢ so 
-							reg.msk_r { m0 r1_1 } ⊢ { m0 r1_1 } 
-							to_reg { rsp m0 r1_1 e0 } ⊢ { rsp m0 rt1_1 e0 } 
-							reg.pnt { rsp rt1_1 } ⊢ { rsp rt1_1 srt1_1 _ }
-							$ b0 ⊢ 
-							∐ bl.t◂{} . 
-								» _^ sw,so,x1,sr0,srt1_0,srt1_1 ⊢ _,_,_,_,_,_,sc0 
-									"\tmov " 0' " [" 4' "+" 2d' "+" 1' 5' "]," 3' "\n" // 
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-							∐. bl.f◂{} . 
-								reg.alc_r m0 ⊢ { m0 rt0 } 
-								reg.pnt { rsp rt0 } ⊢ { rsp rt0 srt0 _ }
-								» _^ sw,so,x1,sr0,srt1_0,srt1_1,srt0 ⊢ _,_,_,_,_,_,_,sc0
-									"\tmov " 6' "," 3' "\n"  
-									"\tmov " 0' " [" 4' "+" 2d' "+" 1' 5' "]," 6' "\n" // 
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-						∐. . 
-							$ b0 ⊢ 
-							∐ bl.t◂{} . 
-								» _^ sw,x1,sr0,srt1_0 ⊢ _,_,_,_,sc0 
-									"\tmov " 0' " [" 3' "+" 1d' "]," 2' "\n" // 
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-							∐. bl.f◂{} . 
-								reg.alc_r m0 ⊢ { m0 rt0 } 
-								reg.pnt { rsp rt0 } ⊢ { rsp rt0 srt0 _ }
-								» _^ sw,x1,sr0,srt1_0,srt0 ⊢ _,_,_,_,_,sc0
-									"\tmov " 4' "," 2' "\n"  
-									"\tmov " 0' " [" 3' "+" 1d' "]," 4' "\n" // 
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-				∐. lea◂{ w0 r0_0 x0 oo0 } . 
-					$ ea1 ⊢ 
-					∐ reg◂r1 . 	
-						reg.pnt { rsp r1 } ⊢ { rsp r1 sr1 br1 } 
-						pnt_w w0 ⊢ sw 
-						reg.msk_ini {} ⊢ m0 
-						reg.msk_r { m0 r1 } ⊢ { m0 r0 } 
-						reg.msk_r { m0 r0_0 } ⊢ { m0 r0_0 } 
-						to_reg { rsp m0 r0_0 e0 } ⊢ { rsp m0 rt0_0 e0 } 
-						reg.pnt { rsp rt0_0 } ⊢ { rsp rt0_0 srt0_0 _ }
-						∐ oo0 ⊢ _some◂{ o0 r0_1 } . 
-							pnt_o o0 ⊢ so 
-							reg.msk_r { m0 r0_1 } ⊢ { m0 r0_1 } 
-							to_reg { rsp m0 r0_1 e0 } ⊢ { rsp m0 rt0_1 e0 } 
-							reg.pnt { rsp rt0_1 } ⊢ { rsp rt0_1 srt0_1 _ }
-							$ br1 ⊢ 
-							∐ bl.t◂{} . 
-								» _^ sw,so,x0,sr1,srt0_0,srt0_1 ⊢ _,_,_,_,_,_,sc0 
-									"\tmov " 3' "," 0' " [" 4' "+" 2d' "+" 1' 5' "]\n" // 
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-							∐. bl.f◂{} . 
-								reg.alc_r m0 ⊢ { m0 rt0 } 
-								reg.pnt { rsp rt0 } ⊢ { rsp rt0 srt0 _ }
-								» _^ sw,so,x0,sr1,srt0_0,srt0_1,srt0 ⊢ _,_,_,_,_,_,_,sc0
-									"\tmov " 6' "," 0' " [" 4' "+" 2d' "+" 1' 5' "]\n" 
-									"\tmov " 3' "," 6' "\n" //
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-						∐. . 
-							$ br1 ⊢ 
-							∐ bl.t◂{} . 
-								» _^ sw,x0,sr1,srt0_0 ⊢ _,_,_,_,sc0 
-									"\tmov " 2' "," 0' " [" 3' "+" 1d' "]\n" // 
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-							∐. bl.f◂{} . 
-								reg.alc_r m0 ⊢ { m0 rt0 } 
-								reg.pnt { rsp rt0 } ⊢ { rsp rt0 srt0 _ }
-								» _^ sw,x0,sr1,srt0_0,srt0 ⊢ _,_,_,_,_,sc0
-									"\tmov " 4' "," 0' " [" 3' "+" 1d' "]\n" 
-									"\tmov " 2' "," 4' "\n" //
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								∎ { rsp e0 }
-					∐. lea◂{ w1 r1_0 x1 oo1 } . 
-						» "mov lea lea" _ ⊢ ee0 
-						_emt ee0 ⊢ _ 
-						∎| 
-				\[
-				§ idx_lea_idx_x { rsp i0 i1 x }
-					reg.idx i0 ⊢ r0 
-					reg.idx i1 ⊢ r1 
-					_none ⊢ oo 
-					w64 {} ⊢ w 
-					lea { r1 w x oo } ⊢ ea1 
-					reg r0 ⊢ ea0 
-					mov { rsp ea0 ea1 } ⊢ { rsp e0 } 
-					∎ { rsp e0 }
-				§ cmp_BYTE_lea_im { rsp i x y } 
-					reg { rsp i } ⊢ { rsp i si bi }
-					∐ bi ⊢ bl.t◂{} . 
-						» _^ si,x,y ⊢ _,_,_,sc0 
-							"\tcmp BYTE [" 0' "+" 1' "]," 2d' "\n" // 
-						∎ { rsp sc0 } 
-					∐. . 
-						» _^ si,x,y ⊢ _,_,_,sc0 
-							"\tmov rdi," 0' "\n" 
-							"\tcmp BYTE [rdi+" 1' "]," 2d' "\n" // 
-						∎ { rsp sc0 } 
-						\]
 				§ idx_mem { rsp r0 m e0 } 
 					emt_reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
 					∐ br0 ⊢ bl.t◂{} . 
@@ -5439,7 +5227,7 @@
 					_shl { x xs } ⊢ { x _ } 
 					» 8r _ ⊢ xa 
 					_add { x xa } ⊢ { x _ } 
-					mov.lea_rax { rsp r x e } ⊢ { rsp r _ e } 
+					lea_rax { rsp r x e } ⊢ { rsp r _ e } 
 					∎ { rsp r i e } 
 				§ idx_idx_blk_n { rsp r0 r1 i e } 
 					$ i ⊢ i,xn 
@@ -5447,7 +5235,7 @@
 					_shl { xn sn } ⊢ { xn _ } 
 					» 8r _ ⊢ an 
 					_add { xn an } ⊢ { xn _ }
-					mov.idx_lea_idx_x { rsp r0 r1 xn e } ⊢ { rsp r0 r1 _ e }
+					idx_lea_idx_x { rsp r0 r1 xn e } ⊢ { rsp r0 r1 _ e }
 					∎ { rsp r0 r1 i e }
 				§ idx_unt { rsp r e } 
 					emt_reg { rsp r } ⊢ { rsp r sr br } 

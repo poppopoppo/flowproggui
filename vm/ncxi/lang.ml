@@ -4227,6 +4227,7 @@ and emt_mov_etr i j pi pj =
   (emt_mov_ptn_to_ptn R.M_Dlt s0 pi pj)^
   "\tjmp QWORD [rsp]\n"
 and emt_mov_tbl v n = 
+  let em = Rope.Buffer.create 1024 in 
   let vl = Array.length v in 
   let vv = Array.make (n*n) None in 
   let ov = Array.make n 0 in 
@@ -4238,7 +4239,7 @@ and emt_mov_tbl v n =
     let o0 = o in 
     let o = ref o0 in 
     let oM = ref o0 in 
-    let em = ref "" in
+    (*let em = ref "" in*)
     while !t&&(!j<vl) do  
       let o0 = !o in
       let j0 = !j in 
@@ -4255,13 +4256,14 @@ and emt_mov_tbl v n =
         | true -> 
           ov.(i)<-(o0-j0);
           vv.(o0)<-(Some(i,j0));
-          em := 
-            !em ^
+          let _ = Rope.Buffer.add_string em 
+          (*em := 
+            !em ^*)
             ( let s0 = RSet.ini () in 
               let _ = rset_ptn s0 pi in 
               "MOV_"^(string_of_int i)^"_"^(string_of_int j0)^":\n"^
               (emt_mov_ptn_to_ptn R.M_Dlt s0 pi pj)^
-              "\tjmp QWORD [rsp]\n" );
+              "\tjmp QWORD [rsp]\n" ) in
           t := false; 
           j := j0+1; o := o0+1; oM := o0+1;
           () 
@@ -4283,8 +4285,9 @@ and emt_mov_tbl v n =
       ( match b with 
         | true -> 
           vv.(o0)<-(Some(i,j0));
-          em := 
-            !em^
+          (*em := 
+            !em^*) 
+            Rope.Buffer.add_string em
             ( let s0 = RSet.ini () in 
               let _ = rset_ptn s0 pi in 
               "MOV_"^(string_of_int i)^"_"^(string_of_int j0)^":\n"^
@@ -4298,30 +4301,32 @@ and emt_mov_tbl v n =
           j := j0+1; o := o0+1; 
           () ) 
     done; 
-    (!oM,!em) in
-  let rec g o i em0 = 
-    (*Util.pnt true @@ "g:"^(string_of_int i)^"\n";*)
-    if i=n then (o,em0) 
+    !oM in
+  let rec g o i = 
+    if i=n then o 
     else 
-      let (oM,em1) = f o i in 
-      g oM (i+1) (em0^em1) in 
-  let (o,em) = g 0 0 "" in 
+      let oM = f o i in 
+      g oM (i+1) in 
+  let o = g 0 0 in 
   let vv = Array.sub vv 0 o in 
-  let (e0,_) = 
+  let e0 = Rope.Buffer.create 1024 in  
+  let _ = 
     Array.fold_left 
-      (fun (e0,k) a -> 
-         if o<=k then (e0,k+1) 
+      (fun k a -> 
+         if o<=k then k+1 
          else 
            match a with 
-           | Some(i,j) -> (e0^"\tdq "^(mov_lb true i j)^"\n",k+1) 
-           | None -> (e0^"\tdq NULL\n",k+1))
-      ("",0) vv in
-  let (ed,_) = 
+           | Some(i,j) -> Rope.Buffer.add_string e0 ("\tdq "^(mov_lb true i j)^"\n");k+1 
+           | None -> Rope.Buffer.add_string e0 ("\tdq NULL\n");k+1)
+      0 vv in
+  let ed = Rope.Buffer.create 1024 in 
+  let _ = 
     Array.fold_left 
-      ( fun (ed,i) o -> 
-          (ed^"%define MOV_OFS_"^(string_of_int i)^" "^(string_of_int o)^"\n",i+1))
-      ("",0) ov in 
-  (ed,em,"MOV_TBL:\n"^e0)
+      ( fun i o -> 
+          Rope.Buffer.add_string ed ("%define MOV_OFS_"^(string_of_int i)^" "^(string_of_int o)^"\n"); 
+          i+1)
+      0 ov in 
+  (Rope.to_string(Rope.Buffer.contents ed),Rope.to_string(Rope.Buffer.contents em),"MOV_TBL:\n"^(Rope.to_string(Rope.Buffer.contents e0)))
 and emt_exe m =
   Util.pnt true "enter emt_exe\n"; 
   let (se_p,em_p,ns,gns) = (init_prm ()) in
