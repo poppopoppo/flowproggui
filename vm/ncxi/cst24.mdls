@@ -1,13 +1,9 @@
-§ smt o 
-	∐ o ⊢ _some◂a .
-		∎ a 
+\[
+§ setge { x y } 
+	∐ y'=<x' .
+		∎ { x y %[ 1r ] }
 	∐. . 
-		_emt %[ "smt 0" ] ⊢ _ 
-		∎| 
-§ lod_o { v i } 
-	_lod_q { v i } ⊢ { v i o } 
-	smt o ⊢ a 
-	∎ { v i a } 
+		∎ { x y %[ 0r ] }
 § set_q { v i a } 
 	_exc_q { v i a } ⊢ { v i _ } 
 	∎ { v i }
@@ -15,17 +11,24 @@
 	_some a ⊢ o 
 	set_q { v i o } ⊢ { v i } 
 	∎ { v i }
+	\]
+§ lod_o { v i } 
+	_lod_q { v i } ⊢ { v i o } 
+	smt o ⊢ a 
+	∎ { v i a } 
+§ mk_arr = _mk_arr
+§ smt o 
+	∐ o ⊢ _some◂a .
+		∎ a 
+	∐. . 
+		_emt %[ "smt 0" ] ⊢ _ 
+		∎| 
 ¶ iso a' 
 	∐ iso : a' 
 § inv a 
 	$ a ⊢ 
 	∐. iso◂a . 
 		∎ a 
-§ setge { x y } 
-	∐ y'=<x' .
-		∎ { x y %[ 1r ] }
-	∐. . 
-		∎ { x y %[ 0r ] }
 § KB = 1024r 
 §§ rp8 
 	¶ @.t 

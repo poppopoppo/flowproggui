@@ -1,29 +1,23 @@
-§ setge = _setge
-§ exc_q { a i v } 
-	_get_q { a i } ⊢ { a i w } 
-	_set_q { a i v } ⊢ { a i } 
-	∎ { a i w }
+§ setge { x y } 
+	∐ y'=<x' .
+		∎ { x y %[ 1r ] }
+	∐. . 
+		∎ { x y %[ 0r ] }
 § set_q { v i a } 
-	_get_q { v i } ⊢ { v i _ } 
-	_set_q { v i a } ⊢ { v i } 
+	_exc_q { v i a } ⊢ { v i _ } 
 	∎ { v i }
-§ get_q = _get_q
-§§ mk_arr 
-	§ @.lp { n x a i } 
-		∐ i'=n' . 
-			∎ { n x a }
-		∐. . 
-			$ x ⊢ x,x0 
-			_set_q { a i x0 } ⊢ { a i } 
-			_inc i ⊢ i 
-			lp { n x a i } ⊢|
-	§ f { n x } 
-		_mk_arr n ⊢ { n a }
-		» 0r _ ⊢ i 
-		lp { n x a i } ⊢| 
-	∎∎
-§ mk_arr = mk_arr.f
-\[
+§ set_o { v i a } 
+	_some a ⊢ o 
+	set_q { v i o } ⊢ { v i } 
+	∎ { v i }
+
+§ mk_arr = _mk_arr
+§ arr_of_lst = _arr_of_lst 
+§ arr_of_lst_len l 
+  arr_of_lst l ⊢ a 
+  _arr_len a ⊢ { a n } 
+  ∎ { a n }
+  \[
 § setge = _setge
 § exc_q { a i v } 
 	_get_q { a i } ⊢ { a i w } 
@@ -201,37 +195,7 @@
 		mk_s8_i { r s i } ⊢ { r s i }
 		∎ { r s }
 	∎∎
-§ @.arr_of_lst_i { l i } 
-	$ l ⊢ 
-	∐ _cns◂{ hd l } . 
-		_inc i ⊢ i 
-		arr_of_lst_i { l i } ⊢ { a i }
-		_dec i ⊢ i 
-		_set_q { a i hd } ⊢ { a i } 
-		∎ { a i }
-	∐. _nil◂{} . 
-		_mk_arr i ⊢ { i a } 
-		∎ { a i } 
-§ arr_of_lst l 
-	» 0r _ ⊢ i 
-	arr_of_lst_i { l i } ⊢ { a i } 
-	∎ a  
-§ @.arr_of_lst_len_i { l i } 
-	$ l ⊢ 
-	∐ _cns◂{ hd l } . 
-		_inc i ⊢ i 
-		arr_of_lst_len_i { l i } ⊢ { a i n }
-		_dec i ⊢ i 
-		_set_q { a i hd } ⊢ { a i } 
-		∎ { a i n }
-	∐. _nil◂{} . 
-		_mk_arr i ⊢ { i a } 
-		$ i ⊢ i,n 
-		∎ { a i n } 
-§ arr_of_lst_len l 
-	» 0r _ ⊢ i 
-	arr_of_lst_len_i { l i } ⊢ { a i n } 
-	∎ { a n }   
+
 §§ bl 
 	¶ t 
 		∐ t : {} 
@@ -312,19 +276,6 @@
 	» 0r _ ⊢ i 
 	s8_of_s8_lst_i { i l } ⊢ { s n } 
 	∎ s 
-\[
-§ A « 
-	_nil {} ⊢ l 
-	» "HELLO " _ ⊢ s0 
-	_cns { s0 l } ⊢ l 
-	» "HOO ooo" _ ⊢ s0 
-	_cns { s0 l } ⊢ l 
-	» "world!!" _ ⊢ s 
-	_cns { s l } ⊢ l 
-	s8_of_s8_lst l ⊢ s 
-	_emt s ⊢ s 
-	∎|  
-\]
 
 § @.assoc { l k }
 	∐ l ⊢ _cns◂{ { k0 o0 } l } .
@@ -14105,9 +14056,22 @@
 			rp8.add_s8 { ec0 ec1 } ⊢ ec0 
 			∎ { i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t { dd ep0 ec0 rtm_n lb_n } }		
 		∎∎
+	§ @.cat_to { o l } 
+		$ l ⊢ 
+		∐ _cns◂{ i l } . 
+			» _^ i,o ⊢ i,o,s 
+				"cat " 0' "  >> " 1' "\n" // 
+			_cd s ⊢ _ 
+			cat_to { o l } ⊢| 
+		∐. _nil◂{} . 
+			∎ o 
 	§ f0 «
 		» _args _ ⊢ ags
-		∐ ags ⊢ _cns◂{ pn tl0 }; tl0 ⊢ _cns◂{ fn0 tl1 }; tl1 ⊢ _nil◂{} .
+		∐ ags ⊢ _cns◂{ pn tl } . 
+			» "rm -f EMT.mdls\n" _ ⊢ cx0 
+			_cd cx0 ⊢ _ 
+			» "EMT.mdls" _ ⊢ fn0
+			cat_to { fn0 tl } ⊢ fn0 
 			_in_fn fn0 ⊢ { fn0 fn0_c }
 			» 0r _ ⊢ x1
 			syntax.file.prs { fn0_c x1 } ⊢ { fn0_c x1 a0 }
