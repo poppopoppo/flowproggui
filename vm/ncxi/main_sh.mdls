@@ -1,0 +1,20 @@
+§ setge { x y } 
+	∐ y'=<x' .
+		∎ { x y %[ 1r ] }
+	∐. . 
+		∎ { x y %[ 0r ] }
+§ set_q { v i a } 
+	_exc_q { v i a } ⊢ { v i _ } 
+	∎ { v i }
+§ set_o { v i a } 
+	_some a ⊢ o 
+	set_q { v i o } ⊢ { v i } 
+	∎ { v i }
+
+§ mk_arr = _mk_arr
+§ arr_of_lst = _arr_of_lst 
+§ arr_of_lst_len l 
+  arr_of_lst l ⊢ a 
+  _arr_len a ⊢ { a n } 
+  ∎ { a n }
+  

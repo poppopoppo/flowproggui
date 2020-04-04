@@ -23,3 +23,34 @@
 		lp { n x a i } ⊢| 
 	∎∎
 § mk_arr = mk_arr.f
+§ @.arr_of_lst_i { l i } 
+	$ l ⊢ 
+	∐ _cns◂{ hd l } . 
+		_inc i ⊢ i 
+		arr_of_lst_i { l i } ⊢ { a i }
+		_dec i ⊢ i 
+		_set_q { a i hd } ⊢ { a i } 
+		∎ { a i }
+	∐. _nil◂{} . 
+		_mk_arr i ⊢ { i a } 
+		∎ { a i } 
+§ arr_of_lst l 
+	» 0r _ ⊢ i 
+	arr_of_lst_i { l i } ⊢ { a i } 
+	∎ a  
+§ @.arr_of_lst_len_i { l i } 
+	$ l ⊢ 
+	∐ _cns◂{ hd l } . 
+		_inc i ⊢ i 
+		arr_of_lst_len_i { l i } ⊢ { a i n }
+		_dec i ⊢ i 
+		_set_q { a i hd } ⊢ { a i } 
+		∎ { a i n }
+	∐. _nil◂{} . 
+		_mk_arr i ⊢ { i a } 
+		$ i ⊢ i,n 
+		∎ { a i n } 
+§ arr_of_lst_len l 
+	» 0r _ ⊢ i 
+	arr_of_lst_len_i { l i } ⊢ { a i n } 
+	∎ { a n }   
