@@ -1,0 +1,5 @@
+§ N = 8r 
+§ f x 
+	» N _ ⊢ y 
+	_add { y x } ⊢ { y x } 
+	∎ { y x }  
