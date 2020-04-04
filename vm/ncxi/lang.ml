@@ -2925,11 +2925,11 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) es0 es1 es2 espp =
             Hashtbl.add !ns.ns_m n nsm;
             ("","","",tbs^"§§ "^n^" = "^(pnt_name m)^"\n")
           | Mdl(n,el0) ->
-            add_ns_m_t !ns.ns_m_t n (ref Ast.M_WC);
             let ns_1 = ref(init_ns ()) in
             !ns_1.root <- (Some ns);
-            Hashtbl.add !ns.ns_m n ns_1;
             let (e0,e1,e2,pp) = emt_m gns ns_1 (ld+1) el0 "" "" "" "" in
+            add_ns_m_t !ns.ns_m_t n (ref Ast.M_WC);
+            Hashtbl.add !ns.ns_m n ns_1;
             (e0,e1,e2,tbs^"§§ "^n^"\n"^pp^tbs^"§§.\n")
           | Etr(n,_,_,(r0,p0)) ->
             Util.pnt true @@ "Etr "^n^"\n";

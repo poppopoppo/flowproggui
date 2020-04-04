@@ -46,6 +46,7 @@ rule token = parse
     | (name as lxm) "\'" { VAL(lxm) }
     | name as lxm { NAM(lxm) }
     | ("_" name) as lxm { PRM(lxm) }
+    | "_" { WC }
     | "|◂"  { OUT_IR }
     | "|◃"  { PRJ_IR  }
     | "◃|"  { CNS_IR  }
@@ -86,7 +87,6 @@ rule token = parse
     | "≒" { DEF }
     | "`" { ACT }
   (*  | "//"  { CST } *)
-    | "_" { WC }
     | "↑[" (digit+ as lxm) "]" { INJ(int_of_string lxm) }
     | "↓[" (digit+ as lxm) "]" { CHO(int_of_string lxm) }
     | "∠[" (digit+ as lxm) "]" { AGL_OP(int_of_string lxm) }
