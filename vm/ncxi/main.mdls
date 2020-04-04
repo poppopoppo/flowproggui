@@ -1,0 +1,25 @@
+§ setge = _setge
+§ exc_q { a i v } 
+	_get_q { a i } ⊢ { a i w } 
+	_set_q { a i v } ⊢ { a i } 
+	∎ { a i w }
+§ set_q { v i a } 
+	_get_q { v i } ⊢ { v i _ } 
+	_set_q { v i a } ⊢ { v i } 
+	∎ { v i }
+§ get_q = _get_q
+§§ mk_arr 
+	§ @.lp { n x a i } 
+		∐ i'=n' . 
+			∎ { n x a }
+		∐. . 
+			$ x ⊢ x,x0 
+			_set_q { a i x0 } ⊢ { a i } 
+			_inc i ⊢ i 
+			lp { n x a i } ⊢|
+	§ f { n x } 
+		_mk_arr n ⊢ { n a }
+		» 0r _ ⊢ i 
+		lp { n x a i } ⊢| 
+	∎∎
+§ mk_arr = mk_arr.f
