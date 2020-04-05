@@ -1,0 +1,62 @@
+§ f0 ags
+		∐ ags ⊢ _cns◂{ pn tl } . 
+			» "rm -f EMT.mdls\n" _ ⊢ cx0 
+			_cd cx0 ⊢ _ 
+			» "EMT.mdls" _ ⊢ fn0
+			cat_to { fn0 tl } ⊢ fn0 
+			_in_fn fn0 ⊢ { fn0 fn0_c }
+			» 0r _ ⊢ x1
+			OpADL.syntax.file.prs { fn0_c x1 } ⊢ { fn0_c x1 a0 }
+			∐ a0 ⊢ _some◂a0 .
+				$ a0 ⊢ 
+				∐ OpADL.syntax.prs_vld◂a0 . 
+					_emt x1 ⊢ x1 
+					OpADL.ns.emt_rtm a0 ⊢ { i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t { dd ep0 ec0 rtm_n lb_n } }		
+					s8_of_s8_lst ep0 ⊢ sep0 
+					_emt sep0 ⊢ sep0 
+					rp8.mk_s8 ec0 ⊢ { ec0 sec0 }
+					_emt sec0 ⊢ sec0 
+					» _^ _ ⊢ sx0 
+						`rm -f EMT.mdls.s
+						`touch EMT.mdls.s
+						`rm -f SGN.txt 
+						`touch SGN.txt
+						//  
+					_cd sx0 ⊢ _ 
+					» "EMT.mdls.s" _ ⊢ ff0 
+					_emt_s8_to { ff0 sec0 } ⊢ { ff0 sec0 } 
+					» "SGN.txt" _ ⊢ ff1 
+					_emt_s8_to { ff1 sep0 } ⊢ _ 
+					» _^ _ ⊢ sx0 
+						`yasm -g dwarf2 -f elf64 EMT.mdls.s -o out.o
+      			`gcc stub.c out.o -nostartfiles -no-pie -pg -g -o EMT.mdls.exe 
+						`ln -f EMT.mdls.exe EMT 
+						//
+					_cd sx0 ⊢ sx0 
+					##_emt v ⊢ v 
+					\[
+					» 0r _ ⊢ dn
+					ast.pnt { dn a0 } ⊢ { dn sr }
+					» _^ sr ⊢ sr,sr0
+						"prs_vld:\n"
+						0'
+						 //
+					_emt sr0 ⊢ sr0
+					\]
+					∎ {}
+				∐. OpADL.syntax.prs_err◂err . 
+						OpADL.syntax.pnt_prs_err err ⊢ s_err 
+						_emt s_err ⊢ s_err 
+						∎ {}
+			∐. .
+				» "prs_failed:\n" _ ⊢ sc0
+				_emt sc0 ⊢ sc0
+				∎ {}
+		∐. .
+			» "no argument\n:" _ ⊢ s
+			_emt s ⊢ s 
+			∎ {}		
+	§ F « 
+		» _args _ ⊢ ags 
+		f0 ags ⊢ _ 
+		∎ {}	

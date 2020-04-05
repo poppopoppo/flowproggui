@@ -54,3 +54,20 @@
 	» 0r _ ⊢ i 
 	arr_of_lst_len_i { l i } ⊢ { a i n } 
 	∎ { a n }   
+§ exc_tv { tv i v0 } 
+  _get_q { tv i } ⊢ { tv i v1 } 
+  _set_q { tv i v0 } ⊢ { tv i }
+  ∎ { tv i v1 } 
+§ lod_tv { tv i } 
+  _lod_q { tv i } ⊢ { tv i v } 
+  ∎ { tv i v } 
+§ set_tv { tv i v } 
+  _set_q { tv i v } ⊢ { tv i } 
+  ∎ { tv i }
+§ ini_tv {} 
+  » 128000r _ ⊢ max_t 
+	_mk_arr max_t ⊢ { max_t tv }
+  ∎ tv 
+§ ini_tv_n n 
+  _mk_arr n ⊢ { n tv } 
+  ∎ { n tv } 

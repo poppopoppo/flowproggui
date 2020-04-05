@@ -4,7 +4,7 @@ let rec f1 l as0 i =
   if l=i then "" else as0.(i)^" "^(f1 l as0 (i+1))
 let f0 as0 = 
   let l = Array.length as0 in
-  if as0.(1)="-p" then f1 l as0 2 else f1 l as0 1 
+  if as0.(1)="-p" then (Util.Log.f := Util.Log.On; f1 l as0 2) else f1 l as0 1 
 let _ =
     Util.pnt true "enter nc\n";
     Util.Log.f := Util.Log.Off;

@@ -3316,7 +3316,6 @@
 			∐ gnr_axm : a' 
 		§ newvar_i { tv_n tv } 
 			var_i {} ⊢ v
-			##_set_q { tv tv_n v } ⊢ { tv tv_n } 
 			set_o { tv tv_n v } ⊢ { tv tv_n } 
 			$ tv_n ⊢ tv_n,tv_n0 
 			_inc tv_n ⊢ tv_n 
@@ -13288,11 +13287,8 @@
 							_nil {} ⊢ ns_t 
 							iso { ns_m ns_e ns_t } ⊢ NS0 
 							iso { mmv mev mtv mv_n } ⊢ MV 
-							\\_emt %[ "Dx0" ] ⊢ _ 
-							\\_emt gel0 ⊢ gel0 
-							\\_emt gel ⊢ gel 
+							
 							slv_file_lp { RTM_ST i0 il MV LCV tx_n NS0 gel0 gfl EC } ⊢ { RTM_ST i0 il MV LCV tx_n NS0 gfl EC }
-							\\_emt gel ⊢ gel 
 							inv MV ⊢ { mmv mev mtv mv_n } 
 							inv NS0 ⊢ { ns_m ns_e ns_t } 
 							_exc_q { mmv i0 ns_m } ⊢ { mmv i0 _ } 
