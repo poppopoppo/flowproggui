@@ -11606,6 +11606,8 @@
 										pop_c_regs
 										`	cmp rax,0 
 										"\tjz LB_" 0d' "\n" 
+										`	add r14,rsi 
+										`	push rdi
 										//
 									rp8.add_s8 { e0 s0 } ⊢ e0 
 									∎ { a0 tav vs0 rsp_g e0 lb_f evv lb_n }
@@ -13093,6 +13095,7 @@
 					`scf_d: ; rdi=src ⊢ rax=flg rdi=dst rsi=n
 					`	push rdi
 					`	movzx rdi,BYTE [rdi]
+					`	xor rax,rax 
 					`	C_CALL isspace
 					`	cmp rax,0
 					`	jnz scf_d_err0 
@@ -13122,6 +13125,7 @@
 					`scf_x: ; rdi=src ⊢ rax=flg rdi=dst rsi=n
 					`	push rdi
 					`	movzx rdi,BYTE [rdi]
+					`	xor rax,rax 
 					`	C_CALL isspace
 					`	cmp rax,0
 					`	jnz scf_x_err0 
@@ -13141,7 +13145,7 @@
 					`	pop rdi
 					`	sub rsi,rdi
 					`	jz scf_x_err1
-					` mov rdi,rax
+					`	mov rdi,rax
 					`	mov rax,1 
 					`	ret
 					`scf_x_err1:
@@ -13304,7 +13308,6 @@
 					`	mov [rax],rsi
 					`
 					`SS_LN_init:
-					##` mov QWORD [SS_LN_N],0
 					`	mov SS_LN_N,0
 					`	mov QWORD [SS_LN_TOP],SS_LN_VCT
 					`	mov r15,SS_LN_VCT 
@@ -13366,7 +13369,6 @@
 					//
 				rp8.add_s8 { ec sc1 } ⊢ ec
 				» 1r _ ⊢ ssn0 
-				##» 1r _ ⊢ rnx 
 				» "SS_MAX" _ ⊢ rmx 
 				» RCD_N _ ⊢ ssN 
 				ss_init_rcd_lp { ssn0 rmx ssN ec } ⊢ { rmx ssN ec } 
