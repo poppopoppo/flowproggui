@@ -51,3 +51,4 @@
   _none {} ⊢ o 
   mk_arr { n o } ⊢ { n _ tv } 
   ∎ { n tv }
+  
