@@ -607,8 +607,8 @@ LB_5227: db 39,49,226,151,130,0
 LB_5232: db 39,48,226,151,130,0
 LB_5233: db 39,49,226,151,130,0
 LB_5240: db 34,68,49,34,0
-LB_5243: db 59,32,226,136,142,124,10,101,120,110,32,52,50,57,49,51,50,58,10,0
-LB_5244: db 59,32,226,136,142,124,10,101,120,110,32,52,50,57,49,53,57,58,10,0
+LB_5243: db 59,32,226,136,142,124,10,101,120,110,32,52,50,57,49,54,52,58,10,0
+LB_5244: db 59,32,226,136,142,124,10,101,120,110,32,52,50,57,49,57,49,58,10,0
 section .text
 global _start
 
@@ -727,6 +727,7 @@ arr_of_lst_end:
 scf_d: ; rdi=src ⊢ rax=flg rdi=dst rsi=n
 	push rdi
 	movzx rdi,BYTE [rdi]
+	xor rax,rax 
 	C_CALL isspace
 	cmp rax,0
 	jnz scf_d_err0 
@@ -756,6 +757,7 @@ scf_d_err1:
 scf_x: ; rdi=src ⊢ rax=flg rdi=dst rsi=n
 	push rdi
 	movzx rdi,BYTE [rdi]
+	xor rax,rax 
 	C_CALL isspace
 	cmp rax,0
 	jnz scf_x_err0 
@@ -5773,6 +5775,8 @@ LB_383:
 	C_POP_REGS
 	cmp rax,0 
 	jz LB_386
+	add r14,rsi 
+	push rdi
 	jmp LB_385
 LB_386:
 ; .dlt.ptn { }
