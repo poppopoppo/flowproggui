@@ -71,3 +71,4 @@
 § ini_tv_n n 
   _mk_arr n ⊢ { n tv } 
   ∎ { n tv } 
+  
