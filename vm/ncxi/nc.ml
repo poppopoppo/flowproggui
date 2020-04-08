@@ -18,7 +18,7 @@ let _ =
     let _ = close_out d in
     let cd =
       "yasm -g dwarf2 -f elf64 NC.s -o out.o\n"^
-      "gcc out.o -nostartfiles -no-pie -pg -g -o NC.exe\n"^
+      "gcc out.o -O0 -nostartfiles -no-pie -pg -g -o NC.exe\n"^
       "ln -f NC.exe opx\n" in
     let _ = Sys.command cd in
     exit 0
