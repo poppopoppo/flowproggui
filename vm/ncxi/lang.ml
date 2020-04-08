@@ -3346,27 +3346,26 @@ and emt_m gns (ns:ns_v ref) ld (el:Ast.glb_etr list) es0 es1 es2 espp =
                    | `V(_,_,_,t_v,_,_) ->
                      gen (ref []) (-1) (Var t_v)
                    | _ -> ()) () gv_0 in
-            let (es_g0,es_g1,pp) =
+            let _ = Buf.add_stg espp @@ tbs^"¶+ℙ \n" in
+            let _ =
               List.fold_left
-                ( fun (es0,es1,pp) rsi ->
+                ( fun _ rsi ->
                     match rsi with
                     | `P(n,rs,_,_,epv,ns_g) ->
                       let ppi = Grm.print_etr (n,rs) in
-                      let es0 =
-                        es0^ 
+                      let _ = Buf.add_stg es1 @@
                         (emt_prs gns ns_g epv (`P rs)) in
-                      (es0,es1(*^eq^eq0*),pp^ppi)
+                      let _ = Buf.add_stg espp ppi in
+                      ()
                     | `V(n,rs,rts,t_v,epv,ns_g) ->
                       let ppi = Grm.print_etr_act (n,rs) in
+                      let _ = Buf.add_stg espp ppi in 
                       let _ = List.combine rs rts in
-                      let es0 =
-                        es0^
+                      let _ = Buf.add_stg es1 @@ 
                         (emt_prs gns ns_g epv (`V (t_v,rs))) in
-                      (es0,es1,pp^ppi)
-                ) ("","","") gv_0 in
-            Buf.add_stg es0 es_g1; 
-            Buf.add_stg es1 es_g0; 
-            Buf.add_stg espp @@ tbs^"¶+ℙ \n"^pp
+                      ()
+                ) () gv_0 in
+            ()
         ) in
       emt_m gns ns ld tl es0 es1 es2 espp
   )
