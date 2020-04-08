@@ -4,11 +4,6 @@
 		`	∎∎ 
 		`§§ M1 = M0
 		// 
-	##_s8_len sf0 ⊢ { sf0 lsf0 } 
-	##_emt lsf0 ⊢ _ 
-	\\_emt sf0 ⊢ sf0 
-	##_in_fn %[ "cst24.mdls" ] ⊢ { _ sf1 }
-	\\_info {} ⊢ {} 
 	_in_fn fn0 ⊢ { _ sf1 } 
 	_emt sf1 ⊢ sf1 
 	OpADL.syntax.file.prs { sf1 %[ 0r ] } ⊢ { _ r0 a0 } 
@@ -21,7 +16,7 @@
 			_emt %[ "D1" ] ⊢ _ 
 			##OpADL.ast.pnt { %[ 0r ] a0 } ⊢ { d0 sa0 }  
 			_emt a0 ⊢ a0
-			\\OpADL.ns.slv_file a0 ⊢ M 
+			OpADL.ns.slv_file a0 ⊢ M 
 			##_s8_len sa0 ⊢ { sa0 ls0 } 
 			\\_emt ls0 ⊢ _ 
 			\\_emt d0 ⊢ _ 

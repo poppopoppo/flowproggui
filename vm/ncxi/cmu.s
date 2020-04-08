@@ -25,6 +25,33 @@ bits 64
 
 %define S8_NULL 0xffff_ffff_ffff_0001
 %define EMT_MAX 20000
+
+%macro C_CALL_SF 1 
+	push rdx
+	push rcx
+	push r8
+	push r9
+	push r10
+	push r11
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call %1 
+	mov rsp,QWORD [rsp_tmp]
+	pop r11 
+	pop r10 
+	pop r9 
+	pop r8 
+	pop rcx 
+	pop rdx 
+%endmacro 
+	
+%macro C_CALL 1 
+	mov QWORD [rsp_tmp],rsp 
+	and rsp,~0xf 
+	call %1 
+	mov rsp,QWORD [rsp_tmp]
+%endmacro 
+	
 extern exit
 extern free
 extern printf
@@ -1013,20 +1040,22 @@ pp0_opq:
   mov rax,[rdi]
   shr rax,30
   add rax,4
-  sub rsp,rax
-  mov rsi,rsp
-  push rax
+  push rdi 
+  mov rdi,rax 
+  mov rsi,1
+  xor rax,rax 
+  C_CALL_SF calloc 
+  pop rdi
+  mov rsi,rax 
   push rsi
   call pp_opq
-  pop rsi
+  mov rsi,QWORD [rsp] 
   xor rax,rax
   mov rdi,fmt_s
-  mov QWORD [rsp_tmp],rsp
-  and rsp,~0xf
-  call printf
-  mov rsp,QWORD [rsp_tmp]
-  pop rax
-  add rsp,rax
+  C_CALL printf 
+  pop rdi
+  xor rax,rax
+  C_CALL_SF free
   ret
 
 pp0_ln:
