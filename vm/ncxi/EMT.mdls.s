@@ -348,6 +348,10 @@ fmt_sig_hdl:
 	db "signal number=%d",10
 	db 0
 
+LB_12: db 39,48,226,151,130,0
+LB_13: db 39,49,226,151,130,0
+LB_32: db 39,48,226,151,130,0
+LB_33: db 39,49,226,151,130,0
 section .text
 	unt: dq 0x0
 
@@ -1340,9 +1344,94 @@ LB_1:
 ; {| 10.. |}
 ; mov_ptn2.
 	jmp JMP_0
-; .mov_ptn2 0'(= r ) ⊢ 0'(= r )
-; {| 10.. |}
-; mov_ptn2.
+LB_6:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_10+8*rax]
+LB_10: dq LB_8,LB_9
+LB_8:
+	mov rdi,LB_12
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_6
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_11
+LB_9:
+	mov rdi,LB_13
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_11
+LB_11:
+	ret
+LB_14:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_17+8*rax]
+LB_17: dq LB_15,LB_16
+LB_15:
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call free_s8
+	pop r8 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_14
+	pop r8 
+	FREE_RCD 2, r8
+	jmp LB_18
+LB_16:
+	jmp LB_18
+LB_18:
+	ret
+LB_26:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_30+8*rax]
+LB_30: dq LB_28,LB_29
+LB_28:
+	mov rdi,LB_32
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	mov rdi,r8 
+	call emt_r64 
+	jmp LB_31
+LB_29:
+	mov rdi,LB_33
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_31
+LB_31:
+	ret
+LB_34:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_37+8*rax]
+LB_37: dq LB_35,LB_36
+LB_35:
+	FREE_LN r8 
+	mov r8,QWORD [r8+8]
+	jmp LB_38
+LB_36:
+	jmp LB_38
+LB_38:
+	ret
 RTM_0:
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 ; #34 %[ 10r ] ⊢ 1'(= r )
@@ -1357,6 +1446,281 @@ RTM_0:
 	mov r13,QWORD [rsp-8+8*1]
 ; .add_rsp 1
 	add rsp,8
+;; rsp=0 , %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #24 { } ⊢ 1(<2)◂{ }
+;; rsp=0 , %4~1(<2)◂{ } %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #0 { %[ 8r ] 1(<2)◂{ } } ⊢ { %[ 8r ] 1(<2)◂{ } 2'(= {| a2◂ [ q0]|} ) }
+	mov rdi,8
+	push rdi 
+	lea rsi,[8+8*rdi]
+	mov rdi,1 
+ C_CALL_SF calloc
+	pop rdi 
+	mov r8,rax
+	mov QWORD [rax],rdi 
+LB_4:
+	cmp rdi,0 
+	jz LB_5
+	sub rdi,1
+	mov r10,rdi
+; .mov_ptn2 1(<2)◂{ } ⊢ 3'(= a2◂ [ q0] )
+; {| 111110.. |}
+	mov r9,unt_1
+; mov_ptn2.
+	mov rsi,r8
+	mov rax,r9
+	mov rdi,r10
+	mov QWORD [rsi+8+8*rdi],rax 
+	jmp LB_4
+LB_5:
+; .dlt.ptn 1(<2)◂{ }
+; .dlt.ptn %[ 8r ]
+;; rsp=0 , %7~2'(= {| a2◂ [ q0]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #24 { } ⊢ 1(<2)◂{ }
+;; rsp=0 , %8~1(<2)◂{ } %7~2'(= {| a2◂ [ q0]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #25 { %[ "FF" ] 1(<2)◂{ } } ⊢ 0(<2)◂{ %[ "FF" ] 1(<2)◂{ } }
+;; rsp=0 , %9~0(<2)◂{ %[ "FF" ] 1(<2)◂{ } } %7~2'(= {| a2◂ [ q0]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #1 { 2'(= {| a2◂ [ q0]|} ) %[ 2r ] 0(<2)◂{ %[ "FF" ] 1(<2)◂{ } } } ⊢ { 2'(= {| a2◂ [ {| l |}]|} ) %[ 2r ] 4'(= a2◂ [ {| l |}] ) }
+; .mov_ptn2 0(<2)◂{ %[ "FF" ] 1(<2)◂{ } } ⊢ 3'(= a2◂ [ {| l |}] )
+; {| 11110.. |}
+	ALC_RCD 2, rax
+	mov r9,rax
+	mov rsi,1  
+	mov rdi,16
+	xor rax,rax 
+	C_CALL_SF calloc
+	mov QWORD [rax],2
+	mov BYTE [rax+8+0],70
+	mov BYTE [rax+8+1],70
+	mov r10,rax
+	mov QWORD [r9+8],r10 
+	mov r10,unt_1
+	mov QWORD [r9+16],r10 
+	mov BYTE [r9+6],0
+; mov_ptn2.
+	mov rax,2
+	mov rdi,r8
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	cmp rax,rsi 
+	jge err
+	lea rdi,[rdi+8+8*rax]
+	mov rax,QWORD [rdi]
+	mov rsi,r9
+	mov QWORD [rdi],rsi 
+	mov r9,rax
+; .mov_ptn2 3'(= a2◂ [ {| l |}] ) ⊢ 4'(= a2◂ [ {| l |}] )
+; {| 111110.. |}
+	mov r10,r9
+; mov_ptn2.
+; .dlt.ptn %[ 2r ]
+;; rsp=0 , %12~4'(= a2◂ [ {| l |}] ) %10~2'(= {| a2◂ [ {| l |}]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #10 4'(= a2◂ [ {| l |}] ) ⊢ 4'(= a2◂ [ {| l |}] )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,r10
+	C_PUSH_REGS
+	mov r8,rdi
+	call LB_6
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_7
+LB_7:
+; .dlt.ptn 4'(= a2◂ [ {| l |}] )
+	mov rdi,r10
+	C_PUSH_REGS
+	mov r8,rdi
+	call LB_14
+	C_POP_REGS
+;; rsp=0 , %10~2'(= {| a2◂ [ {| l |}]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #10 2'(= {| a2◂ [ {| l |}]|} ) ⊢ 2'(= {| a2◂ [ {| l |}]|} )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,r8
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rdi,fmt_arr_l 
+	call emt_stg 
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,[r8]
+	mov rax,0 
+LB_19:
+	cmp rsi,rax 
+	jz LB_20
+	push r8 
+	push rsi 
+	push rax 
+	mov r8,QWORD [r8+8+8*rax]
+	call LB_6
+	mov rdi,fmt_spc 
+	call emt_stg 
+	pop rax 
+	pop rsi 
+	pop r8 
+	add rax,1 
+	jmp LB_19
+LB_20:
+	mov rdi,fmt_arr_r 
+	call emt_stg
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_21
+LB_21:
+; .dlt.ptn 2'(= {| a2◂ [ {| l |}]|} )
+	mov rdi,r8
+	C_PUSH_REGS
+	mov r8,rdi
+	GET_LEN rsi,r8
+	mov rax,0 
+LB_22:
+	cmp rsi,rax 
+	jz LB_23
+	push r8 
+	push rsi 
+	push rax 
+	mov r8,QWORD [r8+8+8*rax]
+	call LB_14
+	pop rax 
+	pop rsi 
+	pop r8 
+	add rax,1 
+	jmp LB_22
+LB_23:
+	C_POP_REGS
+;; rsp=0 , %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #27 { } ⊢ 1(<2)◂{ }
+;; rsp=0 , %15~1(<2)◂{ } %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #0 { %[ 8r ] 1(<2)◂{ } } ⊢ { %[ 8r ] 1(<2)◂{ } 2'(= {| a3◂ [ q0]|} ) }
+	mov rdi,8
+	push rdi 
+	lea rsi,[8+8*rdi]
+	mov rdi,1 
+ C_CALL_SF calloc
+	pop rdi 
+	mov r8,rax
+	mov QWORD [rax],rdi 
+LB_24:
+	cmp rdi,0 
+	jz LB_25
+	sub rdi,1
+	mov r10,rdi
+; .mov_ptn2 1(<2)◂{ } ⊢ 3'(= a3◂ [ q0] )
+; {| 111110.. |}
+	mov r9,unt_1
+; mov_ptn2.
+	mov rsi,r8
+	mov rax,r9
+	mov rdi,r10
+	mov QWORD [rsi+8+8*rdi],rax 
+	jmp LB_24
+LB_25:
+; .dlt.ptn 1(<2)◂{ }
+; .dlt.ptn %[ 8r ]
+;; rsp=0 , %18~2'(= {| a3◂ [ q0]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #26 %[ 3r ] ⊢ 0(<2)◂%[ 3r ]
+;; rsp=0 , %19~0(<2)◂%[ 3r ] %18~2'(= {| a3◂ [ q0]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #1 { 2'(= {| a3◂ [ q0]|} ) %[ 4r ] 0(<2)◂%[ 3r ] } ⊢ { 2'(= {| a3◂ [ r]|} ) %[ 4r ] 4'(= a3◂ [ r] ) }
+; .mov_ptn2 0(<2)◂%[ 3r ] ⊢ 3'(= a3◂ [ r] )
+; {| 11110.. |}
+	mov r9,3
+	ALC_LN rax
+	mov BYTE [rax+6],0
+	mov QWORD [rax+8],r9
+	mov r9,rax
+; mov_ptn2.
+	mov rax,4
+	mov rdi,r8
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	cmp rax,rsi 
+	jge err
+	lea rdi,[rdi+8+8*rax]
+	mov rax,QWORD [rdi]
+	mov rsi,r9
+	mov QWORD [rdi],rsi 
+	mov r9,rax
+; .mov_ptn2 3'(= a3◂ [ r] ) ⊢ 4'(= a3◂ [ r] )
+; {| 111110.. |}
+	mov r10,r9
+; mov_ptn2.
+; .dlt.ptn %[ 4r ]
+;; rsp=0 , %22~4'(= a3◂ [ r] ) %20~2'(= {| a3◂ [ r]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #10 4'(= a3◂ [ r] ) ⊢ 4'(= a3◂ [ r] )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,r10
+	C_PUSH_REGS
+	mov r8,rdi
+	call LB_26
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_27
+LB_27:
+; .dlt.ptn 4'(= a3◂ [ r] )
+	mov rdi,r10
+	C_PUSH_REGS
+	mov r8,rdi
+	call LB_34
+	C_POP_REGS
+;; rsp=0 , %20~2'(= {| a3◂ [ r]|} ) %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; #10 2'(= {| a3◂ [ r]|} ) ⊢ 2'(= {| a3◂ [ r]|} )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,r8
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rdi,fmt_arr_l 
+	call emt_stg 
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,[r8]
+	mov rax,0 
+LB_39:
+	cmp rsi,rax 
+	jz LB_40
+	push r8 
+	push rsi 
+	push rax 
+	mov r8,QWORD [r8+8+8*rax]
+	call LB_26
+	mov rdi,fmt_spc 
+	call emt_stg 
+	pop rax 
+	pop rsi 
+	pop r8 
+	add rax,1 
+	jmp LB_39
+LB_40:
+	mov rdi,fmt_arr_r 
+	call emt_stg
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_41
+LB_41:
+; .dlt.ptn 2'(= {| a3◂ [ r]|} )
+	mov rdi,r8
+	C_PUSH_REGS
+	mov r8,rdi
+	GET_LEN rsi,r8
+	mov rax,0 
+LB_42:
+	cmp rsi,rax 
+	jz LB_43
+	push r8 
+	push rsi 
+	push rax 
+	mov r8,QWORD [r8+8+8*rax]
+	call LB_34
+	pop rax 
+	pop rsi 
+	pop r8 
+	add rax,1 
+	jmp LB_42
+LB_43:
+	C_POP_REGS
 ;; rsp=0 , %3~1'(= r ) %0~0'(= {| {| l |}|} ) 
 ; ∎
 	jmp RTM_1

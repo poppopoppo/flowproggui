@@ -7,5 +7,18 @@
   
 §% 
   f0 %[ 10r ] ⊢ c 
-  
+  _nil {} ⊢ l 
+  _mk_arr { %[ 8r ] l } ⊢ { _ _ a0 } 
+  _nil {} ⊢ l 
+  _cns { %[ "FF" ] l } ⊢ l 
+  _exc_q { a0 %[ 2r ] l } ⊢ { a0 _ l }
+  _emt l ⊢ _  
+  _emt a0 ⊢ _    
+  _none {} ⊢ o 
+  _mk_arr { %[ 8r ] o } ⊢ { _ _ a0 } 
+  _some %[ 3r ] ⊢ x 
+  _exc_q { a0 %[ 4r ] x } ⊢ { a0 _ x } 
+  _emt x ⊢ _ 
+  _emt a0 ⊢ _ 
   ∎ 
+

@@ -9900,9 +9900,6 @@
 					∎∎
 				§ 
 					@.op_axm { gfl evv tav tv_n tv lb_n a rsp rl irv is yd { eg0 eds ec0 } } 
-						##» "enter op_axm" _ ⊢ ee0 
-						##_emt ee0 ⊢ _ 
-						##_emt a ⊢ a 
 						∐ a'=e_axm.inc . 
 							ast.r64_of_rt { evv is } ⊢ { evv x0 } 
 							$ x0 ⊢ 
@@ -10306,20 +10303,33 @@
 							rp8.cct { ec0 e0 } ⊢ ec0  
 							∎ { gfl evv tav tv_n tv lb_n a rsp rl irv is1 { eg0 eds ec0 } } 
 						∐ a'=e_axm.exc_q . 
+							$ yd ⊢ yd,yd0 
+							» 0r _ ⊢ lv 
+							newvar_l { tv_n tv lv } ⊢ { tv_n tv lv y0 } 
+							newvar_l { tv_n tv lv } ⊢ { tv_n tv lv y1 } 
+							newvar_l { tv_n tv lv } ⊢ { tv_n tv lv y2 }
+							$ y2 ⊢ y2,y2_0 
+							RP.cns3 { y0 y1 y2 } ⊢ yt 
+							unify.f { tv yt yd0 } ⊢ tv 
+							» 0r _ ⊢ pv_n 
+							_nil {} ⊢ alp 
+							alc_type_k.hp { pv_n alp tav tv_n tv y2_0 } ⊢ { _ _ tav tv_n tv h0 }
+													
 							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs0 }
 							$ is ⊢ is,is0 
 							stt_v.mk_rset { is0 vs0 } ⊢ vs0
 							∐ is ⊢ RP.rcd◂l0; l0 ⊢ _cns◂{ a0 l0 }; l0 ⊢ _cns◂{ a1 l0 }; l0 ⊢ _cns◂{ a2 l0 }; l0 ⊢ _nil◂{} .
 								ast.arr_of_rt { evv a0 } ⊢ { evv a0 } 
-								∐ a0 ⊢ ast.hp_of◂{ r0 ha0 } . 
+								∐ a0 ⊢ ast.hp_of◂{ r0 _ } . 
 
 									$ r0 ⊢ r0,r0_0 
-									$ ha0 ⊢ ha0,ha0_0 
-									stt_v.arr_reg { r0_0 ha0_0 } ⊢ a0
+									##$ ha0 ⊢ ha0,ha0_0 
+									$ h0 ⊢ h0,h0_0 
+									stt_v.arr_reg { r0_0 h0_0 } ⊢ a0
 									alc_vs vs0 ⊢ { vs0 rm0 } 
-									$ ha0 ⊢ ha0,ha00 
 									$ rm0 ⊢ rm0,rm00 
-									ast.hp { rm00 ha00 } ⊢ pp0 
+									$ h0 ⊢ h0,h0_0 
+									ast.hp { rm00 h0_0 } ⊢ pp0 
 									RP.atm pp0 ⊢ ip0 
 									$ ip0 ⊢ ip0,ip00
 									mov_ptn2.f2 { { evv tav } rsp vs0 a2 ip00 ec0 } ⊢ { { evv tav } rsp vs0 ec0 }
@@ -10341,7 +10351,7 @@
 										"\tmov " 1' ",rax\n" 
 										//
 									rp8.add_s8 { ec0 sc0 } ⊢ ec0 
-									stt_v.ptn_of_hp { vs0 ha0 } ⊢ { vs0 pt0 }
+									stt_v.ptn_of_hp { vs0 h0 } ⊢ { vs0 pt0 }
 									$ pt0 ⊢ pt0,pt00
 									RP.cns3 { a0 a1 pt0 } ⊢ p1 
 									mov_ptn2.f2 { { evv tav } rsp vs0 ip0 pt00 ec0 } ⊢ { { evv tav } rsp vs0 ec0 }
