@@ -61,5 +61,6 @@
 § F « 
 	» _args _ ⊢ ags 
 	f0 ags ⊢ _ 
+	##_info {} ⊢ {} 
 	∎ {}	
     
