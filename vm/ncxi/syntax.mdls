@@ -6182,6 +6182,7 @@
 				`	mov rsi,1  
 				"\tmov rdi," 1d' "\n" 
 				`	xor rax,rax 
+				"\tadd QWORD [S8_N]," 0d' "\n" 
 				`	C_CALL_SF calloc
 				"\tmov QWORD [rax]," 0d' "\n"
 				//
@@ -8111,6 +8112,9 @@
 							$ q0 ⊢ 
 							∐ ast.hp.opq◂{} . 
 								» _^ _ ⊢ s1 
+									` mov rdi,0x0000_ffff_ffff_ffff 
+									`	and rdi,QWORD [r8]
+									`	sub QWORD [S8_N],rdi
 									`	mov rdi,r8
 									`	call free_s8
 									//		
@@ -8137,6 +8141,8 @@
 									`	sub rsi,1 
 									"\tjmp LB_" 0d' "\n" 
 									"LB_" 1d' ":\n" 
+									`	mov rdi,r8
+									`	C_CALL_SF free 
 									//	
 								rp8.add_s8 { e0 s1 } ⊢ e0
 								∎ { ahl fl tav lb_n e0 } 
@@ -9664,7 +9670,7 @@
 								//
 							rp8.add_s8 { e0 s1 } ⊢ e0 
 							∎ { v_n evv { eds e0 } ld lb_n rsp irv rl ar }
-					§ f { evv lb_n rsp irv rl sl dl pl { eds e0 } }
+					§ f { gfl evv tav lb_n rsp irv rl sl dl pl { eg0 eds e0 } }
 						ip0 { evv pl } ⊢ { evv pl } 
 						» 0r _ ⊢ i 
 						_nil {} ⊢ dll 
@@ -9686,7 +9692,8 @@
 							`	mov rcx,QWORD [tmp] 
 							//
 						rp8.add_s8 { e0 se0 } ⊢ e0 
-						∎ { evv lb_n rsp irv rl { eds e0 } }
+						dlt.f { gfl evv tav lb_n rsp dll { eg0 eds e0 } } ⊢ { gfl evv tav lb_n rsp { eg0 eds e0 } }
+						∎ { gfl evv tav lb_n rsp irv rl { eg0 eds e0 } }
 					∎∎ 
 				\[
 				§§ asc 
@@ -11146,9 +11153,7 @@
 									##"; " 
 									// 
 								rp8.add_s8 { ec0 ec1 } ⊢ ec0 
-								##rp8.cct { ec0 ep0 } ⊢ ec0 
-								exp_s8.f { evv lb_n rsp irv rl ss ds pl { eds ec0 } } ⊢ { evv lb_n rsp irv rl { eds ec0 } }
-								##rp8.cct { ec0 e0 } ⊢ ec0
+								exp_s8.f { gfl evv tav lb_n rsp irv rl ss ds pl { eg0 eds ec0 } } ⊢ { gfl evv tav lb_n rsp irv rl { eg0 eds ec0 } }
 								ret_f { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv lc { eg0 eds ec0 } rl ft } ⊢|
 						∐ ast.mtc◂lm .
 							∐ ft ⊢ f_rtm◂ret0 . 
@@ -13552,6 +13557,7 @@
 					`		dq 0 
 					`	err_n: dq 0
 					` SS_LN_C: dq 0
+					`	S8_N: dq 0 
 					`	fmt_err_line: db "err:%x",10,0
 					`	fmt_r64: db "%dr",0
 					`	fmt_s8: db 34,"%s",34,0
@@ -13571,6 +13577,7 @@
 					`
 					`	fmt_info:
 					`		db "info:",10
+					`		db "S8_N=%d",10
 					`		db "SS_LN_C=%d",10
 					`		db "SS_LN_N=%d",10
 					`		db 0
@@ -13612,8 +13619,9 @@
 					`info:
 					`	C_PUSH_REGS
 					`	mov rdi,fmt_info 
-					`	mov rsi,QWORD [SS_LN_C]
-					`	mov rdx,SS_LN_N 
+					`	mov rsi,QWORD [S8_N]
+					`	mov rdx,QWORD [SS_LN_C]
+					`	mov rcx,SS_LN_N 
 					`	xor rax,rax 
 					`	C_CALL printf
 					`	mov rax,0
@@ -13704,7 +13712,9 @@
 					`arr_of_lst_r:
 					`	cmp BYTE [rdi+6],1
 					`	jz arr_of_lst_end 
-					`	push QWORD [rdi+8] 
+					`	push QWORD [rdi+8]
+					`	mov rax,rdi
+					`	FREE_RCD 2,rax 
 					`	mov rdi,QWORD [rdi+16]
 					`	add rsi,1 
 					`	call arr_of_lst_r
