@@ -17,10 +17,12 @@
 					rp8.mk_s8 ec0 ⊢ { ec0 sec0 }
 					##_emt sec0 ⊢ sec0 
 					» _^ _ ⊢ sx0 
-						`rm -f EMT.mdls.s
-						`touch EMT.mdls.s
-						`rm -f SGN.txt 
-						`touch SGN.txt
+						##`rm -f EMT.mdls.s
+						##`touch EMT.mdls.s
+						##`chmod +rw EMT.mdls.s 
+						##`rm -f SGN.txt 
+						##`touch SGN.txt
+						##`chmod +rw EMT.mdls.s 
 						//  
 					_cd sx0 ⊢ _ 
 					» "EMT.mdls.s" _ ⊢ ff0 
@@ -56,8 +58,8 @@
 			» "no argument\n:" _ ⊢ s
 			_emt s ⊢ s 
 			∎ {}		
-	§ F « 
-		» _args _ ⊢ ags 
-		f0 ags ⊢ _ 
-		∎ {}	
+§ F « 
+	» _args _ ⊢ ags 
+	f0 ags ⊢ _ 
+	∎ {}	
     
