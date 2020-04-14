@@ -4,7 +4,11 @@
   ∐. . 
     _dec x ⊢ x 
     f0 x ⊢| 
-  
+§ f1 { c0 s0 o0 s1 o1 } 
+  _rep_movsb { c0 s0 o0 s1 o1 } ⊢| 
+§ f2 x 
+  _shl { x %[ 3r ] } ⊢ { x _ } 
+  ∎ x 
 §% 
   f0 %[ 10r ] ⊢ c 
   _nil {} ⊢ l 
@@ -28,5 +32,8 @@
   _emt y ⊢ _ 
   _emt a0 ⊢ _ 
   _emt a1 ⊢ _ 
+  _emt_s8_to { %[ "TTX0.txt" ] %[ "FOOO\nBAAA\njjj\n" ] } ⊢ _ 
+  f2 %[ 8r ] ⊢ x 
+  _emt x ⊢ _ 
   ∎ 
 

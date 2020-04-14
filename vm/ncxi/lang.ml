@@ -3683,7 +3683,7 @@ and init_prm () =
     "\tmov rax,2\n"^
     "\tmov rsi,0x42\n"^
     "\tadd rdi,8\n"^
-    "\tsyscall\n"^
+    "\tsyscall\n"^ 
     "\tpush rax\n"^
     "\tmov rdi,rax\n"^
     "\tmov rsi,r14\n"^
