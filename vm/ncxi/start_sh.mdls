@@ -22,11 +22,11 @@
 			_emt a0 ⊢ a0
 			OpADL.ns.emt_rtm a0 ⊢ { i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t { dd ep0 ec0 rtm_n lb_n } }		
 			s8_of_s8_lst ep0 ⊢ sep0 
-			rp8.mk_s8 ec0 ⊢ { ec0 sec0 }
+			rp8.to_s8 ec0 ⊢ sec0
 			» "SH.mdls.s" _ ⊢ ff0 
-			_emt_s8_to { ff0 sec0 } ⊢ { ff0 sec0 } 
+			_emt_s8_to { ff0 sec0 } ⊢ _
 			» "SGN_SH.txt" _ ⊢ ff1 
-			_emt_s8_to { ff1 sep0 } ⊢ _ 
+			_emt_s8_to { ff1 sep0 } ⊢ _
 			∎ {} 
 		∐. OpADL.syntax.prs_err◂e0 .
 			∎|
@@ -39,6 +39,7 @@
 	_arr_len args ⊢ { args l } 
 	» "rm -f SH.mdls\n" _ ⊢ xc0 
 	_cd xc0 ⊢ _ 
-	L0 { args l %[ 1r ] } ⊢ { args _ } 
+	L0 { args l %[ 1r ] } ⊢ _
 	E %[ "SH.mdls" ] ⊢ _ 
+	_info {} ⊢ {}  
 	∎ 
