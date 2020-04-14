@@ -11,9 +11,9 @@ bits 64
 
 %define NULL ~0
 %define SFLS_MAX 20000
-%define SFLS_0_MAX (80000<<5) 
-%define SFLS_1_MAX (80000<<6) 
-%define SFLS_2_MAX (160000<<4)
+%define SFLS_0_MAX (80000<<3) 
+%define SFLS_1_MAX (80000<<4) 
+%define SFLS_2_MAX (160000<<2)
 %define SFLS_3_MAX 10000
 %define SFLS_4_MAX 5000
 %define SFLS_NULL 0xffff_ffff_ffff_0000 
