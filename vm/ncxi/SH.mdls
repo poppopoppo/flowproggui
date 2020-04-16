@@ -1,4 +1,13 @@
+§ f◂◂{ G H } x 
+	_inc x ⊢ x 
+	G x ⊢ x 
+	H x ⊢ x 
+	∎ x 
+§ f0◂◂X y 
+	_add { y %[ X ] } ⊢ { y _  }
+	∎ y 
 §%
-	f◂◂{ g h } x ⊢ y 
+	##f◂◂{ g h } x ⊢ y 
+	f0◂◂"ABC" %[ 3r ] ⊢ x 
 	∎
 
