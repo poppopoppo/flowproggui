@@ -21,8 +21,8 @@
 	_emt x ⊢ _ 
 	##f1 %[ 4r ] ⊢ x 
 	##_emt x ⊢ _ 
-	##f◂◂{ f1 _dec } %[ 3r ] ⊢ x 
-	##_emt x ⊢ _ 
+	f◂◂{ f1 _dec } %[ 3r ] ⊢ x 
+	_emt x ⊢ _ 
 	∎
 
 \[
