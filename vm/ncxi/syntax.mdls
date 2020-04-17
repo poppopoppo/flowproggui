@@ -994,7 +994,7 @@
 			@.MP r',e' = reg_ptn.t◂(mtc_atm◂r'◂e')
 			@.cst e' 
 				∐ k_op : { _r64 _r64 rt◂_r64◂_r64 _r64 rt◂_r64◂_r64 }
-				∐ k_op_gnr : { _opn◂{ _r64 ct_ptn◂e' } _r64 DP◂_r64 lc_code◂_r64◂_r64 }
+				∐ k_op_gnr : { _opn◂{ _r64 tpl_ptn◂e' } _r64 DP◂_r64 lc_code◂_r64◂_r64 }
 				∐ k_app : { ct_ptn◂e' ct_ptn◂e' } 
 				∐ k_var : e' 
 				∐ k_op_axm : _r64
@@ -1054,6 +1054,70 @@
 				op_of_k { evv c } ⊢| 
 			∐. RP.rcd◂l . 
 				∎| 
+		§ 
+			@.evl_ct_ptn { evv p }
+				$ p ⊢ 
+				∐ RP.rcd◂l . 
+					evl_ct_ptn_lst { evv l } ⊢ { evv l } 
+					RP.rcd l ⊢ p 
+					∎ { evv p } 
+				∐. RP.atm◂a . 
+					evl_ct { evv a } ⊢ { evv a } 
+					RP.atm a ⊢ p 
+					∎ { evv p } 
+			@.evl_ct_ptn_lst { evv l } 
+				$ l ⊢ 
+				∐ _cns◂{ p l } . 
+					evl_ct_ptn { evv p } ⊢ { evv p }
+					evl_ct_ptn_lst { evv l } ⊢ { evv l } 
+					_cns { p l } ⊢ l 
+					∎ { evv l } 
+				∐. _nil◂{} . 
+					_nil {} ⊢ l 
+					∎ { evv l }
+			@.evl_ct { evv c } 
+				∐ c ⊢ k_name◂i . 
+					lod_tv { evv i } ⊢ { evv i k } 
+					evl_ct { evv k } ⊢|
+				∐ c ⊢ k_app◂{ c0 c1 } .
+					evl_ct_ptn { evv c0 } ⊢ { evv c0 } 
+					evl_ct_ptn { evv c1 } ⊢ { evv c1 }
+					k_app { c0 c1 } ⊢ c 
+					∎ { evv c }
+				∐. . 
+					∎ { evv c }
+		§ 
+			@.exc_tpl { evv t p } 
+				$ t ⊢ 
+				∐ RP.rcd◂l0 . 
+					∐ p ⊢ RP.rcd◂l1 . 
+						exc_tpl_lst { evv l0 l1 } ⊢ { evv l0 l1 } 
+						RP.rcd l0 ⊢ t 
+						RP.rcd l1 ⊢ p 
+						∎ { evv t p }
+					∐. . 
+						∎|  
+				∐. RP.atm◂i0 . 
+					∐ p ⊢ RP.atm◂a0 . 
+						exc_tv { evv i0 a0 } ⊢ { evv i0 a0 } 
+						RP.atm a0 ⊢ p 
+						RP.atm i0 ⊢ t 
+						∎ { evv t p }
+					∐. . 
+						∎| 
+			@.exc_tpl_lst { evv l0 l1 } 
+				∐ l0 ⊢ _cns◂{ t l0 }; l1 ⊢ _cns◂{ p l1 } . 
+					exc_tpl { evv t p } ⊢ { evv t p }
+					exc_tpl_lst { evv l0 l1 } ⊢ { evv l0 l1 } 
+					_cns { t l0 } ⊢ l0 
+					_cns { p l1 } ⊢ l1 
+					∎ { evv l0 l1 }
+				∐ l0 ⊢ _nil◂{}; l1 ⊢ _nil◂{} . 
+					_nil {} ⊢ l0 
+					_nil {} ⊢ l1 
+					∎ { evv l0 l1 }
+				∐. . 
+					∎| 
 		§ @.r64_of_k { evv c } 
 			∐ c ⊢ k_r64◂x . 
 				∎ { evv x } 
@@ -1087,8 +1151,7 @@
 						"\"" 0' "\"" // 
 						∎ { evv sr }
 					∐ c ⊢ k_name◂i . 
-						##lod_tv { evv i } ⊢ [ evv i k } 
-						##cst { evv k } ⊢|
+						
 						» _^ i ⊢ i,si 
 							"#" 0d' // 
 						∎ { evv si }
@@ -4874,7 +4937,7 @@
 						» _^ _ ⊢ sr 
 							"slv_ns_e 1:not found\n" //
 						_emt sr ⊢ sr 
-						_emt e_ns ⊢ e_ns 
+						##_emt e_ns ⊢ e_ns 
 						∎|  
 		§ @.slv_ns_t { n mmv mev ev m_ns e_ns m_l } 
 			$ n ⊢ 
@@ -5923,7 +5986,7 @@
 				##$ vi0 ⊢ vi0,y 
 				set_tv { ev ev_n t0 } ⊢ { ev ev_n }
 				$ c_n ⊢ c_n,cv 
-				$ cv ⊢ cv,cv0 
+				$ ev_n ⊢ ev_n,cv0 
 				_inc c_n ⊢ c_n 
 				ast.k_var cv ⊢ k 
 				set_tv { evv ev_n k } ⊢ { evv ev_n } 
@@ -11144,7 +11207,6 @@
 							∎ { f_c { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl { p1 yr } } 
 				§ 
 					@.stt_jmp { f_c { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl { ys is o yr } } 
-						##lod_tv { evv o } ⊢ { evv o k }
 						ast.op_of_k { evv o } ⊢ { evv k } 
 						∐ k ⊢ ast.k_op_axm◂a . 
 							$ yr ⊢ yr,yr0 
@@ -11178,7 +11240,6 @@
 									stt_jmp_op { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl { { se0 rsp_g0 p0 rsp_g1 p1 } is yr } } ⊢| 
 							∐. . 
 								$ yr ⊢ yr,yr0
-								##$ o ⊢ o,o0 
 								gnr_lc_code { { o_n ys yr0 dp } { gfl cl } lb_n { ev evv } rv tav tv_n tv lcg } ⊢ { { eeg0 eds0 ee0 } R0 { gfl cl } lb_n { ev evv } rv tav tv_n tv }
 								$ R0 ⊢ { lb ig y1 rsp_g0 p0 rsp_g1 p1 }
 								rp8.cct { eg0 eeg0 } ⊢ eg0 
@@ -11187,6 +11248,25 @@
 								» _^ lb ⊢ lb,se0 
 									"LB_" 0d' // 
 								stt_jmp_op { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl { { se0 rsp_g0 p0 rsp_g1 p1 } is yr } } ⊢| 
+						∐ k ⊢ ast.k_app◂{ k0 k1 } . 
+							ast.op_of_k { evv k0 } ⊢ { evv k0 } 
+							ast.evl_ct_ptn { evv k1 } ⊢ { evv k1 } 
+							∐ k0 ⊢ ast.k_op_gnr◂{ og o_n dp lcg } .
+								smt og ⊢ { c_n pg } 
+								ast.exc_tpl { evv pg k1 } ⊢ { evv pg k1 } 
+								$ yr ⊢ yr,yr0
+								gnr_lc_code { { o_n ys yr0 dp } { gfl cl } lb_n { ev evv } rv tav tv_n tv lcg } ⊢ { { eeg0 eds0 ee0 } R0 { gfl cl } lb_n { ev evv } rv tav tv_n tv }
+								ast.exc_tpl { evv pg k1 } ⊢ { evv pg k1 } 
+								$ R0 ⊢ { lb ig y1 rsp_g0 p0 rsp_g1 p1 }
+								rp8.cct { eg0 eeg0 } ⊢ eg0 
+								rp8.cct { eg0 ee0 } ⊢ eg0 
+								rp8.cct { eds eds0 } ⊢ eds 
+								» _^ lb ⊢ lb,se0 
+									"LB_" 0d' // 
+								stt_jmp_op { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl { { se0 rsp_g0 p0 rsp_g1 p1 } is yr } } ⊢| 
+							
+							∐. .
+								∎|  
 						∐. . 
 							ast.pnt.cst { evv k } ⊢ { evv sk } 
 							» _^ sk ⊢ _,ec1 
@@ -13016,6 +13096,7 @@
 								$ y ⊢ y,y0 
 								rtr_dst_ptn { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t y0 td } ⊢ { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t } 
 								slv_n.r { { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r_e lc } ⊢ { { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r_e lc } 
+								$ c_n ⊢ c_n,c_n0 
 								pop_n { c_n ns_e } ⊢ { _ ns_e } 
 								slv.r { lv ev rv tv tv_n lc } ⊢ { lv ev rv tv tv_n lc yr } 
 								_dec lv ⊢ lv 
@@ -13027,8 +13108,9 @@
 								RP.atm yx ⊢ yx 
 								$ yx ⊢ yx,yx0 
 								pnt_type_k { tv yx0 } ⊢ { tv syx } 
-								_none {} ⊢ o 
+								##_none {} ⊢ o 
 								$ ev_n ⊢ ev_n,o_n
+								_some { c_n0 p } ⊢ o 
 								ast.k_op_gnr { o o_n d lc } ⊢ k 
 								» _^ dd,ev_n,w,syx ⊢ dd,ev_n,w,syx,ep1 
 									0'*"\t" "§ " 2' "(" 1d' ") : " 3' "\n" // 
