@@ -6,10 +6,23 @@
 § f0◂◂X y 
 	_add { y %[ X ] } ⊢ { y _  }
 	∎ y 
+§ f1 x 
+	_shl { x %[ 4r ] } ⊢ { x _ } 
+	∎ x 
 §%
 	##f◂◂{ g h } x ⊢ y 
 	f0◂◂9r %[ 3r ] ⊢ x 
 	_emt x ⊢ _ 
+	f◂◂{ _inc _inc } %[ 4r ] ⊢ x 
+	_emt x ⊢ _ 
+	f0◂◂67r %[ 7r ] ⊢ x 
+	_emt x ⊢ _ 
+	f◂◂{ _dec _dec } %[ 8r ] ⊢ x 
+	_emt x ⊢ _ 
+	##f1 %[ 4r ] ⊢ x 
+	##_emt x ⊢ _ 
+	##f◂◂{ f1 _dec } %[ 3r ] ⊢ x 
+	##_emt x ⊢ _ 
 	∎
 
 \[
