@@ -483,7 +483,6 @@
 		∎ a
 	∐. _byt stg_ltr_seq ⊢ { c0 cl }
 		rp8.pfx_chr { c0 cl } ⊢ cl 
-		##_cns { c0 cl } ⊢ cl
 		_some cl ⊢ a
 		∎ a
 	@.stg_ltr_sp
@@ -2036,6 +2035,17 @@
 		_cns { { n r s } l } ⊢ l 
 		prs_err l ⊢ e  
 		∎ e 
+	§ prs_act◂◂F { s p } 
+		$ p ⊢ 
+		∐ prs_vld◂a . 
+			F { s a } ⊢ b  
+			prs_vld b ⊢ p 
+			_some p ⊢ a 
+			∎ a 
+		∐. prs_err◂e . 
+			prs_err e ⊢ p 
+			_some p ⊢ r 
+			∎ r 
 	§ @.pnt_prs_err el 
 		$ el ⊢ 
 		∐ _cns◂{ { n0 n1 em } el } . 
@@ -2531,6 +2541,17 @@
 				_cns { p l } ⊢ l 
 				_some l ⊢ a 
 				∎ a   
+	§§ act
+		§ lc_mtc { {} m } 
+			ast.mtc m ⊢|
+		§ id_0 { {} { s il } }
+			ast.op_id { s il } ⊢|
+		§ id_mtc { {} m } 
+			ast.id_mtc m ⊢|
+		§ id_line { { r1 rs } lc } 
+			_cns { r1 rs } ⊢ rs 
+			ast.id_line { rs lc } ⊢|  
+		∎∎
 	§§+s8 
 		@.lc_code
 			∐* nls "∎|" ⊢ { nn {} }
@@ -2562,63 +2583,23 @@
 					_some e ⊢ a 
 					∎ a 
 			∐* lc_mtc ⊢ { m }
-				$ m ⊢ 
-				∐ prs_vld◂m . 
-					ast.mtc m ⊢ m
-					prs_vld m ⊢ m 
-					_some m ⊢ a
-					∎ a
-				∐. prs_err◂e . 
-					prs_err e ⊢ e 
-					_some e ⊢ a 
-					∎ a 
-			∐# nls "$" !| ; ⊢ { nn {} },rr
-				$ rr ⊢ 
-				∐ prs_vld◂{ s il } .  
-					ast.op_id { s il } ⊢ l 
-					prs_vld l ⊢ l 
-					_some l ⊢ a 
-					∎ a
-				∐. prs_err◂l . 
-					prs_err l ⊢ e 
-					_some e ⊢ a 
-					∎ a 
-
+				prs_act◂◂(act.lc_mtc) { {} m } ⊢| 
+			∐# nls "$" !| ; ⊢ { nn {} },r
+				prs_act◂◂(act.id_0) { {} r } ⊢|
+				
 				∐# src_ptn "⊢" !| ; ⊢ { s {} },il 
 					prs_add { s il } ⊢ a 
 					_some a ⊢ a 
 					∎ a 
 					
 					∐# "\n" lc_id_mtc ⊢ { {} m }
-						$ m ⊢ 
-						∐ prs_vld◂m . 
-							ast.id_mtc m ⊢ m 
-							prs_vld m ⊢ m 
-							_some m ⊢ a 
-							∎ a
-						∐. prs_err◂e . 
-							prs_err e ⊢ e 
-							_some e ⊢ a 
-							∎ a  
+						prs_act◂◂(act.id_mtc) { {} m } ⊢|	
 					∐.# dst_ptn dst_ptn_tl "\n" lc_code ⊢ { r1 rs {} lc }
-						$ lc ⊢ 
-						∐ prs_vld◂lc . 
-							_cns { r1 rs } ⊢ rs
-							ast.id_line { rs lc } ⊢ e
-							prs_vld e ⊢ e 
-							_some e ⊢ a
-							∎ a
-						∐. prs_err◂e . 
-							prs_err e ⊢ e 
-							_some e ⊢ a 
-							∎ a 
+						prs_act◂◂(act.id_line) { { r1 rs } lc } ⊢|
 				∐# line_res lc_id_mtc ⊢ { { n r } lc }
 					$ lc ⊢ 
 					∐ prs_vld◂x . 
-						_nil {} ⊢ l 
-						» "glb_etr id_line line_res 0" _ ⊢ s
-						_cns { { n r s } l } ⊢ l 
-						prs_err l ⊢ l 
+						mk_prs_err { n r %[ "glb_etr id_line line_res 0" ] } ⊢ l 
 						_some l ⊢ a 
 						∎ a
 					∐. prs_err◂l . 
@@ -2630,10 +2611,7 @@
 				∐.# line_res lc_code ⊢ { { n r } lc } 
 					$ lc ⊢ 
 					∐ prs_vld◂x . 
-						_nil {} ⊢ l 
-						» "glb_etr id_line line_res 2" _ ⊢ s
-						_cns { { n r s } l } ⊢ l 
-						prs_err l ⊢ l 
+						mk_prs_err { n r %[ "glb_etr id_line line_res 2" ] } ⊢ l 
 						_some l ⊢ a 
 						∎ a
 					∐. prs_err◂l . 
@@ -4138,9 +4116,6 @@
 		§§ unify 
 		§ 
 			@.f { tv y0 y1 }
-				
-				» "unify d0" _ ⊢ se 
-				_emt se ⊢ _
 				∐ y0 ⊢ RP.atm◂ak; ak ⊢ var◂i0 . 
 					f_l0 { tv i0 y1 } ⊢| 
 				∐ y1 ⊢ RP.atm◂ak; ak ⊢ var◂i1 . 
@@ -4227,6 +4202,7 @@
 					exc_tv { tv i0 vy } ⊢ { tv i0 _ } 
 					∎ tv 
 			§ f_emt { tv y0 y1 } 
+				_emt %[ "unify.f_emt" ] ⊢ _ 
 				$ y0 ⊢ y0,y00
 				$ y1 ⊢ y1,y10
 				pnt_type_k { tv y00 } ⊢ { tv y0s } 
@@ -11350,7 +11326,6 @@
 						∐ k ⊢ ast.k_app◂{ k0 k1 } . 
 							ast.op_of_k { evv k0 } ⊢ { evv k0 } 
 							∐ k0 ⊢ ast.k_op_gnr◂{ og o_n dp lcg _ } .
-								\[
 								ast.evl_ct_ptn { evv k1 } ⊢ { evv k1 } 
 								smt og ⊢ { c_n pg } 
 								exc_tpl { ev evv tv tv_n pg k1 } ⊢ { ev evv tv tv_n pg k1 } 
@@ -11364,8 +11339,6 @@
 								» _^ lb ⊢ lb,se0 
 									"LB_" 0d' // 
 								stt_jmp_op { { gfl cl } lb_n { ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl { { se0 rsp_g0 p0 rsp_g1 p1 } is yr } } ⊢| 
-								\]
-								∎|
 							∐. .
 								∎|  
 						∐. . 
