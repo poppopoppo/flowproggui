@@ -8,6 +8,25 @@
 	∎ y 
 §%
 	##f◂◂{ g h } x ⊢ y 
-	f0◂◂"ABC" %[ 3r ] ⊢ x 
+	f0◂◂9r %[ 3r ] ⊢ x 
+	_emt x ⊢ _ 
 	∎
 
+\[
+	_ala :  { b' a' }→{ c' a' } →→ { _arr◂a' _r64 b' }→{ _arr◂a' _r64 c' } ; array local application
+§ @.f◂◂I x 
+	_add_im◂◂I x ⊢ x 
+	f◂◂(_Inc◂◂I) x ⊢| 
+§ f◂◂{ A B C } x 
+	∐∐ A==F; B==5r; C==G◂◂"HHH" .
+		∎ x 
+	∐∐.
+		∎ x
+§ f◂◂{ A B C } == 
+	∐ A=F; B=5r C=G◂◂"HHH" . 
+		∏._ x 
+			∎ x 
+	∐. 
+		∏._ x 
+			∎ x 
+\]

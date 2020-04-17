@@ -1274,7 +1274,48 @@ ss_end_rcd_31:
 	mov rsi,-65505
 	mov [rax],rsi 
 	jmp RTM_0
+LB_0: ;; #38 0'(= r ) ⊢ 0'(= r ) : (_r64→_r64)
+JMP_0:
+;; rsp=0 , %5~0'(= r ) 
+; ##13 { 0'(= r ) %[ #37 ] } ⊢ { 0'(= r ) %[ 9r ] }
+	add r13,9
+; .dlt.ptn %[ 9r ]
+;; rsp=0 , %6~0'(= r ) 
+; ∎ 0'(= r )
+; .mov_ptn2 0'(= r ) ⊢ 0'(= r )
+; {| 10.. |}
+; mov_ptn2.
+; .add_rsp 0
+	ret
 RTM_0:
+;; rsp=0 , %0~0'(= {| {| l |}|} ) 
+; # ?  %[ 3r ] ⊢ 1'(= r )
+	sub rsp,8
+	mov QWORD [rsp+0],r13
+; .mov_ptn2 %[ 3r ] ⊢ 0'(= r )
+; {| 1000000010.. |}
+	mov r13,3
+; mov_ptn2.
+	call LB_0
+	mov r14,r13
+	mov r13,QWORD [rsp-8+8*1]
+; .add_rsp 1
+	add rsp,8
+;; rsp=0 , %8~1'(= r ) %0~0'(= {| {| l |}|} ) 
+; ##10 1'(= r ) ⊢ 1'(= r )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rdi,r14
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rdi,r8 
+	call emt_r64 
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_1
+LB_1:
+; .dlt.ptn 1'(= r )
 ;; rsp=0 , %0~0'(= {| {| l |}|} ) 
 ; ∎
 	jmp RTM_1
