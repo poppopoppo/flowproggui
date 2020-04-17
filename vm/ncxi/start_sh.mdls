@@ -27,6 +27,11 @@
 			_emt_s8_to { ff0 sec0 } ⊢ _
 			» "SGN_SH.txt" _ ⊢ ff1 
 			_emt_s8_to { ff1 sep0 } ⊢ _
+			» _^ _ ⊢ sx0 
+				`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
+    		`gcc -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O0 -o out.exe 
+				//
+			_cd sx0 ⊢ sx0  
 			∎ {} 
 		∐. OpADL.syntax.prs_err◂e0 .
 			∎|
@@ -41,10 +46,5 @@
 	_cd xc0 ⊢ _ 
 	L0 { args l %[ 1r ] } ⊢ _
 	E %[ "SH.mdls" ] ⊢ _
-	» _^ _ ⊢ sx0 
-		`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
-    `gcc -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O0 -o out.exe 
-		//
-	_cd sx0 ⊢ sx0  
 	_info {} ⊢ {}  
 	∎ 
