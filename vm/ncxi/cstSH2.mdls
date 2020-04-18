@@ -9,6 +9,10 @@
 § f1 x 
 	_shl { x %[ 4r ] } ⊢ { x _ } 
 	∎ x 
+§ @.f2◂◂X y 
+	X y ⊢ y 
+	X y ⊢ y 
+	∎ y 
 §%
 	##f◂◂{ g h } x ⊢ y 
 	f0◂◂9r %[ 3r ] ⊢ x 
@@ -22,6 +26,8 @@
 	##f1 %[ 4r ] ⊢ x 
 	##_emt x ⊢ _ 
 	f◂◂{ f1 _dec } %[ 3r ] ⊢ x 
+	_emt x ⊢ _ 
+	f2◂◂_inc %[ 4r ] ⊢ x 
 	_emt x ⊢ _ 
 	∎
 

@@ -1,0 +1,206 @@
+§ C « 
+  » 17r _ ⊢ r 
+	» _^ r ⊢ r,sr 
+		0d' 0'*"KK" 0d' "\n" // 
+	_emt sr ⊢ sr 
+  ∎ {} § @.apnd { l0 l1 }
+	$ l0 ⊢ 
+	∐ _cns◂{ hd l0 } . 
+		apnd { l0 l1 } ⊢ l 
+		_cns { hd l } ⊢ l 
+		∎ l 
+	∐. _nil◂{} . 
+		∎ l1 
+¶ prs_rslt◂a'
+		∐ prs_vld : a'
+		∐ prs_err : _lst◂{ _r64 _r64 _s8 } 
+§ @.pnt_prs_err el 
+		$ el ⊢ 
+		∐ _cns◂{ { n0 n1 em } el } . 
+			pnt_prs_err el ⊢ sel 
+			» _^ n0,n1,em,sel ⊢ n0,n1,em,sel,sr 
+				"prs_err " 0d' "-" 1d' ":" 2' "\n" 
+				3' // 
+			∎ sr   
+		∐. _nil◂{} . 
+			» "" _ ⊢ sr 
+			∎ sr 
+			
+§§+s8 
+  @.nls 
+			∐# "\n" nls ⊢ { {} xx }
+				_emt { _n _r } ⊢ cc 
+        prs_vld {} ⊢ p 
+				_some p ⊢ a 
+				∎ a 
+			∐# "##" line_res ⊢ { {} xx } 
+				prs_vld {} ⊢ p 
+				_some p ⊢ a 
+				∎ a
+			∐# "\\[" ; ⊢ { {} },p
+				_emt { _n _r } ⊢ aa 
+        _some p ⊢ a 
+				∎ a
+				∐# "\n" blk_cmt nls ⊢ { {} p0 p1 }
+					_emt {} ⊢ ddd 
+          $ p0 ⊢ 
+					∐ prs_vld◂p0 . 
+						$ p1 ⊢ 
+						∐ prs_vld◂p1 . 
+							prs_vld {} ⊢ p 
+							_some p ⊢ a 
+							∎ a 
+						∐. prs_err◂e1 . 
+							pnt_prs_err e1 ⊢ s 
+							_emt s ⊢ s 
+							∎|
+					∐. prs_err◂e0 . 
+						$ p1 ⊢ 
+						∐ prs_vld◂p1 . 
+							pnt_prs_err e0 ⊢ s 
+							_emt s ⊢ s
+							∎| 
+						∐. prs_err◂e1 . 
+							apnd { e0 e1 } ⊢ e 
+							pnt_prs_err e ⊢ s 
+							_emt s ⊢ s
+							∎|
+				∐.# ⊢ { } 
+					##» _^ n,r ⊢ n,r,sr 
+					» _^ _n,_r ⊢ n,r,sr 
+						"nls_err " 0d' "-" 1d' ":\n" //
+					_emt sr ⊢ sr 
+					∎|   
+			∐.# ⊢ { } 
+				prs_vld {} ⊢ p 
+				_some p ⊢ a 
+				∎ a
+		@.blk_cmt 
+			∐# "\\[" ; ⊢ { {} },p
+				_some p ⊢ a 
+				∎ a 
+				∐# "\n" blk_cmt blk_cmt ⊢ { {} p0 p1 }
+					$ p0 ⊢ 
+					∐ prs_vld◂p0 . 
+						$ p1 ⊢ 
+						∐ prs_vld◂p1 . 
+							prs_vld {} ⊢ p 
+							_some p ⊢ a 
+							∎ a 
+						∐. prs_err◂e1 . 
+							prs_err e1 ⊢ p 
+							_some p ⊢ a 
+							∎ a
+					∐. prs_err◂e0 . 
+						$ p1 ⊢ 
+						∐ prs_vld◂p1 . 
+							prs_err e0 ⊢ p 
+							_some p ⊢ a 
+							∎ a 
+						∐. prs_err◂e1 . 
+							apnd { e0 e1 } ⊢ e 
+							prs_err e ⊢ p 
+							_some p ⊢ a 
+							∎ a
+					∐.# ⊢ { } 
+						_nil {} ⊢ l 
+						» "blk_cmt 0" _ ⊢ s
+						_cns { { _n _r s } l } ⊢ l 
+						prs_err l ⊢ l 
+						_some l ⊢ a 
+						∎ a 
+			∐# "\\]" "\n" ⊢ { {} {} }
+				_emt { _n _r } ⊢ xx 
+        prs_vld {} ⊢ p 
+				_some p ⊢ a 
+				∎ a  
+			∐# line_res blk_cmt ⊢ { p0 p1 } 
+				_some p1 ⊢ a 
+				∎ a
+			∐.# ⊢ { } 
+				_nil {} ⊢ l 
+				» "blk_cmt 1" _ ⊢ s
+				_cns { { _n _r s } l } ⊢ l 
+				prs_err l ⊢ l 
+				_some l ⊢ a 
+				∎ a
+		@.line_res 
+			∐# "\n" ⊢ { {} }
+				_some {} ⊢ a 
+				∎ a 
+			∐# _byt line_res ⊢ { b l }
+				_some {} ⊢ a
+				∎ a  
+			∐.# ⊢ { }
+				_some {} ⊢ a 
+				∎ a
+\[
+  jklj
+  jjjj
+  \]
+§ @.lp x 
+  _inc x ⊢ x 
+  lp x ⊢|
+§ A « 
+  » _^ _ ⊢ sr 
+    `\[
+    `\] 
+    // 
+  » 0r _ ⊢ x 
+  nls.prs { sr x } ⊢ { sr x a } 
+  _emt { x a } ⊢ { x a } 
+  ∎ {} \[
+§§ a 
+  §§ b
+    §§ c 
+    ∎∎  
+  ∎∎
+∎∎ 
+\]
+§§ a  
+  §§ b 
+  ∎∎ 
+∎∎ 
+§§ d = a.b
+§§ e = a
+
+##§§ f = a.b.c§§ t_axm 
+  § r64 = 0r 
+  § s8 = 1r 
+  § lst = 2r 
+  § opn = 3r  
+  ∎∎
+§ @.lp0 x 
+  lp0 x ⊢| 
+§ @.lp1 x 
+  _emt x ⊢ x 
+  ∐ x'=0r . 
+    ∎ {} 
+  ∐. . 
+    _dec x ⊢ x 
+    lp1 x ⊢| 
+§ A « 
+  » 10r _ ⊢ x 
+  lp1 x ⊢ x 
+  » t_axm.r64 _ ⊢ a 
+  _emt a ⊢ a 
+  ∎ x¶ @.t a',b'
+  ∐ c : t◂a'◂b'
+¶ s a',b' = t◂a'◂b' 
+¶ u = s◂_r64◂_s8
+§ @.f0 { x y z }  
+  ##$ x ⊢ q,i
+  ##_add q ⊢ r 
+  _inc x ⊢ r 
+  _mk_arr r ⊢ { r a } 
+  _set_q { a r z } ⊢ { a r } 
+  _emt r ⊢ r 
+  ∎ { y r }
+§§ A 
+  §§ B 
+    ∎∎ 
+  §§ D
+    §§ V = B  
+    ∎∎ 
+  ∎∎
+§§ C = A.B
