@@ -145,23 +145,6 @@
 	_cns { a0 l } ⊢ l 
 	∎ l 
 §§ arr 
-	§ @.mlt_i◂◂M { v0 v1 l i } 
-		∐ l'=i' . 
-			∎ { v0 v1 } 
-		∐. . 
-			_lod_q { v0 i } ⊢ { v0 i b0 } 
-			_lod_q { v1 i } ⊢ { v1 i b1 }
-			M { b0 b1 } ⊢ b2 
-			exc_q { v0 i b2 } ⊢ { v0 i _ } 
-			_inc i ⊢ i 
-			mlt_i◂◂M { v0 v1 l i } ⊢|  
-	§ mlt◂◂M { v0 v1 } 
-		_arr_len v0 ⊢ { v0 l0 } 
-		_arr_len v1 ⊢ { v1 l1 } 
-		∐ l0'=l1' . 
-			mlt_i◂◂M { v0 v1 l0 %[ 0r ] } ⊢| 
-		∐. . 
-			err %[ "op2 0:" ] ⊢|  
 	§ @.fnd_lft_i◂◂T { a l i } 
 		∐ l'=i' . 
 			_none {} ⊢ o
@@ -704,10 +687,12 @@
 	§§ RP = reg_ptn
 	§§ rset
 		¶ t = _arr◂bl.t 
-		§ N = 128r 
 		§ ini {} 
+			» 128r _ ⊢ n 
 			bl.f {} ⊢ b 
-			mk_arr { %[ N ] b } ⊢ { _ _ v } 
+			mk_arr { n b } ⊢ { _ _ v } 
+			##» 0r _ ⊢ i 
+			##lp0 { v i } ⊢ v 
 			∎ v 
 		§ @.max_t v 
 				» 0r _ ⊢ i 
@@ -726,7 +711,6 @@
 							$ i ⊢ i,i0
 							_inc i ⊢ i 
 							max_t_lp { v i i0 } ⊢| 
-		
 		§§ pnt 
 			§ @.lp { v i s j }
 				∐ i'=j' . 
@@ -3374,16 +3358,11 @@
 				_some t ⊢ a 
 				∎ a 
 		@.lc_etr_def
-			∐# "=" !| ct_ptn "\n" ⊢ { {} c {} }
-				∐ c ⊢ RP.atm◂c . 
-					ast.lc_ln c ⊢ r
-					prs_vld r ⊢ r 
-					_some r ⊢ a
-					∎ a
-				∐. . 
-					mk_prs_err { _n _r %[ "lc_etr_def 0" ] } ⊢ e 
-					_some e ⊢ a 
-					∎ a 
+			∐# "=" !| cst "\n" ⊢ { {} c {} }
+				ast.lc_ln c ⊢ r
+				prs_vld r ⊢ r 
+				_some r ⊢ a
+				∎ a
 			∐# "«" !| "\n" lc_code ⊢ { {} {} x }
 				$ x ⊢ 
 				∐ prs_vld◂x . 

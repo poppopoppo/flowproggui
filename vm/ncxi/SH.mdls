@@ -23,6 +23,7 @@
 	∐. _nil◂{} . 
 		_nil {} ⊢ l 
 		∎ l 
+§ f3 = map◂◂_dec
 §%
 	##f◂◂{ g h } x ⊢ y 
 	f0◂◂9r %[ 3r ] ⊢ x 
@@ -43,7 +44,9 @@
 	_cns { %[ 4r ] l } ⊢ l 
 	_cns { %[ 3r ] l } ⊢ l 
 	map◂◂_inc l ⊢ l 
-	_emt l ⊢ _
+	_emt l ⊢ l
+	f3 l ⊢ l 
+	_emt l ⊢ l 
 	∎
 
 \[
