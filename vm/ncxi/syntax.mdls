@@ -161,7 +161,9 @@
 		∐ l0'=l1' . 
 			mlt_i◂◂M { v0 v1 l0 %[ 0r ] } ⊢| 
 		∐. . 
-			err %[ "op2 0:" ] ⊢|  
+			##err %[ "op2 0:" ] ⊢|  
+			_emt %[ "op2 0" ] ⊢ _ 
+			∎| 
 	§ @.fnd_lft_i◂◂T { a l i } 
 		∐ l'=i' . 
 			_none {} ⊢ o
@@ -428,6 +430,80 @@
 	§ assoc = assoc 
 	§ rev = rev 
 	§ apnd = apnd 
+	
+	§ @.fld_lr◂◂{ F0 F1 F2 } { v l } 
+		$ l ⊢ 
+		∐ _cns◂{ a l } .
+			F0 { v a } ⊢ { v b } 
+			fld_lr◂◂{ F0 F1 F2 } { v l } ⊢ w 
+			F1 { w b } ⊢ w 
+			∎ w 
+		∐. _nil◂{} . 
+			F2 v ⊢ w 
+			∎ w 
+	§ @.fld_l◂◂F { v l }
+		$ l ⊢ 
+		∐ _cns◂{ a l } .
+			F { v a } ⊢ v 
+			fld_l◂◂F { v l } ⊢| 
+		∐. _nil◂{} . 
+			∎ v
+	§ @.fld_r◂◂F { v l } 
+		$ l ⊢ 
+		∐ _cns◂{ a l } . 
+			fld_r◂◂F { v l } ⊢ v 
+			F { a v } ⊢ v 
+			∎ v 
+		∐. _nil◂{} . 
+			∎ v 
+
+	§ @.pnt_l◂◂{ F S } { v l } 
+		$ l ⊢ 
+		∐ _cns◂{ a l } .
+			F { v a } ⊢ { v s } 
+			∐ l ⊢ _nil◂{} . 
+				∎ { v s }
+			∐. . 
+				pnt_l◂◂{ F S } { v l } ⊢ { v s1 } 
+				^ s,s1 ⊢ _,_,sr 
+					0' S 1' // 
+				∎ { v sr } 
+		∐. _nil◂{} . 
+			∎ { v %[ "" ] }
+	§ @.pnt◂◂{ F S } l 
+		$ l ⊢ 
+		∐ _cns◂{ a l } .
+			F a ⊢ s 
+			∐ l ⊢ _nil◂{} . 
+				∎ s
+			∐. . 
+				pnt◂◂{ F S } l ⊢ s1  
+				^ s,s1 ⊢ _,_,sr 
+					0' S 1' // 
+				∎ sr  
+		∐. _nil◂{} . 
+			∎ %[ "" ] 
+	§ @.map_l◂◂F { v l } 
+		$ l ⊢ 
+		∐ _cns◂{ a l } . 
+			F { v a } ⊢ { v b } 
+			map_l◂◂F { v l } ⊢ { v l } 
+			_cns { b l } ⊢ l 
+			∎ { v l } 
+		∐. _nil◂{} .
+			_nil {} ⊢ l 
+			∎ { v l } 
+	§ @.map_r◂◂F { v l } 
+		$ l ⊢ 
+		∐ _cns◂{ a l } . 
+			map_r◂◂F { v l } ⊢ { v l } 
+			F { v a } ⊢ { v b } 
+			_cns { b l } ⊢ l 
+			∎ { v l } 
+		∐. _nil◂{} .
+			_nil {} ⊢ l 
+			∎ { v l }
+
 	§ @.len l 
 		$ l ⊢ 
 		∐ _cns◂{ a l } . 
@@ -676,6 +752,29 @@
 		¶ @.t ◂ a'
 			∐ rcd : _lst◂(t◂a')
 			∐ atm : a'
+		\[
+		§ 
+			@.map_l◂◂F { v p } 
+				$ p ⊢ 
+				∐ RP.rcd◂l . 
+					map_l_lst◂◂F { v l } ⊢ { v l } 
+					RP.rcd l ⊢ p 
+					∎ { v p } 
+				∐. RP.atm◂a . 
+					F { v a } ⊢ { v b } 
+					RP.atm b ⊢ p 
+					∎ { v p } 
+			@.map_l_lst◂◂F { v l } 
+				$ l ⊢ 
+				∐ _cns◂{ p l } . 
+					map_l◂◂F { v p } ⊢ { v p } 
+					map_l_lst◂◂F { v l } ⊢ { v l } 
+					_cns { p l } ⊢ l 
+					∎ { v l } 
+				∐. _nil◂{} . 
+					_nil◂{} 
+					∎ { v l } 
+					\]
 		§ unt {} 
 			_nil {} ⊢ l 
 			rcd l ⊢ p 
@@ -762,45 +861,9 @@
 			bl.f {} ⊢ b 
 			exc_q { v0 i b } ⊢ { v0 i b } 
 			∎ { v0 i }
-		§ @.and_lp { v0 v1 i }
-			∐ i'=128r . 
-				∎ { v0 v1 }  
-			∐. . 
-				_lod_q { v0 i } ⊢ { v0 i b0 } 
-				_lod_q { v1 i } ⊢ { v1 i b1 }
-				bl.and { b0 b1 } ⊢ b2 
-				exc_q { v0 i b2 } ⊢ { v0 i _ } 
-				_inc i ⊢ i 
-				and_lp { v0 v1 i } ⊢|  
-		§ and { v0 v1 } 
-			» 0r _ ⊢ i 
-			and_lp { v0 v1 i } ⊢|
-		§ @.or_lp { v0 v1 i }
-			∐ i'=128r . 
-				∎ { v0 v1 }  
-			∐. . 
-				_lod_q { v0 i } ⊢ { v0 i b0 } 
-				_lod_q { v1 i } ⊢ { v1 i b1 }
-				bl.or { b0 b1 } ⊢ b2 
-				exc_q { v0 i b2 } ⊢ { v0 i _ } 
-				_inc i ⊢ i 
-				or_lp { v0 v1 i } ⊢|  
-		§ or { v0 v1 } 
-			» 0r _ ⊢ i 
-			or_lp { v0 v1 i } ⊢|
-		§ @.sub_lp { v0 v1 i }
-			∐ i'=128r . 
-				∎ { v0 v1 }  
-			∐. . 
-				_lod_q { v0 i } ⊢ { v0 i b0 } 
-				_lod_q { v1 i } ⊢ { v1 i b1 }
-				bl.sub { b0 b1 } ⊢ b2 
-				exc_q { v0 i b2 } ⊢ { v0 i _ } 
-				_inc i ⊢ i 
-				sub_lp { v0 v1 i } ⊢|  
-		§ sub { v0 v1 } 
-			» 0r _ ⊢ i 
-			sub_lp { v0 v1 i } ⊢|
+		§ and = arr.mlt◂◂bl.and 
+		§ or = arr.mlt◂◂bl.or
+		§ sub = arr.mlt◂◂bl.sub 
 		§ @.min_f v 
 				» 0r _ ⊢ i 
 				min_f_lp { v i } ⊢| 
@@ -930,6 +993,8 @@
 								"q" 0d' // 
 							∎ s 
 					@.pnt_lst l 
+						lst.pnt◂◂{ pnt "" } l ⊢| 
+						\[
 						$ l ⊢ 
 						∐ _cns◂{ h l } . 
 							pnt h ⊢ sh 
@@ -940,6 +1005,8 @@
 						∐. _nil◂{} . 
 							» "" _ ⊢ s 
 							∎ s  
+							\]
+					##§ pnt_lst = lst.pnt◂◂{ pnt "" }
 				§ @.eq_hp { h0 h1 } 
 					∐ h0 ⊢ ref◂q0; h1 ⊢ ref◂q1 .  
 						∐ q0 ⊢ opq◂{}; q1 ⊢ opq◂{} . 
@@ -1126,6 +1193,7 @@
 				∎| 
 		§ 
 			@.evl_ct_ptn { evv p }
+				\[
 				$ p ⊢ 
 				∐ RP.rcd◂l . 
 					evl_ct_ptn_lst { evv l } ⊢ { evv l } 
@@ -1135,16 +1203,10 @@
 					evl_ct { evv a } ⊢ { evv a } 
 					RP.atm a ⊢ p 
 					∎ { evv p } 
+					\]
+				RP.map_l◂◂evl_ct { evv p } ⊢| 
 			@.evl_ct_ptn_lst { evv l } 
-				$ l ⊢ 
-				∐ _cns◂{ p l } . 
-					evl_ct_ptn { evv p } ⊢ { evv p }
-					evl_ct_ptn_lst { evv l } ⊢ { evv l } 
-					_cns { p l } ⊢ l 
-					∎ { evv l } 
-				∐. _nil◂{} . 
-					_nil {} ⊢ l 
-					∎ { evv l }
+				lst.map_l◂◂evl_ct_ptn { evv l } ⊢| 
 			@.evl_ct { evv c } 
 				∐ c ⊢ k_name◂i . 
 					lod_tv { evv i } ⊢ { evv i k } 
