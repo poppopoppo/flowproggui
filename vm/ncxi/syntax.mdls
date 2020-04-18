@@ -752,17 +752,16 @@
 		¶ @.t ◂ a'
 			∐ rcd : _lst◂(t◂a')
 			∐ atm : a'
-		\[
 		§ 
 			@.map_l◂◂F { v p } 
 				$ p ⊢ 
-				∐ RP.rcd◂l . 
+				∐ rcd◂l . 
 					map_l_lst◂◂F { v l } ⊢ { v l } 
-					RP.rcd l ⊢ p 
+					rcd l ⊢ p 
 					∎ { v p } 
-				∐. RP.atm◂a . 
+				∐. atm◂a . 
 					F { v a } ⊢ { v b } 
-					RP.atm b ⊢ p 
+					atm b ⊢ p 
 					∎ { v p } 
 			@.map_l_lst◂◂F { v l } 
 				$ l ⊢ 
@@ -772,9 +771,8 @@
 					_cns { p l } ⊢ l 
 					∎ { v l } 
 				∐. _nil◂{} . 
-					_nil◂{} 
+					_nil {} ⊢ l 
 					∎ { v l } 
-					\]
 		§ unt {} 
 			_nil {} ⊢ l 
 			rcd l ⊢ p 
