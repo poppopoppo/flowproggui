@@ -410,6 +410,15 @@
 		∐. . 
 			bl.f {} ⊢ t 
 			∎ { a b t }
+	§ pnt◂◂P { v o } 
+		$ o ⊢ 
+		∐ _some◂a . 
+			P { v a } ⊢ { v s } 
+			^ s ⊢ _,s 
+				"_some◂" 0' // 
+			∎ { v s } 
+		∐. _none◂{} . 
+			∎ { v %[ "_none◂{}" ] }
 	§ eq_st_T◂◂E { e a b }
 		∐ a ⊢ _some◂a; b ⊢ _some◂b . 
 			E { e a b } ⊢ { e a b t } 
@@ -1279,6 +1288,13 @@
 					k_op_axm { n1 v1 } ⊢ c1 
 					bl.t {} ⊢ b 
 					∎ { evv c0 c1 b }
+				∐ c0 ⊢ k_app◂{ k0 k1 }; c1 ⊢ k_app◂{ k2 k3 } . 
+					eq_ct_ptn { evv k0 k2 } ⊢ { evv k0 k2 b0 } 
+					eq_ct_ptn { evv k1 k3 } ⊢ { evv k1 k3 b1 } 
+					bl.and { b0 b1 } ⊢ b 
+					k_app { k0 k1 } ⊢ c0 
+					k_app { k2 k3 } ⊢ c1 
+					∎ { evv c0 c1 b }
 				∐. . 
 					bl.f {} ⊢ b 
 					∎ { evv c0 c1 b }
@@ -1355,7 +1371,7 @@
 					∐. l ⊢ _nil◂{} .
 						» "" _ ⊢ sr
 						∎ { evv sr }
- 
+			§
 				@.src { evv s } 
 					$ s ⊢ 
 					∐ im_reg◂c .
@@ -1372,6 +1388,11 @@
 						∎ { evv sr }
 					∐. dst_reg◂w .
 						∎ { evv w }
+			§	src_ptn = RP.pnt_l◂◂src 
+			§	src_ptn_lst = lst.pnt_l◂◂{ src_ptn " " }
+			§ dst_ptn = RP.pnt_l◂◂dst
+			§ dst_ptn_lst = lst.pnt_l◂◂{ dst_ptn " " }
+			§	
 				@.mtc_atm { evv a } 
 					$ a ⊢ 
 					∐ mtc_cst◂c .
@@ -1392,35 +1413,8 @@
 					∐. mtc_wc◂o . 
 						» "_" _ ⊢ sr
 						∎ { evv sr } 
-				@.src_ptn = RP.pnt_l◂◂src 
-				@.src_ptn_lst = lst.pnt_l◂◂{ src_ptn " " }
-				@.dst_ptn = RP.pnt_l◂◂dst
-				@.dst_ptn_lst = lst.pnt_l◂◂{ dst_ptn " " }
 				@.mtc_ptn = RP.pnt_l◂◂mtc_atm
-				@.mtc_ptn_lst = lst.pnt_l◂◂{ mtc_ptn " " }
-		\[
-			§ @.mtc_ptn { evv mp } 
-			$ mp ⊢
-			∐ RP.rcd◂l . 
-				$ l ⊢ l,l0 
-				RP.rcd l0 ⊢ r0 
-				mtc_ptn_lst { evv l } ⊢ { evv sl }
-				» _^ sl ⊢ sl,sr
-					"{ " 0' "}" //
-				∎ { evv sr }
-			∐. RP.atm◂a .
-			@.mtc_ptn_lst { evv l }
-				$ l ⊢
-				∐ _cns◂{ hd l } .
-					mtc_ptn { evv hd } ⊢ { evv shd } 
-					mtc_ptn_lst { evv l } ⊢ { evv sl }
-					» _^ shd,sl ⊢ shd,sl,sr 
-						0' " " 1' //
-					∎ { evv sr }
-				∐. _nil◂{} .
-						» "" _ ⊢ sr
-				∎ { evv sr }
-			\]
+			§ mtc_ptn_lst = lst.pnt_l◂◂{ mtc_ptn " " }
 		§	
 			@.lc_code { evv dn lc ep0 }
 					$ lc ⊢ 
@@ -3877,7 +3871,7 @@
 					pnt_dta { tv l } ⊢ { tv s }
 					pnt_dta_i a ⊢ sa  
 					» _^ sa,s ⊢ sa,s,sr 
-						0' 1' // 
+						0' "◂" 1' // 
 					∎ { tv sr } 
 				∐ imp◂{ k0 k1 } . 
 					pnt_type_k { tv k0 } ⊢ { tv s0 }  
@@ -3917,7 +3911,6 @@
 							0d' "'" "(=" 1' ")" // 
 						∎ { tv sr }
 			@.pnt_type_k_lst = lst.pnt_l◂◂{ pnt_type_k " " }
-			@.pnt_dta = lst.pnt_l◂◂{ pnt_type_k "◂" }
 			@.pnt_dta { tv l } 
 				rev l ⊢ l 
 				lst.pnt_l◂◂{ pnt_type_k "◂" } { tv l } ⊢| 
@@ -11698,8 +11691,10 @@
 						gen { tv_n tv lvg dk } ⊢ { tv_n tv lvg dk } 
 						$ yx ⊢ yx,yx0 
 						pnt_type_k { tv yx0 } ⊢ { tv syx } 
-						» _^ lbg,o,sp0,spr0,syx ⊢ lbg,o,sp0,spr0,syx,ec1 
-							"LB_" 0d' ": ;; #" 1d' " " 2' " ⊢ " 3' " : " 4' "\n" //
+						$ o_k ⊢ o_k,o_k0 
+						opn.pnt◂◂ast.pnt.ct_ptn { evv o_k0 } ⊢ { evv so_k } 
+						» _^ lbg,o,sp0,spr0,syx,so_k ⊢ lbg,o,sp0,spr0,syx,_,ec1 
+							"LB_" 0d' ": ;; #" 1d' "◂◂(" 5' ") " 2' " ⊢ " 3' " : " 4' "\n" //
 						» _^ lbg ⊢ lbg,sc0 
 							"JMP_" 0d' ":\n" // 
 						_emt ec1 ⊢ ec1 
@@ -13102,7 +13097,7 @@
 				∎ { n m e }
 			∐. . 
 				» _^ n,m ⊢ n,m,s 
-					"%define SS_RCD_" 0d' "_MAX (1<<12)\n"
+					"%define SS_RCD_" 0d' "_MAX (1<<13)\n"
 					"\tBSS_SS_RCD " 0d' ",SS_RCD_" 0d' "_MAX\n" 
 					//
 				rp8.add_s8 { e s } ⊢ e 
