@@ -24,6 +24,11 @@
 		_nil {} ⊢ l 
 		∎ l 
 § f3 = map◂◂_dec
+§ 
+	@.f4 = map◂◂f5 
+	@.f5 x 
+		_add { x %[ 10r ] } ⊢ { x _ } 
+		∎ x 
 §%
 	##f◂◂{ g h } x ⊢ y 
 	f0◂◂9r %[ 3r ] ⊢ x 
@@ -47,9 +52,11 @@
 	_emt l ⊢ l
 	f3 l ⊢ l 
 	_emt l ⊢ l 
+	f4 l ⊢ l 
+	_emt l ⊢ _ 
 	∎
 
-\[
+	\[
 	_ala :  { b' a' }→{ c' a' } →→ { _arr◂a' _r64 b' }→{ _arr◂a' _r64 c' } ; array local application
 § @.f◂◂I x 
 	_add_im◂◂I x ⊢ x 
@@ -66,4 +73,4 @@
 	∐. 
 		∏._ x 
 			∎ x 
-\]
+	\]
