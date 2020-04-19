@@ -1,0 +1,456 @@
+§§ MX 
+[;
+§ f0 x 
+	_mov_x x ⊢ { x0 x1 } 
+	_add { x0 x1 } ⊢ { x0 _ } 
+	∎ x0
+§ C « 
+	» 0xrFF _ ⊢ x0
+	» 0xrAA _ ⊢ x1
+	_emt_q {{{} {}} {} {{}}} ⊢ { r0 r1 r2 }
+	_emt_q r0 ⊢ r0 
+	_emt_q r1 ⊢ r1
+	_emt_q r2 ⊢ _ 
+	_emt_q x0 ⊢ x0
+	_emt_q { x0 x1 } ⊢ p0
+	∎ {}
+§ C1 « 
+	» 0xr89873 _ ⊢ x0 
+	» 0xrFFF _ ⊢ x1 
+	» 0xrAfA _ ⊢ x2 
+	_add { x1 x2 } ⊢ { x1 x2 } 
+	_emt_q { x1 x2 } ⊢ { x1 x2 }
+	_mov { x0 x1 } ⊢ { x0 x1 }
+	_mov_x x0 ⊢ { x0 _ }  
+	» 0xr1 _ ⊢ x3 
+	f0 x3 ⊢ x3
+	f0 x3 ⊢ x3 
+	_emt_q { x0 x1 x3 } ⊢ { x0 x1 x3 } 
+	» "Hello World !!" _ ⊢ s0
+	_emt_q { s0 x0 { x1 }} ⊢ _ 
+	∎ {}
+§ C2 « 
+	_none {} ⊢ d0
+	_some d0 ⊢ d0
+	_nil {} ⊢ l0 
+	_cns { d0 l0 } ⊢ l0 
+	_emt_q l0 ⊢ l0
+	∎ {} 
+;]
+§ @.tak { x y z }
+	_setge { y x } ⊢ { y x b } 
+	? b 
+	∐\ b' ,b'=0xr0 ⊢ 
+		_mov_x x ⊢ { x x0 }
+		_mov_x y ⊢ { y y0 } 
+		_mov_x z ⊢ { z z0 }
+		_dec x0 ⊢ x0 
+		tak { x0 y0 z0 } ⊢ rx 
+		_mov_x x ⊢ { x x0 }
+		_mov_x y ⊢ { y y0 } 
+		_mov_x z ⊢ { z z0 }
+		_dec y0 ⊢ y0 
+		tak { y0 z0 x0 } ⊢ ry 		
+		_dec z ⊢ z 
+		tak { z x y } ⊢ rz 
+		tak { rx ry rz } ⊢ rr 
+		∎ rr 
+	∐. b' ⊢  
+		∎ z 
+§ C3 « 
+	» 0xrAA _ ⊢ x0 
+	» 0xr87 _ ⊢ x1 
+	_setge { x0 x1 } ⊢ { x0 x1 b0 }
+	? x0 
+	∐\ x0' ,x0'=0xr0 ⊢
+		;_emt_q x0 ⊢ x0 
+		∎ {} 
+	∐\ x0' ,x0'=0xrAB ⊢ 
+		∎ {}
+	∐\ x0' ,x0'=0xrAA ⊢ 
+		» _^ _ ⊢ s0
+			"AA" 
+			//
+		» _^ s0 ⊢ s0,sr 
+			"§" 0' 0' "Qjjjjj" 0' // 
+		_emt_q s0 ⊢ s0
+		_emt_q sr ⊢ sr
+		» 0xr0 _ ⊢ o0 
+		_chr.prs { sr o0 } ⊢ { sr o0 c0 }
+		_emt_q { o0 c0 } ⊢ { o0 c0 } 
+		∎ {}
+	∐. x0' ⊢ 
+		_emt_q x0 ⊢ x0 
+		∎ {}
+[;
+§ C4 « 
+	» 0xr14 _ ⊢ x0 
+	» 0xra _ ⊢ x1 
+	» 0xr0 _ ⊢ x2 
+	tak { x0 x1 x2 } ⊢ y 
+	_emt_q y ⊢ y 
+	∎ {}
+;]
+∎∎
+§§+s8 
+	@.cha 
+		∐ .. ⊢ { b0 } 
+			_some b0 ⊢ o0 
+			∎ o0
+	@.t 
+		∐ "J"  ⊢ { %p0 } 
+			_none {} ⊢ a0 
+			∎ a0
+		∐ ⊢ {} 
+			_none {} ⊢ a0 
+			∎ a0 
+§ S0 = "JJ" 
+§ C0 « 
+	» _^ _ ⊢ s0
+		S0 // 
+	» 0xr0 _ ⊢ x0 
+	t.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+	∎ {}§ C « 
+	$ a ⊢
+		∐ b◂c . 
+			∎|
+		∐. e◂f . 
+			∎| 
+\[
+§ @.f0 x 
+	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 }; t0 ⊢ _cns◂{ h1 t1 } . 
+		» 0r _ ⊢ x0 
+		_emt_q { x0 h1 } ⊢ { x0 h1 } 
+		∎ {}
+	∐ x ⊢ _cns◂{ h t }; t ⊢ _cns◂{ h0 t0 } .
+		» 1r _ ⊢ x0 
+		_emt_q { x0 h0 } ⊢ { x0 h0 } 
+		∎ {}
+	∐ x ⊢ _cns◂p . 
+		» 2r _ ⊢ x0 
+		_emt_q x0 ⊢ x0 
+		∎ {}
+	∐. x ⊢ _nil◂{} . 
+		» 3r _ ⊢ x0 
+		_emt_q x0 ⊢ x0 
+		∎ {}	
+\]
+§ @.s8_of_r64_lst_i { i rl }  
+	∐ rl ⊢ _cns◂{ ri rl_tl } . 
+		_inc i ⊢ i 
+		s8_of_r64_lst_i { i rl_tl } ⊢ { i s0 }
+		_dec i ⊢ i  
+		_sts { s0 i ri } ⊢ { s0 i ri } 
+		∎ { i s0 }  
+	∐. rl ⊢ _nil◂{} . 
+		_mlc_s8 i ⊢ { i s0 }
+		∎ { i s0 } 
+§ s8_of_r64_lst cl 
+	» 0r _ ⊢ i 
+	s8_of_r64_lst_i { i cl } ⊢ { i s } 
+	∎ s
+§§+s8 
+	@.dgt
+	∐. _byt ⊢ { c } 
+		» 48r _ ⊢ c0 
+		» 57r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a  
+§§+s8 
+	@.ch_l 
+	∐. _byt ⊢ { c } 
+		» 97r _ ⊢ c0 
+		» 122r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a
+			  
+§§+s8 
+	@.ch_u
+	∐. _byt ⊢ { c } 
+		» 65r _ ⊢ c0 
+		» 90r _ ⊢ c1 
+		_setge { c c0 } ⊢ { c c0 b0 } 
+		_setge { c1 c } ⊢ { c1 c b1 } 
+		∐ b0'=1r; b1'=1r . 
+			_some c ⊢ a 
+			∎ a 
+		∐. . 
+			_none {} ⊢ a 
+			∎ a  
+§§+s8 
+	@.ch_a 
+	∐ ch_u ⊢ { c } 
+		_some c ⊢ a 
+		∎ a  
+	∐. ch_l ⊢ { c } 
+		_some c ⊢ a 
+		∎ a 		 	
+§§+s8 
+	@.word 
+	∐. ch_a word_tl ⊢ { c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		s8_of_r64_lst cl ⊢ s 
+		_some s ⊢ a 
+		∎ a
+	@.word_tl 
+	∐ word_hd word_tl ⊢ { c tl } 
+		_cns { c tl } ⊢ l 
+		_some l ⊢ a 
+		∎ a 
+	∐. ⊢ { } 
+		_nil {} ⊢ l 
+		_some l ⊢ a 
+		∎ a
+	@.word_hd 
+	∐ ch_a ⊢ { c } 
+		_some c ⊢ a 
+		∎ a 
+	∐ dgt ⊢ { c } 
+		» "P0" _ ⊢ s0 
+		_emt_q s0 ⊢ s0 
+		_some c ⊢ a 
+		∎ a  
+	∐. "_" ⊢ { {} } 
+		» "P1" _ ⊢ s0 
+		_emt_q s0 ⊢ s0 
+		» 95r _ ⊢ c 
+		_some c ⊢ a 
+		∎ a 
+			
+§§+s8 
+	@.prm_word 
+	∐ "_" word 
+	∐. word  
+	 	
+§ T0 « 
+	» "aSk7_dD0_4$ jj " _ ⊢ s0 
+	» 0r _ ⊢ x0 
+	word.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+	∎ {}
+§§+s8 
+	@.stg_ltr
+	∐. "\"" stg_ltr_seq ⊢ { {} cl } 
+		s8_of_r64_lst cl ⊢ s
+		_some s ⊢ a 
+		∎ a
+	@.stg_ltr_seq 
+	∐ "\\" stg_ltr_sp stg_ltr_seq ⊢ { {} c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		_some cl ⊢ a 
+		∎ a  
+	∐ "\"" ⊢ { {} }
+		_nil {} ⊢ cl 
+		_some cl ⊢ a 
+		∎ a 
+	∐. _byt stg_ltr_seq ⊢ { c0 cl } 
+		_cns { c0 cl } ⊢ cl 
+		_some cl ⊢ a 
+		∎ a
+	@.stg_ltr_sp 
+	∐ "\\" ⊢ { {} }
+		» 92r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "\"" ⊢ { {} }
+		» 34r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "n" ⊢ { {} }
+		» 10r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐ "t" ⊢ { {} }
+		» 9r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	∐. "0" ⊢ { {} }
+		» 0r _ ⊢ c0 
+		_some c0 ⊢ a0 
+		∎ a0	 
+	
+§ C2 « 
+	» _^ _ ⊢ s0 
+		`"Hello\tWorld !!" 
+		//
+	» 0r _ ⊢ x0 
+	stg_ltr.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt_q { s0 x0 a0 } ⊢ { s0 x0 a0 } 
+	∎ {}
+§ C1 « 
+	» 65r _ ⊢ x0 
+	» 66r _ ⊢ x1 
+	» 67r _ ⊢ x2 
+	» 68r _ ⊢ x3
+	» 0r _ ⊢ i0
+	_nil {} ⊢ l0  
+	_cns { x0 l0 } ⊢ l0 
+	_cns { x1 l0 } ⊢ l0 
+	_cns { x2 l0 } ⊢ l0 
+	_cns { x3 l0 } ⊢ l0 
+	s8_of_r64_lst_i { i0 l0 } ⊢ { i0 s0 } 
+	_emt_q s0 ⊢ s0 
+	##f0 l0 ⊢ {} 
+	∎ {} 
+	
+§ @.tak { x y z }
+	_setge { y x } ⊢ { y x b }  
+	∐ b'=0r . 
+		_mov_x x ⊢ { x x0 }
+		_mov_x y ⊢ { y y0 } 
+		_mov_x z ⊢ { z z0 }
+		_dec x0 ⊢ x0 
+		tak { x0 y0 z0 } ⊢ rx 
+		_mov_x x ⊢ { x x0 }
+		_mov_x y ⊢ { y y0 } 
+		_mov_x z ⊢ { z z0 }
+		_dec y0 ⊢ y0 
+		tak { y0 z0 x0 } ⊢ ry 		
+		_dec z ⊢ z 
+		tak { z x y } ⊢ rz 
+		tak { rx ry rz } ⊢ rr 
+		∎ rr 
+	∐. .
+		∎ z 		
+
+§ C4 « 
+	» 20r _ ⊢ x0 
+	» 10r _ ⊢ x1 
+	» 0r _ ⊢ x2 
+	tak { x0 x1 x2 } ⊢ y 
+	_emt_q y ⊢ y 
+	∎ {}
+
+§ @.tak_x { x y z } 
+	_setge { y x } ⊢ { y x b } 
+	∐ b'=0r . 
+		_dec x ⊢ x0 
+		tak_x { x0 y z } ⊢ { x0 y z rx }
+		_inc x0 ⊢ x
+		_dec y ⊢ y0 
+		tak_x { y0 z x } ⊢ { y0 z x ry } 
+		_inc y0 ⊢ y 
+		_dec z ⊢ z0 
+		tak_x { z0 x y } ⊢ { z0 x y rz }
+		_inc z0 ⊢ z 
+		tak_x { rx ry rz } ⊢ { rx ry rz rr } 
+		∎ { x y z rr } 
+	∐. . 
+		_mov_x z ⊢ { z z0 }
+		∎ { x y z z0 }
+
+§ @.fact x 
+	∐ x'=0r .
+		» 1r _ ⊢ y 
+		∎ y 
+	∐ x'=1r .
+		» 1r _ ⊢ y 
+		∎ y  
+	∐. . 
+		_mov_x x ⊢ { x x0 } 
+		_dec x0 ⊢ x0 
+		fact x0 ⊢ y0 
+		_imul { x y0 } ⊢ { x y0 } 
+		∎ x
+		
+§ C2 « 
+	» 0r _ ⊢ x0 
+	» 4r _ ⊢ x1 
+	fact x1 ⊢ y1 
+	_emt_q y1 ⊢ y1 
+	∎ {}
+\[
+FF
+\]
+
+§ C5 « 
+	» 20r _ ⊢ x0 
+	» 10r _ ⊢ x1 
+	» 0r _ ⊢ x2 
+	tak_x { x0 x1 x2 } ⊢ { x0 x1 x2 y } 
+	_emt_q y ⊢ y 
+	∎ {}
+
+	§ A0 « 
+	» 2r _ ⊢ x 
+	$ x ⊢ x,x0 
+	_emt { x x0 } ⊢ { x x0 }  
+	$ { x x0 } ⊢ p,p0 
+	_emt { p p0 } ⊢ { p p0 }
+	$ {{{ } {} {} {}} {{{}{{}{}}}}} ⊢ r,r0 
+	_emt { r r0 } ⊢ { r r0 }
+	» "HHH" _ ⊢ s0 
+	» "HhH" _ ⊢ sx 
+	$ s0 ⊢ s0,s1 
+	_emt s0 ⊢ s0 
+	_emt s1 ⊢ s1 
+	∐ s0'=s1' . 
+		_emt p ⊢ p 
+		∐ s0'=sx' . 
+			∎ {}
+		∐. . 
+			∎|
+	∐. .
+		_emt s1 ⊢ s1 
+		∎ {}§§+s8 
+	@.g0 
+		∐* "A" "B" ; 
+			∐* "$" "#" 
+			∐.* "Y" 
+		∐.* "!"  
+§ C0 « 
+	» "!f" _ ⊢ s0 
+	» 0r _ ⊢ x0 
+	g0.prs { s0 x0 } ⊢ { s0 x0 a0 } 
+	_emt { s0 x0 a0 } ⊢ p 
+	∎ p 
+§§ Mdl ≒  
+;§ f0 ≒ |» ! $ ∎ 
+;§ f1 ≒ |» $ ∎
+;§ f2 ≒ |» $ $ ∎   
+§ f3 ≒ |» ! 4 ∎   
+§ f4 ≒ |» ! $+$ ∎ 
+§ f5 ≒ |» ! $+2 ∎      
+§ h0 ≒ |» ! ⟦ 0 1 2 ⟧ ∎
+§ h1 ≒ |» ‹› ‹3› ∎
+§ h2 ≒ 
+	|» ! ∠$ 
+		∐ ! 0 ∎
+		∐ ! 1 ∎
+	∇
+§ g0 ≒  
+	|» ∠$  
+		∐ ∎  
+		∐ ∎
+	∇
+§ f6 ≒ 
+	|» ∠$ $  
+		∐ ! 1'+1 ∎
+		∐ ! 13 ∎
+	∇ 
+§ f7 ≒ |» $ $ $ ∎
+§ f8 ≒ |» ! 0'+1' ∎
+§ @ fact ≒ 
+	|» ∠$ $ 
+		∐ ! 1 ∎         
+		∐ ! 1' » ! $*(fact◂($-1)) ∎
+	∇
+§ f9 ≒ 
+	|» 0 ∠⟦1⟧ 2 
+		∐ ! 3 ∎
+		∐ ! 1' » ! 0' ∎  
+	∇ 
+§§.
