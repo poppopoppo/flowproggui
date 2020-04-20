@@ -61,6 +61,8 @@
 	h◂◂" Y" %[ "b" ] ⊢ s0 
 	h◂◂" H " %[ " h ohi" ] ⊢ s1 
 	h◂◂" Y" %[ "hoo" ] ⊢ s2 
+	$ _cns◂{ %s0 _cns◂{ %s1 _cns◂{ %s2 _nil◂{} } } } ⊢ l 
+	_emt l ⊢ _ 
 	∎
 
 	\[
