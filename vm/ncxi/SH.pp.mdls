@@ -4466,10 +4466,6 @@
 							? s ⊢ s
 							? s ⊢ lc
 							∎ ..
-							? { } ⊢ s
-							? s ⊢ lc
-							? { } ⊢ l0
-							? l0 ⊢ y0
 							∎ ..
 						? ne ⊢ lc
 						? { tv_n tv lv } ⊢ { tv_n tv lv yq }
@@ -4479,13 +4475,7 @@
 						? { lv ev rv tv tv_n tl } ⊢ { lv ev rv tv tv_n tl }
 						? { lv ev rv tv tv_n me } ⊢ { lv ev rv tv tv_n me yr1 }
 						? { lv ev rv tv tv_n lm } ⊢ { lv ev rv tv tv_n lm yr0 }
-						? lv ⊢ lv
-						? { tv_n tv lv yr0 } ⊢ { tv_n tv lv yr0 }
-						? { tv_n tv lv yr1 } ⊢ { tv_n tv lv yr1 }
-						$ yr0 ⊢ yr0 yr0_0
-						? { tv yr0 yr1 } ⊢ tv
-						? lv ⊢ lv
-						? { tv_n tv lv yr0_0 } ⊢ { tv_n tv lv yr0_0 }
+						? { tv_n tv lv yr0 yr1 } ⊢ { tv_n tv lv yr0 _  }
 						? { { tl me } lm } ⊢ lm
 						∎ ..
 						? { lv ev rv tv tv_n tl } ⊢ { lv ev rv tv tv_n tl }
@@ -5062,29 +5052,8 @@
 					? { eds ss } ⊢ eds
 					∎ ..
 			§ reg { rsp i } : 
-						$ %[ "r13" ]  ⊢ r
-						? { } ⊢ b
-						∎ ..
-						$ %[ "r14" ]  ⊢ r
-						? { } ⊢ b
-						∎ ..
-						$ %[ "r8" ]  ⊢ r
-						? { } ⊢ b
-						∎ ..
-						$ %[ "r9" ]  ⊢ r
-						? { } ⊢ b
-						∎ ..
-						$ %[ "r10" ]  ⊢ r
-						? { } ⊢ b
-						∎ ..
-						$ %[ "r11" ]  ⊢ r
-						? { } ⊢ b
-						∎ ..
-						$ %[ "rcx" ]  ⊢ r
-						? { } ⊢ b
-						∎ ..
-						$ %[ "rdx" ]  ⊢ r
-						? { } ⊢ b
+						» _^ .. ⊢ ..
+							"RX" 0.' //
 						∎ ..
 						$ %[  ?  ]  ⊢ rbp
 						? { rbp rsp } ⊢ { rbp rsp }
@@ -9472,9 +9441,8 @@
 							$ %[ 0r ]  ⊢ rsp_0
 							? { rsp_g0 rsp_0 e0 } ⊢ { rsp_g0 e0 }
 							? { lb_f e0 } ⊢ { lb_f e0 }
-							$ %[ 2r ]  ⊢ r0
 							$ h0 ⊢ h0 h00
-							? { r0 h00 } ⊢ a0
+							? { %[ 2r ]  h00 } ⊢ a0
 							? a0 ⊢ pr0
 							? { lb_t e0 } ⊢ { _  e0 }
 							» _^ .. ⊢ ..
