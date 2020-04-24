@@ -1298,8 +1298,8 @@ LB_2:
 	call emt_stg
 	push r8
 	mov r8,QWORD [r8+8+8*0]
-	mov rdi,r8 
-	call emt_r64 
+	mov rdi,r8
+	call emt_r64
 	pop r8 
 	mov rdi,fmt_spc 
 	call emt_stg 
@@ -1381,7 +1381,7 @@ LB_35:
 LB_13: ;; #37◂◂(_none◂{}) 0'(= a3◂ [ a3◂ [ a3◂ [ r]]] ) ⊢ 0'(= r ) : (_opn◂_opn◂_opn◂_r64◂→_r64◂)
 JMP_13:
 ;; rsp=0 , %5~0'(= a3◂ [ a3◂ [ a3◂ [ r]]] )
-;; ?; 0'(= a3◂ [ a3◂ [ a3◂ [ r]]] ) ⊢ 0(<2)◂0(<2)◂0(<2)◂1'(= r )
+;; ?; 0'(= a3◂ [ a3◂ [ a3◂ [ r]]] ) ⊢ 0(<2)◂0(<2)◂0(<2)◂3'(= r )
 	mov rdi,RX0
 	cmp BYTE [rdi+6],0
 	jnz LB_15
@@ -1398,23 +1398,31 @@ LB_16:
 LB_17:
 	jmp LB_14
 LB_18:
-	mov rdi,RX1
+	mov QWORD [GBG_VCT+8*1],rdi
+	mov RX2,QWORD [rdi+8]
+	mov rdi,RX2
 	cmp BYTE [rdi+6],0
 	jnz LB_19
 	jmp LB_20
 LB_19:
 	jmp LB_14
 LB_20:
+	mov QWORD [GBG_VCT+8*2],rdi
+	mov RX3,QWORD [rdi+8]
+	mov rdi,QWORD [GBG_VCT+8*2]
+	FREE_LN rdi
+	mov rdi,QWORD [GBG_VCT+8*1]
+	FREE_LN rdi
 	mov rdi,QWORD [GBG_VCT+8*0]
 	FREE_LN rdi
-;; rsp=0 , %6~1'(= r )
-; ##11 1'(= r ) ⊢ 1'(= r )
-	add RX1,1
-;; rsp=0 , %7~1'(= r )
-; ∎ 1'(= r )
-; .mov_ptn2 1'(= r ) ⊢ 0'(= r )
-; {| 110.. |}
-	mov RX0,RX1
+;; rsp=0 , %6~3'(= r )
+; ##11 3'(= r ) ⊢ 3'(= r )
+	add RX3,1
+;; rsp=0 , %7~3'(= r )
+; ∎ 3'(= r )
+; .mov_ptn2 3'(= r ) ⊢ 0'(= r )
+; {| 10010.. |}
+	mov RX0,RX3
 ; mov_ptn2.
 ; .add_rsp 0
 	ret
@@ -1506,8 +1514,8 @@ RTM_0:
 	mov rdi,RX1
 	C_PUSH_REGS
 	mov r8,rdi
-	mov rdi,r8 
-	call emt_r64 
+	mov rdi,r8
+	call emt_r64
 	C_POP_REGS
 	mov rdi,fmt_nl
 	call emt_stg
