@@ -7,9 +7,17 @@
     ∎ %[ 1r ]
 § f1 x 
   ∎ x 
+§ f2 x 
+  ∐ x ⊢ _some◂_some◂_some◂x . 
+    _inc x ⊢ x 
+    ∎ x 
+  ∐. . 
+    ∎ %[ 0r ] 
 §% 
   $ %[ C ] ⊢ c 
   $ c ⊢ c,c0 
   f1 c ⊢ c 
   _emt c ⊢ _ 
+  f2 _some◂_some◂_some◂%[ 1r ] ⊢ x 
+  _emt x ⊢ _ 
   ∎ 
