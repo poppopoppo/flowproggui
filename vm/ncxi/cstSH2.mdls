@@ -98,6 +98,25 @@
 		∐ _eof !| 
 		∐ _byt 
 
+	_crp◂{ c' r' } ; Compile-time Run-time Pair
+	_crc : c'→→(r'→ _crp◂{ c' r' }) 
+	_cra : (c'→→(r'→a'))→→(_crp◂{ c' r' }→a')
+	_crf : (c0'→→c1')→→(_crp◂{ c0' r' }→_crp◂{ c1' r' })
+§§+s8 
+	@.lst◂+◂G 
+		∐# G lst◂+◂G ⊢ { a l } 
+			∎ _some◂_cns◂{ a l } 
+		∐.# ⊢ { } 
+			∎ _some◂_nil◂{} 
+	@.ptn_T◂+◂G
+		∐# "{" lst◂+◂(ptn_T◂+◂G) "}" ⊢ { {} _ {} } 
+			∎| 
+		∐.# G ⊢ { _ } 
+			∎|
+	@.ptn_T_
+§ cns3◂{ a b c } = _cns◂{ a _cns◂{ b _cns◂{ c _nil◂{} } } }
+§ cns4◂{ a0 a1 a2 a3 } = 
+	⟦ a b c d ⟧ 
 § s8 = a◂◂◂b◂◂◂c
 LB_12949: ;; 
 #125 { 0'(= {| a3◂ [ q0]|} ) 1'(= a2◂ [ a17◂ [ a25◂ [ {| l |}]]] ) } ⊢ 
