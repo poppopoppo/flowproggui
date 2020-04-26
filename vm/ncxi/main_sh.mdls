@@ -33,6 +33,7 @@
     ∎ { tv i v } 
   ∐. . 
     _emt %[ "lod_tv 0" ] ⊢ _ 
+    _emt i ⊢ _ 
     ∎| 
 § set_tv { tv i v } 
   _some v ⊢ v 
