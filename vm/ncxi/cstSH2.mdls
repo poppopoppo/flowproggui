@@ -80,6 +80,22 @@
 		∎ x 
 	∐∐.
 		∎ x
+	M◂+◂''{ f0 f1 f2 f3 } 
+	_lst :: _std → _std 
+	_opn :: _std → _std 
+	_vct :: _vct_wt → _std  
+	_rpc :: _rpc_wt → _std
+	_rpc◂a' 
+	$ : w'::_rpc_wt ∀ _rpc◂w' → { _rpc◂w' _rpc◂w' }
+
+¶ _rpc ◂ ''{ _rpc:a'→{ a' a' } } :: _rpc_wt = a'
+
+¶§ _rpc◂ ''{ }
+
+§§ M ◂+◂ ''{ 'a 'b ∀∀ f:_r64 g:_s8 h:_lst◂a' i:?a j:?b } 
+	∎∎
+
+§§ 
 § f◂◂{ A B C } == 
 	∐ A=F; B=5r C=G◂◂"HHH" . 
 		∏._ x 
@@ -98,22 +114,35 @@
 		∐ _eof !| 
 		∐ _byt 
 
+	module labeled record 
+	module unification row polymorphism
+
+	_opn :: * → * a' = _opn◂a' 
+
+
 	_crp◂{ c' r' } ; Compile-time Run-time Pair
 	_crc : c'→→(r'→ _crp◂{ c' r' }) 
 	_cra : (c'→→(r'→a'))→→(_crp◂{ c' r' }→a')
 	_crf : (c0'→→c1')→→(_crp◂{ c0' r' }→_crp◂{ c1' r' })
 §§+s8 
-	@.lst◂+◂G 
+	@.lst ◂+◂ G 
 		∐# G lst◂+◂G ⊢ { a l } 
 			∎ _some◂_cns◂{ a l } 
 		∐.# ⊢ { } 
 			∎ _some◂_nil◂{} 
-	@.ptn_T◂+◂G
+	@.ptn_T ◂+◂ G 
 		∐# "{" lst◂+◂(ptn_T◂+◂G) "}" ⊢ { {} _ {} } 
 			∎| 
 		∐.# G ⊢ { _ } 
 			∎|
 	@.ptn_T_
+§§+s8 
+	@.lst ◂+◂ G 
+		∐# G lst ⊢ { a l } 
+		∐.# ⊢ { } 
+§§+s8 
+	@.ptn ◂+◂ G 
+		∐# "{" 
 § cns3◂{ a b c } = _cns◂{ a _cns◂{ b _cns◂{ c _nil◂{} } } }
 § cns4◂{ a0 a1 a2 a3 } = 
 	⟦ a b c d ⟧ 
