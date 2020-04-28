@@ -91,6 +91,10 @@
 ¶ _rpc ◂ ''{ _rpc:a'→{ a' a' } } :: _rpc_wt = a'
 
 ¶§ _rpc◂ ''{ }
+	(_nil) {} ⊢ l 
+	$ _nil◂{} ⊢ l 
+	$ _cns◂{ a b } ⊢ c 
+	(_cns) { a l } ⊢ l 
 
 §§ M ◂+◂ ''{ 'a 'b ∀∀ f:_r64 g:_s8 h:_lst◂a' i:?a j:?b } 
 	∎∎
