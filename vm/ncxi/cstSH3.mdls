@@ -86,6 +86,27 @@
   _emt { x a } ⊢ _ 
 
   ∎
+    §§+s8 @.mtc 
+		∐# "X" "◂" !| RP.stx◂+◂mtc ⊢ { {} {} mp }  
+      $ mp ⊢ 
+      ∐ RP.rcd◂l . 
+        ∎ _some◂%[ "D" ]
+      ∐. RP.atm◂a . 
+        ∎ _some◂%[ "E" ]
+		∐# "%[" !| "Y" "]" ⊢ { {} c {} }
+			∎ _some◂%[ "y" ]
+		∐ "%" "W" ⊢ { {} w } 
+			∎ _some◂%[ "w" ]
+		∐# "W" ⊢ { w } 
+			∎ _some◂%[ "W" ]
+		∐.# "_" ⊢ { {} }
+			∎ _some◂%[ "_" ]
+§§+s8 mtc_ptn = RP.stx◂+◂mtc
+§% 
+  mtc_ptn.prs { %[ "{ %W {} { X ◂ { W } _ } }" ] %[ 0r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
+  ∎ 
+
 
 §% 
   $ %[ C ] ⊢ c 
