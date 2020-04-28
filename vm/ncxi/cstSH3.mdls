@@ -47,15 +47,45 @@
     ∐.# "x" ⊢ { {} } 
       ∎ _some◂%[ 0r ] 
 §§+s8 g7 = g0◂+◂g6 
-§% 
-  g4.prs { %[ "YiI Hoobaa fif" ] %[ 0r ] } ⊢ { _ x a } 
+	§§+s8 
+		@.stx_line◂+◂G 
+			∐# G stx_line◂+◂G ⊢ { a l } 
+				∎ _some◂_cns◂{ a l } 
+			∐.# ⊢ { } 
+				∎ _some◂_nil◂{}
+	§§+s8
+		@.stx_cmm_tl◂+◂G 
+			∐# "," !| G stx_cmm_tl◂+◂G ⊢ { {} a l } 
+				∎ _some◂_cns◂{ a l } 
+			∐.# ⊢ { } 
+				∎ _some◂_nil◂{} 
+	§§+s8 
+		@.stx_cmm◂+◂H
+			∐# H stx_cmm_tl◂+◂H ⊢ { a l } 
+				∎ _some◂_cns◂{ a l } 
+			∐.# ⊢ { } 
+				∎ _some◂_nil◂{} 
+
+		§§ RP 
+      ¶ @.t r' 
+        ∐ rcd : _lst◂(t◂r') 
+        ∐ atm : r' 
+      §§+s8 
+			@.stx◂+◂G
+				∐# "{" stx_line◂+◂stx◂+◂G "}" ⊢ { {} l {} }
+					∎ _some◂rcd◂l 
+				∐.# G ⊢ { a } 
+					∎ _some◂atm◂a 
+		  ∎∎
+    §% 
+    g4.prs { %[ "YiI Hoobaa fif" ] %[ 0r ] } ⊢ { _ x a } 
   _emt { x a } ⊢ _ 
   g5.prs { %[ "YiI Hoobaae e e e e eYiI e yueo" ] %[ 0r ] } ⊢ { _ x a } 
   _emt { x a } ⊢ _
-  g7.prs { %[ "rrrx rxrx xxrx rxrr rxrxrxrrxrrrxhe" %[ 0r ] } ⊢ { _ x a } 
+  g7.prs { %[ "rrrx rxrx xxrx rxrr rxrxrxrrxrrrxhe" ] %[ 0r ] } ⊢ { _ x a } 
   _emt { x a } ⊢ _ 
-  ∎
 
+  ∎
 
 §% 
   $ %[ C ] ⊢ c 
@@ -65,3 +95,4 @@
   f2 _some◂_some◂_some◂%[ 1r ] ⊢ x 
   _emt x ⊢ _ 
   ∎ 
+

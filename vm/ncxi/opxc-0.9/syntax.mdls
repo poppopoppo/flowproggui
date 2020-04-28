@@ -453,32 +453,6 @@ unsigned long
 	§ rev = rev 
 	§ apnd = apnd 
 	
-	§§+s8 
-		@.stx_line◂+◂G 
-			∐# G stx_line◂+◂G ⊢ { a l } 
-				∎ _some◂_cns◂{ a l } 
-			∐.# ⊢ { } 
-				∎ _some◂_nil◂{}
-	§§+s8 
-		@.stx_synt◂+◂G 
-			∐* G stx_line◂+◂G ⊢ { a l } 
-				∎ _some◂_cns◂{ a l } 
-			∐.* ⊢ { } 
-				∎ _some◂_nil◂{}
-		§§+s8
-		@.stx_cmm_tl◂+◂G 
-			∐# "," !| G stx_cmm_tl◂+◂G ⊢ { {} a l } 
-				∎ _some◂_cns◂{ a l } 
-			∐.# ⊢ { } 
-				∎ _some◂_nil◂{} 
-	
-	§§+s8 
-		@.stx_cmm◂+◂H
-			∐# H stx_cmm_tl◂+◂H ⊢ { a l } 
-				∎ _some◂_cns◂{ a l } 
-			∐.# ⊢ { } 
-				∎ _some◂_nil◂{} 
-		
 		§ @.eq_v◂◂{ E D } { v l0 l1 } 
 		∐ l0 ⊢ _cns◂{ p0 l0 }; l1 ⊢ _cns◂{ p1 l1 } .
 			E { v p0 p1 } ⊢ { v p0 p1 b0 } 
@@ -675,29 +649,43 @@ unsigned long
 §§+s8 
 	@.esc_s8 
 		∐ "\n" esc_s8 ⊢ { {} e0 }
-			rp8.pfx_s8 { %[ "\\n" ] e0 } ⊢ e0 
-			∎ _some◂e0 
+			» "\\n" _ ⊢ s0 
+			rp8.pfx_s8 { s0 e0 } ⊢ e0 
+			_some e0 ⊢ e0
+			∎ e0 
 		∐ "\t" esc_s8 ⊢ { {} e0 }
-			rp8.pfx_s8 { %[ "\\t" ] e0 } ⊢ e0 
-			∎ _some◂e0 		
+			» "\\t" _ ⊢ s0 
+			rp8.pfx_s8 { s0 e0 } ⊢ e0 
+			_some e0 ⊢ e0
+			∎ e0 		
 		∐ "\\" esc_s8 ⊢ { {} e0 }
-			rp8.pfx_s8 { %[ "\\\\" ] e0 } ⊢ e0 
-			∎ _some◂e0
+			» "\\\\" _ ⊢ s0 
+			rp8.pfx_s8 { s0 e0 } ⊢ e0 
+			_some e0 ⊢ e0
+			∎ e0
 		∐ "\"" esc_s8 ⊢ { {} e0 }
-			rp8.pfx_s8 { %[ "\\\"" ] e0 } ⊢ e0 
-			∎ _some◂e0
+			» "\\\"" _ ⊢ s0 
+			rp8.pfx_s8 { s0 e0 } ⊢ e0 
+			_some e0 ⊢ e0
+			∎ e0
 		
 		∐ _byt esc_s8 ⊢ { b e0 }
 			∐ b'=0r . 
-				rp8.pfx_s8 { %[ "\\0" ] e0 } ⊢ e0 
-				∎ _some◂e0
+				» "\\0" _ ⊢ s0 
+				rp8.pfx_s8 { s0 e0 } ⊢ e0 
+				_some e0 ⊢ e0
+				∎ e0
 			∐. . 
 				rp8.pfx_chr { b e0 } ⊢ e0 
-				∎ _some◂e0
+				_some e0 ⊢ e0
+				∎ e0
 		∐. ⊢ { } 
-			∎ _some◂rp8.e◂{}
+			rp8.e {} ⊢ e0 
+			_some e0 ⊢ e0
+			∎ e0
 § mk_esc_s8 s 
-	esc_s8.prs { s %[ 0r ] } ⊢ { s x0 es } 
+	» 0r _ ⊢ x0 
+	esc_s8.prs { s x0 } ⊢ { s x0 es } 
 	∐ es ⊢ _some◂es . 
 		rp8.to_s8 es ⊢ ss 
 		∎ { s ss }
@@ -720,37 +708,53 @@ unsigned long
 		_some cl ⊢ a
 		∎ a
 	∐ "\"" ⊢ { {} }
-		∎ _some◂rp8.e◂{}
+		rp8.e {} ⊢ cl 
+		_some cl ⊢ a
+		∎ a
 	∐. _byt stg_ltr_seq ⊢ { c0 cl }
 		rp8.pfx_chr { c0 cl } ⊢ cl 
 		_some cl ⊢ a
 		∎ a
 	@.stg_ltr_sp
 	∐ "\\" ⊢ { {} }
-		∎ _some◂%[ 92r ]
+		» 92r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
 	∐ "\"" ⊢ { {} }
-		∎ _some◂%[ 34r ]
+		» 34r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
 	∐ "n" ⊢ { {} }
-		∎ _some◂%[ 10r ]
+		» 10r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
 	∐ "t" ⊢ { {} }
-		∎ _some◂%[ 9r ]
+		» 9r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
 	∐. "0" ⊢ { {} }
-		∎ _some◂%[ 0r ]
+		» 0r _ ⊢ c0
+		_some c0 ⊢ a0
+		∎ a0
 
 §§+s8
 	@.dgt
 	∐. _byt ⊢ { c }
 		∐ c'=<57r; 48r=<c' . 
-			∎ _some◂c
+			_some c ⊢ a
+			∎ a
 		∐. .
-			∎ _none◂{}
+			_none {} ⊢ a
+			∎ a
 §§+s8
 	@.ch_l
 	∐. _byt ⊢ { c }
 		∐ c'=<122r; 97r=<c' . 
-			∎ _some◂c
+			_some c ⊢ a
+			∎ a
 		∐. .
-			∎ _none◂{}
+			_none {} ⊢ a
+			∎ a
 
 §§+s8
 	@.ch_u
@@ -802,6 +806,7 @@ unsigned long
 §§+s8
 	@.prm_word
 	∐ "_" word ⊢ { {} s }
+		##rp8.to_s8 cl ⊢ s  
 		» _^ s ⊢ s,sr 
 			"_" 0' // 
 		_some sr ⊢ a 
@@ -822,14 +827,6 @@ unsigned long
 		¶ @.t ◂ a'
 			∐ rcd : _lst◂(t◂a')
 			∐ atm : a'
-		
-		§§+s8 
-			@.stx◂+◂G
-				∐# "{" lst.stx_line◂+◂stx◂+◂G "}" ⊢ { {} l {} }
-					∎ _some◂rcd◂l 
-				∐.# G ⊢ { a } 
-					∎ _some◂atm◂a 
-
 		§ @.eq_v◂◂E { v c0 c1 } 
 			∐ c0 ⊢ atm◂a0; c1 ⊢ atm◂a1 . 
 				E { v a0 a1 } ⊢ { v a0 a1 b } 
@@ -2190,13 +2187,21 @@ unsigned long
 	§§+s8
 		@.cst
 			∐ _scf_d "r" ⊢ { x {} }
-				∎ _some◂ast.k_r64◂x
+				ast.k_r64 x ⊢ r 
+				_some r ⊢ a
+				∎ a
 			∐ "0x" _scf_x "r" ⊢ { {} x {} }
-				∎ _some◂ast.k_r64◂x  
+				ast.k_r64 x ⊢ r 
+				_some r ⊢ a 
+				∎ a  
 			∐ stg_ltr ⊢ { s }
-				∎ _some◂ast.k_s8◂s
+				ast.k_s8 s ⊢ r 
+				_some r ⊢ a
+				∎ a
 			∐. name ⊢ { n }
-				∎ _some◂ast.k_name◂n
+				ast.k_name n ⊢ r
+				_some r ⊢ a
+				∎ a
 		@.ct_ptn 
 			∐# name "◂◂◂" ct_ptn ⊢ { n {} p } 
 				∎ _some◂RP.atm◂ast.k_agl◂{ n p }
@@ -8077,7 +8082,7 @@ unsigned long
 							∐ ast.im_of◂o0 . 
 								» _^ o0 ⊢ o0,sc0 
 									"\tcmp rdi," 0d' "\n" 
-									"\tjl err_bc\n"
+									"\tjl err\n"
 									"\tadd rsi," 0d' "\n" 
 									`	mov QWORD [REP_MOVSB_VCT],rsi 
 									##`	push rsi 
@@ -8089,7 +8094,7 @@ unsigned long
 								reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
 								» _^ sr0 ⊢ sr0,sc0 
 									"\tcmp rdi," 0' "\n" 
-									"\tjl err_bc\n"
+									"\tjl err\n"
 									"\tadd rsi," 0' "\n"
 									##`	push rsi 
 									`	mov QWORD [REP_MOVSB_VCT],rsi 
@@ -8137,7 +8142,7 @@ unsigned long
 							∐ ast.im_of◂o1 . 
 								» _^ o1 ⊢ o1,sc0 
 									"\tcmp rdi," 0d' "\n" 
-									"\tjl err_bc\n"
+									"\tjl err\n"
 									"\tadd rsi," 0d' "\n"
 									`	mov rdi,rsi
 									// 
@@ -8148,7 +8153,7 @@ unsigned long
 								reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
 								» _^ sr0 ⊢ sr0,sc0 
 									"\tcmp rdi," 0' "\n" 
-									"\tjl err_bc\n"
+									"\tjl err\n"
 									"\tadd rsi," 0' "\n" 
 									`	mov rdi,rsi 
 									// 
@@ -8203,7 +8208,7 @@ unsigned long
 							∐ ast.im_of◂o0 . 
 								» _^ o0 ⊢ o0,sc0 
 									"\tcmp rdi," 0d' "\n" 
-									"\tjle err_bc\n"
+									"\tjle err\n"
 									"\tmov rsi," 0d' "\n" 
 									// 
 								rp8.add_s8 { e0 sc0 } ⊢ e0
@@ -8213,7 +8218,7 @@ unsigned long
 								reg { rsp r0 } ⊢ { rsp r0 sr0 br0 } 
 								» _^ sr0 ⊢ sr0,sc0 
 									"\tcmp rdi," 0' "\n" 
-									"\tjle err_bc\n"
+									"\tjle err\n"
 									"\tmov rsi," 0' "\n"
 									// 
 								rp8.add_s8 { e0 sc0 } ⊢ e0
@@ -9049,7 +9054,7 @@ unsigned long
 											"\tmov rax,0x0000_ffff_ffff_ffff\n" 
 											"\tand rax,QWORD [rdi]\n" 
 											"\tcmp rsi,rax\n" 
-											"\tjge err_bc\n" 
+											"\tjge err\n" 
 											"\tmovzx rax,BYTE [rdi+8+rsi]\n" 
 											"\tmov " 2' ",rax\n" //
 										rp8.add_s8 { ec0 sc0 } ⊢ ec0 
@@ -9066,7 +9071,7 @@ unsigned long
 											"\tmov rax,0x0000_ffff_ffff_ffff\n" 
 											"\tand rax,QWORD [rdi]\n" 
 											"\tcmp rax," 1d' "\n" 
-											"\tjle err_bc\n" 
+											"\tjle err\n" 
 											"\tmovzx rax,BYTE [rdi+8+" 1d' "]\n" 
 											"\tmov " 2' ",rax\n" //
 										rp8.add_s8 { ec0 sc0 } ⊢ ec0 
@@ -9088,7 +9093,7 @@ unsigned long
 										» _^ ls,lb0,sr1,sm0 ⊢ _,_,_,_,sc0 
 											"\tmov rsi," 2' "\n" 
 											"\tcmp rsi," 0d' "\n" 
-											"\tjge err_bc\n" 
+											"\tjge err\n" 
 											"\tmovzx rax,BYTE [LB_" 1d' "+rsi]\n" 
 											"\tmov " 3' ",rax\n" //
 										rp8.add_s8 { ec0 sc0 } ⊢ ec0 
@@ -9315,7 +9320,7 @@ unsigned long
 										`	mov rsi,0x0000_ffff_ffff_ffff 
 										`	and rsi,QWORD [rdi]
 										`	cmp rax,rsi 
-										`	jge err_bc
+										`	jge err
 										`	lea rdi,[rdi+8+8*rax]
 										`	mov rax,QWORD [rdi]
 										"\tmov rsi," 1' "\n" 
@@ -9358,7 +9363,7 @@ unsigned long
 										`	mov rsi,0x0000_ffff_ffff_ffff 
 										`	and rsi,QWORD [rdi]
 										`	cmp rax,rsi 
-										`	jge err_bc
+										`	jge err 
 										`	mov rdi,[rdi+8+8*rax]
 										push_c_regs 
 										`	mov r8,rdi
@@ -12203,7 +12208,6 @@ unsigned long
 					`	C_CALL printf 
 					`	call info 
 					`	call exit 
-					`	mov QWORD [err_n],0xfff
 					`	jmp err
 					`
 					`eq_s8: ;rdi,rsi
@@ -12851,8 +12855,6 @@ unsigned long
 				"RTM_" 0d' ":\n" 	
 				`	C_CALL exit
 				`
-				`err_bc: 
-				`	mov QWORD [err_n],0xff
 				`err: 
 				`	mov rdi,fmt_err_line
 				`	mov rsi,QWORD [err_n]
