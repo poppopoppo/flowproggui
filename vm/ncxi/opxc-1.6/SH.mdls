@@ -11970,7 +11970,7 @@ unsigned long
 					`;	C_CALL_SF getchar 
 					`;	ret
 					`
-					`sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void*
+					`sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void* context
 					`	cmp QWORD [SIG_FLG],0
 					`	jnz sig_hdl_usr
 					`	push rdi 
@@ -11984,8 +11984,12 @@ unsigned long
 					`	call exit 
 					`	mov QWORD [err_n],0xfff
 					`	jmp err
-					`sig_hdl_usr: 
-					`	jmp test_hdl
+					`sig_hdl_usr:
+					`	mov rdi,QWORD [SIG_ETR]
+					`	mov rsi,rdx 
+					`	C_CALL set_usr_hdl 
+					`	ret 
+					##`	jmp test_hdl
 					`
 					`eq_s8: ;rdi,rsi
 					`	push rdx
@@ -12573,7 +12577,9 @@ unsigned long
 				`extern system
 				`extern set_handler
 				`extern emt_s8_to
-				`extern alc_gd_buf 
+				`extern alc_gd_buf
+				`extern set_usr_hdl
+				` 
 				`section .bss
 				`	PAGE_SIZE: resq 1
 				`	tmp: resq 64
