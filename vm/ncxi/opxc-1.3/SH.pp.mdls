@@ -3003,6 +3003,8 @@
 						? e ⊢ e
 						? e ⊢ a
 						∎ ..
+				∐ .. ⊢ { { } x { } p { } }
+					∎ ..
 			@.def_gnr
 				∐ .. ⊢ { { } p }
 					? p ⊢ p
@@ -4246,27 +4248,18 @@
 					∎|
 		§ 
 			@. { ev evv tv tv_n t p } : 
-				$ t ⊢
-						? { ev evv tv tv_n l0 l1 } ⊢ { ev evv tv tv_n l0 l1 }
-						? l0 ⊢ t
-						? l1 ⊢ p
-						∎ ..
-						∎|
-						? { evv i0 a0 } ⊢ { evv i0 a0 }
-						? { ev i0 v0 } ⊢ { ev i0 _  }
-						? a0 ⊢ p
-						? i0 ⊢ t
-						∎ ..
-						∎|
+					? { ev evv tv tv_n l0 l1 } ⊢ { ev evv tv tv_n l0 l1 }
+					∎ ..
+					? { evv i0 a0 } ⊢ { evv i0 a0 }
+					? { ev i0 v0 } ⊢ { ev i0 _  }
+					∎ ..
+					∎|
 			@. { ev evv tv tv_n l0 l1 } : 
 					? { ev evv tv tv_n t p } ⊢ { ev evv tv tv_n t p }
 					? { ev evv tv tv_n l0 l1 } ⊢ { ev evv tv tv_n l0 l1 }
-					? { t l0 } ⊢ l0
-					? { p l1 } ⊢ l1
 					∎ ..
-					? { } ⊢ l0
-					? { } ⊢ l1
 					∎ ..
+					? %[ "set_tpl_lst 0" ]  ⊢ _ 
 					∎|
 		§ 
 			@. =  ? 
@@ -4283,6 +4276,19 @@
 				? { evv ev_n ?◂{ cv t1 } } ⊢ { evv ev_n }
 				$ ev_n ⊢ ev_n n0
 				? ev_n ⊢ ev_n
+				∎ ..
+			@. =  ? 
+		§ 
+			@. =  ? 
+			@. { { wl lv rv rv_n tv tv_n } w } : 
+				? { wl w } ⊢ { wl w o }
+				? { o w } ⊢ w
+				$ tv_n ⊢ tv_n t0
+				? { tv_n tv lv } ⊢ { tv_n tv lv y }
+				$ t0 ⊢ t0 t1
+				? { rv rv_n t0 } ⊢ { rv rv_n }
+				? rv_n ⊢ { i rv_n }
+				$ i ⊢ i i0
 				∎ ..
 			@. =  ? 
 		§§ slv_type
@@ -5084,16 +5090,48 @@
 							? se ⊢ se
 							∎|
 				§ 
+					@. { { evv irv rl av } { xp sp } } : 
+							? { { evv irv rl av } { l0 l1 } } ⊢|
+							? { av i0 sp } ⊢ { av i0 }
+							∎ ..
+							? %[ "asc_ply 0" ]  ⊢ _ 
+							∎|
+					@. { { evv irv rl av } { l0 l1 } } : 
+							? { { evv irv rl av } { xp sp } } ⊢ { evv irv rl av }
+							? { { evv irv rl av } { l0 l1 } } ⊢|
+							∎ ..
+							∎|
+				§ 
+					@. =  ? 
+					@. { { evv irv rl av } a } : 
+						$ a ⊢
+							? { av i } ⊢ { av i sp }
+							∎ ..
+							? { { evv irv rl av } sp } ⊢ { { evv irv rl av } sp }
+							∎ ..
+							∎ ..
+				§ 
+					@. =  ? 
+					@. { { evv irv rl } a } : 
+							? { { evv irv rl } sp } ⊢ { { evv irv rl } sp }
+							? { evv e } ⊢ { evv e k }
+								∎ ..
+								? { evv i } ⊢ { evv i c }
+								? { { evv irv rl } ?◂{ i sp } } ⊢|
+								? { %[ 64r ]  ?◂{ } } ⊢ { _  _  av }
+								? { { evv irv rl av } { xp sp } } ⊢ { evv irv rl av }
+								? { { evv irv rl av } yp } ⊢ { { evv irv rl av } yp }
+								∎ ..
+								? %[ "evl_ctr 0" ]  ⊢ _ 
+								∎|
+							∎ ..
+				§ 
 					@. { { evv irv rl } s } : 
 						$ s ⊢
-							? c ⊢ h
-							? h ⊢ p
 							∎ ..
 							? { { evv irv rl } sp } ⊢ { { evv irv rl } ip }
 							? { evv e } ⊢ { evv e k1 }
 							? { evv k1 } ⊢ { evv { ia1 na1 vi } }
-							? { ia1 na1 ip } ⊢ ip
-							? ip ⊢ ip
 							∎ ..
 							? { irv r } ⊢ { irv r ip }
 							? { rl r } ⊢ { rl r }
@@ -5102,6 +5140,12 @@
 				§ csm_lst =  ? 
 				§ 
 					@. =  ? 
+				§ csm { { evv irv rl } s } : 
+						? { { evv irv rl } s } ⊢ { { evv irv rl } s }
+						? { { evv irv rl } s } ⊢|
+				§ csm_ptn { { evv irv rl } p } : 
+						? { { evv irv rl } p } ⊢ { { evv irv rl } p }
+						? { { evv irv rl } p } ⊢|
 				∎∎
 			§ alc_ln_n { rsp r n e } : 
 					? { rsp r } ⊢ { rsp r sr br }
@@ -8866,10 +8910,9 @@
 								$ yx ⊢ yx yx0
 								? { tv yx0 } ⊢ { tv syx }
 								$ ev_n ⊢ ev_n o_n
-								? { c_n0 p } ⊢ o
 								$ yx ⊢ yx yx0
 								? { tv_n tv yx0 } ⊢ { tv_n tv iy0 }
-								? { o o_n d lc iy0 } ⊢ k
+								? { ?◂{ c_n0 p } o_n d lc iy0 } ⊢ k
 								» _^ .. ⊢ ..
 									0*"\t" "§ "2.' "("1.' ") : "3.' "\n" //
 								? { ep1 ep0 } ⊢ ep0
@@ -8884,7 +8927,23 @@
 							? { tv_n tv evv ev ev_n ns_e w c yx } ⊢ { tv_n tv evv ev ev_n ns_e }
 							? { { rsp rl ns_r } { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } { hpv hpv_n rv rv_n ev ev_n tv tv_n irv tav evv } { eds dd ep0 ec0 rtm_n lb_n } } ⊢ { RTM_ST MV NS LCV EC }
 							? { RTM_ST i il MV LCV tx_n NS gel gfl EC } ⊢|
-							∎|
+							? { %[ 64r ]  ?◂{ } } ⊢ { _  _  rv_t }
+							? { { ?◂{ } %[ 1r ]  rv_t %[ 0r ]  tv tv_n } x } ⊢ { { ns_r_t lv rv_t rv_t_n tv tv_n } x y }
+							? { { { mmv mev ev ns_m ns_e il } rv_t tv tv_n ns_r_t } p } ⊢ { { { mmv mev ev ns_m ns_e il } rv_t tv tv_n ns_r_t } p }
+							? { { lv ev rv_t tv tv_n } p } ⊢ { { lv ev rv_t tv tv_n } p yp }
+							? lv ⊢ lv
+							? { tv_n tv lv y } ⊢ { tv_n tv lv y }
+							? { tv_n tv lv yp } ⊢ { tv_n tv lv yp }
+							$ ?◂?◂{ y yp } ⊢ yi yi0
+							? { tv_n tv yi0 } ⊢ { tv_n tv v0 }
+							$ yi ⊢ yi yi0
+							? { tv yi0 } ⊢ { tv syi }
+							» _^ .. ⊢ ..
+								0*"\t" "§ "2.' "("1.' ") : "3.' "\n" //
+							? { ep1 ep0 } ⊢ ep0
+							? { tv_n tv evv ev ev_n ns_e w ?◂{ x p v0 } yi } ⊢ { tv_n tv evv ev ev_n ns_e }
+							? { { rsp rl ns_r } { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } { hpv hpv_n rv rv_n ev ev_n tv tv_n irv tav evv } { eds dd ep0 ec0 rtm_n lb_n } } ⊢ { RTM_ST MV NS LCV EC }
+							? { RTM_ST i il MV LCV tx_n NS gel gfl EC } ⊢|
 							$ %[ 0r ]  ⊢ lv
 							? { { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r lc } ⊢ { { mmv mev ev ns_m ns_e il } rv tv tv_n rv_n ns_r lc }
 							? { lv ev rv tv tv_n lc } ⊢ { lv ev rv tv tv_n lc yr0 }

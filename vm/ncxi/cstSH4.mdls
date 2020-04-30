@@ -32,3 +32,8 @@
   f %[ "4" ] ⊢ { h0 _ }
   _emt h0 ⊢ _ 
   ∎ 
+
+§ cns2◂{ x0 x1 } = _cns◂{ x0 _cns◂{ x1 _nil◂{} } }
+\\§ ret_vld◂x = _some◂prs_vld◂x 
+\\§ ret_err◂x = _some◂prs_err◂x 
+\\§ r64◂{} = 
