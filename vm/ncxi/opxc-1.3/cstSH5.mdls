@@ -1,6 +1,15 @@
 § cns2◂{ x0 x1 } = _cns◂{ x0 _cns◂{ x1 _nil◂{} } }
+##§ cns3◂{ x0 x1 x2 } = cns2◂{ x0 cns2◂{ x1 x2 } }
+§ S0 = "Hello" 
+§ S1 = "World" 
+§ c0◂{} = _cns◂{ _some◂%[ 0r ] _nil◂{} }
+§ c1◂{} = _cns◂{ %[ S0 ] _cns◂{ %[ S1 ] _nil◂{} } }
+§ id x 
+  ∎ x 
 §% 
   $ cns2◂{ %[ 0r ] %[ 1r ] } ⊢ l 
   _emt l ⊢ _ 
+  _emt c0◂{} ⊢ _ 
+  id c1◂{} ⊢ l 
+  _emt l ⊢ _  
   ∎
-  
