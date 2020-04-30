@@ -9116,7 +9116,7 @@
 				$ ?◂{ ?◂{ ?◂{ } ?◂{ } ?◂{ } } ?◂{ ?◂{ } ?◂{ } ?◂{ } } } ⊢ yx yx0
 				? { tv_n tv %[  ?  ]  yx0 } ⊢ { tv_n tv k }
 				? { tv_n tv evv ev ev_n ns_e %[ "_sts" ]  k yx } ⊢ { tv_n tv evv ev ev_n ns_e }
-				$ ?◂{ ?◂{ ?◂{ } ?◂{ } ?◂{ } } ?◂{ ?◂{ } ?◂{ } } } ⊢ yx yx0
+				$ ?◂{ ?◂{ ?◂{ } ?◂{ } } ?◂{ ?◂{ } ?◂{ } ?◂{ } } } ⊢ yx yx0
 				? { tv_n tv %[  ?  ]  yx0 } ⊢ { tv_n tv k }
 				? { tv_n tv evv ev ev_n ns_e %[ "_lds" ]  k yx } ⊢ { tv_n tv evv ev ev_n ns_e }
 				$ ?◂{ ?◂{ ?◂{ } ?◂{ } } ?◂{ ?◂{ } ?◂{ } ?◂{ } } } ⊢ yx yx0

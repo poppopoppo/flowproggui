@@ -11752,7 +11752,7 @@ unsigned long
 				k_op_axm { tv_n tv %[ EX.sts ] yx0 } ⊢ { tv_n tv k }
 				add_e { tv_n tv evv ev ev_n ns_e %[ "_sts" ] k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
 						
-				$ TX.t_imp◂{ RP.cns3◂{ TX.s8◂{} TX.r64◂{} TX.r64◂{} } RP.cns2◂{ TX.s8◂{} TX.r64◂{} } } ⊢ yx,yx0
+				$ TX.t_imp◂{  RP.cns2◂{ TX.s8◂{} TX.r64◂{} } RP.cns3◂{ TX.s8◂{} TX.r64◂{} TX.r64◂{} }} ⊢ yx,yx0
 				k_op_axm { tv_n tv %[ EX.lds ] yx0 } ⊢ { tv_n tv k }
 				add_e { tv_n tv evv ev ev_n ns_e %[ "_lds" ] k yx } ⊢ { tv_n tv evv ev ev_n ns_e } 
 					
