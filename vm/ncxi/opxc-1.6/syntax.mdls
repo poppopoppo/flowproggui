@@ -4057,10 +4057,10 @@ unsigned long
 		§ add_e = T.add_e 
 		
 		§ k_op_axm { tv_n tv i y } 
-			newvar_ln { tv_n tv y } ⊢ { tv_n tv iy } 
+			T.newvar_ln { tv_n tv y } ⊢ { tv_n tv iy } 
 			∎ { tv_n tv ast.k_op_axm◂{ i iy } } 
 		§ k_ctr { tv_n tv i n y } 
-			newvar_ln { tv_n tv y } ⊢ { tv_n tv iy } 
+			T.newvar_ln { tv_n tv y } ⊢ { tv_n tv iy } 
 			ast.k_ctr { i n iy } ⊢ k 
 			∎ { tv_n tv k } 
 		§§ e_axm 
@@ -5294,7 +5294,7 @@ unsigned long
 						slv.cst { { lv ev tv_n tv } a0 } ⊢ { { lv ev tv_n tv } a0 y0 } 
 						_dec lv ⊢ lv 
 						gen { tv_n tv lv y0 } ⊢ { tv_n tv lv y0 }  
-						newvar_ln { tv_n tv y0 } ⊢ { tv_n tv v0 } 
+						T.newvar_ln { tv_n tv y0 } ⊢ { tv_n tv v0 } 
 						##ast.evl_ct { evv a0 } ⊢ { evv a0 } 
 						exc_tv { evv i0 a0 } ⊢ { evv i0 a0 } 
 						exc_tv { ev i0 v0 } ⊢ { ev i0 v0 } 
@@ -10214,7 +10214,7 @@ unsigned long
 							» 1r _ ⊢ lv 
 							newvar_l { tv_n tv lv } ⊢ { tv_n tv lv yx }
 							$ yx ⊢ yx,yx0 
-							newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv v0 } 
+							T.newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv v0 } 
 							set_tv { ev ev_n v0 } ⊢ { ev ev_n } 
 							_some i0 ⊢ o 
 							$ w ⊢ w,w0 
@@ -10320,7 +10320,7 @@ unsigned long
 						$ yx ⊢ yx,yx0 
 						pnt_type_k { tv yx0 } ⊢ { tv syx }
 						$ yx ⊢ yx,yx0 
-						newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv iy0 } 
+						T.newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv iy0 } 
 						##_none {} ⊢ o 
 						ast.k_op_gnr { o_t o_n d lc iy0 } ⊢ k 		
 						exc_tv { evv en k } ⊢ { evv en _ } 
@@ -10448,7 +10448,7 @@ unsigned long
 	
 		§ add_grm { { w ix yt } i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gel { dd ep0 ec0 rtm_n lb_n } }
 			$ yt ⊢ yt,yt0 
-			newvar_ln { tv_n tv TX.grm◂yt0 } ⊢ { tv_n tv v } 
+			T.newvar_ln { tv_n tv TX.grm◂yt0 } ⊢ { tv_n tv v } 
 			$ ev_n ⊢ ev_n,en 
 			add_e { tv_n tv evv ev ev_n ns_e w ast.k_op_axm◂{ ix v } TX.grm◂yt } ⊢ { tv_n tv evv ev ev_n ns_e }
 			∎ { i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gel { dd ep0 ec0 rtm_n lb_n } }
@@ -10701,7 +10701,7 @@ unsigned long
 					$ yd ⊢ yd,yd0 
 					alc_type_k.hp { %[ 0r ] _nil◂{} tav tv_n tv yd } ⊢ { pv_n al tav tv_n tv ht } 
 					$ en ⊢ en,o_n
-					newvar_ln { tv_n tv yd0 } ⊢ { tv_n tv iy0 }
+					T.newvar_ln { tv_n tv yd0 } ⊢ { tv_n tv iy0 }
 					exc_tv { evv en ast.k_op_prs◂{ o_n iy0 ht } } ⊢ { evv en _ }
 					∎ { { i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t gel { dd ep0 ec0 rtm_n lb_n } } { en m_o e } }
 				∎∎ 
@@ -10812,9 +10812,9 @@ unsigned long
 							$ ga ⊢ ga,ga0 
 							$ mna0 ⊢ mna0,mna0_0
 							$ yt ⊢ yt,yt0 
-							newvar_ln { tv_n tv TX.grm◂yt0 } ⊢ { tv_n tv i0 } 
+							T.newvar_ln { tv_n tv TX.grm◂yt0 } ⊢ { tv_n tv i0 } 
 							$ yt ⊢ yt,yt0 
-							newvar_ln { tv_n tv yt0 } ⊢ { tv_n tv iy0 }
+							T.newvar_ln { tv_n tv yt0 } ⊢ { tv_n tv iy0 }
 							$ yt ⊢ yt,yt0 
 							alc_type_k.hp { %[ 0r ] _nil◂{} tav tv_n tv yt0 } ⊢ { pv_n al tav tv_n tv ht } 
 							set_tv { ev ev_n i0 } ⊢ { ev ev_n }
@@ -11377,7 +11377,7 @@ unsigned long
 								_none {} ⊢ o 
 								$ ev_n ⊢ ev_n,o_n
 								$ yx ⊢ yx,yx0 
-								newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv iy0 } 
+								T.newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv iy0 } 
 								ast.k_op_gnr { o o_n d lc iy0 } ⊢ k 
 								» _^ dd,ev_n,w,syx ⊢ dd,ev_n,w,syx,ep1 
 									0'*"\t" "§ " 2' "(" 1d' ") : " 3' "\n" // 
@@ -11408,7 +11408,7 @@ unsigned long
 								pnt_type_k { tv yx0 } ⊢ { tv syx } 
 								$ ev_n ⊢ ev_n,o_n
 								$ yx ⊢ yx,yx0 
-								newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv iy0 } 
+								T.newvar_ln { tv_n tv yx0 } ⊢ { tv_n tv iy0 } 
 								ast.k_op_gnr { _some◂{ c_n0 p } o_n d lc iy0 } ⊢ k 
 								» _^ dd,ev_n,w,syx ⊢ dd,ev_n,w,syx,ep1 
 									0'*"\t" "§ " 2' "(" 1d' ") : " 3' "\n" // 
@@ -11434,7 +11434,7 @@ unsigned long
 							gen { tv_n tv lv y } ⊢ { tv_n tv lv y } 
 							gen { tv_n tv lv yp } ⊢ { tv_n tv lv yp } 
 							$ RP.atm◂imp◂{ y yp } ⊢ yi,yi0 
-							newvar_ln { tv_n tv yi0 } ⊢ { tv_n tv v0 } 
+							T.newvar_ln { tv_n tv yi0 } ⊢ { tv_n tv v0 } 
 							$ yi ⊢ yi,yi0 
 							pnt_type_k { tv yi0 } ⊢ { tv syi } 
 							» _^ dd,ev_n,w,syi ⊢ dd,ev_n,w,_,ep1 
@@ -11816,6 +11816,10 @@ unsigned long
 
 				» _^ _ ⊢ eds 
 					`section .data
+					`	SIG_FLG: dq 0 
+					`	SIG_ETR: dq 0 
+					`	GD_BUF_N: dq 0 
+					`	EMT_FLG: dq 0 
 					`	GRM_DT: 
 					`		dq 0 
 					`		dq 0 
@@ -11825,10 +11829,12 @@ unsigned long
 					`	err_n: dq 0
 					` SS_LN_C: dq 0
 					`	S8_N: dq 0 
+					`	
 					`	fmt_err_line: db "err:%x",10,0
 					`	fmt_r64: db "%dr",0
 					`	fmt_s8: db 34,"%s",34,0
 					`	fmt_d: db "%d",0
+					`	fmt_d_nl: db "%d",10,0
 					`	fmt_x: db "%x",0
 					`	fmt_arr_l: db "{| ",0
 					`	fmt_arr_r: db "|}",0
@@ -11839,6 +11845,7 @@ unsigned long
 					`	fmt_spc: db " ",0
 					`	fmt_emt: db "_emt:",0
 					`	fmt_getchar: db "_getchar:",0
+					`	fmt_test0: db "sig segv handled!!:",0
 					`	rt_err0: db "rt_err 0:",10,0 
 					` s8_e: dq 0,0
 					`
@@ -11905,6 +11912,8 @@ unsigned long
 					`;	ret
 					`
 					`sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void*
+					`	cmp QWORD [SIG_FLG],0
+					`	jnz sig_hdl_usr
 					`	push rdi 
 					`	push rsi 
 					`	push rdx 
@@ -11916,6 +11925,8 @@ unsigned long
 					`	call exit 
 					`	mov QWORD [err_n],0xfff
 					`	jmp err
+					`sig_hdl_usr: 
+					`	jmp test_hdl
 					`
 					`eq_s8: ;rdi,rsi
 					`	push rdx
@@ -12115,6 +12126,34 @@ unsigned long
 					`	mov rsi,sig_hdl 
 					`	C_CALL set_handler 
 					`
+					`; init emt buffer 
+					`	mov rdi,PAGE_SIZE
+					`	C_CALL alc_gd_buf
+					`	mov QWORD [GD_BUF_PT],rax
+					`	mov rax,0 
+					`	mov rdi,fmt_d 
+					`	mov rsi,QWORD [PAGE_SIZE]
+					`	C_CALL printf
+					`	mov r14,QWORD [GD_BUF_PT]
+					`	mov r13,0 
+					`	mov QWORD [SIG_ETR],test_hdl 
+					`	mov QWORD [SIG_FLG],1
+					`test_lp: 
+					`	mov BYTE [r14+r13],44	
+					`	mov rax,0 
+					`	mov rdi,fmt_d_nl
+					`	mov rsi,r13
+					`	C_CALL printf
+					`	add r13,1 
+					`	jmp test_lp
+					`test_hdl:
+					`	mov r13,0 
+					`	mov rdi,fmt_test0 
+					`	call emt_stg 
+					`	xor rax,rax 
+					`	C_CALL_SF getchar 
+					`	jmp test_lp 
+					`  
 					`SS_LN_init:
 					`	mov SS_LN_N,0
 					`	mov QWORD [SS_LN_TOP],SS_LN_VCT
@@ -12475,13 +12514,16 @@ unsigned long
 				`extern system
 				`extern set_handler
 				`extern emt_s8_to
+				`extern alc_gd_buf 
 				`section .bss
+				`	PAGE_SIZE: resq 1
 				`	tmp: resq 64
 				`	ret_vct: resq 64
 				` rsp_tmp: resq 1
 				`	RB: resq 1 
 				`
 				`; emt buffer 
+				`	GD_BUF_PT: resq 1 
 				`	EMT_BUF_OFS: resq 1 
 				` EMT_BUF: resb EMT_BUF_MAX 
 				`	EMT_BUF_END: resb 1
