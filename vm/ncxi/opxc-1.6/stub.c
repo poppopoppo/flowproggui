@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <signal.h>
+#define _GNU_SOURCE 1 
+#include<signal.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -11,6 +11,10 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/mman.h>
+#include <stdio.h>
+
+#include <sys/ucontext.h>
+#include <ucontext.h>
 
 void* alc_gd_buf(int* ps){
 	int pagesize = sysconf(_SC_PAGE_SIZE);
@@ -34,7 +38,14 @@ int set_handler(int n,void* f){
 	sigemptyset(&a.sa_mask);
 	return sigaction(n,&a,NULL);
 	};
-
+int set_usr_hdl(void* usr,void *extra){
+		void* rip; 
+		ucontext_t *p = (ucontext_t *)extra;
+		((void*)p->uc_mcontext.gregs)[REG_RIP] = usr; 
+		//void rip = p->uc_mcontext.gregs+REG_RIP; 
+		//rip* = usr; 
+		return 0;
+	};
 int emt_s8_to(char* fn,void* buf,int n){
 	int fd = creat(fn,S_IREAD | S_IWRITE);
 	int r =	write(fd,buf,n);
