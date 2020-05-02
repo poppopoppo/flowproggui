@@ -23,9 +23,11 @@ void* alc_gd_buf(int* ps){
 	char* buffer = memalign(pagesize, 2 * pagesize);
 	if (buffer == NULL){
 		return NULL; }
-
+	buffer[pagesize]=0;
+	buffer[0]=0;
+	buffer[1]=0;
 	if (mprotect(buffer + pagesize, pagesize,
-							 PROT_NONE) == -1){ 
+							 PROT_READ) == -1){ 
 		return NULL;
 							 }
 		*ps = pagesize; 
@@ -38,14 +40,13 @@ int set_handler(int n,void* f){
 	sigemptyset(&a.sa_mask);
 	return sigaction(n,&a,NULL);
 	};
-int set_usr_hdl(void* usr,void *extra){
-		void* rip; 
+void* set_usr_hdl(void* usr,void *extra){
 		ucontext_t *p = (ucontext_t *)extra;
-		((void*)p->uc_mcontext.gregs)[REG_RIP] = usr; 
-		//void rip = p->uc_mcontext.gregs+REG_RIP; 
-		//rip* = usr; 
-		return 0;
+		void* rip = p->uc_mcontext.gregs[REG_RIP];
+		p->uc_mcontext.gregs[REG_RIP] = usr; 
+		return rip;
 	};
+
 int emt_s8_to(char* fn,void* buf,int n){
 	int fd = creat(fn,S_IREAD | S_IWRITE);
 	int r =	write(fd,buf,n);
