@@ -54,3 +54,17 @@ $ _cns◂{ a l } ⊢ l
 §§ M ◂◂ a'' b'' ∀∀ f0 f1 f2 f3 
   .. 
   ∎∎
+
+_opn_exn : a'→b' →→ a'→_opn◂b' 
+
+_exh◂◂{ F H Q } x ⊢ y 
+_exh : { a'→b' _exh◂{ e' c' } b'→c' }→→a'→c'
+
+  op x ⊢ y ? eh 
+  op x ⊢ 
+  ? y .
+    ∎  
+  ∐
+  ∐. e .
+    ..
+    ∎
