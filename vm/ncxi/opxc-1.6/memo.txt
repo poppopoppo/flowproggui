@@ -60,6 +60,9 @@ _opn_exn : a'→b' →→ a'→_opn◂b'
 _exh◂◂{ F H Q } x ⊢ y 
 _exh : { a'→b' _exh◂{ e' c' } b'→c' }→→a'→c'
 
+§ 
+  @.g0 +s8 
+    ∐
   op x ⊢ y ? eh 
   op x ⊢ 
   ? y .
