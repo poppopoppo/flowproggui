@@ -71,3 +71,16 @@ _exh : { a'→b' _exh◂{ e' c' } b'→c' }→→a'→c'
   ∐. e .
     ..
     ∎
+§§ F ◂◂ f0 f1 f2 
+  ∎∎
+
+¶¶ 't :: Foo ◂◂ c0:_r64 c1:_s8 m0:a'→b' m1:_s8→'t 
+§ q x 
+  c0 x ⊢ y 
+  c1 y ⊢ z 
+  ∎ z 
+
+¶ t ◂ a' t_Vct::Vct,t_Foo::Foo
+
+¶§ t_v ◂◂ c0~foo c1~baa m0~ree m1~iii 
+
