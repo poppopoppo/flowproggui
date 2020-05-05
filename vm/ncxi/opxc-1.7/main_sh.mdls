@@ -44,7 +44,7 @@
     _emt %[ "set_tv 0" ] ⊢ _ 
     ∎|
 § ini_tv {} 
-  » 412800r _ ⊢ max_t 
+  » 162800r _ ⊢ max_t 
 	_none {} ⊢ o 
   mk_arr { max_t o } ⊢ { _ _ tv }
   ∎ tv 
