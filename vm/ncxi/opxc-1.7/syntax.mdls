@@ -10311,7 +10311,14 @@ unsigned long
 									"\tcall GRM_" 0d' "\n"
 									`	POP_GRM_DT 
 									`	ret
+									"GRM_SUW_" 0d' ":\n"
+									`	add rsp,8 
+									`	POP_GRM_DT 
+									`	add rsp,8 
+									`	pop rdi
+									`	jmp rdi
 									"GRM_" 0d' ":\n"
+									"\tpush GRM_SUW_" 0d' "\n" 							
 									`	push r14
 									//
 								rp8.add_s8 { ef0 s0 } ⊢ ef0 
@@ -10742,7 +10749,7 @@ unsigned long
 				@.act_rmf { gfl lb_f rsp_g go { eg0 eds e0 } MV ev evv rv irv tav tv tv_n rl lb_n }
 					$ go ⊢
 					∐ _none◂{} . 
-						∎ { gfl lb_f rsp_g { eg0 eds e0 } MV ev evv rv irv tav tv tv_n rl lb_n } 
+						∎ { gfl lb_f rsp_g { eg0 eds e0 rp8.e◂{} } MV ev evv rv irv tav tv tv_n rl lb_n } 
 					∐. _some◂{ dpr gar } .
 						$ dpr ⊢ dpr,dpr0 
 						crt_type_k.dst_ptn { { tv rv } dpr0 } ⊢ { { tv rv } k0 }
@@ -10752,8 +10759,20 @@ unsigned long
 						$ _nil◂{} ⊢ al 
 						$ ok0 ⊢ ok0,ok00 
 						alc_type_k.hp { pv_n al tav tv_n tv ok00 } ⊢ { pv_n al tav tv_n tv hok0 } 
+						inc_x lb_n ⊢ { lb_w lb_n } 
+						^ lb_w ⊢ lb_w,sc0 
+							"\tpush SUW_" 0d' "\n" // 
+						rp8.add_s8 { e0 sc0 } ⊢ e0 
 						» "\tpush r14\n" _ ⊢ sc0 
 						rp8.add_s8 { e0 sc0 } ⊢ e0 
+						^ lb_w,rsp_g ⊢ lb_w,rsp_g,sw0 
+							"SUW_" 0d' ":\n" 
+							"\tlea rsp,[rsp+8*" 1d' "]\n" 
+							`	add rsp,8 
+							`	pop rdi 
+							`	jmp rdi 
+							// 
+						rp8.of_s8 sw0 ⊢ ew1
 						inc_x lb_n ⊢ { lb_r lb_n }
 						act_lp { gfl lb_r ok0 hok0 gar { eg0 eds e0 } MV ev evv rv irv tav tv tv_n lb_n } ⊢ { gfl lb_r { eg0 eds e0 } MV ev evv rv irv tav tv tv_n lb_n }
 						stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs0 } 
@@ -10774,7 +10793,7 @@ unsigned long
 						mov_ptn2.f2 { { evv tav } rsp_g vs0 pr0 pk00 e0 } ⊢ { { evv tav } rsp_g vs0 e0 }  
 						$ _nil◂{} ⊢ dl 
 						idx.crt_ptn { irv dpr pk0 rl dl } ⊢ { irv rl dl } 																			
-						∎ { gfl lb_f rsp_g { eg0 eds e0 } MV ev evv rv irv tav tv tv_n rl lb_n } 
+						∎ { gfl lb_f rsp_g { eg0 eds e0 ew1 } MV ev evv rv irv tav tv tv_n rl lb_n } 
 					@.adt_t { h0 e0 } 
 						∐ h0 ⊢ ast.hp.ref◂q0 . 
 							∎ { ast.hp.ref◂q0 e0 }
@@ -10790,8 +10809,9 @@ unsigned long
 						inc_x lb_n ⊢ { lb0 lb_n }
 						inc_x lb_n ⊢ { lb_t lb_n } 
 						$ rsp_g ⊢ rsp_g,rsp_g0 
-						act_rmf { gfl lb0 rsp_g go { eg0 eds e0 } MV ev evv rv irv tav tv tv_n rl lb_n }  ⊢ { gfl lb0 rsp_g { eg0 eds e0 } MV ev evv rv irv tav tv tv_n rl lb_n } 										
+						act_rmf { gfl lb0 rsp_g go { eg0 eds e0 } MV ev evv rv irv tav tv tv_n rl lb_n }  ⊢ { gfl lb0 rsp_g { eg0 eds e0 ew1 } MV ev evv rv irv tav tv tv_n rl lb_n } 										
 						jmp_lb { lb_t e0 } ⊢ { lb_t e0 } 
+						rp8.cct { e0 ew1 } ⊢ e0 
 						lb_etr { lb0 e0 } ⊢ { _ e0 } 
 						$ hl ⊢ hl,hl0 
 						dlt.f { gfl evv tav lb_n rsp_g0 hl0 { eg0 eds e0 } } ⊢ { gfl evv tav lb_n rsp_g0 { eg0 eds e0 } }  
@@ -10804,8 +10824,8 @@ unsigned long
 						^ rsp_g ⊢ rsp_g,sc0 
 							"\tmov QWORD [GRM_DT+24],r14\n" 
 							"\tmov r13,QWORD [rsp+8*" 0d' "]\n"
-							`	push exn_grm 
-							`	push exn_grm
+							\\`	push exn_grm 
+							\\`	push exn_grm
 							 // 
 						rp8.add_s8 { e0 sc0 } ⊢ e0 
 						inc_x lb_n ⊢ { lbr lb_n } 
@@ -10817,7 +10837,7 @@ unsigned long
 						rp8.cct { e0 ew0 } ⊢ e0 
 						^ lbr,lb_r,lb_f ⊢ lbr,lb_r,lb_f,sl0 
 							"LB_" 0d' ":\n" 
-							`	add rsp,16
+							\\`	add rsp,16
 							`	RET_GRM_DT 
 							`	cmp BYTE [r8+6],0
 							"\tjz LB_" 1d' "\n" 
@@ -10884,7 +10904,7 @@ unsigned long
 						act_mtc { { rsp_g vs0 hl } gfl { lb_f lb_r } kh0 h0 { drl dp lc rf gr go } { eg0 eds e0 } MV ev evv rv irv tav tv tv_n lb_n } ⊢ { gfl { lb_f lb_r } { eg0 eds e0 } MV ev evv rv irv tav tv tv_n lb_n } 						
 						rp8.add_s8 { e0 %[ "\tmov r8,unt_1\n" ] } ⊢ e0 
 						lb_etr { lb_r e0 } ⊢ { lb_r e0 } 
-						rp8.add_s8 { e0 %[ "; discard r14\n\tadd rsp,8\n" ] } ⊢ e0 
+						rp8.add_s8 { e0 %[ "; discard r14\n\tadd rsp,16\n" ] } ⊢ e0 
 					∎ { gfl lb_r { eg0 eds e0 } MV ev evv rv irv tav tv tv_n lb_n }	
 			§ 
 				@.grm_f = lst.fld_l◂◂grm_f_i 
@@ -10902,7 +10922,14 @@ unsigned long
 								"\tcall GRM_" 0d' "\n"
 								`	POP_GRM_DT
 								`	ret
+								"GRM_SUW_" 0d' ":\n"
+								`	add rsp,8
+								`	POP_GRM_DT 
+								`	add rsp,8 
+								`	pop rdi
+								`	jmp rdi
 								"GRM_" 0d' ":\n"
+								"\tpush GRM_SUW_" 0d' "\n" 
 								`	push r14
 								//
 							rp8.add_s8 { e0 s0 } ⊢ e0 
