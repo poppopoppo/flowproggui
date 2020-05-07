@@ -36,16 +36,19 @@
   _emt x ⊢ _ 
   ∎
 \]
-§ f3◂◂F x 
+§ f3◂◂F { x z } 
   F x ⊢
   ? y .
     _emt %[ "exh lf 0" ] ⊢ _ 
     _emt y ⊢ y 
+    _emt z ⊢ _ 
     ∎ y 
   ∐. _ . 
     _emt %[ "exh hdl 0" ] ⊢ _ 
-    ∎| 
+    _emt z ⊢ _ 
+    ∎ %[ "exh hdl" ] 
 §% 
-  f3◂◂f1 %[ 23r ] ⊢ x 
+  f3◂◂f1 { %[ 23r ] %[ "Jdd" ] } ⊢ x 
+  _emt x ⊢ _ 
+  _inc %[ "R" ] ⊢ _ 
   ∎ 
-  
