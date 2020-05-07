@@ -453,7 +453,6 @@ LB_47: db 39,49,226,151,130,0
 LB_63: db 59,32,226,136,142,124,10,101,120,110,32,49,57,51,58,10,0
 LB_65: db 34,101,120,104,32,108,102,32,48,34,0
 LB_66: db 34,101,120,104,32,104,100,108,32,48,34,0
-LB_67: db 59,32,226,136,142,124,10,101,120,110,32,56,49,49,58,10,0
 section .text
 	unt: dq 0x0
 
@@ -1814,18 +1813,22 @@ LB_60:
 ; {| 10.. |}
 ; mov_ptn2.
 	jmp JMP_56
-LB_54: ;; #41◂◂(_some◂ ? ) 0'(= r ) ⊢ 0'(= {| l |} ) : (_r64◂→_s8◂)
+LB_54: ;; #41◂◂(_some◂ ? ) { 0'(= r ) 1'(= {| l |} ) } ⊢ 0'(= {| l |} ) : ({ _r64◂ _s8◂}→_s8◂)
 JMP_54:
-;; rsp=0 , %20~0'(= r )
+;; rsp=0 , %21~1'(= {| l |} )%20~0'(= r )
 ; ##40 0'(= r ) ⊢ 0'(= {| l |} )
+	sub rsp,8
+	mov QWORD [rsp+0],RX1
 	push EXH_64
 ; .mov_ptn2 0'(= r ) ⊢ 0'(= r )
-; {| 1000000010.. |}
+; {| 10000000110.. |}
 ; mov_ptn2.
 	call LB_56
 	pop rax
-; .add_rsp 0
-;; rsp=0 , %21~0'(= {| l |} )
+	mov RX1,QWORD [rsp-8+8*1]
+; .add_rsp 1
+	add rsp,8
+;; rsp=0 , %22~0'(= {| l |} )%21~1'(= {| l |} )
 ; ##12 %[ "exh lf 0" ] ⊢ %[ "exh lf 0" ]
 	mov QWORD [SIG_FLG],1
 	mov QWORD [SIG_ETR],emt_bof_hdl
@@ -1835,7 +1838,7 @@ JMP_54:
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
 ; .dlt.ptn %[ "exh lf 0" ]
-;; rsp=0 , %21~0'(= {| l |} )
+;; rsp=0 , %22~0'(= {| l |} )%21~1'(= {| l |} )
 ; ##12 0'(= {| l |} ) ⊢ 0'(= {| l |} )
 	mov QWORD [SIG_FLG],1
 	mov QWORD [SIG_ETR],emt_bof_hdl
@@ -1849,7 +1852,27 @@ JMP_54:
 	EMT_CST fmt_nl,4
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
-;; rsp=0 , %23~0'(= {| l |} )
+;; rsp=0 , %24~0'(= {| l |} )%21~1'(= {| l |} )
+; ##12 1'(= {| l |} ) ⊢ 1'(= {| l |} )
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,RX1
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn 1'(= {| l |} )
+	mov rdi,RX1
+	C_PUSH_REGS
+	mov r8,rdi
+	FREE_S8 r8
+	C_POP_REGS
+;; rsp=0 , %24~0'(= {| l |} )
 ; ∎ 0'(= {| l |} )
 ; .mov_ptn2 0'(= {| l |} ) ⊢ 0'(= {| l |} )
 ; {| 10.. |}
@@ -1857,7 +1880,7 @@ JMP_54:
 ; .add_rsp 0
 	ret
 LB_55:
-;; rsp=0 , 
+;; rsp=0 , %21~1'(= {| l |} )
 ; ##12 %[ "exh hdl 0" ] ⊢ %[ "exh hdl 0" ]
 	mov QWORD [SIG_FLG],1
 	mov QWORD [SIG_ETR],emt_bof_hdl
@@ -1867,22 +1890,70 @@ LB_55:
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
 ; .dlt.ptn %[ "exh hdl 0" ]
+;; rsp=0 , %21~1'(= {| l |} )
+; ##12 1'(= {| l |} ) ⊢ 1'(= {| l |} )
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,RX1
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn 1'(= {| l |} )
+	mov rdi,RX1
+	C_PUSH_REGS
+	mov r8,rdi
+	FREE_S8 r8
+	C_POP_REGS
 ;; rsp=0 , 
-	mov rdi,LB_67
-	call emt_stg 
-	add rsp,8
-	pop rdi
-	jmp rdi
+; ∎ %[ "exh hdl" ]
+; .mov_ptn2 %[ "exh hdl" ] ⊢ 0'(= {| l |} )
+; {| 10.. |}
+	mov rsi,1  
+	mov rdi,16
+	xor rax,rax 
+	add QWORD [S8_N],7
+	C_CALL_SF calloc
+	mov QWORD [rax],7
+	mov BYTE [rax+8+0],101
+	mov BYTE [rax+8+1],120
+	mov BYTE [rax+8+2],104
+	mov BYTE [rax+8+3],32
+	mov BYTE [rax+8+4],104
+	mov BYTE [rax+8+5],100
+	mov BYTE [rax+8+6],108
+	mov RX0,rax
+; mov_ptn2.
+; .add_rsp 0
+	ret
 EXH_64:
+	mov RX1,QWORD [rsp-8+8*1]
+; .add_rsp 1
+	add rsp,8
 	jmp LB_55
 RTM_1:
 ;; rsp=0 , %0~0'(= {| {| l |}|} )
-; # ?  %[ 23r ] ⊢ 1'(= {| l |} )
+; # ?  { %[ 23r ] %[ "Jdd" ] } ⊢ 1'(= {| l |} )
 	sub rsp,8
 	mov QWORD [rsp+0],RX0
-	push EXH_68
-; .mov_ptn2 %[ 23r ] ⊢ 0'(= r )
-; {| 10000000110.. |}
+	push EXH_67
+; .mov_ptn2 { %[ 23r ] %[ "Jdd" ] } ⊢ { 0'(= r ) 1'(= {| l |} ) }
+; {| 11000000110.. |}
+	mov rsi,1  
+	mov rdi,16
+	xor rax,rax 
+	add QWORD [S8_N],3
+	C_CALL_SF calloc
+	mov QWORD [rax],3
+	mov BYTE [rax+8+0],74
+	mov BYTE [rax+8+1],100
+	mov BYTE [rax+8+2],100
+	mov RX1,rax
 	mov RX0,23
 ; mov_ptn2.
 	call LB_54
@@ -1891,10 +1962,30 @@ RTM_1:
 	mov RX0,QWORD [rsp-8+8*1]
 ; .add_rsp 1
 	add rsp,8
-;; rsp=0 , %25~1'(= {| l |} )%0~0'(= {| {| l |}|} )
+;; rsp=0 , %28~1'(= {| l |} )%0~0'(= {| {| l |}|} )
+; ##12 1'(= {| l |} ) ⊢ 1'(= {| l |} )
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,RX1
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn 1'(= {| l |} )
+	mov rdi,RX1
+	C_PUSH_REGS
+	mov r8,rdi
+	FREE_S8 r8
+	C_POP_REGS
+;; rsp=0 , %0~0'(= {| {| l |}|} )
 ; ∎
 	jmp RTM_2
-EXH_68:
+EXH_67:
 	add rsp,16
 	pop rax
 	jmp rax

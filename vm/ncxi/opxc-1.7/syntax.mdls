@@ -1578,13 +1578,17 @@ unsigned long
 					exc_tv { tv i0 var_ln◂y1_0 } ⊢ { tv i0 _ } 
 					∎ tv 
 			§ f_emt { tv y0 y1 } 
-				_emt %[ "unify.f_emt" ] ⊢ _ 
 				$ y0 ⊢ y0,y00
 				$ y1 ⊢ y1,y10
 				pnt_type_k { tv y00 } ⊢ { tv y0s } 
 				pnt_type_k { tv y10 } ⊢ { tv y1s } 
-				_emt { y0s y1s } ⊢ _ 
-				f { tv y0 y1 } ⊢| 
+				f { tv y0 y1 } ⊢
+				? tv .
+					∎ tv 
+				∐. _ . 
+					_emt %[ "unify.f_emt" ] ⊢ _ 
+					_emt { y0s y1s } ⊢ _ 
+					∎|
 			∎∎ 
 		§ @.unifys { tv y0 ys } 
 			$ ys ⊢ 
@@ -9478,8 +9482,8 @@ unsigned long
 									_emt ee0 ⊢ _ 
 								∎|
 						∐ a'=EX.lod_q . 
-							» "lod_q D0" _ ⊢ ee0 
-							_emt ee0 ⊢ _ 
+							\\» "lod_q D0" _ ⊢ ee0 
+							\\_emt ee0 ⊢ _ 
 							rp8.e {} ⊢ e0 
 							stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl vs0 }
 							$ is ⊢ is,is0 
@@ -9874,11 +9878,14 @@ unsigned long
 				§ exh { ox lb_w rsp rsp0 nb l } 
 					$ ox ⊢ 
 					∐ _some◂lb_x . 
-						pop_regs.exh { rsp nb l } ⊢ { rsp _ e }
+						^ lb_w ⊢ _,sc0 
+							"EXH_" 0d' ":\n" // 
+						rp8.of_s8 sc0 ⊢ e  
+						pop_regs.exh { rsp nb l } ⊢ { rsp _ e1 }
+						rp8.cct { e e1 } ⊢ e 
 						set_rsp { rsp rsp0 e } ⊢ { _ e } 
-						^ lb_w,lb_x ⊢ _,_,s 
-							"EXH_" 0d' ":\n" 
-							"\tjmp LB_" 1d' "\n" // 
+						^ lb_x ⊢ _,s 
+							"\tjmp LB_" 0d' "\n" // 
 						rp8.add_s8 { e s } ⊢ e 
 						∎ e
 					∐. _none◂{} . 
@@ -10256,7 +10263,8 @@ unsigned long
 							dlt.f { gfl evv tav lb_n rsp dl { eg0 eds ec0 } } ⊢ { gfl evv tav lb_n rsp { eg0 eds ec0 } }
 							ret_f { { gfl cl mfv } lb_n { ev_n ev evv } rsp { rv irv } tav tv_n tv lc { eg0 eds ec0 ew0 } rl ft } ⊢ { { gfl cl mfv } lb_n { ev_n ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 ew0 } rl ft }		
 							lb_etr { lb_x0 ec0 } ⊢ { _ ec0 } 
-							ret_f { { gfl cl mfv } lb_n { ev_n ev evv } rsp0 { rv irv } tav tv_n tv lx { eg0 eds ec0 ew0 } rl0 ft } ⊢|				
+							ret_f { { gfl cl mfv } lb_n { ev_n ev evv } rsp0 { rv irv } tav tv_n tv lx { eg0 eds ec0 ew0 } rl0 ft } ⊢ { { gfl cl mfv } lb_n { ev_n ev evv } rsp0 { rv irv } tav tv_n tv { eg0 eds ec0 ew0 } rl0 ft }						
+							∎ { { gfl cl mfv } lb_n { ev_n ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 ew0 } rl ft }								
 						∐ ast.ret◂s .
 							$ s ⊢ 
 							∐ _some◂s . 
@@ -10477,9 +10485,9 @@ unsigned long
 						opn.pnt◂◂ast.pnt.ct_ptn { evv o_k0 } ⊢ { evv so_k } 
 						^ lbg,o,sp0,spr0,syx,so_k ⊢ lbg,o,_,_,_,_,ec1 
 							"LB_" 0d' ": ;; #" 1d' "◂◂(" 5' ") " 2' " ⊢ " 3' " : " 4' "\n" //
+						\\_emt ec1 ⊢ ec1 
 						^ lbg ⊢ lbg,sc0 
 							"JMP_" 0d' ":\n" // 
-						_emt ec1 ⊢ ec1 
 						$ lbg ⊢ lbg,lbg0 
 						$ { lbg o o_k gys rsp0 p0 rsp_d pr0 } ⊢ R0,R1
 						gnr_etr R1 ⊢ R1
