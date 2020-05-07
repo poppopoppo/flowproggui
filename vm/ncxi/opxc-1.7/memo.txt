@@ -84,3 +84,22 @@ _exh : { a'→b' _exh◂{ e' c' } b'→c' }→→a'→c'
 
 ¶§ t_v ◂◂ c0~foo c1~baa m0~ree m1~iii 
 
+cte : { (a'→→b') a' } → _cte◂a'
+
+§ f0◂◂F x
+  F x ⊢ x 
+  _inc x ⊢ x 
+  ∎ x
+§ f1 x 
+  _shl_im◂◂4r x ⊢ x 
+  ∎ x 
+§ g0 o 
+  $ o ⊢ 
+  ∐ _some◂f . 
+    _cte_app { f0 f } ⊢ e 
+    ∎ e 
+  ∐. _none◂{} . 
+    _cte_atm f1 ⊢ e 
+    ∎ e 
+§ f2◂◂O x 
+  
