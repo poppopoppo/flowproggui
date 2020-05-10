@@ -1,0 +1,105 @@
+_grm◂t' ; grammer type 
+_prs : _grm◂t' →→ { _s8 _r64 }→{ _s8 _r64 t' }
+_prs◂◂g  
+§+s8 @.g0 
+  ∐ ..  
+    ∎ _some◂%[ 3r ]
+  @.g1 ◂◂ G 
+    ∐ G G ⊢ { a b } 
+      ∎ _some◂{ a b }
+      ..
+
+  g0 : _grm◂_r64 
+  g1 : _grm◂a'→→_grm◂{ a' a' }  
+
+_prs :
+_ctr◂{ a' t' } ; constructor type 
+_cns : _ctr◂{ a' _lst◂a' } 
+_nil : _ctr◂{ {} _lst◂a' }
+(_cns) : a'→_lst◂a' 
+_ctr : _ctr◂{ a' t' } →→ a' → t'
+_ctr◂◂_cns { a l } ⊢ l 
+$ _cns◂{ a l } ⊢ l 
+
+'cns : _ctr◂{ a' '[ cns~a' < p' ] }
+'some : _ctr◂{ a' '[ some~a' < p' ] }
+
+¶ a 
+  ∐ ca0 : q0 
+  ∐ ca1 : q1 
+¶ t0 
+  ∐ c0 : { a0 a1 }  
+  ∐ c1 : b 
+  ∐ c2 : c 
+
+| c0
+  | ca0 0'
+  | ca1 1'
+| c1 
+  | cb0 
+    | cx0 2'
+    | cx1 3'
+  | cb1 4'
+  | cb2 5'
+| c2 6'
+
+
+§ f x 
+  ∐ x'=0r . 
+    ∎ 'cns◂%[ "hoo" ] 
+  ∐. . 
+    ∎ 'or◂%[ 9r ]
+  f : _r64 → '[ cns~_s8 or~_r64 ]
+
+§§ M ◂◂ a'' b'' ∀∀ f0 f1 f2 f3 
+  .. 
+  ∎∎
+
+_opn_exn : a'→b' →→ a'→_opn◂b' 
+
+_exh◂◂{ F H Q } x ⊢ y 
+_exh : { a'→b' _exh◂{ e' c' } b'→c' }→→a'→c'
+
+§ 
+  @.g0 +s8 
+    ∐
+  op x ⊢ y ? eh 
+  op x ⊢ 
+  ? y .
+    ∎  
+  ∐
+  ∐. e .
+    ..
+    ∎
+§§ F ◂◂ f0 f1 f2 
+  ∎∎
+
+¶¶ 't :: Foo ◂◂ c0:_r64 c1:_s8 m0:a'→b' m1:_s8→'t 
+§ q x 
+  c0 x ⊢ y 
+  c1 y ⊢ z 
+  ∎ z 
+
+¶ t ◂ a' t_Vct::Vct,t_Foo::Foo
+
+¶§ t_v ◂◂ c0~foo c1~baa m0~ree m1~iii 
+
+cte : { (a'→→b') a' } → _cte◂a'
+
+§ f0◂◂F x
+  F x ⊢ x 
+  _inc x ⊢ x 
+  ∎ x
+§ f1 x 
+  _shl_im◂◂4r x ⊢ x 
+  ∎ x 
+§ g0 o 
+  $ o ⊢ 
+  ∐ _some◂f . 
+    _cte_app { f0 f } ⊢ e 
+    ∎ e 
+  ∐. _none◂{} . 
+    _cte_atm f1 ⊢ e 
+    ∎ e 
+§ f2◂◂O x 
+  
