@@ -47,8 +47,19 @@
     _emt %[ "exh hdl 0" ] ⊢ _ 
     _emt z ⊢ _ 
     ∎ %[ "exh hdl" ] 
+§ f4 x 
+  $ x ⊢ 
+  ∐ _cns◂{ x l } . 
+    ∎| 
+  ∐. _nil◂{} . 
+    ∎| 
 §% 
   f3◂◂f1 { %[ 23r ] %[ "Jdd" ] } ⊢ x 
-  _emt x ⊢ _ 
+  _emt x ⊢ x 
   \\_inc %[ "R" ] ⊢ _ 
+  _rpc x ⊢ { x x0 } 
+  _emt x ⊢ x 
+  _id x ⊢ x 
+  f4 _nil◂{} ⊢ _ 
+  $ x ⊢ x 
   ∎ 
