@@ -19,7 +19,7 @@
 	∐ _some◂a0 . 
 		$ a0 ⊢ 
 		∐ OpADL.syntax.prs_vld◂a0 . 
-			_emt %[ "D1" ] ⊢ _ 
+			_emt %[ "opxcc:prs_vld" ] ⊢ _ 
 			$ a0 ⊢ a0,a1 
 			ini_tv {} ⊢ evv0 
 			rp8.e {} ⊢ ep0 
@@ -43,6 +43,8 @@
 			_emt sep0 ⊢ _ 
 			∎ {} 
 		∐. OpADL.syntax.prs_err◂e0 .
+			OpADL.syntax.pnt_prs_err e0 ⊢ es0 
+			_emt es0 ⊢ _  
 			∎|
 	∐. _none◂{} . 
 		∎| 

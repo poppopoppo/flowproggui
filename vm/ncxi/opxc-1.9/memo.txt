@@ -103,3 +103,9 @@ cte : { (a'→→b') a' } → _cte◂a'
     ∎ e 
 § f2◂◂O x 
   
+  $ A ⊢ '{ m~* < A }
+  f m ⊢ m 
+  $ '{ m~* < A } ⊢ A 
+
+  f A.m ⊢ A 
+
