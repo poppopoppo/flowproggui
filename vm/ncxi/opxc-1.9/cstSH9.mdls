@@ -117,7 +117,8 @@
     _emt o ⊢ _ 
     _emt a ⊢ a 
     get { a %[ "ywww" ] } ⊢ { a { _ o } }
-    _emt o ⊢ _ 
+    _emt o ⊢ o 
+		_dlt o ⊢ {} 
     ∎ 
   \[
   § fld_i◂◂F { { { m a } n v } i } 

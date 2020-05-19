@@ -118,25 +118,6 @@
 	§ itr { %v %s } : 
 			? s ⊢ { %s %l }
 			? { v s l %[ 0r ]  } ⊢|
-	§§ hsh
-		§ f_i { %h %i %b } : 
-				? h ⊢ %.r0
-				? .r0 ⊢ { %.r0 %h0 }
-				? .r0 ⊢ %h
-				? { h %[ 5r ]  } ⊢ { %h _ }
-				? { h h0 } ⊢ { %h _ }
-				? { h b } ⊢ { %h _ }
-				∎ ..
-		§ f %s : 
-				? s ⊢ { %s %l }
-				? { %[ 5381r ]  s } ⊢|
-		∎∎
-	§§ hsh_tbl
-		¶ bgt = 		¶ t = 		§ N = 255r
-		§ ini { } : 
-				? %[  ?  ]  ⊢ { _ %v }
-				∎ ..
-		∎∎
 	∎∎
 §§ rp8
 	¶
@@ -572,61 +553,7 @@
 				? { v l } ⊢|
 				? { v a } ⊢|
 	∎∎
-§§ s8_tbl
-	¶ t = 	§ SEED = -1649689906r
-	§ M = 1540483477r
-	§ R = 47r
-	§ 
-		@. { { %s %n %h } %i } : 
-				∎ ..
-				? { s i } ⊢ { %s %i %k }
-				? { i %[ 8r ]  } ⊢ { %i _ }
-				? { k %[  ?  ]  } ⊢ { %k _ }
-				? k ⊢ %.r0
-				? .r0 ⊢ { %.r0 %k0 }
-				? .r0 ⊢ %k
-				? { k0 %[  ?  ]  } ⊢ { %k0 _ }
-				? { k k0 } ⊢ { %k _ }
-				? { k %[  ?  ]  } ⊢ { %k _ }
-				? { h k } ⊢ { %h _ }
-				? { h %[  ?  ]  } ⊢ { %h _ }
-				? { { s n h } i } ⊢|
-	§ 
-		@. { { %s %h %m } { %x %n } } : 
-				? { h m } ⊢ { %h _ }
-				∎ ..
-				? n ⊢ %n
-				? { s n } ⊢ { %s %n %r }
-				? { r x } ⊢ { %r %x }
-				? { x %[ 8r ]  } ⊢ { %x _ }
-				? { h r } ⊢ { %h _ }
-				? { { s h m } { x n } } ⊢|
-	§ hsh %s : 
-			? s ⊢ { %s %l }
-			? l ⊢ %.r0
-			? .r0 ⊢ { %.r0 %l0 }
-			? .r0 ⊢ { %.r0 %l1 }
-			? .r0 ⊢ %l
-			? { l1 %[ 7r ]  } ⊢ { %m _ }
-			? { l0 %[ 3r ]  } ⊢ { %n _ }
-			? { n %[ 3r ]  } ⊢ { %n _ }
-			? { %[  ?  ]  l } ⊢ { %h %l }
-			? { h %[  ?  ]  } ⊢ { %h _ }
-			? { { s n h } %[ 0r ]  } ⊢ { %s %n %h }
-			? { n m } ⊢ { %n %m }
-			? { { s h m } { %[ 48r ]  n } } ⊢ { %s %h }
-			? h ⊢ %.r0
-			? .r0 ⊢ { %.r0 %h0 }
-			? .r0 ⊢ %h
-			? { h0 %[  ?  ]  } ⊢ { %h0 _ }
-			? { h h0 } ⊢ { %h _ }
-			? { h %[  ?  ]  } ⊢ { %h _ }
-			? h ⊢ %.r0
-			? .r0 ⊢ { %.r0 %h0 }
-			? .r0 ⊢ %h
-			? { h0 %[  ?  ]  } ⊢ { %h0 _ }
-			? { h h0 } ⊢ { %h _ }
-			∎ ..
+§§ hsh_tbl
 	§§ el
 		§ 
 			@. { { %s { } } %l } : 
@@ -669,7 +596,8 @@
 			? { t { s { } } } ⊢|
 	§ get { %t %s } : 
 			? { t { s { } } } ⊢|
-	§ set =  ? 
+	§ set { %t { %s %v } } : 
+			? { t { s v } } ⊢|
 	§ 
 		@. { { { %m %a } %n %v } %i } : 
 				∎ ..
@@ -680,6 +608,78 @@
 	§ itr { { %m %a } %v } : 
 			? a ⊢ { %a %n }
 			? { { { m a } n v } %[ 0r ]  } ⊢|
+	§§ s8
+		¶ t = 		§ SEED = -1649689906r
+		§ M = 1540483477r
+		§ R = 47r
+		§ 
+			@. { { %s %n %h } %i } : 
+					∎ ..
+					? { s i } ⊢ { %s %i %k }
+					? { i %[ 8r ]  } ⊢ { %i _ }
+					? { k %[  ?  ]  } ⊢ { %k _ }
+					? k ⊢ %.r0
+					? .r0 ⊢ { %.r0 %k0 }
+					? .r0 ⊢ %k
+					? { k0 %[  ?  ]  } ⊢ { %k0 _ }
+					? { k k0 } ⊢ { %k _ }
+					? { k %[  ?  ]  } ⊢ { %k _ }
+					? { h k } ⊢ { %h _ }
+					? { h %[  ?  ]  } ⊢ { %h _ }
+					? { { s n h } i } ⊢|
+		§ 
+			@. { { %s %h %m } { %x %n } } : 
+					? { h m } ⊢ { %h _ }
+					∎ ..
+					? n ⊢ %n
+					? { s n } ⊢ { %s %n %r }
+					? { r x } ⊢ { %r %x }
+					? { x %[ 8r ]  } ⊢ { %x _ }
+					? { h r } ⊢ { %h _ }
+					? { { s h m } { x n } } ⊢|
+		§ hsh %s : 
+				? s ⊢ { %s %l }
+				? l ⊢ %.r0
+				? .r0 ⊢ { %.r0 %l0 }
+				? .r0 ⊢ { %.r0 %l1 }
+				? .r0 ⊢ %l
+				? { l1 %[ 7r ]  } ⊢ { %m _ }
+				? { l0 %[ 3r ]  } ⊢ { %n _ }
+				? { n %[ 3r ]  } ⊢ { %n _ }
+				? { %[  ?  ]  l } ⊢ { %h %l }
+				? { h %[  ?  ]  } ⊢ { %h _ }
+				? { { s n h } %[ 0r ]  } ⊢ { %s %n %h }
+				? { n m } ⊢ { %n %m }
+				? { { s h m } { %[ 48r ]  n } } ⊢ { %s %h }
+				? h ⊢ %.r0
+				? .r0 ⊢ { %.r0 %h0 }
+				? .r0 ⊢ %h
+				? { h0 %[  ?  ]  } ⊢ { %h0 _ }
+				? { h h0 } ⊢ { %h _ }
+				? { h %[  ?  ]  } ⊢ { %h _ }
+				? h ⊢ %.r0
+				? .r0 ⊢ { %.r0 %h0 }
+				? .r0 ⊢ %h
+				? { h0 %[  ?  ]  } ⊢ { %h0 _ }
+				? { h h0 } ⊢ { %h _ }
+				∎ ..
+		§ asc =  ? 
+		§ set =  ? 
+		§ get =  ? 
+		∎∎
+	§§ r64
+		§ hsh %x : 
+				? x ⊢ %.r0
+				? .r0 ⊢ { %.r0 %h }
+				? .r0 ⊢ %x
+				? { h %[ 32r ]  } ⊢ { %h _ }
+				? { h %[ 1r ]  } ⊢ { %h _ }
+				? { h x } ⊢ { %h %x }
+				∎ ..
+		§ asc =  ? 
+		§ set =  ? 
+		§ get =  ? 
+		∎∎
 	∎∎
 § 
 	@.§ mk_esc_s8 %s : 
@@ -1177,13 +1177,12 @@
 						? { tv i1 y0 } ⊢|
 						? { tv r0 r1 } ⊢|
 							? { tv l0 l1 } ⊢|
-							? %[ "unify 0" ]  ⊢ %se
 							? { tv l0 } ⊢ { %tv %l0s }
 							? { tv l1 } ⊢ { %tv %l1s }
 							? a0 ⊢ %a0s
 							? a1 ⊢ %a1s
 							? { a0s l0s a1s l1s } ⊢ %a
-							? se ⊢ %se
+							? %[ "unify 0" ]  ⊢ %se
 							∎|
 						? { tv y0_0 y1_0 } ⊢ %tv
 						? { tv y0_1 y1_1 } ⊢|
@@ -1607,7 +1606,7 @@
 
 			@.test_var
 
-		§§ map
+		§ op_call◂ .. = ..		§ op_inl◂ .. = ..		§§ map
 			∎∎
 		§ 
 			@. { %v %a } : 
@@ -2190,22 +2189,6 @@
 	§§ EX = e_axm
 	§§ ip
 		§ 
-			@. { %n %s } : 
-					? { r n } ⊢ { %r %n }
-					∎ ..
-					∎ ..
-					? { n p } ⊢ { %n %p }
-					∎ ..
-		§ 
-			@. { %n %m } : 
-					? { r n } ⊢ { %r %n }
-					∎ ..
-						? { r n } ⊢ { %r %n }
-						∎ ..
-						∎ ..
-					? { n p } ⊢ { %n %p }
-					∎ ..
-		§ 
 			@. { { %m0 %lc } %ml } : 
 					? { { m0 lc } ml } ⊢ %lc
 					∎ ..
@@ -2222,46 +2205,142 @@
 						? { rl lc } ⊢ %lc
 						∎ ..
 						∎ ..
+			§§ inst
+				§ reg { %w %rv_n %re } : 
+						? rv_n ⊢ %.r0
+						? .r0 ⊢ { %.r0 %n0 }
+						? .r0 ⊢ %rv_n
+						? { re { w n0 } } ⊢ { %re _ }
+						? rv_n ⊢ %rv_n
+						∎ ..
+				§ 
+					@. { { %n %re } %a } : 
+							? { re w } ⊢ { %re { %w %o } }
+							? { o w } ⊢ %w
+							? n ⊢ %.r0
+							? .r0 ⊢ { %.r0 %n0 }
+							? .r0 ⊢ %n
+							? { w n re } ⊢ { %n %re }
+							∎ ..
+							? o ⊢ { }
+							? n ⊢ %.r0
+							? .r0 ⊢ { %.r0 %n0 }
+							? .r0 ⊢ %n
+							? n ⊢ %n
+							∎ ..
+							? { { n re } ap } ⊢ { { %n %re } %ap }
+							∎ ..
+					@. =  ? 
+				§ csm { %re %w } : 
+						? { re w } ⊢ { %re { %w %o } }
+						? { o w } ⊢ %i
+						∎ ..
+				§ 
+					@. { %re %a } : 
+							? { re w } ⊢ { %re { %w %o } }
+							? { o w } ⊢ %i
+							∎ ..
+							∎ ..
+							? { re ap } ⊢ { %re %ap }
+							∎ ..
+					@. =  ? 
+				§ test_var { %n %re %v } : 
+							? { re w } ⊢ { %re { %w %o } }
+							? o ⊢ %i
+							∎ ..
+							∎ ..
+				§ mtc_test { { %n %re } %t } : 
+							? { re sp } ⊢ { %re %sp }
+							? { { n re } mp } ⊢ { { %n %re } %mp }
+							∎ ..
+							? { n re v0 } ⊢ { %n %re %v0 }
+							? { n re v1 } ⊢ { %n %re %v1 }
+							∎ ..
+							? { n re v0 } ⊢ { %n %re %v0 }
+							? { n re v1 } ⊢ { %n %re %v1 }
+							∎ ..
+				§ mtc_line =  ? 
+				§ op_line { { %n %re } %ll } : 
+							? { re s } ⊢ { %re %s }
+							? { { n re } d } ⊢ { { %n %re } %d }
+							∎ ..
+							? { re ss } ⊢ { %re %ss }
+							? { { n re } ds } ⊢ { { %n %re } %ds }
+							∎ ..
+				§ 
+					@. { { %n %re %dp1 %lc1 } %lc0 } : 
+							? { re sp } ⊢ { %re %sp }
+							∎ ..
+							? { { n re } ll } ⊢ { { %n %re } %ll }
+							? { { n re dp1 lc1 } lc0 } ⊢ { %n %re %lc0 }
+							∎ ..
+							? { { n re dp1 lc1 } m } ⊢ { { %n %re _ _ } %m }
+							∎ ..
+							? { re sp } ⊢ { %re %sp }
+							? re ⊢ %.r0
+							? .r0 ⊢ { %.r0 %rex }
+							? .r0 ⊢ %re
+							? { { n re } mp } ⊢ { { %n %re } %mp }
+							? lc1 ⊢ %.r0
+							? .r0 ⊢ { %.r0 %lc1_0 }
+							? .r0 ⊢ %lc1
+							? dp1 ⊢ %.r0
+							? .r0 ⊢ { %.r0 %dp1_0 }
+							? .r0 ⊢ %dp1
+							? { { n re dp1 lc1 } lc } ⊢ { %n %re %lc }
+							? { { n rex dp1_0 lc1_0 } lcx } ⊢ { %n %rex %lcx }
+							∎ ..
+							? o ⊢ { %sp %rl }
+							? { re rl } ⊢ { %re %rl }
+							? { re sp } ⊢ { %re %sp }
+							? { rl ?◂{ ?◂{ ?◂?◂%[  ?  ]  sp dp1 } lc1 } } ⊢ %lc
+							∎ ..
+							∎ ..
+					@. { { %n %re %dp1 %lc1 } { %ml %me } } : 
+						? re ⊢ %.r0
+						? .r0 ⊢ { %.r0 %re0 }
+						? .r0 ⊢ %re
+						? { { n re0 } ml } ⊢ { { %n %re0 } %ml }
+							? { { n re0 dp1 lc1 } m } ⊢ { { %n _ %dp1 %lc1 } %m }
+							∎ ..
+							? { dp1 lc1 } ⊢ %.r0
+							? .r0 ⊢ { %.r0 { %dp1_0 %lc1_0 } }
+							? .r0 ⊢ { %dp1 %lc1 }
+							? { { n re0 dp1_0 lc1_0 } lc } ⊢ { %n _ %lc }
+							∎ ..
+					@. =  ? 
+				§ f { %n %re %sp0 %dp0 %lc0 %dp1 %lc1 } : 
+						? { { n re } dp0 } ⊢ { { %n %re } %dp0 }
+						? { { n re dp1 lc1 } lc0 } ⊢ { %n %re %lc }
+						∎ ..
+				∎∎
 			§ 
-				@. { { %n %dp1 %lc1 } %lc0 } : 
+				@. { { %evv %n } %lc } : 
 						∎ ..
-						? { { n dp1 lc1 } lc0 } ⊢ %lc0
+						? { { evv n } lc } ⊢ { { %evv %n } %lc }
+								? o ⊢ %.r0
+								? .r0 ⊢ { %.r0 %o0 }
+								? .r0 ⊢ %o
+								? { evv o0 } ⊢ { %evv %k }
+									? %[ 5r ]  ⊢ %re
+									? { n re s dp lcg d lc } ⊢ { %n _ %lc }
+									∎ ..
+									∎ ..
+								∎ ..
+							∎ ..
+						? { { evv n } m } ⊢ { { %evv %n } %m }
 						∎ ..
-						? { { n dp1 lc1 } m } ⊢ { _ %m }
-						∎ ..
-						? { n sp } ⊢ { %n %sp }
-						? { n mp } ⊢ { %n %mp }
-						? lc1 ⊢ %.r0
-						? .r0 ⊢ { %.r0 %lc1_0 }
-						? .r0 ⊢ %lc1
-						? dp1 ⊢ %.r0
-						? .r0 ⊢ { %.r0 %dp1_0 }
-						? .r0 ⊢ %dp1
-						? n ⊢ %.r0
-						? .r0 ⊢ { %.r0 %n0 }
-						? .r0 ⊢ %n
-						? { { n dp1 lc1 } lc } ⊢ %lc
-						? { { n0 dp1_0 lc1_0 } lcx } ⊢ %lcx
-						∎ ..
-						? o ⊢ { %sp %rl }
-						? { n sp } ⊢ { %n %sp }
+						? { { evv n } lc } ⊢ { { %evv %n } %lc }
+						? { { evv n } lcx } ⊢ { { %evv %n } %lcx }
 						∎ ..
 						∎ ..
-				@. { { %n %dp1 %lc1 } { %ml %me } } : 
-						? { { n dp1 lc1 } m } ⊢ { { %n %dp1 %lc1 } %m }
 						∎ ..
-						? { dp1 lc1 } ⊢ %.r0
-						? .r0 ⊢ { %.r0 { %dp1_0 %lc1_0 } }
-						? .r0 ⊢ { %dp1 %lc1 }
-						? n ⊢ %.r0
-						? .r0 ⊢ { %.r0 %n0 }
-						? .r0 ⊢ %n
-						? { { n0 dp1_0 lc1_0 } lc } ⊢ %lc
+				@. { { %evv %n } { %ml %me } } : 
+						? { { evv n } m } ⊢ { { %evv %n } %m }
+						∎ ..
+						? { { evv n } lc } ⊢ { { %evv %n } %lc }
 						∎ ..
 				@. =  ? 
-			§ f { %n %sp0 %dp0 %lc0 %dp1 %lc1 } : 
-					? { { n dp1 lc1 } lc0 } ⊢ %lc
-					∎ ..
 			∎∎
 		∎∎
 	§§ syntax
@@ -2372,6 +2451,7 @@
 			∎∎
 		§ 
 			@.			@.			@.		§ 
+			@.		§ 
 			@.		§ 
 			@.		§ 
 			@.			@.			@. =  ? 
@@ -2742,7 +2822,7 @@
 						∎ ..
 			∎∎
 		§§ slv_n
-			§ reg_T { %w %rv_n %re %tv_n %tv } : 
+			§ reg_T { %w %rv_n %re } : 
 					? rv_n ⊢ %.r0
 					? .r0 ⊢ { %.r0 %n0 }
 					? .r0 ⊢ %rv_n
@@ -2780,7 +2860,7 @@
 						? n ⊢ %.r0
 						? .r0 ⊢ { %.r0 %n0 }
 						? .r0 ⊢ %n
-						? { w n re tv_n tv } ⊢ { %n %re %tv_n %tv }
+						? { w n re } ⊢ { %n %re }
 						∎ ..
 						? o ⊢ { }
 						? n ⊢ %.r0
@@ -2815,8 +2895,7 @@
 				@. =  ? 
 				@. =  ? 
 				@. =  ? 
-			§ 
-				@. { %env0 %tv_n %tv %n %re %v } : 
+			§ test_var_T { %env0 %n %re %v } : 
 						? { re w } ⊢ { %re { %w %o } }
 						? o ⊢ %i
 						? i ⊢ %v
@@ -2908,11 +2987,11 @@
 						? { { env0 tv tv_n re } sp } ⊢ { { %env0 %tv %tv_n %re } %sp }
 						? { { env0 tv tv_n n re } mp } ⊢ { { %env0 %tv %tv_n %n %re } %mp }
 						∎ ..
-						? { env0 tv_n tv n re v0 } ⊢ { %env0 %tv_n %tv %n %re %v0 }
-						? { env0 tv_n tv n re v1 } ⊢ { %env0 %tv_n %tv %n %re %v1 }
+						? { env0 n re v0 } ⊢ { %env0 %n %re %v0 }
+						? { env0 n re v1 } ⊢ { %env0 %n %re %v1 }
 						∎ ..
-						? { env0 tv_n tv n re v0 } ⊢ { %env0 %tv_n %tv %n %re %v0 }
-						? { env0 tv_n tv n re v1 } ⊢ { %env0 %tv_n %tv %n %re %v1 }
+						? { env0 n re v0 } ⊢ { %env0 %n %re %v0 }
+						? { env0 n re v1 } ⊢ { %env0 %n %re %v1 }
 						∎ ..
 				@. =  ? 
 			§ add_grm { { %w %ix %yt } %i %il { %mmv %mev %mtv %mv_n %rv %rv_n %ev %ev_n %tv %tv_n } %irv %tav %evv %tx_n %ns_m %ns_e %ns_t { %dd %ep0 %ec0 %rtm_n %lb_n } } : 
@@ -6316,6 +6395,9 @@
 							? { e0 %[ "\tEMT_FLSH\n\tmov QWORD [SIG_FLG],0\n" ]  } ⊢ %e0
 							? { ec0 e0 } ⊢ %ec0
 							∎ ..
+							? { gfl ?◂{ } tav lb_n rsp is { eds ec0 } } ⊢ { %gfl %fl %tav %lb_n %rsp { %eds %ec0 } }
+							? { gfl fl tav lb_n { eds eg0 } } ⊢ { %gfl %tav %lb_n { %eds %eg0 } }
+							∎ ..
 							∎ ..
 								? { evv a0 } ⊢ { %evv %fn }
 								? { evv a1 } ⊢ { %evv %sb0 }
@@ -7966,15 +8048,15 @@
 		§ unt_N =  ? 
 		§ ss_rcd_n { %n %m %e } : 
 					^ .. ⊢ ..
-						"%define SS_RCD_2_MAX (1<<20)\n" "\tBSS_SS_RCD "0.' ",SS_RCD_2_MAX\n" //
+						"%define SS_RCD_2_MAX SS_RCD_2_MAX_P \n" "\tBSS_SS_RCD 2,SS_RCD_2_MAX\n" //
 					? { e s } ⊢ %e
 					∎ ..
 					^ .. ⊢ ..
-						"%define SS_RCD_3_MAX (1<<19)\n" "\tBSS_SS_RCD "0.' ",SS_RCD_3_MAX\n" //
+						"%define SS_RCD_3_MAX SS_RCD_3_MAX_P \n" "\tBSS_SS_RCD 3,SS_RCD_3_MAX\n" //
 					? { e s } ⊢ %e
 					∎ ..
 					^ .. ⊢ ..
-						"%define SS_RCD_4_MAX (1<<13)\n" "\tBSS_SS_RCD "0.' ",SS_RCD_4_MAX\n" //
+						"%define SS_RCD_4_MAX SS_RCD_4_MAX_P  \n" "\tBSS_SS_RCD 4,SS_RCD_4_MAX\n" //
 					? { e s } ⊢ %e
 					∎ ..
 					^ .. ⊢ ..
@@ -8096,7 +8178,7 @@
 							? %[ 5r ]  ⊢ %ns_r_e
 								? { { { mmv mev ev ns_m ns_e il } tv tv_n %[ 0r ]  ns_r_e } d } ⊢ { { { %mmv %mev %ev %ns_m %ns_e %il } %tv %tv_n %rv_n_e %ns_r_e } %d }
 								? { { mmv mev ev ns_m ns_e il } tv tv_n rv_n_e ns_r_e lc } ⊢ { { %mmv %mev %ev %ns_m %ns_e %il } %tv %tv_n %rv_n_e _ %lc }
-								? rv_n_e ⊢ { _ %rv_e }
+								? rv_n_e ⊢ { %rv_n_e %rv_e }
 								? { { lv ev rv_e tv tv_n } d } ⊢ { { %lv %ev %rv_e %tv %tv_n } %d %y }
 								? y ⊢ %.r0
 								? .r0 ⊢ { %.r0 %y0 }
@@ -8120,23 +8202,25 @@
 									0*"\t" "§ "2.' "("1.' ") : "3.' "\n" //
 								? ep1 ⊢ %ep1
 								? { ep1 ep0 } ⊢ %ep0
+								? { { evv rv_n_e } lc } ⊢ { { %evv _ } %lc }
 								? { tv_n tv evv ev ev_n ns_e w ?◂{ ?◂{ } o_n d lc iy0 } yx } ⊢ { %tv_n %tv %evv %ev %ev_n %ns_e }
 								? { { rsp rl ns_r } { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } { hpv hpv_n rv rv_n ev ev_n tv tv_n irv tav evv } { el eds dd ep0 ec0 rtm_n lb_n } } ⊢ { %RTM_ST %MV %NS %LCV %EC }
 								? { RTM_ST i il MV LCV tx_n NS gel gfl EC } ⊢|
 								? { { %[ 0r ]  ?◂{ } lv evv ev ev_n tv tv_n } p } ⊢ { { %c_n %wl %lv %evv %ev %ev_n %tv %tv_n } %p %y_c }
 								? { wl ns_e } ⊢ %ns_e
-								? { { { mmv mev ev ns_m ns_e il } tv tv_n rv_n ns_r_e } d } ⊢ { { { %mmv %mev %ev %ns_m %ns_e %il } %tv %tv_n %rv_n %ns_r_e } %d }
-								? { { lv ev rv tv tv_n } d } ⊢ { { %lv %ev %rv %tv %tv_n } %d %y }
+								? { { { mmv mev ev ns_m ns_e il } tv tv_n %[ 0r ]  ns_r_e } d } ⊢ { { { %mmv %mev %ev %ns_m %ns_e %il } %tv %tv_n %rv_n_e %ns_r_e } %d }
+								? { { mmv mev ev ns_m ns_e il } tv tv_n rv_n_e ns_r_e lc } ⊢ { { %mmv %mev %ev %ns_m %ns_e %il } %tv %tv_n %rv_n_e _ %lc }
+								? rv_n_e ⊢ { %rv_n_e %rv_e }
+								? { { lv ev rv_e tv tv_n } d } ⊢ { { %lv %ev %rv_e %tv %tv_n } %d %y }
 								? y ⊢ %.r0
 								? .r0 ⊢ { %.r0 %y0 }
 								? .r0 ⊢ %y
 								? { { mmv mev ev ns_m ns_e il } mtv tv_n tv ns_t y0 td } ⊢ { { %mmv %mev %ev %ns_m %ns_e %il } %mtv %tv_n %tv %ns_t }
-								? { { mmv mev ev ns_m ns_e il } tv tv_n rv_n ns_r_e lc } ⊢ { { %mmv %mev %ev %ns_m %ns_e %il } %tv %tv_n %rv_n _ %lc }
 								? c_n ⊢ %.r0
 								? .r0 ⊢ { %.r0 %c_n0 }
 								? .r0 ⊢ %c_n
 								? { c_n ns_e } ⊢ { _ %ns_e }
-								? { lv ev rv tv tv_n lc } ⊢ { %lv %ev %rv %tv %tv_n %lc %yr }
+								? { lv ev rv_e tv tv_n lc } ⊢ { %lv %ev %rv_e %tv %tv_n %lc %yr }
 								? lv ⊢ %lv
 								? { tv_n tv lv y } ⊢ { %tv_n %tv %lv %y }
 								? { tv_n tv lv y_c } ⊢ { %tv_n %tv %lv %y_c }
@@ -8151,11 +8235,11 @@
 								? .r0 ⊢ { %.r0 %yx0 }
 								? .r0 ⊢ %yx
 								? { tv_n tv yx0 } ⊢ { %tv_n %tv %iy0 }
-								? { ?◂{ c_n0 p } o_n d lc iy0 } ⊢ %k
+								? { { evv rv_n_e } lc } ⊢ { { %evv _ } %lc }
 								^ .. ⊢ ..
 									0*"\t" "§ "2.' "("1.' ") : "3.' "\n" //
 								? { ep1 ep0 } ⊢ %ep0
-								? { tv_n tv evv ev ev_n ns_e w k yx } ⊢ { %tv_n %tv %evv %ev %ev_n %ns_e }
+								? { tv_n tv evv ev ev_n ns_e w ?◂{ ?◂{ c_n0 p } o_n d lc iy0 } yx } ⊢ { %tv_n %tv %evv %ev %ev_n %ns_e }
 								? { { rsp rl ns_r } { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } { hpv hpv_n rv rv_n ev ev_n tv tv_n irv tav evv } { el eds dd ep0 ec0 rtm_n lb_n } } ⊢ { %RTM_ST %MV %NS %LCV %EC }
 								? { RTM_ST i il MV LCV tx_n NS gel gfl EC } ⊢|
 							∎|
@@ -8475,6 +8559,12 @@
 				? { tv_n tv %[  ?  ]  yx0 } ⊢ { %tv_n %tv %k }
 				? { tv_n tv evv ev ev_n ns_e %[ "_emt" ]  k yx } ⊢ { %tv_n %tv %evv %ev %ev_n %ns_e }
 				? { tv_n tv lv } ⊢ { %tv_n %tv %lv %yv }
+				? ?◂{ yv ?◂{ } } ⊢ %.r0
+				? .r0 ⊢ { %.r0 %yx0 }
+				? .r0 ⊢ %yx
+				? { tv_n tv %[  ?  ]  yx0 } ⊢ { %tv_n %tv %k }
+				? { tv_n tv evv ev ev_n ns_e %[ "_dlt" ]  k yx } ⊢ { %tv_n %tv %evv %ev %ev_n %ns_e }
+				? { tv_n tv lv } ⊢ { %tv_n %tv %lv %yv }
 				? yv ⊢ %.r0
 				? .r0 ⊢ { %.r0 %yv0 }
 				? .r0 ⊢ %yv
@@ -8651,7 +8741,7 @@
 				? EC ⊢ { %el %eds %dd %ep0 %ec0 %rtm_n %lb_n }
 				? %[  ?  ]  ⊢ %ssN
 				^ .. ⊢ ..
-					"bits 64 \n" "; macros \n""%macro RT_ERR 1 \n" "\tmov rdi,rt_err0 \n""\tcall emt_stg \n" "\tmov QWORD [err_n],%1 \n""\tjmp err \n" "%endmacro\n""\n" "%macro C_PUSH_REGS 0 \n""\tpush rdx\n" "\tpush rcx\n""\tpush r8\n" "\tpush r9\n""\tpush r10\n" "\tpush r11\n""%endmacro\n" "\n""%macro C_POP_REGS 0 \n" "\tpop r11 \n""\tpop r10 \n" "\tpop r9 \n""\tpop r8 \n" "\tpop rcx \n""\tpop rdx \n" "%endmacro\n""\n" "%macro CALL_SF 1 \n""\tC_PUSH_REGS \n" "\tcall %1 \n""\tC_POP_REGS\n" "%endmacro\n""\n" "%macro C_CALL_SF 1 \n""\tC_PUSH_REGS\n" "\tmov QWORD [rsp_tmp],rsp \n""\tand rsp,~0xf \n" "\tcall %1 \n""\tmov rsp,QWORD [rsp_tmp]\n" "\tC_POP_REGS\n""%endmacro \n" "\n""%macro C_CALL 1 \n" "\tmov QWORD [rsp_tmp],rsp \n""\tand rsp,~0xf \n" "\tcall %1 \n""\tmov rsp,QWORD [rsp_tmp]\n" "%endmacro \n""\n" "%macro JZ_SPC 2\n""\tmovzx MCR_REG,%1\n" "\tcmp MCR_REG,9 \n""\tjz %2\n" "\tcmp MCR_REG,10 \n""\tjz %2\n" "\tcmp MCR_REG,32 \n""\tjz %2\n" "%endmacro\n"" \n" "%macro JZ_LINE_SPC 2\n""\tmovzx MCR_REG,%1 \n" "\tcmp MCR_REG,9 \n""\tjz %2\n" "\tcmp MCR_REG,32 \n""\tjz %2\n" "%endmacro\n"" \n" "%macro ALC_RCD 2 ; n,reg-name!=rbx \n""\tadd QWORD [SS_RCD_C+8*%1],1\n" "\tadd QWORD [SS_RCD_N+8*%1],1 \n""\tmov %2,[SS_RCD_%1_TOP]\n" "\tmov MCR_REG,[%2]\n""\tmov QWORD [SS_RCD_%1_TOP],MCR_REG\n" "%endmacro \n""\n" "%macro FREE_RCD 2 ; n,reg-name!=rbx \n""\tsub QWORD [SS_RCD_N+8*%1],1\n" "\tmov rbx,QWORD [SS_RCD_%1_TOP] \n""\tmov QWORD [%2],rbx\n" "\tmov QWORD [SS_RCD_%1_TOP],%2\n""%endmacro\n" "\n""%macro FREE_PT 1 \n" "\tmov rbx,[SS_PT_TOP]\n""\tmov QWORD [%1],rbx\n" "\tmov [SS_PT_TOP],%1\n""%endmacro\n" "\n""%macro ALC_PT 1 \n" "\tmov %1,[SS_PT_TOP] \n""\tmov rbx,[%1]\n" "\tmov QWORD [SS_PT_TOP],rbx \n""%endmacro\n" "\t\t\t\t\n""%macro FREE_LN 1 \n" "\tsub SS_LN_N,1 \n""\tmov QWORD [%1],SS_LN_REG\n" "\tmov SS_LN_REG,%1\n""%endmacro\n" "\n""%macro ALC_LN 1 \n" "\tadd QWORD [SS_LN_C],1 \n""\tadd SS_LN_N,1 \n" "\tmov %1,SS_LN_REG \n""\tmov SS_LN_REG,QWORD [SS_LN_REG]\n" "%endmacro\n""\n" "%macro FREE_S8 1 \n"" mov rbx,0x0000_ffff_ffff_ffff \n" "\tand rbx,QWORD [%1]\n""\tsub QWORD [S8_N],rbx\n" "\tmov rdi,%1\n""\tcall free_s8\n" "%endmacro \n""\n" "%macro PUSH_GRM_DT 0\n""\tmov r9,0x0000_ffff_ffff_ffff\n" "\tand r9,[r13]\n""\tsub rsp,32 \n" "\tmov rax,QWORD [GRM_DT]\n""\tmov QWORD [rsp],rax \n" "\tmov rax,QWORD [GRM_DT+8]\n""\tmov QWORD [rsp+8],rax \n" "\tmov rax,QWORD [GRM_DT+16]\n""\tmov QWORD [rsp+16],rax \n" "\tmov rax,QWORD [GRM_DT+24]\n""\tmov QWORD [rsp+24],rax \n" "\tmov QWORD [GRM_DT],r13\n""\tmov QWORD [GRM_DT+8],r9\n" "\tmov QWORD [GRM_DT+16],r14\n""\tmov QWORD [GRM_DT+24],r14\n" "%endmacro\n""\n" "%macro POP_GRM_DT 0 \n""\tmov rax,QWORD [rsp] \n" "\tmov QWORD [GRM_DT],rax\n""\tmov rax,QWORD [rsp+8] \n" "\tmov QWORD [GRM_DT+8],rax\n""\tmov rax,QWORD [rsp+16] \n" "\tmov QWORD [GRM_DT+16],rax\n""\tmov rax,QWORD [rsp+24] \n" "\tmov QWORD [GRM_DT+24],rax\n""\tadd rsp,32 \n" "%endmacro\n""\n" "%macro RET_GRM_DT 0 \n""\tmov r13,QWORD [GRM_DT] \n" "\tmov r9,QWORD [GRM_DT+8] \n""\tmov r14,QWORD [GRM_DT+24]\n" "%endmacro\n""\t\t\t\n" "%macro EMT_R64 1 \n""\tcmp r10,3940 \n" "\tjg \n""\tmov rdx,%1\n" "\tmov rdi,QWORD [GD_BUF_IT] \n""\tmov BYTE [rdi+128],0\n" "\tmov rsi,fmt_r64 \n"" xor rax,rax\n" "\tC_CALL_SF sprintf \n""\tadd QWORD [GD_BUF_IT],rax\n" "%endmacro\n""\n" "\n""%macro EMT_CST 2 ; %1=label,%2=len\n" "\tmov rdi,%1 \n""\tmov rax,%2 \n" "\tcall emt_cst \n""%endmacro\n" "\n""%macro EMT_FLSH 0 \n" " xor rax,rax\n""\tmov rdi,QWORD [GD_BUF_PT] \n" "\tmov rbx,rdi\n""\tC_CALL_SF printf \n" "\tmov QWORD [GD_BUF_N],0\n""\tmov QWORD [rbx],0\n" "%endmacro\n""\n" "%macro GET_LEN 2 \n""\tmov %1,0x0000_ffff_ffff_ffff\n" "\tand %1,QWORD [%2]\n""%endmacro\n" "\n""%macro MOV_RAX 2 \n" "\tmov rax,%2 \n""\tmov %1,rax\n" "\t%endmacro\n""\n" "%macro MOV_RDI 2 \n""\tmov rdi,%2 \n" "\tmov %1,rdi\n""%endmacro\n" "\n""%macro MOV_RBX 2 \n" "\tmov rbx,%2\n""\tmov %1,rbx\n" "%endmacro\n""\n" "%macro scf_F 1 \n""\tpush rdi\n" "\tmovzx rdi,BYTE [rdi]\n""\txor rax,rax \n" "\tC_CALL isspace\n""\tcmp rax,0\n" "\tjnz scf_F_err0_%1 \n""\tjmp scf_F_scf_%1 \n" "scf_F_err0_%1: \n""\tadd rsp,8\n" "\tmov rax,0\n""\tret\n" "\tscf_F_scf_%1:\n""\tmov rdi,QWORD [rsp]\n" "\tsub rsp,8\n""\tmov rsi,rsp\n" "\tmov rdx,%1\n""\tmov rax,0\n" "\tC_CALL strtoul\n""\tpop rsi\n" "\tpop rdi\n""\tsub rsi,rdi\n" "\tjz scf_F_err1_%1\n""\tmov rdi,rax\n" "\tmov rax,1 \n""\tret\n" "scf_F_err1_%1:\n""\tmov rax,0 \n" "\tret\n""%endmacro\n" "\n""%macro BSS_SS_RCD 2 \n" "\tSS_RCD_%1_TOP: resq 1 \n""\tSS_RCD_%1_VCT: resq (%1+1)*(%2+4)\n" "\tSS_RCD_%1_BTM: resq 1\n""%endmacro \n" "\n""%define KB 1024\n" "%define MB KB*KB \n""%define GB MB*MB\n" "%define SIG_INT 2\n""%define SIG_SEGV 11\n" "%define SS_MAX 4000\n""%define SS_LN_MAX 1<<20\n" "%define RCD_N "0.' "\n""%define SS_NULL 0xffff_ffff_ffff_0000\n" "%define EMT_BUF_MAX (KB<<1)\n""%define SS_LN_REG r15\n" "%define MCR_REG rbx\n""%define SS_LN_N r12\n" "\n""%define RX0 r13\n" "%define RX1 r14\n""%define RX2 r8\n" "%define RX3 r9 \n""%define RX4 r10 \n" "%define RX5 r11 \n""%define RX6 rcx \n" "%define RX7 rdx\n""%define SEED 0x_f7f7_65d7_9dab_bace\n" " \n""extern MurmurHash64A\n" "extern exit \n""extern printf \n" "extern sprintf\n""extern malloc \n" "extern calloc\n""extern free \n" "extern isspace \n""extern strtoul\n" "extern strlen\n""extern getchar\n" "extern system\n""extern set_handler\n" "extern emt_s8_to\n""extern alc_gd_buf\n" "extern set_usr_hdl\n"" \n" "section .bss\n""\tPAGE_SIZE: resq 1\n" "\ttmp: resq 64\n""\tret_vct: resq 64\n" " rsp_tmp: resq 1\n""\tRB: resq 1 \n" "\n""; emt buffer \n" "\tGD_BUF_PT: resq 1 \n""\tGD_BUF_IT: resq 1\n" "\tEMT_BUF_OFS: resq 1 \n"" EMT_BUF: resb EMT_BUF_MAX \n" "\tEMT_BUF_END: resb 1\n"" \n" "; garbage vector \n""\tGBG_VCT: resq 252\n" "\n""; exp_s8 \n" "\tEXP_S8_VCT: resb 2048\n""\n" ";rep_movsb \n""\tREP_MOVSB_VCT: resq 4\n" "\n""\tSS_LN_TOP: resq 1\n" "\tSS_LN_VCT: resq 2*SS_LN_MAX\n""\tSS_LN_BTM: resq 1  \n" "\n""\tSS_PT_TOP: resq 1\n" "\tSS_PT_VCT: resq 3*SS_MAX\n""\tSS_PT_BTM: resq 1 \n" "\n""\tSS_RCD_N: resq (RCD_N+1) \n" "\tSS_RCD_C: resq (RCD_N+1)\n""\n" "stat: resb 144\n""struc STAT\n" "\t.st_dev         resq 1\n""\t.st_ino         resq 1\n" "\t.st_mode        resd 1\n""\t.st_nlink       resd 1\n" "\t.st_uid         resd 1\n""\t.st_gid         resd 1\n" "\t.st_rdev        resq 1\n""\t.pad1           resq 1\n" "\t.st_size        resq 1\n""\t.st_blksize     resd 1\n" "\t.pad2 resd 1\n""\t.st_blocks      resq 1\n" "\t.st_atime       resq 1\n""\t.st_atime_nsec  resq 1\n" "\t.st_mtime       resq 1\n""\t.st_mtime_nsec  resq 1\n" "\t.st_ctime       resq 1\n""\t.st_ctime_nsec  resq 1\n" "\t.__unused4  resd 1\n""\t.__unused5  resd 1\n" "endstruc\n""\n" //
+					"%include \"HD.s\" \n" "bits 64 \n""; macros \n" "%macro RT_ERR 1 \n""\tmov rdi,rt_err0 \n" "\tcall emt_stg \n""\tmov QWORD [err_n],%1 \n" "\tjmp err \n""%endmacro\n" "\n""%macro C_PUSH_REGS 0 \n" "\tpush rdx\n""\tpush rcx\n" "\tpush r8\n""\tpush r9\n" "\tpush r10\n""\tpush r11\n" "%endmacro\n""\n" "%macro C_POP_REGS 0 \n""\tpop r11 \n" "\tpop r10 \n""\tpop r9 \n" "\tpop r8 \n""\tpop rcx \n" "\tpop rdx \n""%endmacro\n" "\n""%macro CALL_SF 1 \n" "\tC_PUSH_REGS \n""\tcall %1 \n" "\tC_POP_REGS\n""%endmacro\n" "\n""%macro C_CALL_SF 1 \n" "\tC_PUSH_REGS\n""\tmov QWORD [rsp_tmp],rsp \n" "\tand rsp,~0xf \n""\tcall %1 \n" "\tmov rsp,QWORD [rsp_tmp]\n""\tC_POP_REGS\n" "%endmacro \n""\n" "%macro C_CALL 1 \n""\tmov QWORD [rsp_tmp],rsp \n" "\tand rsp,~0xf \n""\tcall %1 \n" "\tmov rsp,QWORD [rsp_tmp]\n""%endmacro \n" "\n""%macro JZ_SPC 2\n" "\tmovzx MCR_REG,%1\n""\tcmp MCR_REG,9 \n" "\tjz %2\n""\tcmp MCR_REG,10 \n" "\tjz %2\n""\tcmp MCR_REG,32 \n" "\tjz %2\n""%endmacro\n" " \n""%macro JZ_LINE_SPC 2\n" "\tmovzx MCR_REG,%1 \n""\tcmp MCR_REG,9 \n" "\tjz %2\n""\tcmp MCR_REG,32 \n" "\tjz %2\n""%endmacro\n" " \n""%macro ALC_RCD 2 ; n,reg-name!=rbx \n" "\tadd QWORD [SS_RCD_C+8*%1],1\n""\tadd QWORD [SS_RCD_N+8*%1],1 \n" "\tmov %2,[SS_RCD_%1_TOP]\n""\tmov MCR_REG,[%2]\n" "\tmov QWORD [SS_RCD_%1_TOP],MCR_REG\n""%endmacro \n" "\n""%macro FREE_RCD 2 ; n,reg-name!=rbx \n" "\tsub QWORD [SS_RCD_N+8*%1],1\n""\tmov rbx,QWORD [SS_RCD_%1_TOP] \n" "\tmov QWORD [%2],rbx\n""\tmov QWORD [SS_RCD_%1_TOP],%2\n" "%endmacro\n""\n" "%macro FREE_PT 1 \n""\tmov rbx,[SS_PT_TOP]\n" "\tmov QWORD [%1],rbx\n""\tmov [SS_PT_TOP],%1\n" "%endmacro\n""\n" "%macro ALC_PT 1 \n""\tmov %1,[SS_PT_TOP] \n" "\tmov rbx,[%1]\n""\tmov QWORD [SS_PT_TOP],rbx \n" "%endmacro\n""\t\t\t\t\n" "%macro FREE_LN 1 \n""\tsub SS_LN_N,1 \n" "\tmov QWORD [%1],SS_LN_REG\n""\tmov SS_LN_REG,%1\n" "%endmacro\n""\n" "%macro ALC_LN 1 \n""\tadd QWORD [SS_LN_C],1 \n" "\tadd SS_LN_N,1 \n""\tmov %1,SS_LN_REG \n" "\tmov SS_LN_REG,QWORD [SS_LN_REG]\n""%endmacro\n" "\n""%macro FREE_S8 1 \n" " mov rbx,0x0000_ffff_ffff_ffff \n""\tand rbx,QWORD [%1]\n" "\tsub QWORD [S8_N],rbx\n""\tmov rdi,%1\n" "\tcall free_s8\n""%endmacro \n" "\n""%macro PUSH_GRM_DT 0\n" "\tmov r9,0x0000_ffff_ffff_ffff\n""\tand r9,[r13]\n" "\tsub rsp,32 \n""\tmov rax,QWORD [GRM_DT]\n" "\tmov QWORD [rsp],rax \n""\tmov rax,QWORD [GRM_DT+8]\n" "\tmov QWORD [rsp+8],rax \n""\tmov rax,QWORD [GRM_DT+16]\n" "\tmov QWORD [rsp+16],rax \n""\tmov rax,QWORD [GRM_DT+24]\n" "\tmov QWORD [rsp+24],rax \n""\tmov QWORD [GRM_DT],r13\n" "\tmov QWORD [GRM_DT+8],r9\n""\tmov QWORD [GRM_DT+16],r14\n" "\tmov QWORD [GRM_DT+24],r14\n""%endmacro\n" "\n""%macro POP_GRM_DT 0 \n" "\tmov rax,QWORD [rsp] \n""\tmov QWORD [GRM_DT],rax\n" "\tmov rax,QWORD [rsp+8] \n""\tmov QWORD [GRM_DT+8],rax\n" "\tmov rax,QWORD [rsp+16] \n""\tmov QWORD [GRM_DT+16],rax\n" "\tmov rax,QWORD [rsp+24] \n""\tmov QWORD [GRM_DT+24],rax\n" "\tadd rsp,32 \n""%endmacro\n" "\n""%macro RET_GRM_DT 0 \n" "\tmov r13,QWORD [GRM_DT] \n""\tmov r9,QWORD [GRM_DT+8] \n" "\tmov r14,QWORD [GRM_DT+24]\n""%endmacro\n" "\t\t\t\n""%macro EMT_R64 1 \n" "\tcmp r10,3940 \n""\tjg \n" "\tmov rdx,%1\n""\tmov rdi,QWORD [GD_BUF_IT] \n" "\tmov BYTE [rdi+128],0\n""\tmov rsi,fmt_r64 \n" " xor rax,rax\n""\tC_CALL_SF sprintf \n" "\tadd QWORD [GD_BUF_IT],rax\n""%endmacro\n" "\n""\n" "%macro EMT_CST 2 ; %1=label,%2=len\n""\tmov rdi,%1 \n" "\tmov rax,%2 \n""\tcall emt_cst \n" "%endmacro\n""\n" "%macro EMT_FLSH 0 \n"" xor rax,rax\n" "\tmov rdi,QWORD [GD_BUF_PT] \n""\tmov rbx,rdi\n" "\tC_CALL_SF printf \n""\tmov QWORD [GD_BUF_N],0\n" "\tmov QWORD [rbx],0\n""%endmacro\n" "\n""%macro GET_LEN 2 \n" "\tmov %1,0x0000_ffff_ffff_ffff\n""\tand %1,QWORD [%2]\n" "%endmacro\n""\n" "%macro MOV_RAX 2 \n""\tmov rax,%2 \n" "\tmov %1,rax\n""\t%endmacro\n" "\n""%macro MOV_RDI 2 \n" "\tmov rdi,%2 \n""\tmov %1,rdi\n" "%endmacro\n""\n" "%macro MOV_RBX 2 \n""\tmov rbx,%2\n" "\tmov %1,rbx\n""%endmacro\n" "\n""%macro scf_F 1 \n" "\tpush rdi\n""\tmovzx rdi,BYTE [rdi]\n" "\txor rax,rax \n""\tC_CALL isspace\n" "\tcmp rax,0\n""\tjnz scf_F_err0_%1 \n" "\tjmp scf_F_scf_%1 \n""scf_F_err0_%1: \n" "\tadd rsp,8\n""\tmov rax,0\n" "\tret\n""\tscf_F_scf_%1:\n" "\tmov rdi,QWORD [rsp]\n""\tsub rsp,8\n" "\tmov rsi,rsp\n""\tmov rdx,%1\n" "\tmov rax,0\n""\tC_CALL strtoul\n" "\tpop rsi\n""\tpop rdi\n" "\tsub rsi,rdi\n""\tjz scf_F_err1_%1\n" "\tmov rdi,rax\n""\tmov rax,1 \n" "\tret\n""scf_F_err1_%1:\n" "\tmov rax,0 \n""\tret\n" "%endmacro\n""\n" "%macro BSS_SS_RCD 2 \n""\tSS_RCD_%1_TOP: resq 1 \n" "\tSS_RCD_%1_VCT: resq (%1+1)*(%2+4)\n""\tSS_RCD_%1_BTM: resq 1\n" "%endmacro \n""\n" "%define KB 1024\n""%define MB KB*KB \n" "%define GB MB*MB\n""%define SIG_INT 2\n" "%define SIG_SEGV 11\n""%define SS_MAX 4000\n" "%define SS_LN_MAX 1<<20\n""%define RCD_N " 0.'"\n" "%define SS_NULL 0xffff_ffff_ffff_0000\n""%define EMT_BUF_MAX (KB<<1)\n" "%define SS_LN_REG r15\n""%define MCR_REG rbx\n" "%define SS_LN_N r12\n""\n" "%define RX0 r13\n""%define RX1 r14\n" "%define RX2 r8\n""%define RX3 r9 \n" "%define RX4 r10 \n""%define RX5 r11 \n" "%define RX6 rcx \n""%define RX7 rdx\n" "%define SEED 0x_f7f7_65d7_9dab_bace\n"" \n" "extern MurmurHash64A\n""extern exit \n" "extern printf \n""extern sprintf\n" "extern malloc \n""extern calloc\n" "extern free \n""extern isspace \n" "extern strtoul\n""extern strlen\n" "extern getchar\n""extern system\n" "extern set_handler\n""extern emt_s8_to\n" "extern alc_gd_buf\n""extern set_usr_hdl\n" " \n""section .bss\n" "\tPAGE_SIZE: resq 1\n""\ttmp: resq 64\n" "\tret_vct: resq 64\n"" rsp_tmp: resq 1\n" "\tRB: resq 1 \n""\n" "; emt buffer \n""\tGD_BUF_PT: resq 1 \n" "\tGD_BUF_IT: resq 1\n""\tEMT_BUF_OFS: resq 1 \n" " EMT_BUF: resb EMT_BUF_MAX \n""\tEMT_BUF_END: resb 1\n" " \n""; garbage vector \n" "\tGBG_VCT: resq 252\n""\n" "; exp_s8 \n""\tEXP_S8_VCT: resb 2048\n" "\n"";rep_movsb \n" "\tREP_MOVSB_VCT: resq 4\n""\n" "\tSS_LN_TOP: resq 1\n""\tSS_LN_VCT: resq 2*SS_LN_MAX\n" "\tSS_LN_BTM: resq 1  \n""\n" "\tSS_PT_TOP: resq 1\n""\tSS_PT_VCT: resq 3*SS_MAX\n" "\tSS_PT_BTM: resq 1 \n""\n" "\tSS_RCD_N: resq (RCD_N+1) \n""\tSS_RCD_C: resq (RCD_N+1)\n" "\n""stat: resb 144\n" "struc STAT\n""\t.st_dev         resq 1\n" "\t.st_ino         resq 1\n""\t.st_mode        resd 1\n" "\t.st_nlink       resd 1\n""\t.st_uid         resd 1\n" "\t.st_gid         resd 1\n""\t.st_rdev        resq 1\n" "\t.pad1           resq 1\n""\t.st_size        resq 1\n" "\t.st_blksize     resd 1\n""\t.pad2 resd 1\n" "\t.st_blocks      resq 1\n""\t.st_atime       resq 1\n" "\t.st_atime_nsec  resq 1\n""\t.st_mtime       resq 1\n" "\t.st_mtime_nsec  resq 1\n""\t.st_ctime       resq 1\n" "\t.st_ctime_nsec  resq 1\n""\t.__unused4  resd 1\n" "\t.__unused5  resd 1\n""endstruc\n" "\n" //
 				? eh ⊢ %eh
 				? %[ 1r ]  ⊢ %rnx
 				? %[ "SS_MAX" ]  ⊢ %rmx
