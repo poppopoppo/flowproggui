@@ -119,3 +119,12 @@ W.~x.~y.~z.~k
 § L◂◂{ A0 .. Am } = '{ l0~F◂◂Ai l1~Aj .. ln~.. }
 _vct◂'{ c~_s8 dim~&[ 4r : _r64 ]  len~&[ *|{ 4r 3r 2r 7r } : _arr◂{ c~_r64 len~&[ 4r : _r64 ] } ] }
 mtx :: _arr
+
+
+$ n =  
+  ∐
+    ∎| 
+  ∐ 
+  ∐. 
+
+  

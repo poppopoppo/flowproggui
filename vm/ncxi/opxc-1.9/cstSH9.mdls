@@ -107,7 +107,7 @@
 		f◂◂el.get { t { s {} } } ⊢ { t { s o } }
 		∎ { t { s o } }
 	§ set = f◂◂el.set
-  §% 
+	§% 
     ini %[ 5r ] ⊢ a 
     set { a { %[ "foo" ] %[ 4r ] } } ⊢ { a { _ o } }
     _emt o ⊢ _ 
@@ -139,3 +139,34 @@
     rp8.add_s8 { e %[ "~" ] }
 	\]
   ∎∎
+
+§ f0◂◂F x 
+	_inc x ⊢ x 
+	F # x ⊢ x 
+	_dec x ⊢ x 
+	∎ x 
+§ f1 x 
+	_add { x %[ 4r ] } ⊢ { x _ } 
+	$ x ⊢ x,x0 
+	_imul { x x0 } ⊢ { x _ } 
+	∎ x
+§ f2 x 
+	_inc x ⊢ x 
+	f1 # x ⊢ x 
+	_dec x ⊢ x 
+	∎ x 
+§ @.lp◂◂F { { n v } i } 
+	∐ n'=i' . 
+		∎ { n v } 
+	∐. . 
+		F v ⊢ v
+		_inc i ⊢ i
+		lp◂◂F { { n v } i } ⊢|  
+§% 
+	\\f0◂◂f1 %[ 3r ] ⊢ x 
+	\\_emt x ⊢ _ 
+	f2 %[ 3r ] ⊢ x 
+	_emt x ⊢ _ 
+	\\lp◂◂f2 { { %[ 100000000r ] %[ 3r ] } %[ 0r ] } ⊢ { _ x } 
+	\\_emt x ⊢ x 
+	∎ 
