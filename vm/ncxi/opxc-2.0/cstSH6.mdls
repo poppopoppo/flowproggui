@@ -1,0 +1,53 @@
+§§+s8 
+  @.fail 
+    ∐. !| ⊢ { } 
+      ∎ _none◂{}
+
+§§+s8 @.eof
+	∐ _byt !| ⊢ { _ } 
+		∎ _none◂{}
+	∐. ⊢ { } 
+		∎ _some◂{} 
+
+  §§+s8 @.nl_eof 
+	∐# "\n" ⊢ {  {} } 
+		∎ _some◂{} 
+	∐.# eof ⊢ { {} } 
+		∎ _some◂{}
+
+§§+s8 
+		@.stx_line◂+◂G 
+			∐# G stx_line◂+◂G ⊢ { a l } 
+				∎ _some◂_cns◂{ a l } 
+			∐.# ⊢ { } 
+				∎ _some◂_nil◂{}
+§§+s8 
+  @.g0 
+    ∐.# "Hoo" "Baa" ⊢ { {} {} } 
+      ∎ _some◂{}
+§% 
+  _prs◂◂fail { %[ "Hello" ] %[ 0r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
+  _prs◂◂g0 { %[ "Hoo Baa" ] %[ 0r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
+  
+  ∎ 
+
+§§ ct_stx 
+		§§+s8 
+			@.ptn 
+				∐.# _byt  ⊢ { a0 }
+					∎|
+			\[
+      @.atm 
+				∐# name "◂◂◂" !| ptn ⊢ { n {} p } 
+					∎ _some◂RP.atm◂ast.k_agl◂{ n p }
+				∐# "(" ptn ")" ⊢ { {} a {} }
+					∎ _some◂a
+				∐# "{" lst.stx_line◂+◂ptn "}" ⊢ { {} l {} } 
+					∎ _some◂RP.rcd◂l
+				∐.# cst ⊢ { c } 
+					∎ _some◂RP.atm◂c
+          \]
+		∎∎
+		§ ct_ptn = ct_stx.ptn
