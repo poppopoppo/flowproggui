@@ -1,0 +1,66 @@
+
+§ C x
+	_add x ⊢ y
+	∎|
+§§+s8
+	@.rcd
+		∐.* "{" rcd_lst "}" ⊢ { {} l {} }
+			_emt { _n _r } ⊢ { n r }
+			_some n ⊢ p
+			∎ p
+	@.rcd_lst
+		∐* rcd rcd_lst ⊢ { hd tl }			
+			_some _n ⊢ p
+			∎ p
+		∐.* ⊢ { }
+			_some _n ⊢ p
+			∎ p
+
+§§+s8 
+	@.gx
+		∐* "A" gx ; ⊢ { {} w },s
+			∎| 
+			∐* "B" gx ⊢ { {} v }
+				∎| 
+			∐.* "C" ⊢ { {} }
+				∎| 
+		∐.* ⊢ { }
+			∎| 
+§§+s8 
+	@.glb_etr_res 
+			∐* ; ⊢ { },p 
+				_some p ⊢ a 
+				∎ a
+				∐* "∎∎" !| "\\F\\" ⊢ { {} {} } 
+					∎| 
+				∐.* _byt glb_etr_res ⊢ { b r } 
+					_some {} ⊢ a 
+					∎ a 
+			∐.* ⊢ { }
+				_some {} ⊢ a 
+				∎ a
+§ A « 
+	» "JIJ§§+∎∎s8" _ ⊢ s
+	» 0r _ ⊢ x 
+	glb_etr_res.prs { s x } ⊢ { s x a } 
+	_emt { x a } ⊢ { x a } 
+	∎ {}
+§ @.lp0 x 
+ ∎ x 
+§ C «
+	» "{ {} {} }" _ ⊢ s
+	» 0r _ ⊢ x
+	rcd.prs { s x } ⊢ { s x a }
+	_emt { x a } ⊢ { x a }
+	» "x" _ ⊢ sx
+	» "y" _ ⊢ sy
+	» 10r _ ⊢ r 
+	» _^ r ⊢ r,sr 
+		0d' "\n" // 
+	_emt sr ⊢ sr 
+	∐ sx'=sy' .
+		_emt sx ⊢ sx
+		∎ {}
+	∐. .
+		_emt sy ⊢ sy
+		∎ {}

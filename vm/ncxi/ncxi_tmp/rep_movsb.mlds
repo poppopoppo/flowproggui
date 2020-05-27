@@ -1,0 +1,2172 @@
+§ rep_movsb { } 
+	∐ is ⊢ RP.rcd◂l0; l0 ⊢ _cns◂{ a0 l0 }; l0 ⊢ _cns◂{ a1 l0 }; l0 ⊢ _cns◂{ a2 l0 }; l0 ⊢ _cns◂{ a3 l0 }; l0 ⊢ _cns◂{ a4 l0 };l0 ⊢ _nil◂{} . 
+								∐ a0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂c0 . 
+									∐ a1 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.s8◂s0 . 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂o0 . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂s1 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂o1 . 
+													_rep_movsb { c0 s0 o0 s1 o1 } ⊢ { c0 s0 o0 s1 o1 }
+													ast.r64 c0 ⊢ v0 
+													stt_v.hp_im v0 ⊢ a0 
+													RP.atm a0 ⊢ c0 
+													ast.s8 s0 ⊢ v0 
+													stt_v.hp_im v0 ⊢ a0 
+													RP.atm a0 ⊢ s0 
+													ast.r64 o0 ⊢ v0 
+													stt_v.hp_im v0 ⊢ a0 
+													RP.atm a0 ⊢ o0
+													ast.s8 s0 ⊢ v0 
+													stt_v.hp_im v0 ⊢ a0 
+													RP.atm a0 ⊢ s1 
+													ast.r64 o0 ⊢ v0 
+													stt_v.hp_im v0 ⊢ a0 
+													RP.atm a0 ⊢ o1 
+													_nil {} ⊢ l0 
+													_cns { o1 l0 } ⊢ l0 
+													_cns { s1 l0 } ⊢ l0 
+													_cns { o0 l0 } ⊢ l0 
+													_cns { s0 l0 } ⊢ l0 
+													_cns { c0 l0 } ⊢ l0 
+													RP.rcd l0 ⊢ ip1 
+													» _^ sis ⊢ sis,sr 
+														"; _rep_movsb " 0' " ⊢ " 0' "\n" //
+													∎ { tav lb_n a rsp rl irv ip1 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r4 h0 }; h0 ⊢ stt_v.r64◂{} .
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 4d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 	
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r3 h0 }; h0 ⊢ stt_v.ref◂q0; q0 ⊢ stt_v.opq◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂o1 . 
+													reg { rsp r3 } ⊢ { rsp r3 sr3 br3 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													##_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														##mk_s8 s1 ⊢ { s1 es1 } 
+														##rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,o1,sr3,lb0,lb1,es0,srm0 ⊢ sis,c0,sl0,o00,sr3,lb0,lb1,es0,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															##9' 
+															##"\tmov " 10' ",rax\n" 
+															"\tmov rax," 5' "\n" 
+															"\tjmp LB_" 8d' "\n" 
+															"LB_" 7d' ": db " 8' "\n" 
+															"LB_" 8d' ":\n" 
+															"\tmov rdi,QWORD [rax]\n"
+															"\tmov rsi,0x0000_ffff_ffff_ffff\n" 
+															"\tand rdi,rsi\n"  
+															"\tlea rdi,[rdi+" 5d' "]\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 4d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 7d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { r3 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														ast.r64 o1 ⊢ v1 
+														stt_v.hp_im v1 ⊢ h1 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r4 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r3 } ⊢ { rsp r3 sr3 br3 }
+													reg { rsp r4 } ⊢ { rsp r4 sr4 ebr4 } 
+													_s8_len s0 ⊢ { s0 sl0 }
+													##_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														##mk_s8 s1 ⊢ { s1 es1 } 
+														##rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sr3,sr4,lb0,lb1,es0,srm0 ⊢ sis,c0,sl0,o00,sl1,sr3,sr4,lb0,lb1,es0,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															##9' 
+															##"\tmov " 10' ",rax\n" 
+															"\tmov rax," 5' "\n" 
+															"\tjmp LB_" 8d' "\n" 
+															"LB_" 7d' ": db " 8' "\n" 
+															"LB_" 8d' ":\n" 
+															"\tmov rdi,QWORD [rax]\n"
+															"\tmov rsi,0x0000_ffff_ffff_ffff\n" 
+															"\tand rdi,rsi\n" 
+															"\tmov rsi," 6' "\n"  
+															"\tlea rdi,[rdi+rsi]\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 4d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 7d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { r3 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														ast.r64 o1 ⊢ v1 
+														stt_v.hp_im v1 ⊢ h1 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐. . 
+												∎| 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 .
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎|
+											∐. . 
+												∎| 
+										∐. . 
+											∎| 
+									∐ a1 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 	
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐. . 
+												∎| 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 } 
+													» _^ c0,s0,o0,s1,sr4 ⊢ c0,s0,o0,s1,sr4,sr
+														`	mov eax,[r14+4]
+    												`	lea r8,[r8+r13]
+    												`	cmp r8,rax\n"^
+ 												  	`	jg err_s8_ge\n"^
+    												`	mov eax,[r9+4]\n"^
+    												`	lea r10,[r10+r13]\n"^
+    												`	cmp r10,rax\n"^
+    												`	jg err_s8_ge\n"^
+    												`	lea rsi,[r14+7+r8]\n"^
+    												`	lea rdi,[r9+7+r10]\n"^
+    												`	mov rcx,r13\n"^
+    												`	std\n"^
+    												`	rep movsb\n"^
+														//
+													∎ { tav lb_n a rsp rl irv is1 sr }
+												∐. . 
+													∎| 
+											∐. . 
+												∎| 
+										∐. . 
+											∎|
+									∐. . 
+										∎| 
+								∐ a0 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+									∐ a1 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 } 
+													» _^ c0,s0,o0,s1,sr4 ⊢ c0,s0,o0,s1,sr4,sr
+														`	mov eax,[r14+4]
+    												`	lea r8,[r8+r13]
+    												`	cmp r8,rax\n"^
+ 												  	`	jg err_s8_ge\n"^
+    												`	mov eax,[r9+4]\n"^
+    												`	lea r10,[r10+r13]\n"^
+    												`	cmp r10,rax\n"^
+    												`	jg err_s8_ge\n"^
+    												`	lea rsi,[r14+7+r8]\n"^
+    												`	lea rdi,[r9+7+r10]\n"^
+    												`	mov rcx,r13\n"^
+    												`	std\n"^
+    												`	rep movsb\n"^
+														//
+													∎ { tav lb_n a rsp rl irv is1 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 	
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 } 
+													» _^ c0,s0,o0,s1,sr4 ⊢ c0,s0,o0,s1,sr4,sr
+														`	mov eax,[r14+4]
+    												`	lea r8,[r8+r13]
+    												`	cmp r8,rax\n"^
+ 												  	`	jg err_s8_ge\n"^
+    												`	mov eax,[r9+4]\n"^
+    												`	lea r10,[r10+r13]\n"^
+    												`	cmp r10,rax\n"^
+    												`	jg err_s8_ge\n"^
+    												`	lea rsi,[r14+7+r8]\n"^
+    												`	lea rdi,[r9+7+r10]\n"^
+    												`	mov rcx,r13\n"^
+    												`	std\n"^
+    												`	rep movsb\n"^
+														//
+													∎ { tav lb_n a rsp rl irv is1 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐. . 
+												∎| 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 .
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎|
+											∐. . 
+												∎| 
+										∐. . 
+											∎| 
+									∐ a1 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 	
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐. . 
+												∎| 
+										∐ a2 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐ a3 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp_im◂v0; v0 ⊢ ast.r64◂x0 . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐ a4 ⊢ RP.atm◂a0; a0 ⊢ stt_v.hp◂{ r0 h0 }; h0 ⊢ stt_v.r64◂{} . 
+													reg { rsp r4 } ⊢ { rsp r4 sr4 br4 }
+													_s8_len s0 ⊢ { s0 sl0 }
+													_s8_len s1 ⊢ { s1 sl1 } 
+													$ o0 ⊢ o0,o00 
+													_add { o00 c0 } ⊢ { o00 c0 } 
+													##_add { o1 c0 } ⊢ { o1 c0 } 
+													∐ o00'=<sl0' .   
+														rset.ini {} ⊢ v0 
+														$ rl ⊢ rl,rl0 
+														stt_v.mk_rset_env { irv rl0 v0 } ⊢ { irv v0 } 
+														bl.t {} ⊢ bt0 
+														exc_q { v0 r0 bt0 } ⊢ { v0 r0 bt0 } 
+														rset.min_f v0 ⊢ { v0 rm0 } 
+														reg { rsp rm0 } ⊢ { rsp rm0 srm0 brm0 } 
+														$ rm0 ⊢ rm0,rm00 
+														mk_s8 s1 ⊢ { s1 es1 } 
+														rp8.mk_s8 es1 ⊢ { es1 ses1 }
+														» 0r _ ⊢ x0 
+														mk_db { s0 x0 } ⊢ { s0 x0 es0 }
+														$ lb_n ⊢ lb_n,lb0 
+														_inc lb_n ⊢ lb_n 
+														$ lb_n ⊢ lb_n,lb1 
+														_inc lb_n ⊢ lb_n  
+														» _^ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0 ⊢ sis,c0,sl0,o00,sl1,sr4,lb0,lb1,es0,ses1,srm0,sr
+															"; _rep_movsb " 0' " ⊢ " 0' "\n" 
+															9' 
+															"\tmov " 10' ",rax\n" 
+															"\tjmp LB_" 7d' "\n" 
+															"LB_" 6d' ": db " 8' "\n" 
+															"LB_" 7d' ":\n" 
+															"\tmov rdi," 5' "\n" 
+															"\tadd rdi," 1d' "\n" 
+    													"\tcmp rdi," 2d' "\n" 	
+															"\tjle err\n"
+    													"\tmov rsi,[LB_" 6d' "-1+" 3d' "]\n" 
+    													`	lea rdi,[rax+7+rdi]
+															`	push rcx 
+															"\tmov rcx," 1d' "\n" 
+    													`	std
+    													`	rep movsb
+															`	pop rcx
+															//
+														ast.r64 c0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ c0 
+														ast.s8 s0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ s0 
+														ast.r64 o0 ⊢ v0 
+														stt_v.hp_im v0 ⊢ a0 
+														RP.atm a0 ⊢ o0
+														ast.s8 s0 ⊢ v0
+														stt_v.opq {} ⊢ q0 
+														stt_v.ref q0 ⊢ h0  
+														stt_v.hp { rm0 h0 } ⊢ a0 
+														RP.atm a0 ⊢ s1 
+														stt_v.r64 {} ⊢ v0 
+														stt_v.hp { r4 v0 } ⊢ a0 
+														RP.atm a0 ⊢ o1 
+														_nil {} ⊢ l0 
+														_cns { o1 l0 } ⊢ l0 
+														_cns { s1 l0 } ⊢ l0 
+														_cns { o0 l0 } ⊢ l0 
+														_cns { s0 l0 } ⊢ l0 
+														_cns { c0 l0 } ⊢ l0 
+														RP.rcd l0 ⊢ is1 
+														∎ { tav lb_n a rsp rl irv is1 sr }
+													∐. . 
+														» "\tjmp err\n" _ ⊢ sr 
+														∎ { tav lb_n a rsp rl irv is0 sr }
+												∐. . 
+													∎| 
+											∐. . 
+												∎| 
+										∐. . 
+											∎|
+									∐. . 
+										∎|
+								∐. . 
+									∎|   
+							∐. . 
+								∎|

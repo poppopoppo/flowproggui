@@ -1,0 +1,2154 @@
+; _#8 2'(= a3◂ [ a35◂ [ a2◂ [ a31◂ [ ]]]] ) ⊢ 2'(= a3◂ [ a35◂ [ a2◂ [ a31◂ [ ]]]] )
+	mov rdi,fmt_emt
+	call emt_stg
+	mov rax,r8
+	C_PUSH_REGS
+	mov r8,rax
+	call LB_4911
+	C_POP_REGS
+	mov rdi,fmt_nl
+	call emt_stg
+	jmp LB_4912
+LB_4911:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4915+8*rax]
+LB_4915: dq LB_4913,LB_4914
+LB_4913:
+	mov rdi,LB_4917
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4918
+	jmp LB_4916
+LB_4914:
+	mov rdi,LB_4919
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4916
+LB_4916:
+	ret
+LB_4918:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4922+8*rax]
+LB_4922: dq LB_4920,LB_4921
+LB_4920:
+	mov rdi,LB_4924
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4925
+	jmp LB_4923
+LB_4921:
+	mov rdi,LB_4926
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4927
+	jmp LB_4923
+LB_4923:
+	ret
+LB_4927:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4930+8*rax]
+LB_4930: dq LB_4928,LB_4929
+LB_4928:
+	mov rdi,LB_4932
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8 
+	call emt_r64 
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	mov rdi,r8 
+	call emt_r64 
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4927
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4931
+LB_4929:
+	mov rdi,LB_4933
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4931
+LB_4931:
+	ret
+LB_4925:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4936+8*rax]
+LB_4936: dq LB_4934,LB_4935
+LB_4934:
+	mov rdi,LB_4938
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4939
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4925
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4937
+LB_4935:
+	mov rdi,LB_4940
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4937
+LB_4937:
+	ret
+LB_4939:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4947+8*rax]
+LB_4947: dq LB_4941,LB_4942,LB_4943,LB_4944,LB_4945,LB_4946
+LB_4941:
+	mov rdi,LB_4949
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4950
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4948
+LB_4942:
+	mov rdi,LB_4951
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4952
+	jmp LB_4948
+LB_4943:
+	mov rdi,LB_4953
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4954
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4948
+LB_4944:
+	mov rdi,LB_4955
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4956
+	jmp LB_4948
+LB_4945:
+	mov rdi,LB_4957
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4958
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4948
+LB_4946:
+	mov rdi,LB_4959
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4960
+	jmp LB_4948
+LB_4948:
+	ret
+LB_4960:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4963+8*rax]
+LB_4963: dq LB_4961,LB_4962
+LB_4961:
+	mov rdi,LB_4965
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4958
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4960
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4964
+LB_4962:
+	mov rdi,LB_4966
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4964
+LB_4964:
+	ret
+LB_4958:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4969+8*rax]
+LB_4969: dq LB_4967,LB_4968
+LB_4967:
+	mov rdi,LB_4971
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4972
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4973
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4970
+LB_4968:
+	mov rdi,LB_4974
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4972
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4975
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4970
+LB_4970:
+	ret
+LB_4975:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4981+8*rax]
+LB_4981: dq LB_4976,LB_4977,LB_4978,LB_4979,LB_4980
+LB_4976:
+	mov rdi,LB_4983
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4984
+	jmp LB_4982
+LB_4977:
+	mov rdi,LB_4985
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4975
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4975
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4982
+LB_4978:
+	mov rdi,LB_4986
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4975
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4975
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4982
+LB_4979:
+	mov rdi,LB_4987
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4988
+	jmp LB_4982
+LB_4980:
+	mov rdi,LB_4989
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_4982
+LB_4982:
+	ret
+LB_4988:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4992+8*rax]
+LB_4992: dq LB_4990,LB_4991
+LB_4990:
+	mov rdi,LB_4994
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4988
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4993
+LB_4991:
+	mov rdi,LB_4995
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_4993
+LB_4993:
+	ret
+LB_4984:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_4998+8*rax]
+LB_4998: dq LB_4996,LB_4997
+LB_4996:
+	mov rdi,LB_5000
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4975
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4984
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4999
+LB_4997:
+	mov rdi,LB_5001
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_4999
+LB_4999:
+	ret
+LB_4973:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5004+8*rax]
+LB_5004: dq LB_5002,LB_5003
+LB_5002:
+	mov rdi,LB_5006
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4975
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4973
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5005
+LB_5003:
+	mov rdi,LB_5007
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5005
+LB_5005:
+	ret
+LB_4972:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5010+8*rax]
+LB_5010: dq LB_5008,LB_5009
+LB_5008:
+	mov rdi,LB_5012
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4972
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5011
+LB_5009:
+	mov rdi,LB_5013
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5011
+LB_5011:
+	ret
+LB_4956:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5016+8*rax]
+LB_5016: dq LB_5014,LB_5015
+LB_5014:
+	mov rdi,LB_5018
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5020
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*3]
+	call LB_5021
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4956
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5017
+LB_5015:
+	mov rdi,LB_5022
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5017
+LB_5017:
+	ret
+LB_5021:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5030+8*rax]
+LB_5030: dq LB_5023,LB_5024,LB_5025,LB_5026,LB_5027,LB_5028,LB_5029
+LB_5023:
+	mov rdi,LB_5032
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4988
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5031
+LB_5024:
+	mov rdi,LB_5034
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5035
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5031
+LB_5025:
+	mov rdi,LB_5036
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5037
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5021
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5031
+LB_5026:
+	mov rdi,LB_5038
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5039
+	jmp LB_5031
+LB_5027:
+	mov rdi,LB_5040
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5041
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5031
+LB_5028:
+	mov rdi,LB_5042
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5033
+	jmp LB_5031
+LB_5029:
+	mov rdi,LB_5043
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	mov rdi,r8 
+	call emt_r64 
+	jmp LB_5031
+LB_5031:
+	ret
+LB_5041:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5046+8*rax]
+LB_5046: dq LB_5044,LB_5045
+LB_5044:
+	mov rdi,LB_5048
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5049
+	jmp LB_5047
+LB_5045:
+	mov rdi,LB_5050
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5051
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5021
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5047
+LB_5047:
+	ret
+LB_5051:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5054+8*rax]
+LB_5054: dq LB_5052,LB_5053
+LB_5052:
+	mov rdi,LB_5056
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5051
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5055
+LB_5053:
+	mov rdi,LB_5057
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5055
+LB_5055:
+	ret
+LB_5049:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5060+8*rax]
+LB_5060: dq LB_5058,LB_5059
+LB_5058:
+	mov rdi,LB_5062
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5063
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5064
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5065
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5049
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5061
+LB_5059:
+	mov rdi,LB_5066
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5063
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5064
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5065
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5061
+LB_5061:
+	ret
+LB_5065:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5070+8*rax]
+LB_5070: dq LB_5067,LB_5068,LB_5069
+LB_5067:
+	mov rdi,LB_5072
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5039
+	jmp LB_5071
+LB_5068:
+	mov rdi,LB_5073
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5049
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5071
+LB_5069:
+	mov rdi,LB_5074
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5021
+	jmp LB_5071
+LB_5071:
+	ret
+LB_5064:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5077+8*rax]
+LB_5077: dq LB_5075,LB_5076
+LB_5075:
+	mov rdi,LB_5079
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5080
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5064
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5078
+LB_5076:
+	mov rdi,LB_5081
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5078
+LB_5078:
+	ret
+LB_5080:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5085+8*rax]
+LB_5085: dq LB_5082,LB_5083,LB_5084
+LB_5082:
+	mov rdi,LB_5087
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5063
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5086
+LB_5083:
+	mov rdi,LB_5088
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5089
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5089
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5086
+LB_5084:
+	mov rdi,LB_5090
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5089
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5089
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5086
+LB_5086:
+	ret
+LB_5089:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5093+8*rax]
+LB_5093: dq LB_5091,LB_5092
+LB_5091:
+	mov rdi,LB_5095
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5096
+	jmp LB_5094
+LB_5092:
+	mov rdi,LB_5097
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5094
+LB_5094:
+	ret
+LB_5096:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5100+8*rax]
+LB_5100: dq LB_5098,LB_5099
+LB_5098:
+	mov rdi,LB_5102
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5103
+	jmp LB_5101
+LB_5099:
+	mov rdi,LB_5104
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4988
+	jmp LB_5101
+LB_5101:
+	ret
+LB_5103:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5107+8*rax]
+LB_5107: dq LB_5105,LB_5106
+LB_5105:
+	mov rdi,LB_5109
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	mov rdi,r8 
+	call emt_r64 
+	jmp LB_5108
+LB_5106:
+	mov rdi,LB_5110
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5108
+LB_5108:
+	ret
+LB_5063:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5113+8*rax]
+LB_5113: dq LB_5111,LB_5112
+LB_5111:
+	mov rdi,LB_5115
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5116
+	jmp LB_5114
+LB_5112:
+	mov rdi,LB_5117
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5118
+	jmp LB_5114
+LB_5114:
+	ret
+LB_5118:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5123+8*rax]
+LB_5123: dq LB_5119,LB_5120,LB_5121,LB_5122
+LB_5119:
+	mov rdi,LB_5125
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4988
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5063
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5124
+LB_5120:
+	mov rdi,LB_5126
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5096
+	jmp LB_5124
+LB_5121:
+	mov rdi,LB_5127
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5128
+	jmp LB_5124
+LB_5122:
+	mov rdi,LB_5129
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5124
+LB_5124:
+	ret
+LB_5128:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5132+8*rax]
+LB_5132: dq LB_5130,LB_5131
+LB_5130:
+	mov rdi,LB_5134
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5133
+LB_5131:
+	mov rdi,LB_5135
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5133
+LB_5133:
+	ret
+LB_5116:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5138+8*rax]
+LB_5138: dq LB_5136,LB_5137
+LB_5136:
+	mov rdi,LB_5140
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5063
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5116
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5139
+LB_5137:
+	mov rdi,LB_5141
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5139
+LB_5139:
+	ret
+LB_5039:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5144+8*rax]
+LB_5144: dq LB_5142,LB_5143
+LB_5142:
+	mov rdi,LB_5146
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5064
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5065
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5039
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5145
+LB_5143:
+	mov rdi,LB_5147
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5064
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5065
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5145
+LB_5145:
+	ret
+LB_5037:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5152+8*rax]
+LB_5152: dq LB_5148,LB_5149,LB_5150,LB_5151
+LB_5148:
+	mov rdi,LB_5154
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_4988
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5153
+LB_5149:
+	mov rdi,LB_5155
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5035
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5153
+LB_5150:
+	mov rdi,LB_5156
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5096
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5153
+LB_5151:
+	mov rdi,LB_5157
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5158
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5159
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5160
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5153
+LB_5153:
+	ret
+LB_5160:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5163+8*rax]
+LB_5163: dq LB_5161,LB_5162
+LB_5161:
+	mov rdi,LB_5165
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5166
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5160
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5164
+LB_5162:
+	mov rdi,LB_5167
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5164
+LB_5164:
+	ret
+LB_5166:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5170+8*rax]
+LB_5170: dq LB_5168,LB_5169
+LB_5168:
+	mov rdi,LB_5172
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5128
+	jmp LB_5171
+LB_5169:
+	mov rdi,LB_5173
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5171
+LB_5171:
+	ret
+LB_5159:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5176+8*rax]
+LB_5176: dq LB_5174,LB_5175
+LB_5174:
+	mov rdi,LB_5178
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5035
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5159
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5177
+LB_5175:
+	mov rdi,LB_5179
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5177
+LB_5177:
+	ret
+LB_5158:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5182+8*rax]
+LB_5182: dq LB_5180,LB_5181
+LB_5180:
+	mov rdi,LB_5184
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5185
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5158
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5183
+LB_5181:
+	mov rdi,LB_5186
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5183
+LB_5183:
+	ret
+LB_5185:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5191+8*rax]
+LB_5191: dq LB_5187,LB_5188,LB_5189,LB_5190
+LB_5187:
+	mov rdi,LB_5193
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5192
+LB_5188:
+	mov rdi,LB_5194
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5096
+	jmp LB_5192
+LB_5189:
+	mov rdi,LB_5195
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5196
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	mov rdi,r8 
+	call emt_r64 
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5192
+LB_5190:
+	mov rdi,LB_5197
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8 
+	call emt_r64 
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5192
+LB_5192:
+	ret
+LB_5196:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5202+8*rax]
+LB_5202: dq LB_5198,LB_5199,LB_5200,LB_5201
+LB_5198:
+	mov rdi,LB_5204
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5203
+LB_5199:
+	mov rdi,LB_5205
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5203
+LB_5200:
+	mov rdi,LB_5206
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5203
+LB_5201:
+	mov rdi,LB_5207
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5203
+LB_5203:
+	ret
+LB_5035:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5210+8*rax]
+LB_5210: dq LB_5208,LB_5209
+LB_5208:
+	mov rdi,LB_5212
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5096
+	jmp LB_5211
+LB_5209:
+	mov rdi,LB_5213
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5211
+LB_5211:
+	ret
+LB_5033:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5216+8*rax]
+LB_5216: dq LB_5214,LB_5215
+LB_5214:
+	mov rdi,LB_5218
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5219
+	jmp LB_5217
+LB_5215:
+	mov rdi,LB_5220
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5035
+	jmp LB_5217
+LB_5217:
+	ret
+LB_5219:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5223+8*rax]
+LB_5223: dq LB_5221,LB_5222
+LB_5221:
+	mov rdi,LB_5225
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5033
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5219
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5224
+LB_5222:
+	mov rdi,LB_5226
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5224
+LB_5224:
+	ret
+LB_5020:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5229+8*rax]
+LB_5229: dq LB_5227,LB_5228
+LB_5227:
+	mov rdi,LB_5231
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4975
+	jmp LB_5230
+LB_5228:
+	mov rdi,LB_5232
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5230
+LB_5230:
+	ret
+LB_5019:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5235+8*rax]
+LB_5235: dq LB_5233,LB_5234
+LB_5233:
+	mov rdi,LB_5237
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5051
+	jmp LB_5236
+LB_5234:
+	mov rdi,LB_5238
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5166
+	jmp LB_5236
+LB_5236:
+	ret
+LB_4954:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5242+8*rax]
+LB_5242: dq LB_5239,LB_5240,LB_5241
+LB_5239:
+	mov rdi,LB_5244
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5020
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5021
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5243
+LB_5240:
+	mov rdi,LB_5245
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5096
+	jmp LB_5243
+LB_5241:
+	mov rdi,LB_5246
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5021
+	jmp LB_5243
+LB_5243:
+	ret
+LB_4952:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5249+8*rax]
+LB_5249: dq LB_5247,LB_5248
+LB_5247:
+	mov rdi,LB_5251
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	mov rdi,r8
+	call emt_s8
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5252
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_4952
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5250
+LB_5248:
+	mov rdi,LB_5253
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5250
+LB_5250:
+	ret
+LB_5252:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5256+8*rax]
+LB_5256: dq LB_5254,LB_5255
+LB_5254:
+	mov rdi,LB_5258
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5259
+	jmp LB_5257
+LB_5255:
+	mov rdi,LB_5260
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5261
+	jmp LB_5257
+LB_5257:
+	ret
+LB_5261:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5264+8*rax]
+LB_5264: dq LB_5262,LB_5263
+LB_5262:
+	mov rdi,LB_5266
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5160
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5021
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*3]
+	call LB_5267
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*4]
+	call LB_5268
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*5]
+	call LB_5269
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*6]
+	call LB_5261
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5265
+LB_5263:
+	mov rdi,LB_5270
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5160
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5021
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*3]
+	call LB_5267
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*4]
+	call LB_5268
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*5]
+	call LB_5269
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5265
+LB_5265:
+	ret
+LB_5269:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5273+8*rax]
+LB_5273: dq LB_5271,LB_5272
+LB_5271:
+	mov rdi,LB_5275
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5019
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5261
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5274
+LB_5272:
+	mov rdi,LB_5276
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5274
+LB_5274:
+	ret
+LB_5268:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5280+8*rax]
+LB_5280: dq LB_5277,LB_5278,LB_5279
+LB_5277:
+	mov rdi,LB_5282
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5283
+	jmp LB_5281
+LB_5278:
+	mov rdi,LB_5284
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5285
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5268
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5281
+LB_5279:
+	mov rdi,LB_5286
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5281
+LB_5281:
+	ret
+LB_5285:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5289+8*rax]
+LB_5289: dq LB_5287,LB_5288
+LB_5287:
+	mov rdi,LB_5291
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5292
+	jmp LB_5290
+LB_5288:
+	mov rdi,LB_5293
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5292
+	jmp LB_5290
+LB_5290:
+	ret
+LB_5292:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5296+8*rax]
+LB_5296: dq LB_5294,LB_5295
+LB_5294:
+	mov rdi,LB_5298
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4988
+	jmp LB_5297
+LB_5295:
+	mov rdi,LB_5299
+	call emt_stg 
+	mov rdi,r8
+	call emt_s8
+	jmp LB_5297
+LB_5297:
+	ret
+LB_5283:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5302+8*rax]
+LB_5302: dq LB_5300,LB_5301
+LB_5300:
+	mov rdi,LB_5304
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5285
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5283
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5303
+LB_5301:
+	mov rdi,LB_5305
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5303
+LB_5303:
+	ret
+LB_5267:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5309+8*rax]
+LB_5309: dq LB_5306,LB_5307,LB_5308
+LB_5306:
+	mov rdi,LB_5311
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5310
+LB_5307:
+	mov rdi,LB_5312
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5310
+LB_5308:
+	mov rdi,LB_5313
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5310
+LB_5310:
+	ret
+LB_5259:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5316+8*rax]
+LB_5316: dq LB_5314,LB_5315
+LB_5314:
+	mov rdi,LB_5318
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5128
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5267
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5268
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*3]
+	call LB_5319
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*4]
+	call LB_5259
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5317
+LB_5315:
+	mov rdi,LB_5320
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	push r8
+	mov r8,QWORD [r8+8+8*0]
+	call LB_5128
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*1]
+	call LB_5267
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*2]
+	call LB_5268
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	push r8
+	mov r8,QWORD [r8+8+8*3]
+	call LB_5319
+	pop r8 
+	mov rdi,fmt_spc 
+	call emt_stg 
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5317
+LB_5317:
+	ret
+LB_5319:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5323+8*rax]
+LB_5323: dq LB_5321,LB_5322
+LB_5321:
+	mov rdi,LB_5325
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_5259
+	jmp LB_5324
+LB_5322:
+	mov rdi,LB_5326
+	call emt_stg 
+	mov rdi,fmt_rcd_box_l
+	call emt_stg
+	mov rdi,fmt_rcd_r
+	call emt_stg
+	jmp LB_5324
+LB_5324:
+	ret
+LB_4950:
+	movzx rax,BYTE [r8+6]
+	jmp QWORD [LB_5329+8*rax]
+LB_5329: dq LB_5327,LB_5328
+LB_5327:
+	mov rdi,LB_5331
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4925
+	jmp LB_5330
+LB_5328:
+	mov rdi,LB_5332
+	call emt_stg 
+	mov r8,QWORD [r8+8]
+	call LB_4988
+	jmp LB_5330
+LB_5330:
+	ret
+LB_4912:
