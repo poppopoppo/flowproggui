@@ -1,0 +1,74 @@
+§ setge = _setge
+§ exc_q { a i v } 
+	_get_q { a i } ⊢ { a i w } 
+	_set_q { a i v } ⊢ { a i } 
+	∎ { a i w }
+§ set_q { v i a } 
+	_get_q { v i } ⊢ { v i _ } 
+	_set_q { v i a } ⊢ { v i } 
+	∎ { v i }
+§ get_q = _get_q
+§§ mk_arr 
+	§ @.lp { n x a i } 
+		∐ i'=n' . 
+			∎ { n x a }
+		∐. . 
+			$ x ⊢ x,x0 
+			_set_q { a i x0 } ⊢ { a i } 
+			_inc i ⊢ i 
+			lp { n x a i } ⊢|
+	§ f { n x } 
+		_mk_arr n ⊢ { n a }
+		» 0r _ ⊢ i 
+		lp { n x a i } ⊢| 
+	∎∎
+§ mk_arr = mk_arr.f
+§ @.arr_of_lst_i { l i } 
+	$ l ⊢ 
+	∐ _cns◂{ hd l } . 
+		_inc i ⊢ i 
+		arr_of_lst_i { l i } ⊢ { a i }
+		_dec i ⊢ i 
+		_set_q { a i hd } ⊢ { a i } 
+		∎ { a i }
+	∐. _nil◂{} . 
+		_mk_arr i ⊢ { i a } 
+		∎ { a i } 
+§ arr_of_lst l 
+	» 0r _ ⊢ i 
+	arr_of_lst_i { l i } ⊢ { a i } 
+	∎ a  
+§ @.arr_of_lst_len_i { l i } 
+	$ l ⊢ 
+	∐ _cns◂{ hd l } . 
+		_inc i ⊢ i 
+		arr_of_lst_len_i { l i } ⊢ { a i n }
+		_dec i ⊢ i 
+		_set_q { a i hd } ⊢ { a i } 
+		∎ { a i n }
+	∐. _nil◂{} . 
+		_mk_arr i ⊢ { i a } 
+		$ i ⊢ i,n 
+		∎ { a i n } 
+§ arr_of_lst_len l 
+	» 0r _ ⊢ i 
+	arr_of_lst_len_i { l i } ⊢ { a i n } 
+	∎ { a n }   
+§ exc_tv { tv i v0 } 
+  _get_q { tv i } ⊢ { tv i v1 } 
+  _set_q { tv i v0 } ⊢ { tv i }
+  ∎ { tv i v1 } 
+§ lod_tv { tv i } 
+  _lod_q { tv i } ⊢ { tv i v } 
+  ∎ { tv i v } 
+§ set_tv { tv i v } 
+  _set_q { tv i v } ⊢ { tv i } 
+  ∎ { tv i }
+§ ini_tv {} 
+  » 128000r _ ⊢ max_t 
+	_mk_arr max_t ⊢ { max_t tv }
+  ∎ tv 
+§ ini_tv_n n 
+  _mk_arr n ⊢ { n tv } 
+  ∎ { n tv } 
+ § rep_movsb = _rep_movsb  

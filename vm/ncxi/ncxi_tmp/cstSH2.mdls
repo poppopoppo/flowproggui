@@ -1,0 +1,162 @@
+§ f◂◂{ G H } x 
+	_inc x ⊢ x 
+	G x ⊢ x 
+	H x ⊢ x 
+	∎ x 
+§ f0◂◂X y 
+	_add { y %[ X ] } ⊢ { y _  }
+	∎ y 
+§ f1 x 
+	_shl { x %[ 4r ] } ⊢ { x _ } 
+	∎ x 
+§ @.f2◂◂X y 
+	X y ⊢ y 
+	X y ⊢ y 
+	∎ y 
+§ @.map◂◂F l 
+	$ l ⊢ 
+	∐ _cns◂{ a l } . 
+		F a ⊢ a 
+		map◂◂F l ⊢ l 
+		_cns { a l } ⊢ l 
+		∎ l 
+	∐. _nil◂{} . 
+		_nil {} ⊢ l 
+		∎ l 
+§ f3 = map◂◂_dec
+§ 
+	@.f4 = map◂◂f5 
+	@.f5 x 
+		_add { x %[ 10r ] } ⊢ { x _ } 
+		∎ x 
+§ h◂◂S s 
+	^ s ⊢ _,s 
+		0' S // 
+	∎ s
+§ C = _cns◂◂◂{ 4r _nil◂◂◂{} }
+§%
+	##f◂◂{ g h } x ⊢ y 
+	f0◂◂9r %[ 3r ] ⊢ x 
+	_emt x ⊢ _ 
+	f◂◂{ _inc _inc } %[ 4r ] ⊢ x 
+	_emt x ⊢ _ 
+	f0◂◂67r %[ 7r ] ⊢ x 
+	_emt x ⊢ _ 
+	f◂◂{ _dec _dec } %[ 8r ] ⊢ x 
+	_emt x ⊢ _ 
+	##f1 %[ 4r ] ⊢ x 
+	##_emt x ⊢ _ 
+	f◂◂{ f1 _dec } %[ 3r ] ⊢ x 
+	_emt x ⊢ _ 
+	f2◂◂_inc %[ 4r ] ⊢ x 
+	_emt x ⊢ _ 
+	_nil {} ⊢ l   
+	_cns { %[ 4r ] l } ⊢ l 
+	_cns { %[ 3r ] l } ⊢ l 
+	map◂◂_inc l ⊢ l 
+	_emt l ⊢ l
+	f3 l ⊢ l 
+	_emt l ⊢ l 
+	f4 l ⊢ l 
+	_emt l ⊢ _ 
+	h◂◂" Y" %[ "b" ] ⊢ s0 
+	h◂◂" H " %[ " h ohi" ] ⊢ s1 
+	h◂◂" Y" %[ "hoo" ] ⊢ s2 
+	$ _cns◂{ %s0 _cns◂{ %s1 _cns◂{ %s2 _nil◂{} } } } ⊢ l 
+	_emt l ⊢ _ 
+	$ %[ C ] ⊢ c 
+	_emt c ⊢ _ 
+	∎
+
+	\[
+		_cns◂◂◂_cns◂◂◂_nil◂◂◂{}
+		⟦
+	_ala :  { b' a' }→{ c' a' } →→ { _arr◂a' _r64 b' }→{ _arr◂a' _r64 c' } ; array local application
+§ @.f◂◂I x 
+	_add_im◂◂I x ⊢ x 
+	f◂◂(_Inc◂◂I) x ⊢| 
+§ f◂◂{ A B C } x 
+	∐∐ A==F; B==5r; C==G◂◂"HHH" .
+		∎ x 
+	∐∐.
+		∎ x
+	M◂+◂''{ f0 f1 f2 f3 } 
+	_lst :: _std → _std 
+	_opn :: _std → _std 
+	_vct :: _vct_wt → _std  
+	_rpc :: _rpc_wt → _std
+	_rpc◂a' 
+	$ : w'::_rpc_wt ∀ _rpc◂w' → { _rpc◂w' _rpc◂w' }
+
+¶ _rpc ◂ ''{ _rpc:a'→{ a' a' } } :: _rpc_wt = a'
+
+¶§ _rpc◂ ''{ }
+	(_nil) {} ⊢ l 
+	$ _nil◂{} ⊢ l 
+	$ _cns◂{ a b } ⊢ c 
+	(_cns) { a l } ⊢ l 
+
+§§ M ◂+◂ ''{ 'a 'b ∀∀ f:_r64 g:_s8 h:_lst◂a' i:?a j:?b } 
+	∎∎
+
+§§ 
+§ f◂◂{ A B C } == 
+	∐ A=F; B=5r C=G◂◂"HHH" . 
+		∏._ x 
+			∎ x 
+	∐. 
+		∏._ x 
+			∎ x 
+	@.g0 
+		∐ g1
+		∐. g0 "*" g0 
+	@.g1 
+		∐ ⟦g2⟧ "*" !|
+		∐ "A" 
+	@.g2 
+		∐ "\n" !| 
+		∐ _eof !| 
+		∐ _byt 
+
+	module labeled record 
+	module unification row polymorphism
+
+	_opn :: * → * a' = _opn◂a' 
+
+
+	_crp◂{ c' r' } ; Compile-time Run-time Pair
+	_crc : c'→→(r'→ _crp◂{ c' r' }) 
+	_cra : (c'→→(r'→a'))→→(_crp◂{ c' r' }→a')
+	_crf : (c0'→→c1')→→(_crp◂{ c0' r' }→_crp◂{ c1' r' })
+§§+s8 
+	@.lst ◂+◂ G 
+		∐# G lst◂+◂G ⊢ { a l } 
+			∎ _some◂_cns◂{ a l } 
+		∐.# ⊢ { } 
+			∎ _some◂_nil◂{} 
+	@.ptn_T ◂+◂ G 
+		∐# "{" lst◂+◂(ptn_T◂+◂G) "}" ⊢ { {} _ {} } 
+			∎| 
+		∐.# G ⊢ { _ } 
+			∎|
+	@.ptn_T_
+§§+s8 
+	@.lst ◂+◂ G 
+		∐# G lst ⊢ { a l } 
+		∐.# ⊢ { } 
+§§+s8 
+	@.ptn ◂+◂ G 
+		∐# "{" 
+§ cns3◂{ a b c } = _cns◂{ a _cns◂{ b _cns◂{ c _nil◂{} } } }
+§ cns4◂{ a0 a1 a2 a3 } = 
+	⟦ a b c d ⟧ 
+§ s8 = a◂◂◂b◂◂◂c
+LB_12949: ;; 
+#125 { 0'(= {| a3◂ [ q0]|} ) 1'(= a2◂ [ a17◂ [ a25◂ [ {| l |}]]] ) } ⊢ 
+{ 0'(= {| a3◂ [ q0]|} ) 1'(= {| l |} ) } : 
+({ _arr_opn82549'(=82550'(1)) _lst_t17_t25_s8}→{ _arr_opn82550'(1) _s8})
+#125 { 0'(= {| a3◂ [ q0]|} ) 1'(= a2◂ [ a17◂ [ a25◂ [ {| l |}]]] ) } ⊢ 
+{ 0'(= {| a3◂ [ q0]|} ) 1'(= {| l |} ) } : 
+({ _arr_opn82507'(=82508'(1)) _lst_t17_t25_s8}→{ _arr _opn82508'(1) _s8})
+
+	\]

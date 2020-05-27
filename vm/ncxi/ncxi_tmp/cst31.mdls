@@ -1,0 +1,97 @@
+§ f0 x 
+  _emt x ⊢ x 
+  ∎ x 
+§ f1 x 
+  f0 x ⊢ x 
+  ∎ x 
+§ f2 x 
+  f1 x ⊢ x 
+  ∎ x 
+
+§ @.f3 { x y }
+  ∐ y'=0r . 
+    _emt x ⊢ x 
+    ##f3 { x y } ⊢ x 
+    ∎ x 
+  ∐. . 
+    _dec y ⊢ y 
+    f3 { x y } ⊢| 
+
+§ f4 x 
+  f3 { x %[ 4r ] } ⊢ x  
+  ∎ x 
+§ @.f5 x 
+  f5 x ⊢ x 
+  ∎| 
+¶ st ns'
+  ∐ ns : ns'
+§ 
+	@.slv_file_lp { RTM_ST i il { mmv mev mtv mv_n } LCV tx_n NS gel gfl NC } 
+		slv_file_lp { RTM_ST i il { mmv mev mtv mv_n } LCV tx_n NS gel gfl NC } ⊢ { RTM_ST mv_n_0 il { mmv mev mtv mv_n } LCV tx_n NS gfl NC }
+		∎|  
+§ mk_nil_arr n 
+		_nil {} ⊢ l 
+		_mk_arr { n l } ⊢ { n _ a } 
+		∎ { n a }
+	§ mk_none_arr n 
+		_none {} ⊢ l 
+		_mk_arr { n l } ⊢ { n _ a } 
+		∎	{ n a }
+§ slv_file gel
+  $ %[ 0r ] ⊢ tx_n 
+		_nil {} ⊢ ns_m 
+		_nil {} ⊢ ns_t 
+		_nil {} ⊢ ns_e 
+		mk_nil_arr %[ 800r ] ⊢ { _ mmv }  
+		mk_nil_arr %[ 800r ] ⊢ { _ mev }  
+		mk_nil_arr %[ 800r ] ⊢ { _ mtv }  
+		##mk_none_arr %[ 16000r ] ⊢ { _ rv }
+		##mk_none_arr %[ 4000r ] ⊢ { _ irv }
+		##mk_none_arr %[ 2000r ] ⊢ { _ ev }
+		##mk_none_arr %[ 2000r ] ⊢ { _ evv }
+		##mk_none_arr %[ 32000r ] ⊢ { _ tv }
+		##mk_none_arr %[ 2000r ] ⊢ { _ tav }
+		##mk_none_arr %[ 2000r ] ⊢ { _ hpv }
+		##» 0r _ ⊢ hpv_n  
+		##» 1r _ ⊢ mv_n
+		##» 0r _ ⊢ rv_n
+		» 0r _ ⊢ ev_n
+		» 0r _ ⊢ tv_n
+		» 0r _ ⊢ i 
+		» 0r _ ⊢ lv 
+    _nil {} ⊢ ep
+		\\rp8.e {} ⊢ ec 
+    \\rp8.e {} ⊢ eds
+		$ %[ "" ] ⊢ ec 
+  $ %[ "" ] ⊢ eds 
+  ##» 0r _ ⊢ dd 
+	» 0r _ ⊢ rtm_n 
+	» 0r _ ⊢ lb_n 
+	_nil {} ⊢ il 
+  ##_nil {} ⊢ gfl
+	_nil {} ⊢ ns_r 
+	» 0r _ ⊢ rsp 
+	##_nil {} ⊢ rl
+	\\slv_file_lp { {} i il { mmv mev mtv mv_n } {} tx_n { ns_m ns_e ns_t } gel gfl { eds dd ep ec rtm_n lb_n } } ⊢| 
+	_some { eds %[ 0r ] ep ec rtm_n lb_n } ⊢ EC 
+  slv_file_lp { {} i il { {} {} {} {} } {} tx_n {} {} {} EC } ⊢| 
+
+§% 
+  f2 %[ 3r ] ⊢ _ 
+  f2 %[ "HOO" ] ⊢ s 
+  _nil {} ⊢ l 
+  f2 l ⊢ l
+  _cns { %[ 7r ] l } ⊢ l 
+  f2 l ⊢ _  
+  f2 s ⊢ s 
+  f2 %[ 5r ] ⊢ _ 
+  f3 { s %[ 1r ] } ⊢ _ 
+  f3 { {} %[ 3r ] } ⊢ _ 
+  f4 {} ⊢ _ 
+  f5 %[ 9r ] ⊢ _ 
+ ## slv_file_lp { {} {} {} { {} {} {} {} } {} {} { {} {} {} } {} {} { {} {} {} {} {} {} } } ⊢ _ 
+  _nil {} ⊢ gel 
+  _cns { %[ 0r ] gel } ⊢ gel 
+  slv_file gel ⊢ _ 
+  ∎
+  

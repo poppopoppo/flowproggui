@@ -1,0 +1,39 @@
+§ @.s8_itr_i◂◂F { v s l i } 
+	∐ l'=i' . 
+		∎ { v s } 
+	∐. . 
+		_lds { s i } ⊢ { s i b } 
+		$ i ⊢ i,i0 
+		F { v i0 b } ⊢ v 
+		_inc i ⊢ i 
+		s8_itr_i◂◂F { v s l i } ⊢| 
+§ s8_itr◂◂F { v s } 
+	_s8_len s ⊢ { s l } 
+	s8_itr_i◂◂F { v s l %[ 0r ] } ⊢| 
+§§ s8_hsh 
+	§ f_i { h i b } 
+		$ h ⊢ h,h0 
+		_shl { h %[ 5r ] } ⊢ { h _ } 
+		_add { h h0 } ⊢ { h _ } 
+		_add { h b } ⊢ { h _ } 
+		∎ h 
+	§ f s 
+		_s8_len s ⊢ { s l } 
+		s8_itr◂◂f_i { %[ 5381r ] s } ⊢| 
+	∎∎
+§ f = s8_hsh.f
+§% 
+  f %[ "Hello" ] ⊢ { h0 _ }
+  _emt h0 ⊢ _ 
+  f %[ "OIJEjiej oij3oi" ] ⊢ { h0 _ }
+  _emt h0 ⊢ _ 
+  f %[ "lo" ] ⊢ { h0 _ }
+  _emt h0 ⊢ _ 
+  f %[ "4" ] ⊢ { h0 _ }
+  _emt h0 ⊢ _ 
+  ∎ 
+
+§ cns2◂{ x0 x1 } = _cns◂{ x0 _cns◂{ x1 _nil◂{} } }
+\\§ ret_vld◂x = _some◂prs_vld◂x 
+\\§ ret_err◂x = _some◂prs_err◂x 
+\\§ r64◂{} = 
