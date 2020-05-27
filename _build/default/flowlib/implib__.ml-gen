@@ -1,0 +1,17 @@
+(** @canonical Implib.Imp *)
+module Imp = Implib__Imp
+
+(** @canonical Implib.Imp_lexer *)
+module Imp_lexer = Implib__Imp_lexer
+
+(** @canonical Implib.Imp_parser *)
+module Imp_parser = Implib__Imp_parser
+
+(** @canonical Implib.Implib *)
+module Implib = Implib
+
+(** @canonical Implib.Repl *)
+module Repl = Implib__Repl
+
+(** @canonical Implib.Util *)
+module Util = Implib__Util

@@ -1,0 +1,13 @@
+B /home/kohe/.opam/system/lib/batteries
+B /home/kohe/.opam/system/lib/bytes
+B /home/kohe/.opam/system/lib/num
+B /usr/lib/ocaml
+B /usr/lib/ocaml/threads
+B ../_build/default/flowlib/.implib.objs
+S /home/kohe/.opam/system/lib/batteries
+S /home/kohe/.opam/system/lib/bytes
+S /home/kohe/.opam/system/lib/num
+S /usr/lib/ocaml
+S /usr/lib/ocaml/threads
+S .
+FLG -open Implib__ -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs
