@@ -1,4 +1,0 @@
-(executable
-  (name evo_tkn)
-  (libraries batteries str)
-  )
