@@ -10,4 +10,4 @@
 %define SS_LN_MAX 1<<21
 %define SS_LN_REG r15
 %define MCR_REG rbx
-%define SS_LN_N r12
+;%define SS_LN_N r12

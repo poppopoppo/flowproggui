@@ -1,6 +1,16 @@
 § @.f4 x 
   _emt x ⊢ x 
   ∎|
+§ @.g0 +s8 
+  ∐. _psc◂◂"Ab" ⊢ { {} } 
+    ∎ ‹ {} ›
 §% 
-  f4 %[ 4r ] ⊢ _ 
+  \\f4 %[ 4r ] ⊢ _ 
+  _prs◂◂_byt { %[ "dABCiei" ] %[ 17r ] } ⊢ { s x a } 
+  _emt { x a } ⊢ _ 
+  _prs◂◂(_psc◂◂"ABC") { %[ "dABCiei" ] %[ 1r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
+  _prs◂◂g0 { %[ "Abd" ] %[ 0r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
+
   ∎
