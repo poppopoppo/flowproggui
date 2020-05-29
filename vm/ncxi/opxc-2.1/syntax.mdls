@@ -4,6 +4,7 @@
 § PS = 4096r 
 § HP = 2048r 
 § KB = 1024r 
+§ non = _none 
 ¶ sum3 ◂ a',b',c' 
 	∐ c0 : a' 
 	∐ c1 : b' 
@@ -9882,6 +9883,15 @@ unsigned long
 								//
 							rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 							∎ { evv lb_n ec0 RP.unt◂{} } 
+					∐ ax'=EX.scf_d . 
+						`	cmp r14,r9
+					"\tjge LB_" 0d' "\n"
+					` lea rdi,[r13+8+r14] 
+					"\tCALL_SF " C "\n"
+					`	cmp rax,0 
+					"\tjz LB_" 0d' "\n" 
+					`	add r14,rsi
+					`	push rdi
 					∐. . 
 						∎| 
 				§ 
