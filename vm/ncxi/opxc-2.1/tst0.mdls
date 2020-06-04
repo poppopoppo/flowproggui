@@ -1,0 +1,27 @@
+§ 
+  @.f0 = .grm◂◂f1 
+  @.e0◂◂ { s r n }
+    _prs◂◂g0 { s n } ⊢ { s n o } 
+    ∐ .o ⊢ _some◂p0 . 
+      _prs◂◂g1 { s n } ⊢ { s n o } 
+      .. 
+      \\$ { .r0 .r1 .. .rn } ⊢ m 
+      $ n ⊢ n,n0
+      $ r ⊢ r,r0 
+      a0 # { r0 n0 { p0 p1 .. pn } } ⊢ o 
+      $ o ⊢ 
+      ∐ _some◂a . 
+        ∎ { s n ‹ a › }
+      ∐. _none◂{} . 
+        $ n ⊢ _ 
+        $ r ⊢ r,n 
+        e1 { s r n } ⊢| 
+    ∐. o ⊢ _none◂{} . 
+      $ n ⊢ _ 
+      $ r ⊢ r,n 
+      e1 { s r n } ⊢| 
+  \\@.ef { s r n } 
+  @.a0 { _r _n m } 
+    .. 
+    ∎ _some◂.. 
+

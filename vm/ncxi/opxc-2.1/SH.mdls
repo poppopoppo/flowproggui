@@ -6,11 +6,16 @@
     ∎ ‹ {} ›
 §% 
   \\f4 %[ 4r ] ⊢ _ 
-  _prs◂◂_byt { %[ "dABCiei" ] %[ 17r ] } ⊢ { s x a } 
+  _prs◂◂_byt { %[ "dABCiei" ] %[ 17r ] } ⊢ { _ x a } 
   _emt { x a } ⊢ _ 
   _prs◂◂(_psc◂◂"ABC") { %[ "dABCiei" ] %[ 1r ] } ⊢ { _ x a } 
   _emt { x a } ⊢ _ 
   _prs◂◂g0 { %[ "Abd" ] %[ 0r ] } ⊢ { _ x a } 
   _emt { x a } ⊢ _ 
-
+  _prs◂◂_scf_d { %[ "87383" ] %[ 0r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
+  _prs◂◂_line { %[ "   \t\nkk" ] %[ 0r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
+  _prs◂◂_synt { %[ "   \t\nkk" ] %[ 0r ] } ⊢ { _ x a } 
+  _emt { x a } ⊢ _ 
   ∎
