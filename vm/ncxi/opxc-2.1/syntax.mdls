@@ -2919,6 +2919,9 @@ unsigned long
 			§ dlt = 51r
 			§ cst = 52r
 			§ psc = 53r  
+			§ synt = 54r 
+			§ line = 55r 
+	§ N = 56r 
 	§ slv { { tv tv_n } n } 
 		$ %[ 0r ] ⊢ lv 
 		∐ n'=<25r . 
@@ -3124,6 +3127,10 @@ unsigned long
 							∎ { { tv tv_n } %[ "_cst" ] RP.atm◂T.ct_imp◂{ yv TX.t_imp◂{ RP.unt◂{} yv0 } } }
 						∐ n'=53r . 
 							∎ { { tv tv_n } %[ "_psc" ] RP.atm◂T.ct_imp◂{ TX.s8◂{} TX.grm◂RP.unt◂{} } }
+						∐ n'=54r . 
+							∎ { { tv tv_n } %[ "_synt" ] TX.grm◂RP.unt◂{} }
+						∐ n'=55r . 
+							∎ { { tv tv_n } %[ "_line" ] TX.grm◂RP.unt◂{} }
 						∐. . 
 							∎|
 			∎∎
@@ -3148,6 +3155,46 @@ unsigned long
 				_emt %[ "ip.id_line 0" ] ⊢ _ 
 				∎| 
 		§§ grm 
+			\[
+			§ reg◂n = RP.atm◂ast.re_reg◂n 
+			§ name◂n = RP.atm◂ast.k_name◂n 
+			§ f_name◂n = name◂ast.fst_n◂n 
+			§ ct_app◂{ f x } = RP.atm◂ast.k_app◂{ f x }
+			§ opc◂{ f x y } = ast.op_call◂{ f x y } 
+			§ jmp◂{ f x } = ast.jmp◂{ f x }
+			§ env◂{} = RP.cns3◂{ reg◂%[ ".s" ] reg◂%[ ".r" ] reg◂%[ ".n" ] }
+			§ re_none◂{} = RP.atm◂re_agl◂{ f_name◂%[ "_none" ] RP.unt◂{} } 
+			§ re_some◂s = RP.atm◂re_agl◂{ f_name◂%[ "_some" ] s }
+			§ mtc_some◂{ o s } = ast.mtc_id◂{ o re_some◂s }
+			§ mtc_none◂o = ast.mtc_id◂{ o re_none◂{} }
+			§ mtc_opn # { o m lc0 lc1 } 
+				$ o ⊢ o,o0 
+				∎ ast.mtc◂p_cns◂{ { ⟦ mtc_some◂{ o m } ⟧ lc0 } p_end◂{ ⟦ mtc_none◂o0 ⟧ lc1 } }
+			§ op_prs◂g = opc◂{ ct_app◂{ f_name◂%[ "_prs" ] g } RP.cns2◂{ reg◂%[ ".s" ] reg◂%[ ".n" ] } RP.cns3◂{ reg◂%[ ".s" ] reg◂%[ ".n" ] reg◂%[ ".o" ] }
+			§ ret_fail◂{} = ast.ret◂{ RP.cns3◂{ reg◂%[ ".s" ] reg◂%[ ".r" ] re_none◂{} } }
+			§ ret_succ◂a = ast.ret◂{ RP.cns3◂{ reg◂%[ ".s" ] reg◂%[ ".n" ] re_some◂a } }
+			§ mtc_lc◂lc = ast.mtc_code◂lc 
+			§ rN n 
+				^ n ⊢ n,s 
+					".r" 0d' // 
+				∎ { n s } 
+			§ 
+				@.rle { { n g op_f } r }
+					$ r ⊢ 
+					∐ ast.grm.ptn_cut◂r . 
+						rle_cut { { n g } r } ⊢|
+					∐ ast.grm.ptn_seq◂{ p r } .
+						inc_x n ⊢ { n0 n } 
+						rN n0 ⊢ { n0 r0 } 
+						rle { { n ⟦ n0 < g ⟧ } r } ⊢ { n lcr }
+						∎ ast.seq◂{ op_prs◂p mtc_opn◂{ reg◂%[ ".o" ] reg◂r0 lcr mtc_lc◂jmp◂{ op_f env◂{} } }
+				@.f { n a } 
+					$ a ⊢ 
+					∐ ast.grm.act_cns◂{ _ m lc f r o a } . 
+						∎|
+					∐. ast.grm.act_end◂{ l m lc f r o } . 
+						∎| 
+			\]
 			∎∎
 		§§ inl 
 			§ @.dlt_lst { rl lc } 
@@ -9840,6 +9887,28 @@ unsigned long
 							"\tmov rdi,QWORD [rdi]\n" //
 						rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 						∎ { rsp eds ec0 lb_n }
+				§ scf { s lb_n ec0 } 
+					inc_x lb_n ⊢ { lb0 lb_n } 
+					inc_x lb_n ⊢ { lb1 lb_n } 
+					^ lb0,lb1,s ⊢ _,_,_,sc0 
+							`	cmp rax,rdi
+							"\tjge LB_" 0d' "\n"
+							` lea rdi,[rsi+rax] 
+							`	push rax 
+							"\tCALL_SF " 2' "\n" 
+							`	pop rbx 
+							`	cmp rax,0 
+							"\tjz LB_" 0d' "\n" 
+							`	lea rax,[rbx+rsi]
+							`	ALC_LN rsi 
+							"\tmov BYTE [rsi+6],0\n"
+							"\tmov QWORD [rsi+8],rdi\n"
+							"\tjmp LB_" 1d' "\n"			
+							"LB_" 0d' ":\n" 
+							`	mov rsi,unt_1 
+							"LB_" 1d' ":\n" //		
+					rp8.add_s8 { ec0 sc0 } ⊢ ec0 
+					∎ { lb_n ec0 }
 				§ grm_axm { evv lb_n ax axl ec0 } 
 					∐ ax'=EX.byt . 
 						inc_x lb_n ⊢ { lb0 lb_n } 
@@ -9884,15 +9953,47 @@ unsigned long
 							rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 							∎ { evv lb_n ec0 RP.unt◂{} } 
 					∐ ax'=EX.scf_d . 
-						`	cmp r14,r9
-					"\tjge LB_" 0d' "\n"
-					` lea rdi,[r13+8+r14] 
-					"\tCALL_SF " C "\n"
-					`	cmp rax,0 
-					"\tjz LB_" 0d' "\n" 
-					`	add r14,rsi
-					`	push rdi
+						scf { %[ "scf_d" ] lb_n ec0 } ⊢ { lb_n ec0 }
+						∎ { evv lb_n ec0 TX.r64◂{} } 
+					∐ ax'=EX.scf_x . 
+						scf { %[ "scf_x" ] lb_n ec0 } ⊢ { lb_n ec0 }
+						∎ { evv lb_n ec0 TX.r64◂{} } 
+					∐ ax'=EX.synt . 
+						inc_x lb_n ⊢ { lb0 lb_n } 
+						inc_x lb_n ⊢ { lb1 lb_n } 
+						inc_x lb_n ⊢ { lb2 lb_n } 
+						^ lb0,lb1,lb2 ⊢ _,_,_,sc0 
+							"\tjmp LB_" 1d' "\n" 
+							"LB_" 0d' ":\n" 
+							`	add rax,1 
+							"LB_" 1d' ":\n" 
+							`	cmp rax,rdi
+							"\tjge LB_" 2d' "\n" 
+							"\tJZ_SPC BYTE [rsi+rax], LB_" 0d' "\n"  
+							"LB_" 2d' ":\n" 
+							`	mov rsi,unt_0
+							//
+						rp8.add_s8 { ec0 sc0 } ⊢ ec0 
+						∎ { evv lb_n ec0 RP.unt◂{} }
+					∐ ax'=EX.line . 
+						inc_x lb_n ⊢ { lb0 lb_n } 
+						inc_x lb_n ⊢ { lb1 lb_n } 
+						inc_x lb_n ⊢ { lb2 lb_n } 
+						^ lb0,lb1,lb2 ⊢ _,_,_,sc0 
+							"\tjmp LB_" 1d' "\n" 
+							"LB_" 0d' ":\n" 
+							`	add rax,1 
+							"LB_" 1d' ":\n" 
+							`	cmp rax,rdi
+							"\tjge LB_" 2d' "\n" 
+							"\tJZ_LINE_SPC BYTE [rsi+rax], LB_" 0d' "\n"  
+							"LB_" 2d' ":\n" 
+							`	mov rsi,unt_0
+							//
+						rp8.add_s8 { ec0 sc0 } ⊢ ec0 
+						∎ { evv lb_n ec0 RP.unt◂{} }
 					∐. . 
+						_emt %[ "grm_axm 0" ] ⊢ _ 
 						∎| 
 				§ 
 					@.stt_jmp { ox f_c { gfl cl mfv } lb_n { ev_n ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 } rl { ys is o yr } } 
@@ -10506,7 +10607,7 @@ unsigned long
 						inc_x lb_n ⊢ { lb0 lb_n } 
 						inc_x lb_n ⊢ { lb1 lb_n } 
 						inc_x lb_n ⊢ { lb2 lb_n } 
-						^ lb0,lb1,lb2 ⊢ lb0,lb1,lb2,s0 
+						^ lb0,lb1,lb2 ⊢ _,_,_,s0 
 							"\tjmp LB_" 1d' "\n" 
 							"LB_" 0d' ":\n" 
 							`	add r14,1 
@@ -10521,7 +10622,7 @@ unsigned long
 						inc_x lb_n ⊢ { lb0 lb_n } 
 						inc_x lb_n ⊢ { lb1 lb_n } 
 						inc_x lb_n ⊢ { lb2 lb_n } 
-						^ lb0,lb1,lb2 ⊢ lb0,lb1,lb2,s0 
+						^ lb0,lb1,lb2 ⊢ _,_,_,s0 
 							"\tjmp LB_" 1d' "\n" 
 							"LB_" 0d' ":\n" 
 							`	add r14,1 
@@ -11363,7 +11464,7 @@ unsigned long
 					iso_file { { rsp rl ns_r } { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } { hpv hpv_n rv rv_n ev ev_n tv tv_n irv tav evv } { el eds dd ep0 ec0 rtm_n lb_n } } ⊢ { RTM_ST MV NS LCV EC }
 					∎ { RTM_ST i il MV LCV tx_n NS gfl EC }
 		§ @.slv_op_axm { { tv_n tv evv ev ev_n ns_e } x }
-			∐ x'=54r .
+			∐ x'=EX.N .
 				∎ { { tv_n tv evv ev ev_n ns_e } x }
 			∐ x'=18r . 
 				$ %[ 0r ] ⊢ lv 
