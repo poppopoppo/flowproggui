@@ -193,3 +193,18 @@ LB_10016: ;; #193◂◂(_some◂ ? )
   ∐ m'=<(A||B||C) . 
     .. 
   ∐. . 
+'~hoge : '{ hoge~a' < l' } →→ { a' l' }
+
+_vt : a' →[ v' ]→ >[ v' : a' ]
+f◂◂A x ⊢ y 
+_crp◂◂f { %[ _vt◂◂A ] x } ⊢ y 
+
+>[ v0' : t0 ] → >[ { v0' v0' } : t0 ] 
+(_ct◂◂rev)◂◂_cns◂{ "ff" _nil◂{} }
+_vct◂'{ c~a' l~ >[ l' : _r◂_i64 ] } 
+_vct◂ '{ c~_r◂_i8 l~ >[ l' : _r◂_i64 ] } 
+s8◂>[ l' ] 
+
+>[ v' : _lst◂C ] →→ >[ _cns◂{ c◂{} v' } : _lst◂C ]
+$ _cns>◂{ >[ a ] >[ v ] } ⊢ v : { >[ a' ] >[ v' ] } ⊢ >[ _cns◂{ a' v' } ]
+∐ x ⊢ _cns>◂{ a v } . 
