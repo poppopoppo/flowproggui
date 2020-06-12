@@ -208,3 +208,23 @@ s8◂>[ l' ]
 >[ v' : _lst◂C ] →→ >[ _cns◂{ c◂{} v' } : _lst◂C ]
 $ _cns>◂{ >[ a ] >[ v ] } ⊢ v : { >[ a' ] >[ v' ] } ⊢ >[ _cns◂{ a' v' } ]
 ∐ x ⊢ _cns>◂{ a v } . 
+
+§ @.l◂◂x = _cns◂{ x l◂◂((_ct◂◂_inc)◂◂x) }
+l◂◂0r 
+
+§ @.L◂◂{ F G } '=
+  ~l0 x 
+    L~.l2 x ⊢ y
+    ∎ y 
+  ~l1 = l2◂◂l3 
+  ~l2 =^ 
+
+  ~l3 
+  L : '{ l0~ l1~ .. l3~ }
+
+_cls◂{ t' v' }
+
+§ f◂◂* a ; : t'::Get ∀ t'◂v'→{ t' v' }
+  GET◂◂* a ⊢ { a v } ; implicit parameter 
+  g v ⊢ v 
+  ∎ { a v }
