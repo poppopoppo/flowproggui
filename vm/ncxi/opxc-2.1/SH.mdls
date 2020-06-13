@@ -10662,7 +10662,7 @@ unsigned long
 					∐ c0 ⊢ RP.atm◂c0; c0 ⊢ ast.k_op_axm◂{ ax axl } . 
 						evl_ct { { { eg0 eds } gfl lb_n ev_n ev evv tav tv tv_n mfv } ast.k_op_axm◂{ ax ⟦ c1 < axl ⟧ } } ⊢|
 					∐ c0 ⊢ RP.atm◂c0; c0 ⊢ ast.k_op_prs_ftr◂{ im vf } . 
-						\[
+						\\\[
 						$ im ⊢ i_m 
 						lod_tv { mfv i_m } ⊢ { mfv i_m { wp0 ga fl } }
 						find_fl { evv fl c1 } ⊢ { evv fl c1 o } 
@@ -10721,9 +10721,9 @@ unsigned long
 							rp8.cct { eg0 ef0 } ⊢ eg0 
 							set_tpl { ev evv tv tv_n wp0 c1 } ⊢ { ev evv tv tv_n wp0 _ } 
 							∎ { { { eg0 eds } gfl lb_n ev_n ev  evv tav tv tv_n mfv } k1 }
-						\]
-						_emt %[ "prs_ftr 0" ] ⊢ _ 
-						∎|
+						\\\]
+						\\_emt %[ "prs_ftr 0" ] ⊢ _ 
+						\\∎|
 						∐. . 
 							∎ { { { eg0 eds } gfl lb_n ev_n ev  evv tav tv tv_n mfv } ast.k_app◂{ c0 c1 } }
 				∐. . 

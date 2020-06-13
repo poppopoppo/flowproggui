@@ -1,0 +1,11 @@
+op src ⊢ dst
+_cur { x f } ⊢ f 
+_som◂{ a b }  
+_non◂x 
+§ emt = _emt 
+§ cns = _cns 
+§ nil = _nil 
+§ non = _none 
+§ som = _some 
+
+§ 
