@@ -1,0 +1,8 @@
+§ byt { s x } 
+		_s8_len s ⊢ { s l } 
+		∐ l'=<s' . 
+			∎ { s x ‹› } 
+		∐. .
+			_lds { s x } ⊢ { s x b } 
+			_inc x ⊢ x 
+			∎ { s x ‹ b › }
