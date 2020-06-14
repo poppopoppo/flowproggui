@@ -1,0 +1,13 @@
+§ f0◂◂F x 
+  F x ⊢ x 
+  _inc x ⊢ x 
+  ∎ x 
+§ f1◂◂V x 
+  _add { %[ V ] x } ⊢ { y x }
+  ∎ y 
+§% 
+  f0◂◂_dec %[ 0r ] ⊢ x 
+  _emt x ⊢ _ 
+  f1◂◂9r %[ 2r ] ⊢ x 
+  _emt x ⊢ _ 
+  ∎ 
