@@ -237,3 +237,6 @@ _par◂◂{ F _par◂◂{ G H } }
 flock : { _c◂'d _c◂'w .. } ⊢ _c◂'h 
 
 _seq : { _op◂{ a' b' } b'→c' }
+
+§ c0◂{ a b } = { b a } 
+§ c1◂{ a b c } = '{ l~a s~{ b c } }
