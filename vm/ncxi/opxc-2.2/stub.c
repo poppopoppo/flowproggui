@@ -16,6 +16,19 @@
 #include <sys/ucontext.h>
 #include <ucontext.h>
 
+struct OP_SRC_0
+{
+};
+struct OP_SRC_1
+{
+  void *r0;
+};
+struct OP_SRC_2
+{
+  void* r0; 
+  void* r1;
+};
+
 void* alc_gd_buf(int* ps){
 	int pagesize = sysconf(_SC_PAGE_SIZE);
 	if (pagesize == -1){ return NULL; }
