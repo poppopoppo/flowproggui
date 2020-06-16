@@ -220,7 +220,7 @@ l◂◂0r
   ~l2 =^ 
 
   ~l3 
-  L : '{ l0~ l1~ .. l3~ }
+  L : { .. .. } →→ '{ l0~ l1~ .. l3~ }
 
 _cls◂{ t' v' }
 
@@ -228,3 +228,12 @@ _cls◂{ t' v' }
   GET◂◂* a ⊢ { a v } ; implicit parameter 
   g v ⊢ v 
   ∎ { a v }
+
+_inl : (a'→b')→→(a'→b')
+_par : { a'→b' c'→d' }→→{ a' c' }→{ b' d' }
+_par◂◂{ F _par◂◂{ G H } }
+
+§ flock C.= flock : { d w q d l h } ⊢ h 
+flock : { _c◂'d _c◂'w .. } ⊢ _c◂'h 
+
+_seq : { _op◂{ a' b' } b'→c' }
