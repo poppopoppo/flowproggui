@@ -40,7 +40,7 @@
 			» _^ _ ⊢ sx0 
 				`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
     		`gcc -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O0 -o out.exe 
-				//
+				// 
 			_cd sx0 ⊢ sx0  
 			\\_info {} ⊢ {} 
 			_emt sep0 ⊢ _ 
