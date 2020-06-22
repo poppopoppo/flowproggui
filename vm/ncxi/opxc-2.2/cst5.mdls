@@ -1,0 +1,17 @@
+§ 
+  @.f0 { x y z } 
+    _inc x ⊢ x 
+    f1 { x y z } ⊢| 
+  @.f1 { x y z }
+    _inc y ⊢ y 
+    f2 { x y z } ⊢| 
+  @.f2 { x y z } 
+    _inc z ⊢ z 
+    f3 { x y z } ⊢| 
+  @.f3 { x y z } 
+    _emt { x y z } ⊢ { x y z } 
+    f0 { x y z } ⊢| 
+
+§% 
+  f0 { %[ 0r ] %[ 0r ] %[ 0r ] } ⊢ _ 
+  ∎| 
