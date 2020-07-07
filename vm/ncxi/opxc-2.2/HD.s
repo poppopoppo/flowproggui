@@ -10,7 +10,14 @@
 %define SS_LN_MAX 1<<22
 %define SS_LN_REG r15
 %define MCR_REG rbx
+%define SRC_REG r13 
+%define DST_REG r14
 ;%define SS_LN_N r12
+
+%define GLX(n) QWORD [GLV+8*n]
+%define GLX_S(s,n) QWORD [GLV+s+8*n]
+%define SX(n) QWORD [SRC_REG+8*n]
+%define DX(n) QWORD [DST_REG+8*n]
 
 bits 64 
 %define SS_LN_N QWORD [SS_LN_N_PT]
@@ -221,6 +228,7 @@ scf_F_err1_%1:
 %define RX5 r11 
 %define RX6 rcx 
 %define RX7 rdx
+
 %define SEED 0x_f7f7_65d7_9dab_bace
  
 extern MurmurHash64A
