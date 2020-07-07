@@ -27,6 +27,22 @@
 		∎ b 
 	∐. prs_err◂_ . 
 		∎| 
+§§ bl 
+  ¶ t 
+    ∐ t : {} 
+    ∐ f : {} 
+  ∎∎ 
+§ f7 { x y } 
+  $ { x y } ⊢ 
+  ∐ { bl.t◂{} bl.t◂{} } .
+    ∎ %[ 0r ] 
+  ∐ { bl.t◂{} bl.f◂{} } . 
+    ∎ %[ 1r ] 
+  ∐ { bl.f◂{} bl.t◂{} } . 
+    ∎ %[ 2r ] 
+  ∐. { bl.f◂{} bl.f◂{} } . 
+    ∎ %[ 3r ] 
+
 §% 
   f0◂◂_dec # %[ 0r ] ⊢ x 
   _emt x ⊢ _ 
@@ -38,4 +54,6 @@
   _emt x ⊢ x 
   prs_act◂◂lc_exh prs_vld◂{ %[ 4r ] { %[ "FEF" ] %[ 99r ] } } ⊢ a 
   _emt a ⊢ _ 
+  f7 { bl.t◂{} bl.f◂{} } ⊢ v 
+  _emt v ⊢ _ 
   ∎ 
