@@ -2894,20 +2894,15 @@ unsigned long
 		§ set_q = 2r 
 			§ get_q = 3r 
 			§ lod_q = 4r 
-			
 			§ args = 5r 
-			
 			§ mlc_s8 = 6r 
 			§ s8_len = 7r 
-			
 			§ emt = 8r 
-			
 			§ inc = 9r 
 			§ dec = 10r 
 			§ add = 11r 
 			§ sub = 12r 
 			§ imul = 13r
-			
 			§ sts = 14r 
 			§ lds = 15r 
 			§ setge = 16r 
@@ -6130,18 +6125,6 @@ unsigned long
 					» "" _ ⊢ sr 
 					∎ { i0 i1 sr }
 				∐. . 
-					\[
-					reg { rsp i0 } ⊢ { rsp i0 s0 b0 } 
-					reg { rsp i1 } ⊢ { rsp i1 s1 b1 } 
-					∐ b0 ⊢ bl.f◂{}; b1 ⊢ bl.f◂{} . 
-						^ s0,s1 ⊢ s0,s1,sr 
-							"\tMOV_RBX " 1' "," 0' "\n" // 
-						∎ { rsp i0 i1 sr } 
-					∐. . 
-						^ s0,s1 ⊢ s0,s1,sr 
-							"\tmov " 1' "," 0' "\n" // 
-						∎ { rsp i0 i1 sr } 
-						\]
 					^ i0,i1 ⊢ i0,i1,sr 
 						"\tMOV_RBX GLX(" 0d' "),GLX(" 1d' ")\n" //
 					∎ { i0 i1 sr }
@@ -8482,7 +8465,7 @@ unsigned long
 							∎ { evv glv_n is irv rl ec0 } 
 						∐ { ast.hp_of◂r0 ast.im_of◂x1 } .
 							^ r0,x1 ⊢ r0,x1,ec1 
-								"\tmov rdi,GLX(" 0d' "\n" 
+								"\tmov rdi,GLX(" 0d' ")\n" 
 								"\timul rdi," 1d' "\n"
 								"\tmov GLX(" 0d' "),rdi\n" 
 								//
@@ -8872,7 +8855,7 @@ unsigned long
 							_dec c ⊢ c 
 							_dec i ⊢ i 
 							^ i,c ⊢ i,c,s 
-								"\tmov QWORD [rsp+8*" 1d' "],GLX(" 0d' ")\n" // 
+								"\tMOV_RDI QWORD [rsp+8*" 1d' "],GLX(" 0d' ")\n" // 
 							rp8.add_s8 { e s } ⊢ e 
 							$ i ⊢ i,i0 
 							∎ { { v n c ⟦ i0 < l ⟧ e } i }
