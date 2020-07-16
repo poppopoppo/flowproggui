@@ -46,14 +46,14 @@
 §% 
   f0◂◂_dec # %[ 0r ] ⊢ x 
   _emt x ⊢ _ 
-  \\f1◂◂9r # %[ 2r ] ⊢ x 
-  \\_emt x ⊢ _ 
-  \\f2 # %[ 4r ] ⊢ x 
-  \\_emt x ⊢ _ 
-  \\f3 # %[ 3r ] ⊢ x 
-  \\_emt x ⊢ x 
-  \\prs_act◂◂lc_exh prs_vld◂{ %[ 4r ] { %[ "FEF" ] %[ 99r ] } } ⊢ a 
-  \\_emt a ⊢ _ 
+  f1◂◂9r # %[ 2r ] ⊢ x 
+  _emt x ⊢ _ 
+  f2 # %[ 4r ] ⊢ x 
+  _emt x ⊢ _ 
+  f3 # %[ 3r ] ⊢ x 
+  _emt x ⊢ x 
+  prs_act◂◂lc_exh prs_vld◂{ %[ 4r ] { %[ "FEF" ] %[ 99r ] } } ⊢ a 
+  _emt a ⊢ _ 
   \\f7 { bl.t◂{} bl.f◂{} } ⊢ v 
   \\_emt v ⊢ _ 
   ∎ 
