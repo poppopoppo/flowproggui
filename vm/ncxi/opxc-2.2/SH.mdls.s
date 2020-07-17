@@ -1,8 +1,8 @@
 %include "HD.s" 
 %define RCD_N 32
-%define GLV_N 149
+%define GLV_N 159
 %define SS_NULL 0xffff_ffff_ffff_0000
-%define EMT_BUF_MAX (KB<<1)
+%define EMT_BUF_MAX (KB<<1)				
  
 section .bss
 	GLV: resq GLV_N
@@ -187,6 +187,7 @@ LB_8: db 32,58,32,95,114,54,52,226,151,130,10,0
 LB_11: db 32,58,32,95,114,54,52,226,151,130,10,0
 LB_16: db 59,32,226,136,142,124,10,101,120,110,32,52,56,52,58,10,0
 LB_18: db 32,58,32,123,32,95,114,54,52,226,151,130,32,123,32,95,115,56,226,151,130,32,95,114,54,52,226,151,130,125,125,10,0
+LB_36: db 32,58,32,95,114,54,52,226,151,130,10,0
 section .text
 	unt_1: dq (1<<48)
 	unt_2: dq (2<<48)
@@ -840,113 +841,108 @@ ss_end_rcd_31:
 	jmp RTM_0
 LB_0: ;; #60◂◂(_some◂.#10) 128'(= r ) ⊢ 0'(= r ) : (_r64◂→_r64◂)
 JMP_0:
-;; rsp=0 , %0~128'(= r )
-; #.#10 128'(= r ) ⊢ 128'(= r )
-	sub GLX(128),1
-;; rsp=0 , %1~128'(= r )
-; #.#9 128'(= r ) ⊢ 128'(= r )
-	add GLX(128),1
-;; rsp=0 , %2~128'(= r )
-; ∎ 128'(= r )
-	MOV_RBX GLX(0),GLX(128)
-	sub rsp,8
-	push QWORD [rsp+8*1]
+	MOV_RBX GLX(129),GLX(128)
+;; rsp=0 , %0~129'(= r )
+; #.#10 129'(= r ) ⊢ 129'(= r )
+	sub GLX(129),1
+;; rsp=0 , %1~129'(= r )
+; #.#9 129'(= r ) ⊢ 129'(= r )
+	add GLX(129),1
+;; rsp=0 , %2~129'(= r )
+; ∎ 129'(= r )
+	MOV_RBX GLX(0),GLX(129)
 	ret
-LB_3: ;; #62◂◂(_some◂9r) 130'(= r ) ⊢ 0'(= r ) : (_r64◂→_r64◂)
+LB_3: ;; #62◂◂(_some◂9r) 131'(= r ) ⊢ 0'(= r ) : (_r64◂→_r64◂)
 JMP_3:
-;; rsp=0 , %0~130'(= r )
-; #.#11 { %[ 9r ] 130'(= r ) } ⊢ { 131'(= r ) 130'(= r ) }
+	MOV_RBX GLX(132),GLX(131)
+;; rsp=0 , %0~132'(= r )
+; #.#11 { %[ 9r ] 132'(= r ) } ⊢ { 133'(= r ) 132'(= r ) }
 	mov rdi,9
-	add rdi,GLX(130)
-	mov GLX(131),rdi
-;; rsp=0 , %2~130'(= r )%1~131'(= r )
-; ∎ 131'(= r )
-; .dlt.ptn 130'(= r )
-	MOV_RBX GLX(0),GLX(131)
-	sub rsp,8
-	push QWORD [rsp+8*1]
-	ret
-LB_6: ;; #63◂◂(_none◂{}) 133'(= r ) ⊢ 0'(= r ) : (_r64◂→_r64◂)
-JMP_6:
-;; rsp=0 , %0~133'(= r )
-; #.#13 { 133'(= r ) %[ 9r ] } ⊢ { 133'(= r ) %[ 9r ] }
-	mov rdi,GLX(133)
-	imul rdi,9
+	add rdi,GLX(132)
 	mov GLX(133),rdi
-; .dlt.ptn %[ 9r ]
-;; rsp=0 , %1~133'(= r )
+;; rsp=0 , %2~132'(= r )%1~133'(= r )
 ; ∎ 133'(= r )
+; .dlt.ptn 132'(= r )
 	MOV_RBX GLX(0),GLX(133)
-	sub rsp,8
-	push QWORD [rsp+8*1]
 	ret
-LB_9: ;; #64◂◂(_none◂{}) 135'(= r ) ⊢ 0'(= r ) : (_r64◂→_r64◂)
-JMP_9:
-;; rsp=0 , %0~135'(= r )
-; #.#46 135'(= r ) ⊢ 135'(= r )
-;; rsp=0 , %6~135'(= r )
-; #.#11 { %[ 3r ] 135'(= r ) } ⊢ { 136'(= r ) 135'(= r ) }
-	mov rdi,3
-	add rdi,GLX(135)
-	mov GLX(136),rdi
-;; rsp=0 , %8~135'(= r )%7~136'(= r )
-; #.#51 135'(= r ) ⊢ { }
-;; rsp=0 , %7~136'(= r )
-; #.#46 136'(= r ) ⊢ 136'(= r )
-;; rsp=0 , %1~136'(= r )
-; #.#46 136'(= r ) ⊢ 136'(= r )
-;; rsp=0 , %3~136'(= r )
+LB_6: ;; #63◂◂(_none◂{}) 135'(= r ) ⊢ 0'(= r ) : (_r64◂→_r64◂)
+JMP_6:
+	MOV_RBX GLX(136),GLX(135)
+;; rsp=0 , %0~136'(= r )
 ; #.#13 { 136'(= r ) %[ 9r ] } ⊢ { 136'(= r ) %[ 9r ] }
 	mov rdi,GLX(136)
 	imul rdi,9
 	mov GLX(136),rdi
 ; .dlt.ptn %[ 9r ]
-;; rsp=0 , %4~136'(= r )
-; #.#46 136'(= r ) ⊢ 136'(= r )
-;; rsp=0 , %2~136'(= r )
+;; rsp=0 , %1~136'(= r )
 ; ∎ 136'(= r )
 	MOV_RBX GLX(0),GLX(136)
-	sub rsp,8
-	push QWORD [rsp+8*1]
 	ret
-LB_12: ;; #70◂◂(_some◂→[ 68]) 138'(= a14◂ [..] ) ⊢ { 0'(= r ) { 1'(= {| l |} ) 2'(= r ) } } : (_t14◂{ _r64◂ { _s8◂ _r64◂}}→{ _r64◂ { _s8◂ _r64◂}})
+LB_9: ;; #64◂◂(_none◂{}) 138'(= r ) ⊢ 0'(= r ) : (_r64◂→_r64◂)
+JMP_9:
+	MOV_RBX GLX(139),GLX(138)
+;; rsp=0 , %0~139'(= r )
+; #.#46 139'(= r ) ⊢ 139'(= r )
+;; rsp=0 , %6~139'(= r )
+; #.#11 { %[ 3r ] 139'(= r ) } ⊢ { 140'(= r ) 139'(= r ) }
+	mov rdi,3
+	add rdi,GLX(139)
+	mov GLX(140),rdi
+;; rsp=0 , %8~139'(= r )%7~140'(= r )
+; #.#51 139'(= r ) ⊢ { }
+;; rsp=0 , %7~140'(= r )
+; #.#46 140'(= r ) ⊢ 140'(= r )
+;; rsp=0 , %1~140'(= r )
+; #.#46 140'(= r ) ⊢ 140'(= r )
+;; rsp=0 , %3~140'(= r )
+; #.#13 { 140'(= r ) %[ 9r ] } ⊢ { 140'(= r ) %[ 9r ] }
+	mov rdi,GLX(140)
+	imul rdi,9
+	mov GLX(140),rdi
+; .dlt.ptn %[ 9r ]
+;; rsp=0 , %4~140'(= r )
+; #.#46 140'(= r ) ⊢ 140'(= r )
+;; rsp=0 , %2~140'(= r )
+; ∎ 140'(= r )
+	MOV_RBX GLX(0),GLX(140)
+	ret
+LB_12: ;; #70◂◂(_some◂→[ 68]) 142'(= a14◂ [..] ) ⊢ { 0'(= r ) { 1'(= {| l |} ) 2'(= r ) } } : (_t14◂{ _r64◂ { _s8◂ _r64◂}}→{ _r64◂ { _s8◂ _r64◂}})
 JMP_12:
-;; rsp=0 , %0~138'(= a14◂ [..] )
-;; ?; 138'(= a14◂ [..] ) ⊢ 0(<2)◂{ 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } }
-	mov rdi,GLX(138)
+	MOV_RBX GLX(143),GLX(142)
+;; rsp=0 , %0~143'(= a14◂ [..] )
+;; ?; 143'(= a14◂ [..] ) ⊢ 0(<2)◂{ 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } }
+	mov rdi,GLX(143)
 	cmp BYTE [rdi+6],0
 	jnz LB_14
 	jmp LB_15
 LB_14:
 	jmp LB_13
 LB_15:
-	mov rdi,GLX(138)
-	MOV_RDI GLX(139), QWORD [rdi+8]
-	mov rdi,GLX(138)
-	MOV_RDI GLX(140), QWORD [rdi+16]
-	mov rdi,GLX(140)
-	MOV_RDI GLX(141), QWORD [rdi+8]
-	mov rdi,GLX(140)
-	MOV_RDI GLX(142), QWORD [rdi+16]
-	MOV_RAX QWORD [GBG_VCT+8*0],GLX(138)
+	mov rdi,GLX(143)
+	MOV_RDI GLX(144), QWORD [rdi+8]
+	mov rdi,GLX(143)
+	MOV_RDI GLX(145), QWORD [rdi+16]
+	mov rdi,GLX(145)
+	MOV_RDI GLX(146), QWORD [rdi+8]
+	mov rdi,GLX(145)
+	MOV_RDI GLX(147), QWORD [rdi+16]
+	MOV_RAX QWORD [GBG_VCT+8*0],GLX(143)
 	mov rdi,QWORD [GBG_VCT+8*0]
 	FREE_RCD 2,rdi
-;; rsp=0 , %1~{ 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } }
-; #.#46 { 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } } ⊢ { 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } }
-;; rsp=0 , %5~{ 141'(= {| l |} ) 142'(= r ) }%4~139'(= r )
-; #.#46 { 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } } ⊢ { 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } }
-;; rsp=0 , %2~{ 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } }
-; ∎ { 139'(= r ) { 141'(= {| l |} ) 142'(= r ) } }
-	MOV_RBX GLX(0),GLX(139)
-	MOV_RBX GLX(1),GLX(141)
-	MOV_RBX GLX(2),GLX(142)
-	sub rsp,24
-	push QWORD [rsp+8*3]
+;; rsp=0 , %1~{ 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } }
+; #.#46 { 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } } ⊢ { 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } }
+;; rsp=0 , %5~{ 146'(= {| l |} ) 147'(= r ) }%4~144'(= r )
+; #.#46 { 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } } ⊢ { 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } }
+;; rsp=0 , %2~{ 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } }
+; ∎ { 144'(= r ) { 146'(= {| l |} ) 147'(= r ) } }
+	MOV_RBX GLX(0),GLX(144)
+	MOV_RBX GLX(1),GLX(146)
+	MOV_RBX GLX(2),GLX(147)
 	ret
 LB_13:
-;; ?; 138'(= a14◂ [..] ) ⊢ 1(<2)◂143'(= a2◂ [..] )
+;; ?; 143'(= a14◂ [..] ) ⊢ 1(<2)◂148'(= a2◂ [..] )
 	mov QWORD [GBG_VCT+8*0],rdi
-	MOV_RAX GLX(143),QWORD [rdi+8]
+	MOV_RAX GLX(148),QWORD [rdi+8]
 	mov rdi,QWORD [GBG_VCT+8*0]
 	FREE_LN rdi
 ;; rsp=0 , 
@@ -955,24 +951,94 @@ LB_13:
 	add rsp,8
 	pop rdi
 	jmp rdi
+LB_19: ;; #73◂◂(_none◂{}) { 154'(= a15◂ [..] ) 155'(= a15◂ [..] ) } ⊢ 0'(= r ) : ({ _t15◂ _t15◂}→_r64◂)
+JMP_19:
+	MOV_RBX GLX(156),GLX(154)
+	MOV_RBX GLX(157),GLX(155)
+;; rsp=0 , %1~157'(= a15◂ [..] )%0~156'(= a15◂ [..] )
+;; ?; { 156'(= a15◂ [..] ) 157'(= a15◂ [..] ) } ⊢ { 0(<2)◂{ } 0(<2)◂{ } }
+	mov rdi,GLX(156)
+	cmp BYTE [rdi+6],0
+	jnz LB_21
+	jmp LB_22
+LB_21:
+	jmp LB_20
+LB_22:
+	mov rdi,GLX(157)
+	cmp BYTE [rdi+6],0
+	jnz LB_23
+	jmp LB_24
+LB_23:
+	jmp LB_20
+LB_24:
+;; rsp=0 , 
+; ∎ %[ 0r ]
+	mov GLX(0),0
+	ret
+LB_20:
+;; ?; { 156'(= a15◂ [..] ) 157'(= a15◂ [..] ) } ⊢ { 0(<2)◂{ } 1(<2)◂{ } }
+	mov rdi,GLX(156)
+	cmp BYTE [rdi+6],0
+	jnz LB_26
+	jmp LB_27
+LB_26:
+	jmp LB_25
+LB_27:
+	mov rdi,GLX(157)
+	cmp BYTE [rdi+6],1
+	jnz LB_28
+	jmp LB_29
+LB_28:
+	jmp LB_25
+LB_29:
+;; rsp=0 , 
+; ∎ %[ 1r ]
+	mov GLX(0),1
+	ret
+LB_25:
+;; ?; { 156'(= a15◂ [..] ) 157'(= a15◂ [..] ) } ⊢ { 1(<2)◂{ } 0(<2)◂{ } }
+	mov rdi,GLX(156)
+	cmp BYTE [rdi+6],1
+	jnz LB_31
+	jmp LB_32
+LB_31:
+	jmp LB_30
+LB_32:
+	mov rdi,GLX(157)
+	cmp BYTE [rdi+6],0
+	jnz LB_33
+	jmp LB_34
+LB_33:
+	jmp LB_30
+LB_34:
+;; rsp=0 , 
+; ∎ %[ 2r ]
+	mov GLX(0),2
+	ret
+LB_30:
+;; ?; { 156'(= a15◂ [..] ) 157'(= a15◂ [..] ) } ⊢ { 1(<2)◂{ } 1(<2)◂{ } }
+;; rsp=0 , 
+; ∎ %[ 3r ]
+	mov GLX(0),3
+	ret
 RTM_0:
 ;; rsp=0 , %0~127'(= {| ? |} )
-; # ?  %[ 0r ] ⊢ 129'(= r )
+; # ?  %[ 0r ] ⊢ 130'(= r )
 	lea rsp,[rsp-8*1]
 	MOV_RDI QWORD [rsp+8*0],GLX(127)
 	push EXH_1
 	mov GLX(128),0
 	call LB_0
 	pop rax
-	MOV_RBX GLX(129),GLX(0)
+	MOV_RBX GLX(130),GLX(0)
 	pop rdi
 	mov GLX(127),rdi
-;; rsp=0 , %1~129'(= r )%0~127'(= {| ? |} )
-; ##8 129'(= r ) ⊢ 129'(= r )
+;; rsp=0 , %1~130'(= r )%0~127'(= {| ? |} )
+; ##8 130'(= r ) ⊢ 130'(= r )
 	mov QWORD [SIG_FLG],1
 	mov QWORD [SIG_ETR],emt_bof_hdl
 	EMT_CST fmt_emt,64
-	mov rdi,GLX(129)
+	mov rdi,GLX(130)
 	C_PUSH_REGS
 	mov r8,rdi 
 	mov rdi,r8
@@ -982,46 +1048,19 @@ RTM_0:
 	EMT_CST LB_2,11
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
-; .dlt.ptn 129'(= r )
+; .dlt.ptn 130'(= r )
 ;; rsp=0 , %0~127'(= {| ? |} )
-; # ?  %[ 2r ] ⊢ 132'(= r )
+; # ?  %[ 2r ] ⊢ 134'(= r )
 	lea rsp,[rsp-8*1]
 	MOV_RDI QWORD [rsp+8*0],GLX(127)
 	push EXH_4
-	mov GLX(130),2
+	mov GLX(131),2
 	call LB_3
-	pop rax
-	MOV_RBX GLX(132),GLX(0)
-	pop rdi
-	mov GLX(127),rdi
-;; rsp=0 , %3~132'(= r )%0~127'(= {| ? |} )
-; ##8 132'(= r ) ⊢ 132'(= r )
-	mov QWORD [SIG_FLG],1
-	mov QWORD [SIG_ETR],emt_bof_hdl
-	EMT_CST fmt_emt,64
-	mov rdi,GLX(132)
-	C_PUSH_REGS
-	mov r8,rdi 
-	mov rdi,r8
-	call emt_r64
-	C_POP_REGS
-	EMT_CST fmt_nl,4
-	EMT_CST LB_5,11
-	EMT_FLSH
-	mov QWORD [SIG_FLG],0
-; .dlt.ptn 132'(= r )
-;; rsp=0 , %0~127'(= {| ? |} )
-; ##63 %[ 4r ] ⊢ 134'(= r )
-	lea rsp,[rsp-8*1]
-	MOV_RDI QWORD [rsp+8*0],GLX(127)
-	push EXH_7
-	mov GLX(133),4
-	call LB_6
 	pop rax
 	MOV_RBX GLX(134),GLX(0)
 	pop rdi
 	mov GLX(127),rdi
-;; rsp=0 , %5~134'(= r )%0~127'(= {| ? |} )
+;; rsp=0 , %3~134'(= r )%0~127'(= {| ? |} )
 ; ##8 134'(= r ) ⊢ 134'(= r )
 	mov QWORD [SIG_FLG],1
 	mov QWORD [SIG_ETR],emt_bof_hdl
@@ -1033,22 +1072,22 @@ RTM_0:
 	call emt_r64
 	C_POP_REGS
 	EMT_CST fmt_nl,4
-	EMT_CST LB_8,11
+	EMT_CST LB_5,11
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
 ; .dlt.ptn 134'(= r )
 ;; rsp=0 , %0~127'(= {| ? |} )
-; ##64 %[ 3r ] ⊢ 137'(= r )
+; ##63 %[ 4r ] ⊢ 137'(= r )
 	lea rsp,[rsp-8*1]
 	MOV_RDI QWORD [rsp+8*0],GLX(127)
-	push EXH_10
-	mov GLX(135),3
-	call LB_9
+	push EXH_7
+	mov GLX(135),4
+	call LB_6
 	pop rax
 	MOV_RBX GLX(137),GLX(0)
 	pop rdi
 	mov GLX(127),rdi
-;; rsp=0 , %7~137'(= r )%0~127'(= {| ? |} )
+;; rsp=0 , %5~137'(= r )%0~127'(= {| ? |} )
 ; ##8 137'(= r ) ⊢ 137'(= r )
 	mov QWORD [SIG_FLG],1
 	mov QWORD [SIG_ETR],emt_bof_hdl
@@ -1060,22 +1099,49 @@ RTM_0:
 	call emt_r64
 	C_POP_REGS
 	EMT_CST fmt_nl,4
+	EMT_CST LB_8,11
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn 137'(= r )
+;; rsp=0 , %0~127'(= {| ? |} )
+; ##64 %[ 3r ] ⊢ 141'(= r )
+	lea rsp,[rsp-8*1]
+	MOV_RDI QWORD [rsp+8*0],GLX(127)
+	push EXH_10
+	mov GLX(138),3
+	call LB_9
+	pop rax
+	MOV_RBX GLX(141),GLX(0)
+	pop rdi
+	mov GLX(127),rdi
+;; rsp=0 , %7~141'(= r )%0~127'(= {| ? |} )
+; ##8 141'(= r ) ⊢ 141'(= r )
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,GLX(141)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_nl,4
 	EMT_CST LB_11,11
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
-;; rsp=0 , %8~137'(= r )%0~127'(= {| ? |} )
-; # ?  0(<2)◂{ %[ 4r ] { %[ "FEF" ] %[ 99r ] } } ⊢ { 146'(= r ) { 147'(= {| l |} ) 148'(= r ) } }
+;; rsp=0 , %8~141'(= r )%0~127'(= {| ? |} )
+; # ?  0(<2)◂{ %[ 4r ] { %[ "FEF" ] %[ 99r ] } } ⊢ { 151'(= r ) { 152'(= {| l |} ) 153'(= r ) } }
 	lea rsp,[rsp-8*2]
-	MOV_RDI QWORD [rsp+8*1],GLX(137)
+	MOV_RDI QWORD [rsp+8*1],GLX(141)
 	MOV_RDI QWORD [rsp+8*0],GLX(127)
 	push EXH_17
 	ALC_RCD 2, rax
-	mov GLX(138),rax
-	mov GLX(144),4
-	mov rax,GLX(138)
-	MOV_RDI QWORD [rax+8],GLX(144)
+	mov GLX(142),rax
+	mov GLX(149),4
+	mov rax,GLX(142)
+	MOV_RDI QWORD [rax+8],GLX(149)
 	ALC_RCD 2, rax
-	mov GLX(144),rax
+	mov GLX(149),rax
 	mov rsi,1  
 	mov rdi,16
 	xor rax,rax 
@@ -1085,32 +1151,32 @@ RTM_0:
 	mov BYTE [rax+8+0],70
 	mov BYTE [rax+8+1],69
 	mov BYTE [rax+8+2],70
-	mov GLX(145),rax
-	mov rax,GLX(144)
-	MOV_RDI QWORD [rax+8],GLX(145)
-	mov GLX(145),99
-	mov rax,GLX(144)
-	MOV_RDI QWORD [rax+16],GLX(145)
-	mov rax,GLX(138)
-	MOV_RDI QWORD [rax+16],GLX(144)
-	mov rax,GLX(138)
+	mov GLX(150),rax
+	mov rax,GLX(149)
+	MOV_RDI QWORD [rax+8],GLX(150)
+	mov GLX(150),99
+	mov rax,GLX(149)
+	MOV_RDI QWORD [rax+16],GLX(150)
+	mov rax,GLX(142)
+	MOV_RDI QWORD [rax+16],GLX(149)
+	mov rax,GLX(142)
 	mov BYTE [rax+6],0
 	call LB_12
 	pop rax
-	MOV_RBX GLX(146),GLX(0)
-	MOV_RBX GLX(147),GLX(1)
-	MOV_RBX GLX(148),GLX(2)
+	MOV_RBX GLX(151),GLX(0)
+	MOV_RBX GLX(152),GLX(1)
+	MOV_RBX GLX(153),GLX(2)
 	pop rdi
 	mov GLX(127),rdi
 	pop rdi
-	mov GLX(137),rdi
-;; rsp=0 , %9~{ 146'(= r ) { 147'(= {| l |} ) 148'(= r ) } }%8~137'(= r )%0~127'(= {| ? |} )
-; ##8 { 146'(= r ) { 147'(= {| l |} ) 148'(= r ) } } ⊢ { 146'(= r ) { 147'(= {| l |} ) 148'(= r ) } }
+	mov GLX(141),rdi
+;; rsp=0 , %9~{ 151'(= r ) { 152'(= {| l |} ) 153'(= r ) } }%8~141'(= r )%0~127'(= {| ? |} )
+; ##8 { 151'(= r ) { 152'(= {| l |} ) 153'(= r ) } } ⊢ { 151'(= r ) { 152'(= {| l |} ) 153'(= r ) } }
 	mov QWORD [SIG_FLG],1
 	mov QWORD [SIG_ETR],emt_bof_hdl
 	EMT_CST fmt_emt,64
 	EMT_CST fmt_rcd_l,4
-	mov rdi,GLX(146)
+	mov rdi,GLX(151)
 	C_PUSH_REGS
 	mov r8,rdi 
 	mov rdi,r8
@@ -1118,14 +1184,14 @@ RTM_0:
 	C_POP_REGS
 	EMT_CST fmt_spc,4
 	EMT_CST fmt_rcd_l,4
-	mov rdi,GLX(147)
+	mov rdi,GLX(152)
 	C_PUSH_REGS
 	mov r8,rdi 
 	mov rdi,r8
 	call emt_s8
 	C_POP_REGS
 	EMT_CST fmt_spc,4
-	mov rdi,GLX(148)
+	mov rdi,GLX(153)
 	C_PUSH_REGS
 	mov r8,rdi 
 	mov rdi,r8
@@ -1139,13 +1205,44 @@ RTM_0:
 	EMT_CST LB_18,32
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
-; .dlt.ptn { 146'(= r ) { 147'(= {| l |} ) 148'(= r ) } }
-	mov rdi,GLX(147)
+; .dlt.ptn { 151'(= r ) { 152'(= {| l |} ) 153'(= r ) } }
+	mov rdi,GLX(152)
 	C_PUSH_REGS
 	mov r8,rdi
 	FREE_S8 r8
 	C_POP_REGS
-;; rsp=0 , %8~137'(= r )%0~127'(= {| ? |} )
+;; rsp=0 , %8~141'(= r )%0~127'(= {| ? |} )
+; ##73 { 0(<2)◂{ } 1(<2)◂{ } } ⊢ 158'(= r )
+	lea rsp,[rsp-8*2]
+	MOV_RDI QWORD [rsp+8*1],GLX(141)
+	MOV_RDI QWORD [rsp+8*0],GLX(127)
+	push EXH_35
+	mov GLX(154),unt_0
+	mov GLX(155),unt_1
+	call LB_19
+	pop rax
+	MOV_RBX GLX(158),GLX(0)
+	pop rdi
+	mov GLX(127),rdi
+	pop rdi
+	mov GLX(141),rdi
+;; rsp=0 , %11~158'(= r )%8~141'(= r )%0~127'(= {| ? |} )
+; ##8 158'(= r ) ⊢ 158'(= r )
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,GLX(158)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_CST LB_36,11
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn 158'(= r )
+;; rsp=0 , %8~141'(= r )%0~127'(= {| ? |} )
 ; ∎
 	jmp RTM_1
 EXH_1:
@@ -1165,6 +1262,10 @@ EXH_10:
 	pop rax
 	jmp rax
 EXH_17:
+	add rsp,8
+	pop rax
+	jmp rax
+EXH_35:
 	add rsp,8
 	pop rax
 	jmp rax

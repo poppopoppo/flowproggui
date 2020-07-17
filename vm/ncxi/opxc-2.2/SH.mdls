@@ -54,6 +54,6 @@
   _emt x ⊢ x 
   prs_act◂◂lc_exh prs_vld◂{ %[ 4r ] { %[ "FEF" ] %[ 99r ] } } ⊢ a 
   _emt a ⊢ _ 
-  \\f7 { bl.t◂{} bl.f◂{} } ⊢ v 
-  \\_emt v ⊢ _ 
+  f7 { bl.t◂{} bl.f◂{} } ⊢ v 
+  _emt v ⊢ _ 
   ∎ 

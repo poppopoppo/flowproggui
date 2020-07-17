@@ -52,7 +52,6 @@ sig_hdl_usr:
 	C_CALL set_usr_hdl 
 	mov QWORD [SIG_RIP],rax
 	ret 
-	;jmp test_hdl
 
 eq_s8: ;rdi,rsi
 	push rdx
