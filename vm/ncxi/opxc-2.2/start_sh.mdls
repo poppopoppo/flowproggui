@@ -20,30 +20,17 @@
 		$ a0 ⊢ 
 		∐ OpADL.syntax.prs_vld◂a0 . 
 			_emt %[ "opxcc:prs_vld" ] ⊢ _ 
-			$ a0 ⊢ a0,a1 
-			ini_tv {} ⊢ evv0 
-			rp8.e {} ⊢ ep0 
-			set_tv { evv0 %[ 0r ] %[ 1r ] } ⊢ { evv0 _ } 
-			_emt %[ "start_sh D0" ] ⊢ _ 
-			\\OpADL.ast.pnt_file.f { evv0 %[ 0r ] a1 ep0 } ⊢ { _ _ ep0 } 
-			_emt %[ "start_sh D1" ] ⊢ _ 
-			rp8.to_s8 ep0 ⊢ sp0 
-			_emt_s8_to { %[ "SH.pp.mdls" ] sp0 }  ⊢ _ 
-			OpADL.ns.emt_rtm a0 ⊢ { i il { hpv hpv_n } { mmv mev mtv mv_n rv rv_n ev ev_n tv tv_n } irv tav evv tx_n ns_m ns_e ns_t { dd ep0 ec0 rtm_n lb_n } }		
+			OpADL.ns.emt_rtm a0 ⊢ { i il { hpv hpv_n } { rv rv_n ev ev_n tv tv_n } irv tav evv tx_n { dd ec0 rtm_n lb_n } }		
 			_emt %[ "start_sh D2" ] ⊢ _ 
-			s8_of_s8_lst ep0 ⊢ sep0 
 			rp8.to_s8 ec0 ⊢ sec0
-			» "SH.mdls.s" _ ⊢ ff0 
-			_emt_s8_to { ff0 sec0 } ⊢ _
-			» "SGN_SH.txt" _ ⊢ ff1 
-			_emt_s8_to { ff1 sep0 } ⊢ { _ sep0 }
+			_emt_s8_to { %[ "SH.mdls.s" ] sec0 } ⊢ _
+			
 			» _^ _ ⊢ sx0 
 				`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
     		`gcc -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O0 -o out.exe 
 				// 
 			_cd sx0 ⊢ sx0  
 			\\_info {} ⊢ {} 
-			_emt sep0 ⊢ _ 
 			∎ {} 
 		∐. OpADL.syntax.prs_err◂e0 .
 			OpADL.syntax.pnt_prs_err e0 ⊢ es0 
