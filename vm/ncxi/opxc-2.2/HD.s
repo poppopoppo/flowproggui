@@ -1,5 +1,5 @@
-%define SS_RCD_2_MAX_P (1<<22)
-%define SS_RCD_3_MAX_P (1<<20)
+%define SS_RCD_2_MAX_P (1<<25)
+%define SS_RCD_3_MAX_P (1<<23)
 %define SS_RCD_4_MAX_P (1<<19)
 %define KB 1024
 %define MB KB*KB 

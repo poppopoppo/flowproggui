@@ -280,3 +280,4 @@ _seq : { _op◂{ a' b' } b'→c' }
   $ M1◂r1 ⊢ r1 
   _add { M0*◂r0 M0*◂r1 } ⊢ { M0*◂r0 M1*◂r1 }
   
+  ini_arr : { v→{ }　}
