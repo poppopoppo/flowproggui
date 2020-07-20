@@ -7813,7 +7813,6 @@ unsigned long
 						$ v2 ⊢ v2,ya0
 						T.iug { tv_n tv lv RP.cns3◂{ v0 v1 TX.arr◂v2 } yd } ⊢ { tv_n tv _ _ _ }
 						$ ya0 ⊢ ya0,ya0_0 
-						\\alc_type_k.cnc_hp { { tv_n tv } ya0_0 } ⊢ { { tv_n tv } ha0 } 
 						alc_type_k.f_i { tav tv_n tv %[ 0r ] ya0_0 } ⊢ { tav tv_n tv c_n pa0 } 
 						inc_x glv_n ⊢ { rm0 glv_n } 
 						inc_x glv_n ⊢ { rm1 glv_n } 
@@ -7822,9 +7821,6 @@ unsigned long
 						$ a0 ⊢ a0,a00 
 						$ a1 ⊢ a1,a1_0 
 						$ RP.cns3◂{ a00 a1_0 stt_v.arr_reg◂{ rm00 ya0 } } ⊢ pd1 
-						\\$ rm1 ⊢ rm1,rm10				
-						\\$ ha0 ⊢ ha0,ha00 
-						\\$ RP.atm◂ast.hp◂{ rm10 ha00 } ⊢ pt0
 						l1 { evv a0 e0 } ⊢ { evv e0 }
 						inc_x lb_n ⊢ { lb2 lb_n } 
 						inc_x lb_n ⊢ { lb3 lb_n }
@@ -9432,11 +9428,10 @@ unsigned long
 									_emt ee0 ⊢ _ 
 								∎|
 						∐ a'=EX.lod_q . 
-							$ rp8.e◂{} ⊢ e0 
 							∐ is ⊢ RP.rcd◂l0; l0 ⊢ _cns◂{ a0 l0 }; l0 ⊢ _cns◂{ a1 l0 }; l0 ⊢ _nil◂{}; a0 ⊢ RP.atm◂aa0 .
 								$ a1 ⊢ a1,a1_0
 								r64_to_rax { evv a1_0 } ⊢ { evv sc0 } 
-								rp8.add_s8 { e0 sc0 } ⊢ e0 
+								rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 								$ aa0 ⊢ aa0,aa00 
 								RP.atm aa0 ⊢ a0
 								∐ aa00 ⊢ ast.hp◂{ r0 h0 }; h0 ⊢ ast.hp.ref◂q0; q0 ⊢ ast.hp.arr◂ya0 . 
@@ -9449,13 +9444,13 @@ unsigned long
 										`	cmp rax,rsi 
 										`	jge err_lod_q
 										"\timul rax," 1d' "\n"
-										`	mov rdi,[rdi+8+8*rax]
+										`	lea rdi,[rdi+8+8*rax]
 										"\tmov SRC_REG,rdi\n"
 										//
-									rp8.add_s8 { e0 sc0 } ⊢ e0 
+									rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 									$ pa0 ⊢ pa0,pa0_0
 									lod_sgm.ptn { { ec0 glv_n } pa0_0 } ⊢ { { ec0 glv_n } pa1 } 
-									rpc.ptn { gfl ⟦⟧ tv_n tv tav glv_n lb_n pa1 irv { eds e0 } } ⊢ { gfl fl tv_n tv tav glv_n lb_n pa1 pa2 irv { eds e0 } }					
+									rpc.ptn { gfl ⟦⟧ tv_n tv tav glv_n lb_n pa1 irv { eds ec0 } } ⊢ { gfl fl tv_n tv tav glv_n lb_n pa1 pa2 irv { eds ec0 } }					
 									rpc.adt_lp { gfl ⟦⟧ tv_n tv tav lb_n glv_n { eds eg0 } } ⊢ { gfl tv_n tv tav lb_n glv_n { eds eg0 } }
 									∎ { f_c1 { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 rp8.e◂{} } rl { RP.cns3◂{ a0 a1 pa2 } yr } } 									 
 								
