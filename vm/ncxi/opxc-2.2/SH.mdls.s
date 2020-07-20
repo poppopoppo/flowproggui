@@ -1,6 +1,6 @@
 %include "HD.s" 
 %define RCD_N 32
-%define GLV_N 137
+%define GLV_N 149
 %define SS_NULL 0xffff_ffff_ffff_0000
 %define EMT_BUF_MAX (KB<<1)				
  
@@ -183,6 +183,9 @@ fmt_sig_hdl:
 
 LB_4: db 32,58,32,95,97,114,114,226,151,130,95,114,54,52,226,151,130,10,0
 LB_9: db 32,58,32,95,97,114,114,226,151,130,123,32,95,115,56,226,151,130,32,95,114,54,52,226,151,130,125,10,0
+LB_12: db 32,58,32,123,32,95,97,114,114,226,151,130,95,114,54,52,226,151,130,32,95,114,54,52,226,151,130,125,10,0
+LB_15: db 32,58,32,123,32,95,97,114,114,226,151,130,123,32,95,115,56,226,151,130,32,95,114,54,52,226,151,130,125,32,123,32,95,115,56,226,151,130,32,95,114,54,52,226,151,130,125,125,10,0
+LB_18: db 32,58,32,123,32,95,97,114,114,226,151,130,123,32,95,115,56,226,151,130,32,95,114,54,52,226,151,130,125,32,123,32,95,115,56,226,151,130,32,95,114,54,52,226,151,130,125,125,10,0
 section .text
 	unt_1: dq (1<<48)
 	unt_2: dq (2<<48)
@@ -984,6 +987,281 @@ LB_8:
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
 ;; rsp=0 , %8~132'(= {| ? |} )%4~128'(= {| ? |} )%0~127'(= {| ? |} )
+; ##1 { 128'(= {| ? |} ) %[ 1r ] %[ 4095r ] } ⊢ { 128'(= {| ? |} ) %[ 1r ] 137'(= r ) }
+	mov rax,1
+	mov rdi,GLX(128)
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	cmp rax,rsi 
+	jge err_exc_q
+	 imul rax,1
+	lea rdi,[rdi+8+8*rax]
+	mov DST_REG,rdi 
+	mov SRC_REG,rdi
+	MOV_RDI GLX(137),QWORD [SRC_REG+8*0]
+	mov QWORD [DST_REG+8*0],4095
+; .dlt.ptn %[ 1r ]
+;; rsp=0 , %11~137'(= r )%9~128'(= {| ? |} )%8~132'(= {| ? |} )%0~127'(= {| ? |} )
+; ##8 { 128'(= {| ? |} ) 137'(= r ) } ⊢ { 128'(= {| ? |} ) 137'(= r ) }
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	EMT_CST fmt_rcd_l,4
+	mov rdi,GLX(128)
+	C_PUSH_REGS
+	mov r8,rdi 
+	EMT_CST fmt_arr_l,8
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,[r8]
+	mov rax,0 
+	lea SRC_REG,[r8+8]
+LB_10:
+	cmp rsi,rax 
+	jz LB_11
+	push r8 
+	push rsi 
+	push rax 
+	MOV_RDI GLX(138),QWORD [SRC_REG+8*0]
+	mov rdi,GLX(138)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	lea SRC_REG,[SRC_REG+8*1]
+	EMT_CST fmt_spc,4
+	pop rax 
+	pop rsi 
+	pop r8 
+	add rax,1 
+	jmp LB_10
+LB_11:
+	EMT_CST fmt_arr_r,4
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	mov rdi,GLX(137)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	EMT_CST fmt_nl,4
+	EMT_CST LB_12,29
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn 137'(= r )
+;; rsp=0 , %12~128'(= {| ? |} )%8~132'(= {| ? |} )%0~127'(= {| ? |} )
+; ##1 { 132'(= {| ? |} ) %[ 2r ] { %[ "hello" ] %[ 99r ] } } ⊢ { 132'(= {| ? |} ) %[ 2r ] { 139'(= {| l |} ) 140'(= r ) } }
+	mov rax,2
+	mov rdi,GLX(132)
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	cmp rax,rsi 
+	jge err_exc_q
+	 imul rax,2
+	lea rdi,[rdi+8+8*rax]
+	mov DST_REG,rdi 
+	mov SRC_REG,rdi
+	MOV_RDI GLX(139),QWORD [SRC_REG+8*0]
+	MOV_RDI GLX(140),QWORD [SRC_REG+8*1]
+	mov rsi,1  
+	mov rdi,16
+	xor rax,rax 
+	add QWORD [S8_N],5
+	C_CALL_SF calloc
+	mov QWORD [rax],5
+	mov BYTE [rax+8+0],104
+	mov BYTE [rax+8+1],101
+	mov BYTE [rax+8+2],108
+	mov BYTE [rax+8+3],108
+	mov BYTE [rax+8+4],111
+	mov QWORD [DST_REG+8*0],rax
+	mov QWORD [DST_REG+8*1],99
+; .dlt.ptn %[ 2r ]
+;; rsp=0 , %16~{ 139'(= {| l |} ) 140'(= r ) }%14~132'(= {| ? |} )%12~128'(= {| ? |} )%0~127'(= {| ? |} )
+; ##8 { 132'(= {| ? |} ) { 139'(= {| l |} ) 140'(= r ) } } ⊢ { 132'(= {| ? |} ) { 139'(= {| l |} ) 140'(= r ) } }
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	EMT_CST fmt_rcd_l,4
+	mov rdi,GLX(132)
+	C_PUSH_REGS
+	mov r8,rdi 
+	EMT_CST fmt_arr_l,8
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,[r8]
+	mov rax,0 
+	lea SRC_REG,[r8+8]
+LB_13:
+	cmp rsi,rax 
+	jz LB_14
+	push r8 
+	push rsi 
+	push rax 
+	MOV_RDI GLX(141),QWORD [SRC_REG+8*0]
+	MOV_RDI GLX(142),QWORD [SRC_REG+8*1]
+	EMT_CST fmt_rcd_l,4
+	mov rdi,GLX(141)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	mov rdi,GLX(142)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	lea SRC_REG,[SRC_REG+8*2]
+	EMT_CST fmt_spc,4
+	pop rax 
+	pop rsi 
+	pop r8 
+	add rax,1 
+	jmp LB_13
+LB_14:
+	EMT_CST fmt_arr_r,4
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_l,4
+	mov rdi,GLX(139)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	mov rdi,GLX(140)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	EMT_CST fmt_nl,4
+	EMT_CST LB_15,49
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn { 139'(= {| l |} ) 140'(= r ) }
+	mov rdi,GLX(139)
+	C_PUSH_REGS
+	mov r8,rdi
+	FREE_S8 r8
+	C_POP_REGS
+;; rsp=0 , %17~132'(= {| ? |} )%12~128'(= {| ? |} )%0~127'(= {| ? |} )
+; ##4 { 132'(= {| ? |} ) %[ 0r ] } ⊢ { 132'(= {| ? |} ) %[ 0r ] { 145'(= {| l |} ) 146'(= r ) } }
+	mov rax,0
+	mov rdi,GLX(132)
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	cmp rax,rsi 
+	jge err_lod_q
+	imul rax,2
+	lea rdi,[rdi+8+8*rax]
+	mov SRC_REG,rdi
+	MOV_RDI GLX(143),QWORD [SRC_REG+8*0]
+	MOV_RDI GLX(144),QWORD [SRC_REG+8*1]
+	mov rdi,GLX(143)
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rdi,r8
+	CALL_SF rpc_s8
+	C_POP_REGS
+	mov GLX(145),rax
+	mov rdi,GLX(144)
+	C_PUSH_REGS
+	mov r8,rdi
+	mov rax,r8
+	C_POP_REGS
+	mov GLX(146),rax
+; .dlt.ptn %[ 0r ]
+;; rsp=0 , %21~{ 145'(= {| l |} ) 146'(= r ) }%19~132'(= {| ? |} )%12~128'(= {| ? |} )%0~127'(= {| ? |} )
+; ##8 { 132'(= {| ? |} ) { 145'(= {| l |} ) 146'(= r ) } } ⊢ { 132'(= {| ? |} ) { 145'(= {| l |} ) 146'(= r ) } }
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	EMT_CST fmt_rcd_l,4
+	mov rdi,GLX(132)
+	C_PUSH_REGS
+	mov r8,rdi 
+	EMT_CST fmt_arr_l,8
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,[r8]
+	mov rax,0 
+	lea SRC_REG,[r8+8]
+LB_16:
+	cmp rsi,rax 
+	jz LB_17
+	push r8 
+	push rsi 
+	push rax 
+	MOV_RDI GLX(147),QWORD [SRC_REG+8*0]
+	MOV_RDI GLX(148),QWORD [SRC_REG+8*1]
+	EMT_CST fmt_rcd_l,4
+	mov rdi,GLX(147)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	mov rdi,GLX(148)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	lea SRC_REG,[SRC_REG+8*2]
+	EMT_CST fmt_spc,4
+	pop rax 
+	pop rsi 
+	pop r8 
+	add rax,1 
+	jmp LB_16
+LB_17:
+	EMT_CST fmt_arr_r,4
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_l,4
+	mov rdi,GLX(145)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	mov rdi,GLX(146)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	EMT_CST fmt_nl,4
+	EMT_CST LB_18,49
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn { 145'(= {| l |} ) 146'(= r ) }
+	mov rdi,GLX(145)
+	C_PUSH_REGS
+	mov r8,rdi
+	FREE_S8 r8
+	C_POP_REGS
+;; rsp=0 , %22~132'(= {| ? |} )%12~128'(= {| ? |} )%0~127'(= {| ? |} )
 ; ∎
 	jmp RTM_1
 RTM_1:
