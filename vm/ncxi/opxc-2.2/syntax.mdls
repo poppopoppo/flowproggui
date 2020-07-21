@@ -7155,12 +7155,11 @@ unsigned long
 									`	GET_LEN rsi,r8
 									`	mov rax,0 
 									"\tlea SRC_REG,[r8+8]\n"
+									`	push r8 
 									"LB_" 0d' ":\n"
 									`	cmp rsi,0
 									"\tjz LB_" 1d' "\n"
-									`	push r8 
 									`	push rsi 
-									\\ `	mov r8,QWORD [r8+8*rsi]
 									//
 								rp8.add_s8 { e0 s1 } ⊢ e0
 								$ pa0 ⊢ pa0,pa0_0 
@@ -7168,12 +7167,11 @@ unsigned long
 								ptn { ahl fl tv_n tv tav evv lb_n glv_n pa1 { eds e0 } } ⊢ { ahl fl  tv_n tv tav evv lb_n glv_n { eds e0 } } 
 								^ lb0,lb1,c_n ⊢ lb0,lb1,c_n,s1 	 
 									`	pop rsi 
-									`	pop r8 
 									`	sub rsi,1 
 									"\tlea SRC_REG,[SRC_REG+8*" 2d' "]\n"
 									"\tjmp LB_" 0d' "\n" 
 									"LB_" 1d' ":\n" 
-									`	mov rdi,r8
+									`	pop rdi
 									`	C_CALL_SF free 
 									//	
 								rp8.add_s8 { e0 s1 } ⊢ e0
@@ -7350,10 +7348,10 @@ unsigned long
 									`	and rsi,[r8]
 									`	mov rax,0 
 									`	lea SRC_REG,[r8+8]
+									`	push r8 
 									"LB_" 0d' ":\n"
 									`	cmp rsi,rax 
 									"\tjz LB_" 1d' "\n"
-									`	push r8 
 									`	push rsi 
 									`	push rax 
 									//
@@ -7366,10 +7364,10 @@ unsigned long
 									`	EMT_CST fmt_spc,4
 									`	pop rax 
 									`	pop rsi 
-									`	pop r8 
 									`	add rax,1 
 									"\tjmp LB_" 0d' "\n" 
 									"LB_" 1d' ":\n" 
+									`	pop r8 
 									`	EMT_CST fmt_arr_r,4
 									//	
 								rp8.add_s8 { e0 s1 } ⊢ e0
@@ -7553,35 +7551,30 @@ unsigned long
 									`	xor rax,rax
 									`	C_CALL_SF calloc
 									`	mov QWORD [rax],r9
-									`	mov r10,rax 
 									`	lea DST_REG,[rax+8]
 									`	lea SRC_REG,[r8+8]
+									`	push r8 
+									`	push rax 
 									"LB_" 0d' ":\n" 
 									`	cmp r9,0 
 									"\tjz LB_" 1d' "\n" 
-									`	push r8 
 									`	push r9
-									`	push r10
-									`	mov r8,QWORD [r8+8*r9]
 									//
 								rp8.add_s8 { e0 sc0 } ⊢ e0
 								$ pa0 ⊢ pa0,pa0_0 
 								lod_sgm.ptn { { e0 glv_n } pa0_0 } ⊢ { { e0 glv_n } pa1 } 
 								ptn { ahl fl tv_n tv tav evv lb_n glv_n pa1 { eds e0 } } ⊢ { ahl fl  tv_n tv tav evv lb_n glv_n pa1 pa2 { eds e0 } } 
 								to_sgm.ptn { e0 { evv tav tv_n tv eds } glv_n pa2 pa0 } ⊢ { e0 { evv tav tv_n tv eds } glv_n }
-								^ c_n ⊢ c_n,s0
-									`	pop r10 
+								^ c_n ⊢ _,s0
 									`	pop r9  
-									`	pop r8 
-									\\"\tmov QWORD [r10+8*r9],rax\n"  
-									`	sub r9,1 
+									`	sub r9,1
 									"\tlea SRC_REG,[SRC_REG+8*" 0d' "]\n"
 									"\tlea DST_REG,[DST_REG+8*" 0d' "]\n"
 									//  
 								rp8.add_s8 { e0 s0 } ⊢ e0
 								jmp_lb { lb0 e0 } ⊢ { _ e0 } 
 								lb_etr { lb1 e0 } ⊢ { _ e0 } 
-								» "\tmov rax,r10\n" _ ⊢ s0 
+								» "\tpop rax\n\tpop r8\n" _ ⊢ s0 
 								rp8.add_s8 { e0 s0 } ⊢ e0
 								∎ { ahl fl tv_n tv tav evv lb_n glv_n { eds e0 } }
 							∐ ast.hp.clr◂hc0 . 
