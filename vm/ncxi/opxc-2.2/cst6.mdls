@@ -14,5 +14,6 @@
   _emt a1 ⊢ _
   _emt a2 ⊢ _
   _mk_arr { %[ 3r ] { _some◂_some◂%[ 0r ] ⟦ %[ "ff" ] %[ "bc" ] ⟧ } } ⊢ { _ _ ax0 }
+  _emt %[ 0r ] ⊢ _ 
   _emt ax0 ⊢ _
   ∎
