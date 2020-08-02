@@ -1,14 +1,16 @@
 § f0 x 
   ∎ x 
 §% 
-  \\_mk_arr { %[ 2r ] ⟦ %[ "ff" ] %[ "bc" ] ⟧ } ⊢ { _ _ ax0 }
+  f0 _some◂_some◂%[ "ff" ] ⊢ x 
+  _emt x ⊢ _ 
+  _mk_arr { %[ 2r ] ⟦ %[ "ff" ] %[ "bc" ] ⟧ } ⊢ { _ _ ax0 }
   \\_mk_arr { %[ 3r ] { _some◂_some◂%[ 0r ] ⟦ %[ "ff" ] ⟧ } } ⊢ { _ _ ax0 }
-  \\_emt %[ 0r ] ⊢ _ 
-  \\$ ax0 ⊢ ax0,ax1 
-  \\_emt ax0 ⊢ _
+  _emt %[ 0r ] ⊢ _ 
+  $ ax0 ⊢ ax0,ax1 
+  _emt ax0 ⊢ _
   \\$ ax0 ⊢ _ 
-  \\_emt ax1 ⊢ _ 
-  \\_emt %[ 1r ] ⊢ _ 
+  _emt ax1 ⊢ _ 
+  _emt %[ 1r ] ⊢ _ 
   \\$ ax1 ⊢ _ 
   \\[
   f0 ⟦ %[ "ffuuuiiuiuiuiu" ] %[ "bc" ] ⟧ ⊢ p 
