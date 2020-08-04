@@ -284,3 +284,17 @@ _seq : { _op◂{ a' b' } b'→c' }
 
   { { _r64 _r64 } { _r64 _r64 } } = @[ t={ _r64 _r64 } | { t t } ]
   C.[ a' | ]  
+
+
+_pf : _fmt◂a' →→ a'→{ a' _s8 }
+Nd' : _fmt◂{ _ _ __ _r64 < _ }
+_fmt_0d : 
+_fmt_1d :
+_fmt_2d :
+_fmt_3d :
+_pf.mk_q : _pf.fmt◂{ < l' }→→_pf.fmt◂{ }
+_pf.d : _pf.i◂{ _r64 < l' }
+_pf.S : _pf.i◂{ < l' }→→_pf.i◂{ q' < l' }
+_pf.i2 : _pf.t◂a'→→_pf.fmt◂{ t0' t1' a' < l0' }
+
+_fmt_cct : { _fmt◂a' _fmt◂a' }→_fmt◂a' 
