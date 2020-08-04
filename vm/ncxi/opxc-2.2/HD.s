@@ -1,13 +1,18 @@
 %define SS_RCD_2_MAX_P (1<<25)
 %define SS_RCD_3_MAX_P (1<<23)
-%define SS_RCD_4_MAX_P (1<<19)
+%define SS_RCD_4_MAX_P (1<<20)
+%define SS_RCD_5_MAX_P (1<<20)
+%define SS_RCD_6_MAX_P (1<<18)
+%define SS_RCD_7_MAX_P (1<<18)
+%define SS_RCD_8_MAX_P (1<<17)
+
 %define KB 1024
 %define MB KB*KB 
 %define GB MB*MB
 %define SIG_INT 2
 %define SIG_SEGV 11
 %define SS_MAX 4000
-%define SS_LN_MAX 1<<22
+%define SS_LN_MAX 1<<4
 %define SS_LN_REG r15
 %define MCR_REG rbx
 %define SRC_REG r13 

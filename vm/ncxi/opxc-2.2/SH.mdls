@@ -8511,7 +8511,7 @@ unsigned long
 						"\tjz LB_" 0d' "\n" 
 						`	lea rax,[rbx+rsi]
 						"\tmov rsi,rdi\n"
-						"\tmov r10,0"
+						`	mov r10,0
 						"\tjmp LB_" 1d' "\n"			
 						"LB_" 0d' ":\n" 
 						`	mov rsi,unt
@@ -8554,7 +8554,7 @@ unsigned long
 							^ ls,lb0,lb1 ⊢ ls,_,_,sc0 
 								"\tadd rax," 0d' "\n" 
 								"\tmov rsi,unt\n"
-								"\tmov r10,0\n"
+								`	mov r10,0
 								"\tjmp LB_" 2d' "\n" 
 								"LB_" 1d' ":\n" 
 								"\tmov rsi,unt\n" 
@@ -9971,7 +9971,7 @@ unsigned long
 				∎ { n m e }
 			∐ 5r=<n'; n'=<8r . 
 				^ n,m ⊢ n,m,s 
-					"%define SS_RCD_" 0d' "_MAX (1<<16)\n"
+					"%define SS_RCD_" 0d' "_MAX SS_RCD_" 0d' "_MAX_P\n"
 					"\tBSS_SS_RCD " 0d' ",SS_RCD_" 0d' "_MAX\n" 
 					//
 				rp8.add_s8 { e s } ⊢ e 
