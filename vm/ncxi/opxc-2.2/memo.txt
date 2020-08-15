@@ -298,3 +298,17 @@ _pf.S : _pf.i◂{ < l' }→→_pf.i◂{ q' < l' }
 _pf.i2 : _pf.t◂a'→→_pf.fmt◂{ t0' t1' a' < l0' }
 
 _fmt_cct : { _fmt◂a' _fmt◂a' }→_fmt◂a' 
+
+§ f◂◂F x 
+  $ x ⊢ 
+  ∐ _cns◂{ a x } .
+    F x ⊢ i 
+    _inc i ⊢ i 
+    ∎ i 
+  ∐. _nil◂{} . 
+    ∎ %[ 0r ]
+    f◂◂(f◂◂F) 
+
+
+  AST → pseudo-assembly → assembly
+  _[ x = { x %[ 0r ] } ]
