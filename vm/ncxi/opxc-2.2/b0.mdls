@@ -1,0 +1,39 @@
+§ @.lp◂◂F { v n i } 
+  ∐ n'=i' . 
+    ∎ v 
+  ∐. .
+    F v ⊢ v 
+    _inc i ⊢ i 
+    lp◂◂F { v n i } ⊢| 
+
+§ f x 
+  $ x ⊢ 
+  ∐ _cns◂{ a x } . 
+    $ x ⊢ 
+    ∐ _cns◂{ b x } . 
+      $ a ⊢ 
+      ∐ _some◂a . 
+        $ b ⊢ 
+        ∐ _some◂b . 
+          _add { a b } ⊢ { a b } 
+          ∎ ⟦ ‹ b › ‹ a › < x ⟧
+        ∐. _none◂{} . 
+          $ a ⊢ a,b 
+          ∎ ⟦ ‹ a › ‹ b › < x ⟧ 
+      ∐. _none◂{} . 
+        $ b ⊢ 
+        ∐ _some◂b . 
+          $ b ⊢ b,a 
+          _add { a b } ⊢ { a b } 
+          ∎ ⟦ ‹ b › ‹ a › < x ⟧
+        ∐. _none◂{} .
+          ∎ ⟦ ‹ %[ 0r ] › ‹ %[ 2r ] › < x ⟧
+    ∐. _nil◂{} . 
+      ∎ ⟦ a ‹ %[ 3r ] › ⟧ 
+  ∐. _nil◂{} . 
+    ∎ ⟦ ‹ %[ 9r ] › ‹ %[ 4r ] › ⟧ 
+
+§% 
+  lp◂◂f { ⟦ ‹ %[ 4r ] › ⟧ %[ 10000000r ] %[ 0r ] } ⊢ _ 
+  ∎
+
