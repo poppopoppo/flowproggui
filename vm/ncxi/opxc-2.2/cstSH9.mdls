@@ -48,13 +48,15 @@
 		_xor { h h0 } ⊢ { h _ } 
 		∎ { s h }
 	§% 
+	\[
     $ %[ "e" ] ⊢ s 
     \\_lds64 { s %[ 0r ] } ⊢ { s _ x } 
     \\_emt x ⊢ _ 
     hsh s ⊢ { _ h }  
 		_emt h ⊢ _ 
+  \]
 		∎
-  §§  el
+	§§  el
 		§ @.asc { { s {} } l } 
 			$ l ⊢ 
 			∐ _cns◂{ { t v } l } . 
@@ -88,39 +90,42 @@
 				$ s ⊢ s,s0
 				∎ { { s ‹› } ⟦ { s0 w } ⟧ } 
 		∎∎
-	§ ini n 
+	§ ini # n 
 		_shl { %[ 1r ] n } ⊢ { l n }  
 		_mk_arr { l ⟦⟧ } ⊢ { l _ a } 
 		_dec l ⊢ l 
 		∎ { l a } 
-	§ f◂◂F { { m a } { s v } }
+	§ f◂◂F # { { m a } { s v } }
 		hsh s ⊢ { s h } 
 		_and { h m } ⊢ { h m } 
 		_exc_q { a h ⟦⟧ } ⊢ { a h l }
 		F { { s v } l } ⊢ { { s w } l }
 		_exc_q { a h l } ⊢ { a h _ } 
 		∎ { { m a } { s w } } 
-	§ asc { t s } 
+	§ asc # { t s } 
 		f◂◂el.asc { t { s {} } } ⊢ { t { s o } }
 		∎ { t { s o } } 
-	§ get { t s } 
+	§ get # { t s } 
 		f◂◂el.get { t { s {} } } ⊢ { t { s o } }
 		∎ { t { s o } }
 	§ set = f◂◂el.set
 	§% 
     ini %[ 5r ] ⊢ a 
-    set { a { %[ "foo" ] %[ 4r ] } } ⊢ { a { _ o } }
-    _emt o ⊢ _ 
+    \\set { a { %[ "foo" ] %[ 4r ] } } ⊢ { a { _ o } }
+    \\_emt o ⊢ _ 
     set { a { %[ "ywww" ] %[ 5r ] } } ⊢ { a { _ o } }
-    _emt o ⊢ _ 
-    asc { a %[ "foo" ] } ⊢ { a { _ o } } 
-    _emt o ⊢ _ 
+    $ o ⊢ _ 
+		\\_emt o ⊢ _ 
+   \\ asc { a %[ "foo" ] } ⊢ { a { _ o } } 
+   \\ _emt o ⊢ _ 
     _emt a ⊢ a 
     get { a %[ "ywww" ] } ⊢ { a { _ o } }
+	\[
     _emt o ⊢ o 
 		_dlt o ⊢ {} 
+  \]
     ∎ 
-  \[
+	\[
   § fld_i◂◂F { { { m a } n v } i } 
     ∐ n'=i' .
       ∎ { { m a } v }
@@ -165,8 +170,8 @@
 §% 
 	\\f0◂◂f1 %[ 3r ] ⊢ x 
 	\\_emt x ⊢ _ 
-	f2 %[ 3r ] ⊢ x 
-	_emt x ⊢ _ 
+	\\f2 %[ 3r ] ⊢ x 
+	\\_emt x ⊢ _ 
 	\\lp◂◂f2 { { %[ 100000000r ] %[ 3r ] } %[ 0r ] } ⊢ { _ x } 
 	\\_emt x ⊢ x 
 	∎ 
