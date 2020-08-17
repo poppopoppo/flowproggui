@@ -7832,8 +7832,8 @@ unsigned long
 				∎∎ 
 			§§ lc_code 
 				¶ rf 	
-					∐ rf_t : {} 
-					∐ rf_f : {} 
+					∐ rf_t : _r64
+					∐ rf_f : _r64 
 					∐ rf_k : _r64  
 				§§ rep_movsb
 					§ 
@@ -8864,13 +8864,14 @@ unsigned long
 					$ rfb_g0 ⊢ 
 					∐ _some◂l . 
 						∐ l'=<rfl' . 
-							hsh_tbl.r64.set { rfv { o rf_t◂{} } } ⊢ { rfv { o _ } } 
+							hsh_tbl.r64.set { rfv { o rf_t◂l } } ⊢ { rfv { o _ } } 
 							∎ { bl.t◂{} rfv o rfl rfb %[ ";; rfb=t\n" ] }
 						∐. . 
-							hsh_tbl.r64.set { rfv { o rf_f◂{} } } ⊢ { rfv { o _ } } 
+							hsh_tbl.r64.set { rfv { o rf_f◂l } } ⊢ { rfv { o _ } } 
 							∎ { bl.f◂{} rfv o rfl rfb %[ ";; rfb=f\n" ] }
 					∐. _none◂{} . 
-						hsh_tbl.r64.set { rfv { o rf_f◂{} } } ⊢ { rfv { o _ } } 
+						$ rfl ⊢ rfl,l
+						hsh_tbl.r64.set { rfv { o rf_f◂l } } ⊢ { rfv { o _ } } 
 						∎ { bl.f◂{} rfv o rfl rfb %[ ";; rfb=f\n" ] }					
 				§ 
 					@.stt_etr { rfv oa0 { og ok dp r_ng ibg } { o_n ys yr } { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rv tav tv_n tv lcg { eg0 eds } } 
@@ -8879,10 +8880,16 @@ unsigned long
 							$ rfv ⊢ { rfl rfb rfv } 
 							hsh_tbl.r64.asc { rfv ig } ⊢ { rfv { ig a0 } }
 							smt a0 ⊢ rfb0 
-							∐ rfb0 ⊢ rf_k◂l . 
+							$ rfb0 ⊢ 
+							∐  rf_k◂l . 
 								min_rfv { ‹ l › rfb } ⊢ rfb  
 								∎ { bl.t◂{} { rfl rfb rfv } { lb ig o_k gys p0 gyd } yr { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rv tav tv_n tv { eg0 eds } } 
-							∐. . 
+							∐ rf_t◂l . 
+								∐ l'=<rfl' . 
+									∎ { bl.t◂{} { rfl rfb rfv } { lb ig o_k gys p0 gyd } yr { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rv tav tv_n tv { eg0 eds } } 
+								∐. . 
+									∎ { bl.f◂{} { rfl rfb rfv } { lb ig o_k gys p0 gyd } yr { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rv tav tv_n tv { eg0 eds } } 									
+							∐. rf_f◂l . 
 								∎ { bl.f◂{} { rfl rfb rfv } { lb ig o_k gys p0 gyd } yr { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rv tav tv_n tv { eg0 eds } } 
 						∐. _none◂{} . 
 							$ yr ⊢ yr,yr0
@@ -8916,7 +8923,7 @@ unsigned long
 									stt_v.mk_rset_env_x { irv rl } ⊢ { irv rl v } 
 									rset.max_t v ⊢ { v mi } 
 									_inc mi ⊢ mi 
-									\\∐ bf ⊢ bl.t◂{} . 
+									∐ bf ⊢ bl.t◂{} . 
 										push_gl { { v mi %[ 0r ] ⟦⟧ er } %[ 0r ] } ⊢ { { _ mi c l er } _ } 
 										$ rsp ⊢ rsp,rsp1 
 										$ l ⊢ l,l0 
@@ -8934,7 +8941,7 @@ unsigned long
 										pop_gl { ec0 l } ⊢ ec0 
 										$ f_c ⊢ _ 
 										∎ { rfv f_call◂{} { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 ew1 } rl { p1 yr } } 
-									\[
+									\\[
 									∐. . 
 										$ rsp ⊢ rsp,rsp1 
 										^ lb_w ⊢ lb_w,s0 
@@ -8950,7 +8957,7 @@ unsigned long
 										mov_ptn2.alc_ptn { { ec0 glv_n } p1 } ⊢ { { ec0 glv_n } p1 } 
 										$ f_c ⊢ _ 
 										∎ { rfv f_call◂{} { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } rsp { rv irv } tav tv_n tv { eg0 eds ec0 ew1 } rl { p1 yr } } 
-							\]
+							\\]
 							∐ k ⊢ ast.k_app◂{ k0 k1 } . 
 								_emt %[ "stt_call app 1" ] ⊢ _
 								∎|  
