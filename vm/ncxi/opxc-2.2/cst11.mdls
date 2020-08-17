@@ -116,8 +116,9 @@
 		f◂◂el.get { t { s {} } } ⊢ { t { s o } }
 		∎ { t { s o } }
 	§ set = f◂◂el.set
-	§% 
-    ini %[ 1r ] ⊢ a 
+
+  §% 
+    ini %[ 2r ] ⊢ a 
     set { a { %[ "ywww" ] %[ 5r ] } } ⊢ { a { _ o } }
     $ o ⊢ _ 
 	  _emt a ⊢ a 
@@ -125,3 +126,4 @@
     get { a %[ "ywww" ] } ⊢ { a { _ o } }
     ∎ 
   ∎∎
+ 
