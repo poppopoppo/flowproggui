@@ -312,3 +312,7 @@ _fmt_cct : { _fmt◂a' _fmt◂a' }→_fmt◂a'
 
   AST → pseudo-assembly → assembly
   _[ x = { x %[ 0r ] } ]
+
+  &[ t' = _pcp◂{' a~_r64 b~_s8 c~t' } ]
+  &[ t'::_rpc | { t' t' } ] 
+  {+ _r8 * 4r }
