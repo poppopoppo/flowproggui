@@ -1,5 +1,12 @@
 § f x 
   ∎ x 
+§ @.hsh_i { n i } 
+		∐ i'=n' . 
+			_inc i ⊢ i 
+      ∎ {}
+		∐. .
+			hsh_i { n i } ⊢| 
 §% 
   f %[ 0r ] ⊢ x 
+  hsh_i { %[ 0r ] %[ 0r ] } ⊢ _
   ∎ 
