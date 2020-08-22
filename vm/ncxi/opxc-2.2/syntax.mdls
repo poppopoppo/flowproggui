@@ -8855,7 +8855,7 @@ unsigned long
 									stt_v.mk_rset_env_x irv ⊢ { irv v } 
 									rset.max_t v ⊢ { v mi } 
 									_inc mi ⊢ mi 
-									\\∐ bf ⊢ bl.t◂{} . 
+									∐ bf ⊢ bl.t◂{} . 
 										push_gl { { v mi %[ 0r ] ⟦⟧ er } %[ 0r ] } ⊢ { { _ mi c l er } _ } 
 										$ l ⊢ l,l0 
 										^ lb_w ⊢ lb_w,s0 
@@ -8872,7 +8872,7 @@ unsigned long
 										pop_gl { ec0 l } ⊢ ec0 
 										$ f_c ⊢ _ 
 										∎ { rfv f_call◂{} { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv }  { rv irv } tav tv_n tv { eg0 eds ec0 ew1 } { p1 yr } } 
-									\[
+									\\[
 									∐. . 
 										^ lb_w ⊢ lb_w,s0 
 											"\tpush EXH_" 0d' "\n" // 
@@ -8887,7 +8887,7 @@ unsigned long
 										mov_ptn2.alc_ptn { { ec0 glv_n } p1 } ⊢ { { ec0 glv_n } p1 } 
 										$ f_c ⊢ _ 
 										∎ { rfv f_call◂{} { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv }  { rv irv } tav tv_n tv { eg0 eds ec0 ew1 } { p1 yr } } 
-							\]
+							\\]
 							∐ k ⊢ ast.k_app◂{ k0 k1 } . 
 								_emt %[ "stt_call app 1" ] ⊢ _
 								∎|  
@@ -9438,7 +9438,7 @@ unsigned long
 							rp8.add_s8 { ec0 ec1 } ⊢ ec0 
 							dlt.env { gfl evv irv tv_n tv tav lb_n glv_n { eg0 eds ec0 } } ⊢ { gfl evv irv tv_n tv tav lb_n glv_n { eg0 eds ec0 } } 
 							$ irv ⊢ _ 
-							hsh_tbl.ini %[ 10r ] ⊢ irv 
+							hsh_tbl.ini %[ 6r ] ⊢ irv 
 							\\hsh_tbl.is_empty irv ⊢ { irv b } 
 							\\bl.is_t b ⊢ {} 
 							\\[
@@ -9578,7 +9578,7 @@ unsigned long
 								\\hsh_tbl.is_empty irv ⊢ { irv b } 
 								\\bl.is_t b ⊢ {} 
 								$ irv ⊢ _ 
-								hsh_tbl.ini %[ 10r ] ⊢ irv 
+								hsh_tbl.ini %[ 6r ] ⊢ irv 
 								∐ ft ⊢ f_etr◂{ lb_i rsp_d pr yr } . 
 									$ pr ⊢ pr,pr0 
 									mov_ptn2.ptn { ec0 { evv tav tv_n tv eds } glv_n is pr0 } ⊢ { ec0 { evv tav tv_n tv eds } glv_n } 
@@ -9663,7 +9663,7 @@ unsigned long
 						$ p0 ⊢ p0,p0_f 
 						mov_ptn2.alc_ptn { { ee0 glv_n } p0_f } ⊢ { { ee0 glv_n } p0_f } 
 						$ p0_f ⊢ p0_f,p00 
-						hsh_tbl.ini %[ 12r ] ⊢ irv_g 
+						hsh_tbl.ini %[ 6r ] ⊢ irv_g 
 						idx.crt_ptn { irv_g dp p00 _nil◂{} } ⊢ { irv_g dl } 
 						$ lbg ⊢ lbg,lbg0 
 						$ gyd ⊢ gyd,gyd0
@@ -10548,7 +10548,7 @@ unsigned long
 			\\_emt sep0 ⊢ _ 
 			hsh_tbl.ini %[ 10r ] ⊢ rfv
 			\\ini_tv_n %[ 160003r ] ⊢ { _ irv } 
-			hsh_tbl.ini %[ 12r ] ⊢ irv
+			hsh_tbl.ini %[ 6r ] ⊢ irv
 			$ ast.hp◂{ %[ 127r ] ast.hp.arr◂TX.s8◂{} } ⊢ ax0 
 			$ _cns◂{ RP.atm◂%ax0 _nil◂{} } ⊢ rs_i 
 			gnr.idx.crt_lst { irv rs_n rs_i ⟦⟧ } ⊢ { irv dl } 
