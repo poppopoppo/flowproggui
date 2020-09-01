@@ -6,7 +6,17 @@
       ∎ {}
 		∐. .
 			hsh_i { n i } ⊢| 
+§ smt_err◂◂E o 
+	∐ o ⊢ _some◂a .
+		∎ a 
+	∐. . 
+		_emt %[ "smt_err 0" ] ⊢ _ 
+		_emt %[ E ] ⊢ _ 
+		∎| 
 §% 
   f %[ 0r ] ⊢ x 
   hsh_i { %[ 0r ] %[ 0r ] } ⊢ _
+  smt_err◂◂"slv_type" ‹ %[ 0r ] › ⊢ i 
+  smt_err◂◂"FF" _some◂%[ "ff" ] ⊢ _ 
+  _emt i ⊢ _
   ∎ 
