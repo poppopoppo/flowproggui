@@ -13,10 +13,16 @@
 		_emt %[ "smt_err 0" ] ⊢ _ 
 		_emt %[ E ] ⊢ _ 
 		∎| 
+§ f0 x 
+	∎| 
+§ f1 x 
+	f0 %[ 0r ] ⊢ { _ _ } 
+	∎ x 
 §% 
   f %[ 0r ] ⊢ x 
   hsh_i { %[ 0r ] %[ 0r ] } ⊢ _
   smt_err◂◂"slv_type" ‹ %[ 0r ] › ⊢ i 
   smt_err◂◂"FF" _some◂%[ "ff" ] ⊢ _ 
   _emt i ⊢ _
-  ∎ 
+  f1 %[ 9r ] ⊢ _ 
+	∎ 
