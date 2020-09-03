@@ -1,6 +1,6 @@
 %define SS_RCD_2_MAX_P (1<<25)
 %define SS_RCD_3_MAX_P (1<<23)
-%define SS_RCD_4_MAX_P (1<<20)
+%define SS_RCD_4_MAX_P (1<<2)
 %define SS_RCD_5_MAX_P (1<<20)
 %define SS_RCD_6_MAX_P (1<<18)
 %define SS_RCD_7_MAX_P (1<<18)
