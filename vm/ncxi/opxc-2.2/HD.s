@@ -1,6 +1,6 @@
 %define SS_RCD_2_MAX_P (1<<25)
 %define SS_RCD_3_MAX_P (1<<23)
-%define SS_RCD_4_MAX_P (1<<2)
+%define SS_RCD_4_MAX_P (1<<22)
 %define SS_RCD_5_MAX_P (1<<20)
 %define SS_RCD_6_MAX_P (1<<18)
 %define SS_RCD_7_MAX_P (1<<18)
@@ -27,6 +27,13 @@
 bits 64 
 %define SS_LN_N QWORD [SS_LN_N_PT]
 ; macros 
+%macro BC 1
+	mov rsi,BC_PT ; BC_PT is static address
+	;mov rsi,rsp ; rsp is dynamic address
+	mov MCR_REG,0xff00ff00ff
+  cmov%1 rsi,MCR_REG
+  mov rsi,QWORD [rsi]
+%endmacro 
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
 	call emt_stg 
