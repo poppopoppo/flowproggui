@@ -53,6 +53,32 @@ sig_hdl_usr:
 	mov QWORD [SIG_RIP],rax
 	ret 
 
+eq_s8_q: ; rdi,rsi
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,QWORD [rdi]
+	mov rdx,0x0000_ffff_ffff_ffff
+	and rdx,QWORD [rsi]
+	cmp rax,rdx
+	jnz eq_s8_q_f
+	;mov rcx,rax 
+	;and rcx,0b111 
+	shr rax,3 
+	add rax,1
+eq_s8_q_lp:
+	cmp rax,0
+	jz eq_s8_q_t
+	mov rdx,QWORD [rdi+8*rax]
+	cmp QWORD [rsi+8*rax],rdx 
+	jnz eq_s8_q_f 
+	sub rax,1 
+	jmp eq_s8_q_lp 
+eq_s8_q_f:
+	mov rax,0 
+	;stz
+	ret 
+eq_s8_q_t:
+	mov rax,1 
+	ret
 eq_s8: ;rdi,rsi
 	push rdx
 	mov rax,0x0000_ffff_ffff_ffff 
