@@ -27,13 +27,20 @@
 bits 64 
 %define SS_LN_N QWORD [SS_LN_N_PT]
 ; macros 
-%macro BC 1
-	mov rsi,BC_PT ; BC_PT is static address
+%macro BC 2
+	mov %2,BC_PT ; BC_PT is static address
 	;mov rsi,rsp ; rsp is dynamic address
 	mov MCR_REG,0xff00ff00ff
-  cmov%1 rsi,MCR_REG
-  mov rsi,QWORD [rsi]
+  cmov%1 %2,MCR_REG
+	mov %2,QWORD [%2]
 %endmacro 
+;%macro BC 1
+;	mov rsi,BC_PT ; BC_PT is static address
+	;mov rsi,rsp ; rsp is dynamic address
+;	mov MCR_REG,0xff00ff00ff
+ ; cmov%1 rsi,MCR_REG
+  ;mov rsi,QWORD [rsi]
+;%endmacro 
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
 	call emt_stg 
