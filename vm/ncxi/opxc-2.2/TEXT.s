@@ -52,6 +52,115 @@ sig_hdl_usr:
 	C_CALL set_usr_hdl 
 	mov QWORD [SIG_RIP],rax
 	ret 
+%define S8_HSH_SEED 0xf7f765d79dabbace
+%define S8_HSH_M 0xc6a4a7935bd1e995
+%define S8_HSH_R 47 
+s8_hsh: ; rdi 
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,QWORD [rdi]
+	mov rsi,rdi 
+	mov rdx,rdi 
+	and rsi,7 
+	and rdx,~111b
+	mov rcx,rax
+	imul rcx,S8_HSH_M
+	xor rcx,S8_HSH_SEED
+	mov r10,0
+s8_hsh_i:
+	cmp r10,rdx
+	jz s8_hsh_i_end  
+	mov rbx,QWORD [rdi+8+8*r10] 
+	add r10,8 
+	imul rbx,S8_HSH_M 
+	mov r8,r10 
+	shr r8,S8_HSH_R 
+	xor r10,r8 
+	imul r10,S8_HSH_M 
+	xor rcx,r10 
+	imul rcx,S8_HSH_M 
+	jmp s8_hsh_i 
+s8_hsh_i_end:
+	add rdx,rsi
+	mov r10b,48
+s8_hsh_m: 
+	cmp r10,0 
+	jz s8_hsh_m_end 
+	sub rdx,1 
+	movzx r8,BYTE [rdi+8+rdx]
+	push rcx 
+	mov rcx,r10 
+	shl r8,cl 
+	pop rcx  
+	sub r10,8 
+	xor rcx,r8 
+	jmp s8_hsh_m 
+s8_hsh_m_end:
+	mov rbx,rcx 
+	shr rbx,S8_HSH_R 
+	xor rcx,rbx 
+	imul rcx,S8_HSH_M 
+	mov rbx,rcx 
+	shr rbx,S8_HSH_R 
+	xor rcx,rbx 
+	mov rax,rcx 
+	ret 
+
+%define C1 0xcc9e_2d51 
+%define C2 0x1b87_3593 
+%define R1 15 
+%define R2 13 
+%define M 5 
+%define N 0xe654_6b64 
+%define SEED 0x9848_3cbf  
+
+mm32: ; rdi=s  
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+	add rdi,8	
+	mov r8,rsi 
+	shr r8,2 
+	;mov rdx,rsi 
+	;and rdx,11b 
+	mov rax,SEED 
+	mov r10d,DWORD [rdi+4*r8]
+mm32_m:
+	cmp r8,0 
+	jz mm32_i 
+	mov ebx,DWORD [rdi-4+4*r8]
+	mov edx,C1 
+	imul ebx,edx 
+	rol ebx,R1 
+	imul ebx,C2 
+	xor eax,ebx
+	rol eax,R2 
+	imul eax,M 
+	add eax,N 	
+	sub r8,1 
+	jmp mm32_m 
+mm32_i:
+	mov edx,C1 
+	imul r10d,edx
+	rol r10d,R1 
+	imul r10d,C2 
+	
+	xor eax,r10d 
+	
+	xor eax,esi 
+
+	mov ebx,eax
+	shr ebx,16 
+	xor eax,ebx 
+	mov rdx,0x85eb_ca6b 
+	imul eax,edx
+	mov ebx,ecx
+	shr ebx,13 
+	xor eax,ebx 
+	mov edx,0xc2b2_ae35 
+	imul eax,edx
+	mov ebx,eax 
+	shr ebx,16 
+	xor eax,ebx
+	ret
 
 eq_s8_q: ; rdi,rsi
 	mov rax,0x0000_ffff_ffff_ffff 
