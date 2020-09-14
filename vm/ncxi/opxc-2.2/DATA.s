@@ -5,19 +5,21 @@
 	GD_BUF_N: dq 0 
 	EMT_FLG: dq 0 
 	err_n: dq 0
- SS_LN_C: dq 0
+	 SS_LN_C: dq 0
 	S8_N: dq 0 
-	
+	CLR_N: dq 0 
+
 	fmt_err_line: db "err:%llx",10,0
 	fmt_r64: db "%dr",0
 	fmt_s8: db 34,"%s",34,0
 	fmt_d: db "%d",0
 	fmt_d_nl: db "%d",10,0
 	fmt_x: db "%x",0
-	fmt_arr_l: db "{| ",0
-	fmt_arr_r: db "|}",0
+	fmt_arr_l: db "{+ ",0
+	fmt_arr_r: db "}",0
 	fmt_rcd_l: db "{ ",0
 	fmt_rcd_r: db "} ",0
+	fmt_Clr_l: db "{= ",0 
 	fmt_rcd_box_l: db "*{ "
 	fmt_nl: db 10,0
 	fmt_spc: db " ",0

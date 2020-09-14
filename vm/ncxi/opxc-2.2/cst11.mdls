@@ -173,3 +173,24 @@
 	g2 %[ "jj" ] ⊢ _ 
 	∎ 
 	
+§ t { v i { x y } } 
+	_add { v x } ⊢ { v x } 
+	_inc x ⊢ x 
+	∎ { v { y x } } 
+
+§% 
+	_mk_arr { %[ 6r ] { %[ 0r ] %[ 4r ] } } ⊢ { _ _ v }
+	_ala◂◂t { %[ 2r ] %[ 3r ] v } ⊢ { x v }
+	_emt { x v } ⊢ _ 
+	∎
+
+§% 
+	_cli {} ⊢ C0 
+	_emt C0 ⊢ C0 
+	_clp { C0 %[ 0r ] } ⊢ { C0 p0 }
+	_emt C0 ⊢ C0
+	_emt p0 ⊢ p0
+	_clp { C0 %[ 2r ] } ⊢ { C0 p1 }
+	_clp { C0 %[ 3r ] } ⊢ { C0 p2 }
+	_emt C0 ⊢ C0
+	∎ 
