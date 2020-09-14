@@ -1,7 +1,7 @@
 %include "HD.s"  
 ;	v.0
 %define RCD_N 32
-%define GLV_N 248
+%define GLV_N 256
 %define SS_NULL 0xffff_ffff_ffff_0000
 %define EMT_BUF_MAX (KB<<1)				
  
@@ -84,11 +84,13 @@ LB_66: db 32,58,32,95,115,56,226,151,130,10,0
 LB_71: db 32,58,32,95,114,54,52,226,151,130,10,0
 LB_73: db 32,58,32,95,114,54,52,226,151,130,10,0
 LB_89: db 32,58,32,123,32,95,114,54,52,226,151,130,32,95,97,114,114,226,151,130,123,32,95,114,54,52,226,151,130,32,95,114,54,52,226,151,130,125,125,10,0
-LB_94: db 32,58,32,95,67,108,114,226,151,130,56,57,51,39,40,49,41,10,0
+LB_94: db 32,58,32,95,67,108,114,226,151,130,57,49,48,39,40,49,41,10,0
 LB_97: db 32,58,32,95,67,108,114,226,151,130,95,114,54,52,226,151,130,10,0
 LB_98: db 91,61,93,0
 LB_99: db 32,58,32,95,112,116,226,151,130,95,114,54,52,226,151,130,10,0
 LB_102: db 32,58,32,95,67,108,114,226,151,130,95,114,54,52,226,151,130,10,0
+LB_105: db 32,58,32,95,114,54,52,226,151,130,10,0
+LB_108: db 32,58,32,95,67,108,114,226,151,130,95,114,54,52,226,151,130,10,0
 section .text
 	unt_1: dq (1<<48)
 	unt_2: dq (2<<48)
@@ -708,7 +710,7 @@ ss_end_rcd_31:
 	mov [rax],rsi 
 	jmp RTM_0
 ;; rfb=f
-LB_0: ;; #82◂◂(_none◂{}) 128'(= r ) ⊢ { 0'(= r ) 1'(= {| ? |} ) } : (_r64◂→{ _r64◂ _arr◂_lst◂529'(=530'(0))})
+LB_0: ;; #82◂◂(_none◂{}) 128'(= r ) ⊢ { 0'(= r ) 1'(= {| ? |} ) } : (_r64◂→{ _r64◂ _arr◂_lst◂546'(=547'(0))})
 JMP_0:
 	MOV_RBX GLX(129),GLX(128)
 ;; %0~129'(= r )
@@ -1869,9 +1871,8 @@ LB_78:
 	jge err_exc_q
 	 imul rax,2
 	push rdi 
-	lea rdi,[rdi+8+8*rax]
-	push rdi 
-	mov SRC_REG,rdi 
+	lea SRC_REG,[rdi+8+8*rax]
+	push SRC_REG
 	MOV_RDI GLX(230),SX(0)
 	MOV_RDI GLX(231),SX(1)
 	push EXH_86
@@ -1978,6 +1979,16 @@ EXH_86:
 	add rsp,8
 	pop rax
 	jmp rax
+;; rfb=f
+LB_103: ;; #92◂◂(_none◂{}) { 249'(= r ) 250'(= r ) } ⊢ { 0'(= r ) 1'(= r ) } : ({ _r64◂ _r64◂}→{ _r64◂ _r64◂})
+JMP_103:
+	MOV_RBX GLX(251),GLX(249)
+	MOV_RBX GLX(252),GLX(250)
+;; %0~251'(= r )%1~252'(= r )
+; ∎ { 252'(= r ) 251'(= r ) }
+	MOV_RBX GLX(0),GLX(252)
+	MOV_RBX GLX(1),GLX(251)
+	ret
 RTM_5:
 ;; %0~127'(= {| ? |} )%7~{ 207'(= r ) 208'(= {| ? |} ) }%9~210'(6)◂211'
 ; ##62 { } ⊢ 244'(= [| _ |] )
@@ -2163,8 +2174,93 @@ LB_101:
 	EMT_FLSH
 	mov QWORD [SIG_FLG],0
 ;; %0~127'(= {| ? |} )%7~{ 207'(= r ) 208'(= {| ? |} ) }%9~210'(6)◂211'%36~245'(= [| _ |] )%38~246'(= [| _ |] )%40~247'(= [| _ |] )%41~244'(= [| _ |] )
+; # ?  { %[ 5r ] 247'(= [| _ |] ) 244'(= [| _ |] ) } ⊢ { 255'(= r ) 247'(= [| _ |] ) 244'(= [| _ |] ) }
+	mov rax,GLX(247)
+	mov rdi,GLX(244)
+	mov rsi,QWORD [rax+8] 
+	cmp QWORD [rdi+8],rsi 
+	jnz err_exc_q
+	push rdi 
+	push rax 
+	lea SRC_REG,[rax+24]
+	push SRC_REG 
+	MOV_RDI GLX(248),SX(0)
+	push EXH_104
+	mov rax,5
+	mov GLX(249),rax
+	MOV_RBX GLX(250),GLX(248)
+	call LB_103
+	add rsp,8
+	MOV_RBX GLX(253),GLX(0)
+	MOV_RBX GLX(254),GLX(1)
+	pop DST_REG
+	pop GLX(247)
+	pop GLX(244)
+	MOV_RDI DX(0),GLX(254)
+	MOV_RBX GLX(255),GLX(253)
+;; %0~127'(= {| ? |} )%7~{ 207'(= r ) 208'(= {| ? |} ) }%9~210'(6)◂211'%36~245'(= [| _ |] )%38~246'(= [| _ |] )%42~255'(= r )%43~247'(= [| _ |] )%44~244'(= [| _ |] )
+; ##8 255'(= r ) ⊢ 255'(= r )
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,GLX(255)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_CST LB_105,11
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+; .dlt.ptn 255'(= r )
+;; %0~127'(= {| ? |} )%7~{ 207'(= r ) 208'(= {| ? |} ) }%9~210'(6)◂211'%36~245'(= [| _ |] )%38~246'(= [| _ |] )%43~247'(= [| _ |] )%44~244'(= [| _ |] )
+; ##8 244'(= [| _ |] ) ⊢ 244'(= [| _ |] )
+	mov QWORD [SIG_FLG],1
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,GLX(244)
+	C_PUSH_REGS
+	mov r8,rdi 
+	EMT_CST fmt_Clr_l,8
+	mov rsi,QWORD [r8+16]
+	mov rax,QWORD [r8+24]
+	push SRC_REG 
+	push r8 
+LB_106:
+	cmp rsi,0 
+	jz LB_107
+	lea SRC_REG,QWORD [rax+24]
+	mov rax,QWORD [rax] 
+	sub rsi,1 
+	push rsi 
+	push rax 
+	mov rdi,SX(0)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_spc,4
+	pop rax 
+	pop rsi 
+	jmp LB_106
+LB_107:
+	pop r8 
+	pop SRC_REG
+	EMT_CST fmt_rcd_r,4
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_CST LB_108,18
+	EMT_FLSH
+	mov QWORD [SIG_FLG],0
+;; %0~127'(= {| ? |} )%7~{ 207'(= r ) 208'(= {| ? |} ) }%9~210'(6)◂211'%36~245'(= [| _ |] )%38~246'(= [| _ |] )%43~247'(= [| _ |] )%46~244'(= [| _ |] )
 ; ∎
 	jmp RTM_6
+EXH_104:
+	add rsp,8
+	pop rax
+	jmp rax
 RTM_6:
 	C_CALL exit
 

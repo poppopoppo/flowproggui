@@ -183,7 +183,8 @@
 	_ala◂◂t { %[ 2r ] %[ 3r ] v } ⊢ { x v }
 	_emt { x v } ⊢ _ 
 	∎
-
+§ l { y x } 	
+	∎ { x y } 
 §% 
 	_cli {} ⊢ C0 
 	_emt C0 ⊢ C0 
@@ -192,5 +193,8 @@
 	_emt p0 ⊢ p0
 	_clp { C0 %[ 2r ] } ⊢ { C0 p1 }
 	_clp { C0 %[ 3r ] } ⊢ { C0 p2 }
+	_emt C0 ⊢ C0
+	_cla◂◂l { %[ 5r ] p2 C0 } ⊢ { x p2 C0 }  
+	_emt x ⊢ _  
 	_emt C0 ⊢ C0
 	∎ 
