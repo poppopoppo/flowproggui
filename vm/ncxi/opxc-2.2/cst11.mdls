@@ -197,4 +197,6 @@
 	_cla◂◂l { %[ 5r ] p2 C0 } ⊢ { x p2 C0 }  
 	_emt x ⊢ _  
 	_emt C0 ⊢ C0
+	_cln C0 ⊢ { C0 p3 } 
+	_emt C0 ⊢ C0 
 	∎ 
