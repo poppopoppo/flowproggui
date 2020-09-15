@@ -346,3 +346,12 @@ a b c
 
   {+ a b c d } 
   {= a b c d } 
+
+  p' = _pt◂{ p' a p' }
+  k' = { _pt◂k' a _pt◂k' }
+  ¶ @.k  
+    ∐ c : { _pt◂k a _pt◂k } 
+
+  ¶ @.p 
+    ∐ c : _pt◂{ p a p }
+
