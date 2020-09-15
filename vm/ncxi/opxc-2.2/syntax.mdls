@@ -10423,6 +10423,7 @@ unsigned long
 											∎|					
 									∐. . 
 										∎| 
+								\\ cln 
 								∐ 
 									∐ is ⊢ RP.atm◂ast.hp◂{ r0 _ } . 
 										$ yr ⊢ yr,yr0 
@@ -10444,7 +10445,8 @@ unsigned long
 											"\tmov GLX(" 2d' "),rax\n" 
 											"\tmov rdi,GLX(" 1d' ")\n"
 											`	mov rsi,QWORD [rdi+8]
-											`	or rsi,0xf000_0000_0000_0000 
+											\\`	or rsi,0xf000_0000_0000_0000 
+											`	bts rsi,63 
 											`	mov QWORD [rax+8],rsi 
 											`	mov QWORD [rax+16],1 
 											//
@@ -10454,6 +10456,47 @@ unsigned long
 										∎ { V rfv { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } { rv irv } tav tv_n tv { eg0 eds ec0 rp8.e◂{} } { iy yr } } 																										
 									∐. . 
 										∎| 
+								\\ cls 
+								∐ 
+									∐ is ⊢ RP.rcd◂_cns◂{ RP.atm◂ast.hp◂{ r0 _ } _cns◂{ RP.atm◂ast.hp◂{ i0 _ } _cns◂{ pk _nil◂{} } } } . 
+										$ yr ⊢ yr,yr0 
+										inst { tv_n tv %[ 1r ] yr0 } ⊢ { tv_n tv lv yr0 }
+										newvar_l { tv_n tv lv } ⊢ { tv_n tv lv v0 } 
+										newvar_l { tv_n tv lv } ⊢ { tv_n tv lv v1 } 
+										$ v0 ⊢ v0,v0_0,v0_1 
+										$ v1 ⊢ v1 
+										T.unify.f { tv RP.cns2◂{ TX.Clr◂v0_0 TX.pt◂v0_1 } yr0 } ⊢ tv 
+										_dec lv ⊢ lv 
+										gen { tv_n tv lv v0 } ⊢ { tv_n tv lv yk } 
+										gen { tv_n tv lv v1 } ⊢ { tv_n tv lv _ } 
+										$ yk ⊢ yk,yk0 
+										alc_type_k.f_i { tav tv_n tv %[ 0r ] yk0 } ⊢ { tav tv_n tv c_n pa0 }
+										_add { c_n %[ 2r ] } ⊢ { c_n _ } 
+										^ c_n,r0,i0 ⊢ _,r0,i0,sc0 
+											"\tmov rdi,GLX(" 1d' ")\n"
+											"\tmov rax,GLX(" 2d' ")\n" 
+											`	mov rsi,QWORD [rax+8]
+											`	bt rsi,63 
+											`	jnc err_exc_q 
+											`	mov rbx,0x0fff_ffff_ffff_ffff
+											`	and rsi,rbx
+											`	cmp QWORD [rdi+8],rsi 
+											`	jnz err_exc_q 
+											`	mov QWORD [rax+8],rsi 
+											`	mov rsi,QWORD [rdi+24]
+											`	mov QWORD [rax],rsi 
+											`	mov QWORD [rdi+24],rax 
+											`	add QWORD [rdi+16],1 
+											`	add QWORD [rax+16],1 
+											`	lea DST_REG,[rax+24]
+											//
+										rp8.add_s8 { ec0 sc0 } ⊢ ec0 
+										mov_ptn2.to_sgm_ptn { ec0 { evv tav tv_n tv eds } glv_n pk pa0 } ⊢ { ec0 { evv tav tv_n tv eds } glv_n } 
+										$ yk ⊢ yk,yk0 
+										$ RP.cns2◂{ stt_v.Clr_reg◂{ r0 yk } stt_v.pt_reg◂{ i0 yk0 } } ⊢ iy 
+										∎ { V rfv { gfl cl mfv } glv_n ei_n lb_n { ev_n ev evv } { rv irv } tav tv_n tv { eg0 eds ec0 rp8.e◂{} } { iy yr } } 																										
+									∐. . 
+										∎|
 								∐.  
 									^ a ⊢ a,ee1 
 										"; ##" 0d' ".. ⊢ ..\n"
