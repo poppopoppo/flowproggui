@@ -34,10 +34,13 @@
 	§ SEED = 0xf7f765d79dabbacer
 	§ M = 0xc6a4a7935bd1e995r
 	§ R = 47r 
+	\\[
 	§ @.hsh_i { { s n h } i } 
 		∐ i'=n' . 
-			∎ { s n h }
+			∎| 
+			\\∎ { s n h }
 		∐. .
+			\[
 			_lds64 { s i } ⊢ { s i k } 
 			_add { i %[ 8r ] } ⊢ { i _ } 
 			_imul { k %[ M ] } ⊢ { k _ } 
@@ -47,7 +50,11 @@
 			_imul { k %[ M ] } ⊢ { k _ } 
 			_xor { h k } ⊢ { h _ } 
 			_imul { h %[ M ] } ⊢ { h _ } 
-			hsh_i { { s n h } i } ⊢| 
+			\]
+			\\hsh_i { { s n h } i } ⊢| 
+			∎| 
+			\\]
+\[
 	§ @.hsh_m { { s h m } { x n } } 
 		∐ x'=0r . 
 			_imul { h m } ⊢ { h _ } 
@@ -116,7 +123,7 @@
 		f◂◂el.get { t { s {} } } ⊢ { t { s o } }
 		∎ { t { s o } }
 	§ set = f◂◂el.set
-
+\[
   §% 
     ini %[ 2r ] ⊢ a 
     set { a { %[ "ywww" ] %[ 5r ] } } ⊢ { a { _ o } }
@@ -125,7 +132,10 @@
     \\$ a ⊢ a,a0 
     get { a %[ "ywww" ] } ⊢ { a { _ o } }
     ∎ 
-  ∎∎
+  \]
+	\]
+	∎∎
+\[	
  
 § g0 x 
 	=+ x' 
@@ -139,7 +149,6 @@
 		∎ %[ "f90" ] 
 	∐. 
 		∎ %[ "2" ] 
-		
 §% 
 	g0 %[ 0r ] ⊢ s 
 	_emt s ⊢ _ 
@@ -158,6 +167,7 @@
 		∎ %[ 3r ] 
 	∐. . 
 		∎ %[ 5r ]
+
 §% 
 	g1 %[ 2r ] ⊢ x 
 	_emt x ⊢ _ 
@@ -185,6 +195,7 @@
 	∎
 § l # { y x } 	
 	∎ { x y } 
+
 § cls = _cls
 § c x 
 	_cls x ⊢|
@@ -205,3 +216,4 @@
 	_cls { C0 p3 %[ 99r ] } ⊢ { C0 p3 }
 	_emt C0 ⊢ C0
 	∎ 
+\]

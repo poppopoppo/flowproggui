@@ -26,3 +26,24 @@
   _emt i ⊢ _
   f1 %[ 9r ] ⊢ _ 
 	∎ 
+	§ M = 0r 
+	§ R = 1r 
+	§§ M 
+		§ @.hsh_i { { s n h } i } 
+		∐ i'=n' . 
+			∎ { s n h }
+		∐. .
+			_lds64 { s i } ⊢ { s i k } 
+			_add { i %[ 8r ] } ⊢ { i _ } 
+			_imul { k %[ M ] } ⊢ { k _ } 
+			$ k ⊢ k,k0 
+			_shr { k0 %[ R ] } ⊢ { k0 _ } 
+			_xor { k k0 } ⊢ { k _ }
+			_imul { k %[ M ] } ⊢ { k _ } 
+			_xor { h k } ⊢ { h _ } 
+			_imul { h %[ M ] } ⊢ { h _ } 
+			\[
+			\]
+			hsh_i { { s n h } i } ⊢| 
+		∎∎ 
+		

@@ -162,6 +162,35 @@ mm32_i:
 	xor eax,ebx
 	ret
 
+cmp_s8: 
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,QWORD [rdi]
+	mov rdx,0x0000_ffff_ffff_ffff
+	and rdx,QWORD [rsi]
+	cmp rax,rdx
+	jg cmp_s8_g 
+	jl cmp_s8_l 
+	shr rax,3 
+	add rax,1
+cmp_s8_lp:
+	cmp rax,0
+	jz cmp_s8_e
+	mov rdx,QWORD [rdi+8*rax]
+	cmp QWORD [rsi+8*rax],rdx 
+	jg cmp_s8_g 
+	jl cmp_s8_l  
+	sub rax,1 
+	jmp cmp_s8_lp 
+cmp_s8_l:
+	mov rax,0 
+	ret 
+cmp_s8_e:
+	mov rax,1 
+	ret
+cmp_s8_g: 
+	mov rax,2
+	ret
+
 eq_s8_q: ; rdi,rsi
 	mov rax,0x0000_ffff_ffff_ffff 
 	and rax,QWORD [rdi]
