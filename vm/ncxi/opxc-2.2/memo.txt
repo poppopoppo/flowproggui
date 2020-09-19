@@ -355,3 +355,34 @@ a b c
   ¶ @.p 
     ∐ c : _pt◂{ p a p }
 
+
+  _bgn : {} ⊢ { _In◂v' _Out◂v' } ; bi generation 
+  _bfs : { _M◂{ w0' '{ In~v' < p0' } } _M◂{ w1' '{ Out~v' < p1' } } } ⊢ { w0' w1' } ; bi fusion 
+
+
+    <=< x',y' 
+    ; x'<y'
+    ∐ . 
+      ..
+    ; x'=y'
+    ∐ .
+    ; y'<x'
+    ∐. . 
+
+    _Cmn◂{ {} i' } 
+    _Cmn◂{ i' {} }
+
+
+
+  _getchar : _Ext.t → { _Ext.t _r64 }
+  _Ext.x : _Ext.t → { _Ext.t _Ext.t }
+
+  main : { _lst◂_s8 _Ext.t } → r' 
+§ main { args Ext } 
+
+    opxcc hoge.mdls -e main 
+  opxcc -c hoo.mdls,baa.mdls,wree.mdls -e:std M3.f 
+§ main { { a0 a1 .. an } Ext }
+
+opc 
+opcx 
