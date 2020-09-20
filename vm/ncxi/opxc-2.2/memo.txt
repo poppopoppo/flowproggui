@@ -381,8 +381,11 @@ a b c
 § main { args Ext } 
 
     opxcc hoge.mdls -e main 
-  opxcc -c hoo.mdls,baa.mdls,wree.mdls -e:std M3.f 
+  opxcc -c hoo.mdls,baa.mdls,wree.mdls -e:dft M3.f 
+
 § main { { a0 a1 .. an } Ext }
+◂◂◂ ; compile time constructor 
+_cns◂◂◂{ A _nil◂◂◂{} }
 
 opc 
 opcx 
