@@ -1,0 +1,54 @@
+§ 
+  @.es { { i_n V S } es }
+    $ es ⊢ 
+    ∐ _cns◂{ p1 es } . 
+      _Clr.ila { V p1 } ⊢ { { i li osf es1 } Vl }
+      $ i ⊢ 
+      ∐ _none◂{} . 
+        _Clr.rla { { i li osf es1 } Vl } ⊢ { V p1 } 
+        sc { i_n V p1 S } ⊢ { i_n V p1 S }
+        ll.get { V p0 } ⊢ { V p0 ll0 } 
+        ll.get { V p1 } ⊢ { V p1 ll1 } 
+        min { ll0 ll1 } ⊢ llm 
+        ll.set { V p0 llm } ⊢ { V p0 }
+        osf.get { V p0 } ⊢ { V p0 b }
+        es { { i_n V S } es } ⊢| 
+      ∐. _some◂ip0 . 
+        $ b ⊢ 
+        ∐ bl.t◂{} . 
+          idx.get { V p1 } ⊢ { V p1 i1 } 
+          ll.get { V p0 } ⊢ { V p0 ll0 } 
+          min { i1 ll0 } ⊢ m0 
+          ll.set { V p0 m0 } ⊢ { V p0 m0 } 
+          es { { i_n V S } es } ⊢| 
+        ∐. bl.f◂{} . 
+          es { { i_n V S } es } ⊢|
+    ∐. _nil◂{} . 
+      ∎ { i_n V S } 
+
+  @.sc { i_n V p0 S } 
+    $ p0 ⊢ p0,p0_0 
+    _Clr.ila { V p0_0 } ⊢ { { _ _ _ es } Vl }   
+    inc_x i_n ⊢ { i i_n }
+    $ ⟦ p0 < S ⟧ ⊢ S 
+    $ i ⊢ i,i0
+    $ es ⊢ es,es0 
+    _Clr.rla { { i i0 bl.t◂{} es0 } Vl } ⊢ { p0 V }
+    es { { i_n V S } es } ⊢ { i_n V S }
+    ll.get { V p0 } ⊢ { V p0 ll0 } 
+    idx.get { V p0 } ⊢ { V p0 i0 } 
+    ∐ ll0'=i0' . 
+      ncsc { } ⊢| 
+    ∐. . 
+      ∎ 
+  @.ncsc 
+    ∐ S ⊢ _cns◂{ w S } . 
+      osf.set { V w bl.f◂{} } ⊢ { V w }
+      ∐ w'=v' . 
+        ∎    
+      ∐. . 
+        ncsc { } ⊢| 
+    ∐. . 
+      ∎|     
+\\§ tjn { V p0 } 
+  
