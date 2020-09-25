@@ -110,16 +110,16 @@ bits 64
 %macro ALC_RCD 2 ; n,reg-name!=rbx 
 	add QWORD [SS_RCD_C+8*%1],1
 	add QWORD [SS_RCD_N+8*%1],1 
-	mov %2,[SS_RCD_%1_TOP]
+	mov %2,[SS_RCD_TOP+8*%1]
 	mov MCR_REG,[%2]
-	mov QWORD [SS_RCD_%1_TOP],MCR_REG
+	mov QWORD [SS_RCD_TOP+8*%1],MCR_REG
 %endmacro 
 
 %macro FREE_RCD 2 ; n,reg-name!=rbx 
 	sub QWORD [SS_RCD_N+8*%1],1
-	mov rbx,QWORD [SS_RCD_%1_TOP] 
+	mov rbx,QWORD [SS_RCD_TOP+8*%1] 
 	mov QWORD [%2],rbx
-	mov QWORD [SS_RCD_%1_TOP],%2
+	mov QWORD [SS_RCD_TOP+8*%1],%2
 %endmacro
 
 %macro FREE_PT 1 
@@ -235,9 +235,9 @@ scf_F_err1_%1:
 %endmacro
 
 %macro BSS_SS_RCD 2 
-	SS_RCD_%1_TOP: resq 1 
+	;SS_RCD_%1_TOP: resq 1 
 	SS_RCD_%1_VCT: resq (%1+1)*(%2+4)
-	SS_RCD_%1_BTM: resq 1
+	;SS_RCD_%1_BTM: resq 1
 %endmacro 
 
 %define RX0 r13

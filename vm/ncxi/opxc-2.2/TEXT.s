@@ -2,6 +2,40 @@
 	unt: dq 0x0
 
 	unt_0: dq 0x0 
+
+ss_lp: 
+	cmp rdi,0 
+	jz ss_end
+	sub rdi,1 
+	lea rsi,[rax+8+8*rdx] 
+	mov QWORD [rax],rsi 
+	mov rax,rsi 
+	jmp ss_lp
+ss_end:
+	mov rsi,0xffff_ffff_ffff_0000 
+	add rsi,rdx
+	mov [rax],rsi 
+	ret
+init_ss_rcd: ; rdi=n 
+	mov QWORD [SS_RCD_N+8*rdi],0
+	mov QWORD [SS_RCD_C+8*rdi],0
+	mov QWORD [SS_RCD_TOP+8*rdi],SS_RCD_14_VCT
+
+init_ss: ; rdi=sgm rsi=size rax=n
+	mov rdi,0 
+init_ss_lp:
+	cmp rax,0
+	jz init_ss_end 
+	sub rax,1 
+	lea rdx,[rdi+8*rsi]
+	mov QWORD [rdi],rdx 
+	mov rdi,rdx 
+	jmp init_ss_lp
+init_ss_end: 
+	mov rsi,-65522
+	mov [rdi],rsi 
+	ret 
+
 info:
 	C_PUSH_REGS
 	mov rdi,fmt_info 
