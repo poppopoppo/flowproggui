@@ -1,3 +1,6 @@
+	SS_RCD_TOP: resq 64 
+	SS_RCD_BTM: resq 64 
+	SS_RCD_N: resq 64 
 	GLV: resq GLV_N
 	SS_LN_N_PT: resq 1 
 	PAGE_SIZE: resq 1
@@ -26,7 +29,7 @@
 	SS_LN_VCT: resq 2*SS_LN_MAX
 	SS_LN_BTM: resq 1  
 
-	SS_RCD_N: resq (RCD_N+1) 
+	;SS_RCD_N: resq (RCD_N+1) 
 	SS_RCD_C: resq (RCD_N+1)
 
 	CNC_TOP: resq 64 
