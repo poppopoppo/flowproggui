@@ -3,6 +3,30 @@
 
 	unt_0: dq 0x0 
 
+sig_alc_rcd: ; rbx=n 
+	C_PUSH_REGS 
+	push rdi 
+	push rsi 
+	push rax
+	mov rdi,rbx 
+	xor rax,rax
+	add rdi,1 
+	shl rdi,10 
+	mov rsi,rdi 
+	xor rdi,rdi 
+	mov rdi,8
+	C_CALL calloc_sf
+	mov rdx,rbx 
+	mov rbx,rax 
+	;mov QWORD [SS_RCD_TOP+8*rbx],rax 
+	mov rdi,1000 
+	call ss_lp
+	pop rax 
+	pop rsi 
+	pop rdi 
+	C_POP_REGS 
+	jmp QWORD [SIG_RIP]
+
 ss_lp: 
 	cmp rdi,0 
 	jz ss_end
@@ -67,25 +91,33 @@ info_rcd_end:
 ;	ret
 
 sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void* context
-	cmp QWORD [SIG_FLG],0
-	jnz sig_hdl_usr
+	mov rdi,QWORD [SIG_ETR]
+	mov rsi,rdx 
+	C_CALL set_usr_hdl 
+	mov QWORD [SIG_RIP],rax
+	ret 
+sig_dft_alc_rcd: 
+	mov rbx,QWORD [SIG_FLG]
+	and rbx,0xffff 
+	;mov rdi,rbx 
+	jmp sig_alc_rcd
+sig_dft: 
+	;mov rbx,QWORD [SIG_FLG] 
+	;and rbx,0xffff_0000 
+	;cmp rbx,0xf00f_0000 
+	;je sig_dft_alc_rcd
 	push rdi 
 	push rsi 
 	push rdx 
 	xor rax,rax 
 	mov rsi,rdi 
 	mov rdi,fmt_sig_hdl
+	mov rdx,QWORD [SIG_FLG]
 	C_CALL printf 
-	;call info 
 	call exit 
 	mov QWORD [err_n],0xfff
 	jmp err
-sig_hdl_usr:
-	mov rdi,QWORD [SIG_ETR]
-	mov rsi,rdx 
-	C_CALL set_usr_hdl 
-	mov QWORD [SIG_RIP],rax
-	ret 
+
 %define S8_HSH_SEED 0xf7f765d79dabbace
 %define S8_HSH_M 0xc6a4a7935bd1e995
 %define S8_HSH_R 47 

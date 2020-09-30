@@ -45,4 +45,5 @@
 fmt_sig_hdl:
 	db "sig_hdl:",10
 	db "signal number=%d",10
+	db "SIG_FLG=%llx",10
 	db 0
