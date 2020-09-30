@@ -11,7 +11,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/mman.h>
-#include <stdio.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 #include <sys/ucontext.h>
 #include <ucontext.h>
@@ -28,7 +29,29 @@ struct OP_SRC_2
   void* r0; 
   void* r1;
 };
+void *calloc_sf(size_t n, size_t size){
+  void* p = calloc(n,size);
+  if (p==NULL){
+    exit(EXIT_FAILURE);
+  }; 
+  return p;
+};
 
+int ini_prc() {
+  int rc = 0;
+  struct rlimit rl;
+
+  rl.rlim_cur = 4000000000;
+  rl.rlim_max = 10000000000;
+
+  rc = setrlimit(RLIMIT_AS, &rl);
+  if (rc < 0)
+  {
+    printf("Error: setrlimit(%d) %s\n", errno, strerror(errno));
+    return (-1);
+  }
+  return 0;
+};
 void* alc_gd_buf(int* ps){
 	int pagesize = sysconf(_SC_PAGE_SIZE);
 	if (pagesize == -1){ return NULL; }

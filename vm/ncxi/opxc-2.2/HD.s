@@ -1,11 +1,11 @@
 
-%define SS_RCD_2_MAX_P (1<<25)
-%define SS_RCD_3_MAX_P (1<<23)
-%define SS_RCD_4_MAX_P (1<<22)
-%define SS_RCD_5_MAX_P (1<<20)
-%define SS_RCD_6_MAX_P (1<<18)
-%define SS_RCD_7_MAX_P (1<<18)
-%define SS_RCD_8_MAX_P (1<<17)
+%define SS_RCD_2_MAX_P (1<<6)
+%define SS_RCD_3_MAX_P (1<<6)
+%define SS_RCD_4_MAX_P (1<<6)
+%define SS_RCD_5_MAX_P (1<<6)
+%define SS_RCD_6_MAX_P (1<<6)
+%define SS_RCD_7_MAX_P (1<<6)
+%define SS_RCD_8_MAX_P (1<<6)
 
 %define KB 1024
 %define MB KB*KB 
@@ -42,6 +42,7 @@ bits 64
  ; cmov%1 rsi,MCR_REG
   ;mov rsi,QWORD [rsi]
 ;%endmacro 
+
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
 	call emt_stg 
@@ -108,11 +109,16 @@ bits 64
 %endmacro
  
 %macro ALC_RCD 2 ; n,reg-name!=rbx 
-	add QWORD [SS_RCD_C+8*%1],1
+	;add QWORD [SS_RCD_C+8*%1],1
 	add QWORD [SS_RCD_N+8*%1],1 
-	mov %2,[SS_RCD_TOP+8*%1]
-	mov MCR_REG,[%2]
-	mov QWORD [SS_RCD_TOP+8*%1],MCR_REG
+	;mov QWORD [SIG_FLG],(0xf00f_0000+%1) 
+	mov QWORD [SIG_ETR],sig_alc_rcd_%1 
+	mov MCR_REG,QWORD [SS_RCD_TOP+8*%1]
+	mov %2,QWORD [MCR_REG]
+	mov QWORD [SS_RCD_TOP+8*%1],%2
+	mov %2,MCR_REG
+	;mov QWORD [SIG_FLG],0xffff_0000
+	mov QWORD [SIG_ETR],sig_dft
 %endmacro 
 
 %macro FREE_RCD 2 ; n,reg-name!=rbx 
@@ -235,9 +241,7 @@ scf_F_err1_%1:
 %endmacro
 
 %macro BSS_SS_RCD 2 
-	;SS_RCD_%1_TOP: resq 1 
 	SS_RCD_%1_VCT: resq (%1+1)*(%2+4)
-	;SS_RCD_%1_BTM: resq 1
 %endmacro 
 
 %define RX0 r13
@@ -251,6 +255,8 @@ scf_F_err1_%1:
 
 %define SEED 0x_f7f7_65d7_9dab_bace
  
+extern calloc_sf
+extern ini_prc 
 extern MurmurHash64A
 extern exit 
 extern printf 
