@@ -76,7 +76,7 @@ sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void* context
 	mov rsi,rdi 
 	mov rdi,fmt_sig_hdl
 	C_CALL printf 
-	call info 
+	;call info 
 	call exit 
 	mov QWORD [err_n],0xfff
 	jmp err

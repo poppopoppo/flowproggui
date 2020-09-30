@@ -1,0 +1,28 @@
+§ eq_T◂◂E { a b } 
+	∐ a ⊢ _some◂a; b ⊢ _some◂b . 
+		E { a b } ⊢ { a b t } 
+		∎ { _some◂a _some◂b t } 
+	∐ a ⊢ _none◂{}; b ⊢ _none◂{} . 
+			∎ { _none◂{} _none◂{} %[ 1r ] } 
+		∐. . 
+			∎ { a b %[ 0r ] }
+
+§ f0 { x y }
+  ^ x,y ⊢ x,y,s 
+    0d'  "lll"  // 
+  ∎ {} 
+
+\[
+§ pnt◂◂P { v o } 
+		$ o ⊢ 
+		∐ _some◂a . 
+			P { v a } ⊢ { v s } 
+			^ s ⊢ _,s 
+				"_some◂" 0' // 
+			∎ { v s } 
+		∐. _none◂{} . 
+			∎ { v %[ "_none◂{}" ] }
+\]
+
+§ main args 
+  ∎ {} 
