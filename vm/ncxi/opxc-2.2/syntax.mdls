@@ -7184,6 +7184,43 @@ unsigned long
 			$ rp8.of_s8◂e0 ⊢ e0 
 			mk_s8_lp { s l %[ 0r ] e0 } ⊢ { s l e0 } 
 			∎ { s e0 }
+		§ @.mk_s8_64_lp { s l i e } 
+			∐ i'=l' . 
+				∎ { s l e } 
+			∐. . 
+				_lds64 { s i } ⊢ { s i b } 
+				^ i,b ⊢ i,_,eb 
+					"\tmov rbx," 1d' "\n"
+					"\tmov QWORD [rdi],rbx\n" 
+					`	add rdi,8 
+					// 
+				$ rp8.of_s8◂eb ⊢ eb 
+				rp8.cct { e eb } ⊢ e 
+				_add { i %[ 8r ] } ⊢ { i _ }
+				mk_s8_64_lp { s l i e } ⊢| 
+		§ @.mk_s8_64_m { s l i e } 
+			∐ i'=l' . 
+				∎ { s l e } 
+			∐. . 
+				_lds { s i } ⊢ { s i b } 
+				^ i,b ⊢ i,_,eb 
+					"\tmov BYTE [rdi]," 1d' "\n" 
+					`	add rdi,1 
+					// 
+				$ rp8.of_s8◂eb ⊢ eb 
+				rp8.cct { e eb } ⊢ e 
+				_inc i ⊢ i
+				mk_s8_64_m { s l i e } ⊢| 
+		§ mk_s8_64 s 
+			_s8_len s ⊢ { s l } 
+			mlc_s8 l ⊢ { l e0 } 
+			$ l ⊢ l,l0 
+			_shr { l %[ 3r ] } ⊢ { l _ } 
+			_shl { l %[ 3r ] } ⊢ { l _ }
+			rp8.add_s8 { rp8.of_s8◂e0 %[ "\tlea rdi,[rax+8]\n" ] } ⊢ e0
+			mk_s8_64_lp { s l %[ 0r ] e0 } ⊢ { s l e0 } 
+			mk_s8_64_m { s l0 l e0 } ⊢ { s _ e0 }
+			∎ { s e0 }
 		§ @.mk_db_lp { s i l r } 
 			∐ i'=l' . 
 				^ r ⊢ r,e 
@@ -7251,7 +7288,7 @@ unsigned long
 				ast.s8_of_rt { evv a0 } ⊢ { evv s } 
 				$ s ⊢ 
 				∐ ast.im_of◂s . 
-					mk_s8 s ⊢ { _ e } 
+					mk_s8_64 s ⊢ { _ e } 
 					inc_x glv_n ⊢ { r glv_n } 
 					^ r ⊢ r,sc0 
 						"\tmov GLX(" 0d' "),rax\n" // 
@@ -7517,7 +7554,7 @@ unsigned long
 							lod_tv { evv i } ⊢ { evv _ c0 } 
 							im_to_rax { e0 { evv tav tv eds } glv_n c0 } ⊢|
 						∐ c0 ⊢ ast.k_s8◂s0 . 
-							mk_s8 s0 ⊢ { _ es } 
+							mk_s8_64 s0 ⊢ { _ es } 
 							rp8.cct { e0 es } ⊢ e0 
 							∎ { e0 { evv tav tv eds } glv_n }
 						∐ c0 ⊢ ast.k_r64◂x0 . 
@@ -9030,7 +9067,7 @@ unsigned long
 								^ _ ⊢ sc0 
 									"\tmov QWORD [REP_MOVSB_VCT+8],rax\n" // 
 								rp8.add_s8 { e0 sc0 } ⊢ e0 
-								mk_s8 s1 ⊢ { s1 es1 }
+								mk_s8_64 s1 ⊢ { s1 es1 }
 								rp8.cct { e0 es1 } ⊢ e0 
 								inc_x glv_n ⊢ { rm0 glv_n } 
 								^ rm0,ls1 ⊢ rm0,_,sc0 
@@ -9091,7 +9128,7 @@ unsigned long
 							$ s0 ⊢ 
 							∐ ast.im_of◂s0 . 
 								_s8_len s0 ⊢ { s0 ls0 }  
-								mk_s8 s0 ⊢ { s0 es0 }
+								mk_s8_64 s0 ⊢ { s0 es0 }
 								rp8.cct { e0 es0 } ⊢ e0 
 								inc_x glv_n ⊢ { rm0 glv_n } 
 								^ rm0,ls0 ⊢ rm0,_,sc0 

@@ -12,9 +12,9 @@
 	fmt_err_line: db "err:%llx",10,0
 	fmt_r64: db "%dr",0
 	fmt_s8: db 34,"%s",34,0
-	fmt_d: db "%d",0
-	fmt_d_nl: db "%d",10,0
-	fmt_x: db "%x",0
+	fmt_d: db "%lld",0
+	fmt_d_nl: db "%lld",10,0
+	fmt_x: db "%llx",0
 	fmt_arr_l: db "{+ ",0
 	fmt_arr_r: db "}",0
 	fmt_rcd_l: db "{ ",0
