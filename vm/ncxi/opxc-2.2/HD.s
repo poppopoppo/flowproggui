@@ -161,6 +161,17 @@ bits 64
 	call free_s8
 %endmacro 
 				
+%macro INIT_SS_RCD 1 
+init_ss_rcd_%1:
+	mov QWORD [SS_RCD_N+8*%1],0
+	mov QWORD [SS_RCD_C+8*%1],0
+	mov QWORD [SS_RCD_TOP+8*%1],SS_RCD_3_VCT
+	mov rax,SS_RCD_%1_VCT
+	mov rdi,(1<<6)
+	mov rdx,3
+	call ss_lp 
+%endmacro
+
 %macro EMT_R64 1 
 	cmp r10,3940 
 	jg 

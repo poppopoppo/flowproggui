@@ -40,11 +40,7 @@ ss_end:
 	add rsi,rdx
 	mov [rax],rsi 
 	ret
-init_ss_rcd: ; rdi=n 
-	mov QWORD [SS_RCD_N+8*rdi],0
-	mov QWORD [SS_RCD_C+8*rdi],0
-	mov QWORD [SS_RCD_TOP+8*rdi],SS_RCD_14_VCT
-
+	
 init_ss: ; rdi=sgm rsi=size rax=n
 	mov rdi,0 
 init_ss_lp:
