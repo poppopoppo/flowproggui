@@ -1,12 +1,4 @@
 
-%define SS_RCD_2_MAX_P (1<<6)
-%define SS_RCD_3_MAX_P (1<<6)
-%define SS_RCD_4_MAX_P (1<<6)
-%define SS_RCD_5_MAX_P (1<<6)
-%define SS_RCD_6_MAX_P (1<<6)
-%define SS_RCD_7_MAX_P (1<<6)
-%define SS_RCD_8_MAX_P (1<<6)
-
 %define KB 1024
 %define MB KB*KB 
 %define GB MB*MB
@@ -126,31 +118,6 @@ bits 64
 	mov rbx,QWORD [SS_RCD_TOP+8*%1] 
 	mov QWORD [%2],rbx
 	mov QWORD [SS_RCD_TOP+8*%1],%2
-%endmacro
-
-%macro FREE_PT 1 
-	mov rbx,[SS_PT_TOP]
-	mov QWORD [%1],rbx
-	mov [SS_PT_TOP],%1
-%endmacro
-
-%macro ALC_PT 1 
-	mov %1,[SS_PT_TOP] 
-	mov rbx,[%1]
-	mov QWORD [SS_PT_TOP],rbx 
-%endmacro
-				
-%macro FREE_LN 1 
-	sub SS_LN_N,1 
-	mov QWORD [%1],SS_LN_REG
-	mov SS_LN_REG,%1
-%endmacro
-
-%macro ALC_LN 1 
-	add QWORD [SS_LN_C],1 
-	add SS_LN_N,1 
-	mov %1,SS_LN_REG 
-	mov SS_LN_REG,QWORD [SS_LN_REG]
 %endmacro
 
 %macro FREE_S8 1 

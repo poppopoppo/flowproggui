@@ -79,4 +79,26 @@
   _emt r ⊢ _ 
   _lds64 { s0 %[ 0r ] } ⊢ { s0 _ r } 
   _emt r ⊢ _
+  _cmp_s8 { %[ "fji" ] %[ "ijjfi" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+  _cmp_s8 { %[ "fji423frer" ] %[ "ijjfi" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+  _cmp_s8 { %[ "ijjfi000" ] %[ "ijjfi000" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi0000" ] %[ "ijjfi0000" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi00" ] %[ "ijjfi00" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi00099" ] %[ "ijjfi00099" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi000" ] %[ "ijjfi000" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi000" ] %[ "kjjfi000" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi000" ] %[ "ajjfi000" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi000" ] %[ "ijjgi000" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+   _cmp_s8 { %[ "ijjfi000" ] %[ "ijjei000" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
   ∎ {} 
