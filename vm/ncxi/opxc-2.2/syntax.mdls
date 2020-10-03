@@ -333,6 +333,85 @@
 		∐. lf◂{} . 
 			∎ { lf◂{} { k0 ‹› } }
 	∎∎
+§§ bst_s8 
+	¶ t v' 
+		∐ nd : { t◂v' { _s8 v' } t◂v' } 
+		∐ lf : {}
+	§ ini # {} 
+		∎ lf◂{} 
+	§ @.asc { t k0 } 
+		$ t ⊢ 
+		∐ nd◂{ l { k v } r } . 
+			_cmp_s8 { k k0 } ⊢ { k k0 c } 
+			=+ c' 
+			∐ 
+				$ c ⊢ _ 
+				asc { r k0 } ⊢ { r { k0 o } } 
+				∎ { nd◂{ l { k v } r } { k0 o } }
+			∐ 
+				$ c ⊢ _ 
+				$ v ⊢ v,v0
+				∎ { nd◂{ l { k v } r } { k0 ‹ v0 › } }
+			∐. 
+				$ c ⊢ _ 
+				asc { l k0 } ⊢ { l { k0 o } } 
+				∎ { nd◂{ l { k v } r } { k0 o } }
+		∐. lf◂{} . 
+			∎ { lf◂{} { k0 ‹› } }
+	§ @.set { t { k0 v0 } } 
+		$ t ⊢ 
+		∐ nd◂{ l { k v } r } . 
+			_cmp_s8 { k k0 } ⊢ { k k0 c } 
+			=+ c' 
+			∐ 
+				$ c ⊢ _ 
+				set { r { k0 v0 } } ⊢ { r { k0 o } }
+				∎ { nd◂{ l { k v } r } { k0 o } }
+			∐  
+				∎ { nd◂{ l { k v0 } r } { k0 ‹ v › } }
+			∐. 
+				$ c ⊢ _ 
+				set { l { k0 v0 } } ⊢ { l { k0 o } } 
+				∎ { nd◂{ l { k v } r } { k0 o } }
+		∐. lf◂{} . 
+			$ k0 ⊢ k0,k 
+			∎ { nd◂{ lf◂{} { k v0 } lf◂{} } { k0 ‹› } }
+	§ @.mrg0 { t0 t1 }
+		$ t0 ⊢ 
+		∐ nd◂{ l0 { k0 v0 } r0 } .
+			$ t1 ⊢ 
+			∐ nd◂{ l1 { k1 v1 } r1 } . 
+				mrg0 { r0 l1 } ⊢ t1 
+				∎ nd◂{ l0 { k0 v0 } nd◂{ t1 { k1 v1 } r1 } } 
+			∐. lf◂{} .
+				∎ nd◂{ l0 { k0 v0 } r0 }
+		∐. lf◂{} . 
+			$ t1 ⊢ 
+			∐ nd◂{ l1 { k1 v1 } r1 } . 
+				∎ nd◂{ l1 { k1 v1 } r1 }
+			∐. lf◂{} . 
+				∎ lf◂{}
+	§ @.get { t k0 } 
+		$ t ⊢ 
+		∐ nd◂{ l { k v } r } . 
+			_cmp_s8 { k k0 } ⊢ { k k0 c } 
+			=+ c' 
+			∐ 
+				$ c ⊢ _ 
+				get { r k0 } ⊢ { r { k0 o } } 
+				∎ { nd◂{ l { k v } r } { k0 o } }
+			∐ 
+				$ c ⊢ _ 
+				$ k ⊢ _ 
+				mrg0 { l r } ⊢ t 
+				∎ { t { k0 ‹ v › } }
+			∐.
+				$ c ⊢ _ 
+				get { l k0 } ⊢ { l { k0 o } } 
+				∎ { nd◂{ l { k v } r } { k0 o } }
+		∐. lf◂{} . 
+			∎ { lf◂{} { k0 ‹› } }
+	∎∎
 §§ BST 
 	¶ nd k',v'
 		∐ p : { _opn◂(_pt◂(nd◂k'◂v')) { k' v' } _opn◂(_pt◂(nd◂k'◂v')) } 
