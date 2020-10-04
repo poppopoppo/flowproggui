@@ -389,3 +389,6 @@ _cns◂◂◂{ A _nil◂◂◂{} }
 
 opc 
 opcx 
+
+  f x ⊢⊢ y 
+  
