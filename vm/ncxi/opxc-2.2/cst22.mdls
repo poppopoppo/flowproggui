@@ -101,4 +101,10 @@
   _emt r ⊢ _ 
    _cmp_s8 { %[ "ijjfi000" ] %[ "ijjei000" ] } ⊢ { _ _ r } 
   _emt r ⊢ _ 
+  _cli {} ⊢ C0 
+  _clp { C0 %[ 0r ] } ⊢ { C0 p0 } 
+  _clc_o { C0 p0 } ⊢ { Cl0 i } 
+  _inc i ⊢ i 
+  _clc_i { Cl0 i } ⊢ { C0 p0 } 
+  \\_emt i ⊢ _ 
   ∎ {} 
