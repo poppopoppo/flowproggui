@@ -134,7 +134,7 @@
 				∐ _some◂l . 
 					$ l ⊢ l,l0 
 					_clc_i { Cl p◂{ ‹ l › { k v } r } } ⊢ { C t }
-					get◂◂get_r { { C T } t l0 k0 } ⊢|
+					get◂◂get_l { { C T } t l0 k0 } ⊢|
 				∐. _none◂{} . 
 					_clc_i { Cl p◂{ ‹› { k v } r } } ⊢ { C t }
 					∎ { { C T } { k0 ‹› } }  
@@ -152,9 +152,12 @@
       _emt { k v } ⊢ { k v }  
       $ { l r } ⊢ { l r },{ l0 r0 } 
       _clc_i { C p◂{ l { k v } r } } ⊢ { C _ } 
+      _emt %[ "<-" ] ⊢ _ 
       emt { C l0 } ⊢ C 
+      _emt %[ "->" ] ⊢ _ 
       emt { C r0 } ⊢| 
     ∐. _none◂{} . 
+      _emt %[ "<>" ] ⊢ _ 
       ∎ C 
   § emt { C T } 
     $ T ⊢ T,t 
@@ -175,4 +178,31 @@
   B.get { B %[ "rr" ] } ⊢ { B { _ i } } 
   _emt i ⊢ _ 
   B.emt B ⊢ B 
+  B.ini {} ⊢ C 
+  B.set { C { %[ "V" ] %[ 0r ] } } ⊢ { C _ }
+  B.set { C { %[ "p" ] %[ 1r ] } } ⊢ { C _ } 
+  B.get { C %[ "V" ] } ⊢ { C _} 
+  B.get { C %[ "p" ] } ⊢ { C _ } 
+  B.set { C { %[ "V" ] %[ 3r ] } } ⊢ { C _ } 
+  B.set { C { %[ "k" ] %[ 4r ] } } ⊢ { C _ } 
+  B.get { C %[ "k" ] } ⊢ { C _}
+  B.set { C { %[ "k" ] %[ 5r ] } } ⊢ { C _ } 
+  B.set { C { %[ "k0" ] %[ 6r ] } } ⊢ { C _ } 
+  _emt {} ⊢ {} 
+  B.emt C ⊢ C 
+  B.get { C %[ "k0" ] } ⊢ { C _}
+  B.get { C %[ "V" ] } ⊢ { C _}
+  B.set { C { %[ "p" ] %[ 8r ] } } ⊢ { C _ } 
+  B.set { C { %[ "V" ] %[ 7r ] } } ⊢ { C _ } 
+  _emt {} ⊢ {} 
+  B.emt C ⊢ C 
+  B.get { C %[ "p" ] } ⊢ { C { _ i0 } }
+  _emt i0 ⊢ _ 
+  B.get { C %[ "V" ] } ⊢ { C { _ i } }
+  _emt i ⊢ _
+  B.emt C ⊢ C 
+  B.get { C %[ "k" ] } ⊢ { C  { _ i } }
+  _emt i ⊢ _
+  _emt {} ⊢ {} 
+  B.emt C ⊢ C 
   ∎ {} 
