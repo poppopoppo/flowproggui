@@ -392,3 +392,58 @@ opcx
 
   f x ⊢⊢ y 
   
+
+{ 
+  (
+    { 
+      { 
+        { 
+          _arr◂_opn◂{ _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂} 
+          _arr◂_opn◂{ _Clr◂.t17◂l(2) _opn◂_pt◂.t17◂l(2)}
+          { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂} 
+          { _Clr◂.t17◂l(2) _opn◂_pt◂.t17◂l(2)}
+          _lst◂{ l(2) { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂} { _Clr◂.t17◂l(2) _opn◂_pt◂.t17◂l(2)} l(2)}
+        }
+        l(2)
+        _r64◂ 
+        { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂}
+        _lst◂_r64◂
+      } 
+    _lst◂.t29◂_s8◂◂.t26◂_opn◂l(2) 
+  }→
+  { 
+    { 
+      { 
+        _arr◂_opn◂{ _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂}
+        _arr◂_opn◂{ _Clr◂.t17◂l(2) _opn◂_pt◂.t17◂l(2)}
+        { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂} 
+        { _Clr◂.t17◂l(2) _opn◂_pt◂.t17◂l(2)}
+        _lst◂{ l(2) { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂}{ _Clr◂.t17◂l(2) _opn◂_pt◂.t17◂l(2)} l(2)}
+      } 
+      l(2)
+      _r64◂ 
+      { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂}
+      _lst◂_r64◂
+    } 
+    _lst◂.t29◂_r64
+    l(2)
+    _opn◂_r64◂})"" 
+    
+({ 
+  { 
+    { 
+      _arr◂_opn◂{ _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂} 
+      _arr◂_opn◂{ _Clr◂.t17◂l(1) _opn◂_pt◂.t17◂l(1)}
+      { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂} 
+      { _Clr◂.t17◂l(1) _opn◂_pt◂.t17◂l(1)}
+      _lst◂{ l(1) { _Clr◂.t17◂_r64◂ _opn◂_pt◂.t17◂_r64◂}{ _Clr◂.t17◂l(1) _opn◂_pt◂.t17◂l(1)} l(1)}
+    } 
+    l(1)
+    l(1) 
+    { _Clr◂.t17◂l(1) _opn◂_pt◂.t17◂l(1)}
+    l(1)
+  } 
+  .t21◂.t29◂_s8◂◂
+  .t26◂_opn◂_s8◂
+}→
+{ { l(2) l(2)l(2) l(2)l(2)} l(2)})"" ""}

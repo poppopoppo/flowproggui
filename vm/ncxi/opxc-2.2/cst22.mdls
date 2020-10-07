@@ -46,6 +46,12 @@
 		∐. _none◂{} . 
 			∎ { v %[ "_none◂{}" ] }
 \]
+§ f5◂◂F x  
+  F x ⊢ x 
+  ∎ x 
+§ @.g0 ^= 
+  ∐. "j" "jf" ⊢ { {} {} } 
+    ∎ ‹ {} › 
 § P0 =^ 
   0d' "," 1d' ",.." // 
 § main args 
@@ -67,6 +73,10 @@
   ∎ {} 
 § f4 x 
   ∎ x 
+§ cmp_s8 { x y } 
+  _cmp_s8 { x y } ⊢|
+  \\ { x y b } 
+  \\∎ { x y b }
 § main args 
   f4 %[ "09fds0()fe98few98uNv9hve8nv3=~fk-" ] ⊢ s 
   _pf_x◂◂P0 { s %[ 25r ] { %[ 34r ] %[ 0xfr ] } } ⊢ { s0 x0 _ } 
@@ -97,14 +107,24 @@
   _emt r ⊢ _ 
    _cmp_s8 { %[ "ijjfi000" ] %[ "ajjfi000" ] } ⊢ { _ _ r } 
   _emt r ⊢ _ 
-   _cmp_s8 { %[ "ijjfi000" ] %[ "ijjgi000" ] } ⊢ { _ _ r } 
+   _cmp_s8 { %[ "ijif" ] %[ "ijig" ] } ⊢ { _ _ r } 
   _emt r ⊢ _ 
-   _cmp_s8 { %[ "ijjfi000" ] %[ "ijjei000" ] } ⊢ { _ _ r } 
+   _cmp_s8 { %[ "0000fbiuhi" ] %[ "0000ax9j0j" ] } ⊢ { _ _ r } 
   _emt r ⊢ _ 
+   cmp_s8 { %[ "0000fbiuhi" ] %[ "0000ax9j0j" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+  cmp_s8 { %[ "4444_FFfeA_GGGGE" ] %[ "4444_FFefB_GGGGE" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+    cmp_s8 { %[ "4444_FFfeB_GGGGE" ] %[ "4444_FFefA_GGGGE" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+  cmp_s8 { %[ "4444_FFee_GGGGE" ] %[ "4444_FFff_GGGGE" ] } ⊢ { _ _ r } 
+  _emt r ⊢ _ 
+  \[
   _cli {} ⊢ C0 
   _clp { C0 %[ 0r ] } ⊢ { C0 p0 } 
   _clc_o { C0 p0 } ⊢ { Cl0 i } 
   _inc i ⊢ i 
   _clc_i { Cl0 i } ⊢ { C0 p0 } 
   \\_emt i ⊢ _ 
+  \]
   ∎ {} 

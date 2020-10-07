@@ -40,8 +40,8 @@
 				_clc_i { Cl p◂{ l { k v } ‹ r › } } ⊢ { C _ }
 				set { { C r0 } { k0 v0 } } ⊢| 
 			∐. _none◂{} . 
-				$ k0 ⊢ k0,k1 
 				_clc_i { Cl p◂{ l { k v } ‹› } } ⊢ { C t }
+				$ k0 ⊢ k0,k1 
 				_clp { C p◂{ ‹› { k1 v0 } ‹› } } ⊢ { C r1 }
 				_clc_o { C t } ⊢ { Cl p◂{ l { k v } _ } } 
 				_clc_i { Cl p◂{ l { k v } ‹ r1 › } } ⊢ { C _ }
@@ -56,8 +56,8 @@
 				_clc_i { Cl p◂{ ‹ l › { k v } r } } ⊢ { C _ }
 				set { { C l0 } { k0 v0 } } ⊢| 
 			∐. _none◂{} . 
-				$ k0 ⊢ k0,k1 
 				_clc_i { Cl p◂{ ‹› { k v } r } } ⊢ { C t }
+				$ k0 ⊢ k0,k1 
 				_clp { C p◂{ ‹› { k1 v0 } ‹› } } ⊢ { C l1 }
 				_clc_o { C t } ⊢ { Cl p◂{ _ { k v } r } } 
 				_clc_i { Cl p◂{ ‹ l1 › { k v } r } } ⊢ { C _ }
