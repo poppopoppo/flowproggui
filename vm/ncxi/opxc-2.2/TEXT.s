@@ -236,14 +236,13 @@ cmp_stg: ;s0=rdi l0=rax s1=rsi l1=rdx
 	jg cmp_s8_g 
 	jl cmp_s8_l 
 	shr rax,3 
-	;add rax,1 
 	xor rbx,rbx
 cmp_s8_lp:
 	mov rdx,QWORD [rsi+8*rbx]
 	cmp QWORD [rdi+8*rbx],rdx 
 	jg cmp_s8_g 
 	jl cmp_s8_l  
-	cmp rbx,0
+	cmp rbx,rax
 	jz cmp_s8_e
 	add rbx,1 
 	jmp cmp_s8_lp 
