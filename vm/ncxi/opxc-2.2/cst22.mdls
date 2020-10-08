@@ -119,17 +119,17 @@
   _emt r ⊢ _ 
   cmp_s8 { %[ "4444_FFee_GGGGE" ] %[ "4444_FFff_GGGGE" ] } ⊢ { _ _ r } 
   _emt r ⊢ _ 
-  \[
   _cli {} ⊢ C0 
   _clp { C0 %[ 0r ] } ⊢ { C0 p0 } 
   _clc_o { C0 p0 } ⊢ { Cl0 i } 
   _inc i ⊢ i 
   _clc_i { Cl0 i } ⊢ { C0 p0 } 
   \\_emt i ⊢ _ 
-  \]
   _mk_arr { %[ 4r ] %[ "ff" ] } ⊢ { _ _ a }
+  \[
   _alc_o { a %[ 2r ] } ⊢ { a s } 
   _emt s ⊢ _ 
   _alc_i { a %[ "ji" ] } ⊢ { a i } 
   _emt { a i } ⊢ { a _ }
+  \]
   ∎ {} 
