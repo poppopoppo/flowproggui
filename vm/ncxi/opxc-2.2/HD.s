@@ -5,8 +5,8 @@
 %define SIG_INT 2
 %define SIG_SEGV 11
 %define SS_MAX 4000
-%define SS_LN_MAX 1<<4
-%define SS_LN_REG r15
+;%define SS_LN_MAX 1<<4
+;%define SS_LN_REG r15
 %define MCR_REG rbx
 %define SRC_REG r13 
 %define DST_REG r14
@@ -18,7 +18,7 @@
 %define DX(n) QWORD [DST_REG+8*n]
 
 bits 64 
-%define SS_LN_N QWORD [SS_LN_N_PT]
+;%define SS_LN_N QWORD [SS_LN_N_PT]
 ; macros 
 %macro BC 2
 	mov %2,BC_PT ; BC_PT is static address

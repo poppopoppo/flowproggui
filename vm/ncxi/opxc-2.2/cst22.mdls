@@ -127,4 +127,9 @@
   _clc_i { Cl0 i } ⊢ { C0 p0 } 
   \\_emt i ⊢ _ 
   \]
+  _mk_arr { %[ 4r ] %[ "ff" ] } ⊢ { _ _ a }
+  _alc_o { a %[ 2r ] } ⊢ { a s } 
+  _emt s ⊢ _ 
+  _alc_i { a %[ "ji" ] } ⊢ { a i } 
+  _emt { a i } ⊢ { a _ }
   ∎ {} 
