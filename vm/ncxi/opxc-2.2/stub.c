@@ -32,6 +32,7 @@ struct OP_SRC_2
 void *calloc_sf(size_t n, size_t size){
   void* p = calloc(n,size);
   if (p==NULL){
+    printf("call_sf:0"); 
     exit(EXIT_FAILURE);
   }; 
   return p;

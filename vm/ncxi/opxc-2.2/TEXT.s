@@ -114,58 +114,6 @@ sig_dft:
 	mov QWORD [err_n],0xfff
 	jmp err
 
-%define S8_HSH_SEED 0xf7f765d79dabbace
-%define S8_HSH_M 0xc6a4a7935bd1e995
-%define S8_HSH_R 47 
-s8_hsh: ; rdi 
-	mov rax,0x0000_ffff_ffff_ffff 
-	and rax,QWORD [rdi]
-	mov rsi,rdi 
-	mov rdx,rdi 
-	and rsi,7 
-	and rdx,~111b
-	mov rcx,rax
-	imul rcx,S8_HSH_M
-	xor rcx,S8_HSH_SEED
-	mov r10,0
-s8_hsh_i:
-	cmp r10,rdx
-	jz s8_hsh_i_end  
-	mov rbx,QWORD [rdi+8+8*r10] 
-	add r10,8 
-	imul rbx,S8_HSH_M 
-	mov r8,r10 
-	shr r8,S8_HSH_R 
-	xor r10,r8 
-	imul r10,S8_HSH_M 
-	xor rcx,r10 
-	imul rcx,S8_HSH_M 
-	jmp s8_hsh_i 
-s8_hsh_i_end:
-	add rdx,rsi
-	mov r10b,48
-s8_hsh_m: 
-	cmp r10,0 
-	jz s8_hsh_m_end 
-	sub rdx,1 
-	movzx r8,BYTE [rdi+8+rdx]
-	push rcx 
-	mov rcx,r10 
-	shl r8,cl 
-	pop rcx  
-	sub r10,8 
-	xor rcx,r8 
-	jmp s8_hsh_m 
-s8_hsh_m_end:
-	mov rbx,rcx 
-	shr rbx,S8_HSH_R 
-	xor rcx,rbx 
-	imul rcx,S8_HSH_M 
-	mov rbx,rcx 
-	shr rbx,S8_HSH_R 
-	xor rcx,rbx 
-	mov rax,rcx 
-	ret 
 
 %define C1 0xcc9e_2d51 
 %define C2 0x1b87_3593 
@@ -361,8 +309,9 @@ scf_x: ; rdi=src ⊢ rax=flg rdi=dst rsi=n
 	scf_F 16
 
 mlc_s8: ; rdi=len  
-	push rdi 
-	and rdi,~111b
+	push rdi  
+	mov rsi,~7
+	and rdi,rsi
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 

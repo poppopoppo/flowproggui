@@ -7445,7 +7445,7 @@ unsigned long
 				$ iso◂{ log.ini◂{} %[ 0r ] ⟦⟧ } ⊢ EC
 				slv_file_lp { V i il MV LCV tx_n NS gel EC } ⊢| 
   §§ asm 
-    § BUF_SIZE = 2000000000r
+    § BUF_SIZE = 2000000r
     ¶ lb = _r64
     ¶ a
       ∐ e : {}
@@ -7454,7 +7454,6 @@ unsigned long
       ∐ call_lb : lb
       ∐ etr_lb : lb 
       ∐ jmp_lb : lb 
-      ∐ jz_lb : lb 
       ∐ jz_lb : lb 
       ∐ jnz_lb : lb 
       ∐ jz_bl_lb : { bl.t lb } 
@@ -7552,9 +7551,18 @@ unsigned long
       ∐. lf◂a . 
         to_s8_a { a b i } ⊢| 
     § to_s8 # e 
+      
       _mlc_s8 %[ BUF_SIZE ] ⊢ { _ b }
       to_s8_i { e b %[ 0r ] } ⊢ { b l }
-      ∎ { b l }  
+      _rsz { b l } ⊢ { b _ } 
+      ∎ b
+    § main _
+      $ lf◂e◂{} ⊢ B 
+      add_s8 { B %[ "JIOJ\n" ] } ⊢ B 
+      cct { B lf◂jmp_lb◂%[ 45r ] } ⊢ B 
+      to_s8 B ⊢ s 
+      _emt s ⊢ _ 
+      ∎ {}
     ∎∎
 
 	§§ gnr
@@ -8000,7 +8008,22 @@ unsigned long
 					$ %[ "crt_idx_ptn 1" ] ⊢ se 
 					_emt se ⊢ se  
 					∎|
-			@.crt_lst { irv dl ipl dll } 
+      @.crt_btm # { irv d dl } 
+        crt { irv d RP.atm◂ast.btm◂{} dl } ⊢|
+      @.crt_btm_lst { irv dl dll } 
+			∐ dl ⊢ _cns◂{ d dl } .
+				crt_btm_ptn { irv d dll } ⊢ { irv dll } 
+				crt_btm_lst { irv dl dll } ⊢|
+			∐. dl ⊢ _nil◂{} .
+				∎ { irv dll }
+			@.crt_btm_ptn { irv d dl } 
+        $ d ⊢ 
+        ∐ RP.atm◂a . 
+          crt_btm { irv a dl } ⊢| 
+        ∐. RP.rcd◂l . 
+          crt_btm_lst { irv l dl } ⊢| 
+
+      @.crt_lst { irv dl ipl dll } 
 			∐ dl ⊢ _cns◂{ d dl }; ipl ⊢ _cns◂{ ip ipl } . 
 				crt { irv d ip dll } ⊢ { irv dll } 
 				crt_lst { irv dl ipl dll } ⊢|
@@ -8014,7 +8037,9 @@ unsigned long
 				∐ rp ⊢ RP.rcd◂r . 
 					∐ ip ⊢ RP.rcd◂ir . 
 						crt_ptn_lst { irv r ir dl } ⊢| 
-					∐. . 
+					∐ ip ⊢ RP.atm◂ast.btm◂{} . 
+            crt_btm_lst { irv r dl } ⊢|
+          ∐. . 
 						$ %[ "crt_idx_ptn 2" ] ⊢ se 
 						_emt se ⊢ se  
 						∎| 
@@ -9067,7 +9092,8 @@ unsigned long
 								`	mov r9,0x0000_ffff_ffff_ffff 
 								`	and r9,QWORD [r8] 
 								`	mov rdi,r9 
-								"\timul rdi," 2d' "\n"
+								"\tmov rsi," 2d' "\n" 
+                ` imul rdi,rsi 
 								`	lea rdi,[8+8*rdi] 
 								`	mov rsi,1 
 								`	xor rax,rax
@@ -9216,7 +9242,8 @@ unsigned long
 						inc_x lb_n ⊢ { lb_m3 lb_n }  
 						^ rm0,rm2,lb2,lb3,c_n,lb_e,lb4,lb5,lb_m1,lb_m2,lb_m3 ⊢ _,_,_,lb3,c_n,_,_,_,_,_,_,s0 
 							`	push rdi 
-							"\timul rdi," 4d' "\n" 
+							"\tmov rsi," 4d' "\n" 
+              ` imul rdi,rsi 
 							`	lea rsi,[8+8*rdi]
 							`	mov rdi,1 
 							` C_CALL_SF calloc_sf
@@ -9226,8 +9253,9 @@ unsigned long
 							`	push DST_REG
 							`	lea DST_REG,[rax+8] 
 							`	mov rax,rdi 
-							`	and rax,3  
-							`	and rdi,~3
+							`	and rax,3
+              ` mov rsi,~3  
+							`	and rdi,rsi
 							"\tmov GLX(" 1d' "),rdi\n"  
 							"\tjmp QWORD [LB_" 6d' "+8*rax]\n" 
 							"LB_" 6d' ": dq LB_" 2d' ",LB_" 8d' ",LB_" 9d' ",LB_" 10d' "\n"  
@@ -9685,7 +9713,8 @@ unsigned long
 									^ r0,l0,v_n ⊢ r0,l0,v_n,s1 
 										"\tmov rsi,GLX(" 0d' ")\n" 
 										"\tmov QWORD [EXP_S8_VCT+" 2d' "],rsi\n" 
-										"\timul rsi," 1d' "\n" 
+									  "\tmov rax," 1d' "\n" 
+                    ` imul rsi,rax 
 										`	add rdi,rsi 
 										// 
 									rp8.add_s8 { e0 s1 } ⊢ e0
@@ -9875,7 +9904,8 @@ unsigned long
 							∐ ast.hp_of◂r1 . 
 								^ r0,r1 ⊢ r0,r1,ec1 
 									"\tmov rdi,GLX(" 0d' ")\n" 
-									"\timul rdi,GLX(" 1d' ")\n"
+									"\tmov rsi,GLX(" 1d' ")\n" 
+									` imul rdi,rsi 
 									"\tmov GLX(" 0d' "),rdi\n"
 									//
 								rp8.add_s8 { ec0 ec1 } ⊢ ec0 
@@ -9884,7 +9914,8 @@ unsigned long
 							∐. ast.im_of◂x1 .
 								^ r0,x1 ⊢ r0,x1,ec1 
 									"\tmov rdi,GLX(" 0d' ")\n" 
-									"\timul rdi," 1d' "\n"
+									"\tmov rsi," 1d' "\n"
+									` imul rdi,rsi 
 									"\tmov GLX(" 0d' "),rdi\n" 
 									//
 								rp8.add_s8 { ec0 ec1 } ⊢ ec0 
@@ -9896,7 +9927,8 @@ unsigned long
 								inc_x glv_n ⊢ { rm0 glv_n } 
 								^ rm0,r1,x0 ⊢ rm0,r1,x0,ec1 
 									"\tmov rdi," 2d' "\n" 
-									"\timul rdi,GLX(" 1d' ")\n" 
+									"\tmov rsi,GLX(" 1d' ")\n" 
+									` imul rdi,rsi 
 									"\tmov GLX(" 0d' "),rdi\n"  
 									//
 								rp8.add_s8 { ec0 ec1 } ⊢ ec0 
@@ -9925,7 +9957,8 @@ unsigned long
 						^ r0 ⊢ _,sc0 
 							"\tmov rsi,GLX(" 0d' ")\n" 
 							`	mov rdi,0x0000_ffff_ffff_ffff 
-							`	and rdi,QWORD [rsi] 
+							` mov rax,QWORD [rsi] 
+              `	and rdi,rax
 							`	add rsi,8
 							//
 						rp8.add_s8 { ec0 sc0 } ⊢ ec0 
@@ -10752,11 +10785,13 @@ unsigned long
 							^ r0,c_n ⊢ r0,c_n,sc0 
 								"\tmov rdi,GLX(" 0d' ")\n"
 								`	mov rsi,0x0000_ffff_ffff_ffff 
-								`	and rsi,QWORD [rdi]
+								` mov rbx,QWORD [rdi] 
+                `	and rsi,rbx
 								`	cmp rax,rsi 
 								`	jge err_lod_q 
 								`	BC ge,rsi
-								"\timul rax," 1d' "\n"
+								"\tmov rbx," 1d' "\n" 
+                ` imul rax,rbx
 								`	lea rdi,[rdi+8+8*rax]
 								"\tmov SRC_REG,rdi\n"
 								//
@@ -10780,7 +10815,8 @@ unsigned long
 						^ r0,rm0 ⊢ r0,rm0,sc0 
 							"\tmov rdi,GLX(" 0d' ")\n" 
 							`	mov rsi,0x0000_ffff_ffff_ffff 
-							`	and rsi,QWORD [rdi]
+							` mov rax,QWORD [rdi] 
+              `	and rsi,rax
 							"\tmov GLX(" 1d' "),rsi\n" // 
 						rp8.add_s8 { ec0 sc0 } ⊢ ec0 
 						$ RP.cns2◂{ RP.atm◂ast.hp◂{ r0 ast.hp.arr◂ha } stt_v.r64_reg◂rm0 } ⊢ iy 
@@ -11775,7 +11811,8 @@ unsigned long
 										^ rc0,rp0,c_n ⊢ rc0,rp0,_,sc0 
 											"\tmov rdi,GLX(" 0d' ")\n" 											
 											"\tmov rax,GLX(" 1d' ")\n"
-											"\timul rax," 2d' "\n" 
+											"\tmov rsi," 2d' "\n" 
+                      ` imul rax,rsi 
 											`	lea DST_REG,[rdi+8+8*rax]
 											//
 										rp8.add_s8 { ec0 sc0 } ⊢ ec0 
@@ -11807,12 +11844,12 @@ unsigned long
 											"\tmov rdi,GLX(" 0d' ")\n" 
 											"\tmov rax,GLX(" 1d' ")\n"
 											`	mov rsi,0x0000_ffff_ffff_ffff 
-											`	and rsi,QWORD [rdi]
+											` mov rdx,QWORD [rdi] 
+                      `	and rsi,rdx 
 											`	cmp rax,rsi 
 											`	jge err_exc_q
-											\\[
-											"\timul rax," 2d' "\n" 
-											\\]
+											"\tmov rdx," 2d' "\n" 
+                      ` imul rax,rdx 
 											`	lea SRC_REG,[rdi+8+8*rax] 
 											//
 										rp8.add_s8 { ec0 sc0 } ⊢ ec0 
@@ -12387,7 +12424,7 @@ unsigned long
           ∎ { f0 m0 }
         ∐. . 
           ∎| 
-      ∐. . 
+      ∐. .  
         ∎| 
 
   ∎∎
@@ -12398,10 +12435,17 @@ unsigned long
 	_emt %[ "E 0" ] ⊢ _ 
 	E { f0 m0 } ⊢ _  
 	∎ {}	
-§ Main _ 
+§ main0 = main
+§ Main args 
+  OpADL.ns.asm.main {} ⊢ {}
+  main args ⊢| 
+§ Main0 a 
+  _lod_q { a %[ 0r ] } ⊢ { a _ s0 } 
+  _s8_len s0 ⊢ _ 
   $ %[ "foooo!!!jioohohio" ] ⊢ s
-  _rsz { s %[ 7r ] } ⊢ { s _ } 
+  \\_rsz { s %[ 7r ] } ⊢ { s _ } 
   \\_s8_len s ⊢ { s l } 
   \\_emt l ⊢ _ 
-  _emt s ⊢ _ 
-  ∎|
+  \\_emt s ⊢ _ 
+  OpADL.ns.asm.main {} ⊢ {}
+  ∎ {}  
