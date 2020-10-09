@@ -10789,9 +10789,9 @@ unsigned long
 								"\tmov rdi,GLX(" 0d' ")\n" 
 								`	call mlc_s8
 								"\tmov GLX(" 1d' "),rax\n" // 
-								rp8.add_s8 { ec0 sc0 } ⊢ ec0 
-								$ RP.cns2◂{ stt_v.r64_reg◂r0 stt_v.s8_reg◂rm0 } ⊢ iy 
-								∎ { evv glv_n ec0 iy } 								
+							rp8.add_s8 { ec0 sc0 } ⊢ ec0 
+							$ RP.cns2◂{ stt_v.r64_reg◂r0 stt_v.s8_reg◂rm0 } ⊢ iy 
+							∎ { evv glv_n ec0 iy } 								
 					\\[
 					§ stt_og og 
 						$ og ⊢ 
