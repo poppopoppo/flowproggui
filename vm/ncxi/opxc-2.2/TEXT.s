@@ -350,7 +350,7 @@ arr_of_lst_end:
 	xor rax,rax
 	mov rdi,8
 	add rsi,1 
-	C_CALL calloc
+	C_CALL calloc_sf
 	pop rsi 
 	mov QWORD [rax],rsi
 	ret 
@@ -366,7 +366,7 @@ mlc_s8: ; rdi=len
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 
-	C_CALL_SF calloc
+	C_CALL_SF calloc_sf
 	pop QWORD [rax] 
 	ret
 

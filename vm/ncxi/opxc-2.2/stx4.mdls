@@ -3623,12 +3623,13 @@ unsigned long
 			§ seq = 74r 
 			§ alc_i = 75r 
 			§ alc_o = 76r 
+      § rsz = 77r 
 			\[
 			§ mk_arr0 = 59r 
 			§ set_q0 = 60r 
 			§ of_arr0 = 61r 
 	\]
-	§ N = 77r 
+	§ N = 78r 
 
 	§ slv_name i  
 		=+ i' 
@@ -3786,6 +3787,8 @@ unsigned long
 			∎ %[ "_alc_i" ] 
 		∐ 
 			∎ %[ "_alc_o" ]
+    ∐ 
+      ∎ %[ "_rsz" ]
 		∐. 
 			∎| 
 	§ slv { tv i }  
@@ -4070,7 +4073,10 @@ unsigned long
 			T.newvar_q { tv lv } ⊢ { tv lv yk }
 			$ yk ⊢ yk,yk1,yk2,yk3
 			∎ { tv TX.t_imp◂{ RP.cns2◂{ TX.arr◂yk TX.r64◂{} } RP.cns2◂{ TX.arr_lc◂yk1 yk2 } } }		  		  
-		∐. 
+		\\ rsz 
+    ∐ 
+      ∎ { tv TX.t_imp◂{ RP.cns2◂{ TX.s8◂{} TX.r64◂{} } RP.cns2◂{ TX.s8◂{} TX.r64◂{} } } } 
+    ∐. 
 			∎| 
 							\[
 						∐ n'=e_axm.mk_arr0 .
@@ -11815,12 +11821,40 @@ unsigned long
 										$ RP.cns2◂{ RP.atm◂ast.rt_usr◂{ %[ 0r ] RP.cns2◂{ stt_v.r64_reg◂rp0 stt_v.arr_reg◂{ rc0 yk } } } pa1 } ⊢ iy 
 										stt_jmp_axm { ec0 evv tav tv eds glv_n iy f_c } ⊢ { ec0 evv tav tv eds glv_n iy }
 										∎ { V rfv { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } { rv irv } tav tv { eg0 eds ec0 rp8.e◂{} } { iy yr } } 																										
-									\[
-										∎| 
-									\]
 									∐. . 
 										∎|  
-								∐.  
+								\\ rsz 
+                ∐ 
+                  ∐ is ⊢ RP.rcd◂_cns◂{ s0 _cns◂{ r0 _nil◂{} } } .
+                    s8_to_hp { evv glv_n s0 } ⊢ { evv glv_n rs e }
+                    rp8.cct { ec0 e } ⊢ ec0 
+                    $ r0 ⊢ r0,r00 
+                    r64_to_rax { evv r00 } ⊢ { evv sc0 }
+                    rp8.add_s8 { ec0 sc0 } ⊢ ec0
+                    ^ rs ⊢ rs,sc0 
+                      "\tmov rdi,GLX(" 0d' ")\n" 
+                      ` push rax 
+                      ` mov rsi,~7 
+                      ` and rax,rsi
+                      ` add rax,16
+                      ` mov rsi,rax
+                      ` C_CALL_SF realloc 
+                      "\tmov GLX(" 0d' "),rax\n"
+                      ` pop rdi  
+                      ` mov QWORD [rax],rdi
+                      ` mov rsi,rdi 
+                      ` and rdi,7
+                      ` mov rdi,QWORD [s8_m+8*rdi]
+                      ` shr rsi,3 
+                      ` and QWORD [rax+8+8*rsi],rdi
+                      // 
+                    rp8.add_s8 { ec0 sc0 } ⊢ ec0
+                    $ RP.cns2◂{ stt_v.s8_reg◂rs r0 } ⊢ iy  
+                    stt_jmp_axm { ec0 evv tav tv eds glv_n iy f_c } ⊢ { ec0 evv tav tv eds glv_n iy }
+										∎ { V rfv { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } { rv irv } tav tv { eg0 eds ec0 rp8.e◂{} } { iy yr } } 																										
+                  ∐. . 
+                    ∎|
+                ∐.  
 									^ a ⊢ a,ee1 
 										"; ##" 0d' ".. ⊢ ..\n"
 										"\tcall ETR_" 0d' "\n" //
@@ -12365,5 +12399,9 @@ unsigned long
 	E { f0 m0 } ⊢ _  
 	∎ {}	
 § Main _ 
-  _emt %[ "foooo!!!" ] ⊢ _
+  $ %[ "foooo!!!jioohohio" ] ⊢ s
+  _rsz { s %[ 7r ] } ⊢ { s _ } 
+  \\_s8_len s ⊢ { s l } 
+  \\_emt l ⊢ _ 
+  _emt s ⊢ _ 
   ∎|
