@@ -101,15 +101,12 @@ bits 64
 %endmacro
  
 %macro ALC_RCD 2 ; n,reg-name!=rbx 
-	;add QWORD [SS_RCD_C+8*%1],1
 	add QWORD [SS_RCD_N+8*%1],1 
-	;mov QWORD [SIG_FLG],(0xf00f_0000+%1) 
 	mov QWORD [SIG_ETR],sig_alc_rcd_%1 
 	mov MCR_REG,QWORD [SS_RCD_TOP+8*%1]
 	mov %2,QWORD [MCR_REG]
 	mov QWORD [SS_RCD_TOP+8*%1],%2
 	mov %2,MCR_REG
-	;mov QWORD [SIG_FLG],0xffff_0000
 	mov QWORD [SIG_ETR],sig_dft
 %endmacro 
 
