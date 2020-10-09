@@ -47,3 +47,13 @@ fmt_sig_hdl:
 	db "signal number=%d",10
 	db "SIG_FLG=%llx",10
 	db 0
+
+s8_m: 
+	dq 0x0 
+	dq 0x0000_0000_0000_00ff
+	dq 0x0000_0000_0000_ffff  
+	dq 0x0000_0000_00ff_ffff  
+	dq 0x0000_0000_ffff_ffff  
+	dq 0x0000_00ff_ffff_ffff  
+	dq 0x0000_ffff_ffff_ffff  
+	dq 0x00ff_ffff_ffff_ffff  

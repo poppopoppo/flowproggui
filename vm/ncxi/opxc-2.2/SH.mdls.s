@@ -1,7 +1,7 @@
 %include "HD.s"  
 ;	v.0
 %define RCD_N 32
-%define GLV_N 129
+%define GLV_N 130
 %define SS_NULL 0xffff_ffff_ffff_0000
 %define EMT_BUF_MAX (KB<<1)				
  
@@ -11,9 +11,8 @@ section .bss
 section .data
 %include "DATA.s"
 					
-LB_1: db 34,102,111,111,111,111,33,33,33,34,0,0,0,0,0,0,0,0,0
-LB_2: db 32,58,32,95,115,56,226,151,130,10,0,0,0,0,0,0,0,0,0
-LB_3: db 59,32,226,136,142,124,10,101,120,110,32,52,49,51,54,48,52,58,10,0,0,0,0,0,0,0,0,0
+LB_1: db 32,58,32,95,115,56,226,151,130,10,0,0,0,0,0,0,0,0,0
+LB_2: db 59,32,226,136,142,124,10,101,120,110,32,52,49,53,51,50,49,58,10,0,0,0,0,0,0,0,0,0
 section .text
 	unt_1: dq (1<<48)
 	unt_2: dq (2<<48)
@@ -35,26 +34,65 @@ _start:
 	jmp RTM_0
 LB_0: ;; #1286◂◂(_none◂{}) 128'(= {| ? |} ) ⊢ - : (_arr◂_s8◂→q(0))
 JMP_0:
+	mov rsi,1  
+	mov rdi,32
+	xor rax,rax 
+	add QWORD [S8_N],17
+	C_CALL_SF calloc_sf
+	mov QWORD [rax],17
+	lea rdi,[rax+8]
+	mov rbx,2387226039977733990
+	mov QWORD [rdi],rbx
+	add rdi,8 
+	mov rbx,7595443265897195882
+	mov QWORD [rdi],rbx
+	add rdi,8 
+	mov BYTE [rdi],111
+	add rdi,1 
+	mov GLX(129),rax
+	mov rax,7
+	mov rdi,GLX(129)
+ push rax 
+ mov rsi,~7 
+ and rax,rsi
+ add rax,16
+ mov rsi,rax
+ C_CALL_SF realloc 
+	mov GLX(129),rax
+ pop rdi  
+ mov QWORD [rax],rdi
+ mov rsi,rdi 
+ and rdi,7
+ mov rdi,QWORD [s8_m+8*rdi]
+ shr rsi,3 
+ and QWORD [rax+8+8*rsi],rdi
 	push QWORD [SIG_ETR]
 	mov QWORD [SIG_ETR],emt_bof_hdl
 	EMT_CST fmt_emt,64
-	EMT_CST LB_1,10
+	mov rdi,GLX(129)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
 	EMT_CST fmt_nl,4
-	EMT_CST LB_2,10
+	EMT_CST LB_1,10
 	EMT_FLSH
 	pop QWORD [SIG_ETR]
-	mov rdi,LB_3
+	mov r8,GLX(129)
+	FREE_S8 r8
+	mov rdi,LB_2
 	call emt_stg 
 	add rsp,8
 	pop rdi
 	jmp rdi
 RTM_0:
-	push EXH_4
+	push EXH_3
 	MOV_RBX GLX(128),GLX(127)
 	call LB_0
 	add rsp,8
 	C_CALL exit
-EXH_4:
+EXH_3:
 	add rsp,8
 	pop rax
 	jmp rax

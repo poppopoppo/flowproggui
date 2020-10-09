@@ -238,6 +238,7 @@ extern printf
 extern sprintf
 extern malloc 
 extern calloc
+extern realloc
 extern free 
 extern isspace 
 extern strtoul
