@@ -77,7 +77,11 @@
   _cmp_s8 { x y } ⊢|
   \\ { x y b } 
   \\∎ { x y b }
+§ f5 { l x } 
+  \\_mk_arr { l x } ⊢ { _ _ a } 
+  ∎ {}
 § main args 
+  \[
   f4 %[ "09fds0()fe98few98uNv9hve8nv3=~fk-" ] ⊢ s 
   _pf_x◂◂P0 { s %[ 25r ] { %[ 34r ] %[ 0xfr ] } } ⊢ { s0 x0 _ } 
   _emt { s0 x0 } ⊢ { s0 _ } 
@@ -125,8 +129,10 @@
   _inc i ⊢ i 
   _clc_i { Cl0 i } ⊢ { C0 p0 } 
   \\_emt i ⊢ _ 
-  _mk_arr { %[ 4r ] %[ "ff" ] } ⊢ { _ _ a }
-  \[
+  \]
+  _mk_arr { %[ 10r ] %[ 9r ] } ⊢ { _ _ a }
+  \\f5 { %[ 4r ] %[ 9r ] } ⊢ a 
+\[
   _alc_o { a %[ 2r ] } ⊢ { a s } 
   _emt s ⊢ _ 
   _alc_i { a %[ "ji" ] } ⊢ { a i } 

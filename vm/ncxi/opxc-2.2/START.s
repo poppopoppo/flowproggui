@@ -1,4 +1,5 @@
 ; ini_prc 
+	mov rdi,NULL 
 	C_CALL ini_prc 
 ; set signal handler 
 	mov rdi,SIG_SEGV 
