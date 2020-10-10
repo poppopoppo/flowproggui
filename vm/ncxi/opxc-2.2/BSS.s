@@ -5,9 +5,9 @@
 	GLV: resq GLV_N
 	PAGE_SIZE: resq 1
 	tmp: resq 64
-	ret_vct: resq 64
+	;ret_vct: resq 64
  rsp_tmp: resq 1
-	RB: resq 1 
+	;RB: resq 1 
 
 ; emt buffer 
 	GD_BUF_PT: resq 1 
@@ -19,7 +19,7 @@
 ; exp_s8 
 ;	EXP_S8_VCT: resb 2048
 ;	EXP_S8_VCT: resq 256
-	EXP_S8_VCT: resq 800
+;	EXP_S8_VCT: resq 800
 
 
 ;rep_movsb 
