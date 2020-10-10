@@ -37,10 +37,10 @@ void *calloc_sf(size_t n, size_t size){
   }; 
   return p;
 };
-
-int ini_prc() {
+int ini_prc(void** p){
   int rc = 0;
   struct rlimit rl;
+  *p = NULL;
 
   rl.rlim_cur = 4000000000;
   rl.rlim_max = 10000000000;

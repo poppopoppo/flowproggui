@@ -1,8 +1,8 @@
+	NULL: resq 1 
 	SS_RCD_TOP: resq 64 
 	SS_RCD_BTM: resq 64 
 	SS_RCD_N: resq 64 
 	GLV: resq GLV_N
-;	SS_LN_N_PT: resq 1 
 	PAGE_SIZE: resq 1
 	tmp: resq 64
 	ret_vct: resq 64
@@ -16,18 +16,14 @@
  EMT_BUF: resb EMT_BUF_MAX 
 	EMT_BUF_END: resb 1
  
-; garbage vector 
-;	GBG_VCT: resq 252
-
 ; exp_s8 
-	EXP_S8_VCT: resb 2048
+;	EXP_S8_VCT: resb 2048
+;	EXP_S8_VCT: resq 256
+	EXP_S8_VCT: resq 800
+
 
 ;rep_movsb 
 	REP_MOVSB_VCT: resq 4
-
-;	SS_LN_TOP: resq 1
-;	SS_LN_VCT: resq 2*SS_LN_MAX
-;	SS_LN_BTM: resq 1  
 
 	;SS_RCD_N: resq (RCD_N+1) 
 	SS_RCD_C: resq (RCD_N+1)

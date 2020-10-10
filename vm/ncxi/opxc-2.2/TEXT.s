@@ -447,6 +447,10 @@ err_exc_q:
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
+err_NULL: 
+	mov rax,0xffff_ffff_0000_0000
+	mov QWORD [err_n],rax				
+	jmp err
 err_bc: 
 	mov QWORD [err_n],0xff
 err: 
