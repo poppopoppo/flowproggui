@@ -156,5 +156,9 @@
   _push { %[ 11r ] a } ⊢ a 
   _push { %[ 12r ] a } ⊢ a 
   _push { %[ 13r ] a } ⊢ a 
+  _alc_o { a %[ 4r ] } ⊢ { a v } 
+  _shl { v %[ 6r ] } ⊢ { v _ } 
+  _alc_i { a v } ⊢ { a _ } 
   _emt a ⊢ a 
+  _lod_q { a %[ 3r ] } ⊢ { a _ _ }
   ∎ {} 
