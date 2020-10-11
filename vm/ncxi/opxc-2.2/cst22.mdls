@@ -137,6 +137,9 @@
   _emt { a i } ⊢ { a _ }
   \]
   ∎ {} 
+§ f8 { x y } 
+  _seq◂◂{ _imul _add } { x y } ⊢ { x y } 
+  ∎ { x y } 
 § main _
   _mk_arr_x { %[ 15r ] %[ 3r ] } ⊢ { _ _ a } 
   _arr_len a ⊢ { a l } 
@@ -161,4 +164,10 @@
   _alc_i { a v } ⊢ { a _ } 
   _emt a ⊢ a 
   _lod_q { a %[ 3r ] } ⊢ { a _ _ }
+  _add { %[ 4r ] %[ 6r ] } ⊢ p 
+  _emt p ⊢ _
+  _seq◂◂{ _imul _add } { %[ 4r ] %[ 6r ] } ⊢ p 
+  _emt p ⊢ _ 
+  f8 { %[ 4r ] %[ 6r ] } ⊢ p 
+  _emt p ⊢ _ 
   ∎ {} 
