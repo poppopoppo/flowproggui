@@ -12124,7 +12124,6 @@ unsigned long
 							$ asm.e◂{} ⊢ ec1 
 							$ ft ⊢ { lb_i pr yr }  
 							$ lb_i ⊢ lb_i,lb_i0 
-							\\$ pr ⊢ pr,pr0 
 							$ { lb_i0 pr yr } ⊢ ft 
 							$ { lb_i f_call◂{} } ⊢ f_c 
 							stt_jmp { V rfv _none◂{} f_c { gfl cl mfv } glv_n ei_n lb_n { ev_n evv }  { rv irv } tav tv { eg0 eds ec1 } { ys is o yd } } ⊢ { V rfv  { gfl cl mfv } glv_n ei_n lb_n { ev_n evv }  { rv irv } tav tv { eg0 eds ec1 ew1 } { p1 yd } }  
