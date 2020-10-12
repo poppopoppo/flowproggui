@@ -23,6 +23,10 @@ LB_33: db 51,48,114,0,0,0,0,0,0,0,0,0
 LB_34: db 54,114,0,0,0,0,0,0,0,0,0
 LB_35: db 32,58,32,123,32,95,114,54,52,226,151,130,32,95,114,54,52,226,151,130,125,10,0,0,0,0,0,0,0,0,0
 LB_38: db 32,58,32,123,32,95,114,54,52,226,151,130,32,95,114,54,52,226,151,130,125,10,0,0,0,0,0,0,0,0,0
+LB_46: db 34,70,70,34,0,0,0,0,0,0,0,0,0
+LB_47: db 57,114,0,0,0,0,0,0,0,0,0
+LB_48: db 50,114,0,0,0,0,0,0,0,0,0
+LB_49: db 32,58,32,123,32,95,97,114,114,226,151,130,123,32,125,226,151,130,95,114,56,226,151,130,32,123,32,95,114,54,52,226,151,130,32,95,114,54,52,226,151,130,125,125,10,0,0,0,0,0,0,0,0,0
 section .text
 global _start
 _start:
@@ -40,7 +44,7 @@ JMP_36:
 	add GLX(137),rdi
 	MOV_RBX GLX(0),GLX(137)
 	MOV_RBX GLX(1),GLX(138)
-	ret
+ ret 
 LB_39: ;; #16◂◂(_none◂{}) 141'(= r ) ⊢ 0'(1)◂1' : (_r64◂→_opn◂_r64◂)
 JMP_39:
 	mov GLX(0),0
@@ -48,7 +52,7 @@ JMP_39:
 	lea DST_REG,GLX(1)
 	MOV_RDI DX(0),GLX(141)
 	pop DST_REG
-	ret
+ ret 
 LB_41: ;; _r64◂
 	jmp QWORD [LB_44+8*r10]
 LB_44: dq LB_42,LB_43
@@ -56,8 +60,8 @@ LB_42
 	jmp LB_45
 LB_43
 	jmp LB_45
-LB_45:
-	ret
+LB_45
+ ret 
 LB_0: ;; #17◂◂(_none◂{}) 128'(= {| ? |} ) ⊢ { } : (_arr◂{ }◂_arr◂{ }◂_r8◂→{ })
 JMP_0:
 	mov rdi,15
@@ -677,21 +681,39 @@ LB_28:
 	mov r10,GLX(142)
 	mov r8,GLX(143)
 	call LB_41
+	push QWORD [SIG_ETR]
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	EMT_CST fmt_rcd_l,4
+	EMT_CST LB_46,4
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_l,4
+	EMT_CST LB_47,2
+	EMT_CST fmt_spc,4
+	EMT_CST LB_48,2
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	EMT_CST fmt_spc,4
+	EMT_CST fmt_rcd_r,4
+	EMT_CST fmt_nl,4
+	EMT_CST LB_49,45
+	EMT_FLSH
+	pop QWORD [SIG_ETR]
 	mov r8,GLX(129)
 	GET_LEN rsi,r8
 	mov rax,0 
 	push SRC_REG 
 	lea SRC_REG,[r8+8]
 	push r8 
-LB_46:
+LB_50:
 	cmp rsi,0
-	jz LB_47
+	jz LB_51
 	push rsi 
 	pop rsi 
 	sub rsi,1 
 	lea SRC_REG,[SRC_REG+8*1]
-	jmp LB_46
-LB_47:
+	jmp LB_50
+LB_51:
 	pop rdi
 	pop SRC_REG 
 	C_CALL_SF free 
@@ -705,12 +727,12 @@ EXH_40:
 	pop rax
 	jmp rax
 RTM_0:
-	push EXH_48
+	push EXH_52
 	MOV_RBX GLX(128),GLX(127)
 	call LB_0
 	add rsp,8
 	C_CALL exit
-EXH_48:
+EXH_52:
 	add rsp,8
 	pop rax
 	jmp rax

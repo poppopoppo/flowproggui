@@ -141,6 +141,7 @@
   _seq◂◂{ _seq◂◂{ _sub _imul } _add } { x y } ⊢| 
 § f9 a 
   _some a ⊢| 
+
 § main _
   _mk_arr_x { %[ 15r ] %[ 3r ] } ⊢ { _ _ a } 
   _arr_len a ⊢ { a l } 
@@ -172,4 +173,6 @@
   f8 { %[ 8r ] %[ 6r ] } ⊢ p 
   _emt p ⊢ _ 
   f9 %[ 0r ] ⊢ _ 
+  _id_par◂◂(_id_par◂◂_inc) { %[ "FF" ] { %[ 9r ] %[ 1r ] } } ⊢ p 
+  _emt p ⊢ _ 
   ∎ {} 
