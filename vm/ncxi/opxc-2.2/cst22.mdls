@@ -140,7 +140,8 @@
 § f8 { x y } 
   _seq◂◂{ _seq◂◂{ _sub _imul } _add } { x y } ⊢| 
 § f9 a 
-  _some a ⊢| 
+  $ _some◂a ⊢ o 
+  ∎ o 
 § c0◂{ x y } = { y x }
 § main _
   _mk_arr_x { %[ 15r ] %[ 3r ] } ⊢ { _ _ a } 
@@ -175,6 +176,10 @@
   f9 %[ 0r ] ⊢ _ 
   _id_par◂◂(_id_par◂◂_inc) { %[ "FF" ] { %[ 9r ] %[ 1r ] } } ⊢ p 
   _emt p ⊢ _ 
-  _seq◂◂{ c0 _seq◂◂{ _imul c0 } } { %[ 4r ] %[ 3r ] } ⊢ p 
+  _seq◂◂{ _ctr◂◂c0 _seq◂◂{ _imul _ctr◂◂c0 } } { %[ 4r ] %[ 3r ] } ⊢ p 
+  _emt p ⊢ _ 
+  $ c0◂{ %[ 3r ] %[ "F" ] } ⊢ _ 
+  _ctr◂◂_some {} ⊢ _ 
+  _ctr◂◂c0 { %[ 3r ] %[ 2r ] } ⊢ p 
   _emt p ⊢ _ 
   ∎ {} 
