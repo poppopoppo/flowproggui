@@ -1,0 +1,75 @@
+
+
+	¶ nd v'
+		∐ p : { _opn◂(_pt◂(nd◂v')) { _s8 v' } _opn◂(_pt◂(nd◂v')) } 
+	¶ t v' = { _Clr◂(nd◂v') _pt◂(nd◂v') }
+	§ ini # {} 
+		_cli {} ⊢ C 
+		∎ { C ‹› } 
+§ 
+		@.get_r # { { C T } w o } 
+			_clc_o { C w } ⊢ { Cl p◂{ l { k v } _ } }
+			_clc_i { Cl p◂{ l { k v } o } } ⊢ { C _ } 
+			∎ { C T }  
+	§	@.get_T◂◂F { { C T } x t k0 } 
+			_clc_o { C t } ⊢ { Cl p◂{ l { k v } r } } 
+			_cmp_s8 { k k0 } ⊢ { k k0 c } 
+			=+ c' 
+			∐ 
+				$ r ⊢ 
+				∐ _some◂r .          
+          $ r ⊢ r,r0 
+					_clc_i { Cl p◂{ l { k v } ‹ r › } } ⊢ { C t }
+					get_T◂◂get_r { { C T } t r0 k0 } ⊢|
+        ∐. _none◂{} . 
+					∎|
+			∐  
+        $ v ⊢ v,v0 
+				_clc_i { Cl p◂{ ‹› { k v0 } ‹› } } ⊢ { C _ }
+        ∐ l ⊢ _none◂{}; r ⊢ _some◂r . 
+					$ { { C T } x ‹ r › } ⊢ { { C T } w o } 
+          _clc_o { C w } ⊢ { Cl p◂{ l { k1 v1 } _ } }
+			    _clc_i { Cl p◂{ l { k1 v1 } o } } ⊢ { C _ } 
+          $ { C T } ⊢ { C T } 
+          \\get_r { { C T } x ‹ r › } ⊢ { C T }  
+					∎ { { C T } { k0 ‹ v › } }
+				∐. . 
+          ∎|
+			∐. 
+				∎|
+		§ get { { C T } k0 } 
+			$ T ⊢ 
+			∐ _some◂T . 
+				$ T ⊢ T,t,t0 
+        get_T◂◂get_r { { C ‹ T › } t0 t k0 } ⊢| 
+			∐. _none◂{} . 
+				∎| 
+        \\∎ { { C ‹› } { k0 ‹› } } 
+
+	\[
+  § main0 {} 
+		ini {} ⊢ B 
+		set { B { %[ "" ] %[ 65r ] } } ⊢ { B _ } 
+		∎ B
+	\]
+  § main _ 
+		\\main0 {} ⊢ B0 
+		ini {} ⊢ B0 
+    get { B0 %[ "FE" ] } ⊢ { B1 cx } 
+		\[
+		$ B0 ⊢ { C T } 
+		$ T ⊢ 
+		∐ _some◂T . 
+			$ T ⊢ T,t,t0 
+       get_T◂◂get_e { { C ‹ T › } t0 t %[ "" ] } ⊢ _ 
+			 ∎ {}
+			 \\$ %[ "FF" ] ⊢ k0
+			 \\_clc_o { C t } ⊢ { Cl p◂{ l { k v } r } } 
+			\\_cmp_s8 { k k0 } ⊢ { k k0 c } 
+			\\_clc_o { C t } ⊢ { Cl p◂{ l { k v } _ } }
+			\\_clc_i { Cl p◂{ l { k v } ‹› } } ⊢ { C _ } 
+			\\get_m { { C ‹ T › } t t0 } ⊢ _
+			\\∎ {} 
+		∐. _none◂{} . 
+		\]
+			∎ {} 
