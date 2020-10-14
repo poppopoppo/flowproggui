@@ -143,6 +143,13 @@
   $ _some◂a ⊢ o 
   ∎ o 
 § c0◂{ x y } = { y x }
+§ @.f10 { i r } 
+  ∐ i'=0r . 
+    ∎ r 
+  ∐. . 
+    _imul { i r } ⊢ { i r } 
+    _dec i ⊢ i 
+    f10 { i r } ⊢| 
 § main _
   _mk_arr_x { %[ 15r ] %[ 3r ] } ⊢ { _ _ a } 
   _arr_len a ⊢ { a l } 
@@ -181,5 +188,5 @@
   $ c0◂{ %[ 3r ] %[ "F" ] } ⊢ _ 
   _ctr◂◂_some {} ⊢ _ 
   _ctr◂◂c0 { %[ 3r ] %[ 2r ] } ⊢ p 
-  _emt p ⊢ _ 
+  \\_emt p ⊢ _ 
   ∎ {} 
