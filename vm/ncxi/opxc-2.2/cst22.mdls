@@ -80,6 +80,7 @@
 § f5 { l x } 
   \\_mk_arr { l x } ⊢ { _ _ a } 
   ∎ {}
+\[
 § main args 
   f4 %[ "09fds0()fe98few98uNv9hve8nv3=~fk-" ] ⊢ s 
   _pf_x◂◂P0 { s %[ 25r ] { %[ 34r ] %[ 0xfr ] } } ⊢ { s0 x0 _ } 
@@ -137,12 +138,21 @@
   _emt { a i } ⊢ { a _ }
   \]
   ∎ {} 
+\]
 § f8 { x y } 
   _seq◂◂{ _seq◂◂{ _sub _imul } _add } { x y } ⊢| 
 § f9 a 
   $ _some◂a ⊢ o 
   ∎ o 
 § c0◂{ x y } = { y x }
+§ @.f10 { i r }
+  ∐ i'=0r .
+    _id r ⊢| 
+  ∐. . 
+    _imul { r i } ⊢ { r i } 
+    _dec i ⊢ i 
+    f10 { i r } ⊢| 
+\[
 § @.f10 { i r } 
   ∐ i'=0r . 
     ∎ r 
@@ -150,6 +160,7 @@
     _imul { i r } ⊢ { i r } 
     _dec i ⊢ i 
     f10 { i r } ⊢| 
+\]
 § main _
   _mk_arr_x { %[ 15r ] %[ 3r ] } ⊢ { _ _ a } 
   _arr_len a ⊢ { a l } 
@@ -189,4 +200,6 @@
   _ctr◂◂_some {} ⊢ _ 
   _ctr◂◂c0 { %[ 3r ] %[ 2r ] } ⊢ p 
   \\_emt p ⊢ _ 
+  f10 { %[ 5r ] %[ 1r ] } ⊢ r 
+  _emt r ⊢ _ 
   ∎ {} 
