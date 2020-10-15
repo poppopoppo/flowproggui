@@ -161,6 +161,8 @@
     _dec i ⊢ i 
     f10 { i r } ⊢| 
 \]
+§ @.f11 a 
+  _seq◂◂{ _imul f11 } a ⊢| 
 § main _
   _mk_arr_x { %[ 15r ] %[ 3r ] } ⊢ { _ _ a } 
   _arr_len a ⊢ { a l } 
@@ -199,7 +201,9 @@
   $ c0◂{ %[ 3r ] %[ "F" ] } ⊢ _ 
   _ctr◂◂_some {} ⊢ _ 
   _ctr◂◂c0 { %[ 3r ] %[ 2r ] } ⊢ p 
-  \\_emt p ⊢ _ 
+  _emt p ⊢ _ 
   f10 { %[ 5r ] %[ 1r ] } ⊢ r 
   _emt r ⊢ _ 
+  f11 { %[ 44r ] %[ 6r ] } ⊢ p 
+  _emt p ⊢ _ 
   ∎ {} 
