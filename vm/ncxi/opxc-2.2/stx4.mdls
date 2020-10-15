@@ -4749,6 +4749,9 @@ unsigned long
 					∐ c ⊢ ast.k_pf◂pf . 
 						lst.map_l◂◂exp_s8 { { evv vv } pf } ⊢ { { evv vv } pf }
 						∎ { { evv vv } RP.atm◂ast.k_pf◂pf }
+					∐ c ⊢ ast.k_ply◂{ x y } . 
+						src_ptn { { evv vv } y } ⊢ { { evv vv } y } 
+						∎ { { evv vv } RP.atm◂ast.k_ply◂{ x y } }
 					∐. . 
 						∎ { { evv vv } RP.atm◂c }
 				@.ct_ptn = RP.map_l_atm◂◂cst
@@ -4763,7 +4766,6 @@ unsigned long
 					∎ { { evv vv } ast.exp_s8_for◂{ i c } }
 				∐. . 
 					∎ { { evv vv } e } 
-			§ 
 				@.src { { evv vv } s } 
 					$ s ⊢ 
 					∐ ast.re_agl◂{ e p } . 
@@ -6627,17 +6629,17 @@ unsigned long
 			@.r { { ps q pd } lc } 
 				$ lc ⊢
 				∐ ast.jmp◂{ en x } . 
-					\\ip0 { pd x } ⊢ k0 
-					\\∎ ast.jmp◂{ seq_k◂{ q seq_k◂{ ctr◂k0 seq_k◂{ dlt_id◂{} en } } } ps }
-					∎ ast.seq◂{ { q ps pd } ast.jmp◂{ en x } }
+					ip0 { pd x } ⊢ k0 
+					∎ ast.jmp◂{ seq_k◂{ q seq_k◂{ ctr◂k0 seq_k◂{ dlt_id◂{} en } } } ps }
+					\\∎ ast.seq◂{ { q ps pd } ast.jmp◂{ en x } }
 				∐ ast.seq◂{ { en s d } lc } .
-					\[
+					\\[
 					ip1 { pd s } ⊢ { k0 d0 } 
 					$ seq_k◂{ q seq_k◂{ ctr◂k0 id_par◂en } } ⊢ q 
 					$ RP.cns2◂{ d0 d } ⊢ pd
 					r { { ps q pd } lc } ⊢| 
-					\]
-					∎ ast.seq◂{ { q ps pd } ast.seq◂{ { en s d } lc } }
+					\\]
+				\\	∎ ast.seq◂{ { q ps pd } ast.seq◂{ { en s d } lc } }
 				∐ ast.mtc◂lm .
 					\\mtc lm ⊢ lm 
 					∎ ast.seq◂{ { q ps pd } ast.mtc◂lm } 
@@ -8564,8 +8566,9 @@ unsigned long
 							∎| 
 						∐ ast.k_app◂_ . 
 							∎| 
-						∐ ast.k_var◂_ .
-							∎| 
+						∐ ast.k_var◂{ i v } .
+							_emt i ⊢ _ 
+							∎|  
 						∐ ast.k_op_axm◂_ .
 							∎|
 						∐ ast.k_pf◂_ .
