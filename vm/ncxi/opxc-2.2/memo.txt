@@ -449,3 +449,10 @@ opcx
 { { l(2) l(2)l(2) l(2)l(2)} l(2)})"" ""}
 
   _mtc◂{ a' b' }
+
+_oom : _mtc◂{ a' b' } →→(a'→b')
+_moo : (a'→b')→→_mtc◂{ a' b' }
+_mcp : { _ctr◂{ b' a' } _mtc◂{ b' c' } _mtc◂{ a' c' } }→→_mtc◂{ a' c' }
+_mcn : {}→→_mtc◂t' 
+_mcs : { _ctr◂{ b' a' } _mtc◂{ b' c' } }→→_mtc◂{ a' c' }
+_mct : { _mt _ctr◂{ a' { { v' v' } b' } } _mtc◂{ a' b' } _mtc◂{ a' b' } }→→mtc◂{ a' b' }
