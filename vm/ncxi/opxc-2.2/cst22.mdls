@@ -212,17 +212,17 @@
 § c {} 
   ∎ %[ 4r ]
 § f12 v 
-  _oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcp◂◂{ _none _moo◂◂c _mcn◂◂{} } }) v ⊢ i 
+  _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcp◂◂{ _mop◂◂_none _moo◂◂c _mcn◂◂{} } }) v ⊢ i 
   ∎ i
 § main _ 
   _oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
   _emt i ⊢ _ 
-  _oom◂◂(_mcp◂◂{ p _moo◂◂_inc _mcn◂◂{} }) p◂%[ 66r ] ⊢ i 
+  _oom◂◂(_mcp◂◂{ _mop◂◂p _moo◂◂_inc _mcn◂◂{} }) p◂%[ 66r ] ⊢ i 
   _emt i ⊢ _ 
-  _oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcn◂◂{} }) _some◂%[ 664r ] ⊢ i 
+  _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcn◂◂{} }) _some◂%[ 664r ] ⊢ i 
   _emt i ⊢ _ 
   \\_oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcn◂◂{} }) _none◂{} ⊢ i 
-  _oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcp◂◂{ _none _moo◂◂c _mcn◂◂{} } }) _none◂{} ⊢ i 
+  _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcp◂◂{ _mop◂◂_none _moo◂◂c _mcn◂◂{} } }) _none◂{} ⊢ i 
   _emt i ⊢ _ 
   f12 _none◂{} ⊢ i 
   _emt i ⊢ _ 
