@@ -456,3 +456,8 @@ _mcp : { _ctr◂{ b' a' } _mtc◂{ b' c' } _mtc◂{ a' c' } }→→_mtc◂{ a' c
 _mcn : {}→→_mtc◂t' 
 _mcs : { _ctr◂{ b' a' } _mtc◂{ b' c' } }→→_mtc◂{ a' c' }
 _mct : { _mt _ctr◂{ a' { { v' v' } b' } } _mtc◂{ a' b' } _mtc◂{ a' b' } }→→mtc◂{ a' b' }
+
+
+  \[ { x y } = _cns◂{ x _cns◂{ y _nil◂{} } } ]◂{ %[ "#" ] { %[ 4r ] v } }
+  -- 
+  --
