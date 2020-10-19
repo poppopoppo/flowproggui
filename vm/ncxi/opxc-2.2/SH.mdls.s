@@ -12,6 +12,7 @@ section .data
 %include "DATA.s"
 					
 LB_3: db 32,58,32,95,114,54,52,226,151,130,10,0,0,0,0,0,0,0,0,0
+LB_4: db 32,58,32,95,114,54,52,226,151,130,10,0,0,0,0,0,0,0,0,0
 section .text
 global _start
 _start:
@@ -54,14 +55,29 @@ LB_2:
 	EMT_CST LB_3,11
 	EMT_FLSH
 	pop QWORD [SIG_ETR]
+	mov rax,67
+	mov GLX(0),rax
+	push QWORD [SIG_ETR]
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,GLX(0)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_CST LB_4,11
+	EMT_FLSH
+	pop QWORD [SIG_ETR]
  ret 
 RTM_0:
-	push EXH_4
+	push EXH_5
 	MOV_RBX GLX(128),GLX(127)
 	call LB_0
 	add rsp,8
 	C_CALL exit
-EXH_4:
+EXH_5:
 	add rsp,8
 	pop rax
 	jmp rax
