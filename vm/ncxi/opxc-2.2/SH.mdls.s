@@ -1,7 +1,7 @@
 %include "HD.s"  
 ;	v.0
 %define RCD_N 32
-%define GLV_N 130
+%define GLV_N 134
 %define SS_NULL 0xffff_ffff_ffff_0000
 %define EMT_BUF_MAX (KB<<1)				
  
@@ -15,6 +15,7 @@ LB_3: db 32,58,32,95,114,54,52,226,151,130,10,0,0,0,0,0,0,0,0,0
 LB_4: db 32,58,32,95,114,54,52,226,151,130,10,0,0,0,0,0,0,0,0,0
 LB_5: db 32,58,32,95,114,54,52,226,151,130,10,0,0,0,0,0,0,0,0,0
 LB_8: db 32,58,32,95,114,54,52,226,151,130,10,0,0,0,0,0,0,0,0,0
+LB_15: db 32,58,32,95,114,54,52,226,151,130,10,0,0,0,0,0,0,0,0,0
 section .text
 global _start
 _start:
@@ -25,7 +26,26 @@ JMP_6:
 	mov rax,4
 	mov GLX(0),rax
  ret 
-LB_0: ;; #20◂◂(_none◂{}) 128'(= {| ? |} ) ⊢ { } : (_arr◂{ }◂_arr◂{ }◂_r8◂→{ })
+LB_9: ;; #20◂◂(_none◂{}) 130'(1)◂131' ⊢ 0'(= r ) : (_opn◂(=_r64◂)→_r64◂)
+JMP_9:
+	mov rdi,GLX(130)
+	jmp QWORD [LB_12+8*rdi]
+LB_12: dq LB_10,LB_11
+LB_10
+	add GLX(131),1
+	MOV_RBX GLX(0),GLX(131)
+LB_11
+	push EXH_13
+	call LB_6
+	add rsp,8
+	MOV_RBX GLX(132),GLX(0)
+	MOV_RBX GLX(0),GLX(132)
+ ret 
+EXH_13:
+	add rsp,8
+	pop rax
+	jmp rax
+LB_0: ;; #21◂◂(_none◂{}) 128'(= {| ? |} ) ⊢ { } : (_arr◂{ }◂_arr◂{ }◂_r8◂→{ })
 JMP_0:
 	mov r8,GLX(128)
 	GET_LEN rsi,r8
@@ -110,18 +130,41 @@ LB_2:
 	EMT_CST LB_8,11
 	EMT_FLSH
 	pop QWORD [SIG_ETR]
+	push EXH_14
+	mov GLX(130),1
+	mov GLX(131),unt
+	call LB_9
+	add rsp,8
+	MOV_RBX GLX(133),GLX(0)
+	push QWORD [SIG_ETR]
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,GLX(133)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_r64
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_CST LB_15,11
+	EMT_FLSH
+	pop QWORD [SIG_ETR]
  ret 
 EXH_7:
 	add rsp,8
 	pop rax
 	jmp rax
+EXH_14:
+	add rsp,8
+	pop rax
+	jmp rax
 RTM_0:
-	push EXH_9
+	push EXH_16
 	MOV_RBX GLX(128),GLX(127)
 	call LB_0
 	add rsp,8
 	C_CALL exit
-EXH_9:
+EXH_16:
 	add rsp,8
 	pop rax
 	jmp rax
