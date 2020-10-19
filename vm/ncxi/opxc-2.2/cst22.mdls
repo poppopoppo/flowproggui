@@ -209,9 +209,16 @@
   f11 { %[ 44r ] %[ 6r ] } ⊢ p 
   _emt p ⊢ _ 
   ∎ {} 
+§ c {} 
+  ∎ %[ 4r ]
 § main _ 
   _oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
   _emt i ⊢ _ 
   _oom◂◂(_mcp◂◂{ p _moo◂◂_inc _mcn◂◂{} }) p◂%[ 66r ] ⊢ i 
+  _emt i ⊢ _ 
+  _oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcn◂◂{} }) _some◂%[ 664r ] ⊢ i 
+  _emt i ⊢ _ 
+  \\_oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcn◂◂{} }) _none◂{} ⊢ i 
+  _oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcp◂◂{ _none _moo◂◂c _mcn◂◂{} } }) _none◂{} ⊢ i 
   _emt i ⊢ _ 
   ∎ {} 
