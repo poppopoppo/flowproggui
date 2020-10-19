@@ -163,6 +163,8 @@
 \]
 § @.f11 a 
   _seq◂◂{ _imul f11 } a ⊢| 
+¶ p e' 
+  ∐ p : e' 
 § main _
   _mk_arr_x { %[ 15r ] %[ 3r ] } ⊢ { _ _ a } 
   _arr_len a ⊢ { a l } 
@@ -210,5 +212,6 @@
 § main _ 
   _oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
   _emt i ⊢ _ 
+  _oom◂◂(_mcp◂◂{ p _moo◂◂_inc _mcn◂◂{} }) p◂%[ 66r ] ⊢ i 
+  _emt i ⊢ _ 
   ∎ {} 
-  
