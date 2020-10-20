@@ -211,9 +211,21 @@
   ∎ {} 
 § c {} 
   ∎ %[ 4r ]
+§ ic◂x = x 
+\\ \[ x → x ] 
 § f12 v 
   _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcp◂◂{ _mop◂◂_none _moo◂◂c _mcn◂◂{} } }) v ⊢ i 
   ∎ i
+§ f13 { { v0 v1 } i }
+  _inc i ⊢ i 
+  ∎ { { v0 v1 } i }
+§ f14 { { v0 v1 } i }
+  _dec i ⊢ i 
+  ∎ { { v0 v1 } i }
+§ f15 { v w } 
+  _oom◂◂(_mcp◂◂{ _mt_le◂◂ic _moo◂◂f13 _moo◂◂f14 }) { { v w } %[ 2r ] } ⊢ r 
+  _emt r ⊢ _
+  ∎ {}
 § main _ 
   _oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
   _emt i ⊢ _ 
@@ -226,4 +238,14 @@
   _emt i ⊢ _ 
   f12 _none◂{} ⊢ i 
   _emt i ⊢ _ 
-  ∎ {} 
+  _oom◂◂(_mcp◂◂{ _mt_ne◂◂ic _moo◂◂f13 _moo◂◂f14 }) { { %[ 5r ] %[ 5r ] } %[ 2r ] } ⊢ r 
+  _emt r ⊢ _
+  f15 { %[ 6r ] %[ 5r ] } ⊢ {} 
+  $ %[ 4r ] ⊢ x 
+  $ %[ 6r ] ⊢ y 
+  ∐ x'=y' . 
+    _emt {} ⊢ {} 
+    ∎ {}
+  ∐. . 
+    ∎ {} 
+
