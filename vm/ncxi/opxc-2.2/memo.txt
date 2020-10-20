@@ -458,6 +458,22 @@ _mcs : { _ctr◂{ b' a' } _mtc◂{ b' c' } }→→_mtc◂{ a' c' }
 _mct : { _mt _ctr◂{ a' { { v' v' } b' } } _mtc◂{ a' b' } _mtc◂{ a' b' } }→→mtc◂{ a' b' }
 
 
-  \[ { x y } = _cns◂{ x _cns◂{ y _nil◂{} } } ]◂{ %[ "#" ] { %[ 4r ] v } }
+  \[ { x y } → _cns◂{ x _cns◂{ y _nil◂{} } } ]◂{ %[ "#" ] { %[ 4r ] v } }
+  \\[ { X Y } →→ X◂◂Y ]◂◂{ _inc 8r } 
+
   -- 
   --
+
+_tj : { _ctr◂{ a' { v' b' } } _tj◂{ a' c' } }→→_mtc◂{ a' c' }
+_tjn : {}→→_tj◂{ a' b' }
+_tjc : { _mtc◂{ a' b' } _tj◂{ a' b' } }→→_tj◂{ a' b' }
+
+_exh : { a'→b' { b' t' }→c' t'→c' }→→{ a' t' }→c' 
+_exh : (a'→b')→→(a'→_exn◂b')
+
+¶ _exn x' 
+  ∐ _nml : x' 
+  ∐ _bdc : 
+  .. 
+  ∐ 
+
