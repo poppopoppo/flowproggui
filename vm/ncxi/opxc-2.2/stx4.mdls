@@ -3991,12 +3991,14 @@ unsigned long
 			§ mt_e = 88r 
 			§ mt_ne = 89r
 			§ mt_le = 90r 
+			§ exn = 91r 
+			\\§ _exh = 91r 
 			\[
 			§ mk_arr0 = 59r 
 			§ set_q0 = 60r 
 			§ of_arr0 = 61r 
-	\]
-	§ N = 91r 
+			\]
+	§ N = 92r 
 
 	§ slv_name i  
 		=+ i' 
@@ -4182,6 +4184,8 @@ unsigned long
 			∎ %[ "_mt_ne" ]
 		∐ 
 			∎ %[ "_mt_le" ]
+		∐ 	
+			∎ %[ "_exn" ]
 		∐. 
 			∎| 
 	§ slv { tv i }  
@@ -4577,7 +4581,11 @@ unsigned long
 			$ y0 ⊢ y0,y0t,y0s 
 			$ y1 ⊢ y1,y1t 
 			∎ { tv TX.t_ct_imp◂{ TX.t_ctr◂{ y0 RP.cns2◂{ RP.cns2◂{ y1 y1t } y2 } } TX.t_mop◂{ y0t y0s } } } 
-		
+		\\ exn 
+		∐ 
+			T.newvar_q { tv lv } ⊢ { tv lv y0 }
+			T.newvar_q { tv lv } ⊢ { tv lv yx }
+			∎ { tv TX.t_ct_imp◂{ yx TX.t_imp◂{ RP.unt◂{} y0 } } }			
 		∐. 
 			∎| 
 							\[
@@ -5501,7 +5509,8 @@ unsigned long
 	§
 		@.lc_code ^=
 			∐* nls "∎|" ⊢ { nn {} }
-				∎ _some◂prs_vld◂ast.exn◂%_n
+				\\∎ _some◂prs_vld◂ast.exn◂%_n
+				∎ ret_vld◂ast.jmp◂{ RP.atm◂ast.k_app◂{ RP.atm◂ast.k_name◂ast.fst_n◂%[ "_exn" ] RP.atm◂ast.k_r64◂%_n } RP.unt◂{} }
 			∐# nls "∎" !| ; ⊢ { nn {} },r
 				∎ _some◂%r  
 				∐# src_ptn "\n" ⊢ { r {} }
@@ -7418,8 +7427,7 @@ unsigned long
 		∐. _nil◂{} . 
 			∎ NS  
 	§§ slv_lc_clq 
-			§ 
-				f_l0_i { { env0 evv tv ev_n cl { fl ql gl } } { w le } }
+			§ f_l0_i { { env0 evv tv ev_n cl { fl ql gl } } { w le } }
 					assoc { cl w } ⊢ { cl w o } 
 					nnt_emt { o w } ⊢ w 
 					$ w ⊢ w,w0 
@@ -11597,7 +11605,6 @@ unsigned long
 						m_of_mp { evv y } ⊢ { evv y }
 						∎ { evv { x y } } 
 					∐ mc ⊢ RP.atm◂ast.k_ctr◂{ i n _ } . 
-						 
 						∎ { evv { RP.atm◂%[ 0r ] RP.atm◂stt_a◂{ i n RP.atm◂r◂%[ 0r ] } } } 
 					∐ mc ⊢ RP.atm◂ast.k_name◂v . 
 						EVV.lod_evv { evv v } ⊢ { evv v c }
@@ -12642,6 +12649,35 @@ unsigned long
 								\\ mcn 
 								∐ 
 									∎|
+								\\ mop 
+								∐ 
+									∎| 
+								\\ mt_e 
+								∐ 
+									∎| 
+								\\ mt_ne 
+								∐ 
+									∎| 
+								\\ mt_le 
+								∐ 
+									∎| 
+								\\ exn 
+								∐ 
+									∐ la ⊢ _cns◂{ RP.atm◂ast.k_r64◂ne _nil◂{} } . 
+										$ is ⊢ _ 
+										^ ne ⊢ _,se 
+											"; ∎|\n" 
+											"exn " 0d' ":\n" // 
+										printf { eds ec0 se lb_n } ⊢ { eds ec0 se lb_n }
+										^ _ ⊢ ec1 
+										"\tadd rsp,8\n" 
+											"\tpop rdi\n" 
+											"\tjmp rdi\n" // 
+										asm.add_s8 { ec0 ec1 } ⊢ ec0 
+										$ RP.atm◂ast.btm◂{} ⊢ pr 
+										∎ { V rfv { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } irv tav tv { eg0 eds ec0 ew0 } pr } 																																															
+									∐. . 
+										∎|
 								∐.  
 									^ a ⊢ a,ee1 
 										"; ##" 0d' ".. ⊢ ..\n"
