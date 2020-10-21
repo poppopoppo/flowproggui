@@ -477,3 +477,9 @@ _exh : (a'→b')→→(a'→_exn◂b')
   .. 
   ∐ 
 
+
+¶ @.lst_T.[ _ ] _ 
+  ∐ nil_T : {} ⊢ lst_T.[ 'nil ]◂a' 
+  ∐ cns_T : { a' lst_T.[ t' ]◂a' } ⊢ lst_T.[ 'cns ]◂a' 
+¶ lst_cns a' 
+  ∐ lst_cns : lst_T.[ 'cns ]◂a' 
