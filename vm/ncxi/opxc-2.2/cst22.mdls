@@ -226,6 +226,24 @@
   _oom◂◂(_mcp◂◂{ _mt_le◂◂ic _moo◂◂f13 _moo◂◂f14 }) { { v w } %[ 2r ] } ⊢ r 
   _emt r ⊢ _
   ∎ {}
+§ f16 { x y } 
+  ∐ x ⊢ _cns◂{ a b } . 
+    ∎|  
+  ∐. . 
+    ∎ {} 
+§ f17 { x y } 
+  ∐ x'=y'; y'=5r . 
+    ∎|  
+  ∐. . 
+    ∎ {} 
+§ f19 _ 
+  ∎| 
+§ f18 # { { env0 mtv tv t_ns as l2 } t } 
+	f19 { { env0 mtv tv t_ns as _nil◂{} l2 } t } ⊢|
+§ v0 _ 
+  ∎ %[ 0r ] 
+§ v1 _ 
+  ∎ %[ 1r ] 
 § main _ 
   _oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
   _emt i ⊢ _ 
@@ -243,9 +261,8 @@
   f15 { %[ 6r ] %[ 5r ] } ⊢ {} 
   $ %[ 4r ] ⊢ x 
   $ %[ 6r ] ⊢ y 
-  ∐ x'=y' . 
-    _emt {} ⊢ {} 
-    ∎ {}
-  ∐. . 
-    ∎ {} 
+  _oom◂◂(_tj◂◂{ ic _tjc◂◂{ _moo◂◂v0 _tjc◂◂{ _moo◂◂v0 _tjn◂◂(_moo◂◂v1) } } }) { %[ 7r ] {} } ⊢ a 
+  _emt a ⊢ _
+  ∎ {} 
+
 
