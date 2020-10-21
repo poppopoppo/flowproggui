@@ -12,8 +12,8 @@
 %define DST_REG r14
 ;%define SS_LN_N r12
 
-%define GLX(n) QWORD [GLV+8*n]
-%define GLX_S(s,n) QWORD [GLV+s+8*n]
+;%define GLX(n) QWORD [GLV+8*n]
+%define GLX(n) QWORD [(GLV+8*n)] 
 %define SX(n) QWORD [SRC_REG+8*n]
 %define DX(n) QWORD [DST_REG+8*n]
 
@@ -101,20 +101,20 @@ bits 64
 %endmacro
  
 %macro ALC_RCD 2 ; n,reg-name!=rbx 
-	add QWORD [SS_RCD_N+8*%1],1 
+	add QWORD [(SS_RCD_N+8*%1)],1 
 	mov QWORD [SIG_ETR],sig_alc_rcd_%1 
-	mov MCR_REG,QWORD [SS_RCD_TOP+8*%1]
+	mov MCR_REG,QWORD [(SS_RCD_TOP+8*%1)]
 	mov %2,QWORD [MCR_REG]
-	mov QWORD [SS_RCD_TOP+8*%1],%2
+	mov QWORD [(SS_RCD_TOP+8*%1)],%2
 	mov %2,MCR_REG
 	mov QWORD [SIG_ETR],sig_dft
 %endmacro 
 
 %macro FREE_RCD 2 ; n,reg-name!=rbx 
-	sub QWORD [SS_RCD_N+8*%1],1
-	mov rbx,QWORD [SS_RCD_TOP+8*%1] 
+	sub QWORD [(SS_RCD_N+8*%1)],1
+	mov rbx,QWORD [(SS_RCD_TOP+8*%1)] 
 	mov QWORD [%2],rbx
-	mov QWORD [SS_RCD_TOP+8*%1],%2
+	mov QWORD [(SS_RCD_TOP+8*%1)],%2
 %endmacro
 
 %macro FREE_S8 1 
@@ -127,9 +127,9 @@ bits 64
 				
 %macro INIT_SS_RCD 1 
 init_ss_rcd_%1:
-	mov QWORD [SS_RCD_N+8*%1],0
-	mov QWORD [SS_RCD_C+8*%1],0
-	mov QWORD [SS_RCD_TOP+8*%1],SS_RCD_3_VCT
+	mov QWORD [(SS_RCD_N+8*%1)],0
+	mov QWORD [(SS_RCD_C+8*%1)],0
+	mov QWORD [(SS_RCD_TOP+8*%1)],SS_RCD_3_VCT
 	mov rax,SS_RCD_%1_VCT
 	mov rdi,(1<<6)
 	mov rdx,3
