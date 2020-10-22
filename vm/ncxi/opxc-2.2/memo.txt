@@ -483,3 +483,9 @@ _exh : (a'→b')→→(a'→_exn◂b')
   ∐ cns_T : { a' lst_T.[ t' ]◂a' } ⊢ lst_T.[ 'cns ]◂a' 
 ¶ lst_cns a' 
   ∐ lst_cns : lst_T.[ 'cns ]◂a' 
+
+
+§ E =\ 
+  fd◂◂
+    (FJIOe◂◂\\[ f →→ f◂◂f ] V)
+    //
