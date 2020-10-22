@@ -12122,13 +12122,14 @@ unsigned long
 						∐. _none◂{} . 
 							$ lc ⊢ lc0,lc 
 							_clc_i { gev { lc0 gl } } ⊢ { gev ie } 
-							$ ast.jmp◂{ lc RP.atm◂ast.re_reg◂%[ 0r ] } ⊢ lc 
-							$ RP.atm◂%[ 0r ] ⊢ dp 
+							\\$ ast.jmp◂{ lc RP.atm◂ast.re_reg◂%[ 0r ] } ⊢ lc 
+							\\$ RP.atm◂%[ 0r ] ⊢ dp 
 							$ { mfv gev } ⊢ mfv 
 							inc_x ei_n ⊢ { o ei_n }
 							inc_x lb_n ⊢ { lbg lb_n } 
 							$ ok ⊢ o_k 
 							$ ys ⊢ gys 
+							\[
 							ast.RV.ini {} ⊢ rv_g
 							slv.crt_tpl_ptn { { %[ 1r ] rv_g tv } dp } ⊢ { { lv_g rv_g tv } dp yd } 
 							slv.r { V lv_g evv rv_g tv lc } ⊢ { V lv_g evv rv_g tv lc yrg } 
@@ -12141,9 +12142,21 @@ unsigned long
 							_dec lv_g ⊢ lv_g 
 							gen { tv lv_g yd } ⊢ { tv lv_g _ } 
 							gen { tv lv_g yrg } ⊢ { tv lv_g yrg } 
+							\]
+							$ %[ 1r ] ⊢ lv_g 
+							slv.ct_ptn { { lv_g evv tv } lc } ⊢ { { lv_g evv tv } lc y0 } 
+							inst { tv lv_g gys } ⊢ { tv lv_g gys } 
+							newvar_l { tv lv_g } ⊢ { tv lv_g vy } 
+							$ gys ⊢ gys,gys0 
+							$ vy ⊢ vy,gyd 
+							T.unify.f { tv y0 TX.t_imp◂{ gys0 vy } } ⊢ tv 
+							_dec lv_g ⊢ lv_g 
+							gen { tv lv_g gys } ⊢ { tv lv_g gys } 
+							gen { tv lv_g gyd } ⊢ { tv lv_g gyd } 
+
 							$ gys ⊢ gys,gys0 
 							alc_type_k.f_i { tav tv glv_n gys0 } ⊢ { tav tv glv_n p0 } 
-							$ yrg ⊢ gyd,gyd0
+							$ gyd ⊢ gyd,gyd0
 							alc_type_k.f_i { tav tv %[ 0r ] gyd0 } ⊢ { tav tv d_n pr0 } 
 							$ p0 ⊢ p0,p00 
 							ast.pnt.rt { evv p00 } ⊢ { evv sp0 } 
@@ -12172,17 +12185,21 @@ unsigned long
 							_clc_o { gev ie } ⊢ { gev { lc0 gl } } 
 							_clc_i { gev { lc0 ⟦ R1 < gl ⟧ } } ⊢ { gev ie } 
 							$ o_k ⊢ o_k,ok0 
+							$ gys ⊢ gys,gys0 
 							$ { lbg o o_k gys p0 gyd0 pr00 } ⊢ R0
 							_alc_o { mfv o_n } ⊢ { mfv ol } 
 							_alc_i { mfv ⟦ { ok0 ie } < ol ⟧ } ⊢ { mfv _ }
 							$ { mfv gev } ⊢ mfv 
-							$ { lbg0 pr0 gyd } ⊢ ft 
+							\\$ { lbg0 pr0 gyd } ⊢ ft 
 							ast.IRV.ini {} ⊢ irv_g 
-							idx.tpl_ptn { irv_g dp p0_f } ⊢ irv_g  
+							\\idx.tpl_ptn { irv_g dp p0_f } ⊢ irv_g  
 							$ rfv ⊢ { rfl rfb rfv } 
 							hsh_tbl.r64.set { rfv { o0 rf_k◂{} } } ⊢ { rfv { o0 _ } }
 							_inc rfl ⊢ rfl 
-							f { V { rfl ‹› rfv } { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } { rv_g irv_g } tav tv lc { eg0 eds ee0 asm.e◂{} } ft } ⊢ { V { rfl rfb_g rfv } { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } _ tav tv { eg0 eds ee0 ew0 } } 
+							\\f { V { rfl ‹› rfv } { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } { rv_g irv_g } tav tv lc { eg0 eds ee0 asm.e◂{} } ft } ⊢ { V { rfl rfb_g rfv } { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } _ tav tv { eg0 eds ee0 ew0 } } 
+							$ { lbg0 f_jmp◂pr0 } ⊢ f_c 
+							stt_jmp { V { rfl ‹› rfv } ‹› f_c { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } irv_g tav tv { eg0 eds ee0 asm.e◂{} } { gys0 p0_f lc } } ⊢ { V { rfl rfb_g rfv } { gfl cl mfv } glv_n ei_n lb_n { ev_n evv } irv tav tv { eg0 eds ee0 ew0 } _ }  
+														
 							_dec rfl ⊢ rfl 
 							gnr_rfv { rfv o0 rfb rfb_g } ⊢ { bf rfv o0 rfb sr0 }
 							asm.cct { ee0 ew0 } ⊢ ee0 
