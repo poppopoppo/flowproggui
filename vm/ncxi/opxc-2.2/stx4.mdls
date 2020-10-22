@@ -33,8 +33,8 @@
 		_clc_i { V k } ⊢ { V p } 
 		∎ { V p }
 	∎∎ 
-§ eml = _emt 
-\\§ eml = _id 
+\\§ eml = _emt 
+§ eml = _id 
 § @.arr_of_lst_i { c i l } 
 	$ l ⊢ 
 	∐ _cns◂{ a l } . 
@@ -4738,7 +4738,7 @@ unsigned long
 					set_tv { av i0 sp } ⊢ { av i0 } 
 					∎ av 
 				∐. . 
-					_emt %[ "asc_ply 0" ] ⊢ _ 
+					_emt %[ "mp:asc_ply 0" ] ⊢ _ 
 					∎| 
 			@.asc_ply_lst { av { l0 l1 } }
 				∐ l0 ⊢ _cns◂{ xp l0 }; l1 ⊢ _cns◂{ sp l1 } . 
@@ -8912,14 +8912,18 @@ unsigned long
 					∎| 
 		§
 			@.asc_ply { av { xp sp } } 
-				∐ xp ⊢ RP.rcd◂l0; sp ⊢ RP.rcd◂l1 . 
-					asc_ply_lst { av { l0 l1 } } ⊢|
-				∐ xp ⊢ RP.atm◂i0 .  
+				$ xp ⊢ 
+				∐ RP.atm◂i0 .  
 					set_tv { av i0 sp } ⊢ { av i0 } 
 					∎ av 
-				∐. . 
-					_emt %[ "asc_ply 0" ] ⊢ _ 
-					∎| 
+				∐. RP.rcd◂l0 . 
+					∐ sp ⊢ RP.rcd◂l1 . 
+						asc_ply_lst { av { l0 l1 } } ⊢|
+					∐ sp ⊢ RP.atm◂ast.btm◂{} . 
+						asc_btm_lst { av l0 } ⊢| 
+					∐. . 
+						_emt %[ "asc_ply 0" ] ⊢ _ 
+						∎| 
 			@.asc_ply_lst { av { l0 l1 } }
 				∐ l0 ⊢ _cns◂{ xp l0 }; l1 ⊢ _cns◂{ sp l1 } . 
 					asc_ply { av { xp sp } } ⊢ av
@@ -8928,6 +8932,12 @@ unsigned long
 					∎ av
 				∐. . 
 					∎| 
+			@.asc_btm # { av i } 
+        set_tv { av i RP.atm◂ast.btm◂{} } ⊢ { av i0 } 
+				∎ av 
+			@.asc_btm_ptn = RP.fld_l◂◂asc_btm
+      @.asc_btm_lst = lst.fld_l◂◂asc_btm_ptn 
+			
 		§ 
 			@.subst_ply = RP.map_l_atm◂◂subst_ply_atm
 			@.subst_ply_atm { { evv av } a }
@@ -13338,10 +13348,35 @@ unsigned long
 								jg_lb { lb_f ec0 } ⊢ { lb_f ec0 }
 								∎ { evv lb_f ec0 }
 							∐. . 
-								jle_lb { lb_f ec0 } ⊢ { lb_f ec0 }
+								jl_lb { lb_f ec0 } ⊢ { lb_f ec0 }
 								∎ { evv lb_f ec0 }
 						∐. . 
 							∎|
+				@.stt_test_ct { t evv c0 c1 lb_f e0 } 
+					$ t ⊢ 
+					∐ mt_e◂{} . 
+						ast.eq_ct { evv c0 c1 } ⊢ { evv c0 c1 b } 
+						∐ b ⊢ bl.f◂{} . 
+							jmp_lb { lb_f e0 } ⊢ { lb_f e0 } 
+							∎ { evv lb_f e0 }
+						∐. . 
+							∎ { evv lb_f e0 }
+					∐ mt_ne◂{} . 
+						ast.eq_ct { evv c0 c1 } ⊢ { evv c0 c1 b } 
+						∐ b ⊢ bl.t◂{} . 
+							jmp_lb { lb_f e0 } ⊢ { lb_f e0 } 
+							∎ { evv lb_f e0 }
+						∐. . 
+							∎ { evv lb_f e0 }
+					∐. mt_le◂{} . 
+						ast.r64_of_k { evv c0 } ⊢ { evv x0 } 
+						ast.r64_of_k { evv c1 } ⊢ { evv x1 } 
+						∐ x0'=<x1' . 
+							∎ { evv lb_f e0 } 
+						∐. . 
+							jmp_lb { lb_f e0 } ⊢ { lb_f e0 }
+							∎ { evv lb_f e0 }
+						
 				@.stt_mtc_test { t evv lb_n lb_f v0 v1 e0 }
 					∐ v0 ⊢ RP.rcd◂l0; v1 ⊢ RP.rcd◂l1 . 
 						∎| 
@@ -13361,12 +13396,8 @@ unsigned long
 								stt_test_im { bl.f◂{} evv t c0 r1 h1 lb_f e0 } ⊢ { evv lb_f e0 } 
 								∎ { evv lb_n lb_f e0 }
 							∐ a1 ⊢ ast.hp_im◂c1 . 
-								ast.eq_ct { evv c0 c1 } ⊢ { evv c0 c1 b } 
-								∐ b ⊢ bl.f◂{} . 
-									jmp_lb { lb_f e0 } ⊢ { lb_f e0 } 
-									∎ { evv lb_n lb_f e0 }
-								∐. . 
-									∎ { evv lb_n lb_f e0 }
+								stt_test_ct { t evv c0 c1 lb_f e0 } ⊢ { evv lb_f e0 } 
+								∎ { evv lb_n lb_f e0 }
 							∐. . 
 								∎|
 						∐ ast.btm◂{} . 
