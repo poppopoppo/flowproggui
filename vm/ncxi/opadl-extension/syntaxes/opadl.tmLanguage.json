@@ -114,14 +114,14 @@
 			},
 			{
 				"name": "comment.line.opadl.slsh",
-				"match": "(\\\\\\\\.*\\n?)"
+				"match": "(--.*\\n?)"
 			}
 		]
 	},
 	"blk_comments": {
 		"name": "comment.blk.opadl",
-		"begin": "\\\\\\[",
-		"end": "\\\\\\]",
+		"begin": "-\\\\",
+		"end": "-/",
 		"patterns": [
 			{
 				"include": "$self"
