@@ -57,35 +57,35 @@
 	arr_of_lst_i { %[ 0r ] i l } ⊢ { c v } 
 	∎ v  
 
-§ smt o 
+§ smt # o 
 	∐ o ⊢ _some◂a .
 		∎ a 
 	∐. . 
 		$ %[ "smt 0" ] ⊢ ee0 
 		_emt ee0 ⊢ _ 
 		∎| 
-§ smt_err◂◂E o 
+§ smt_err◂◂E # o 
 	∐ o ⊢ _some◂a .
 		∎ a 
 	∐. . 
 		_emt %[ "smt_err 0" ] ⊢ _ 
 		_emt %[ E ] ⊢ _ 
 		∎| 
-§ smt_err_r { o e } 
+§ smt_err_r # { o e } 
 	∐ o ⊢ _some◂a .
 		∎ a 
 	∐. . 
 		_emt %[ "smt_err 0" ] ⊢ _ 
 		_emt e ⊢ _ 
 		∎| 
-§ nnt o 
+§ nnt # o 
 	∐ o ⊢ _none◂{} .
 		∎ {} 
 	∐. . 
 		$ %[ "nnt 0" ] ⊢ ee0 
 		_emt ee0 ⊢ _ 
 		∎| 
-§ nnt_emt { o x } 
+§ nnt_emt # { o x } 
 	∐ o ⊢ _none◂{} .
 		∎ x
 	∐. . 
@@ -2002,7 +2002,7 @@ unsigned long
 		¶ @.t ◂ a'
 			∐ rcd : _lst◂(t◂a')
 			∐ atm : a'
-		§ atm_a p 
+		§ atm_a # p 
 			∐ p ⊢ atm◂a . 
 				∎ a 
 			∐. . 
@@ -2553,7 +2553,7 @@ unsigned long
 					∎ { tv ‹› }  
 				∐. . 
 					∎ { tv ‹ %[ 2r ] › }  
-			@.f_l0 { tv i0 y1 }   
+			@.f_l0 # { tv i0 y1 }   
 				cla.l { tv i0 } ⊢ { tv i0 v0 } 
 				∐ v0 ⊢ var_ln◂y2 . 
 					f { tv y2 y1 } ⊢|
@@ -2607,7 +2607,7 @@ unsigned long
 				§ f_b = f 
 				§ f_b_lst = f_lst 
 				--\
-				§ f_eml { tv y } 
+				§ f_eml # { tv y } 
 					$ y ⊢ y,y0 
 					pnt_type_k { tv y0 } ⊢ { tv s } 
 					∎ { tv y s }
@@ -2873,10 +2873,10 @@ unsigned long
 				∎ { tv lv X.prd◂{ w yr } }
 		§§ inst_cl 
 			§ 
-				@.cl_dta { v { a l } } 
+				@.cl_dta # { v { a l } } 
 					lst { v l } ⊢ { v l }
 					∎ { v RP.atm◂dta◂{ %a %l } } 
-				@.cl_abs { { tv cl } { a0 y0 } }
+				@.cl_abs # { { tv cl } { a0 y0 } }
 					_emt %[ "inst_cl.cl_abs 0" ] ⊢ _ 
 					∎| 
 				@.cl_var { { tv cl } i0 } 
@@ -7310,37 +7310,7 @@ unsigned long
 
 	§§ inl 
 			§ 
-				-\
-				@.cst { { evv vv } c }
-					∐ c ⊢ ast.k_name◂i . 
-						EVV.lod_evv { evv i } ⊢ { evv i c } 
-						ct_ptn { { evv vv } c } ⊢|
-					∐ c ⊢ ast.k_var◂{ i v } . 
-						lod_tv { vv i } ⊢ { vv i c }
-						∎ { { evv vv } c } 
-					∐ c ⊢ ast.k_app◂{ c0 c1 } . 
-						ct_ptn { { evv vv } c0 } ⊢ { { evv vv } c0 } 
-						ct_ptn { { evv vv } c1 } ⊢ { { evv vv } c1 } 
-						∎ { { evv vv } RP.atm◂ast.k_app◂{ c0 c1 } }
-					-\
-					∐ c ⊢ ast.k_agl◂{ c p } . 
-						cst { { evv vv } c } ⊢ { { evv vv } c } 
-						ct_ptn { { evv vv } p } ⊢ { { evv vv } p }
-						∎ { { evv vv } ast.k_agl◂{ c p } }
-					-/
-					∐ c ⊢ ast.k_op_axm◂{ x xl } . 
-						lst.map_l◂◂ct_ptn { { evv vv } xl } ⊢ { { evv vv } xl }
-						∎ { { evv vv } RP.atm◂ast.k_op_axm◂{ x xl } }
-					∐ c ⊢ ast.k_pf◂pf . 
-						lst.map_l◂◂exp_s8 { { evv vv } pf } ⊢ { { evv vv } pf }
-						∎ { { evv vv } RP.atm◂ast.k_pf◂pf }
-					∐ c ⊢ ast.k_ply◂{ x y } . 
-						src_ptn { { evv vv } y } ⊢ { { evv vv } y } 
-						∎ { { evv vv } RP.atm◂ast.k_ply◂{ x y } }
-					∐. . 
-						∎ { { evv vv } RP.atm◂c }
-				@.ct_ptn = RP.map_l_atm◂◂cst
-				-/
+			
 				@.exp_s8 { E e } 
 				∐ e ⊢ ast.exp_s8_cst◂c . 
 					ct_ptn { E c } ⊢ { E c } 
@@ -8182,7 +8152,8 @@ unsigned long
     ¶ lb = _r64
     ¶ a
       ∐ s8 : _s8  
-      ∐ ret : {} 
+      ∐ mov_glx : { _r64 _r64 } 
+			∐ ret : {} 
       ∐ call_lb : lb
       ∐ etr_lb : lb 
       ∐ jmp_lb : lb 
@@ -8204,6 +8175,8 @@ unsigned long
       § ret =^
         ` ret 
         //
+			§ mov_glx =^ 	
+				"\tMOV_RBX GLX(" 0d' "),GLX(" 1d' ")\n" //
       § call_lb =^
         "\tcall LB_" 0d' "\n" //
       § call_lb =^
@@ -8239,7 +8212,10 @@ unsigned long
       ∐ s8◂s . 
         _pf_x◂◂pf.s8 { b i { s } } ⊢ { b i _ }
         ∎ { b i }  
-      ∐ ret◂{} . 
+      ∐ mov_glx◂{ r0 r1 } .
+				_pf_x◂◂pf.mov_glx { b i { r0 r1 } } ⊢ { b i _ } 
+				∎ { b i }
+			∐ ret◂{} . 
         _pf_x◂◂pf.ret { b i {} } ⊢ { b i _ }
         ∎ { b i } 
       ∐ call_lb◂lb . 
@@ -8535,9 +8511,13 @@ unsigned long
 						"\tMOV_RBX GLX(" 1d' "),GLX(" 0d' ")\n" //
 					∎ { i0 i1 sr }
 			§ mov_e # { r0 r1 e } 
-				mov { r0 r1 } ⊢ { r0 r1 s } 
-				asm.add_s8 { e s } ⊢ e 
-				∎ { r0 r1 e } 
+				∐ r0'=r1' . 
+					∎ { r0 r1 e } 
+				∐. . 
+					$ r0 ⊢ r0,r00 
+					$ r1 ⊢ r1,r10 
+					asm.cct { e asm.lf◂asm.mov_glx◂{ r10 r00 } } ⊢ e 
+					∎ { r0 r1 e } 
 			
 			§ r64_to_rax { evv a0 }
 				ast.r64_of_rt { evv a0 } ⊢ { evv x } 
