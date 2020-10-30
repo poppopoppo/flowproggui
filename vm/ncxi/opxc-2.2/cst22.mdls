@@ -35,7 +35,7 @@
     f4 l ⊢| 
   ∐. _nil◂{} . 
     ∎ {} 
-\[
+-\
 § pnt◂◂P { v o } 
 		$ o ⊢ 
 		∐ _some◂a . 
@@ -45,7 +45,7 @@
 			∎ { v s } 
 		∐. _none◂{} . 
 			∎ { v %[ "_none◂{}" ] }
-\]
+-/
 § f5◂◂F x  
   F x ⊢ x 
   ∎ x 
@@ -57,17 +57,17 @@
 § main args 
   _pf◂◂P0 { %[ 44r ] %[ 0xffffr ] } ⊢ R
   _emt R ⊢ _
-  \\f1 ⟦⟧ ⊢ _ 
-  \[
+  --f1 ⟦⟧ ⊢ _ 
+  -\
   f2 { %[ 0r ] ⟦⟧ } ⊢ l 
   _info {} ⊢ {} 
   $ l ⊢ _
   f2 { %[ 0r ] ⟦⟧ } ⊢ _
   f2 { %[ 0r ] ⟦⟧ } ⊢ l  
-  \]
+  -/
   f3 { %[ 0r ] %[ 350000r ] ⟦⟧ } ⊢ l 
   _emt %[ 0r ] ⊢ _ 
-  \\f4 l ⊢ {} 
+  --f4 l ⊢ {} 
   $ l ⊢ _ 
   _info {} ⊢ {} 
   ∎ {} 
@@ -75,12 +75,12 @@
   ∎ x 
 § cmp_s8 { x y } 
   _cmp_s8 { x y } ⊢|
-  \\ { x y b } 
-  \\∎ { x y b }
+  -- { x y b } 
+  --∎ { x y b }
 § f5 { l x } 
-  \\_mk_arr { l x } ⊢ { _ _ a } 
+  --_mk_arr { l x } ⊢ { _ _ a } 
   ∎ {}
-\[
+-\
 § main args 
   f4 %[ "09fds0()fe98few98uNv9hve8nv3=~fk-" ] ⊢ s 
   _pf_x◂◂P0 { s %[ 25r ] { %[ 34r ] %[ 0xfr ] } } ⊢ { s0 x0 _ } 
@@ -128,17 +128,17 @@
   _clc_o { C0 p0 } ⊢ { Cl0 i } 
   _inc i ⊢ i 
   _clc_i { Cl0 i } ⊢ { C0 p0 } 
-  \\_emt i ⊢ _ 
+  --_emt i ⊢ _ 
   _mk_arr { %[ 10r ] %[ 9r ] } ⊢ { _ _ a }
-  \\f5 { %[ 4r ] %[ 9r ] } ⊢ a 
-\[
+  --f5 { %[ 4r ] %[ 9r ] } ⊢ a 
+-\
   _alc_o { a %[ 2r ] } ⊢ { a s } 
   _emt s ⊢ _ 
   _alc_i { a %[ "ji" ] } ⊢ { a i } 
   _emt { a i } ⊢ { a _ }
-  \]
+  -/
   ∎ {} 
-\]
+-/
 § f8 { x y } 
   _seq◂◂{ _seq◂◂{ _sub _imul } _add } { x y } ⊢| 
 § f9 a 
@@ -152,7 +152,7 @@
     _imul { r i } ⊢ { r i } 
     _dec i ⊢ i 
     f10 { i r } ⊢| 
-\[
+-\
 § @.f10 { i r } 
   ∐ i'=0r . 
     ∎ r 
@@ -160,7 +160,7 @@
     _imul { i r } ⊢ { i r } 
     _dec i ⊢ i 
     f10 { i r } ⊢| 
-\]
+-/
 § @.f11 a 
   _seq◂◂{ _imul f11 } a ⊢| 
 ¶ p e' 
@@ -212,7 +212,7 @@
 § c {} 
   ∎ %[ 4r ]
 § ic◂x = x 
-\\ \[ x → x ] 
+-- -\ x → x ] 
 § f12 v 
   _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcp◂◂{ _mop◂◂_none _moo◂◂c _mcn◂◂{} } }) v ⊢ i 
   ∎ i
@@ -251,7 +251,7 @@
   _emt i ⊢ _ 
   _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcn◂◂{} }) _some◂%[ 664r ] ⊢ i 
   _emt i ⊢ _ 
-  \\_oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcn◂◂{} }) _none◂{} ⊢ i 
+  --_oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcn◂◂{} }) _none◂{} ⊢ i 
   _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcp◂◂{ _mop◂◂_none _moo◂◂c _mcn◂◂{} } }) _none◂{} ⊢ i 
   _emt i ⊢ _ 
   f12 _none◂{} ⊢ i 
@@ -264,7 +264,15 @@
   _oom◂◂(_tj◂◂{ ic _tjc◂◂{ _moo◂◂v0 _tjc◂◂{ _moo◂◂v0 _tjn◂◂(_moo◂◂v1) } } }) { %[ 7r ] {} } ⊢ a 
   _emt a ⊢ _
   ∎ {} 
-
+§ f _ 
+  --_oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
+  --_inc %[ 4r ] ⊢ _ 
+  _id_par◂◂_inc { {} %[ 4r ] } ⊢ _ 
+  ∎ {}
+--§ main _ 
+  --_oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
+  --f {} ⊢ {}
+  --∎ {}
 § f16 { x y } 
   ∐ x'=<y' . 
     _emt %[ 0r ] ⊢ _ 

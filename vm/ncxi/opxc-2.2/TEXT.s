@@ -447,6 +447,21 @@ err_exc_q:
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
+err_clc_o: 
+	mov rbx,0xe0e2_0000_0000_0000
+	or rax,rbx 
+	mov QWORD [err_n],rax
+	jmp err 
+err_alc_o: 
+	mov rbx,0xe0e1_0000_0000_0000
+	or rax,rbx 
+	mov QWORD [err_n],rax
+	jmp err 
+err_cls: 
+	mov rbx,0xe0e0_0000_0000_0000
+	or rax,rbx 
+	mov QWORD [err_n],rax
+	jmp err 
 err_NULL: 
 	mov rax,0xffff_ffff_0000_0000
 	mov QWORD [err_n],rax				
