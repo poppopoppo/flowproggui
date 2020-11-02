@@ -251,7 +251,7 @@
   _emt i ⊢ _ 
   _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcn◂◂{} }) _some◂%[ 664r ] ⊢ i 
   _emt i ⊢ _ 
-  --_oom◂◂(_mcp◂◂{ _some _moo◂◂_inc _mcn◂◂{} }) _none◂{} ⊢ i 
+  -\
   _oom◂◂(_mcp◂◂{ _mop◂◂_some _moo◂◂_inc _mcp◂◂{ _mop◂◂_none _moo◂◂c _mcn◂◂{} } }) _none◂{} ⊢ i 
   _emt i ⊢ _ 
   f12 _none◂{} ⊢ i 
@@ -263,6 +263,7 @@
   $ %[ 6r ] ⊢ y 
   _oom◂◂(_tj◂◂{ ic _tjc◂◂{ _moo◂◂v0 _tjc◂◂{ _moo◂◂v0 _tjn◂◂(_moo◂◂v1) } } }) { %[ 7r ] {} } ⊢ a 
   _emt a ⊢ _
+  -/
   ∎ {} 
 § f _ 
   --_oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
