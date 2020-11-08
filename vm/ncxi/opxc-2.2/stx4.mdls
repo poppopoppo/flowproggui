@@ -11742,7 +11742,7 @@ unsigned long
 							∎ { ‹› ‹› } 
 					§ mov_ptn # { lb0 lb1 GV E p0 p1 e }
 						∐ lb0'=lb1' . 
-							GV.gen { GV p0 } ⊢ { GV p0 } 
+							--GV.gen { GV p0 } ⊢ { GV p0 } 
 							mov_ptn2.ptn { e E GV p0 p1 } ⊢ { e E GV }
 							∎ { lb0 lb1 GV E e }
 						∐. . 
