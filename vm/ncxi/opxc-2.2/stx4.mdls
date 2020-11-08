@@ -9492,12 +9492,6 @@ unsigned long
 						∎ { S i bl.t◂{} } 
 					∐. . 
 						∎ { S i bl.f◂{} }
-				§ mov_ptn # { ec0 { evv tav tv eds } GV p0 p1 }
-					BST_r64.ini {} ⊢ S 
-					GV.rpc p1 ⊢ { p1 p10 } 
-					mk_set { { GV S } p10 } ⊢ { GV S }
-					alc_ptn_T◂◂alc_set { { ec0 GV S } p0 } ⊢ { { ec0 GV S } p0 }
-					ptn { ec0 { evv tav tv eds } GV p0 p1 } ⊢| 
 				
 				∎∎
 		
