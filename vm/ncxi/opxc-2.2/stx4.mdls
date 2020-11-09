@@ -12948,8 +12948,8 @@ unsigned long
 										GV.lod { GV rc0 } ⊢ { GV rc0 i0 } 
 										GV.lod { GV rp0 } ⊢ { GV rp0 i1 } 
 										-\
-										asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] i0 } } ⊢ ec0 										
 										asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] i1 } } ⊢ ec0 										
+										asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] i0 } } ⊢ ec0 										
 										^ _ ⊢ sc0 
 											`	mov rsi,QWORD [rax+8]
 											"\tcmp rdi,rsi \n"
