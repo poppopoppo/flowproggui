@@ -2,4 +2,5 @@ SHX*
 *.o
 SH.mdls.s
 SGN_SH.txt
+*.exe 
 
