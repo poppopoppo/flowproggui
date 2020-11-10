@@ -264,6 +264,9 @@
   _oom◂◂(_tj◂◂{ ic _tjc◂◂{ _moo◂◂v0 _tjc◂◂{ _moo◂◂v0 _tjn◂◂(_moo◂◂v1) } } }) { %[ 7r ] {} } ⊢ a 
   _emt a ⊢ _
   -/
+  _bsr %[ 3r ] ⊢ { x i }
+  _shl { %[ 2r ] i } ⊢ { y i } 
+  _emt { x y i } ⊢ _ 
   ∎ {} 
 § f _ 
   --_oom◂◂(_moo◂◂_inc) %[ 45r ] ⊢ i 
