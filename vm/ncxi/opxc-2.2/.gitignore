@@ -3,4 +3,6 @@ SHX*
 SH.mdls.s
 SGN_SH.txt
 *.exe 
+perf.data
+perf.data.old
 
