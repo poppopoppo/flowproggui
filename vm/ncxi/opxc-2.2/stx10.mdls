@@ -4772,7 +4772,7 @@ unsigned long
 				@.subst_ply_atm { { evv av } a }
 					$ a ⊢ 
 					∐ ast.re_reg◂i . 
-						lod_tv { av i } ⊢ { av i p } 
+						get_tv { av i } ⊢ { av i p } 
 						∎ { { evv av } p } 
 					∐ ast.re_agl◂{ e sp } . 
 						subst_ply { { evv av } sp } ⊢ { { evv av } p } 
@@ -9012,7 +9012,7 @@ unsigned long
 			@.subst_ply_atm { { evv av } a }
 				$ a ⊢ 
 				∐ ast.re_reg◂i . 
-					lod_tv { av i } ⊢ { av i p } 
+					get_tv { av i } ⊢ { av i p } 
 					∎ { { evv av } p } 
 				∐ ast.re_agl◂{ e sp } . 
 					subst_ply { { evv av } sp } ⊢ { { evv av } p } 
@@ -9030,7 +9030,7 @@ unsigned long
 				∐ k ⊢ ast.k_ply◂{ nc xp yp } . 
 					mk_arr { nc _none◂{} } ⊢ { _ _ av } 
 					asc_ply { av { xp p } } ⊢ av
-					subst_ply { { evv av } yp } ⊢ { { evv av } p } 
+					subst_ply { { evv av } yp } ⊢ { { evv _ } p } 
 					∎ { evv p }
 				∐ k ⊢ ast.k_op_axm◂{ a l }; a'=EX.sqc; l ⊢ _cns◂{ RP.rcd◂_cns◂{ RP.atm◂c0 _cns◂{ RP.atm◂c1 _nil◂{} } } _nil◂{} } . 
 					app_ctr { evv c0 p } ⊢ { evv p } 
