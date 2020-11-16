@@ -7998,6 +7998,7 @@ unsigned long
 			∐ mov_glx_op : { _r64 op.t }
 			∐ mov_op_glx : { op.t _r64 }
       ∐ mov_glx : { _r64 _r64 } 
+			∐ db : { _r64 _s8 } 
 			∐ ret : {} 
       ∐ call_lb : lb
       ∐ etr_lb : lb 
@@ -8032,6 +8033,10 @@ unsigned long
       § ret =^
         ` ret 
         //
+			§ db =^
+				0d' "," //
+			§ db_etr =^
+				"LB_" 0d' ": db " // 
 			§ mov_lt_lt =^ 
 				"\tMOV_RBX " 0' "," 1' "\n" //
 			§ mov_lt_glx =^ 
@@ -8082,7 +8087,17 @@ unsigned long
 			∎ nd◂{ e lf◂a }
     § pfx_s8 # { s e }
       ∎ nd◂{ of_s8◂s e }
-    § @.to_s8_a { a b i } 
+		§ @.mk_db_lp { { S I } s i l } 
+			∐ i'=l' . 
+        _pf_x◂◂pf.s8 { S I { %[ "0,0,0,0,0,0,0,0,0\n" ] } } ⊢ { S I _ }
+				∎ { { S I } s } 
+			∐. . 
+				_lds { s i } ⊢ { s i b } 
+				_inc i ⊢ i 
+				_pf_x◂◂pf.db { S I { b } } ⊢ { S I _ }
+				--_inc I ⊢ I 
+				mk_db_lp { { S I } s i l } ⊢|
+		§ @.to_s8_a { a b i } 
       $ a ⊢ 
       ∐ s8◂s . 
         _pf_x◂◂pf.s8 { b i { s } } ⊢ { b i _ }
@@ -8134,6 +8149,11 @@ unsigned long
 				∐. op.sx◂r1 . 
 					_pf_x◂◂pf.mov_glx_sx { b i { r0 r1 } } ⊢ { b i _ } 
 					∎ { b i }
+			∐ db◂{ lb s } . 
+				_pf_x◂◂pf.db_etr { b i { lb } } ⊢ { b i _ }
+				_s8_len s ⊢ { s l } 
+				mk_db_lp { { b i } s %[ 0r ] l } ⊢ { { b i } _ } 
+				∎ { b i }
 			∐ ret◂{} . 
         _pf_x◂◂pf.ret { b i {} } ⊢ { b i _ }
         ∎ { b i } 
@@ -8846,11 +8866,12 @@ unsigned long
 						∎ { p lb_n { SC SCM eds } { ls l0 } } 
 					∐. _none◂{} . 
 						inc_x lb_n ⊢ { l lb_n }
-						data_s8 { eds l s } ⊢ { eds l s }
-						$ l ⊢ l,l0 
+						$ s ⊢ s,s0 
+						$ l ⊢ l,l0,l1 
+						asm.add_nd { eds asm.db◂{ l1 s0 } } ⊢ eds 
 						_clc_i { SC { s ‹ l › } } ⊢ { SC p } 
 						∎ { p lb_n { SC SCM eds } { ls l0 } } 
-				§ lod_ps { p { SC SCM eds } }
+				§ lod_ps # { p { SC SCM eds } }
 					_clc_o { SC p } ⊢ { SC { s l } }
 					$ s ⊢ s,s0 
 					_clc_i { SC { s l } } ⊢ { SC p } 
@@ -8862,9 +8883,11 @@ unsigned long
 						lod_p { p lb_n { SC SCM eds } } ⊢| 
 					∐. _none◂{} . 
 						inc_x lb_n ⊢ { lb lb_n }
-						data_s8 { eds lb s } ⊢ { eds lb s } 
+						$ lb ⊢ lb,lb0,lb1 
+						$ s ⊢ s,s0 
+						asm.add_nd { eds asm.db◂{ lb1 s0 } } ⊢ eds 
+						--data_s8 { eds lb s } ⊢ { eds lb s } 
 						_s8_len s ⊢ { s ls } 
-						$ lb ⊢ lb,lb0 
 						_cln SC ⊢ { SC p } 
 				    $ p ⊢ p,p0 
 						SCM.set { SCM { s p0 } } ⊢ { SCM { s _ } } 
@@ -9405,7 +9428,7 @@ unsigned long
 					∐. _nil◂{} . 
 						∎ { A0 A1 e0 GV }
 						
-				§ ptn { e0 E GV p0 p1 } 
+				§ ptn # { e0 E GV p0 p1 } 
 					$ asm.e◂{} ⊢ e1 
 					ptn { ⟦⟧ e1 E GV p0 p1 } ⊢ { L e1 E GV } 
 					asm.cct { e0 e1 } ⊢ e0
@@ -9708,7 +9731,7 @@ unsigned long
 				∎∎ 
 		
 			§§ emt 
-				§ emt_stg { s lb_n { eds e } } 
+				§ emt_stg # { s lb_n { eds e } } 
 					EDS.lod_s { s lb_n eds } ⊢ { s lb_n eds { l lb0 } } 
 					^ lb0,l ⊢ lb0,l,sc0 
 						"\tEMT_CST LB_" 0d' "," 1d' "\n"  
@@ -9716,7 +9739,7 @@ unsigned long
 					asm.add_s8 { e sc0 } ⊢ e 
 					∎ { s lb_n { eds e } }
 				
-				§ emt_s8 { s lb_n eds e } 
+				§ emt_s8 # { s lb_n eds e } 
 					EDS.lod_p { s lb_n eds } ⊢ { s lb_n eds { ls lb } } 
 					^ lb,ls ⊢ _,_,sc0 
 							"\tEMT_CST LB_" 0d' "," 1d' "\n"  
