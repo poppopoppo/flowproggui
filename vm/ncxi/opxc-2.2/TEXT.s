@@ -434,7 +434,8 @@ exn_grm:
 	mov QWORD [err_n],rax
 	jmp err 
 exn_dft: 
-	mov rax,0xff00_0000_0000_0000
+	mov rax,0xeeee_0000_0000_0000
+	or rax,rsi 
 	mov QWORD [err_n],rax				
 	jmp err 
 err_lod_q:
