@@ -534,3 +534,12 @@ W : t→{ t s }
   _inc x ⊢= 
 
 ¶ F7 += f0,f1,f2,f3,f4,f5,f6
+
+  V ⊢= →→→ V ⊢ V 
+  V ⊢< X →→→ V ⊢ { V X } 
+  V >⊢ X →→→ V ⊢ { X V }
+  { V X } ⊢> →→→ { V X } ⊢ V 
+  { X V } <⊢ →→→ { X V } ⊢ V 
+  { V X } ⊢* Y →→→ { V X } ⊢ { V Y }
+  { X V } *⊢ Y →→→ { X V } ⊢ { Y V }
+  
