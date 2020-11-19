@@ -2545,7 +2545,7 @@ unsigned long
 			@.f_l1 { tv i0 lv y1 } 
 				∐ y1 ⊢ RP.atm◂ak1; ak1 ⊢ var◂p◂i1 . 
 					∐ i0'=i1' . 
-						∎ { tv ‹› } 
+						∎ { tv ‹› }
 					∐. .
 						cla.l { tv i1 } ⊢ { tv i1 v1 } 
 						∐ v1 ⊢ var_ln◂y2 . 
@@ -12347,8 +12347,7 @@ unsigned long
 									∐ is ⊢ RP.rcd◂_cns◂{ RP.atm◂ast.hp◂{ rp0 _ } _cns◂{ c0 _nil◂{} } } .
 										inc_x lb_n ⊢ { lb0 lb_n } 
 										GV.lod { GV rp0 } ⊢ { GV _ i0 } 
-										_add { c_n %[ 3r ] } ⊢ { c_n _ } 
-										
+										_add { c_n %[ 3r ] } ⊢ { c_n _ } 										
 										asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] i0 } } ⊢ ec0 										
 										^ _ ⊢ sc0 
 											`	sub QWORD [rax+16],1
