@@ -543,3 +543,12 @@ W : t→{ t s }
   { V X } ⊢* Y →→→ { V X } ⊢ { V Y }
   { X V } *⊢ Y →→→ { X V } ⊢ { Y V }
   
+  V,X ⊢> →→→ { V X } ⊢ V 
+  X,V <⊢ →→→ { X V } ⊢ V 
+  V,X ⊢* Y →→→ { V X } ⊢ { V Y }
+  X,V *⊢ Y →→→ { X V } ⊢ { Y V }
+  X,Y *⊢* →→→ { X Y } ⊢ { X Y }
+  F x ⊢ y ¦ G z ⊢ w
+   
+
+

@@ -1310,7 +1310,6 @@ unsigned long
 				∎ _some◂_cns◂{ a l } 
 			∐.# ⊢ { } 
 				∎ _some◂_nil◂{} 
-	
 	§
 		@.stx_cmm◂◂H ^= 
 			∐# H stx_cmm_tl◂◂H ⊢ { a l } 
@@ -1485,8 +1484,8 @@ unsigned long
 				prj { l i } ⊢|
 		∐. _nil◂{} . 
 			$ %[ "prj 0" ] ⊢ se 
-			_emt se ⊢ se 
-			_emt i ⊢ i 
+			_emt se ⊢ _ 
+			_emt i ⊢ _ 
 			∎| 
 	§ @.add { l a } 
 		$ l ⊢ 
@@ -1514,18 +1513,18 @@ unsigned long
 		∐. _nil◂{} . 
 			∎ { t { rp8.e◂{} _nil◂{} } } 
 			
-	§ add_s8 { { t l } s } 
+	§ add_s8 # { { t l } s } 
 		rp8.add_s8 { t s } ⊢ t
 		∎ { t l } 
-	§ emt_i { {} e } 
+	§ emt_i # { {} e } 
 		rp8.mk_s8 e ⊢ { e s } 
 		_emt s ⊢ _ 
 		∎ { {} e } 
-	§ emt { t l }
-			lst.map_r◂◂emt_i { {} l } ⊢ { {} l } 
-			rp8.mk_s8 t ⊢ { t s } 
-			_emt s ⊢ _ 
-			∎ { t l }
+	§ emt # { t l }
+		lst.map_r◂◂emt_i { {} l } ⊢ { {} l } 
+		rp8.mk_s8 t ⊢ { t s } 
+		_emt s ⊢ _ 
+		∎ { t l }
 	∎∎
 §§ p_lst 
 	§ @.map_l◂◂F { v l } 
@@ -1536,11 +1535,13 @@ unsigned long
 			∎ { v p_cns◂{ b l } } 
 		∐. p_end◂a .
 			F { v a } ⊢ { v b } 
+			--F v,a ⊢* b 
 			∎ { v p_end◂b } 
 	§ @.fld_l◂◂F { v l }
 		$ l ⊢ 
 		∐ p_cns◂{ a l } . 
 			F { v a } ⊢ v 
+			--F v,a ⊢> 
 			fld_l◂◂F { v l } ⊢| 
 		∐. p_end◂a .
 			F { v a } ⊢|
@@ -2619,7 +2620,7 @@ unsigned long
 				@.lst = map_k_lst◂◂{ al_dta al_abs al_var }
 			∎∎
 		§ inst # { tv lv y } 
-			$ _nil◂{} ⊢ al 
+			$ ⟦⟧ ⊢ al 
 			inst.al { { tv lv al } y } ⊢ { { tv lv al } y } 
 			∎ { tv lv y }   
 		§ inst_lst # { tv lv l al } 
@@ -2761,22 +2762,25 @@ unsigned long
 			_dec lv ⊢ lv 
 			gen { tv lv y1 } ⊢ { tv lv y1 }
 			∎ { tv lv ys yd y1 }  
-		§ of_var_i # { { tv lv al } v } 
-			inst_al { tv lv RP.atm◂var◂p◂v al } ⊢ { tv lv v al } 
-			∎ { { tv lv al } v }
+		§ @.iug_axm_i_j { { tv lv al } vl yl } 
+			∐ vl ⊢ _cns◂{ v vl }; yl ⊢ _cns◂{ y yl } .
+				inst_al { tv lv RP.atm◂var◂p◂v al } ⊢ { tv lv v al } 
+				inst_al { tv lv y al } ⊢ { tv lv y al } 
+				unify.f { tv v y } ⊢ tv 
+				iug_axm_i_j { { tv lv al } vl yl } ⊢| 
+			∐ vl ⊢ _nil◂{}; yl ⊢ _nil◂{} . 
+				∎ { tv lv al } 
+			∐. . 
+				∎|
 		§ iug_axm # { tv vl kl yl } 
 			inst_lst { tv %[ 0r ] kl ⟦⟧ } ⊢ { tv lv kl al }
-			inst_lst { tv lv yl al } ⊢ { tv lv yl al }
-			lst.map_l◂◂of_var_i { { tv lv al } vl } ⊢ { { tv lv al } vl }
-			unify.f_lst { tv vl yl } ⊢ tv
+			iug_axm_i_j { { tv lv al } vl yl } ⊢ { tv lv al } 
 			_dec lv ⊢ lv 
 			gen_lst { tv lv kl } ⊢ { tv _ kl } 
 			∎ { tv kl }
 		§ iug_axm_i # { tv vl k yl } 
-			inst_al { tv %[ 0r ] k ⟦⟧ } ⊢ { tv lv k al }
-			inst_lst { tv lv yl al } ⊢ { tv lv yl al }
-			lst.map_l◂◂of_var_i { { tv lv al } vl } ⊢ { { tv lv al } vl }
-			unify.f_lst { tv vl yl } ⊢ tv
+			inst_al { tv %[ 1r ] k ⟦⟧ } ⊢ { tv lv k al }
+			iug_axm_i_j { { tv lv al } vl yl } ⊢ { tv lv al } 
 			_dec lv ⊢ lv 
 			gen { tv lv k } ⊢ { tv _ k } 
 			∎ { tv k }
@@ -6726,9 +6730,6 @@ unsigned long
 					gen { tv lv y } ⊢ { tv lv y } 
 					gen { tv lv yp } ⊢ { tv lv yp } 
 					$ TX.t_ctr◂{ y yp } ⊢ y 
-					-\
-					$ t ⊢ t,t0 
-					-/
 					inst { tv lv y } ⊢ { tv lv y }
 					∎ { { lv evv tv } ast.k_ply◂{ nc p0 p1 } y }
 				∐. . 
@@ -6752,8 +6753,8 @@ unsigned long
 			@.exp_s8 { lv evv tv e } 
 				$ e ⊢ 
 				∐ ast.exp_s8_cst◂c . 
-					ct_ptn { { lv evv tv } c } ⊢ { { lv evv tv } c y } 
-					T.iug { tv lv y TX.s8◂{} } ⊢ { tv lv _ _ }
+					--ct_ptn { { lv evv tv } c } ⊢ { { lv evv tv } c y } 
+					--T.iug { tv lv y TX.s8◂{} } ⊢ { tv lv _ _ }
 					∎ { lv evv tv ast.exp_s8_cst◂%c _none◂{} }
 				∐ ast.exp_s8_idx◂{ p i } . 
 					$ i ⊢ i,i0 
@@ -6768,8 +6769,8 @@ unsigned long
 						_emt %[ "slv exp_s8_fmt 0" ] ⊢ _ 
 						∎|  
 				∐. ast.exp_s8_for◂{ i c } . 
-					ct_ptn { { lv evv tv } c } ⊢ { { lv evv tv } c y0 } 
-					T.iug { tv lv y0 TX.s8◂{} } ⊢ { tv lv _ _ }
+					--ct_ptn { { lv evv tv } c } ⊢ { { lv evv tv } c y0 } 
+					--T.iug { tv lv y0 TX.s8◂{} } ⊢ { tv lv _ _ }
 					$ i ⊢ i,i0 
 					∎ { lv evv tv ast.exp_s8_for◂{ %i %c } _some◂{ %i0 TX.r64◂{} } } 
 		
@@ -7512,8 +7513,6 @@ unsigned long
 		§  
 			@.slv_file_lp { i il SC VM MV LCV tx_n NS gel EC }
 				inv_file { MV NS LCV EC } ⊢ { { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } {    ev_n tv tav evv } { el dd ep0 } }
-				--$ %[ "enter slv_file_lp" ] ⊢ sxe0 
-				--_emt sxe0 ⊢ _
 				s8_of_s8_lst ep0 ⊢ sep0 
 				$ ⟦ sep0 ⟧ ⊢ ep0 
 				$ gel ⊢ 
