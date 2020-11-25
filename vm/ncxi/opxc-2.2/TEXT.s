@@ -3,6 +3,50 @@
 
 	unt_0: dq 0x0 
 
+thread_create: ; rdi=fn
+	push rdi
+	call stack_create
+	lea rsi, [rax + STACK_SIZE - 8]
+	pop qword [rsi]
+	mov rdi, THREAD_FLAGS
+	mov rax, SYS_clone
+	syscall
+	cmp rax,-1 
+	jz err 
+	ret
+
+;; void *stack_create(void)
+stack_create:
+	mov rdi, 0
+	mov rsi, STACK_SIZE
+	mov rdx, PROT_WRITE | PROT_READ
+	mov r10, MAP_ANONYMOUS | MAP_PRIVATE | MAP_GROWSDOWN
+	mov r8, -1
+	mov r9, 0
+	mov rax, SYS_mmap
+	syscall
+	cmp rax,-1 
+	jz err 
+	ret
+
+th0:
+	mov QWORD [FLG1],0 
+	mov rax,SYS_futex 
+	mov rdi,FTX0 
+	mov rsi,FUTEX_WAIT 
+	mov rdx,0
+	mov r10,0 
+	syscall  
+	cmp rax,-1 
+	jz err
+	mov rdi,0
+	lock xchg QWORD [FTX0],rdi
+	;cmp rdi,0 
+	;mov rax,0xffab
+	;jz err 
+	mov QWORD [FLG1],1
+	;C_CALL free 
+	jmp th0
 sig_alc_rcd: ; rbx=n 
 	C_PUSH_REGS 
 	push rdi 
@@ -15,7 +59,7 @@ sig_alc_rcd: ; rbx=n
 	mov rsi,rdi 
 	xor rdi,rdi 
 	mov rdi,8
-	C_CALL calloc_sf
+	CALLOC_SF
 	mov rdx,rbx 
 	mov rbx,rax 
 	;mov QWORD [SS_RCD_TOP+8*rbx],rax 
@@ -278,7 +322,11 @@ esc_s8: ; rdi ⊢ rax
 	shl rax,1 
 	sub rsp,rax 
 esc_s8_lp0: 
-
+calloc_sf_0: 
+	CALLOC_SF 
+	ret
+;calloc_sf: 
+	
 arr_of_lst: 
 	mov rsi,0 
 arr_of_lst_r:
@@ -298,7 +346,7 @@ arr_of_lst_end:
 	xor rax,rax
 	mov rdi,8
 	add rsi,1 
-	C_CALL calloc_sf
+	CALLOC_SF
 	pop rsi 
 	mov QWORD [rax],rsi
 	ret 
@@ -315,7 +363,7 @@ mlc_s8: ; rdi=len
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 
-	C_CALL_SF calloc_sf
+	CALLOC_SF
 	pop QWORD [rax] 
 	ret
 
@@ -333,10 +381,6 @@ s8_of_c_stg:
 	cld
 	rep movsb
 	ret
-
-free_s8: ;rdi=ptr
-	C_CALL_SF free
-	ret 
 
 in_fn: 
 	mov rax,2
@@ -474,6 +518,6 @@ err:
 	mov rsi,QWORD [err_n]
 	xor rax,rax
 	C_CALL printf
-	mov rax,1
-	mov rbx,0
-	int 0x80
+	mov rax,SYS_exit
+	syscall
+
