@@ -9418,22 +9418,21 @@ unsigned long
 					∐. _nil◂{} . 
 						∎ { tv l0 ⟦⟧ ‹› }					
 				§ adt_call { ahl fl tv lb_n e0 { ax0 l0 } }
-					hsh_tbl.r64.get { ahl ax0 } ⊢ { ahl { ax0 ll } } 
-					$ ll ⊢ 
-					∐ _some◂ll . 
-						f_ll { tv l0 ll } ⊢ { tv l0 ll o }
-						$ o ⊢ 
-						∐ _some◂lb0 . 
-							call_lb { lb0 e0 } ⊢ { _ e0 }
-							hsh_tbl.r64.set { ahl { ax0 ll } } ⊢ { ahl { ax0 _ } } 
-							∎ { ahl fl tv lb_n e0 }
-						∐. _none◂{} . 
-								inc_x lb_n ⊢ { lb0 lb_n } 
-							call_lb { lb0 e0 } ⊢ { lb0 e0 }
-							$ l0 ⊢ l0,l00 
-							$ lb0 ⊢ lb0,lb00 
-							hsh_tbl.r64.set { ahl { ax0 ⟦ { l00 lb00 } < ll ⟧ } } ⊢ { ahl { ax0 _ } } 
+					_alc_o { ahl ax0 } ⊢ { ahl ll } 
+					f_ll { tv l0 ll } ⊢ { tv l0 ll o }
+					$ o ⊢ 
+					∐ _some◂lb0 . 
+						call_lb { lb0 e0 } ⊢ { _ e0 }
+						_alc_i { ahl ll } ⊢ { ahl _ } 
+						∎ { ahl fl tv lb_n e0 }
+					∐. _none◂{} . 
+						inc_x lb_n ⊢ { lb0 lb_n } 
+						call_lb { lb0 e0 } ⊢ { lb0 e0 }
+						$ l0 ⊢ l0,l00 
+						$ lb0 ⊢ lb0,lb00 
+							_alc_i { ahl ⟦ { l00 lb00 } < ll ⟧ } ⊢ { ahl ax0 } 
 							∎ { ahl _cns◂{ { ax0 l0 lb0 } fl } tv lb_n e0 }
+					-\
 					∐. _none◂{} . 
 						inc_x lb_n ⊢ { lb0 lb_n } 
 						call_lb { lb0 e0 } ⊢ { lb0 e0 }
@@ -9441,7 +9440,7 @@ unsigned long
 						$ lb0 ⊢ lb0,lb00 
 						hsh_tbl.r64.set { ahl { ax0 ⟦ { l00 lb00 } ⟧ } } ⊢ { ahl { ax0 _ } } 
 						∎ { ahl _cns◂{ { ax0 l0 lb0 } fl } tv lb_n e0 }
-					
+					-/
 				§ 
 					@.adt◂◂ADT_HP { ahl fl ax0 l0 tv tav evv lb_n GV { eds e0 } } 
 						dta_n { tav ax0 } ⊢ { tav ax0 { n lx0 lx1 } } 
@@ -9622,14 +9621,14 @@ unsigned long
 							∎ { ahl fl tv tav evv lb_n GV { eds e0 } } 	
 				§ @.adt_hp { ahl fl j0 tv tav evv lr lbl lb1 lb_n GV { eds e0 } } 
 						∐ lbl ⊢ p_cns◂{ lbi lbl };lr ⊢ _cns◂{ h lr } . 
-							lb_etr { lbi e0 } ⊢ { lbi e0 } 
+							lb_etr { lbi e0 } ⊢ { _ e0 } 
 							hp_adt { ahl fl tv tav evv lb_n GV h { eds e0 } } ⊢ { ahl fl tv tav evv lb_n GV { eds e0 } } 
 							_inc j0 ⊢ j0 
 							jmp_lb { lb1 e0 } ⊢ { lb1 e0 }
 							adt_hp { ahl fl j0 tv tav evv lr lbl lb1 lb_n GV { eds e0 } } ⊢| 
 						∐ lbl ⊢ p_end◂lbi; lr ⊢ _cns◂{ h lr } .
 							$ lr ⊢ _ 
-							lb_etr { lbi e0 } ⊢ { lbi e0 } 
+							lb_etr { lbi e0 } ⊢ { _ e0 } 
 							hp_adt { ahl fl tv tav evv lb_n GV h { eds e0 } } ⊢ { ahl fl tv tav evv lb_n GV { eds e0 } } 
 							jmp_lb { lb1 e0 } ⊢ { lb1 e0 }
 							∎ { ahl fl tv tav evv lb1 lb_n GV { eds e0 } }
@@ -9844,9 +9843,7 @@ unsigned long
 						∐ lr ⊢ _cns◂{ h lr } .
 							$ lbl ⊢ 
 							∐ p_cns◂{ lbi lbl } . 
-								^ lbi ⊢ lbi,s0 
-									"LB_" 0d' ":\n" // 
-								asm.add_s8 { e0 s0 } ⊢ e0 
+								lb_etr { lbi e0 } ⊢ { _ e0 } 
 								^ j0 ⊢ j0,sx 
 											"'" 0d' "◂" //
 								_inc j0 ⊢ j0 
@@ -12922,9 +12919,12 @@ unsigned long
 			asm.add_s8 { ec0 sc1 } ⊢ ec0
 			asm.add_s8 { ec0 %[ "\tjmp RTM_0\n" ] } ⊢ ec0 
 				
-			hsh_tbl.ini %[ 6r ] ⊢ gf0 
-			hsh_tbl.ini %[ 6r ] ⊢ gf1 
-			hsh_tbl.ini %[ 6r ] ⊢ gf2 
+			--hsh_tbl.ini %[ 6r ] ⊢ gf0 
+			--hsh_tbl.ini %[ 6r ] ⊢ gf1 
+			--hsh_tbl.ini %[ 6r ] ⊢ gf2 
+			_mk_arr { %[ 1024r ] ⟦⟧ } ⊢ { _ _ gf0 }  
+			_mk_arr { %[ 1024r ] ⟦⟧ } ⊢ { _ _ gf1 }  
+			_mk_arr { %[ 1024r ] ⟦⟧ } ⊢ { _ _ gf2 }  
 			$ { gf0 gf1 gf2 } ⊢ gfl
 
 			_mk_arr_x { %[ 1r ] gnr.lc_code.rf_k◂{} } ⊢ { _ _ rfv } 
