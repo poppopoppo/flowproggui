@@ -7512,7 +7512,7 @@ unsigned long
 
 		§  
 			@.slv_file_lp { i il SC VM MV LCV tx_n NS gel EC }
-				inv_file { MV NS LCV EC } ⊢ { { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } {    ev_n tv tav evv } { el dd ep0 } }
+				inv_file { MV NS LCV EC } ⊢ { { mmv mev mtv mfv mv_n } { ns_m ns_e ns_t } { ev_n tv tav evv } { el dd ep0 } }
 				s8_of_s8_lst ep0 ⊢ sep0 
 				$ ⟦ sep0 ⟧ ⊢ ep0 
 				$ gel ⊢ 
@@ -7793,7 +7793,6 @@ unsigned long
 				$ t0 ⊢ ia0,t0_0 
 				$ RP.atm◂T.var◂T.p◂t0_0 ⊢ v 
 				set_tv { tav %[ TX.id.opn ] { %[ "_opn" ] { %[ 2r ] ⟦ ia0 ⟧ ⟦ v TX.unt◂{} ⟧ } } } ⊢ { tav _ }
-				--_push { { %[ "_opn" ] { %[ 2r ] ⟦ ia0 ⟧ ⟦ v TX.unt◂{} ⟧ } } tav } ⊢ tav
 				
 				newvar_i tv ⊢ { tv i0 } 
 				$ i0 ⊢ i0,i1 
@@ -8602,8 +8601,8 @@ unsigned long
 				`	mov rsi,1  
 				"\tmov rdi," 1d' "\n" 
 				`	xor rax,rax 
-				"\tadd QWORD [S8_N]," 0d' "\n" 
-				`	C_CALL_SF calloc_sf
+				--"\tadd QWORD [S8_N]," 0d' "\n" 
+				`	CALLOC_SF
 				"\tmov QWORD [rax]," 0d' "\n"
 				//
 			∎ { l e }   
@@ -9517,7 +9516,11 @@ unsigned long
 						∐ ast.hp.r64◂{} . 
 							∎ { ahl fl tv tav evv lb_n GV { eds e0 } }
 						∐ ast.hp.opq◂_ . 	
-							asm.add_s8 { e0 %[ "\tFREE_S8 r8\n" ] } ⊢ e0 
+							inc_x lb_n ⊢ { lb lb_n } 
+							^ lb ⊢ _,s0 
+								`	mov rdi,r8 
+								"\tFREE_OPQ " 0d' "\n" // 
+							asm.add_s8 { e0 s0 } ⊢ e0 
 							∎ { ahl fl tv tav evv lb_n GV { eds e0 } }
 						∐ ast.hp.id◂{ x y0 } . 
 							∐ x'=ast.hp.id.Clr . 
@@ -9579,9 +9582,12 @@ unsigned long
 								"LB_" 1d' ":\n" 
 								`	pop rdi
 								`	pop SRC_REG 
-								`	C_CALL_SF free 
 								//	
 							asm.add_s8 { e0 s1 } ⊢ e0
+							inc_x lb_n ⊢ { lb lb_n }
+							^ lb ⊢ _,s0 
+								"\tFREE_OPQ " 0d' "\n" // 
+							asm.add_s8 { e0 s0 } ⊢ e0 
 							∎ { ahl fl tv tav evv lb_n GV { eds e0 } }
 				@.sgm_ptn = ptn_T◂◂sx 
 				@.ptn = ptn_T◂◂glx 
@@ -9955,7 +9961,7 @@ unsigned long
 									`	lea rdi,[8+8*rdi] 
 									`	mov rsi,1 
 									`	xor rax,rax
-									`	C_CALL_SF calloc_sf
+									`	CALLOC_SF
 									`	mov QWORD [rax],r9
 									`	push DST_REG
 									`	push SRC_REG
@@ -10124,7 +10130,7 @@ unsigned long
       		  ` imul rdi,rsi 
 						`	lea rsi,[8+8*rdi]
 						`	mov rdi,1 
-						` C_CALL_SF calloc_sf
+						`	CALLOC_SF
 						`	pop rdi 
 						`	mov QWORD [rax],rdi
 						//
@@ -10144,7 +10150,7 @@ unsigned long
       		  ` imul rdi,rsi 
 						`	lea rsi,[8+8*rdi]
 						`	mov rdi,1 
-						` C_CALL_SF calloc_sf
+						`	CALLOC_SF
 						`	pop rsi 
 						`	pop rdi 
 						`	mov QWORD [rax],rdi 
@@ -12946,7 +12952,7 @@ unsigned long
 			$ EE ⊢ { { _ glv_n } lb_n tav ec1 }
 			$ FE ⊢ { rfv gfl mfv  ev_n eg0 eds ew0 }		
 			$ eds ⊢ { _ _ eds } 
-			asm.add_s8 { ec1 %[ "\tC_CALL exit\n" ] } ⊢ ec1			
+			asm.add_s8 { ec1 %[ "\tmov QWORD [EXIT],1\n\tC_CALL exit\n" ] } ⊢ ec1			
 			asm.cct { ec1 ew0 } ⊢ ec1  
 			asm.cct { ec0 eg0 } ⊢ ec0 
 			asm.cct { ec0 ec1 } ⊢ ec0 
@@ -13020,7 +13026,8 @@ unsigned long
 			
 			^ _ ⊢ sx0 
 				`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
-    		`gcc -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O0 -o out.exe 
+    		`gcc -pthread -lpthread -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O0 -o out.exe 
+    		--`gcc -pthread -lpthread -Wall stub.c out.o -nostartfiles -no-pie -O2 -o out.exe 
 				// 
 			_cd sx0 ⊢ _  
 			_emt %[ "opxcc:compiled to out.exe" ] ⊢ _ 

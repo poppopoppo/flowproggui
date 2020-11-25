@@ -1,3 +1,7 @@
+	EXIT: resq 0
+	FLG0: resq 1 
+	FLG1: resq 1
+	FTX0: resq 1
 	NULL: resq 1 
 	SS_RCD_TOP: resq 64 
 	SS_RCD_BTM: resq 64 

@@ -1,6 +1,15 @@
 ; ini_prc 
 	mov rdi,NULL 
 	C_CALL ini_prc 
+; crt shreads 
+	mov QWORD [EXIT],0 
+	mov QWORD [FLG0],0 
+	mov QWORD [FLG1],0 
+	mov QWORD [FTX0],0
+	mov rdi,th0 
+	call thread_create 
+	cmp rax,-1 
+	jz err
 ; set signal handler 
 	mov rdi,SIG_SEGV 
 	mov rsi,sig_hdl 
