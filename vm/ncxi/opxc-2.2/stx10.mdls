@@ -10425,15 +10425,9 @@ unsigned long
 									^ _ ⊢ s1 
 										`	mov rsi,rdi  
 										`	sub rsp,128 
-										`	mov rdi,rsp 
+										`	lea rdi,[rsp+127]
 										`	push rsi 
-										-\
-										`	mov rdx,rax 
-										`	mov rsi,fmt_d
-										` xor rax,rax
-										`	C_CALL_SF sprintf
-										-/
-										`	call pf_d 
+										`	call pf_d_rv 
 										`	pop rdi
 										`	add rdi,rax 
 										`	push rax 
@@ -10442,7 +10436,7 @@ unsigned long
 									lp1 { GV evv { eds e0 } ld lb_n  ar rr pl } ⊢ { GV evv { eds e0 } ld lb_n  ar }
 									^ _ ⊢ sr 
 										`	pop rcx 
-										`	lea rsi,[rsp+rcx-1] 
+										`	lea rsi,[rsp+127] 
 										`	rep movsb
 										`	add rsp,128
 										//
@@ -10451,25 +10445,12 @@ unsigned long
 								∐ ast.fmt_x◂{} .
 									r64_to_rax { GV evv p0 e0 } ⊢ { GV evv e0 }
 									^ _ ⊢ s1 
-										-\
-										`	mov rsi,rdi 
+										`	mov rsi,rdi  
 										`	sub rsp,128 
-										`	mov rdi,rsp 
+										`	lea rdi,[rsp+127]
 										`	push rsi 
-										`	mov rdx,rax 
-										`	mov rsi,fmt_d
-										` xor rax,rax
-										`	C_CALL_SF sprintf
+										`	call pf_d_rv 
 										`	pop rdi
-										`	add rdi,rax 
-										`	push rax 
-										-/
-										`	mov rsi,rdi 
-										`	sub rsp,128 
-										`	mov rdi,rsp 
-										`	push rsi 
-										`	call pf_d
-										`	pop rdi 
 										`	add rdi,rax 
 										`	push rax 
 										// 
@@ -10477,7 +10458,7 @@ unsigned long
 									lp1 { GV evv { eds e0 } ld lb_n  ar rr pl } ⊢ { GV evv { eds e0 } ld lb_n  ar }
 									^ _ ⊢ sr 
 										`	pop rcx 
-										`	lea rsi,[rsp+rcx-1] 
+										`	lea rsi,[rsp+127] 
 										`	rep movsb
 										`	add rsp,128
 										//
