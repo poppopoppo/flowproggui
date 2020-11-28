@@ -98,11 +98,9 @@ bits 64
 	mov rax,rdx 
 	shr rax,3
 	mov rsi,rax  
-	shl rsi,1 ; *2 
-	mov rdx,rsi 
-	shl rdx,2 ; *4 
+	add rsi,rsi ; *2
+	lea rsi,[rsi+4*rsi] 
 	sub rdi,rsi 
-	sub rdi,rdx 
 %endmacro
 %macro MOV_CH_DGT 2 
 %endmacro
