@@ -47,6 +47,34 @@ th0:
 	mov QWORD [FLG1],1
 	;C_CALL free 
 	jmp th0
+
+pf_x: ; rdi=buf rax=num 
+	mov rsi,0 
+
+pf_d: ; rdi=buf rax=num 
+	mov r10,rdi
+	sub rsp,128 
+	mov r9,127
+pf_d_lp0:
+	DIV_MOD10 
+	;MOV_CH_DGT rsi,rdi 
+	lea rsi,[rdi+48] 
+	mov BYTE [rsp+r9],sil 
+	sub r9,1 
+	cmp rax,0 
+	jnz pf_d_lp0 
+	mov rcx,127
+	sub rcx,r9 
+	mov rax,rcx 
+	lea rsi,[rsp+r9+1] 
+	mov rdi,r10
+	cld
+	rep movsb  
+	std 
+	mov BYTE [rdi],0
+	mov rdi,rsi
+	add rsp,128 
+	ret 
 sig_alc_rcd: ; rbx=n 
 	C_PUSH_REGS 
 	push rdi 
