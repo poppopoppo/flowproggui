@@ -75,6 +75,20 @@ pf_d_lp0:
 	mov rdi,rsi
 	add rsp,128 
 	ret 
+
+pf_d_rv: ; rdi=buf rax=num 
+	mov r10,rdi
+	mov r9,rdi
+pf_d_rv_lp0:
+	DIV_MOD10 
+	lea rsi,[rdi+48] 
+	mov BYTE [r9],sil 
+	sub r9,1 
+	cmp rax,0 
+	jnz pf_d_rv_lp0 
+	sub r10,r9 
+	mov rax,r10
+	ret 
 sig_alc_rcd: ; rbx=n 
 	C_PUSH_REGS 
 	push rdi 
