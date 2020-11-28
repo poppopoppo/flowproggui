@@ -85,7 +85,27 @@ bits 64
  ; cmov%1 rsi,MCR_REG
   ;mov rsi,QWORD [rsi]
 ;%endmacro 
-
+%macro DIV10 0 ; rax ⊢ rax
+	mov MCR_REG,0xcccc_cccc_cccc_cccd 
+  mul MCR_REG 
+  mov rax,rdx 
+  shr rax,3
+%endmacro
+%macro DIV_MOD10 0 ; rax ⊢ rax,rdi 
+	mov rdi,rax 
+	mov MCR_REG,0xcccc_cccc_cccc_cccd 
+	mul MCR_REG 
+	mov rax,rdx 
+	shr rax,3
+	mov rsi,rax  
+	shl rsi,1 ; *2 
+	mov rdx,rsi 
+	shl rdx,2 ; *4 
+	sub rdi,rsi 
+	sub rdi,rdx 
+%endmacro
+%macro MOV_CH_DGT 2 
+%endmacro
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
 	call emt_stg 

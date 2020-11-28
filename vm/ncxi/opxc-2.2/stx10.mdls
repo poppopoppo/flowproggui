@@ -9430,17 +9430,8 @@ unsigned long
 						call_lb { lb0 e0 } ⊢ { lb0 e0 }
 						$ l0 ⊢ l0,l00 
 						$ lb0 ⊢ lb0,lb00 
-							_alc_i { ahl ⟦ { l00 lb00 } < ll ⟧ } ⊢ { ahl ax0 } 
-							∎ { ahl _cns◂{ { ax0 l0 lb0 } fl } tv lb_n e0 }
-					-\
-					∐. _none◂{} . 
-						inc_x lb_n ⊢ { lb0 lb_n } 
-						call_lb { lb0 e0 } ⊢ { lb0 e0 }
-						$ l0 ⊢ l0,l00 
-						$ lb0 ⊢ lb0,lb00 
-						hsh_tbl.r64.set { ahl { ax0 ⟦ { l00 lb00 } ⟧ } } ⊢ { ahl { ax0 _ } } 
+						_alc_i { ahl ⟦ { l00 lb00 } < ll ⟧ } ⊢ { ahl ax0 } 
 						∎ { ahl _cns◂{ { ax0 l0 lb0 } fl } tv lb_n e0 }
-					-/
 				§ 
 					@.adt◂◂ADT_HP { ahl fl ax0 l0 tv tav evv lb_n GV { eds e0 } } 
 						dta_n { tav ax0 } ⊢ { tav ax0 { n lx0 lx1 } } 
@@ -10436,10 +10427,13 @@ unsigned long
 										`	sub rsp,128 
 										`	mov rdi,rsp 
 										`	push rsi 
+										-\
 										`	mov rdx,rax 
 										`	mov rsi,fmt_d
 										` xor rax,rax
 										`	C_CALL_SF sprintf
+										-/
+										`	call pf_d 
 										`	pop rdi
 										`	add rdi,rax 
 										`	push rax 
@@ -10457,15 +10451,25 @@ unsigned long
 								∐ ast.fmt_x◂{} .
 									r64_to_rax { GV evv p0 e0 } ⊢ { GV evv e0 }
 									^ _ ⊢ s1 
+										-\
 										`	mov rsi,rdi 
 										`	sub rsp,128 
 										`	mov rdi,rsp 
 										`	push rsi 
-										"\tmov rdx,rax\n" 
+										`	mov rdx,rax 
 										`	mov rsi,fmt_d
 										` xor rax,rax
 										`	C_CALL_SF sprintf
 										`	pop rdi
+										`	add rdi,rax 
+										`	push rax 
+										-/
+										`	mov rsi,rdi 
+										`	sub rsp,128 
+										`	mov rdi,rsp 
+										`	push rsi 
+										`	call pf_d
+										`	pop rdi 
 										`	add rdi,rax 
 										`	push rax 
 										// 
