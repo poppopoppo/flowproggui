@@ -10002,7 +10002,7 @@ unsigned long
 							∎ { ahl fl tv tav evv lb_n GV { eds e0 } }
 						∐ ast.hp.opq◂d . 
 							∐ d'=ast.hp.arr.std . 
-								asm.add_s8 { e0 %[ "\tmov rdi,r8\n\tCALL_SF rpc_s8\n" ] } ⊢ e0 
+								asm.add_s8 { e0 %[ "\tmov rdi,r8\n\tcall rpc_s8\n" ] } ⊢ e0 
 								∎ { ahl fl tv tav evv lb_n GV { eds e0 } }
 							∐. . 
 								∎|
@@ -10026,12 +10026,14 @@ unsigned long
 								$ { GV gn } ⊢ GV 
 								inc_x lb_n ⊢ { lb0 lb_n } 
 								inc_x lb_n ⊢ { lb1 lb_n } 
-								^ lb0,lb1,c_n ⊢ lb0,lb1,c_n,sc0 
+								^ _ ⊢ sc0 
 									`	mov r9,0x0000_ffff_ffff_ffff 
 									`	and r9,QWORD [r8] 
 									`	mov rdi,r9 
-									"\tmov rsi," 2d' "\n" 
-	                ` imul rdi,rsi 
+									//
+								asm.add_s8 { e0 sc0 } ⊢ e0
+								imul_im◂◂"rdi" { c_n e0 } ⊢ { c_n e0 }
+								^ lb0,lb1 ⊢ lb0,lb1,sc0 
 									`	lea rdi,[8+8*rdi] 
 									`	mov rsi,1 
 									`	xor rax,rax
@@ -10050,11 +10052,12 @@ unsigned long
 									//
 								asm.add_s8 { e0 sc0 } ⊢ e0
 								sgm_ptn { ahl fl tv tav evv lb_n GV pa0 { eds e0 } } ⊢ { ahl fl  tv tav evv lb_n GV { eds e0 } } 
+								_shl { c_n %[ 3r ] } ⊢ { c_n _ } 
 								^ c_n ⊢ _,s0
 									`	pop r9  
 									`	sub r9,1
-									"\tlea SRC_REG,[SRC_REG+8*" 0d' "]\n"
-									"\tlea DST_REG,[DST_REG+8*" 0d' "]\n"
+									"\tlea SRC_REG,[SRC_REG+" 0d' "]\n"
+									"\tlea DST_REG,[DST_REG+" 0d' "]\n"
 									//  
 								asm.add_s8 { e0 s0 } ⊢ e0
 								jmp_lb { lb0 e0 } ⊢ { _ e0 } 
@@ -10198,10 +10201,9 @@ unsigned long
 						∎ { GV evv e0 }
 			§ mlc_arr { d c_n e }	 
 				∐ d'=ast.hp.arr.std . 
-					^ c_n ⊢ c_n,s 
-						`	push rdi 
-						"\tmov rsi," 0d' "\n" 
-      		  ` imul rdi,rsi 
+					asm.add_s8 { e %[ "\tpush rdi\n" ] } ⊢ e 
+					imul_im◂◂"rdi" { c_n e } ⊢ { c_n e } 
+					^ _ ⊢ s 
 						`	lea rsi,[8+8*rdi]
 						`	mov rdi,1 
 						`	CALLOC_SF
@@ -10211,7 +10213,7 @@ unsigned long
 					asm.add_s8 { e s } ⊢ e 
 					∎ { d c_n e }
 				∐ d'=ast.hp.arr.x . 
-					^ c_n ⊢ c_n,s 
+					^ _ ⊢ s 
 						`	cmp rdi,0 
 						`	jz err 
 						`	push rdi 
@@ -10220,8 +10222,10 @@ unsigned long
 						`	push rsi 
 						`	xor rdi,rdi
 						`	bts rdi,rsi 
-						"\tmov rsi," 0d' "\n" 
-      		  ` imul rdi,rsi 
+						//
+					asm.add_s8 { e s } ⊢ e 						
+					imul_im◂◂"rdi" { c_n e } ⊢ { c_n e } 
+					^ _ ⊢ s 
 						`	lea rsi,[8+8*rdi]
 						`	mov rdi,1 
 						`	CALLOC_SF
@@ -12477,41 +12481,41 @@ unsigned long
 										inc_x lb_n ⊢ { lb0 lb_n } 
 										$ i0 ⊢ i0,i00 
 										asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] i00 } } ⊢ ec0 
-										^ c_n,lb0 ⊢ c_n,lb0,sc0 
+										^ lb0 ⊢ lb0,sc0 
 											`	movzx rsi,BYTE [rdi+7]
 											`	mov rax,0x0000_ffff_ffff_ffff 
 											`	and rax,QWORD [rdi]
 											`	add rax,1
 											`	bt rax,rsi 
-											"\tjnc LB_" 1d' "\n"
+											"\tjnc LB_" 0d' "\n"
 											`	push rax 
 											`	add rsi,1 
 											`	push rsi 
 											`	xor rax,rax
 											`	bts rax,rsi 
-											"\tmov rsi," 0d' "\n" 
-      		  					` imul rax,rsi 
+											//
+										asm.add_s8 { ec0 sc0 } ⊢ ec0 
+										imul_im◂◂"rax" { c_n ec0 } ⊢ { c_n ec0 }
+										^ _ ⊢ sc0 
 											`	lea rsi,[8+8*rax]
 											` C_CALL_SF realloc
 											`	cmp rax,QWORD [NULL] 
 											`	jz err_NULL 
-										//
+											//
 										asm.add_s8 { ec0 sc0 } ⊢ ec0 
 										asm.add_nd { ec0 asm.mov_glx_op◂{ i0 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ ec0 
-										^ c_n,lb0 ⊢ _,_,sc0 
+										^ lb0 ⊢ _,sc0 
 											`	mov rdi,rax
 											`	pop rsi 
 											`	pop rax 
-											"LB_" 1d' ":\n" 
+											"LB_" 0d' ":\n" 
 											`	mov QWORD [rdi],rax 
 											`	mov BYTE [rdi+7],sil
-											"\tmov rsi," 0d' "\n" 
 											`	sub rax,1
-											` imul rax,rsi 
-											`	lea DST_REG,[rdi+8+8*rax]
 											//
 										asm.add_s8 { ec0 sc0 } ⊢ ec0 
-										
+										imul_im◂◂"rax" { c_n ec0 } ⊢ { _ ec0 }
+										asm.add_s8 { ec0 %[ "\tlea DST_REG,[rdi+8+8*rax]\n" ] } ⊢ ec0										
 										mov_ptn2.to_sgm_ptn { ec0 { evv tav tv eds } GV pk pa0 } ⊢ { ec0 { evv tav tv eds } GV } 
 										$ RP.atm◂ast.hp◂{ r0 ast.hp.arr◂d0 } ⊢ iy 
 										stt_jmp_axm { VM evv tv { GV lb_n tav  ec0 } { rfv gfl mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|
