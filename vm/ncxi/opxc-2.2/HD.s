@@ -102,8 +102,7 @@ bits 64
 	lea rsi,[rsi+4*rsi] 
 	sub rdi,rsi 
 %endmacro
-%macro MOV_CH_DGT 2 
-%endmacro
+
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
 	call emt_stg 
@@ -115,13 +114,12 @@ bits 64
 	C_CALL_SF free 
 %endmacro
 %macro FREE_OPQ 1
-	;mov rax,0 
-	lock cmpxchg QWORD [FTX0],rdi
+	jmp LB_%1_0 
+	mov rax,0 
+	mov rsi,1 
+	lock cmpxchg QWORD [FTX0],rsi
 	jnz LB_%1_0 
-	;jmp LB_%1_0
-	;cmp rax,0 
-	;mov QWORD [err_n],0xffab
-	;jnz err
+	mov QWORD [BUF0],rdi
 	cmp QWORD [FLG1],0 
 	jnz LB_%1_1 
 	mov rax,SYS_futex 
@@ -130,7 +128,7 @@ bits 64
 	mov rdx,1 
 	mov r10,0
 	syscall
-	cmp rax,-1 
+	cmp rax,-1  
 	jz err
 	jmp LB_%1_1
 LB_%1_0:
@@ -140,6 +138,7 @@ LB_%1_0:
 	C_CALL_SF free 
 LB_%1_1:
 %endmacro
+
 %macro C_PUSH_REGS 0 
 	push rdx
 	push rcx
