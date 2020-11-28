@@ -3,6 +3,7 @@
 	FLG1: resq 1
 	FTX0: resq 1
 	NULL: resq 1 
+	BUF0: resq 8
 	SS_RCD_TOP: resq 64 
 	SS_RCD_BTM: resq 64 
 	SS_RCD_N: resq 64 

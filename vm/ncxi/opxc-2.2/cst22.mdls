@@ -296,12 +296,16 @@
 § m1 _ 
   m1_0 { %[ 0r ] %[ 1r ] } ⊢ _ 
   ∎ {} 
-§ @.m2_lp s 
+§ @.m2_lp { i s }
   --_emt s ⊢ _ 
-  $ s ⊢ _ 
-  m2_lp %[ "jjoijojojojjio" ] ⊢| 
+  _inc i ⊢ i 
+  --_emt i ⊢ i
+  _s8_len s ⊢ { s l } 
+  _emt l ⊢ _  
+  _emt s ⊢ _ 
+  m2_lp { i %[ "ec54e54o" ] } ⊢| 
 § m2 _ 
-  m2_lp %[ "jjj98bubioiuhoihu" ] ⊢ _ 
+  m2_lp { %[ 0r ] %[ "jjj98bubioiuhoihu" ] } ⊢ _ 
   ∎ {} 
 
 § main1 _ 

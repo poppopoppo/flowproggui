@@ -6,6 +6,13 @@
 	mov QWORD [FLG0],0 
 	mov QWORD [FLG1],0 
 	mov QWORD [FTX0],0
+	mov rax,0
+BUF0_ini: 	
+	mov QWORD [BUF0+8*rax],0
+	add rax,1 
+	cmp rax,4 
+	jnz BUF0_ini 
+	
 	mov rdi,th0 
 	call thread_create 
 	cmp rax,-1 
