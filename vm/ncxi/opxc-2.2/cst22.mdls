@@ -320,7 +320,10 @@
   ∎ {} 
 	
 § main2 _ 
-  ^ %[ 0xffffffffffffffffr ] ⊢ _,s 
-    0d' // 
+  --^ %[ 0xffffffffffffffffr ] ⊢ _,s 
+   -- 0d' // 
+  --_emt s ⊢ _ 
+  ^ %[ 0xbcd675756fd68066r ] ⊢ _,s 
+    "0x" 0x' // 
   _emt s ⊢ _ 
   ∎ {} 

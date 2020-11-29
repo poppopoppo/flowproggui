@@ -60,9 +60,25 @@ th0_1:
 	;C_CALL_SF free 
 	jmp th0
 
-
+pf_x_tb: db "0123456789abcdef"
 pf_x: ; rdi=buf rax=num 
-	mov rsi,0 
+	lzcnt rcx,rax 
+	shr rcx,2
+	mov rsi,17 
+	sub rsi,rcx 
+	mov r8,rsi 
+	mov BYTE [rdi+rsi],0
+pf_x_lp:
+	mov rdx,rax 
+	and rdx,0xf
+	movzx rbx,BYTE [pf_x_tb+rdx] 
+	mov BYTE [rdi+rsi-1],bl 
+	shr rax,4  
+	sub rsi,1 
+	cmp rsi,0 
+	jnz pf_x_lp 
+	mov rax,r8 
+	ret
 
 pf_d: ; rdi=buf rax=num 
 	mov r10,rdi
