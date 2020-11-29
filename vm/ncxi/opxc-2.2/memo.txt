@@ -555,4 +555,25 @@ W : t→{ t s }
 *14 = *7*2 
   lea rsi,[8*rdi]
   sub rsi,rdi 
+
+_arr◂{ a' t'' }
+  t'' = 
+  | standard 
+  | fixed -- fixed length
+  | extend -- extendable 
+  | extend-page -- extendable,per page size
+  | static -- read only 
+  | slice -- slice array 
+
+  _st◂a' -- static type,shared object,pointer to statically allocated regions  
+  $ a ⊢ a,a0 -- rpc pointer 
+  $ a ⊢ _ -- no cost delete 
+  _rpc_st : _st◂a' → { _st◂a' a' } 
+  _arr◂{ a' '{ .. st~{} } } -- static array 
+  _arr◂{ .. '{ .. st~| < l' } } -- non-static array 
+  _cst : c'→→{}→c'
+  _cst_st : c'→→{}→(st◂c')
+  _cst_st◂◂"FOO BAA" {} ⊢ s0 
+  _cst_vp◂◂"brabra" {} ⊢ v0 
   
+  compile-time-value | static-run-time-value | dynamic-run-time-value 
