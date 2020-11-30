@@ -331,7 +331,9 @@
 § main3 _ 
   _st◂◂"FJFJJJJ" {} ⊢ s0 
   $ s0 ⊢ s0,s1 
-  _emt s0 ⊢ _ 
-  _emt s1 ⊢ _
+  _emt s0 ⊢ s0 
+  _emt s1 ⊢ s1 
+  ^ s0,s1 ⊢ _,_,s 
+    0st' "," 1st' // 
+  _emt s ⊢ _ 
   ∎ {} 
-  

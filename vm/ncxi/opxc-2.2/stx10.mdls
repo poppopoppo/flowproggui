@@ -2937,6 +2937,7 @@ unsigned long
 				∐ k_ply : { _r64 RP.t◂_r64 SP◂_r64◂e'◂s' }
 			@.fmt
 				∐ fmt_s : {}
+				∐ fmt_st_s : {} 
 				∐ fmt_d : {}
 				∐ fmt_x : {}
 				∐ fmt_p : {}
@@ -3668,6 +3669,11 @@ unsigned long
 			∐. . 
 				$ %[ "r64_of_rt 1" ] ⊢ ee0 
 				_emt ee0 ⊢ _ 
+				∎| 
+		§ st_of_rt { evv p } 
+			∐ p ⊢ RP.atm◂hp◂{ r _ } . 
+				∎ { evv r }
+			∐. . 
 				∎| 
 		§ s8_of_rt { evv p }
 			∐ p ⊢ RP.atm◂a . 
@@ -5349,6 +5355,8 @@ unsigned long
 				∎ _some◂{ ast.fmt_d◂{} %d }
 			∐ _scf_d "x'" ⊢ { d {} }
 				∎ ‹ { ast.fmt_x◂{} d } ›
+			∐ _scf_d "st'" ⊢ { d {} }
+				∎ ‹ { ast.fmt_st_s◂{} d } ›
 			∐. _scf_d "'" ⊢ { d {} }
 				∎ ‹ { ast.fmt_s◂{} d } ›
 		@.s8_ptn_line ^=
@@ -6774,6 +6782,8 @@ unsigned long
 					$ p ⊢ 
 					∐ ast.fmt_s◂{} . 
 						∎ { lv evv tv ast.exp_s8_idx◂{ ast.fmt_s◂{} %i } _some◂{ %i0 TX.s8◂{} } }
+					∐ ast.fmt_st_s◂{} . 
+						∎ { lv evv tv ast.exp_s8_idx◂{ ast.fmt_st_s◂{} %i } _some◂{ %i0 TX.st◂TX.s8◂{} } }
 					∐ ast.fmt_d◂{} . 
 						∎ { lv evv tv ast.exp_s8_idx◂{ ast.fmt_d◂{} %i } _some◂{ %i0 TX.r64◂{} } }
 					∐ ast.fmt_x◂{} .
@@ -10543,6 +10553,26 @@ unsigned long
 												//
 											asm.add_s8 { e0 sr } ⊢ e0 
 											∎ { GV evv { eds e0 } ld lb_n  ar } 					
+								∐ ast.fmt_st_s◂{} . 
+									ast.st_of_rt { evv p0 } ⊢ { evv r0 } 
+									GV.lod { GV r0 } ⊢ { GV r0 i0 } 
+									asm.add_nd { e0 asm.mov_rx_glx◂{ %[ asm.rx.rsi ] i0 } } ⊢ e0 
+									^ _ ⊢ s1 
+										`	mov rax,QWORD [rsi-8] 
+										`	add rdi,rax 
+										`	push rsi
+										`	push rax 
+											// 
+									asm.add_s8 { e0 s1 } ⊢ e0
+									lp1 { GV evv { eds e0 } ld lb_n  ar rr pl } ⊢ { GV evv { eds e0 } ld lb_n  ar }
+									^ _ ⊢ sr 
+										`	pop rcx 
+										`	pop rsi
+										`	lea rsi,[rsi+rcx-1]
+										`	rep movsb
+										//
+									asm.add_s8 { e0 sr } ⊢ e0 
+									∎ { GV evv { eds e0 } ld lb_n ar } 					
 								∐ ast.fmt_d◂{} .
 									r64_to_rax { GV evv p0 e0 } ⊢ { GV evv e0 }
 									^ _ ⊢ s1 

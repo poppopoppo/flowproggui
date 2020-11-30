@@ -1,7 +1,7 @@
 %include "HD.s"  
 ;	v.0
 %define RCD_N 64
-%define GLV_N 131
+%define GLV_N 132
 %define SS_NULL 0xffff_ffff_ffff_0000
 %define EMT_BUF_MAX (KB<<1)				
  
@@ -19,6 +19,10 @@ LB_7_H: dq 0x1a
 LB_7: db 46,112,49,54,226,151,130,95,97,114,114,226,151,130,123,32,125,226,151,130,95,114,56,226,151,130,0,0,0,0,0,0,0,0,0
 LB_8_H: dq 0x1
 LB_8: db 10,0,0,0,0,0,0,0,0,0
+LB_9_H: dq 0x1
+LB_9: db 44,0,0,0,0,0,0,0,0,0
+LB_10_H: dq 0x13
+LB_10: db 95,97,114,114,226,151,130,123,32,125,226,151,130,95,114,56,226,151,130,0,0,0,0,0,0,0,0,0
 section .text
 global _start
 _start:
@@ -67,7 +71,6 @@ LB_2:
 	EMT_CST LB_8,1
 	EMT_FLSH
 	pop QWORD [SIG_ETR]
-	mov r8,GLX(0x81)
 	push QWORD [SIG_ETR]
 	mov QWORD [SIG_ETR],emt_bof_hdl
 	EMT_CST fmt_emt,64
@@ -84,16 +87,66 @@ LB_2:
 	EMT_CST LB_8,1
 	EMT_FLSH
 	pop QWORD [SIG_ETR]
+	mov rdi,0
+	mov rsi,GLX(0x81)
+	mov rax,QWORD [rsi-8] 
+	add rdi,rax 
+	push rsi
+	push rax 
+	mov rsi,GLX(0x82)
+	mov rax,QWORD [rsi-8] 
+	add rdi,rax 
+	push rsi
+	push rax 
+	add rdi,0x1
+	push rdi 
+	call mlc_s8 
+	pop rdi
+	lea rdi,[rax+7+rdi]
+	std 
+	mov QWORD [tmp],rcx 
+	mov GLX(0x83),rax
+	pop rcx 
+	pop rsi
+	lea rsi,[rsi+rcx-1]
+	rep movsb
+	lea rsi,[LB_9+0x1-1]
+	mov rcx,0x1
+	rep movsb
+	pop rcx 
+	pop rsi
+	lea rsi,[rsi+rcx-1]
+	rep movsb
+	mov rcx,QWORD [tmp]
+	mov r8,GLX(0x81)
 	mov r8,GLX(0x82)
+	push QWORD [SIG_ETR]
+	mov QWORD [SIG_ETR],emt_bof_hdl
+	EMT_CST fmt_emt,64
+	mov rdi,GLX(0x83)
+	C_PUSH_REGS
+	mov r8,rdi 
+	mov rdi,r8
+	call emt_s8
+	C_POP_REGS
+	EMT_CST fmt_nl,4
+	EMT_CST LB_6,3
+	EMT_CST LB_10,19
+	EMT_CST LB_8,1
+	EMT_FLSH
+	pop QWORD [SIG_ETR]
+	mov r8,GLX(0x83)
+	mov rdi,r8 
+	FREE_OPQ 11
  ret 
 RTM_0:
-	push EXH_9
+	push EXH_12
 	MOV_RBX GLX(0x80),GLX(0x7f)
 	call LB_0
 	add rsp,8
 	mov QWORD [EXIT],1
 	C_CALL exit
-EXH_9:
+EXH_12:
 	add rsp,0x8
 	pop rax
 	jmp rax
