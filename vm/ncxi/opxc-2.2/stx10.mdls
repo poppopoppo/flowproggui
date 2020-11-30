@@ -9871,7 +9871,7 @@ unsigned long
 								∎ { ahl fl tv tav evv lb_n GV { eds e0 } }								 								
 							-- st 
 							∐ 
-								asm.add_s8 { e0 %[ "\tmov rdx,r8\n\tlea rax,[r8-8]\n\tcall emt_s8_stg\n" ] } ⊢ e0 
+								asm.add_s8 { e0 %[ "\tmov rdi,r8\n\tmov rax,QWORD [r8-8]\n\tcall emt_cst\n" ] } ⊢ e0 
 								∎ { ahl fl tv tav evv lb_n GV { eds e0 } }
 							∐. 
 								∎|
@@ -12640,9 +12640,9 @@ unsigned long
 										ast.s8_of_k { evv k } ⊢ { evv s } 
 										EDS.lod_p { s lb_n eds } ⊢ { s lb_n eds { ls lb } } 
 										^ lb ⊢ _,sc0 
-											"\tmov rdi,LB_" 0d' "\n" //
+											"LB_" 0d' //
 										GV.new_i GV ⊢ { GV r i } 
-										asm.add_nd { ec0 asm.mov_glx_op◂{ i asm.op.rx◂%[ asm.rx.rdi ] } } ⊢ ec0 
+										asm.add_nd { ec0 asm.mov_glx_op◂{ i asm.op.lt◂sc0 } } ⊢ ec0 
 										$ stt_v.st_reg◂{ r TX.s8◂{} } ⊢ iy 
 										stt_jmp_axm { VM evv tv { GV lb_n tav  ec0 } { rfv gfl mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|										 	
 									∐. . 
