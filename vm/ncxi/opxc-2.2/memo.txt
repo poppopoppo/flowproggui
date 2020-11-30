@@ -577,6 +577,17 @@ _arr◂{ a' t'' }
   _cst_vp◂◂"brabra" {} ⊢ v0 
 
   compile-time-value | static-run-time-value | dynamic-run-time-value 
+  CT | St | Shr | Dyn 
+
+
+      CT
+    /   \
+Dyn       Stt
+  \     
+    Shr
+  
+  shared -> public 
+  logical,static,public,dynamic
 
   $ _ ⊢ c 
     ..
@@ -591,3 +602,6 @@ _arr◂{ a' t'' }
     ^]
     // 
   $ _^ ⊢ c 
+
+  $ a ⊢< a0 →→→ $ a ⊢ a,a0 
+  
