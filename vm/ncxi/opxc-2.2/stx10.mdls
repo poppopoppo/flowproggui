@@ -10523,7 +10523,7 @@ unsigned long
 										`	push rax 
 										// 
 									asm.add_s8 { e0 s1 } ⊢ e0
-									lp1 { GV evv { eds e0 } ld lb_n  ar rr pl } ⊢ { GV evv { eds e0 } ld lb_n  ar }
+									lp1 { GV evv { eds e0 } ld lb_n ar rr pl } ⊢ { GV evv { eds e0 } ld lb_n  ar }
 									^ _ ⊢ sr 
 										`	pop rcx 
 										`	lea rsi,[rsp+31] 
@@ -10531,30 +10531,12 @@ unsigned long
 										`	add rsp,32
 										//
 									asm.add_s8 { e0 sr } ⊢ e0 
-									∎ { GV evv { eds e0 } ld lb_n  ar } 	 
+									∎ { GV evv { eds e0 } ld lb_n ar } 	 
 								∐ ast.fmt_x◂{} .
 									r64_to_rax { GV evv p0 e0 } ⊢ { GV evv e0 }
-									asm.add_s8 { e0 %[ "\tbsr rsi,rax\n" ] } ⊢ e0 
-									inc_x lb_n ⊢ { lb0 lb_n } 
-									jz_lb { lb0 e0 } ⊢ { lb0 e0 } 
-									^ _ ⊢ s1 										
-										`	mov rcx,63 
-										`	sub rcx,rsi 
-										`	shr rcx,2 
-										`	mov rsi,16 
-										`	sub rsi,rcx 
-										`	add rdi,rsi 
-										`	push rsi 
-										`	push rax  
-										// 
-									asm.add_s8 { e0 s1 } ⊢ e0
-									inc_x lb_n ⊢ { lb1 lb_n } 
-									jmp_lb { lb1 e0 } ⊢ { lb1 e0 }
-									lb_etr { lb0 e0 } ⊢ { _ e0 }
-									asm.add_s8 { e0 %[ "\tadd rdi,1\n\tpush 1\n\tpush rax\n" ] } ⊢ e0 
-									lb_etr { lb1 e0 } ⊢ { _ e0 }
+									asm.add_s8 { e0 %[ "\tpush rax\n\tcall pf_x_n\n"] } ⊢ e0
 									lp1 { GV evv { eds e0 } ld lb_n  ar rr pl } ⊢ { GV evv { eds e0 } ld lb_n  ar }
-									asm.add_s8 { e0 %[ "\tpop rax\n\tpop rcx\n\tcall pf_x_rv\n" ] } ⊢ e0 
+									asm.add_s8 { e0 %[ "\tpop rax\n\tcall pf_x_rv\n" ] } ⊢ e0 
 									∎ { GV evv { eds e0 } ld lb_n ar } 	
 								∐. ast.fmt_p◂{} .
 									∎| 
