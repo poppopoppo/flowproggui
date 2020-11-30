@@ -326,4 +326,8 @@
   ^ %[ 0xbcd675756fd68066r ] ⊢ _,s 
     "0x" 0x' // 
   _emt s ⊢ _ 
+  _st◂◂"FJFJJJJ" {} ⊢ s0 
+  $ s0 ⊢ s0,s1 
+  _emt s0 ⊢ _ 
+  _emt s1 ⊢ _
   ∎ {} 
