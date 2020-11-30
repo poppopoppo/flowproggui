@@ -80,6 +80,18 @@ pf_x_lp:
 	mov rax,r8 
 	ret
 
+pf_x_rv: 
+	movzx rdx,al 
+	and rdx,0xf
+	movzx rbx,BYTE [pf_x_tb+rdx] 
+	mov BYTE [rdi],bl 
+	shr rax,4  
+	sub rdi,1 
+	sub rcx,1 
+	cmp rcx,0
+	jnz pf_x_rv 
+	ret  
+
 pf_d: ; rdi=buf rax=num 
 	mov r10,rdi
 	sub rsp,128 

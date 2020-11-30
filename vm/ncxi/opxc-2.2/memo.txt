@@ -575,5 +575,19 @@ _arr◂{ a' t'' }
   _cst_st : c'→→{}→(st◂c')
   _cst_st◂◂"FOO BAA" {} ⊢ s0 
   _cst_vp◂◂"brabra" {} ⊢ v0 
-  
+
   compile-time-value | static-run-time-value | dynamic-run-time-value 
+
+  $ _ ⊢ c 
+    ..
+    // 
+  $ _> ⊢ c 
+  $ _^< ⊢ c 
+    "Hello" ^^ " World!!" 
+    ^[
+    ` Foo 
+    ^^
+    ` Baa 
+    ^]
+    // 
+  $ _^ ⊢ c 
