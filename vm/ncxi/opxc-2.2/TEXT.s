@@ -627,4 +627,10 @@ err:
 err_th0: 
 	mov rax,SYS_exit 
 	syscall 
-
+exn:
+	mov rdi,fmt_exn
+	;mov rsi,QWORD [err_n]
+	xor rax,rax
+	C_CALL printf
+	mov rax,SYS_exit
+	syscall
