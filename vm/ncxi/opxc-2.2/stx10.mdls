@@ -1235,7 +1235,7 @@ unsigned long
 	$ sl ⊢ 
 	∐ _cns◂{ s sl } . 
 		_s8_len s ⊢ { s b }
-		_add { l b } ⊢ { l b } 
+		_add { l b } ⊢ { l _ } 
 		s8_of_s8_lst_i { l sl } ⊢ { sr n } 
 		_pf_x◂◂pf_s8 { sr n { s } } ⊢ { sr n { _ } } 
 		∎ { sr n } 
@@ -1244,6 +1244,22 @@ unsigned long
 		∎ { sr %[ 0r ] }
 § s8_of_s8_lst # l 
 	s8_of_s8_lst_i { %[ 0r ] l } ⊢ { s n } 
+	∎ s 
+§ @.s8_of_s8_lst_rev_i { l sl }
+	$ sl ⊢ 
+	∐ _cns◂{ s sl } . 
+		_s8_len s ⊢ { s b }
+		_add { l b } ⊢ { l b } 
+		s8_of_s8_lst_rev_i { l sl } ⊢ { sr n } 
+		_sub { n b } ⊢ { n b } 
+		_pf_x◂◂pf_s8 { sr n { s } } ⊢ { sr n { _ } } 
+		_sub { n b } ⊢ { n _ }
+		∎ { sr n } 
+	∐. _nil◂{} . 
+		_mlc_s8 l ⊢ { l sr } 
+		∎ { sr l }
+§ s8_of_s8_lst_rev # l 
+	s8_of_s8_lst_rev_i { %[ 0r ] l } ⊢ { s _ } 
 	∎ s 
 
 § @.assoc { l k }
@@ -5382,9 +5398,12 @@ unsigned long
 			∐# var_idx "*" !| stg_ltr ⊢ { i {} s }
 				∎ _some◂ast.exp_s8_for◂{ %i RP.atm◂ast.k_s8◂%s }
 			∐# s8_lt nls s8_lst ⊢ { s _ l } 
-				rev ⟦ s < l ⟧ ⊢ l 
-				s8_of_s8_lst l ⊢ s 
-				∎ _some◂ast.exp_s8_cst◂RP.atm◂ast.k_s8◂%s
+				$ l ⊢ 
+				∐ _nil◂{} . 
+					∎ _some◂ast.exp_s8_cst◂RP.atm◂ast.k_s8◂%s
+				∐. _cns◂{ s1 l } . 
+					s8_of_s8_lst_rev ⟦ s s1 < l ⟧ ⊢ s 
+					∎ _some◂ast.exp_s8_cst◂RP.atm◂ast.k_s8◂%s
 			∐# name ⊢ { n }
 				∎ _some◂ast.exp_s8_cst◂RP.atm◂ast.k_name◂%n
 			∐.# s8_fmt ⊢ { f }
