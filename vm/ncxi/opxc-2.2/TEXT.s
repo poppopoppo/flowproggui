@@ -445,10 +445,61 @@ arr_of_lst_end:
 	mov QWORD [rax],rsi
 	ret 
 
+scf_F:
+	cmp rax,rdi
+	jge scf_F_0
+	lea rdi,[rsi+rax] 
+	push rax 
+	call scf_T 
+	pop rbx 
+	cmp rax,0 
+	jz scf_F_0 
+	lea rax,[rbx+rsi]
+	mov rsi,rdi
+	mov r10,0
+	jmp scf_F_1 
+scf_F_0:
+	mov rsi,unt
+	mov r10,1 
+scf_F_1: 
+	ret
+ 
 scf_d: ; rdi=src ⊢ rax=flg rdi=dst rsi=n
-	scf_F 10
+	mov r8,10 
+	jmp scf_T
 scf_x: ; rdi=src ⊢ rax=flg rdi=dst rsi=n
-	scf_F 16
+	mov r8,16 
+	jmp scf_T
+
+scf_T: 
+	push rdi
+	movzx rdi,BYTE [rdi]
+	xor rax,rax 
+	C_CALL isspace
+	cmp rax,0
+	jnz scf_T_err0 
+	jmp scf_T_scf 
+scf_T_err0: 
+	add rsp,8
+	mov rax,0
+	ret
+	scf_T_scf:
+	mov rdi,QWORD [rsp]
+	sub rsp,8
+	mov rsi,rsp
+	mov rdx,r8
+	mov rax,0
+	C_CALL strtoul
+	pop rsi
+	pop rdi
+	sub rsi,rdi
+	jz scf_T_err1
+	mov rdi,rax
+	mov rax,1 
+	ret
+scf_T_err1:
+	mov rax,0 
+	ret
 
 mlc_s8: ; rdi=len  
 	push rdi  
