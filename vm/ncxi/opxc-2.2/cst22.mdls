@@ -355,7 +355,9 @@
     0st' "," 1st' // 
   _emt s ⊢ _ 
   ∎ {} 
+§ S0 = _ccs◂◂{ " OK OK" _ccs◂◂{ "JFOIJ" "ofo oj" } }
 § main4 _ 
+  _emt %[ S0 ] ⊢ _ 
   _st◂◂"FJFJJJJ" {} ⊢ s0 
   $ s0 ⊢ s0,s1 
   g1 { s0 s1 } ⊢ s 
