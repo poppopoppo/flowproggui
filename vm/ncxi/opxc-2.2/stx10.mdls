@@ -5423,7 +5423,33 @@ unsigned long
 		∐# s8_lt !| nls s8_lst ⊢ { s _ l }
 			∎ _some◂⟦ s < l ⟧
 		∐.# ⊢ { } 
-			∎ _some◂⟦⟧ 
+			∎ _some◂⟦⟧
+	§ @.s8_ct ^= 
+		∐# s8_ptn_line s8_lst ⊢ { s l } 
+			$ l ⊢ 
+			∐ _nil◂{} . 
+				∎ _some◂RP.atm◂ast.k_s8◂%s
+			∐. _cns◂{ s1 l } . 
+				s8_of_s8_lst_rev ⟦ s s1 < l ⟧ ⊢ s 
+				∎ _some◂RP.atm◂ast.k_s8◂%s
+		∐# stg_ltr s8_lst ⊢ { s l }
+			$ l ⊢ 
+			∐ _nil◂{} . 
+				∎ _some◂RP.atm◂ast.k_s8◂%s
+			∐. _cns◂{ s1 l } . 
+				s8_of_s8_lst_rev ⟦ s s1 < l ⟧ ⊢ s 
+				∎ _some◂RP.atm◂ast.k_s8◂%s 
+		∐.# ct_ptn ⊢ { c } 
+			∎ _some◂c 
+	§ @.s8_ct_lst ^= 
+		∐# "//" "\n" ⊢ { {} {} } 
+			∎ ‹ ‹› ›
+		∐.# s8_ct nls s8_ct_lst ⊢ { p _ l } 
+			$ l ⊢ 
+			∐ _some◂l . 
+				∎ ‹ ‹ RP.atm◂ast.k_app◂{ RP.atm◂ast.k_name◂ast.fst_n◂%[ "_ccs" ] RP.cns2◂{ p l } } › › 
+			∐. _none◂{} . 
+				∎ ‹ ‹ p › ›
 	§ 
 		@.s8_ptn ^=
 			∐# var_idx "*" !| stg_ltr ⊢ { i {} s }
@@ -5535,6 +5561,16 @@ unsigned long
 					∎ ret_vld◂ast.mtc◂m
 				∐. prs_err◂e .
 					∎ ret_err◂e 
+			∐# nls "$~" !| "_^" "⊢" mtc_ptn "\n" nls s8_ct_lst lc_code ⊢ { _ {} {} {} m {} _ c lc }
+				$ lc ⊢ 
+				∐ prs_vld◂lc . 
+					$ c ⊢ 
+					∐ _some◂c . 
+						∎ ret_vld◂ast.seq◂{ { RP.atm◂ast.k_app◂{ RP.atm◂ast.k_name◂ast.fst_n◂%[ "_st" ] c } RP.unt◂{} m } lc }
+					∐. _none◂{} . 
+						∎ ret_vld◂ast.seq◂{ { RP.atm◂ast.k_app◂{ RP.atm◂ast.k_name◂ast.fst_n◂%[ "_st" ] RP.atm◂ast.k_s8◂%[ "" ] } RP.unt◂{} m } lc }
+				∐. prs_err◂e . 
+					∎ ret_err◂e
 			∐# nls "$" !| ; ⊢ { nn {} },r
 				prs_act◂◂act.id_0 { {} r } ⊢|
 
@@ -8887,18 +8923,16 @@ unsigned long
 			=+ x' 
 			-- x=0 
 			∐ 
-				^ _ ⊢ s 
-					"\tmov " R ",0\n" // 
-				asm.add_s8 { e s } ⊢ e 
+				_st◂◂(_ccs◂◂{ "\tmov " _ccs◂◂{ R ",0\n" } }) {} ⊢ s 
+				asm.add_st_s8 { e s } ⊢ e 
 				∎ { x e }
 			-- x=1 
 			∐ 
 				∎ { x e }
 			-- x=2 
 			∐ 
-				^ _ ⊢ s 
-					"\tadd " R "," R "\n" // 
-				asm.add_s8 { e s } ⊢ e 
+				_st◂◂(_ccs◂◂{ "\tadd " _ccs◂◂{ R _ccs◂◂{ "," _ccs◂◂{ R "\n" } } } }) {} ⊢ s 
+				asm.add_st_s8 { e s } ⊢ e 
 				∎ { x e }
 			-- x=3 
 			∐ 

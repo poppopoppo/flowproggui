@@ -365,3 +365,11 @@
   g0 %[ 16r ] ⊢ x 
   _emt x ⊢ _ 
   ∎ {} 
+§ main5 _ 
+  $~ _^ ⊢ s0 
+    ` OIJFOIEJ 
+    "\toifeoj" 
+    S0 
+    "LL" // / 
+  _emt s0 ⊢ _ 
+  ∎ {} 
