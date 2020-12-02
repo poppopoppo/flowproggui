@@ -273,36 +273,6 @@ init_ss_rcd_%1:
 	mov %1,rbx
 %endmacro
 
-%macro scf_F 1 
-	push rdi
-	movzx rdi,BYTE [rdi]
-	xor rax,rax 
-	C_CALL isspace
-	cmp rax,0
-	jnz scf_F_err0_%1 
-	jmp scf_F_scf_%1 
-scf_F_err0_%1: 
-	add rsp,8
-	mov rax,0
-	ret
-	scf_F_scf_%1:
-	mov rdi,QWORD [rsp]
-	sub rsp,8
-	mov rsi,rsp
-	mov rdx,%1
-	mov rax,0
-	C_CALL strtoul
-	pop rsi
-	pop rdi
-	sub rsi,rdi
-	jz scf_F_err1_%1
-	mov rdi,rax
-	mov rax,1 
-	ret
-scf_F_err1_%1:
-	mov rax,0 
-	ret
-%endmacro
 
 %macro BSS_SS_RCD 2 
 	SS_RCD_%1_VCT: resq (%1+1)*(%2+4)
