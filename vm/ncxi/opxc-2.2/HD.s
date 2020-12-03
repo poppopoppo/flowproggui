@@ -257,17 +257,14 @@ LB_%1_1:
 %define SEED 0x_f7f7_65d7_9dab_bace
  
 extern futex
-;extern calloc_sf
 extern ini_prc 
 extern MurmurHash64A
 extern exit 
 extern printf 
-;extern sprintf
 extern malloc 
 extern calloc
 extern realloc
 extern free 
-;extern isspace 
 extern strtoul
 extern strlen
 extern getchar
