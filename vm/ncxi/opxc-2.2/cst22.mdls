@@ -372,6 +372,8 @@
     "\toifeoj" 
     S0 
     "LL" //  
+  _st_s8_len s0 ⊢ { s0 l0 }
+  _emt l0 ⊢ _ 
   _emt s0 ⊢ _ 
   --_emt %[ 934098034r ] ⊢ _ 
   ∎ {} 
