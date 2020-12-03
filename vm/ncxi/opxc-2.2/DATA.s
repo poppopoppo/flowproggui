@@ -9,6 +9,8 @@
 	S8_N: dq 0 
 	CLR_N: dq 0 
 
+
+	fmt_s8_l: db "%.*s",0
 	fmt_exn: db "exn:%lld",10,0 
 	fmt_err_line: db "err:%llx",10,0
 	fmt_r64: db "%dr",0

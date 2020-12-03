@@ -225,19 +225,6 @@ init_ss_rcd_%1:
 	call ss_lp 
 %endmacro
 
-%macro EMT_R64 1 
-	cmp r10,3940 
-	jg 
-	mov rdx,%1
-	mov rdi,QWORD [GD_BUF_IT] 
-	mov BYTE [rdi+128],0
-	mov rsi,fmt_r64 
- xor rax,rax
-	C_CALL_SF sprintf 
-	add QWORD [GD_BUF_IT],rax
-%endmacro
-
-
 %macro EMT_CST 2 ; %1=label,%2=len
 	mov rdi,%1 
 	mov rax,%2 
@@ -245,10 +232,21 @@ init_ss_rcd_%1:
 %endmacro
 
 %macro EMT_FLSH 0 
- xor rax,rax
+	xor rax,rax
+	;mov rdi,QWORD [GD_BUF_N] 
+	;mov rsi,QWORD [GD_BUF_PT] 
 	mov rdi,QWORD [GD_BUF_PT] 
 	mov rbx,rdi
 	C_CALL_SF printf 
+	;mov rax,SYS_write 
+	;mov rdi,STDOUT 
+	;mov rsi,GD_BUF_PT 
+	;mov rsi,fmt_err0 
+	;mov rdx,QWORD [GD_BUF_N] 
+	;mov rdx,8 
+	;syscall 
+	;cmp rax,-1 
+	;jz err  
 	mov QWORD [GD_BUF_N],0
 	mov QWORD [rbx],0
 %endmacro
@@ -300,7 +298,7 @@ extern malloc
 extern calloc
 extern realloc
 extern free 
-extern isspace 
+;extern isspace 
 extern strtoul
 extern strlen
 extern getchar

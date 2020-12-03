@@ -20,20 +20,7 @@
 	EMT_BUF_OFS: resq 1 
  EMT_BUF: resb EMT_BUF_MAX 
 	EMT_BUF_END: resb 1
- 
-; exp_s8 
-;	EXP_S8_VCT: resb 2048
-;	EXP_S8_VCT: resq 256
-;	EXP_S8_VCT: resq 800
-
-
-;rep_movsb 
-	REP_MOVSB_VCT: resq 4
-
-	;SS_RCD_N: resq (RCD_N+1) 
 	SS_RCD_C: resq (RCD_N+1)
-
-	CNC_TOP: resq 64 
 
 stat: resb 144
 struc STAT
