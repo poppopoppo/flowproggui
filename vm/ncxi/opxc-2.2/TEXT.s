@@ -560,11 +560,11 @@ emt_stg: ; rdi=stg
 	ret
 
 emt_cst: ; rdi=stg,rax=len 
-	C_PUSH_REGS 
+	;C_PUSH_REGS 
 	mov rdx,rdi 
 	jmp emt_s8_stg 
 emt_s8: ; rdi=s8
-	C_PUSH_REGS 
+	;C_PUSH_REGS 
 	mov rax,0x0000_ffff_ffff_ffff
 	and rax,QWORD [rdi] 
 	lea rdx,[rdi+8]
@@ -578,13 +578,15 @@ emt_s8_stg: ; rax=len,rdx=stg-ptr
 	cmp rsi,4096 
 	jl emt_s8_add
 	push rcx 
+	push rdx 
 	call flsh
+	pop rdx 
 	pop rcx 
 	mov r10,0
 emt_s8_add:
-	mov rcx,8
-	mov rax,2 
-	add rax,rcx 
+	;mov rcx,8
+	;mov rax,2 
+	;add rax,rcx 
 	;add QWORD [GD_BUF_N],rax
 	xor rax,rax
 	mov rsi,fmt_s8
@@ -598,32 +600,35 @@ emt_s8_add:
 	;cld  
 	;rep movsb 
 	;mov BYTE [rdi],0
-	C_POP_REGS 
+	;C_POP_REGS 
 	ret
 emt_s8_flsh:
+	push rdx 
 	call flsh 
 	xor rax,rax 
-	mov rsi,rdx
+	;mov rsi,rdx
+	pop rsi 
 	mov rdi,fmt_s8 
 	C_CALL_SF printf 
-	C_POP_REGS
+	;C_POP_REGS
 	ret 
 
 flsh: 
-	xor rax,rax
+	;xor rax,rax
 	;mov rdi,QWORD [GD_BUF_N] 
 	;mov rsi,QWORD [GD_BUF_PT] 
 	;mov rbx,rsi
-	mov rdi,QWORD [GD_BUF_PT] 
-	mov rbx,rdi 
-	C_CALL_SF printf 
-	;mov rax,SYS_write 
-	;mov rdi,STDOUT 
-	;mov rsi,GD_BUF_PT 
-	;mov rdx,QWORD [GD_BUF_N] 
-	;syscall 
-	;cmp rax,-1 
-	;jz err  
+	;mov rdi,QWORD [GD_BUF_PT] 
+	;mov rbx,rdi 
+	;C_CALL_SF printf 
+	mov rax,SYS_write 
+	mov rdi,STDOUT 
+	mov rsi,QWORD [GD_BUF_PT] 
+	mov rdx,QWORD [GD_BUF_N] 
+	mov rbx,rsi 
+	syscall 
+	cmp rax,-1 
+	jz err  
 	mov QWORD [GD_BUF_N],0
 	mov QWORD [rbx],0
 	ret
@@ -633,7 +638,6 @@ emt_bof_hdl:
 	jmp QWORD [SIG_RIP] 
 
 emt_r64: ;rdi=r64
-	;C_PUSH_REGS 
 	mov rdx,rdi
 	mov r9,QWORD [GD_BUF_PT] 
 	mov r10,QWORD [GD_BUF_N]
@@ -643,10 +647,7 @@ emt_r64: ;rdi=r64
 	mov r10,0 
 emt_r64_add:
 	mov rax,rdx 
-	;xor rax,rax 
-	;mov rsi,fmt_r64
 	lea rdi,[r9+r10]
-	;C_CALL_SF sprintf
 	push rdi 
 	call pf_d 
 	pop rdi 
@@ -654,7 +655,6 @@ emt_r64_add:
 	mov BYTE [rdi+rax+1],0
 	add rax,2 
 	add QWORD [GD_BUF_N],rax 
-	;C_POP_REGS
 	ret
 
 					
