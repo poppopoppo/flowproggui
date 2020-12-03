@@ -366,10 +366,12 @@
   _emt x ⊢ _ 
   ∎ {} 
 § main5 _ 
+  _emt %[ 43r ] ⊢ _ 
   $~ _^ ⊢ s0 
     ` OIJFOIEJ 
     "\toifeoj" 
     S0 
-    "LL" // / 
+    "LL" //  
   _emt s0 ⊢ _ 
+  --_emt %[ 934098034r ] ⊢ _ 
   ∎ {} 
