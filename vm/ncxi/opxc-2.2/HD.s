@@ -214,41 +214,10 @@ LB_%1_1:
 	mov QWORD [(SS_RCD_TOP+8*%1)],%2
 %endmacro
 
-%macro INIT_SS_RCD 1 
-init_ss_rcd_%1:
-	mov QWORD [(SS_RCD_N+8*%1)],0
-	mov QWORD [(SS_RCD_C+8*%1)],0
-	mov QWORD [(SS_RCD_TOP+8*%1)],SS_RCD_3_VCT
-	mov rax,SS_RCD_%1_VCT
-	mov rdi,(1<<6)
-	mov rdx,3
-	call ss_lp 
-%endmacro
-
 %macro EMT_CST 2 ; %1=label,%2=len
 	mov rdi,%1 
 	mov rax,%2 
 	call emt_cst 
-%endmacro
-
-%macro EMT_FLSH 0 
-	xor rax,rax
-	;mov rdi,QWORD [GD_BUF_N] 
-	;mov rsi,QWORD [GD_BUF_PT] 
-	mov rdi,QWORD [GD_BUF_PT] 
-	mov rbx,rdi
-	C_CALL_SF printf 
-	;mov rax,SYS_write 
-	;mov rdi,STDOUT 
-	;mov rsi,GD_BUF_PT 
-	;mov rsi,fmt_err0 
-	;mov rdx,QWORD [GD_BUF_N] 
-	;mov rdx,8 
-	;syscall 
-	;cmp rax,-1 
-	;jz err  
-	mov QWORD [GD_BUF_N],0
-	mov QWORD [rbx],0
 %endmacro
 
 %macro GET_LEN 2 
