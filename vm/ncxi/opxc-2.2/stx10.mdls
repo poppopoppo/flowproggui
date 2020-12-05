@@ -9161,9 +9161,14 @@ unsigned long
 		§ ini # {} 
 			ini_tv_n %[ 64r ] ⊢ { _ v } 
 			∎ v 
-		§ ini_n = ini_tv_n 
-		§ get = get_tv
-		§ set = set_tv
+		§ ini_n # n 
+			_mk_arr { n RP.atm◂ast.btm◂{} } ⊢ { n _ v } 
+			∎ { n v }
+		§ get # { v i } 
+			exc_q { v i RP.atm◂ast.btm◂{} } ⊢| 
+		§ set # { v i a } 
+			exc_q { v i a } ⊢ { v i _ } 
+			∎ { v i }
 		§
 			@.asc_ply { av { xp sp } } 
 				$ xp ⊢ 
@@ -9174,7 +9179,8 @@ unsigned long
 					∐ sp ⊢ RP.rcd◂l1 . 
 						asc_ply_lst { av { l0 l1 } } ⊢|
 					∐ sp ⊢ RP.atm◂ast.btm◂{} . 
-						asc_btm_lst { av l0 } ⊢| 
+						--asc_btm_lst { av l0 } ⊢| 
+						∎ av
 					∐. . 
 						_emt %[ "asc_ply 0" ] ⊢ _ 
 						∎| 
@@ -9186,11 +9192,13 @@ unsigned long
 					∎ av
 				∐. . 
 					∎| 
+			-\
 			@.asc_btm # { av i } 
         set { av i RP.atm◂ast.btm◂{} } ⊢ { av i0 } 
 				∎ av 
 			@.asc_btm_ptn = RP.fld_l◂◂asc_btm
       @.asc_btm_lst = lst.fld_l◂◂asc_btm_ptn 
+		-/
 		§
 			@.lod_ply { i { xp sp } } 
 				$ xp ⊢ 
@@ -9243,7 +9251,8 @@ unsigned long
 					RP.atm_a c ⊢ c 
 					app_ctr { evv c p } ⊢| 
 				∐ k ⊢ ast.k_ply◂{ nc xp yp } . 
-					mk_arr { nc _none◂{} } ⊢ { _ _ av } 
+					--mk_arr { nc _none◂{} } ⊢ { _ _ av } 
+					_mk_arr { nc RP.atm◂ast.btm◂{} } ⊢ { _ _ av } 
 					asc_ply { av { xp p } } ⊢ av
 					subst_ply { { evv av } yp } ⊢ { { evv _ } p } 
 					∎ { evv p }
@@ -12083,8 +12092,7 @@ unsigned long
 									asm.cct { eg0 eg1 } ⊢ eg0 
 									stt_jmp_axm { VM evv tv { GV lb_n tav ec0 } { rfv gfl mfv ev_n eg0 eds ew0 } iy f_c } ⊢|
 								-- exc_q 
-								∐ 
-								
+								∐ 								
 									∎| 
 								-- set_q 
 								∐
@@ -13046,7 +13054,7 @@ unsigned long
 							$ mo ⊢ 
 							∐ mtj◂{ { _ x y } v r } . 
 								∐ y ⊢ RP.rcd◂_cns◂{ RP.atm◂stt_r◂yx _cns◂{ _ _nil◂{} } } . 
-									$ EE ⊢ { GV lb_n tav  ec0 }
+									$ EE ⊢ { GV lb_n tav ec0 }
 									idx.lod_ply { yx { x is } } ⊢ { yx is o } 
 									smt o ⊢ x 
 									ast.r64_of_rt { evv x } ⊢ { evv x } 
@@ -13080,11 +13088,11 @@ unsigned long
 							∐ mop◂{ { _ ps pm } pb p1 } . 
 								ast.RV.ini {} ⊢ AV 
 								stt_mtc_lp { { is pm ps m S pb p1 } ox f_c AV ⟦⟧ FE VM EE evv tv } ⊢| 				
-							∐. mt◂{ t { _ x y } pb p1 } . 
+							∐. mt◂{ t { n x y } pb p1 } . 
 								∐ y ⊢ RP.rcd◂_cns◂{ RP.rcd◂_cns◂{ v0 _cns◂{ v1 _nil◂{} } } _cns◂{ _ _nil◂{} } } .
 									$ EE ⊢ { GV lb_n tav  ec0 } 
 									GV.rpc_d { GV is } ⊢ { GV is is0 } 
-									idx.ini {} ⊢ RV 
+									idx.ini_n n ⊢ { _ RV } 
 									idx.asc_ply { RV { x is0 } } ⊢ RV 
 									rt_of_mp_T◂◂idx.get { RV v0 } ⊢ { RV v0 }
 									rt_of_mp_T◂◂idx.get { RV v1 } ⊢ { _ v1 }									  
