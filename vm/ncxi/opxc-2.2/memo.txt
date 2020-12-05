@@ -535,19 +535,19 @@ W : t→{ t s }
 
 ¶ F7 += f0,f1,f2,f3,f4,f5,f6
 
-  V ⊢= →→→ V ⊢ V 
-  V ⊢< X →→→ V ⊢ { V X } 
-  V >⊢ X →→→ V ⊢ { X V }
-  { V X } ⊢> →→→ { V X } ⊢ V 
-  { X V } <⊢ →→→ { X V } ⊢ V 
-  { V X } ⊢* Y →→→ { V X } ⊢ { V Y }
-  { X V } *⊢ Y →→→ { X V } ⊢ { Y V }
+  V ⊢= →→→ V ⊢ V -- evolution 
+  V ⊢< X →→→ V ⊢ { V X }  -- right extension
+  V >⊢ X →→→ V ⊢ { X V } -- left extensionn
+  { V X } ⊢> →→→ { V X } ⊢ V -- right subsumption
+  { X V } <⊢ →→→ { X V } ⊢ V -- left subsumption
+  { V X } ⊢* Y →→→ { V X } ⊢ { V Y } -- left evolution
+  { X V } *⊢ Y →→→ { X V } ⊢ { Y V } -- right evolution
   
   V,X ⊢> →→→ { V X } ⊢ V 
   X,V <⊢ →→→ { X V } ⊢ V 
   V,X ⊢* Y →→→ { V X } ⊢ { V Y }
   X,V *⊢ Y →→→ { X V } ⊢ { Y V }
-  X,Y *⊢* →→→ { X Y } ⊢ { X Y }
+  X,Y *⊢* →→→ { X Y } ⊢ { X Y } -- bi evolution
   F x ⊢ y ¦ G z ⊢ w
    
 
@@ -613,3 +613,6 @@ Dyn       Stt
 
     $= "fff" ⊢ r →→→ $ %[ "fff" ] ⊢ r 
      
+    _stk.ini : ({ _arr◂a' b' }→c')→→{ { a' _r64 } b' }→{ { a' _r64 } c' }
+
+$_
