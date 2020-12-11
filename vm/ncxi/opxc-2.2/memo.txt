@@ -616,3 +616,20 @@ Dyn       Stt
     _stk.ini : ({ _arr◂a' b' }→c')→→{ { a' _r64 } b' }→{ { a' _r64 } c' }
 
 $_
+
+
+  computational space time 
+
+etr: ; p1,pj < p0,pi
+  MOV p0 ⊢ p1  
+  RPC p0 ⊢ p0,p1 
+  INI p0,im 
+  DLT p0 
+  TJ e0,e1,..en < er 
+  RET 
+  CJ e0,e1 
+
+
+0000111110100001 <-> ⟦ 4 9 10 11 15 16 ⟧ 
+
+AST -> exp-Clr -> val-Clr 
