@@ -633,3 +633,10 @@ etr: ; p1,pj < p0,pi
 0000111110100001 <-> ⟦ 4 9 10 11 15 16 ⟧ 
 
 AST -> exp-Clr -> val-Clr 
+
+¶¶ _Obj.[ _ ] = '{ of~(_ → _r64) to~(_r64→_) }
+
+¶§ _Obj = '{ of~r64.id to~r64.id }
+¶§ _Obj = '{ of~of_s8 to~to_s8 }
+
+
