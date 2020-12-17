@@ -639,4 +639,52 @@ AST -> exp-Clr -> val-Clr
 ¶§ _Obj = '{ of~r64.id to~r64.id }
 ¶§ _Obj = '{ of~of_s8 to~to_s8 }
 
+to_hp : a'→→{}→a' 
+_asm = _s8 
+obj : a'→→_asm
 
+
+
+public ADT,copy on write 
+
+  !% a,b,c ⊢  
+§ a0 =% _r64,_r64 ⊢ _r64,_r64,_r64,_s8 
+
+§§ dmy 
+  ¶ t v' 
+    ∐ p : {}
+  ¶ s8 
+    ∐ s8 : t◂_s8
+  ∎∎  
+¶ dmy t' 
+  ∐ dmy : 
+§§ dmy 
+¶ _dmy_s8 a' 
+  ∐ p : _dmy◂_s8
+  
+¶ @.s8 
+  ∐ p : { _r64 _dmy◂s8 } 
+¶ @._arr k',t'
+  ∐ p : { _r64 _dmy◂(arr◂k'◂t') }
+
+  _to_r64 : a'→{ _r64 _dmy◂a' } -- cast to r64
+  _of_r64 : { _r64 _dmy◂a' }→a' -- cast to a'
+
+  _mk_stk : ({ _arr◂a' v' }→w')→→({ { _r64 a' } v' }→{ { _r64 a' } w' }
+
+  ¶ _r i' 
+    ∐ _i : i' 
+
+¶¶ R : _mdl.t◂'{ add~{ _r◂_ _r◂_ }→{ _r◂_ _r◂_ } } 
+
+¶§ R = _mdl.of◂'{ add~_r32.add }
+
+
+_ARCH.mdls 
+_X86.mdls 
+
+
+  %a %n %v 
+  _rpc_dmy a ⊢ { a d } 
+  _mlca_cnc { d n } ⊢ { d n { dm m } } 
+  

@@ -130,8 +130,13 @@ bits 64
 	;cmp rax,0 
 	;mov QWORD [err_n],0xffac
 	;jz err
+	bt QWORD [rdi],63 
+	jc LB_%1_1
 	C_CALL_SF free 
-lLB_%1_1:
+	jmp LB_%1_2
+LB_%1_1:
+	mov QWORD [rdi],rdi
+LB_%1_2:
 %endmacro
 
 %macro C_PUSH_REGS 0 

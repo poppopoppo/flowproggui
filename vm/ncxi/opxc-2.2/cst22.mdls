@@ -377,3 +377,17 @@
   _emt s0 ⊢ _ 
   --_emt %[ 934098034r ] ⊢ _ 
   ∎ {} 
+§ h0 { { n t A } r } 
+  _inc r ⊢ r 
+  _emt A ⊢ _
+  ∎ r 
+§ main6 _
+  _ila1◂◂"\tbsr rdi,rdi\n" %[ 44r ] ⊢ x 
+  _emt x ⊢ _ 
+  _mk_stk◂◂h0 { { %[ 4r ] { %[ 3r ] %[ "fff" ] } } %[ 3r ] } ⊢ y 
+  --_emt y ⊢ _ 
+  ∎ {} 
+§ main7 _ 
+  _mk_stk◂◂h0 { { %[ 4r ] %[ 3r ] } %[ 3r ] } ⊢ y 
+  _emt y ⊢ _ 
+  ∎ {}
