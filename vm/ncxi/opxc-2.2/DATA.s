@@ -7,8 +7,8 @@
 	err_n: dq 0
 	 SS_LN_C: dq 0
 	S8_N: dq 0 
-	CLR_N: dq 0 
-
+	CLR_N: dq 2 
+	CLR_NULL: dq 0,0,1
 
 	fmt_s8_l: db "%.*s",0
 	fmt_exn: db "exn:%lld",10,0 

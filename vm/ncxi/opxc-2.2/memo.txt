@@ -687,4 +687,23 @@ _X86.mdls
   %a %n %v 
   _rpc_dmy a ⊢ { a d } 
   _mlca_cnc { d n } ⊢ { d n { dm m } } 
+
+  _cst◂_r64
   
+
+    k_op : .. ⊢ cst◂e'◂s'◂{ cst_V cst_OP } 
+    k_r64 : .. ⊢ cst◂e'◂s'◂{ cst_V cst_K }
+    k_app : { CP◂e'◂s'◂{ CST_E }}.. ⊢ cst◂e'◂s'◂{ cst_E cst_OP }
+
+    app : { CP◂{ v' cst_OP } CP◂{ }}
+  app : { t◂t_OP t◂t_X } ⊢ t◂b' 
+  uc_OP : t◂t_OP ⊢ t◂x' 
+  uc_K : t◂t_K ⊢ t◂x' 
+  
+  @.rcd ◂ _ 
+  ∐ unt : {} ⊢ rcd◂{}
+  ∐ prd : { a' rcd◂R' } ⊢ rcd◂{ a' < R' }
+
+    $ R ⊢ 
+    ∐ {} 
+    ∐. { a < R } .
