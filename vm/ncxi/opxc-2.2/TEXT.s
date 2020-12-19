@@ -692,3 +692,37 @@ exn:
 	C_CALL printf
 	mov rax,SYS_exit
 	syscall
+
+synt:
+	jmp synt_1 
+synt_0:
+	add rax,1 
+synt_1:						
+	cmp rax,rdi
+	jge synt_2
+	movzx MCR_REG,BYTE [rsi+rax]
+	cmp MCR_REG,9 
+	jz synt_0
+	cmp MCR_REG,10 
+	jz synt_0
+	cmp MCR_REG,32 
+	jz synt_0
+synt_2:
+	mov r10,0
+	ret
+
+line:
+	jmp line_1 
+line_0:
+	add rax,1 
+line_1:						
+	cmp rax,rdi
+	jge line_2
+	movzx MCR_REG,BYTE [rsi+rax]
+	cmp MCR_REG,9 
+	jz line_0
+	cmp MCR_REG,32 
+	jz line_0
+line_2:
+	mov r10,0
+	ret
