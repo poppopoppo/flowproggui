@@ -203,7 +203,6 @@ LB_%1_2:
 %endmacro
  
 %macro ALC_RCD 2 ; n,reg-name!=rbx 
-	;add QWORD [(SS_RCD_N+8*%1)],1 
 	mov QWORD [SIG_ETR],sig_alc_rcd_%1 
 	mov MCR_REG,QWORD [(SS_RCD_TOP+8*%1)]
 	mov %2,QWORD [MCR_REG]
@@ -213,7 +212,6 @@ LB_%1_2:
 %endmacro 
 
 %macro FREE_RCD 2 ; n,reg-name!=rbx 
-	;sub QWORD [(SS_RCD_N+8*%1)],1
 	mov rbx,QWORD [(SS_RCD_TOP+8*%1)] 
 	mov QWORD [%2],rbx
 	mov QWORD [(SS_RCD_TOP+8*%1)],%2
