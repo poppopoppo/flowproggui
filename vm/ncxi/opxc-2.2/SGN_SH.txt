@@ -628,6 +628,7 @@
 		§ btm(363) : { }◂q()◂q()◂.a23◂_ctr
 		§ hp_im(363) : q()◂(=(=(={ (={ }◂◂_r8◂_arr) (=(=◂_r64))◂_opn})◂_pt))◂.a26◂.a13◂q()◂q()◂.a23◂_ctr
 		§ hp(363) : { q() (=◂.a21)}◂q()◂q()◂.a23◂_ctr
+		§ axm(363) : ◂_r64◂q()◂q()◂.a26◂.a13◂_ctr
 		§§ SCM
 			§ set_s(363) : ({ { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arr}→{ { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { }◂◂_r8◂_arr q()◂_opn}◂_pt})
 			§ len_p(364) : ({ { { { }◂◂_r8◂_arr q()}◂_Clr q()} { { }◂◂_r8◂_arr q()}◂_pt}→{ { { { }◂◂_r8◂_arr q()}◂_Clr q()} { { }◂◂_r8◂_arr q()}◂_pt◂_r64})
@@ -763,27 +764,27 @@
 	§ exc_tpl_lst : ({ q()◂q()◂.a13◂_opn◂_arr ◂_r64◂.a13◂_lstq()◂.a13◂_lst}→q()◂q()◂.a13◂_opn◂_arr)
 	§ exc_tpl : ({ q()◂q()◂.a13◂_opn◂_arr ◂_r64◂.a13q()◂.a13}→q()◂q()◂.a13◂_opn◂_arr)
 	§§ ip
-		§ id_line_i : ({ { { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29} { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_lst}→{ }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29)
-		§ id_line(416) : ({ { }◂◂_r8◂_arr◂◂.a20◂.a20◂q()◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_lst{ }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29}→{ }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29)
+		§ id_line_i : ({ { { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13 { }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29} { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_lst}→{ }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29)
+		§ id_line(416) : ({ { }◂◂_r8◂_arr◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_lst{ }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29}→{ }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29)
 		§§ grm
 			§ reg(417) : q()◂q()◂q()q()◂.a24◂.a13◂_ctr
 			§ reg_d(417) : q()◂q()◂.a13◂_ctr
 			§ name(417) : q()◂q()◂q()◂.a26◂.a13◂_ctr
 			§ f_name(417) : { }◂◂_r8◂_arr◂◂.a20◂q()◂.a26◂.a13◂_ctr
-			§ ret(417) : q()◂◂.a20◂.a20◂q()◂.a26◂.a13◂.a24◂.a13◂q()◂◂.a20q()◂q()q()◂.a29◂_ctr
+			§ ret(417) : q()◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13◂q()◂q()q()◂q()q()◂.a29◂_ctr
 			§ ct_app(417) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
 			§ opc(417) : { q() q()q()}◂{ q() q()q()}◂_ctr
 			§ jmp(417) : { q()◂q()◂.a26◂.a13 q()◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13}◂q()◂q()q()◂q()q()◂.a29◂_ctr
-			§ rb_r(417) : { }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂{ }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂_ctr
+			§ rb_r(417) : { }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂{ }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂_ctr
 			§ ini(417) : { }◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_ctr
-			§ ini_n(417) : { }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂{ }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂_ctr
+			§ ini_n(417) : { }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂{ }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29◂_ctr
 			§ env(417) : { }◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_ctr
 			§ re_none(417) : { }◂q()◂◂.a20q()◂.a24◂.a13◂_ctr
 			§ re_some(417) : q()◂◂.a20q()◂.a24◂.a13◂q()◂◂.a20q()◂.a24◂.a13◂_ctr
 			§ mtc_some(417) : { q()◂.a13 q()◂◂.a20◂.a20◂q()◂.a26◂.a13◂.a24◂.a13}◂q()◂◂.a20q()◂.a31◂_ctr
 			§ mtc_none(417) : q()◂.a13◂q()◂◂.a20q()◂.a31◂_ctr
 			§ mtc_opn(417) : ({ q()◂.a13 q()◂◂.a20◂.a20◂q()◂.a26◂.a13◂.a24◂.a13q()◂◂.a20q()◂q()◂.a30 q()◂◂.a20q()◂q()◂.a30}→q()◂q()q()◂◂.a20q()◂q()◂.a30◂q()q()◂.a29)
-			§ op_prs(418) : ◂.a20◂q()◂.a26◂.a13◂{ ◂.a20◂q()◂.a26◂.a13 { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13}◂_ctr
+			§ op_prs(418) : q()◂q()◂.a26◂.a13◂{ q()◂q()◂.a26◂.a13 { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13}◂_ctr
 			§ op_f(418) : q()◂{ q() { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13}◂_ctr
 			§ ret_fail(418) : { }◂{ }◂◂_r8◂_arr◂◂.a20q()◂q()q()◂.a29◂_ctr
 			§ ret_succ(418) : { }◂◂_r8◂_arr◂◂.a20◂.a20◂q()◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂◂.a20q()◂q()q()◂.a29◂_ctr
@@ -792,7 +793,7 @@
 			§ fN(419) : (◂_r64→{ ◂_r64 { }◂◂_r8◂_arr})
 			§ reg_n(420) : (◂_r64→{ ◂_r64 { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13})
 			§ f_n(421) : ({ ◂_r64 { }◂◂_r8◂_arr◂.a13◂_opn}→{ ◂_r64 ◂.a20◂q()◂.a26◂.a13})
-			§ rf(422) : ({ ◂.a43 { }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29}→{ ◂.a43 { }◂◂_r8◂_arr◂◂.a20q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29})
+			§ rf(422) : ({ ◂.a43 { }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29}→{ ◂.a43 { }◂◂_r8◂_arr◂q()q()◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29})
 			§ grm : ({ { ◂_r64 ◂_r64{ { ◂_r64 { }◂◂_r8◂_arr} ◂.a47}◂_lst { }◂◂_r8◂_arr◂.a13◂_opn} { }◂◂_r8◂_arr◂◂.a20◂.a42}→{ { ◂_r64 ◂_r64{ { ◂_r64 { }◂◂_r8◂_arr} ◂.a47}◂_lst { }◂◂_r8◂_arr◂.a13◂_opn} ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13})
 			§ etr : ({ ◂_r64 { { ◂_r64 { }◂◂_r8◂_arr} ◂.a47}◂_lst{ }◂◂_r8◂_arr◂.a13◂_opn { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}→{ ◂_r64 { { ◂_r64 { }◂◂_r8◂_arr} ◂.a47}◂_lst{ }◂◂_r8◂_arr◂.a13◂_opn ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13})
 			§ rle_cut : ({ { ◂_r64 ◂_r64{ { ◂_r64 { }◂◂_r8◂_arr} ◂.a47}◂_lst { }◂◂_r8◂_arr◂.a13◂_opn{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂_lst { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29 ◂.a43{ { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20◂.a42}◂_opn} ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂_lst}→{ { ◂_r64 ◂_r64{ { ◂_r64 { }◂◂_r8◂_arr} ◂.a47}◂_lst { }◂◂_r8◂_arr◂.a13◂_opn◂.a43} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29})
@@ -848,11 +849,15 @@
 		§ add_prs_err(463) : ({ ◂_r64 ◂_r64{ }◂◂_r8◂_arr q()◂.a51}→q()◂.a51)
 		§ prs_act : (({ q() q()}→q())→→({ q() q()◂.a51}→q()◂.a51◂_opn))
 		§ pnt_prs_err : ({ ◂_r64 ◂_r64{ }◂◂_r8◂_arr}◂_lst→{ }◂◂_r8◂_arr)
+		§ r : ◂_r64◂_grm
+		§ .f4 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂_r64◂_opn})
+		§ .f3 : ({ { ◂_r64 { }} { ◂_r64 ◂_r64}}→◂_r64◂_opn)
+		§ .f2 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂_r64◂_opn})
+		§ .f1 : ({ { { } ◂_r64{ }} { ◂_r64 ◂_r64}}→◂_r64◂_opn)
+		§ .f0 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂_r64◂_opn})
 		§ cst : ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_grm
-		§ .f8 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn})
-		§ .f7 : ({ { ◂_r64 { }} { ◂_r64 ◂_r64}}→◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn)
 		§ .f6 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn})
-		§ .f5 : ({ { { } ◂_r64{ }} { ◂_r64 ◂_r64}}→◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn)
+		§ .f5 : ({ { ◂_r64} { ◂_r64 ◂_r64}}→◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn)
 		§ .f4 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn})
 		§ .f3 : ({ { { }◂◂_r8◂_arr} { ◂_r64 ◂_r64}}→◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn)
 		§ .f2 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a20◂{ }◂◂_r8◂_arr◂.a26◂_opn})
@@ -1160,12 +1165,12 @@
 		§ .f1 : ({ { { }◂.a51 ◂.a20◂{ }◂◂_r8◂_arr◂.a28◂_lst} { ◂_r64 ◂_r64}}→◂.a20◂{ }◂◂_r8◂_arr◂.a28◂_lst◂_opn)
 		§ .f0 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a20◂{ }◂◂_r8◂_arr◂.a28◂_lst◂_opn})
 		§§ act
-			§ lc_mtc(734) : ({ { } q()}→q()◂q()q()◂q()q()◂.a29)
+			§ lc_mtc(737) : ({ { } q()}→q()◂q()q()◂q()q()◂.a29)
 			§ id_0_mtc : ({ q()◂.a13 { q()◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13 q()◂q()q()◂q()◂.a30}◂.a12}→q()◂q()q()◂q()◂.a30)
-			§ id_0(736) : ({ { } { { }◂◂_r8◂_arr◂◂.a20◂.a20◂q()◂.a26◂.a13◂.a24◂.a13 { { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_lst { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂q()q()◂q()◂.a30◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29}◂{ { }◂◂_r8◂_arr◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂q()q()◂q()◂.a30}◂.a12q()◂.a2}}→{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂q()q()◂q()◂.a30◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29)
-			§ id_mtc(737) : ({ { } q()}→q()◂q()q()◂.a2)
-			§ id_line(738) : ({ { q() q()◂_lst} q()}→{ q()◂_lst q()}◂q()q()◂.a2)
-			§ lc_exh(739) : ({ { q()◂q()◂.a26◂.a13 q()◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13q()} { q()◂q()q()◂q()q()◂.a29 q()◂q()q()◂q()q()◂.a29}}→q()◂q()q()◂q()q()◂.a29)
+			§ id_0(739) : ({ { } { { }◂◂_r8◂_arr◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13 { { }◂◂_r8◂_arr◂q()q()◂.a24◂.a13◂_lst { }◂◂_r8◂_arr◂q(){ }◂◂_r8◂_arr◂q()q()◂q()◂.a30◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29}◂{ { }◂◂_r8◂_arr◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂q()q()◂q()◂.a30}◂.a12q()◂.a2}}→{ }◂◂_r8◂_arr◂q(){ }◂◂_r8◂_arr◂q()q()◂q()◂.a30◂{ }◂◂_r8◂_arr◂q()q()◂.a24◂.a13q()◂.a29)
+			§ id_mtc(740) : ({ { } q()}→q()◂q()q()◂.a2)
+			§ id_line(741) : ({ { q() q()◂_lst} q()}→{ q()◂_lst q()}◂q()q()◂.a2)
+			§ lc_exh(742) : ({ { q()◂q()◂.a26◂.a13 q()◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13q()} { q()◂q()q()◂q()q()◂.a29 q()◂q()q()◂q()q()◂.a29}}→q()◂q()q()◂q()q()◂.a29)
 			∎∎
 		§ exp_s8_d_0 : { { }◂◂_r8◂_arr◂◂.a20q()◂q()◂.a26◂.a13◂.a24◂.a13◂_lst { }◂◂_r8◂_arr◂◂.a20q()◂q()◂.a26◂.a13◂.a24◂.a13}◂_opn◂_grm
 		§ exp_s8_d : { { }◂◂_r8◂_arr◂◂.a20q()◂q()◂.a26◂.a13◂.a24◂.a13◂_lst { }◂◂_r8◂_arr◂◂.a20q()◂q()◂.a26◂.a13◂.a24◂.a13}◂_grm
@@ -1409,10 +1414,12 @@
 		§ .f1 : ({ { { }◂◂_r8◂_arr◂◂.a20◂.a42◂.a51} { ◂_r64 ◂_r64}}→{ }◂◂_r8◂_arr◂◂.a20◂.a42◂.a51◂_opn)
 		§ .f0 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64{ }◂◂_r8◂_arr◂◂.a20◂.a42◂.a51◂_opn})
 		§ lc_etr_def : ◂.a47◂.a51◂_grm
+		§ .f12 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a47◂.a51◂_opn})
+		§ .f11 : ({ { { }◂◂_r8◂_arr◂.a13◂_opn { }{ } { }◂◂_r8◂_arr◂◂.a20◂.a42◂.a51} { ◂_r64 ◂_r64}}→◂.a47◂.a51◂_opn)
 		§ .f10 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a47◂.a51◂_opn})
-		§ .f9 : ({ { { }◂◂_r8◂_arr◂.a13◂_opn { }{ } { }◂◂_r8◂_arr◂◂.a20◂.a42◂.a51} { ◂_r64 ◂_r64}}→◂.a47◂.a51◂_opn)
+		§ .f9 : ({ { { } { }◂.a20◂{ }◂◂_r8◂_arr◂.a28◂_lst} { ◂_r64 ◂_r64}}→◂.a47◂.a51◂_opn)
 		§ .f8 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a47◂.a51◂_opn})
-		§ .f7 : ({ { { } { }◂.a20◂{ }◂◂_r8◂_arr◂.a28◂_lst} { ◂_r64 ◂_r64}}→◂.a47◂.a51◂_opn)
+		§ .f7 : ({ { { } ◂_r64{ }} { ◂_r64 ◂_r64}}→◂.a47◂.a51◂_opn)
 		§ .f6 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a47◂.a51◂_opn})
 		§ .f5 : ({ { { } ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13{ }} { ◂_r64 ◂_r64}}→◂.a47◂.a51◂_opn)
 		§ .f4 : ({ { }◂◂_r8◂_arr ◂_r64}→{ { }◂◂_r8◂_arr ◂_r64◂.a47◂.a51◂_opn})
@@ -1479,62 +1486,62 @@
 	§§ ns
 		§§ f_c
 			¶ seq ~ (=◂.a4)			¶ mtc ~ (=◂.a4)			∎∎
-		§ f_ret_mtc(1005) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
-		§ f_ret(1005) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
-		§ f_seq_mtc(1005) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
-		§ f_seq(1005) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
+		§ f_ret_mtc(1010) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
+		§ f_ret(1010) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
+		§ f_seq_mtc(1010) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
+		§ f_seq(1010) : q()◂q()◂q()q()◂q()q()◂q()q()◂q()◂.a52◂_ctr
 		§§ t_axm = T.t_axm
 		§§ inst = T.inst
-		§ k_ctr(1005) : ({ { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64◂_r64 ◂.a17◂.a16◂.a13}→{ { ◂.a17◂.a19◂_Clr q()}◂.a14 q()◂q()◂.a26})
-		§ dta_n_1(1006) : ({ q()◂{ q() { ◂_r64 q()q()}}◂_opn◂_arr ◂_r64}→{ q()◂{ q() { ◂_r64 q()q()}}◂_opn◂_arr ◂_r64{ q() q()}◂_opn})
-		§ dta_n(1007) : ({ q()◂{ q() { q() q()q()}}◂_opn◂_arr ◂_r64}→{ q()◂{ q() { q() q()q()}}◂_opn◂_arr ◂_r64{ q() q()q()}})
+		§ k_ctr(1010) : ({ { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64◂_r64 ◂.a17◂.a16◂.a13}→{ { ◂.a17◂.a19◂_Clr q()}◂.a14 q()◂q()◂.a26})
+		§ dta_n_1(1011) : ({ q()◂{ q() { ◂_r64 q()q()}}◂_opn◂_arr ◂_r64}→{ q()◂{ q() { ◂_r64 q()q()}}◂_opn◂_arr ◂_r64{ q() q()}◂_opn})
+		§ dta_n(1012) : ({ q()◂{ q() { q() q()q()}}◂_opn◂_arr ◂_r64}→{ q()◂{ q() { q() q()q()}}◂_opn◂_arr ◂_r64{ q() q()q()}})
 		§ slv_ns : ({ ({ q() { }◂◂_r8◂_arr}→{ q() { }◂◂_r8◂_arrq()◂_opn}) ({ q() { }◂◂_r8◂_arr}→{ q() { }◂◂_r8◂_arrq()◂_opn})({ q() q()}→{ q() q()q()}) ({ q() q()q()}→{ q() q()})(q()→{ q() q()}) ({ q() q()}→q())}→→({ ◂.a20 q()q() q()◂_lst}→{ q() q()q()◂_lst q()}))
 		§§ MMV
-			§ ini(1009) : ({ }→{ }◂q()◂_opn◂_arr)
+			§ ini(1014) : ({ }→{ }◂q()◂_opn◂_arr)
 			∎∎
 		§§ NS_M
-			§ asc(1010) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂_opn})
+			§ asc(1015) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂_opn})
 			∎∎
 		§§ MTV
-			§ ini(1011) : ({ }→{ }◂q()◂_opn◂_arr)
-			§ asc(1012) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂_opn})
+			§ ini(1016) : ({ }→{ }◂q()◂_opn◂_arr)
+			§ asc(1017) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂_opn})
 			∎∎
 		§§ NS_T
 			∎∎
 		§§ MEV
-			§ ini(1013) : ({ }→{ }◂q()◂_opn◂_arr)
+			§ ini(1018) : ({ }→{ }◂q()◂_opn◂_arr)
 			∎∎
 		§§ NS_E
-			§ asc(1014) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂_opn})
+			§ asc(1019) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂_opn})
 			∎∎
-		§ add_e(1015) : ({ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clr{ q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 q()◂.a16◂.a13}→{ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clr{ q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()◂.a19◂_pt◂.a25◂_pt})
-		§ alc_e(1016) : ({ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clrq()◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 q()◂.a16◂.a13}→{ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clrq()◂.a19◂_pt◂.a25◂_pt◂q()◂.a26})
-		§ add_t(1017) : ({ { q()◂.a19◂_Clr q()}◂.a14 { q()◂.a19◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a8◂_pt◂_opn}{ }◂◂_r8◂_arr q()◂.a16◂.a13}→{ { q()◂.a19◂_Clr q()}◂.a14 { q()◂.a19◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a8◂_pt◂_opn}})
+		§ add_e(1020) : ({ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clr{ q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { }◂◂_r8◂_arrq()◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 q()◂.a16◂.a13}→{ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clr{ q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()◂.a19◂_pt◂.a25◂_pt})
+		§ alc_e(1021) : ({ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clrq()◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 q()◂.a16◂.a13}→{ { q()◂.a19◂_Clr q()}◂.a14 q()◂.a19◂_pt◂.a25◂_Clrq()◂.a19◂_pt◂.a25◂_pt◂q()◂.a26})
+		§ add_t(1022) : ({ { q()◂.a19◂_Clr q()}◂.a14 { q()◂.a19◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a8◂_pt◂_opn}{ }◂◂_r8◂_arr q()◂.a16◂.a13}→{ { q()◂.a19◂_Clr q()}◂.a14 { q()◂.a19◂_pt◂.a8◂_Clr q()◂.a19◂_pt◂.a8◂_pt◂_opn}})
 		§§ slv_ns_e
-			§ asc_m(1018) : ({ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arr}→{ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arrq()◂_opn})
-			§ asc_f(1019) : ({ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arr}→{ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arrq()◂_opn})
-			§ get(1020) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}})
-			§ set(1021) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64})
-			§ p0(1022) : ({ q() q()q() q()}→{ { q() q()} { q() q()}})
-			§ p1(1023) : ({ { q() q()} { q() q()}}→{ q() q()q() q()})
+			§ asc_m(1023) : ({ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arr}→{ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arrq()◂_opn})
+			§ asc_f(1024) : ({ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arr}→{ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arrq()◂_opn})
+			§ get(1025) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}})
+			§ set(1026) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64})
+			§ p0(1027) : ({ q() q()q() q()}→{ { q() q()} { q() q()}})
+			§ p1(1028) : ({ { q() q()} { q() q()}}→{ q() q()q() q()})
 			∎∎
 		§§ slv_ns_t
-			§ asc_m(1024) : ({ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arr}→{ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arrq()◂_opn})
-			§ asc_f(1025) : ({ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arr}→{ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arrq()◂_opn})
-			§ get(1026) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}})
-			§ set(1027) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64})
-			§ p0(1028) : ({ q() q()q() q()}→{ { q() q()} { q() q()}})
-			§ p1(1029) : ({ { q() q()} { q() q()}}→{ q() q()q() q()})
+			§ asc_m(1029) : ({ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arr}→{ { { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()} { }◂◂_r8◂_arrq()◂_opn})
+			§ asc_f(1030) : ({ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arr}→{ { q() { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arrq()◂_opn})
+			§ get(1031) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}})
+			§ set(1032) : ({ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64{ q() q()}}→{ { q()◂q()◂_opn◂_arr q()◂q()◂_opn◂_arr} ◂_r64})
+			§ p0(1033) : ({ q() q()q() q()}→{ { q() q()} { q() q()}})
+			§ p1(1034) : ({ { q() q()} { q() q()}}→{ q() q()q() q()})
 			∎∎
 		§§ slv_ns_m
-			§ p0(1030) : ({ q() q()q() q()}→{ q() { q() q()q()}})
-			§ p1(1031) : ({ q() { q() q()q()}}→{ q() q()q() q()})
+			§ p0(1035) : ({ q() q()q() q()}→{ q() { q() q()q()}})
+			§ p1(1036) : ({ q() { q() q()q()}}→{ q() q()q() q()})
 			∎∎
 		§§ slv_n
-			§ re_itr(1032) : ({ q()◂_lst { q() q()}}→q()◂_lst)
+			§ re_itr(1037) : ({ q()◂_lst { q() q()}}→q()◂_lst)
 			§§ RE
 				∎∎
-			§ reg(1033) : ({ { }◂◂_r8◂_arr ◂_r64{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}}→{ ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}})
+			§ reg(1038) : ({ { }◂◂_r8◂_arr ◂_r64{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}}→{ ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}})
 			§ ct_ptn : ({ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13}→{ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13})
 			§ exp_s8 : ({ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} ◂.a20◂{ }◂◂_r8◂_arr◂.a28}→{ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a28})
 			§ cst : ({ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} ◂.a20◂{ }◂◂_r8◂_arr◂.a26}→{ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26})
@@ -1550,66 +1557,66 @@
 			§ tpl_ptn : ({ { { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} ◂_r64} { }◂◂_r8◂_arr◂.a13}→{ { { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} ◂_r64} ◂_r64◂.a13})
 			§ tpl_atm : ({ { { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} ◂_r64} { }◂◂_r8◂_arr}→{ { { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} ◂_r64} ◂_r64})
 			§ csm_tpl : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()})
-			§ dlt_i(1041) : ({ { ◂_r64 q()◂q()q()◂.a24◂.a13◂_lst} q()}→{ ◂_r64 q()◂q()q()◂.a24◂.a13◂_lst})
-			§ dlt(1042) : ({ q()◂_lst q()◂q()q()◂q()◂.a13q()◂.a29}→q()◂q()q()◂q()◂.a13q()◂.a29)
-			§ iso_i(1043) : ({ { ◂_r64 q()◂.a13◂_lstq()◂q()q()◂.a24◂.a13◂_lst} { q() q()q()◂q()q()◂.a24◂.a13}}→{ ◂_r64 q()◂.a13◂_lstq()◂q()q()◂.a24◂.a13◂_lst})
-			§ iso_rl(1044) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()◂_lst{ q() q()q()◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13}◂_lst}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q()◂_lst q()◂_lstq()◂q()q()◂.a31}◂_opn})
-			§ iso(1045) : ({ { q()◂_lst q()◂_lstq()◂q()q()◂.a31}◂_opn q()◂q()q()◂q()q()◂.a13◂q()◂.a30◂q()◂.a13q()◂.a29}→q()◂q()q()◂q()q()◂.a13◂q()◂.a30◂q()◂.a13q()◂.a29)
-			§ test_var(1046) : ({ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q(){ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂.a33}→{ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q(){ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()◂q(){ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a33})
-			§ op_line(1047) : ({ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}} { ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13 { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13}}→{ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_r64◂_lst { ◂_r64 q()◂_r64◂q()q()◂.a24◂.a13}◂_lst◂_r64◂_lst} { q()◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13 ◂_r64◂q()q()◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13◂.a24◂.a13◂_r64◂.a13}})
-			§ mtc_test(1048) : ({ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_r64◂_lst} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂.a31}→{ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_r64◂_lst} ◂_r64◂q(){ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a31})
+			§ dlt_i(1046) : ({ { ◂_r64 q()◂q()q()◂.a24◂.a13◂_lst} q()}→{ ◂_r64 q()◂q()q()◂.a24◂.a13◂_lst})
+			§ dlt(1047) : ({ q()◂_lst q()◂q()q()◂q()◂.a13q()◂.a29}→q()◂q()q()◂q()◂.a13q()◂.a29)
+			§ iso_i(1048) : ({ { ◂_r64 q()◂.a13◂_lstq()◂q()q()◂.a24◂.a13◂_lst} { q() q()q()◂q()q()◂.a24◂.a13}}→{ ◂_r64 q()◂.a13◂_lstq()◂q()q()◂.a24◂.a13◂_lst})
+			§ iso_rl(1049) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()◂_lst{ q() q()q()◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13}◂_lst}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q()◂_lst q()◂_lstq()◂q()q()◂.a31}◂_opn})
+			§ iso(1050) : ({ { q()◂_lst q()◂_lstq()◂q()q()◂.a31}◂_opn q()◂q()q()◂q()q()◂.a13◂q()◂.a30◂q()◂.a13q()◂.a29}→q()◂q()q()◂q()q()◂.a13◂q()◂.a30◂q()◂.a13q()◂.a29)
+			§ test_var(1051) : ({ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q(){ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂.a33}→{ { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q(){ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()◂q(){ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a33})
+			§ op_line(1052) : ({ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}} { ◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13 { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13}}→{ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_r64◂_lst { ◂_r64 q()◂_r64◂q()q()◂.a24◂.a13}◂_lst◂_r64◂_lst} { q()◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13 ◂_r64◂q()q()◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13◂.a24◂.a13◂_r64◂.a13}})
+			§ mtc_test(1053) : ({ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_r64◂_lst} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂.a31}→{ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_r64◂_lst} ◂_r64◂q(){ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a31})
 			§ lc_mtc : ({ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_r64◂_lst} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30}→{ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}} ◂_r64◂q()◂_r64◂.a13◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a30})
 			§ r : ({ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}→{ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}} ◂_r64◂q()◂_r64◂q()◂_r64◂.a13◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a30◂◂_r64◂.a13{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a29})
 			§ tj : ({ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}} { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29◂_lst}→{ { { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()}◂_lst} q()◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}} ◂_r64◂q()◂_r64◂q()◂_r64◂.a13◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a30◂◂_r64◂.a13{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a29◂_lst})
 			∎∎
 		§§ slv_gl
 			§§ RV = ast.RV
-			§ app_k(1052) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
-			§ app_ax(1052) : { ◂_r64 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
-			§ pc0(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ pc1(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ ctr(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ pr0(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ pr1(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ op_ax(1052) : ◂_r64◂q()◂q()◂.a26◂.a13◂_ctr
-			§ id_k(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ dlt_k(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ seq_k(1052) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
-			§ id_par(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ dlt_id(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ sqc_k(1052) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
-			§ mcn_k(1052) : { }◂q()◂q()◂.a26◂.a13◂_ctr
-			§ mcp_k(1052) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
-			§ moo_k(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ oom_k(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ mop_k(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ mt_e_k(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ mt_ne_k(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ mt_le_k(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ tj_k(1052) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
-			§ tjn_k(1052) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
-			§ tjc_k(1052) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
+			§ app_k(1057) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
+			§ app_ax(1057) : { ◂_r64 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
+			§ pc0(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ pc1(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ ctr(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ pr0(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ pr1(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ op_ax(1057) : ◂_r64◂q()◂q()◂.a26◂.a13◂_ctr
+			§ id_k(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ dlt_k(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ seq_k(1057) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
+			§ id_par(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ dlt_id(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ sqc_k(1057) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
+			§ mcn_k(1057) : { }◂q()◂q()◂.a26◂.a13◂_ctr
+			§ mcp_k(1057) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
+			§ moo_k(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ oom_k(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ mop_k(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ mt_e_k(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ mt_ne_k(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ mt_le_k(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ tj_k(1057) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
+			§ tjn_k(1057) : q()◂q()◂.a26◂.a13◂q()◂q()◂.a26◂.a13◂_ctr
+			§ tjc_k(1057) : { q()◂q()◂.a26◂.a13 q()◂q()◂.a26◂.a13}◂q()◂q()◂.a26◂.a13◂_ctr
 			§ f0 : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64◂q()q()◂.a24◂.a13}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64◂q()q()◂.a24◂.a13})
 			§ f0_atm : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64◂q()q()◂.a24}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64◂q()q()◂.a24})
-			§ f1_atm(1053) : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
-			§ f2_atm(1054) : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64})
-			§ ip0(1055) : ({ ◂_r64◂.a13 ◂_r64◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13}→q()◂q()◂.a26◂.a13)
-			§ ip1(1056) : ({ ◂_r64◂.a13 ◂_r64◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13}→{ q()◂q()◂.a26◂.a13 ◂_r64◂.a13})
-			§ to_src(1057) : ({ q()◂q()q()◂.a24◂.a13◂_lst q()}→q()◂q()q()◂.a24◂.a13◂_lst)
-			§ to_tpl(1058) : ({ q()◂.a13◂_lst q()}→q()◂.a13◂_lst)
+			§ f1_atm(1058) : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
+			§ f2_atm(1059) : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64})
+			§ ip0(1060) : ({ ◂_r64◂.a13 ◂_r64◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13}→q()◂q()◂.a26◂.a13)
+			§ ip1(1061) : ({ ◂_r64◂.a13 ◂_r64◂q()q()◂q()◂.a26◂.a13◂.a24◂.a13}→{ q()◂q()◂.a26◂.a13 ◂_r64◂.a13})
+			§ to_src(1062) : ({ q()◂q()q()◂.a24◂.a13◂_lst q()}→q()◂q()q()◂.a24◂.a13◂_lst)
+			§ to_tpl(1063) : ({ q()◂.a13◂_lst q()}→q()◂.a13◂_lst)
 			§§ ip_m
 				§ f0 : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64◂.a13}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64◂.a13})
 				§ f0_atm : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64} ◂_r64})
-				§ f2_atm(1060) : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64◂q()q()◂.a24})
+				§ f2_atm(1065) : ({ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64}→{ { { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂_r64◂_r64◂.a13◂_lst ◂_r64◂.a13◂_lst} ◂_r64◂q()q()◂.a24})
 				§ f_mp : ({ { ◂_r64 ◂_r64◂.a13◂_lstq()◂.a13◂_lst} q()◂q()q()◂.a24◂.a13}→{ { ◂_r64 ◂_r64◂.a13◂_lstq()◂.a13◂_lst} ◂_r64◂q()q()◂.a24◂.a13})
 				§ f_m : ({ { ◂_r64 ◂_r64◂.a13◂_lstq()◂.a13◂_lst} q()◂q()q()◂.a24}→{ { ◂_r64 ◂_r64◂.a13◂_lstq()◂.a13◂_lst} ◂_r64◂q()q()◂.a24})
-				§ f(1062) : ({ ◂_r64◂.a13 ◂_r64◂.a13◂_r64◂q()q()◂.a24◂.a13}→{ ◂_r64◂.a13 q()◂q()◂.a26◂.a13})
-				§ ft_im_atm(1063) : ({ { { q() ◂_r64} q()◂_r64 ◂_r64◂q()q()◂.a24◂.a13◂_lst} q()}→{ { { q() ◂_r64} q()◂_r64 ◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
-				§ ft_atm(1064) : ({ { { q() ◂_r64} { q() ◂_r64}q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} q()}→{ { { q() ◂_r64} { q() ◂_r64}q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
-				§ ft_c_atm(1065) : ({ { q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} q()}→{ { q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
-				§ f_t(1066) : ({ q()◂.a13 q()◂q()q()◂.a33q()◂q()q()◂.a33}→{ q()◂.a13 q()◂q()◂.a26◂.a13})
+				§ f(1067) : ({ ◂_r64◂.a13 ◂_r64◂.a13◂_r64◂q()q()◂.a24◂.a13}→{ ◂_r64◂.a13 q()◂q()◂.a26◂.a13})
+				§ ft_im_atm(1068) : ({ { { q() ◂_r64} q()◂_r64 ◂_r64◂q()q()◂.a24◂.a13◂_lst} q()}→{ { { q() ◂_r64} q()◂_r64 ◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
+				§ ft_atm(1069) : ({ { { q() ◂_r64} { q() ◂_r64}q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} q()}→{ { { q() ◂_r64} { q() ◂_r64}q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
+				§ ft_c_atm(1070) : ({ { q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} q()}→{ { q() ◂_r64◂_r64◂q()q()◂.a24◂.a13◂_lst} ◂_r64})
+				§ f_t(1071) : ({ q()◂.a13 q()◂q()q()◂.a33q()◂q()q()◂.a33}→{ q()◂.a13 q()◂q()◂.a26◂.a13})
 				∎∎
-			§ id0(1067) : q()◂{ q()◂q()◂.a26◂.a13 ◂_r64◂q()q()◂.a24◂.a13q()}◂_ctr
+			§ id0(1072) : q()◂{ q()◂q()◂.a26◂.a13 ◂_r64◂q()q()◂.a24◂.a13q()}◂_ctr
 			§ mtc : ({ ◂_r64◂.a13 ◂_r64◂q()◂_r64◂.a13◂q()◂.a30}→q()◂q()◂.a26◂.a13)
 			§ tj : ({ { ◂_r64◂.a13 q()◂q()◂.a26◂.a13} ◂_r64◂q()◂_r64◂q()◂_r64◂.a13◂q()◂.a30◂◂_r64◂.a13q()◂.a29◂_lst}→q()◂q()◂.a26◂.a13)
 			§ r : ({ { q()◂q()◂.a26◂.a13 ◂_r64◂.a13} ◂_r64◂q()◂_r64◂q()◂_r64◂.a13◂q()◂.a30◂◂_r64◂.a13q()◂.a29}→q()◂q()◂.a26◂.a13)
@@ -1618,8 +1625,8 @@
 		§ tpl_ptn : ({ { ◂_r64 { q() ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clrq() { ◂.a17◂.a19◂_Clr q()}◂.a14} q()◂.a13}→{ { ◂_r64 { q() ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clrq() { ◂.a17◂.a19◂_Clr q()}◂.a14} ◂_r64◂.a13◂.a17◂.a16◂.a13})
 		§ tpl_atm : ({ { ◂_r64 { q() ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clrq() { ◂.a17◂.a19◂_Clr q()}◂.a14} q()}→{ { ◂_r64 { q() ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clrq() { ◂.a17◂.a19◂_Clr q()}◂.a14} ◂_r64◂.a17◂.a16◂.a13})
 		§§ slv
-			§ reg(1071) : ({ ◂_r64 ◂_r64{ ◂.a17◂.a19◂_pt◂.a9◂_Clr ◂.a17◂.a19◂_pt◂.a9◂_pt◂_opn} { ◂.a17◂.a19◂_Clr q()}◂.a14}→{ ◂_r64 ◂_r64{ ◂.a17◂.a19◂_pt◂.a9◂_Clr ◂.a17◂.a19◂_pt◂.a9◂_pt◂_opn} { ◂.a17◂.a19◂_Clr q()}◂.a14◂.a17◂.a16◂.a13})
-			§ set_tpl(1072) : ({ { ◂_r64 q()◂◂.a17◂.a19◂_pt◂_arr{ ◂.a17◂.a19◂_Clr q()}◂.a14} ◂_r64}→{ { ◂_r64 q()◂◂.a17◂.a19◂_pt◂_arr{ ◂.a17◂.a19◂_Clr q()}◂.a14} ◂_r64◂.a17◂.a16◂.a13})
+			§ reg(1076) : ({ ◂_r64 ◂_r64{ ◂.a17◂.a19◂_pt◂.a9◂_Clr ◂.a17◂.a19◂_pt◂.a9◂_pt◂_opn} { ◂.a17◂.a19◂_Clr q()}◂.a14}→{ ◂_r64 ◂_r64{ ◂.a17◂.a19◂_pt◂.a9◂_Clr ◂.a17◂.a19◂_pt◂.a9◂_pt◂_opn} { ◂.a17◂.a19◂_Clr q()}◂.a14◂.a17◂.a16◂.a13})
+			§ set_tpl(1077) : ({ { ◂_r64 q()◂◂.a17◂.a19◂_pt◂_arr{ ◂.a17◂.a19◂_Clr q()}◂.a14} ◂_r64}→{ { ◂_r64 q()◂◂.a17◂.a19◂_pt◂_arr{ ◂.a17◂.a19◂_Clr q()}◂.a14} ◂_r64◂.a17◂.a16◂.a13})
 			§ lod_src_ptn : ({ { ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ }◂◂.a17◂.a19◂_pt◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} ◂_r64◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a17◂.a19◂_pt◂.a25◂_pt◂q()◂.a26◂.a13◂.a24◂.a13}→{ { ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ }◂◂.a17◂.a19◂_pt◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} ◂_r64◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a17◂.a19◂_pt◂.a25◂_pt◂q()◂.a26◂.a13◂.a24◂.a13◂.a17◂.a16◂.a13})
 			§ pf : ({ { ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a16◂.a13} ◂.a17◂.a19◂_pt◂.a25◂_pt◂q()◂.a28◂_lst}→{ { ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a16◂.a13} ◂.a17◂.a19◂_pt◂.a25◂_pt◂q()◂.a28◂_lst})
 			§ ct_ptn_lst : ({ { ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} ◂.a17◂.a19◂_pt◂.a25◂_pt◂q()◂.a26◂.a13◂_lst}→{ { ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} ◂.a17◂.a19◂_pt◂.a25◂_pt◂q()◂.a26◂.a13◂_lst◂.a17◂.a16◂.a13◂_lst})
@@ -1634,13 +1641,13 @@
 			§ test_var : ({ ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a9◂_Clr ◂.a17◂.a19◂_pt◂.a9◂_pt◂_opn}◂_r64◂◂.a17◂.a19◂_pt◂.a25◂_ptq()◂.a33}→{ ◂_r64 ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a9◂_Clr ◂.a17◂.a19◂_pt◂.a9◂_pt◂_opn}◂_r64◂◂.a17◂.a19◂_pt◂.a25◂_ptq()◂.a33 ◂.a17◂.a16◂.a13})
 			∎∎
 		§ ctr_of : ({ ◂.a17◂.a19◂_pt◂.a25◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}→{ ◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}})
-		§ mop_of(1082) : ({ ◂.a17◂.a19◂_pt◂.a25◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13q()◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35 q()◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35}→{ ◂.a17◂.a19◂_pt◂.a25◂_Clr q()◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37})
+		§ mop_of(1087) : ({ ◂.a17◂.a19◂_pt◂.a25◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13q()◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35 q()◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35}→{ ◂.a17◂.a19◂_pt◂.a25◂_Clr q()◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37})
 		§ mk_tj : ({ { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a16◂.a13} ◂_r64◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}→{ { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a16◂.a13} ◂_r64{ }◂◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35◂.a17◂.a16◂.a13 ◂_r64})
 		§ mk_mtc : ({ { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a16◂.a13} ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}→{ { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35◂.a17◂.a16◂.a13 ◂_r64})
 		§ mk_ir : ({ { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a16◂.a13} ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}→{ { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂.a17◂.a16◂.a13})
 		§§ inl
-			§ mtc_atm(1086) : ({ { q() q()} q()}→{ { q() q()} q()})
-			§ tpl_atm(1087) : (q()→q())
+			§ mtc_atm(1091) : ({ { q() q()} q()}→{ { q() q()} q()})
+			§ tpl_atm(1092) : (q()→q())
 			§ ct_ptn : ({ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ }◂◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn◂_arr} ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}→{ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ }◂◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn◂_arr} ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13})
 			§ src_ptn : ({ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ }◂◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn◂_arr} ◂_r64◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂.a24◂.a13}→{ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ }◂◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn◂_arr} ◂_r64◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂.a24◂.a13})
 			§ cst_evl_0 : ({ { q() q(){ }◂◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn◂_arr} { { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr} { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13})
@@ -1658,104 +1665,104 @@
 			§ args_ln : ({ { { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} q(){ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}q()◂_lst { q() ◂.a17◂.a19◂_pt◂_opn}◂_lst{ ◂.a17◂.a19◂_pt { q() q()◂_lst◂.a20◂q()◂.a41◂.a16◂.a13}◂_opn◂_opn}◂_lst} ◂.a20◂q()◂.a41◂.a16◂.a13}→{ { { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} q(){ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}{ q() ◂.a17◂.a19◂_pt◂_opn}◂_lst { ◂.a17◂.a19◂_pt { q() q()◂_lst◂.a20◂q()◂.a41◂.a16◂.a13}◂_opn◂_opn}◂_lst} ◂.a17◂.a16◂.a13})
 			∎∎
 		§ slv_args_def_0 : ({ q() { ◂.a17◂.a19◂_Clr q()}◂.a14q() q()◂_lst{ q() ◂.a17◂.a19◂_pt◂_opn}◂_lst ◂_r64◂.a17◂.a16◂.a13◂_lst ◂.a17◂.a16◂.a13◂_lst}→{ q() { ◂.a17◂.a19◂_Clr q()}◂.a14q() { q() ◂.a17◂.a19◂_pt◂_opn}◂_lst◂.a17◂.a16◂.a13 ◂.a17◂.a16◂.a13◂.a17◂.a19◂_pt◂_lst})
-		§ slv_args_def(1099) : ({ q() { ◂.a17◂.a19◂_Clr q()}◂.a14q() q()◂_lst◂_r64}→{ q() { ◂.a17◂.a19◂_Clr q()}◂.a14q() { q() ◂.a17◂.a19◂_pt◂_opn}◂_lst◂.a17◂.a16◂.a13 ◂.a17◂.a16◂.a13◂.a17◂.a19◂_pt◂_lst})
+		§ slv_args_def(1104) : ({ q() { ◂.a17◂.a19◂_Clr q()}◂.a14q() q()◂_lst◂_r64}→{ q() { ◂.a17◂.a19◂_Clr q()}◂.a14q() { q() ◂.a17◂.a19◂_pt◂_opn}◂_lst◂.a17◂.a16◂.a13 ◂.a17◂.a16◂.a13◂.a17◂.a19◂_pt◂_lst})
 		§ slv_dt_def : ({ { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} { q() ◂.a17◂.a19◂_pt◂.a25◂_Clr}◂_r64 q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ q() ◂.a17◂.a19◂_pt◂_opn}◂_lst ◂.a17◂.a16◂.a13{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_r64 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ { }◂◂_r8◂_arr ◂.a20◂q()◂.a41◂.a16◂.a13}◂_lst { ◂_r64 { }◂◂_r8◂_arr◂_lst}}→{ { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} { q() ◂.a17◂.a19◂_pt◂.a25◂_Clr}◂_r64 q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ q() ◂.a17◂.a19◂_pt◂_opn}◂_lst ◂.a17◂.a16◂.a13{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_r64 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ ◂_r64 { }◂◂_r8◂_arr◂_lst} ◂_r64◂.a17◂.a16◂.a13◂_lst})
 		§§ slv_dt_clq
 			§ lp0 : ({ q() { { q() { }◂◂_r8◂_arr} ◂.a48}◂_lst{ { { { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂_opn}◂_lst ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a20◂{ }◂◂_r8◂_arr◂.a41◂.a16◂.a13}◂_lst ◂_r64{ }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂_lst}◂_lst { ◂.a17◂.a19◂_pt { { }◂◂_r8◂_arr { }◂◂_r8◂_arr◂_lst◂.a20◂{ }◂◂_r8◂_arr◂.a41◂.a16◂.a13}◂_opn◂_opn}◂_lst◂.a17◂.a19◂_pt◂_lst} ◂_r64q() { ◂.a17◂.a19◂_Clr q()}◂.a14{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}→{ q() { { { { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂_opn}◂_lst ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a20◂{ }◂◂_r8◂_arr◂.a41◂.a16◂.a13}◂_lst ◂_r64{ }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂_lst}◂_lst { ◂.a17◂.a19◂_pt { { }◂◂_r8◂_arr { }◂◂_r8◂_arr◂_lst◂.a20◂{ }◂◂_r8◂_arr◂.a41◂.a16◂.a13}◂_opn◂_opn}◂_lst◂.a17◂.a19◂_pt◂_lst}◂_r64 q(){ ◂.a17◂.a19◂_Clr q()}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}})
 			§ lp0_ln : ({ { { ◂.a17◂.a19◂_pt { { }◂◂_r8◂_arr q()◂_lst◂.a20◂q()◂.a41◂.a16◂.a13}◂_opn◂_opn}◂_lst ◂.a17◂.a19◂_pt◂_lst} { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} q(){ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst}q() q()q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn} { ◂_r64 { }◂◂_r8◂_arr◂_lst}}→{ { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} q(){ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} q()q() q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}{ ◂_r64 { }◂◂_r8◂_arr◂_lst}})
 			§ lp0_def : ({ { { q() ◂.a17◂.a19◂_pt◂_opn}◂_lst ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a20◂q()◂.a41◂.a16◂.a13}◂_lst ◂_r64q() q()}◂_lst { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst}q()◂{ q() { ◂_r64 q()◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr◂_r64 q()q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn} { ◂_r64 { }◂◂_r8◂_arr◂_lst}}→{ { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} q()◂{ q() { ◂_r64 q()◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr◂.a17◂.a19◂_pt◂.a25◂_Clr ◂_r64q() q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}{ ◂_r64 { }◂◂_r8◂_arr◂_lst}})
-			§ f(1104) : ({ q() { { q() { }◂◂_r8◂_arr} ◂.a48}◂_lst{ q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} ◂_r64q()◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr◂_r64 q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}{ ◂_r64 { }◂◂_r8◂_arr◂_lst}}→{ q() { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst}◂_r64 q()◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr◂.a17◂.a19◂_pt◂.a25◂_Clr ◂_r64q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn} { ◂_r64 { }◂◂_r8◂_arr◂_lst}})
+			§ f(1109) : ({ q() { { q() { }◂◂_r8◂_arr} ◂.a48}◂_lst{ q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst} ◂_r64q()◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr◂_r64 q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}{ ◂_r64 { }◂◂_r8◂_arr◂_lst}}→{ q() { q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q(){ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}{ q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}q() { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst}◂_r64 q()◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr◂.a17◂.a19◂_pt◂.a25◂_Clr ◂_r64q()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn} { ◂_r64 { }◂◂_r8◂_arr◂_lst}})
 			∎∎
 		§ tpl_push : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { { }◂◂_r8◂_arr q()◂_opn}◂_lst{ { }◂◂_r8◂_arr q()◂_opn}◂_lst}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()◂_lst})
-		§ tpl_push(1106) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { { }◂◂_r8◂_arr q()◂_opn}◂_lst}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()◂_lst})
+		§ tpl_push(1111) : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { { }◂◂_r8◂_arr q()◂_opn}◂_lst}→{ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} q()◂_lst})
 		§ tpl_pop : ({ { q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn} { { }◂◂_r8◂_arr q()◂_opn}◂_lst}→{ q()◂.a8◂_Clr q()◂.a8◂_pt◂_opn})
 		§§ slv_lc_clq
-			§ f_l0_i(1108) : ({ { q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q(){ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64{ { }◂◂_r8◂_arr { }◂_opn}◂_lst { { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_pt { ◂_r64 ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst}◂.a17◂.a19◂_pt◂.a25◂_pt { }◂◂_r8◂_arr◂.a17◂.a16◂.a13 { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt ◂.a17◂.a19◂_pt◂.a25◂_pt{ }◂◂_r8◂_arr ◂.a17◂.a16◂.a13{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13 ◂.a17◂.a16◂.a13}◂_lst q()}} { { q() { }◂◂_r8◂_arr} ◂.a47}}→{ q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q(){ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64{ { }◂◂_r8◂_arr { }◂_opn}◂_lst { { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_pt { ◂_r64 ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst}◂.a17◂.a19◂_pt◂.a25◂_pt { }◂◂_r8◂_arr◂.a17◂.a16◂.a13 { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt ◂.a17◂.a19◂_pt◂.a25◂_pt{ }◂◂_r8◂_arr ◂.a17◂.a16◂.a13{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13 ◂.a17◂.a16◂.a13}◂_lst q()}})
+			§ f_l0_i(1113) : ({ { q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q(){ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64{ { }◂◂_r8◂_arr { }◂_opn}◂_lst { { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_pt { ◂_r64 ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst}◂.a17◂.a19◂_pt◂.a25◂_pt { }◂◂_r8◂_arr◂.a17◂.a16◂.a13 { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt ◂.a17◂.a19◂_pt◂.a25◂_pt{ }◂◂_r8◂_arr ◂.a17◂.a16◂.a13{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13 ◂.a17◂.a16◂.a13}◂_lst q()}} { { q() { }◂◂_r8◂_arr} ◂.a47}}→{ q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q(){ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64{ { }◂◂_r8◂_arr { }◂_opn}◂_lst { { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_pt { ◂_r64 ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst}◂.a17◂.a19◂_pt◂.a25◂_pt { }◂◂_r8◂_arr◂.a17◂.a16◂.a13 { }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt ◂.a17◂.a19◂_pt◂.a25◂_pt{ }◂◂_r8◂_arr ◂.a17◂.a16◂.a13{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}◂_lst{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13 ◂.a17◂.a16◂.a13}◂_lst q()}})
 			§ f_l1_q : ({ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst} q()◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ q() ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a20◂{ }◂◂_r8◂_arr◂.a26◂.a13 ◂.a17◂.a16◂.a13}◂_lst}→{ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst} q()◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ q() ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 ◂.a17◂.a19◂_pt◂.a17◂.a16◂.a13}◂_lst})
-			§ f_l2_q_i(1110) : ({ { { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64◂.a10} { { }◂◂_r8◂_arr q()q() q()◂.a17◂.a16◂.a13}}→{ { { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64◂.a10} { q() q()}})
-			§ f_l3_q_i(1111) : ({ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { ◂.a17◂.a19◂_pt◂.a25◂_pt ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14})
-			§ f_l1_i(1112) : ({ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() q()q() ◂.a17◂.a16◂.a13{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}}→{ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() q()◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13 q()◂.a17◂.a16◂.a13}})
-			§ f_gl1_i(1113) : ({ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() { q() ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst}q() q()◂.a17◂.a16◂.a13 { }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}}→{ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() q()◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13 q()◂.a17◂.a16◂.a13}})
-			§ f_l2_i(1114) : ({ { ◂_r64 { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂_r64 ◂.a10}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt q()◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { }◂◂_r8◂_arr◂.a17◂.a16◂.a13}}→{ ◂_r64 { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂_r64 ◂.a10}})
-			§ f_gl2_i(1115) : ({ { ◂_r64 { q() { q() q()◂_lst}◂_Clr}q() { ◂.a17◂.a19◂_Clr q()}◂.a14{ ◂_r64 ◂.a10}} { { q() q()◂_lst}◂_pt q()q() { }◂◂_r8◂_arr◂.a17◂.a16◂.a13}}→{ ◂_r64 { q() { q() q()◂_lst}◂_Clr}q() { ◂.a17◂.a19◂_Clr q()}◂.a14{ ◂_r64 ◂.a10}})
-			§ f(1116) : ({ q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q()} { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64{ { q() { }◂◂_r8◂_arr} ◂.a47}◂_lst { ◂_r64 { }◂◂_r8◂_arr◂_lst}}→{ q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q()} { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64{ ◂_r64 { }◂◂_r8◂_arr◂_lst} q()◂_lst})
+			§ f_l2_q_i(1115) : ({ { { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64◂.a10} { { }◂◂_r8◂_arr q()q() q()◂.a17◂.a16◂.a13}}→{ { { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64◂.a10} { q() q()}})
+			§ f_l3_q_i(1116) : ({ { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { ◂.a17◂.a19◂_pt◂.a25◂_pt ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13}}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂.a17◂.a19◂_pt◂.a25◂_Clr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14})
+			§ f_l1_i(1117) : ({ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() q()q() ◂.a17◂.a16◂.a13{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13 { }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}}→{ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() q()◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13 q()◂.a17◂.a16◂.a13}})
+			§ f_gl1_i(1118) : ({ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() { q() ◂.a17◂.a16◂.a13{ { }◂◂_r8◂_arr ◂.a17◂.a19◂_pt◂.a25◂_pt◂_opn}◂_lst}q() q()◂.a17◂.a16◂.a13 { }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13◂{ }◂◂_r8◂_arr◂.a30◂{ }◂◂_r8◂_arr◂◂.a20q()◂.a24◂.a13{ }◂◂_r8◂_arr◂.a29}}→{ { ◂_r64 { { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14} { q() q()◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a26◂.a13 q()◂.a17◂.a16◂.a13}})
+			§ f_l2_i(1119) : ({ { ◂_r64 { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂_r64 ◂.a10}} { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt q()◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { }◂◂_r8◂_arr◂.a17◂.a16◂.a13}}→{ ◂_r64 { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { ◂_r64 ◂.a10}})
+			§ f_gl2_i(1120) : ({ { ◂_r64 { q() { q() q()◂_lst}◂_Clr}q() { ◂.a17◂.a19◂_Clr q()}◂.a14{ ◂_r64 ◂.a10}} { { q() q()◂_lst}◂_pt q()q() { }◂◂_r8◂_arr◂.a17◂.a16◂.a13}}→{ ◂_r64 { q() { q() q()◂_lst}◂_Clr}q() { ◂.a17◂.a19◂_Clr q()}◂.a14{ ◂_r64 ◂.a10}})
+			§ f(1121) : ({ q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q()} { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64{ { q() { }◂◂_r8◂_arr} ◂.a47}◂_lst { ◂_r64 { }◂◂_r8◂_arr◂_lst}}→{ q() { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}{ q() q()q() q()} { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { q() { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} q()}◂_lst}q() ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64{ ◂_r64 { }◂◂_r8◂_arr◂_lst} q()◂_lst})
 			∎∎
-		§ iso_file(1117) : ({ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}}→{ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}})
-		§ inv_file(1118) : ({ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}}→{ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}})
+		§ iso_file(1122) : ({ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}}→{ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}})
+		§ inv_file(1123) : ({ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}}→{ { q() q()q() q()q()} { q() q()q() q()}{ q() q()q() q()} { q() q()q()}})
 		§ slv_file_lp : ({ ◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q(){ q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂_r64} { ◂_r64 { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14q()◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr}◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂.a45◂_lst { q() ◂_r64{ }◂◂_r8◂_arr◂_lst}}→{ ◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} q(){ q()◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr q()◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arrq()◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂_r64} { ◂_r64 { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14q()◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr}◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}{ q() ◂_r64{ }◂◂_r8◂_arr◂_lst}})
 		§ slv_op_axm : ({ { { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂.a17◂.a19◂_pt◂.a25◂_Clrq() { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}} ◂_r64}→{ { { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂.a17◂.a19◂_pt◂.a25◂_Clrq() { ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}} ◂_r64})
-		§ slv_file(1121) : ({ ◂.a45◂_lst ◂.a45◂_lst}→{ ◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { q()◂_Clr q()◂_Clr}{ { }◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr { }◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ }◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂_r64} { ◂_r64 { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ }◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr}◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}{ { ◂.a10 q()◂_lst} ◂_r64{ }◂◂_r8◂_arr◂_lst}})
+		§ slv_file(1126) : ({ ◂.a45◂_lst ◂.a45◂_lst}→{ ◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}◂_lst{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}} { q()◂_Clr q()◂_Clr}{ { }◂{ ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}◂_opn◂_arr { }◂{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr{ }◂{ ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}◂_opn◂_arr { { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_opn { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_pt}◂_lst}◂_Clr}◂_r64} { ◂_r64 { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ }◂{ { }◂◂_r8◂_arr { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr}◂_r64 { ◂_r64 { ◂_r64◂.a8◂_Clr ◂_r64◂.a8◂_pt◂_opn}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂.a8◂_pt◂_opn} { ◂.a17◂.a19◂_pt◂.a8◂_Clr ◂.a17◂.a19◂_pt◂.a8◂_pt◂_opn}}{ { ◂.a10 q()◂_lst} ◂_r64{ }◂◂_r8◂_arr◂_lst}})
 		§§ asm
 			¶ lb ~ (=◂_r64)			§§ rx
-				¶ t ~ (=◂_r64)				§ pnt(1122) : (q()→{ }◂◂_r8◂_arr)
+				¶ t ~ (=◂_r64)				§ pnt(1127) : (q()→{ }◂◂_r8◂_arr)
 				∎∎
 			§§ op
-				§ sx(1123) : (=◂_r64)◂◂.a53◂_ctr
-				§ dx(1123) : (=◂_r64)◂◂.a53◂_ctr
-				§ rsp_n(1123) : (=◂_r64)◂◂.a53◂_ctr
-				§ rx(1123) : (=(=◂_r64))◂◂.a53◂_ctr
-				§ im(1123) : (=◂_r64)◂◂.a53◂_ctr
-				§ lt(1123) : (={ }◂◂_r8◂_arr)◂◂.a53◂_ctr
-				§ pnt(1123) : (◂.a53→{ }◂◂_r8◂_arr)
+				§ sx(1128) : (=◂_r64)◂◂.a53◂_ctr
+				§ dx(1128) : (=◂_r64)◂◂.a53◂_ctr
+				§ rsp_n(1128) : (=◂_r64)◂◂.a53◂_ctr
+				§ rx(1128) : (=(=◂_r64))◂◂.a53◂_ctr
+				§ im(1128) : (=◂_r64)◂◂.a53◂_ctr
+				§ lt(1128) : (={ }◂◂_r8◂_arr)◂◂.a53◂_ctr
+				§ pnt(1128) : (◂.a53→{ }◂◂_r8◂_arr)
 				∎∎
-			§ free_rcd(1124) : { (=◂_r64) (={ }◂◂_r8◂_arr)}◂◂.a54◂_ctr
-			§ alc_rcd(1124) : { (=◂_r64) (={ }◂◂_r8◂_arr)}◂◂.a54◂_ctr
-			§ jg_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ jle_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ jl_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ jz_bl_lb(1124) : { (=◂.a4) (=(=◂_r64))}◂◂.a54◂_ctr
-			§ jnz_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ jz_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ jmp_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ etr_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ call_lb(1124) : (=(=◂_r64))◂◂.a54◂_ctr
-			§ ret(1124) : { }◂◂.a54◂_ctr
-			§ db(1124) : { (=◂_r64) (={ }◂◂_r8◂_arr)}◂◂.a54◂_ctr
-			§ mov_glx(1124) : { (=◂_r64) (=◂_r64)}◂◂.a54◂_ctr
-			§ mov_op_glx(1124) : { (=◂.a53) (=◂_r64)}◂◂.a54◂_ctr
-			§ mov_glx_op(1124) : { (=◂_r64) (=◂.a53)}◂◂.a54◂_ctr
-			§ mov_op_op(1124) : { (=◂.a53) (=◂.a53)}◂◂.a54◂_ctr
-			§ st_s8(1124) : (=(={ }◂◂_r8◂_arr))◂.p16◂◂.a54◂_ctr
-			§ s8(1124) : (={ }◂◂_r8◂_arr)◂◂.a54◂_ctr
-			§ mov_op_sx(1124) : { ◂.a53 ◂_r64}◂◂.a54◂_ctr
-			§ mov_glx_sx(1124) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
-			§ mov_dx_glx(1124) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
-			§ mov_glx_rsp_n(1124) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
-			§ mov_rsp_n_glx(1124) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
-			§ mov_glx_im(1124) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
-			§ mov_rx_glx(1124) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
-			§ mov_glx_rx(1124) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
-			§ mov_rax_glx(1124) : ◂_r64◂◂.a54◂_ctr
-			§ mov_rdi_glx(1124) : ◂_r64◂◂.a54◂_ctr
-			§ mov_glx_rax(1124) : ◂_r64◂◂.a54◂_ctr
-			§ mov_glx_rdi(1124) : ◂_r64◂◂.a54◂_ctr
-			§ lf(1124) : (=◂.a54)◂◂.a55◂_ctr
-			§ e(1124) : { }◂◂.a55◂_ctr
-			§ nd(1124) : { (=◂.a55) (=◂.a55)}◂◂.a55◂_ctr
+			§ free_rcd(1129) : { (=◂_r64) (={ }◂◂_r8◂_arr)}◂◂.a54◂_ctr
+			§ alc_rcd(1129) : { (=◂_r64) (={ }◂◂_r8◂_arr)}◂◂.a54◂_ctr
+			§ jg_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ jle_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ jl_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ jz_bl_lb(1129) : { (=◂.a4) (=(=◂_r64))}◂◂.a54◂_ctr
+			§ jnz_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ jz_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ jmp_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ etr_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ call_lb(1129) : (=(=◂_r64))◂◂.a54◂_ctr
+			§ ret(1129) : { }◂◂.a54◂_ctr
+			§ db(1129) : { (=◂_r64) (={ }◂◂_r8◂_arr)}◂◂.a54◂_ctr
+			§ mov_glx(1129) : { (=◂_r64) (=◂_r64)}◂◂.a54◂_ctr
+			§ mov_op_glx(1129) : { (=◂.a53) (=◂_r64)}◂◂.a54◂_ctr
+			§ mov_glx_op(1129) : { (=◂_r64) (=◂.a53)}◂◂.a54◂_ctr
+			§ mov_op_op(1129) : { (=◂.a53) (=◂.a53)}◂◂.a54◂_ctr
+			§ st_s8(1129) : (=(={ }◂◂_r8◂_arr))◂.p16◂◂.a54◂_ctr
+			§ s8(1129) : (={ }◂◂_r8◂_arr)◂◂.a54◂_ctr
+			§ mov_op_sx(1129) : { ◂.a53 ◂_r64}◂◂.a54◂_ctr
+			§ mov_glx_sx(1129) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
+			§ mov_dx_glx(1129) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
+			§ mov_glx_rsp_n(1129) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
+			§ mov_rsp_n_glx(1129) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
+			§ mov_glx_im(1129) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
+			§ mov_rx_glx(1129) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
+			§ mov_glx_rx(1129) : { ◂_r64 ◂_r64}◂◂.a54◂_ctr
+			§ mov_rax_glx(1129) : ◂_r64◂◂.a54◂_ctr
+			§ mov_rdi_glx(1129) : ◂_r64◂◂.a54◂_ctr
+			§ mov_glx_rax(1129) : ◂_r64◂◂.a54◂_ctr
+			§ mov_glx_rdi(1129) : ◂_r64◂◂.a54◂_ctr
+			§ lf(1129) : (=◂.a54)◂◂.a55◂_ctr
+			§ e(1129) : { }◂◂.a55◂_ctr
+			§ nd(1129) : { (=◂.a55) (=◂.a55)}◂◂.a55◂_ctr
 			§§ pf
 				∎∎
-			§ cct(1124) : ({ ◂.a55 ◂.a55}→◂.a55)
-			§ of_s8(1125) : { }◂◂_r8◂_arr◂◂.a55◂_ctr
-			§ add_s8(1125) : ({ ◂.a55 { }◂◂_r8◂_arr}→◂.a55)
-			§ of_st_s8(1126) : { }◂◂_r8◂_arr◂.p16◂◂.a55◂_ctr
-			§ add_st_s8(1126) : ({ ◂.a55 { }◂◂_r8◂_arr◂.p16}→◂.a55)
+			§ cct(1129) : ({ ◂.a55 ◂.a55}→◂.a55)
+			§ of_s8(1130) : { }◂◂_r8◂_arr◂◂.a55◂_ctr
+			§ add_s8(1130) : ({ ◂.a55 { }◂◂_r8◂_arr}→◂.a55)
+			§ of_st_s8(1131) : { }◂◂_r8◂_arr◂.p16◂◂.a55◂_ctr
+			§ add_st_s8(1131) : ({ ◂.a55 { }◂◂_r8◂_arr◂.p16}→◂.a55)
 			§ add_st_s8_im : ({ }◂◂_r8◂_arr→→(◂.a55→◂.a55))
-			§ add_nd(1128) : ({ ◂.a55 ◂.a54}→◂.a55)
-			§ pfx_s8(1129) : ({ { }◂◂_r8◂_arr ◂.a55}→◂.a55)
+			§ add_nd(1133) : ({ ◂.a55 ◂.a54}→◂.a55)
+			§ pfx_s8(1134) : ({ { }◂◂_r8◂_arr ◂.a55}→◂.a55)
 			§ mk_db_lp : ({ { { }◂◂_r8◂_arr ◂_r64} { }◂◂_r8◂_arr◂_r64 ◂_r64}→{ { { }◂◂_r8◂_arr ◂_r64} { }◂◂_r8◂_arr})
 			§ to_s8_a : ({ ◂.a54 { }◂◂_r8◂_arr◂_r64}→{ { }◂◂_r8◂_arr ◂_r64})
 			§ to_s8_i : ({ ◂.a55 { }◂◂_r8◂_arr◂_r64}→{ { }◂◂_r8◂_arr ◂_r64})
-			§ mlc_buf(1133) : (◂_r64→{ }◂◂_r8◂_arr)
-			§ to_s8(1134) : (◂.a55→{ }◂◂_r8◂_arr)
-			§ main(1135) : (q()→{ })
+			§ mlc_buf(1138) : (◂_r64→{ }◂◂_r8◂_arr)
+			§ to_s8(1139) : (◂.a55→{ }◂◂_r8◂_arr)
+			§ main(1140) : (q()→{ })
 			∎∎
 		§§ GV
-			§ ix(1136) : ({ q() ◂_r64}→{ { q() ◂_r64} ◂_r64})
-			§ new(1137) : ({ ◂.a22◂_Clr ◂_r64}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt})
-			§ new_i(1138) : ({ ◂.a22◂_Clr ◂_r64}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂_r64})
+			§ ix(1141) : ({ q() ◂_r64}→{ { q() ◂_r64} ◂_r64})
+			§ new(1142) : ({ ◂.a22◂_Clr ◂_r64}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt})
+			§ new_i(1143) : ({ ◂.a22◂_Clr ◂_r64}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂_r64})
 			§ lod : ({ { ◂.a22◂_Clr q()} ◂.a22◂_pt}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂_r64})
 			§ lod_o : ({ { ◂.a22◂_Clr q()} ◂.a22◂_pt}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂_r64◂_opn})
-			§ rpc_i(1141) : ({ { ◂.a22◂_Clr q()} ◂.a22◂_pt}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂.a22◂_pt})
+			§ rpc_i(1146) : ({ { ◂.a22◂_Clr q()} ◂.a22◂_pt}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂.a22◂_pt})
 			§ rpc_d : ({ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13◂.a22◂_pt◂q()◂.a23◂.a13})
 			§ rpc_d_atm : ({ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a22◂_pt◂q()◂.a23◂.a13})
 			§ imv : ({ { ◂_r64 ◂_r64}◂_lst { ◂.a22◂_Clr q()}q() ◂.a22◂_pt◂.a22◂_pt}→{ { ◂_r64 ◂_r64}◂_lst { ◂.a22◂_Clr q()}q()})
@@ -1763,63 +1770,63 @@
 			§ gen_v : ({ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt})
 			§ gen : ({ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13})
 			§ gen_atm : ({ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23})
-			§ new_v(1147) : ({ ◂.a22◂_Clr q()}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt})
+			§ new_v(1152) : ({ ◂.a22◂_Clr q()}→{ { ◂.a22◂_Clr q()} ◂.a22◂_pt})
 			∎∎
 		§§ alc_type_k
-			§ alc_i(1148) : ({ ◂.a22◂_Clr ◂_r64}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt})
+			§ alc_i(1153) : ({ ◂.a22◂_Clr ◂_r64}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt})
 			§ rcd : ({ { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂.a17◂.a16◂.a13}→{ { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂.a17◂.a16◂.a13◂_lst})
 			§ arr_t : ({ { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂.a17◂.a16◂.a13}→{ { ◂.a17◂.a19◂_Clr q()}◂.a14 ◂_r64◂_opn})
 			§ arr : ({ { ◂.a17◂.a19◂_Clr q()}◂.a14 q()◂.a17◂.a16◂.a13 ◂.a17◂.a16◂.a13}→{ { ◂.a17◂.a19◂_Clr q()}◂.a14 q()◂q()◂.a23◂.a13})
 			§ f_T : ((q()→{ q() q()})→→({ { q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14q() ◂_r64} ◂.a17◂.a16◂.a13}→{ { q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14q() ◂_r64} q()◂q()◂.a23◂.a13}))
-			§ f_i(1153) : ({ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a17◂.a16◂.a13}→{ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13})
-			§ f_o(1154) : ({ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a17◂.a16◂.a13}→{ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13◂_opn})
-			§ f_x(1155) : ({ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a17◂.a16◂.a13}→{ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13})
+			§ f_i(1158) : ({ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a17◂.a16◂.a13}→{ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13})
+			§ f_o(1159) : ({ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a17◂.a16◂.a13}→{ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13◂_opn})
+			§ f_x(1160) : ({ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a17◂.a16◂.a13}→{ q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13})
 			∎∎
 		§§ gnr
-			§ call_lb(1156) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ lb_etr(1157) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ lb_i_etr(1158) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
-			§ jmp_lb(1159) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ jg_lb(1160) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ jnz_lb(1161) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ jz_lb(1162) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ jz_bl_lb(1163) : ({ ◂.a4 ◂_r64◂.a55}→{ ◂_r64 ◂.a55})
-			§ jl_lb(1164) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ jle_lb(1165) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ call_lb(1161) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ lb_etr(1162) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ lb_i_etr(1163) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
+			§ jmp_lb(1164) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ jg_lb(1165) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ jnz_lb(1166) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ jz_lb(1167) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ jz_bl_lb(1168) : ({ ◂.a4 ◂_r64◂.a55}→{ ◂_r64 ◂.a55})
+			§ jl_lb(1169) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ jle_lb(1170) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
 			§ alc_rcd : ({ }◂◂_r8◂_arr→→({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55}))
 			§ free_rcd : ({ }◂◂_r8◂_arr→→({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55}))
-			§ ret(1168) : (◂.a55→◂.a55)
+			§ ret(1173) : (◂.a55→◂.a55)
 			§ mk_jmp_tbl : ({ ◂_r64 ◂_r64◂.a10}→{ ◂_r64 { }◂◂_r8◂_arr◂_r64◂.a12})
-			§ mk_jmp_tbl(1170) : ({ ◂_r64 ◂_r64}→{ ◂_r64 { }◂◂_r8◂_arr◂_r64◂.a12})
-			§ c_call(1171) : ({ }◂◂_r8◂_arr→{ { }◂◂_r8◂_arr { }◂◂_r8◂_arr})
-			§ mlc_s8(1172) : (◂_r64→{ ◂_r64 { }◂◂_r8◂_arr})
+			§ mk_jmp_tbl(1175) : ({ ◂_r64 ◂_r64}→{ ◂_r64 { }◂◂_r8◂_arr◂_r64◂.a12})
+			§ c_call(1176) : ({ }◂◂_r8◂_arr→{ { }◂◂_r8◂_arr { }◂◂_r8◂_arr})
+			§ mlc_s8(1177) : (◂_r64→{ ◂_r64 { }◂◂_r8◂_arr})
 			§ mk_s8_64_lp : ({ { }◂◂_r8◂_arr ◂_r64◂_r64 ◂.a55}→{ { }◂◂_r8◂_arr ◂_r64◂.a55})
 			§ mk_s8_64_m : ({ { }◂◂_r8◂_arr ◂_r64◂_r64 ◂.a55}→{ { }◂◂_r8◂_arr ◂_r64◂.a55})
-			§ mk_s8_64(1175) : ({ }◂◂_r8◂_arr→{ { }◂◂_r8◂_arr ◂.a55})
+			§ mk_s8_64(1180) : ({ }◂◂_r8◂_arr→{ { }◂◂_r8◂_arr ◂.a55})
 			§ mk_db_lp : ({ ◂.a55 { }◂◂_r8◂_arr◂_r64 ◂_r64}→{ ◂.a55 { }◂◂_r8◂_arr})
-			§ mov_e(1177) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
-			§ r64_to_rax(1178) : ({ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a55})
-			§ r64_to_hp(1179) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt ◂.a55})
-			§ s8_to_rax(1180) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a55}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂.a55})
-			§ s8_to_hp(1181) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a55}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂.a55})
-			§ sx(1182) : ({ ◂.a55 ◂.a53◂_r64}→◂.a55)
-			§ glx(1183) : ({ ◂.a55 ◂.a53◂_r64}→◂.a55)
-			§ r8(1184) : ({ ◂.a55 ◂.a53q()}→◂.a55)
-			§ rax_idx(1185) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ rdi_idx(1186) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-			§ rax_im(1187) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ mov_e(1182) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
+			§ r64_to_rax(1183) : ({ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a55})
+			§ r64_to_hp(1184) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt ◂.a55})
+			§ s8_to_rax(1185) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a55}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂.a55})
+			§ s8_to_hp(1186) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a55}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂.a55})
+			§ sx(1187) : ({ ◂.a55 ◂.a53◂_r64}→◂.a55)
+			§ glx(1188) : ({ ◂.a55 ◂.a53◂_r64}→◂.a55)
+			§ r8(1189) : ({ ◂.a55 ◂.a53q()}→◂.a55)
+			§ rax_idx(1190) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ rdi_idx(1191) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
+			§ rax_im(1192) : ({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
 			§ imul_im : ({ }◂◂_r8◂_arr→→({ ◂_r64 ◂.a55}→{ ◂_r64 ◂.a55}))
 			§§ cmp
-				§ idx_idx(1189) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
-				§ idx_im(1190) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
+				§ idx_idx(1194) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
+				§ idx_im(1195) : ({ ◂_r64 ◂_r64◂.a55}→{ ◂_r64 ◂_r64◂.a55})
 				∎∎
 			§§ EDS
-				§ lod_p(1191) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55}}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} { ◂_r64 ◂_r64}})
-				§ lod_ps(1192) : ({ { q() q()}◂_pt { { q() q()}◂_Clr q()q()}}→{ { q() q()}◂_pt { { q() q()}◂_Clr q()q()}q()})
-				§ set_s(1193) : ({ { }◂◂_r8◂_arr { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}q()}}→{ { { }◂◂_r8◂_arr q()◂_opn}◂_pt { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}q()}})
-				§ lod_s(1194) : ({ { }◂◂_r8◂_arr ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55}}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} { ◂_r64 ◂_r64}})
+				§ lod_p(1196) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55}}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} { ◂_r64 ◂_r64}})
+				§ lod_ps(1197) : ({ { q() q()}◂_pt { { q() q()}◂_Clr q()q()}}→{ { q() q()}◂_pt { { q() q()}◂_Clr q()q()}q()})
+				§ set_s(1198) : ({ { }◂◂_r8◂_arr { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}q()}}→{ { { }◂◂_r8◂_arr q()◂_opn}◂_pt { { { }◂◂_r8◂_arr q()◂_opn}◂_Clr { { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr q()◂_opn}◂_pt◂.a8◂_pt◂_opn}q()}})
+				§ lod_s(1199) : ({ { }◂◂_r8◂_arr ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55}}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} { ◂_r64 ◂_r64}})
 				§ lod_s_T : ({ }◂◂_r8◂_arr→→({ ◂_r64 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55}}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} { ◂_r64 ◂_r64}}))
-				§ to_rax(1196) : ({ { { }◂◂_r8◂_arr q()}◂_pt { { { }◂◂_r8◂_arr q()}◂_Clr q()q()}◂.a55}→{ { { }◂◂_r8◂_arr q()}◂_pt { { { }◂◂_r8◂_arr q()}◂_Clr q()q()}◂.a55})
+				§ to_rax(1201) : ({ { { }◂◂_r8◂_arr q()}◂_pt { { { }◂◂_r8◂_arr q()}◂_Clr q()q()}◂.a55}→{ { { }◂◂_r8◂_arr q()}◂_pt { { { }◂◂_r8◂_arr q()}◂_Clr q()q()}◂.a55})
 				∎∎
 			§§ lod_sgm
 				§ ptn : ({ { ◂.a55 { ◂.a22◂_Clr ◂_r64}} ◂.a22◂_pt◂q()◂.a23◂.a13}→{ { ◂.a55 { ◂.a22◂_Clr ◂_r64}} ◂.a22◂_pt◂q()◂.a23◂.a13})
@@ -1828,10 +1835,10 @@
 				§ atm_1 : ({ { q() { ◂.a22◂_Clr q()}◂.a22◂_pt} q()◂q()◂.a23}→{ { q() { ◂.a22◂_Clr q()}◂.a22◂_pt} ◂.a22◂_pt◂q()◂.a23})
 				∎∎
 			§§ idx
-				§ ini_n(1199) : (◂_r64→{ ◂_r64 { }◂q()◂q()◂.a23◂.a13◂_arr})
-				§ get(1200) : ({ q()◂q()◂q()◂.a23◂.a13◂_arr ◂_r64}→{ q()◂q()◂q()◂.a23◂.a13◂_arr ◂_r64q()◂q()◂.a23◂.a13})
-				§ set(1201) : ({ q()◂q()◂_arr ◂_r64q()}→{ q()◂q()◂_arr ◂_r64})
-				§ get_2(1202) : ({ { q() q()}◂_lst q()}→{ { q() q()}◂_lst q()q()})
+				§ ini_n(1204) : (◂_r64→{ ◂_r64 { }◂q()◂q()◂.a23◂.a13◂_arr})
+				§ get(1205) : ({ q()◂q()◂q()◂.a23◂.a13◂_arr ◂_r64}→{ q()◂q()◂q()◂.a23◂.a13◂_arr ◂_r64q()◂q()◂.a23◂.a13})
+				§ set(1206) : ({ q()◂q()◂_arr ◂_r64q()}→{ q()◂q()◂_arr ◂_r64})
+				§ get_2(1207) : ({ { q() q()}◂_lst q()}→{ { q() q()}◂_lst q()q()})
 				§ asc_2_lst : ({ { q() q()◂q()◂.a23◂.a13q() q()◂q()◂.a23◂.a13} { q()◂.a13◂_lst q()◂q()◂.a23◂.a13◂_lst}}→{ { q() q()◂q()◂.a23◂.a13q() q()◂q()◂.a23◂.a13} q()◂q()◂.a23◂.a13◂_lst})
 				§ asc_2 : ({ { q() q()◂q()◂.a23◂.a13q() q()◂q()◂.a23◂.a13} { q()◂.a13 q()◂q()◂.a23◂.a13}}→{ { q() q()◂q()◂.a23◂.a13q() q()◂q()◂.a23◂.a13} q()◂q()◂.a23◂.a13})
 				§ asc_ply_lst : ({ q()◂q()◂q()◂.a23◂.a13◂_arr { ◂_r64◂.a13◂_lst q()◂q()◂.a23◂.a13◂_lst}}→q()◂q()◂q()◂.a23◂.a13◂_arr)
@@ -1842,7 +1849,7 @@
 				§ app_ctr : ({ q()◂.a25◂_Clr q()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26q()◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr q()◂q()◂.a25◂_pt◂.a23◂.a13})
 				§ app_ctr_stk : ({ { ◂_r64 q()◂q()◂.a25◂_pt◂.a23◂.a13{ }◂q()◂q()◂.a25◂_pt◂.a23◂.a13◂_arr} { q()◂.a25◂_Clr ◂_r64◂.a13◂_r64◂q()◂.a25◂_ptq()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂.a24◂.a13 q()◂q()◂.a25◂_pt◂.a23◂.a13}}→{ q()◂.a25◂_Clr q()◂q()◂.a25◂_pt◂.a23◂.a13})
 				§ subst_ply_atm : ({ { q()◂.a25◂_Clr { }◂q()◂q()◂.a25◂_pt◂.a23◂.a13◂_arr} ◂_r64◂q()◂.a25◂_ptq()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂.a24}→{ { q()◂.a25◂_Clr { }◂q()◂q()◂.a25◂_pt◂.a23◂.a13◂_arr} q()◂q()◂.a25◂_pt◂.a23◂.a13})
-				§ csm_tpl(1212) : ({ q()◂q()◂q()◂.a23◂.a13◂_arr ◂_r64}→{ q()◂q()◂q()◂.a23◂.a13◂_arr q()◂q()◂.a23◂.a13})
+				§ csm_tpl(1217) : ({ q()◂q()◂q()◂.a23◂.a13◂_arr ◂_r64}→{ q()◂q()◂q()◂.a23◂.a13◂_arr q()◂q()◂.a23◂.a13})
 				∎∎
 			§§ mov_ptn2
 				§ alc_T : (({ q() ◂_r64}→{ q() ◂_r64◂.a4})→→({ { ◂.a22◂_Clr ◂_r64} q()◂.a22◂_pt ◂.a55}→{ { ◂.a22◂_Clr ◂_r64} q()◂.a22◂_pt ◂.a55}))
@@ -1859,15 +1866,15 @@
 				§ ptn_A1 : ({ { q()◂.a9◂_Clr q()◂.a9◂_pt◂_opn} { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn}◂.a55 q()◂_r64}→{ { q()◂.a9◂_Clr q()◂.a9◂_pt◂_opn} { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn}◂.a55 q()◂_r64})
 				§ ptn_lp : ({ { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn}◂.a55 { q() ◂_r64}◂_r64 ◂_r64}→{ { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn}◂.a55 { q() ◂_r64}})
 				§ ptn_L : ({ { ◂_r64 ◂_r64}◂_lst { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn}{ ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} ◂.a55{ q() ◂_r64}}→{ { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn} { ◂_r64◂.a9◂_Clr ◂_r64◂.a9◂_pt◂_opn}◂.a55 { q() ◂_r64}})
-				§ ptn(1226) : ({ ◂.a55 { q()◂.a25◂_Clr q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}}{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a22◂_pt◂q()◂.a23◂.a13}→{ ◂.a55 { q()◂.a25◂_Clr q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}}{ ◂.a22◂_Clr ◂_r64}})
+				§ ptn(1231) : ({ ◂.a55 { q()◂.a25◂_Clr q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}}{ ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a22◂_pt◂q()◂.a23◂.a13}→{ ◂.a55 { q()◂.a25◂_Clr q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}}{ ◂.a22◂_Clr ◂_r64}})
 				∎∎
 			§§ pop_regs
-				§ exh_i(1227) : ({ { { ◂.a22◂_Clr q()} ◂_r64◂.a55} ◂.a22◂_pt}→{ { ◂.a22◂_Clr q()} ◂_r64◂.a55})
-				§ exh(1228) : ({ { ◂.a22◂_Clr q()} ◂_r64◂.a22◂_pt◂_lst}→{ { ◂.a22◂_Clr q()} ◂_r64◂.a55})
+				§ exh_i(1232) : ({ { { ◂.a22◂_Clr q()} ◂_r64◂.a55} ◂.a22◂_pt}→{ { ◂.a22◂_Clr q()} ◂_r64◂.a55})
+				§ exh(1233) : ({ { ◂.a22◂_Clr q()} ◂_r64◂.a22◂_pt◂_lst}→{ { ◂.a22◂_Clr q()} ◂_r64◂.a55})
 				∎∎
 			§§ adp
 				§ f_ll : ({ { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64◂_r64 ◂.a17◂.a16◂.a13◂_lstq()◂{ ◂.a17◂.a16◂.a13◂_lst q()}◂_arr}→{ { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂.a17◂.a16◂.a13◂_lstq()◂{ ◂.a17◂.a16◂.a13◂_lst q()}◂_arr q()◂_opn})
-				§ adt_call(1230) : ({ q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64◂.a55 { ◂_r64 ◂.a17◂.a16◂.a13◂_lst}}→{ q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64◂.a55})
+				§ adt_call(1235) : ({ q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64◂.a55 { ◂_r64 ◂.a17◂.a16◂.a13◂_lst}}→{ q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64◂.a55})
 				§ adt_lp : (({ q() { q() ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lstq() ◂.a17◂.a16◂.a13◂_lst{ ◂.a17◂.a19◂_Clr q()}◂.a14 q()q() q()q() { q() ◂.a55}}→{ q() { q() ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr q()}◂.a14 q()q() q()q() { q() ◂.a55}})→→({ q() { q() ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr q()}◂.a14 q()q() q()q() { q() ◂.a55}}→{ q() { ◂.a17◂.a19◂_Clr q()}◂.a14q() q()q() q(){ q() ◂.a55}}))
 				§ adt : (({ q() q()◂_r64 { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr q()◂.a17◂.a16◂.a13◂_lst ◂_r64◂.a12◂_r64 ◂_r64q() { q() ◂.a55}}→{ q() q()q() q()q() ◂_r64q() q(){ q() ◂.a55}})→→({ q() q()◂_r64 ◂.a17◂.a16◂.a13◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64q() { q() ◂.a55}}→{ q() q()q() q()q() q()q() { q() ◂.a55}}))
 				∎∎
@@ -1876,7 +1883,7 @@
 				§ ptn_T : (({ ◂.a55 ◂.a53◂_r64}→◂.a55)→→({ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13{ q() ◂.a55}}→{ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { q() ◂.a55}}))
 				§ ptn : ({ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13{ q() ◂.a55}}→{ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { q() ◂.a55}})
 				§ sgm_ptn : ({ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13{ q() ◂.a55}}→{ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { q() ◂.a55}})
-				§ hp_adt(1235) : ({ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a17◂.a16◂.a13{ q() ◂.a55}}→{ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { q() ◂.a55}})
+				§ hp_adt(1240) : ({ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a17◂.a16◂.a13{ q() ◂.a55}}→{ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { q() ◂.a55}})
 				§ adt_hp : ({ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst◂_r64 { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr q()◂.a17◂.a16◂.a13◂_lst ◂_r64◂.a12◂_r64 ◂_r64{ ◂.a22◂_Clr q()} { q() ◂.a55}}→{ { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()q()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64◂_r64 { ◂.a22◂_Clr q()}{ q() ◂.a55}})
 				∎∎
 			§§ cmp_s8
@@ -1884,9 +1891,9 @@
 				§ f : ({ ◂_r64 { }◂◂_r8◂_arr}→{ ◂_r64 { }◂◂_r8◂_arr◂.a55})
 				∎∎
 			§§ emt
-				§ emt_stg(1239) : ({ { }◂◂_r8◂_arr ◂_r64{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}})
+				§ emt_stg(1244) : ({ { }◂◂_r8◂_arr ◂_r64{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}})
 				§ emt_stg_T : ({ }◂◂_r8◂_arr→→({ ◂_r64 { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}→{ ◂_r64 { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}))
-				§ emt_s8(1241) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a55}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a55})
+				§ emt_s8(1246) : ({ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a55}→{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂_r64{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a55})
 				§ ptn_lst_T : (({ ◂.a55 ◂.a53◂_r64}→◂.a55)→→({ { q() q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13◂_lst{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}→{ { q() q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}))
 				§ ptn_T : (({ ◂.a55 ◂.a53◂_r64}→◂.a55)→→({ { q() q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}→{ { q() q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}))
 				§ sgm_ptn : ({ { q() q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} ◂.a22◂_pt◂q()◂.a23◂.a13{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}}→{ { q() q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64{ ◂.a22◂_Clr q()} { { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂.a55}})
@@ -1909,24 +1916,24 @@
 				§ adt_hp : ({ { q() q()q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst◂_r64 { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr q()◂.a17◂.a16◂.a13◂_lst ◂_r64◂.a12◂_r64 ◂_r64{ ◂.a22◂_Clr q()} { q() ◂.a55}}→{ { q() q()q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr} { ◂_r64 ◂.a17◂.a16◂.a13◂_lst◂_r64}◂_lst{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arrq() ◂_r64◂_r64 { ◂.a22◂_Clr q()}{ q() ◂.a55}})
 				∎∎
 			§§ arr
-				§ l1(1255) : ({ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a55})
-				§ mlc_arr(1256) : ({ q() ◂_r64◂.a55}→{ q() ◂_r64◂.a55})
-				§ stt_mk_arr(1257) : ({ q() { q() q()q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 q()◂.a25◂_Clrq()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14◂.a17◂.a16◂.a13 { ◂.a22◂_Clr ◂_r64}◂_r64 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}}→{ { q() q()q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr} q()◂.a25◂_Clrq()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂_r64{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a55◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
+				§ l1(1260) : ({ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a55})
+				§ mlc_arr(1261) : ({ q() ◂_r64◂.a55}→{ q() ◂_r64◂.a55})
+				§ stt_mk_arr(1262) : ({ q() { q() q()q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 q()◂.a25◂_Clrq()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14◂.a17◂.a16◂.a13 { ◂.a22◂_Clr ◂_r64}◂_r64 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}}→{ { q() q()q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr} q()◂.a25◂_Clrq()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14{ ◂.a22◂_Clr ◂_r64} ◂_r64{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a55◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
 				∎∎
 			§§ lc_code
-				§ rf_k(1258) : q()◂q()◂q()q()◂.a56◂_ctr
-				§ rf_f(1258) : q()◂q()◂q()q()◂.a56◂_ctr
-				§ rf_t(1258) : q()◂q()◂q()q()◂.a56◂_ctr
-				§ s8_to_rdi_rsi(1258) : ({ { ◂.a22◂_Clr q()} { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55}◂.a55 ◂_r64{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂◂.a22◂_pt◂.a49}→{ { ◂.a22◂_Clr q()} { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55}◂.a55 ◂_r64})
+				§ rf_k(1263) : q()◂q()◂q()q()◂.a56◂_ctr
+				§ rf_f(1263) : q()◂q()◂q()q()◂.a56◂_ctr
+				§ rf_t(1263) : q()◂q()◂q()q()◂.a56◂_ctr
+				§ s8_to_rdi_rsi(1263) : ({ { ◂.a22◂_Clr q()} { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55}◂.a55 ◂_r64{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂◂.a22◂_pt◂.a49}→{ { ◂.a22◂_Clr q()} { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55}◂.a55 ◂_r64})
 				§§ sts
-					§ f_o0(1259) : ({ { ◂.a22◂_Clr q()} ◂_r64◂◂.a22◂_pt◂.a49◂.a55}→{ { ◂.a22◂_Clr q()} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
-					§ f_c0(1260) : ({ { ◂.a22◂_Clr q()} ◂_r64◂◂.a22◂_pt◂.a49◂.a55}→{ { ◂.a22◂_Clr q()} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
+					§ f_o0(1264) : ({ { ◂.a22◂_Clr q()} ◂_r64◂◂.a22◂_pt◂.a49◂.a55}→{ { ◂.a22◂_Clr q()} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
+					§ f_c0(1265) : ({ { ◂.a22◂_Clr q()} ◂_r64◂◂.a22◂_pt◂.a49◂.a55}→{ { ◂.a22◂_Clr q()} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
 					§ f : ({ ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 { ◂.a22◂_Clr ◂_r64}q()◂.a25◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}◂.a55}→{ { ◂.a22◂_Clr ◂_r64} q()◂.a25◂_Clr{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
 					∎∎
 				§§ exp_s8
-					§ for(1262) : { (=◂_r64) q()}◂q()◂.a57◂_ctr
-					§ idx(1262) : { (=◂.a27) (=◂_r64)}◂q()◂.a57◂_ctr
-					§ cst(1262) : q()◂q()◂.a57◂_ctr
+					§ for(1267) : { (=◂_r64) q()}◂q()◂.a57◂_ctr
+					§ idx(1267) : { (=◂.a27) (=◂_r64)}◂q()◂.a57◂_ctr
+					§ cst(1267) : q()◂q()◂.a57◂_ctr
 					§ lp0_c : ({ ◂_r64 q()◂_lst}→{ ◂_r64 { }◂q()◂_opn◂_arr})
 					§ ip0 : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}q()} q()◂.a25◂_Clrq()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a28◂_lst}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}q()} q()◂.a25◂_Clr{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a57◂_lst})
 					§ ip2 : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}q()} q()◂.a25◂_Clrq()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a28◂_lst ◂.a10}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}q()} q()◂.a25◂_Clr{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a57◂_lst})
@@ -1934,60 +1941,60 @@
 					§ s8 : ({ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a55} ◂_r64◂_r64 q()◂◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂_opn◂_arr{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt ◂.a22◂_pt◂{ ◂.a22◂_pt ◂.a22◂_pt}◂.a3{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a57◂_lst}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a55} ◂_r64◂_r64 q()◂◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂_opn◂_arr})
 					∎∎
 				§§ op2
-					§ op_dmy(1267) : ({ q() q()}→q())
+					§ op_dmy(1272) : ({ q() q()}→q())
 					§ f : ({ ({ ◂_r64 ◂_r64}→{ ◂_r64 ◂_r64}) { }◂◂_r8◂_arr}→→({ ◂.a4 { q()◂.a25◂_Clr q()}{ ◂.a22◂_Clr ◂_r64} q()q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ { q()◂.a25◂_Clr q()} { ◂.a22◂_Clr ◂_r64}q() q()◂.a22◂_pt◂q()◂.a23◂.a13 ◂.a55}))
 					∎∎
 				§ op_shr : ({ ({ ◂_r64 ◂_r64}→{ ◂_r64 ◂_r64}) { }◂◂_r8◂_arr}→→({ q()◂.a25◂_Clr q(){ ◂.a22◂_Clr ◂_r64} q()q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a55}→{ q()◂.a25◂_Clr q(){ ◂.a22◂_Clr ◂_r64} q()q() ◂.a22◂_pt◂q()◂.a23◂.a13◂.a55}))
 				§ op1 : ({ (◂_r64→◂_r64) { }◂◂_r8◂_arr}→→({ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clr◂.a22◂_pt◂q()◂.a23◂.a13 ◂.a55}))
-				§ imul(1271) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂q()◂.a23◂.a13 ◂.a55})
-				§ grm_axm(1272) : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr◂_r64 ◂_r64q()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_lst ◂.a55}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr◂_r64 ◂.a55q()◂.a16◂.a13})
-				§ suw(1273) : ({ ◂_r64 ◂_r64}→{ ◂_r64 ◂_r64◂.a55})
-				§ exh(1274) : ({ { ◂.a22◂_Clr q()} ◂_r64◂_opn◂_r64 ◂_r64◂.a22◂_pt◂_lst}→{ { ◂.a22◂_Clr q()} ◂.a55})
-				§ alc_gl_i(1275) : ({ { { ◂_r64◂_Clr ◂_r64} ◂.a55} ◂_r64◂_pt}→{ { { ◂_r64◂_Clr ◂_r64} ◂.a55} ◂_r64◂_pt})
+				§ imul(1276) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂q()◂.a23◂.a13 ◂.a55})
+				§ grm_axm(1277) : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr◂_r64 ◂_r64q()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_lst ◂.a55}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr◂_r64 ◂.a55q()◂.a16◂.a13})
+				§ suw(1278) : ({ ◂_r64 ◂_r64}→{ ◂_r64 ◂_r64◂.a55})
+				§ exh(1279) : ({ { ◂.a22◂_Clr q()} ◂_r64◂_opn◂_r64 ◂_r64◂.a22◂_pt◂_lst}→{ { ◂.a22◂_Clr q()} ◂.a55})
+				§ alc_gl_i(1280) : ({ { { ◂_r64◂_Clr ◂_r64} ◂.a55} ◂_r64◂_pt}→{ { { ◂_r64◂_Clr ◂_r64} ◂.a55} ◂_r64◂_pt})
 				§§ push_gl
-					§ alc(1276) : ({ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂_lst◂_r64 ◂.a22◂_pt◂.a55}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂_lst◂_r64 ◂.a22◂_pt◂.a55})
+					§ alc(1281) : ({ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂_lst◂_r64 ◂.a22◂_pt◂.a55}→{ { ◂.a22◂_Clr ◂_r64} ◂.a22◂_pt◂_lst◂_r64 ◂.a22◂_pt◂.a55})
 					§ atm : ({ { ◂.a55 { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂_lst ◂_r64} ◂.a22◂_pt◂q()◂.a23}→{ { ◂.a55 { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂_lst ◂_r64} ◂.a22◂_pt◂q()◂.a23})
-					§ f(1278) : ({ { ◂.a55 { ◂.a22◂_Clr ◂_r64}} ◂.a22◂_pt◂q()◂.a23◂.a13◂_lst}→{ { ◂.a55 { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂_lst ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13◂_lst})
+					§ f(1283) : ({ { ◂.a55 { ◂.a22◂_Clr ◂_r64}} ◂.a22◂_pt◂q()◂.a23◂.a13◂_lst}→{ { ◂.a55 { ◂.a22◂_Clr ◂_r64}◂.a22◂_pt◂_lst ◂_r64} ◂.a22◂_pt◂q()◂.a23◂.a13◂_lst})
 					∎∎
 				§§ pop_gl
 					§ f_i : ({ { { ◂.a22◂_Clr q()} ◂.a55◂_r64} ◂.a22◂_pt}→{ { ◂.a22◂_Clr q()} ◂.a55◂_r64})
-					§ f(1280) : ({ { ◂.a22◂_Clr q()} ◂.a55◂.a22◂_pt◂_lst ◂_r64}→{ { ◂.a22◂_Clr q()} ◂.a55})
+					§ f(1285) : ({ { ◂.a22◂_Clr q()} ◂.a55◂.a22◂_pt◂_lst ◂_r64}→{ { ◂.a22◂_Clr q()} ◂.a55})
 					∎∎
 				§§ alc_gl
-					§ alc(1281) : ({ { { ◂.a22◂_Clr ◂_r64} ◂.a55} ◂.a22◂_pt}→{ { { ◂.a22◂_Clr ◂_r64} ◂.a55} ◂.a22◂_pt})
+					§ alc(1286) : ({ { { ◂.a22◂_Clr ◂_r64} ◂.a55} ◂.a22◂_pt}→{ { { ◂.a22◂_Clr ◂_r64} ◂.a55} ◂.a22◂_pt})
 					§ atm : ({ { { ◂.a22◂_Clr ◂_r64} ◂.a55} ◂.a22◂_pt◂q()◂.a23}→{ { { ◂.a22◂_Clr ◂_r64} ◂.a55} ◂.a22◂_pt◂q()◂.a23})
 					∎∎
-				§ stt_f_c(1283) : ({ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55}{ q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13{ }◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂{ q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}q()◂q()q()◂q()◂.a52}→{ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()}{ { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
-				§ gnr_rfv(1284) : ({ q()◂◂_r64◂{ }q()◂.a56◂_arr ◂_r64◂_r64 ◂_r64}→{ ◂.a4 q()◂◂_r64◂{ }q()◂.a56◂_arr◂_r64})
+				§ stt_f_c(1288) : ({ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55}{ q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13{ }◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂{ q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}q()◂q()q()◂q()◂.a52}→{ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()}{ { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
+				§ gnr_rfv(1289) : ({ q()◂◂_r64◂{ }q()◂.a56◂_arr ◂_r64◂_r64 ◂_r64}→{ ◂.a4 q()◂◂_r64◂{ }q()◂.a56◂_arr◂_r64})
 				§ chk_rec : ({ q()◂◂_r64◂{ }{ }◂.a56◂_arr ◂_r64}→{ q()◂◂_r64◂{ }{ }◂.a56◂_arr ◂_r64◂.a4})
-				§ stt_alc_hp(1286) : ({ { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt ◂.a17◂.a16◂.a13}→{ { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13◂_opn})
+				§ stt_alc_hp(1291) : ({ { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt ◂.a17◂.a16◂.a13}→{ { ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13◂_opn})
 				§ mk_id_ptn : ({ q()◂.a13◂_lst q()◂.a13}→q()◂.a13)
-				§ stt_jmp_axm(1288) : ({ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55}{ q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13{ q() { q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂_lstq()}{ }◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂{ q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}q()◂q()q()◂q()◂.a52}}→{ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()}{ { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
-				§ stt_lds(1289) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a23◂.a13})
-				§ stt_lds64(1290) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a23◂.a13})
-				§ stt_s8_len(1291) : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
-				§ stt_emt_s8_to(1292) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
-				§ stt_cd(1293) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a23◂.a13})
-				§ stt_arr_len(1294) : ({ q() { ◂.a22◂_Clr ◂_r64}◂.a55 ◂.a22◂_pt◂q()◂.a23◂.a13}→{ q() { ◂.a22◂_Clr ◂_r64}◂.a55 ◂.a22◂_pt◂q()◂.a23◂.a13})
-				§ stt_in_fn(1295) : ({ { ◂.a22◂_Clr q()} q()◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂◂.a22◂_pt◂.a49}→{ { ◂.a22◂_Clr q()} q()◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a23◂.a13})
-				§ stt_mlc_s8(1296) : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂_r64{ ◂.a22◂_Clr ◂_r64} ◂.a55◂_r64◂◂.a22◂_pt◂.a49}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂_r64{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
+				§ stt_jmp_axm(1293) : ({ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55}{ q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13{ q() { q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂_lstq()}{ }◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂{ q() ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}q()◂q()q()◂q()◂.a52}}→{ q() q()◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { q() q()q() q()q() { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()}q()}{ { ◂.a22◂_Clr ◂_r64} q()q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
+				§ stt_lds(1294) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a23◂.a13})
+				§ stt_lds64(1295) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr ◂_r64}q() ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} ◂.a22◂_pt◂q()◂.a23◂.a13})
+				§ stt_s8_len(1296) : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()q()} q()◂.a25◂_Clr{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
+				§ stt_emt_s8_to(1297) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13})
+				§ stt_cd(1298) : ({ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13}→{ q()◂.a25◂_Clr { ◂.a22◂_Clr q()}◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a23◂.a13})
+				§ stt_arr_len(1299) : ({ q() { ◂.a22◂_Clr ◂_r64}◂.a55 ◂.a22◂_pt◂q()◂.a23◂.a13}→{ q() { ◂.a22◂_Clr ◂_r64}◂.a55 ◂.a22◂_pt◂q()◂.a23◂.a13})
+				§ stt_in_fn(1300) : ({ { ◂.a22◂_Clr q()} q()◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂◂.a22◂_pt◂.a49}→{ { ◂.a22◂_Clr q()} q()◂_r64 ◂.a55{ { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr q()◂.a55} ◂.a22◂_pt◂q()◂.a23◂.a13})
+				§ stt_mlc_s8(1301) : ({ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂_r64{ ◂.a22◂_Clr ◂_r64} ◂.a55◂_r64◂◂.a22◂_pt◂.a49}→{ { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55} ◂_r64{ ◂.a22◂_Clr ◂_r64} ◂.a55◂.a22◂_pt◂q()◂.a23◂.a13})
 				§ mk_vyl : ({ q()◂.a13◂_lst q()◂.a13}→q()◂.a13)
-				§ stt_oom(1298) : ({ { ◂.a22◂_Clr q()} q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64◂.a17◂.a16◂.a13 { q() { q() q()◂.a17◂.a16◂.a13◂_lst}{ }◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}◂.a22◂_pt◂q()◂.a23◂.a13◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}q()◂q()q()◂q()◂.a52}◂.a55}→{ { ◂.a22◂_Clr q()} q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64{ q() { q() q()◂.a17◂.a16◂.a13◂_lst}q()◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}q()◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}q()◂q()q()◂q()◂.a52} ◂_r64◂.a22◂_pt◂q()◂.a23◂.a13 ◂.a55})
-				§ stt_og(1299) : ({ q() q()}◂_opn→q()◂_opn)
+				§ stt_oom(1303) : ({ { ◂.a22◂_Clr q()} q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64◂.a17◂.a16◂.a13 { q() { q() q()◂.a17◂.a16◂.a13◂_lst}{ }◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}◂.a22◂_pt◂q()◂.a23◂.a13◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}q()◂q()q()◂q()◂.a52}◂.a55}→{ { ◂.a22◂_Clr q()} q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 ◂_r64{ q() { q() q()◂.a17◂.a16◂.a13◂_lst}q()◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}q()◂{ ◂_r64 ◂.a22◂_pt◂q()◂.a23◂.a13}q()◂q()q()◂q()◂.a52} ◂_r64◂.a22◂_pt◂q()◂.a23◂.a13 ◂.a55})
+				§ stt_og(1304) : ({ q() q()}◂_opn→q()◂_opn)
 				§§ RV = ast.RV
 				§ rt_of_mp : ({ { { q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_Clr q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_pt◂_opn} q()} ◂_r64◂.a38◂.a13}→{ { { q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_Clr q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_pt◂_opn} q()} q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13})
 				§ rt_of_m : ({ { { q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_Clr q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_pt◂_opn} q()} ◂_r64◂.a38}→{ { { q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_Clr q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a9◂_pt◂_opn} q()} q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13})
 				§ rt_of_mp_T : (({ q() q()}→{ q() q()q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13})→→({ q() q()◂.a38◂.a13}→{ q() q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}))
 				§ rt_of_m_T : (({ q() q()}→{ q() q()q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13})→→({ q() q()◂.a38}→{ q() q()◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}))
-				§ K_a(1303) : q()◂q()◂q()◂.a58◂_ctr
-				§ K_l(1303) : q()◂q()◂q()◂.a58◂_ctr
+				§ K_a(1308) : q()◂q()◂q()◂.a58◂_ctr
+				§ K_l(1308) : q()◂q()◂q()◂.a58◂_ctr
 				§ stt_test_hp : ({ ◂.a34 ◂_r64◂_r64 ◂.a21◂_r64 ◂.a55}→{ ◂_r64 ◂.a55})
-				§ stt_test_im(1304) : ({ ◂.a4 q()◂.a25◂_Clr◂.a34 q()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_r64 ◂.a21◂_r64 ◂.a55}→{ q()◂.a25◂_Clr ◂_r64◂.a55})
-				§ stt_test_ct(1305) : ({ ◂.a34 q()◂.a25◂_Clrq()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 q()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_r64 ◂.a55}→{ q()◂.a25◂_Clr ◂_r64◂.a55})
-				§ stt_mtc_test(1306) : ({ { ◂.a22◂_Clr q()} ◂.a34q()◂.a25◂_Clr q()◂_r64 ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clrq() ◂_r64◂.a55})
-				§ mk_rl_i(1307) : ({ q()◂_lst q()◂q()◂.a23◂.a13}→q()◂_lst)
+				§ stt_test_im(1309) : ({ ◂.a4 q()◂.a25◂_Clr◂.a34 q()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_r64 ◂.a21◂_r64 ◂.a55}→{ q()◂.a25◂_Clr ◂_r64◂.a55})
+				§ stt_test_ct(1310) : ({ ◂.a34 q()◂.a25◂_Clrq()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 q()◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂_r64 ◂.a55}→{ q()◂.a25◂_Clr ◂_r64◂.a55})
+				§ stt_mtc_test(1311) : ({ { ◂.a22◂_Clr q()} ◂.a34q()◂.a25◂_Clr q()◂_r64 ◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13◂.a22◂_pt◂q()◂.a25◂_pt◂.a23◂.a13 ◂.a55}→{ { ◂.a22◂_Clr q()} q()◂.a25◂_Clrq() ◂_r64◂.a55})
+				§ mk_rl_i(1312) : ({ q()◂_lst q()◂q()◂.a23◂.a13}→q()◂_lst)
 				§ mk_vl : ({ { ◂_r64 q()◂.a13◂_lst} q()◂.a13}→{ q()◂.a13◂_lst q()◂.a13})
-				§ mk_vl(1309) : ({ ◂_r64 q()◂.a13}→{ q()◂.a13◂_lst q()◂.a13})
+				§ mk_vl(1314) : ({ ◂_r64 q()◂.a13}→{ q()◂.a13◂_lst q()◂.a13})
 				§ stt_obs_i : ({ { ◂.a22◂_pt ◂_r64◂.a38◂.a13◂_r64◂.a13 ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_pt◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_pt◂_lst ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a35} { { ◂.a22◂_Clr ◂_r64} ◂_r64q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr}◂.a55 ◂_r64◂.a12◂.a17◂.a16◂.a13◂_lst ◂_r64◂_r64 ◂_r64◂_opn{ ◂_r64 { ◂_r64 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_lst◂.a17◂.a16◂.a13◂_lst}{ }◂{ ◂_r64 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂{ ◂_r64 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}q()◂q()q()◂q()◂.a52} { }◂◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_arr{ ◂_r64◂.a38◂.a13◂_lst ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_lst◂_r64◂.a38◂.a13◂_lst}◂{ ◂_r64 ◂_r64}◂.a58◂_lst { { ◂_r64 ◂_arr_x◂◂_r64◂{ }{ }◂.a56◂_arr} { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr}{ { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr q()} q()◂.a55 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55}◂.a55}{ ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14}→{ { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a36◂_Clr ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13◂{ ◂_r64 ◂_r64◂.a13◂_r64◂.a38◂.a13}◂.a37◂_Clr} ◂.a17◂.a19◂_pt◂.a25◂_Clr{ ◂.a17◂.a19◂_Clr ◂_r64}◂.a14 { { ◂_r64 ◂_arr_x◂◂_r64◂{ }{ }◂.a56◂_arr} { q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr q()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arrq()◂◂_arr_x◂{ ◂.a17◂.a16◂.a13◂_lst ◂_r64}◂_arr◂_opn◂_arr}{ { ◂.a17◂.a19◂_pt◂.a25◂_pt◂{ { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a26◂.a13 { ◂_r64 ◂_r64◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂.a17◂.a16◂.a13 ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13}◂_lst}◂_Clr q()} q()◂.a55 { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_Clr { { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_Clr { { }◂◂_r8◂_arr ◂_r64◂_opn}◂_pt◂.a8◂_pt◂_opn}◂.a55}◂.a55}{ { ◂.a22◂_Clr ◂_r64} ◂_r64q()◂{ q() { ◂_r64 ◂.a17◂.a19◂_pt◂_lst◂.a17◂.a16◂.a13◂_lst}}◂_opn◂_arr ◂.a55} ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13})
 				§ stt_rb_K : ({ ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13 { }◂◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_arr{ ◂_r64◂.a38◂.a13◂_lst ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_lst◂_r64◂.a38◂.a13◂_lst}◂{ ◂_r64 ◂_r64}◂.a58◂_lst ◂.a17◂.a19◂_pt◂.a25◂_Clr}→{ ◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13 { }◂◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_arr◂.a17◂.a19◂_pt◂.a25◂_Clr})
 				§ stt_rb_K_l : ({ { { }◂◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_lst} ◂_r64◂.a38◂.a13◂_lst}→{ { }◂◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_arr ◂.a17◂.a19◂_pt◂.a25◂_Clr◂.a22◂_pt◂◂.a17◂.a19◂_pt◂.a25◂_pt◂.a23◂.a13◂_lst})
@@ -2007,16 +2014,16 @@
 				∎∎
 			∎∎
 		§ rcd_sig_lp : ({ ◂_r64 ◂_r64◂.a55}→◂.a55)
-		§ emt_rtm(1327) : ({ ◂.a20 ◂.a45◂_lst◂.a45◂_lst}→◂.a55)
+		§ emt_rtm(1332) : ({ ◂.a20 ◂.a45◂_lst◂.a45◂_lst}→◂.a55)
 		∎∎
 	∎∎
 § cat_to : ({ { }◂◂_r8◂_arr { }◂◂_r8◂_arr◂_lst}→{ }◂◂_r8◂_arr)
 § L0 : ({ q()◂{ }◂◂_r8◂_arr◂_arr ◂_r64◂_r64}→{ q()◂{ }◂◂_r8◂_arr◂_arr ◂_r64})
-§ E(1330) : ({ { }◂◂_r8◂_arr ◂.a20}→{ })
+§ E(1335) : ({ { }◂◂_r8◂_arr ◂.a20}→{ })
 §§ args
-	§ f(1331) : (q()→q())
-	§ f(1332) : (q()◂{ }◂◂_r8◂_arr◂_arr→{ { }◂◂_r8◂_arr ◂.a20})
+	§ f(1336) : (q()→q())
+	§ f(1337) : (q()◂{ }◂◂_r8◂_arr◂_arr→{ { }◂◂_r8◂_arr ◂.a20})
 	∎∎
-§ main(1333) : (q()◂{ }◂◂_r8◂_arr◂_arr→{ })
-§ c0(1334) : { q() q()}◂{ q() q()}◂_ctr
-§ Main0(1334) : (q()◂{ }◂◂_r8◂_arr◂_arr→{ })
+§ main(1338) : (q()◂{ }◂◂_r8◂_arr◂_arr→{ })
+§ c0(1339) : { q() q()}◂{ q() q()}◂_ctr
+§ Main0(1339) : (q()◂{ }◂◂_r8◂_arr◂_arr→{ })
