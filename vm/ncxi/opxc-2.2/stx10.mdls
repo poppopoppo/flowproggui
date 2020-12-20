@@ -3759,219 +3759,7 @@ unsigned long
 			§ of_arr0 = 61r 
 			-/
 	§ N = 104r 
-
-	§ slv_name i  
-		=+ i' 
-		∐ 
-			∎ %[ "_mk_arr" ] 
-		∐		
-			∎ %[ "_exc_q" ]
-		∐ 
-			∎ %[ "_set_q" ]
-		∐ 		
-			∎ %[  "_get_q"  ]
-		∐ 			
-			∎ %[  "_lod_q"  ]
-		∐  		
-			∎ %[  "_args"  ]
-		∐ 		
-			∎ %[  "_mlc_s8"  ]
-		∐	
-			∎ %[  "_s8_len"  ]
-		∐
-			∎ %[  "_emt"  ]
-		∐ 		
-			∎ %[  "_inc"  ]
-		∐ 		
-			∎ %[  "_dec"  ]
-		∐ 		
-			∎ %[  "_add"  ]
-		∐ 		
-			∎ %[  "_sub"  ]
-		∐ 		
-			∎ %[  "_imul"  ]
-		∐  		
-			∎ %[  "_sts"  ]
-		∐ 
-			∎ %[  "_lds"  ]
-		∐ 
-			∎ %[  "_setge"  ]
-		∐ 
-			∎ %[  "_rep_movsb"  ]
-		∐ 
-			∎ %[  "_nil"  ]
-		∐ 
-			∎ %[  "_cns"  ]
-		∐ 
-			∎ %[  "_some"  ]
-		∐ 
-			∎ %[  "_none"  ]
-		∐ 
-			∎ %[  "_in_fn"  ]
-		∐ 
-			∎ %[  "_emt_s8_to"  ]
-		∐ 
-			∎ %[  "_cd"  ]
-		∐ 
-			∎ %[  "_byt"  ]
-		∐ 
-			∎ %[  "_0"  ]
-		∐ 
-			∎ %[  "_1"  ]
-		∐ 
-			∎ %[  "_2"  ]
-		∐ 
-			∎ %[  "_3"  ]
-		∐ 
-			∎ %[  "_4"  ]
-		∐ 
-			∎ %[  "_arr_len"  ]
-		∐ 
-			∎ %[  "_arr_of_lst"  ]
-		∐ 
-			∎ %[  "_scf_d"  ]
-		∐ 
-			∎ %[  "_scf_x"  ]
-		∐ 
-			∎ %[  "_dlt0"  ]
-		∐ 
-			∎ %[  "_info"  ]
-		∐ 
-			∎ %[  "_rpc"  ]
-		∐ 
-			∎ %[  "_getchar"  ]
-		∐ 
-			∎ %[  "_shl"  ]
-		∐ 
-			∎ %[  "_shr"  ]
-		∐ 
-			∎ %[  "_app"  ]
-		∐ 
-			∎ %[  "_and"  ]
-		∐ 
-			∎ %[  "_or"  ]
-		∐ 
-			∎ %[  "_prs"  ]
-		∐ 
-			∎ %[  "_5"  ]
-		∐ 
-			∎ %[  "_id"  ]
-		∐ 
-			∎ %[  "_6"  ]
-		∐ 
-			∎ %[  "_xor"  ]
-		∐ 
-			∎ %[  "_lds64"  ]
-		∐ 
-			∎ %[  "_s8_hsh"  ]
-		∐ 
-			∎ %[  "_dlt"  ]
-		∐ 
-			∎ %[  "_cst"  ]
-		∐ 
-			∎ %[  "_psc"  ]
-		∐ 
-			∎ %[  "_synt"  ]
-		∐ 
-			∎ %[  "_line"  ]
-		∐ 
-			∎ %[  ".grm"  ]
-		∐ 
-			∎ %[  ".grm_ftr"  ]
-		∐ 
-			∎ %[  "_ftr"  ]
-		∐ 
-			∎ %[  "_inl"  ]
-		∐	
-			∎ %[  "_tj"  ]
-		∐ 
-			∎ %[ "_ala" ] 
-		∐ 
-			∎ %[ "_cli" ] 
-		∐ 
-			∎ %[ "_clp" ] 
-		∐ 
-			∎ %[ "_cla" ]
-		∐ 
-			∎ %[ "_cln" ] 
-		∐ 
-			∎ %[ "_cls" ]
-		∐ 
-			∎ %[ "_cmp_s8" ] 
-		∐ 
-			∎ %[ "_cld" ] 
-		∐ 
-			∎ %[ "_pf" ] 
-		∐ 
-			∎ %[ "_pf_x" ]
-		∐ 
-			∎ %[ "_clc_i" ]
-		∐ 
-			∎ %[ "_clc_o" ]
-		∐ 
-			∎ %[ "_clc_d" ]
-		∐ 
-			∎ %[ "_seq" ] 
-		∐ 
-			∎ %[ "_alc_i" ] 
-		∐ 
-			∎ %[ "_alc_o" ]
-    ∐ 
-      ∎ %[ "_rsz" ]
-		∐ 
-			∎ %[ "_mk_arr_x" ]
-		∐ 
-			∎ %[ "_push" ] 
-		∐ 
-			∎ %[ "_pop" ]  
-		∐ 
-			∎ %[ "_id_par" ] 
-		∐ 
-			∎ %[ "_ctr" ]
-		∐ 
-			∎ %[ "_oom" ]
-		∐ 
-			∎ %[ "_moo" ]
-		∐ 
-			∎ %[ "_mcp" ]
-		∐ 
-			∎ %[ "_mcn" ]
-		∐ 
-			∎ %[ "_mop" ] 
-		∐ 
-			∎ %[ "_mt_e" ] 
-		∐ 
-			∎ %[ "_mt_ne" ]
-		∐ 
-			∎ %[ "_mt_le" ]
-		∐ 	
-			∎ %[ "_exn" ]
-		∐ 
-			∎ %[ "_tj" ]
-		∐ 
-			∎ %[ "_tjn" ]
-		∐ 
-			∎ %[ "_tjc" ]
-		∐ 
-			∎ %[ "_sqc" ] 
-		∐ 
-			∎ %[ "_inv" ]
-		∐ 
-			∎ %[ "_bsr" ]
-		∐ 
-			∎ %[ "_st" ]
-		∐ 
-			∎ %[ "_ccs" ]
-		∐ 
-			∎ %[ "_st_s8_len" ]
-		∐ 
-			∎ %[ "_ila1" ] 
-		∐ 
-			∎ %[ "_mk_stk" ] 
-		∐ 
-			∎ %[ "_cl_N" ] 
-		∐.  
-			∎| 
+ 
 	§ slv { tv i }  
 		=+ i' 
 		-- mk_arr 
@@ -7780,6 +7568,7 @@ unsigned long
 				add_e { tv evv ns_e %[ "_none" ] RP.atm◂k yx } ⊢ { tv evv   ns_e _ } 
 					
 				slv_op_axm { { tv evv ev_n ns_e } %[ 22r ] } ⊢|
+			-\
 			∐ x'=<36r .
 				_inc x ⊢ x 
 				slv_op_axm { { tv evv ev_n ns_e } x } ⊢| 
@@ -7797,19 +7586,11 @@ unsigned long
 				_inc x ⊢ x 
 				add_e { tv evv ns_e %[ ".grm_ftr" ] RP.atm◂ast.k_op_axm◂{ x0 ⟦⟧ } y } ⊢ { tv evv   ns_e _ } 
 				slv_op_axm { { tv evv ev_n ns_e } x } ⊢| 
-			∐ x'=<76r .
+			-/
+			∐. .
 				_inc x ⊢ x 
 				slv_op_axm { { tv evv ev_n ns_e } x } ⊢| 
-			∐. . 
-				$ x ⊢ x,x0 
-				EX.slv { tv x0 } ⊢ { tv y } 
-				$ x ⊢ x,x0 
-				EX.slv_name x0 ⊢ w  
-				$ x ⊢ x,x0 
-				_inc x ⊢ x 
-				add_e { tv evv ns_e w RP.atm◂ast.k_op_axm◂{ x0 ⟦⟧ } y } ⊢ { tv evv   ns_e _ } 
-				slv_op_axm { { tv evv ev_n ns_e } x } ⊢| 
-		§ slv_file { ael gel }
+			§ slv_file { ael gel }
 				$ %[ TX.N0 ] ⊢ tx_n 
 				NS_M.ini {} ⊢ ns_m 
 				NS_T.ini {} ⊢ ns_t 
