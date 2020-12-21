@@ -393,7 +393,18 @@
   ∎ {}
 § p0 =^
   "0x" 0x' "r" //
+  
 § C0 = (_ct◂◂(_pf◂◂p0))◂◂{ 9r }
 § main8 _ 
   _emt %[ C0 ] ⊢ _ 
+  ∎ {} 
+
+§ add_im◂◂X # r
+  !^ r ⊢ r 
+    "\tadd rax,0x" (_ct.scf_x◂◂X) "\n" // 
+   ∎ r
+§ main9 _ 
+  $ %[ 3r ] ⊢ x
+  _add_im◂◂4r x ⊢ x 
+  _emt x ⊢ _ 
   ∎ {} 
