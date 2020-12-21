@@ -102,4 +102,24 @@
 § _ila1 =# 101r 
 § _mk_stk =# 102r 
 § _cl_N =# 103r 
+§ _ila =# 104r
+§ _ila_n =# 105r
+§ _ila_i =# 106r
 § _ct =# 107r
+§§ _ila 
+  §§ t 
+    § O =# 105r 
+    § S =# 106r 
+    ∎∎
+  § f1 = 101r 
+  § f = 104r 
+  ∎∎
+§§ _ct 
+  § scf_d =# 108r 
+  § scf_x =# 109r 
+  ∎∎
+-- non-atomic 
+§ _add_im◂◂X # r
+  !^ r ⊢ r 
+    "\tadd rax,0x" (_ct.scf_x◂◂X) "\n" // 
+   ∎ r

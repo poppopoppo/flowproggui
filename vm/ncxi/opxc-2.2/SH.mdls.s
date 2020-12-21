@@ -1,7 +1,7 @@
 %include "HD.s"  
 ;	v.0
 %define RCD_N 64
-%define GLV_N 129
+%define GLV_N 130
 %define SS_NULL 0xffff_ffff_ffff_0000
 %define EMT_BUF_MAX (KB<<1)				
  
@@ -10,22 +10,18 @@ section .bss
 
 section .data
 %include "DATA.s"
-LB_5_H: dq 0x1
-LB_5: db 34,0,0,0,0,0,0,0,0,0
-LB_6_H: dq 0x4
-LB_6: db 48,120,57,114,0,0,0,0,0,0,0,0,0
-LB_7_H: dq 0x3
-LB_7: db 32,58,32,0,0,0,0,0,0,0,0,0
-LB_8_H: dq 0x13
-LB_8: db 123,32,125,226,151,130,226,151,130,95,114,56,226,151,130,95,97,114,114,0,0,0,0,0,0,0,0,0
-LB_9_H: dq 0x1
-LB_9: db 10,0,0,0,0,0,0,0,0,0
+LB_5_H: dq 0x3
+LB_5: db 32,58,32,0,0,0,0,0,0,0,0,0
+LB_6_H: dq 0x7
+LB_6: db 226,151,130,95,114,54,52,0,0,0,0,0,0,0,0,0
+LB_7_H: dq 0x1
+LB_7: db 10,0,0,0,0,0,0,0,0,0
 section .text
 global _start
 _start:
 %include "START.s"
 	jmp RTM_0
-LB_0: ;; #0x31◂◂(_none◂{}) 128'(= {| ? |} ) ⊢ { } : ({ }◂{ }◂◂_r8◂_arr◂_arr→{ })
+LB_0: ;; #0x34◂◂(_none◂{}) 128'(= {| ? |} ) ⊢ { } : ({ }◂{ }◂◂_r8◂_arr◂_arr→{ })
 JMP_0:
 	MOV_RBX r8,GLX(0x80)
 	GET_LEN rsi,r8
@@ -47,27 +43,31 @@ LB_2:
 	pop rdi
 	pop SRC_REG 
 	FREE_OPQ 4
+	mov GLX(0x81),0x3
+	MOV_RBX rax,GLX(0x81)
+	add rax,0x4
+	MOV_RBX GLX(0x81),rax
 	push QWORD [SIG_ETR]
 	mov QWORD [SIG_ETR],emt_bof_hdl
 	EMT_CST fmt_emt,5
-	EMT_CST LB_5,1
-	EMT_CST LB_6,4
-	EMT_CST LB_5,1
+	MOV_RBX r8,GLX(0x81)
+	mov rdi,r8
+	call emt_r64
 	EMT_CST fmt_nl,1
-	EMT_CST LB_7,3
-	EMT_CST LB_8,19
-	EMT_CST LB_9,1
+	EMT_CST LB_5,3
+	EMT_CST LB_6,7
+	EMT_CST LB_7,1
 	call flsh
 	pop QWORD [SIG_ETR]
  ret 
 RTM_0:
-	push EXH_10
+	push EXH_8
 	MOV_RBX GLX(0x80),GLX(0x7f)
 	call LB_0
 	add rsp,8
 	mov QWORD [EXIT],1
 	C_CALL exit
-EXH_10:
+EXH_8:
 	add rsp,0x8
 	pop rax
 	jmp rax
