@@ -87,8 +87,13 @@ void* set_usr_hdl(void* usr,void *extra){
 int emt_s8_to(char* fn,void* buf,int n){
 	int fd = creat(fn,S_IREAD | S_IWRITE);
 	int r =	write(fd,buf,n);
-	close(fd);
-	return r;
+  if (r == -1)
+  {
+    printf("emt_s8_to:0");
+    exit(EXIT_FAILURE);
+  };
+  close(fd);
+  return r;
 }
 typedef u_int64_t uint64_t;
 #if defined(_MSC_VER)

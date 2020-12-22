@@ -721,3 +721,28 @@ _rpc_T : _t→[ a' ]→(a'→{ a' a' })
 f : { _r64 _r64 }→[ { x' y' } ]→{ >[ x' ] >[ _ct.inc◂◂x' ] }
 
 _opn : _t→[ y' ]→_t 
+
+f : S→[ v ]→D ◂◂ x : A 
+
+S ~~ A -- type unification
+v ~~ x -- value unification 
+
+§§ M 
+  ¶ t = .. 
+  § f = .. 
+  ∎∎ 
+  M : _mdl◂'{ t~<[] f~_s8 } 
+
+  _r64→[ <[ x' ] ]→{ }
+
+  _id_T◂◂<[ \a' . { a' _r64 } ] { x y } ⊢ { x y } 
+
+
+  rank-0 | 934r "JIOJIO" _add (_inc◂◂2343r) <[ { a' c' } ] >[ "rr3" ]
+  rank-1 | _r64 _s8 { a' b' } >[ 98734789r : _r64 ] <[]
+  rank-2 | * 
+
+
+  rank-N : rank-N+1 
+
+  ◂◂ : { }
