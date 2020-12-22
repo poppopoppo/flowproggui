@@ -1,3 +1,29 @@
+§§ _TX 
+  § r64 = 0r 
+  § s8 = 1r 
+	§ arr = 2r  
+	§ Clr = 3r 
+	§ pt = 4r 
+	§ prd = 5r 
+	§ grm = 6r 
+	§ pf = 7r 
+	§ Clr_lc = 8r 
+  § arr_lc = 9r 
+	§ r8 = 10r 
+	§ arr_x = 11r 
+	§ ctr = 12r 
+	§ mtc = 13r 
+	§ mop = 14r 
+	§ tj = 15r 
+	§ st = 16r 
+	§ ila = 17r
+	§ dmy = 18r
+	§ hp = 19r 
+  ∎∎ 
+
+
+
+--¶ _r64 =# 0r
 § _mk_arr =# 0r 
 § _exc_q =# 1r 
 § _set_q =# 2r 
@@ -5,17 +31,17 @@
 § _lod_q =# 4r 
 § _args =# 5r 
 § _mlc_s8 =# 6r 
-§ _s8_len =# 7r 
+--§ _s8_len =# 7r 
 § _emt =# 8r 
 --§ _inc =# 9r 
 --§ _dec =# 10r 
 --§ _add =# 11r 
 --§ _sub =# 12r 
 --§ _imul =# 13r 
-§ _sts =# 14r 
+--§ _sts =# 14r 
 --§ _lds =# 15r 
 --§ _setge =# 16r 
-§ _rep_movsb =# 17r 
+--§ _rep_movsb =# 17r 
 --§ _nil =# 18r 
 --§ _cns =# 19r 
 --§ _some =# 20r 
@@ -75,7 +101,7 @@
 § _seq =# 74r 
 § _alc_i =# 75r 
 § _alc_o =# 76r 
-§ _rsz =# 77r
+--§ _rsz =# 77r
 § _mk_arr_x =# 78r
 § _push =# 79r 
 § _pop =# 80r  
@@ -135,8 +161,10 @@
   !^ r0,r1 ⊢ {}
     ` mov rdx,QWORD [rdi]
     ` lea rsi,[rdi+8]
-    ` lea rdi,[rax+8]
+    ` mov rdi,rax
     ` C_CALL_SF emt_s8_to 
+    ` cmp rax,-1 
+    ` jz err 
     //
   ∎ s
 § _add_im◂◂X # r
@@ -214,6 +242,7 @@
     ` bsr rax,rax
     //
 	∎ { x r } 
+
 § _cmp_s8 { s0 s1 }
   _hp.rpc s0 ⊢ { s0 r0 }
   _hp.rpc s1 ⊢ { s1 r1 }
@@ -248,7 +277,7 @@
   ∎ { s i c }		
 § _sts_C◂◂C # { s i }
   _hp.rpc s ⊢ { s r }
-  !^ r,i ⊢ _,i,c 
+  !^ r,i ⊢ _,i 
     ` mov rsi,0x0000_ffff_ffff_ffff 
     ` and rsi,QWORD [rax]
     ` cmp rdi,rsi 
@@ -256,3 +285,42 @@
 		"\tmov BYTE [rax+8+rdi],0x" (_ct.scf_x◂◂C) "\n"
     //
   ∎ { s i }
+§ _sts # { s i c }
+  _hp.rpc s ⊢ { s r }
+  !^ r,i,c ⊢ _,i,c 
+    ` mov rdx,0x0000_ffff_ffff_ffff 
+    ` and rdx,QWORD [rax]
+    ` cmp rdi,rdx 
+	  ` jge err_bc 
+		` mov BYTE [rax+8+rdi],sil
+    //
+  ∎ { s i c }
+§ _rsz { s l }
+  _hp.rpc s ⊢ { s r }
+  $ l ⊢ l,l0 
+  !^ r,l0 ⊢ r  
+    ` push rdi 
+    ` mov rsi,~7 
+    ` and rdi,rsi
+    ` add rdi,16
+    ` mov rsi,rdi
+    ` mov rdi,rax
+    ` C_CALL_SF realloc 
+    `	cmp rax,QWORD [NULL] 
+		`	jz err_NULL 
+		` pop rdi  
+    ` mov QWORD [rax],rdi
+    ` mov rsi,rdi 
+    ` and rdi,7
+    ` mov rdi,QWORD [s8_m+8*rdi]
+    ` shr rsi,3 
+    ` and QWORD [rax+8+8*rsi],rdi
+    //
+  ∎ { s l }
+§ _s8_len # s 
+  _hp.rpc s ⊢ { s r }
+  !^ r ⊢ r,l 
+    ` mov rdi,0x0000_ffff_ffff_ffff 
+    ` and rdi,QWORD [rax]
+    //
+  ∎ { s l }
