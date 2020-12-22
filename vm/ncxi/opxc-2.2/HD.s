@@ -69,7 +69,7 @@ bits 64
 %macro BC 2
 	mov %2,BC_PT ; BC_PT is static address
 	;mov rsi,rsp ; rsp is dynamic address
-	mov MCR_REG,0xff00ff00ff
+	mov MCR_REG,0xff00_ff00_ff
   cmov%1 %2,MCR_REG
 	mov %2,QWORD [%2]
 %endmacro 
