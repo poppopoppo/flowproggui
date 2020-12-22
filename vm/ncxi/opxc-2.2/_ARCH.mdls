@@ -7,21 +7,21 @@
 § _mlc_s8 =# 6r 
 § _s8_len =# 7r 
 § _emt =# 8r 
-§ _inc =# 9r 
-§ _dec =# 10r 
-§ _add =# 11r 
-§ _sub =# 12r 
-§ _imul =# 13r 
+--§ _inc =# 9r 
+--§ _dec =# 10r 
+--§ _add =# 11r 
+--§ _sub =# 12r 
+--§ _imul =# 13r 
 § _sts =# 14r 
-§ _lds =# 15r 
-§ _setge =# 16r 
+--§ _lds =# 15r 
+--§ _setge =# 16r 
 § _rep_movsb =# 17r 
 --§ _nil =# 18r 
 --§ _cns =# 19r 
 --§ _some =# 20r 
 --§ _none =# 21r 
 § _in_fn =# 22r 
-§ _emt_s8_to =# 23r 
+--§ _emt_s8_to =# 23r 
 § _cd =# 24r 
 § _byt =# 25r 
 --§ _0 =# 26r 
@@ -30,24 +30,24 @@
 --§ _3 =# 29r 
 --§ _4 =# 30r 
 § _arr_len =# 31r 
-§ _arr_of_lst =# 32r 
+--§ _arr_of_lst =# 32r 
 § _scf_d =# 33r 
 § _scf_x =# 34r 
-§ _dlt0 =# 35r 
-§ _info =# 36r 
+--§ _dlt0 =# 35r 
+--§ _info =# 36r 
 § _rpc =# 37r 
-§ _getchar =# 38r 
-§ _shl =# 39r 
-§ _shr =# 40r 
+--§ _getchar =# 38r 
+--§ _shl =# 39r 
+--§ _shr =# 40r 
 § _app =# 41r 
-§ _and =# 42r 
-§ _or =# 34r 
+--§ _and =# 42r 
+--§ _or =# 34r 
 § _prs =# 44r 
 --§ _5 =# 45r 
 § _id =# 46r 
 --§ _6 =# 47r 
-§ _xor =# 48r 
-§ _lds64 =# 49r 
+--§ _xor =# 48r 
+--§ _lds64 =# 49r 
 § _s8_hsh =# 50r 
 § _dlt =# 51r 
 § _cst =# 52r 
@@ -65,7 +65,7 @@
 § _cla =# 64r 
 § _cln =# 65r 
 § _cls =# 66r 
-§ _cmp_s8 =# 67r 
+--§ _cmp_s8 =# 67r 
 § _cld =# 68r 
 § _pf =# 69r 
 § _pf_x =# 70r 
@@ -95,7 +95,7 @@
 § _tjc =# 94r
 § _sqc =# 95r
 § _inv =# 96r
-§ _bsr =# 97r
+--§ _bsr =# 97r
 § _st =# 98r
 § _ccs =# 99r
 § _st_s8_len =# 100r
@@ -118,8 +118,141 @@
   § scf_d =# 108r 
   § scf_x =# 109r 
   ∎∎
+§§ _hp 
+  § of =# 110r
+  § to =# 111r 
+  § rpc # a 
+    of a ⊢ { r h } 
+    $ r ⊢ r,r0 
+    to { r h } ⊢ a 
+    ∎ { a r0 }
+  ∎∎ 
 -- non-atomic 
+§ _emt_s8_to_im◂◂F # s 
+  _st◂◂F {} ⊢ f 
+  _hp.rpc f ⊢ { f r0 }
+  _hp.rpc s ⊢ { s r1 } 
+  !^ r0,r1 ⊢ {}
+    ` mov rdx,QWORD [rdi]
+    ` lea rsi,[rdi+8]
+    ` lea rdi,[rax+8]
+    ` C_CALL_SF emt_s8_to 
+    //
+  ∎ s
 § _add_im◂◂X # r
   !^ r ⊢ r 
     "\tadd rax,0x" (_ct.scf_x◂◂X) "\n" // 
    ∎ r
+§ _sub_im◂◂X # r
+  !^ r ⊢ r 
+    "\tsub rax,0x" (_ct.scf_x◂◂X) "\n" // 
+   ∎ r  
+§ _inc # r 
+  !^ r ⊢ r 
+    ` add rax,1 
+    //
+  ∎ r 
+§ _dec # r 
+  !^ r ⊢ r 
+    ` sub rax,1 
+    //
+  ∎ r  
+§ _shr_im◂◂X # r 
+  !^ r ⊢ r 
+    "\tshr rax,0x" (_ct.scf_x◂◂X) "\n" // 
+   ∎ r
+§ _shl_im◂◂X # r 
+  !^ r ⊢ r 
+    "\tshl rax,0x" (_ct.scf_x◂◂X) "\n" // 
+   ∎ r
+§ op2◂◂OP # { r0 r1 } 
+  !^ r0,r1 ⊢ r0,r1 
+    "\t" OP " rax,rdi\n" // 
+  ∎ { r0 r1 }
+§ _imul = op2◂◂"imul" 
+§ _add = op2◂◂"add" 
+§ _sub = op2◂◂"sub" 
+§ _and = op2◂◂"and" 
+§ _or = op2◂◂"or" 
+§ _xor = op2◂◂"xor" 
+§ _setge { x y } 
+  !^ x,y ⊢ x,y,z 
+    ` cmp rax,rdi 
+    ` mov rsi,0
+    ` mov rdx,1
+    ` cmovge rsi,rdx 
+    //
+  ∎ { x y z }
+§ _getchar {} 
+  !^ _ ⊢ c 
+    `	mov rdi,fmt_getchar 
+		`	call emt_stg 
+		`	xor rax,rax 
+		`	C_CALL_SF getchar 
+		//
+  ∎ c 
+§ _shr # { r c } 
+  !^ r,c ⊢ r,c
+    ` mov rcx,rdi 
+    ` shr rax,cl 
+    //
+  ∎ { r c }
+§ _shl # { r c } 
+  !^ r,c ⊢ r,c
+    ` mov rcx,rdi 
+    ` shl rax,cl 
+    //
+  ∎ { r c }
+§ _info {} 
+  !^ _ ⊢ {} 
+    ` call info 
+    //
+  ∎ {}
+§ _bsr # x 
+	$ x ⊢ x,x0 
+	!^ x0 ⊢ r 
+    ` bsr rax,rax
+    //
+	∎ { x r } 
+§ _cmp_s8 { s0 s1 }
+  _hp.rpc s0 ⊢ { s0 r0 }
+  _hp.rpc s1 ⊢ { s1 r1 }
+  !^ r0,r1 ⊢ z
+    ` lea rsi,[rdi+8]
+    ` mov rdx,QWORD [rdi]
+    ` lea rdi,[rax+8]
+    ` mov rax,QWORD [rax]
+    ` call cmp_stg 
+    //
+  ∎ { s0 s1 z }
+§ _lds # { s i } 
+  _hp.rpc s ⊢ { s r }
+  !^ r,i ⊢ _,i,c 
+    ` mov rsi,0x0000_ffff_ffff_ffff 
+    ` and rsi,QWORD [rax]
+    ` cmp rdi,rsi 
+	  ` jge err_bc 
+		` movzx rsi,BYTE [rax+8+rdi]
+    //
+  ∎ { s i c }
+§ _lds64 # { s i }
+  _hp.rpc s ⊢ { s r }
+  !^ r,i ⊢ _,i,c 
+    ` mov rsi,0x0000_ffff_ffff_ffff 
+    ` and rsi,QWORD [rax]
+	  ` sub rsi,7
+    `	cmp rdi,rsi 
+		`	jge err_bc 
+	  `	mov rsi,QWORD [rax+8+rdi]
+		//
+  ∎ { s i c }		
+§ _sts_C◂◂C # { s i }
+  _hp.rpc s ⊢ { s r }
+  !^ r,i ⊢ _,i,c 
+    ` mov rsi,0x0000_ffff_ffff_ffff 
+    ` and rsi,QWORD [rax]
+    ` cmp rdi,rsi 
+	  ` jge err_bc 
+		"\tmov BYTE [rax+8+rdi],0x" (_ct.scf_x◂◂C) "\n"
+    //
+  ∎ { s i }
