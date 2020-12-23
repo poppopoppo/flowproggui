@@ -1,3 +1,4 @@
+-- rank-1
 §§ _TX 
   § r64 = 0r 
   § s8 = 1r 
@@ -21,9 +22,27 @@
 	§ hp = 19r 
   ∎∎ 
 
+¶ _r64 =# 0r
+¶ _r8 =# 10r 
+¶ _arr0 =# 2r 
+--¶ _arr_t◂t'◂k' = _arr0◂t'◂k'
+¶ _arr = _arr0◂{} 
+¶ _s8 = _arr◂_r8 
+¶ _Clr =# 3r 
+¶ _pt =# 4r 
+¶ _st =# 16r 
+¶ _dmy =# 18r
 
+-- id 
+§§ _id 
+  §: r64 = _r64
+  §: s8 = _s8  
+  §: arr0 t',k' = _arr0◂t'◂k' 
+  §: arr k' = _arr◂k'
+  §: st_s8 = _st◂_s8
+  ∎∎
 
---¶ _r64 =# 0r
+-- rank-0
 § _mk_arr =# 0r 
 § _exc_q =# 1r 
 § _set_q =# 2r 
@@ -55,7 +74,7 @@
 --§ _2 =# 28r 
 --§ _3 =# 29r 
 --§ _4 =# 30r 
-§ _arr_len =# 31r 
+--§ _arr_len =# 31r 
 --§ _arr_of_lst =# 32r 
 § _scf_d =# 33r 
 § _scf_x =# 34r 
@@ -155,6 +174,7 @@
   ∎∎ 
 -- non-atomic 
 § _emt_s8_to_im◂◂F # s 
+  _id.s8 s ⊢ s 
   _st◂◂F {} ⊢ f 
   _hp.rpc f ⊢ { f r0 }
   _hp.rpc s ⊢ { s r1 } 
@@ -244,6 +264,8 @@
 	∎ { x r } 
 
 § _cmp_s8 { s0 s1 }
+  _id.s8 s0 ⊢ s0 
+  _id.s8 s1 ⊢ s1 
   _hp.rpc s0 ⊢ { s0 r0 }
   _hp.rpc s1 ⊢ { s1 r1 }
   !^ r0,r1 ⊢ z
@@ -255,6 +277,7 @@
     //
   ∎ { s0 s1 z }
 § _lds # { s i } 
+  _id.s8 s ⊢ s 
   _hp.rpc s ⊢ { s r }
   !^ r,i ⊢ _,i,c 
     ` mov rsi,0x0000_ffff_ffff_ffff 
@@ -265,6 +288,7 @@
     //
   ∎ { s i c }
 § _lds64 # { s i }
+  _id.s8 s ⊢ s 
   _hp.rpc s ⊢ { s r }
   !^ r,i ⊢ _,i,c 
     ` mov rsi,0x0000_ffff_ffff_ffff 
@@ -276,6 +300,7 @@
 		//
   ∎ { s i c }		
 § _sts_C◂◂C # { s i }
+  _id.s8 s ⊢ s 
   _hp.rpc s ⊢ { s r }
   !^ r,i ⊢ _,i 
     ` mov rsi,0x0000_ffff_ffff_ffff 
@@ -286,6 +311,7 @@
     //
   ∎ { s i }
 § _sts # { s i c }
+  _id.s8 s ⊢ s 
   _hp.rpc s ⊢ { s r }
   !^ r,i,c ⊢ _,i,c 
     ` mov rdx,0x0000_ffff_ffff_ffff 
@@ -296,6 +322,7 @@
     //
   ∎ { s i c }
 § _rsz { s l }
+  _id.s8 s ⊢ s 
   _hp.rpc s ⊢ { s r }
   $ l ⊢ l,l0 
   !^ r,l0 ⊢ r  
@@ -317,10 +344,26 @@
     ` and QWORD [rax+8+8*rsi],rdi
     //
   ∎ { s l }
+§ _arr_len # a 
+  _id.arr0 a ⊢ a 
+  _hp.rpc a ⊢ { a r }
+  !^ r ⊢ r,l 
+    ` mov rdi,0x0000_ffff_ffff_ffff 
+    ` and rdi,QWORD [rax]
+    //
+  ∎ { a l }
 § _s8_len # s 
+  _id.s8 s ⊢ s 
   _hp.rpc s ⊢ { s r }
   !^ r ⊢ r,l 
     ` mov rdi,0x0000_ffff_ffff_ffff 
     ` and rdi,QWORD [rax]
+    //
+  ∎ { s l }
+§ _st_s8_len # s 
+  _id.st_s8 s ⊢ s 
+  _hp.rpc s ⊢ { s r }
+  !^ r ⊢ _,l 
+    ` mov rdi,QWORD [rax-8]
     //
   ∎ { s l }

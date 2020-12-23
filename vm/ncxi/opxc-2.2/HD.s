@@ -66,20 +66,7 @@
 
 bits 64 
 ; macros 
-%macro BC 2
-	mov %2,BC_PT ; BC_PT is static address
-	;mov rsi,rsp ; rsp is dynamic address
-	mov MCR_REG,0xff00_ff00_ff
-  cmov%1 %2,MCR_REG
-	mov %2,QWORD [%2]
-%endmacro 
-;%macro BC 1
-;	mov rsi,BC_PT ; BC_PT is static address
-	;mov rsi,rsp ; rsp is dynamic address
-;	mov MCR_REG,0xff00ff00ff
- ; cmov%1 rsi,MCR_REG
-  ;mov rsi,QWORD [rsi]
-;%endmacro 
+
 %macro DIV10 0 ; rax ⊢ rax
 	mov MCR_REG,0xcccc_cccc_cccc_cccd 
   mul MCR_REG 
