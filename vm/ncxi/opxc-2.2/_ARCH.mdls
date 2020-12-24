@@ -32,7 +32,7 @@
 ¶ _pt =# 4r 
 ¶ _st =# 16r 
 ¶ _dmy =# 18r
-
+¶ _hp =# 19r 
 -- id 
 §§ _id 
   §: r64 = _r64
@@ -40,6 +40,11 @@
   §: arr0 t',k' = _arr0◂t'◂k' 
   §: arr k' = _arr◂k'
   §: st_s8 = _st◂_s8
+  §: Clr k' = _Clr◂k'
+  §§ hp 
+    §: s8 = _hp◂_s8 
+    §: Clr k' = _hp◂(_Clr◂k') 
+    ∎∎ 
   ∎∎
 
 -- rank-0
@@ -48,8 +53,8 @@
 § _set_q =# 2r 
 § _get_q =# 3r 
 § _lod_q =# 4r 
-§ _args =# 5r 
-§ _mlc_s8 =# 6r 
+--§ _args =# 5r 
+--§ _mlc_s8 =# 6r 
 --§ _s8_len =# 7r 
 § _emt =# 8r 
 --§ _inc =# 9r 
@@ -65,9 +70,9 @@
 --§ _cns =# 19r 
 --§ _some =# 20r 
 --§ _none =# 21r 
-§ _in_fn =# 22r 
+--§ _in_fn =# 22r 
 --§ _emt_s8_to =# 23r 
-§ _cd =# 24r 
+--§ _cd =# 24r 
 § _byt =# 25r 
 --§ _0 =# 26r 
 --§ _1 =# 27r 
@@ -93,7 +98,7 @@
 --§ _6 =# 47r 
 --§ _xor =# 48r 
 --§ _lds64 =# 49r 
-§ _s8_hsh =# 50r 
+--§ _s8_hsh =# 50r 
 § _dlt =# 51r 
 § _cst =# 52r 
 § _psc =# 53r 
@@ -143,7 +148,7 @@
 --§ _bsr =# 97r
 § _st =# 98r
 § _ccs =# 99r
-§ _st_s8_len =# 100r
+--§ _st_s8_len =# 100r
 § _ila1 =# 101r 
 § _mk_stk =# 102r 
 § _cl_N =# 103r 
@@ -166,6 +171,7 @@
 §§ _hp 
   § of =# 110r
   § to =# 111r 
+  § ini =# 113r 
   § rpc # a 
     of a ⊢ { r h } 
     $ r ⊢ r,r0 
@@ -367,3 +373,48 @@
     ` mov rdi,QWORD [rax-8]
     //
   ∎ { s l }
+§ _s8_hsh # s 
+  _id.s8 s ⊢ s 
+  _hp.rpc s ⊢ { s r }
+  !^ r ⊢ _,h 
+    ` mov rdi,rax 
+    ` call mm32
+    ` mov rdi,rax 
+    //
+  ∎ { s h }
+§ _mlc_s8 l 
+  $ l ⊢ l,l0 
+  !^ l0 ⊢ m 
+    ` mov rdi,rax 
+    ` call mlc_s8 
+    // 
+  _hp.ini {} ⊢ h 
+  _id.hp.s8 h ⊢ h 
+  _hp.to { m h } ⊢ s 
+  ∎ { l s }
+§ _in_fn f 
+  _hp.rpc f ⊢ { f r } 
+  !^ r ⊢ m 
+    ` lea rdi,[rax+8]
+    ` call in_fn 
+    // 
+  _hp.ini {} ⊢ h 
+  _id.hp.s8 h ⊢ h 
+  _hp.to { m h } ⊢ s 
+  ∎ { f s }
+§ _cd c 
+  _hp.rpc c ⊢ { c r } 
+  !^ r ⊢ {} 
+    ` lea rdi,[rax+8]
+    ` C_CALL system 
+    // 
+  ∎ c
+§ _cli # {} 
+  !^ _ ⊢ n 
+    `	mov rax,QWORD [CLR_N]
+		`	add QWORD [CLR_N],1 
+    // 
+  _hp.ini {} ⊢ h 
+  _id.hp.Clr h ⊢ h 
+  _hp.to { n h } ⊢ C 
+  ∎ C

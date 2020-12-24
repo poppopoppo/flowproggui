@@ -746,3 +746,6 @@ v ~~ x -- value unification
   rank-N : rank-N+1 
 
   ◂◂ : { }
+
+
+  !< r0,r1 ⊢ z 
