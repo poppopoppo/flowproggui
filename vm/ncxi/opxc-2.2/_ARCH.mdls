@@ -110,7 +110,7 @@
 § _inl =# 59r 
 § _tj =# 60r 
 § _ala =# 61r 
-§ _cli =# 62r 
+--§ _cli =# 62r 
 § _clp =# 63r 
 § _cla =# 64r 
 § _cln =# 65r 
@@ -144,7 +144,7 @@
 § _tjn =# 93r
 § _tjc =# 94r
 § _sqc =# 95r
-§ _inv =# 96r
+--§ _inv =# 96r
 --§ _bsr =# 97r
 § _st =# 98r
 § _ccs =# 99r
@@ -418,3 +418,32 @@
   _id.hp.Clr h ⊢ h 
   _hp.to { n h } ⊢ C 
   ∎ C
+
+§§ _r2 
+  ¶ t 
+    ∐ i : _r64 
+  § f◂{} = i◂%[ 0r ] 
+  § t◂{} = i◂%[ 1r ]
+  § op2◂◂OP # { i◂r0 i◂r1 } 
+  !^ r0,r1 ⊢ r 
+    "\t" OP " rax,rdi\n" // 
+    ∎ i◂r
+  § and = op2◂◂"and" 
+  § or = op2◂◂"or" 
+  § not i◂b 
+    !^ b ⊢ b 
+      ` not rax 
+      // 
+    ∎ i◂b
+  § sub # { i◂r0 i◂r1 }
+    !^ r0,r1 ⊢ r 
+      ` not rdi 
+      ` and rax,rdi 
+      //
+    ∎ i◂r
+  § is_t i◂r 
+    ∐ r'=1r .
+      ∎ {} 
+    ∐. .  
+      ∎| 
+  ∎∎ 
