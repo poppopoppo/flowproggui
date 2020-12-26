@@ -126,6 +126,7 @@ pf_d_lp0:
 	add rsp,128 
 	ret 
 
+
 pf_d_rv: ; rdi=buf rax=num 
 	mov r10,rdi
 	mov r9,rdi
@@ -139,6 +140,18 @@ pf_d_rv_lp0:
 	sub r10,r9 
 	mov rax,r10
 	ret 
+
+pf_x_bc: 
+	mov rbx,0x0000_ffff_ffff_ffff
+	and rbx,QWORD [rax] 
+	sub rbx,rdi 
+	jl err_bc
+	sub rbx,rsi 
+	jl err_bc 
+	add rsi,rdi  
+	lea rdi,[rax+7+rsi] 
+	std
+	ret
 
 sig_alc_rcd: ; rbx=n 
 	C_PUSH_REGS 
@@ -155,7 +168,6 @@ sig_alc_rcd: ; rbx=n
 	CALLOC_SF
 	mov rdx,rbx 
 	mov rbx,rax 
-	;mov QWORD [SS_RCD_TOP+8*rbx],rax 
 	mov rdi,1000 
 	call ss_lp
 	pop rax 
@@ -218,10 +230,6 @@ info_rcd:
 info_rcd_end:
 	C_POP_REGS 
 	ret
-;getchar:
-;	xor rax,rax 
-;	C_CALL_SF getchar 
-;	ret
 
 sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void* context
 	mov rdi,QWORD [SIG_ETR]
