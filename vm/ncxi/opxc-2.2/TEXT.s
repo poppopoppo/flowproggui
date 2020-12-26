@@ -470,7 +470,6 @@ scf_F:
 scf_T: 
 	push rdi
 	movzx rdi,BYTE [rdi]
-	xor rax,rax 
 	call is_spc
 	cmp rax,0
 	jnz scf_T_err0 
@@ -534,28 +533,33 @@ s8_of_c_stg:
 	ret
 
 in_fn: 
+	sub rsp,144 
+	mov rbx,rsp 
 	mov rax,2
 	mov rsi,2
 	syscall
 	push rax ; [rsp]=fd
 	mov rdi,rax
 	mov rax,5
-	mov rsi,stat
+	mov rsi,rbx
 	syscall
-	mov rdi,[stat + STAT.st_size]
+	mov rdi,[rbx+STAT.st_size]
+	push rbx 
 	call mlc_s8
+	pop rbx 
 	mov rdi,QWORD [rsp]
 	push rax ; [rsp]=buf
 	mov rsi,rax
 	add rsi,8
 	mov rax,0
-	mov rdx,[stat+STAT.st_size]
+	mov rdx,[rbx+STAT.st_size]
 	syscall
 	mov rax,3
 	mov rdi,QWORD [rsp+8]
 	syscall
 	mov rax,QWORD [rsp]	
 	add rsp,16
+	add rsp,144
 	ret 
 
 emt_stg: ; rdi=stg 
