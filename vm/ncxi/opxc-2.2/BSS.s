@@ -9,14 +9,11 @@
 	SS_RCD_N: resq 64 
 	GLV: resq GLV_N
 	PAGE_SIZE: resq 1
-	tmp: resq 64
+	;tmp: resq 64
 	;ret_vct: resq 64
- rsp_tmp: resq 1
+ ;rsp_tmp: resq 1
 	;RB: resq 1 
-; stk 
-	STK_VCT: resq (1024*1024) 
-	STK_N: resq 1
-	STK_TOP: resq 1
+
 ; emt buffer 
 	GD_BUF_PT: resq 1 
 	GD_BUF_IT: resq 1
@@ -25,7 +22,7 @@
 	EMT_BUF_END: resb 1
 	SS_RCD_C: resq (RCD_N+1)
 
-stat: resb 144
+;stat: resb 144
 struc STAT
 	.st_dev         resq 1
 	.st_ino         resq 1

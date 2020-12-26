@@ -459,3 +459,9 @@
     ∐. .  
       ∎| 
   ∎∎ 
+§ _min # { x y } 
+  !^ x,y ⊢ r 
+    ` cmp rax,rdi 
+    ` cmovg rax,rdi 
+    //
+  ∎ r

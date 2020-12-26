@@ -152,18 +152,24 @@ LB_%1_2:
 
 %macro C_CALL_SF 1 
 	C_PUSH_REGS
-	mov QWORD [rsp_tmp],rsp 
+	;mov QWORD [rsp_tmp],rsp 
+	push rbx
+	mov rbx,rsp 
 	and rsp,~0xf 
 	call %1 
-	mov rsp,QWORD [rsp_tmp]
+	mov rsp,rbx 
+	pop rbx
+	;mov rsp,QWORD [rsp_tmp]
 	C_POP_REGS
 %endmacro 
 
 %macro C_CALL 1 
-	mov QWORD [rsp_tmp],rsp 
+	push rbx 
+	mov rbx,rsp
 	and rsp,~0xf 
 	call %1 
-	mov rsp,QWORD [rsp_tmp]
+	mov rsp,rbx
+	pop rbx
 %endmacro 
 
 %macro CALLOC_SF 0
@@ -248,7 +254,7 @@ LB_%1_2:
  
 extern futex
 extern ini_prc 
-extern MurmurHash64A
+;extern MurmurHash64A
 extern exit 
 extern printf 
 extern malloc 

@@ -1,3 +1,4 @@
+	tmp: dq 0 
 	BC_PT: dq 0x00ff0f0f
 	SIG_FLG: dq 0 
 	SIG_ETR: dq 0 
