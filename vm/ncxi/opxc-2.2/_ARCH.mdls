@@ -44,15 +44,16 @@
   §§ hp 
     §: s8 = _hp◂_s8 
     §: Clr k' = _hp◂(_Clr◂k') 
+    §: pt k' = _hp◂(_pt◂k') 
     ∎∎ 
   ∎∎
 
 -- rank-0
 § _mk_arr =# 0r 
-§ _exc_q =# 1r 
-§ _set_q =# 2r 
-§ _get_q =# 3r 
-§ _lod_q =# 4r 
+--§ _exc_q =# 1r 
+--§ _set_q =# 2r 
+--§ _get_q =# 3r 
+--§ _lod_q =# 4r 
 --§ _args =# 5r 
 --§ _mlc_s8 =# 6r 
 --§ _s8_len =# 7r 
@@ -149,9 +150,9 @@
 § _st =# 98r
 § _ccs =# 99r
 --§ _st_s8_len =# 100r
-§ _ila1 =# 101r 
+--§ _ila1 =# 101r 
 § _mk_stk =# 102r 
-§ _cl_N =# 103r 
+--§ _cl_N =# 103r 
 § _ila =# 104r
 § _ila_n =# 105r
 § _ila_i =# 106r
@@ -418,6 +419,15 @@
   _id.hp.Clr h ⊢ h 
   _hp.to { n h } ⊢ C 
   ∎ C
+§ _cl_N # {} 
+  !^ _ ⊢ n 
+    `	mov rax,CLR_NULL 
+	  `	add QWORD [rax+16],1 
+    // 
+  _hp.ini {} ⊢ h 
+  _id.hp.pt h ⊢ h 
+  _hp.to { n h } ⊢ p 
+  ∎ p
 
 §§ _r2 
   ¶ t 
