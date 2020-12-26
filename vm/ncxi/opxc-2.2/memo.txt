@@ -749,3 +749,11 @@ v ~~ x -- value unification
 
 
   !< r0,r1 ⊢ z 
+
+'{} | '{ _~a' < l' }
+¶§
+
+  push sig_alc_rcd 
+  mov rax,RM 
+  mov RM,QWORD [RM]
+  add rsp,8
