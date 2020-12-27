@@ -465,3 +465,13 @@
     ` cmovg rax,rdi 
     //
   ∎ r
+§ _lod_q # { a i } 
+  _alc_o { a i } ⊢ { a k }
+  $ k ⊢ k,k0 
+  _alc_i { a k } ⊢ { a i } 
+  ∎ { a i k0 }
+§ _ila1◂◂S # x 
+  !^ x ⊢ x 
+    S // 
+  ∎ x 
+  
