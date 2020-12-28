@@ -52,135 +52,80 @@
 
 -- rank-0
 § _mk_arr =# 0r 
---§ _exc_q =# 1r 
---§ _set_q =# 2r 
---§ _get_q =# 3r 
---§ _lod_q =# 4r 
---§ _args =# 5r 
---§ _mlc_s8 =# 6r 
---§ _s8_len =# 7r 
-§ _emt =# 8r 
---§ _inc =# 9r 
---§ _dec =# 10r 
---§ _add =# 11r 
---§ _sub =# 12r 
---§ _imul =# 13r 
---§ _sts =# 14r 
---§ _lds =# 15r 
---§ _setge =# 16r 
---§ _rep_movsb =# 17r 
---§ _nil =# 18r 
---§ _cns =# 19r 
---§ _some =# 20r 
---§ _none =# 21r 
---§ _in_fn =# 22r 
---§ _emt_s8_to =# 23r 
---§ _cd =# 24r 
-§ _byt =# 25r 
---§ _0 =# 26r 
---§ _1 =# 27r 
---§ _2 =# 28r 
---§ _3 =# 29r 
---§ _4 =# 30r 
---§ _arr_len =# 31r 
---§ _arr_of_lst =# 32r 
-§ _scf_d =# 33r 
-§ _scf_x =# 34r 
---§ _dlt0 =# 35r 
---§ _info =# 36r 
-§ _rpc =# 37r 
---§ _getchar =# 38r 
---§ _shl =# 39r 
---§ _shr =# 40r 
-§ _app =# 41r 
---§ _and =# 42r 
---§ _or =# 34r 
-§ _prs =# 44r 
---§ _5 =# 45r 
-§ _id =# 46r 
---§ _6 =# 47r 
---§ _xor =# 48r 
---§ _lds64 =# 49r 
---§ _s8_hsh =# 50r 
-§ _dlt =# 51r 
-§ _cst =# 52r 
-§ _psc =# 53r 
-§ _synt =# 54r 
-§ _line =# 55r 
-§ _grm =# 56r 
-§ _grm_ftr =# 57r 
-§ _ftr =# 58r 
-§ _inl =# 59r 
-§ _tj =# 60r 
-§ _ala =# 61r 
---§ _cli =# 62r 
-§ _clp =# 63r 
-§ _cla =# 64r 
-§ _cln =# 65r 
-§ _cls =# 66r 
---§ _cmp_s8 =# 67r 
-§ _cld =# 68r 
-§ _pf =# 69r 
-§ _pf_x =# 70r 
-§ _clc_i =# 71r 
-§ _clc_o =# 72r 
-§ _clc_d =# 73r 
-§ _seq =# 74r 
-§ _alc_i =# 75r 
-§ _alc_o =# 76r 
---§ _rsz =# 77r
-§ _mk_arr_x =# 78r
-§ _push =# 79r 
-§ _pop =# 80r  
-§ _id_par =# 81r  
-§ _ctr =# 82r
-§ _oom =# 83r
-§ _moo =# 84r
-§ _mcp =# 85r
-§ _mcn =# 86r
-§ _mop =# 87r 
-§ _mt_e =# 88r 
-§ _mt_ne =# 89r
-§ _mt_le =# 90r
-§ _exn =# 91r
-§ _tj =# 92r
-§ _tjn =# 93r
-§ _tjc =# 94r
-§ _sqc =# 95r
---§ _inv =# 96r
---§ _bsr =# 97r
-§ _st =# 98r
-§ _ccs =# 99r
---§ _st_s8_len =# 100r
---§ _ila1 =# 101r 
-§ _mk_stk =# 102r 
---§ _cl_N =# 103r 
-§ _ila =# 104r
-§ _ila_n =# 105r
-§ _ila_i =# 106r
-§ _ct =# 107r
+§ _emt =# 1r 
+--§ _ila2 =# 2r
+§ _rpc =# 3r 
+§ _app =# 4r 
+§ _prs =# 5r 
+§ _id =# 6r 
+§ _dlt =# 7r 
+§ _cst =# 8r 
+§ _psc =# 9r 
+§ _synt =# 10r 
+§ _line =# 11r 
+§ _grm =# 12r 
+§ _grm_ftr =# 13r 
+§ _ftr =# 14r 
+§ _inl =# 15r 
+§ _tj =# 16r 
+§ _clp =# 17r 
+§ _cln =# 18r 
+§ _cls =# 19r 
+§ _cld =# 20r 
+§ _pf =# 21r 
+§ _pf_x =# 22r 
+§ _clc_i =# 23r 
+§ _clc_o =# 24r 
+§ _clc_d =# 25r 
+§ _seq =# 26r 
+§ _alc_i =# 27r 
+§ _alc_o =# 28r 
+§ _mk_arr_x =# 29r
+§ _push =# 30r 
+§ _pop =# 31r  
+§ _id_par =# 32r  
+§ _ctr =# 33r
+§ _oom =# 34r
+§ _moo =# 35r
+§ _mcp =# 36r
+§ _mcn =# 37r
+§ _mop =# 38r 
+§ _mt_e =# 39r 
+§ _mt_ne =# 40r
+§ _mt_le =# 41r
+§ _exn =# 42r
+§ _tj =# 43r
+§ _tjn =# 44r
+§ _tjc =# 45r
+§ _sqc =# 46r
+§ _st =# 47r
+§ _ccs =# 48r
+§ _mk_stk =# 49r 
 §§ _ila 
+  § f = 50r 
   §§ t 
-    § O =# 105r 
-    § S =# 106r 
+    § O =# 51r 
+    § S =# 52r
+    § C =# 53r
     ∎∎
-  § f1 = 101r 
-  § f = 104r 
   ∎∎
+§ _ct =# 54r
 §§ _ct 
-  § scf_d =# 108r 
-  § scf_x =# 109r 
+  § scf_d =# 55r 
+  § scf_x =# 56r 
   ∎∎
 §§ _hp 
-  § of =# 110r
-  § to =# 111r 
-  § ini =# 113r 
+  § of =# 57r
+  § to =# 58r 
+  § ini =# 59r 
   § rpc # a 
     of a ⊢ { r h } 
     $ r ⊢ r,r0 
     to { r h } ⊢ a 
     ∎ { a r0 }
   ∎∎ 
+§ _id_T =# 60r 
+
 -- non-atomic 
 § _emt_s8_to_im◂◂F # s 
   _id.s8 s ⊢ s 
@@ -474,4 +419,39 @@
   !^ x ⊢ x 
     S // 
   ∎ x 
-  
+
+§ _scf_d_F { s i }
+  _id.s8 s ⊢ s 
+  _hp.rpc s ⊢ { s r } 
+  !^ i,r ⊢ i,j,x 
+    ` call scf_d_F
+    //
+  ∐ j'=0r .
+    ∎ { s i ‹ x › }
+  ∐. .
+    ∎ { s i ‹› }
+§ _scf_d = _grm◂◂_scf_d_F 
+
+§ _scf_x_F { s i }
+  _id.s8 s ⊢ s 
+  _hp.rpc s ⊢ { s r } 
+  !^ i,r ⊢ i,j,x 
+    ` call scf_x_F
+    //
+  ∐ j'=0r .
+    ∎ { s i ‹ x › }
+  ∐. .
+    ∎ { s i ‹› }
+§ _scf_x = _grm◂◂_scf_x_F 
+
+§ _byt_F { s i }
+  _id.s8 s ⊢ s 
+  _hp.rpc s ⊢ { s r } 
+  !^ i,r ⊢ i,j,x 
+    ` call byt_F
+    //
+  ∐ j'=0r .
+    ∎ { s i ‹ x › }
+  ∐. .
+    ∎ { s i ‹› }
+§ _byt = _grm◂◂_byt_F

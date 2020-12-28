@@ -750,6 +750,8 @@ v ~~ x -- value unification
 
   !< r0,r1 ⊢ z 
 
+!^ r0,..rn ⊢ d0,..dm < m0,..mk
+
 '{} | '{ _~a' < l' }
 ¶§
 
@@ -757,3 +759,7 @@ v ~~ x -- value unification
   mov rax,RM 
   mov RM,QWORD [RM]
   add rsp,8
+
+¶ @.t -#- long,no_dlt,no_emt,no_rpc 
+
+!^ .. | .. ⊢ .. | .. < .. 
