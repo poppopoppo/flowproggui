@@ -1,4 +1,7 @@
 
+%define SS_NULL 0xffff_ffff_ffff_0000
+%define EMT_BUF_MAX (KB<<1)	
+
 ;; futex 
 %define FUTEX_WAIT		0
 %define FUTEX_WAKE		1
@@ -251,12 +254,15 @@ LB_%1_2:
 %define RX7 rdx
 
 %define SEED 0x_f7f7_65d7_9dab_bace
- 
+
+extern stdout 
+extern stdin
 extern futex
 extern ini_prc 
 ;extern MurmurHash64A
 extern exit 
 extern printf 
+extern fwrite
 extern malloc 
 extern calloc
 extern realloc
@@ -269,3 +275,4 @@ extern set_handler
 extern emt_s8_to
 extern alc_gd_buf
 extern set_usr_hdl
+extern fw

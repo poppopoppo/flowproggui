@@ -3171,8 +3171,8 @@ unsigned long
 						∎ { evv k_app◂{ k0 k1 } k_app◂{ k2 k3 } b1 }
 					∐. bl.f◂{} .	
 						∎ { evv k_app◂{ k0 k1 } k_app◂{ k2 k3 } bl.f◂{} }					
-				--∐ c0 ⊢ k_ap◂p0; c1 ⊢ k_ap◂p1 . 
-					--∎ { evv c0 c1 bl.f◂{} }
+				∐ c0 ⊢ k_ap◂{ p0 t0 }; c1 ⊢ k_ap◂{ p1 t1 }; p0'=p1' . 
+					∎ { evv k_ap◂{ p0 t0 } k_ap◂{ p1 t1 } bl.t◂{} }
 				∐. . 
 					∎ { evv c0 c1 bl.f◂{} }
 		§ @.r64_of_k { evv c } 
@@ -6479,12 +6479,14 @@ unsigned long
 				∐. .
 					∎|
 			§ slv { tv AP p y } 
+				_emt %[ "D" ] ⊢ _ 
 				_clc_o { AP p } ⊢ { AP { s V } }
 				T.ciu { tv y s } ⊢ { tv y s b } 
 				∐ b'=1r .
 					_arr_len V ⊢ { V l } 
 					slv_i { tv V l %[ 1r ] y } ⊢ { tv V c }
 					_clc_i { AP { s V } } ⊢ { AP _ }
+				_emt %[ "D1" ] ⊢ _ 
 					∎ { tv AP c }
 				∐. .
 					∎|
@@ -10273,16 +10275,6 @@ unsigned long
 						asm.add_s8 { ec0 sc0 } ⊢ ec0 
 						$ { SC SCM eds } ⊢ eds 
 						∎ { eds evv lb_n ec0 RP.unt◂{} } 
-					-\
-					∐ ax'=EX.scf_d . 
-						_st◂◂"\tmov r8,10\n\tcall scf_F\n" {} ⊢ sc0 
-						asm.add_st_s8 { ec0 sc0 } ⊢ ec0 
-						∎ { eds evv lb_n ec0 TX.r64◂{} } 
-					∐ ax'=EX.scf_x . 
-						_st◂◂"\tmov r8,16\n\tcall scf_F\n" {} ⊢ sc0 
-						asm.add_st_s8 { ec0 sc0 } ⊢ ec0 
-						∎ { eds evv lb_n ec0 TX.r64◂{} } 
-					-/
 					∐ ax'=EX.synt . 
 						asm.add_st_s8_im◂◂"\tcall synt\n" ec0 ⊢ ec0
 						∎ { eds evv lb_n ec0 RP.unt◂{} }
@@ -12201,8 +12193,7 @@ unsigned long
 				`;	v.0
 				"%define RCD_N " 0d' "\n"
 				"%define GLV_N " 1d' "\n" 
-				`%define SS_NULL 0xffff_ffff_ffff_0000
-				`%define EMT_BUF_MAX (KB<<1)				
+							
 				` 
 				`section .bss
 				`%include "BSS.s"

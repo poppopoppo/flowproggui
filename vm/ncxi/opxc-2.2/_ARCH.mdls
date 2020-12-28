@@ -232,19 +232,22 @@
   ∎ { s0 s1 z }
 § _lds # { s i } 
   _id.s8 s ⊢ s 
-  _hp.rpc s ⊢ { s r }
-  !^ r,i ⊢ _,i,c 
+  --_hp.rpc s ⊢ { s r }
+  _hp.of s ⊢ { r h } 
+  !^ r,i ⊢ *r,*i,c 
     ` mov rsi,0x0000_ffff_ffff_ffff 
     ` and rsi,QWORD [rax]
     ` cmp rdi,rsi 
 	  ` jge err_bc 
 		` movzx rsi,BYTE [rax+8+rdi]
     //
+  _hp.to { r h } ⊢ s 
   ∎ { s i c }
 § _lds64 # { s i }
   _id.s8 s ⊢ s 
-  _hp.rpc s ⊢ { s r }
-  !^ r,i ⊢ _,i,c 
+  --_hp.rpc s ⊢ { s r }
+  _hp.of s ⊢ { r h } 
+  !^ r,i ⊢ *r,*i,c 
     ` mov rsi,0x0000_ffff_ffff_ffff 
     ` and rsi,QWORD [rax]
 	  ` sub rsi,7
@@ -252,28 +255,33 @@
 		`	jge err_bc 
 	  `	mov rsi,QWORD [rax+8+rdi]
 		//
+  _hp.to { r h } ⊢ s 
   ∎ { s i c }		
 § _sts_C◂◂C # { s i }
   _id.s8 s ⊢ s 
-  _hp.rpc s ⊢ { s r }
-  !^ r,i ⊢ _,i 
+  --_hp.rpc s ⊢ { s r }
+  _hp.of s ⊢ { r h } 
+  !^ r,i ⊢ *r,*i 
     ` mov rsi,0x0000_ffff_ffff_ffff 
     ` and rsi,QWORD [rax]
     ` cmp rdi,rsi 
 	  ` jge err_bc 
 		"\tmov BYTE [rax+8+rdi],0x" (_ct.scf_x◂◂C) "\n"
     //
+  _hp.to { r h } ⊢ s 
   ∎ { s i }
 § _sts # { s i c }
   _id.s8 s ⊢ s 
-  _hp.rpc s ⊢ { s r }
-  !^ r,i,c ⊢ _,i,c 
+  --_hp.rpc s ⊢ { s r }
+  _hp.of s ⊢ { r h } 
+  !^ r,i,c ⊢ *r,*i,c 
     ` mov rdx,0x0000_ffff_ffff_ffff 
     ` and rdx,QWORD [rax]
     ` cmp rdi,rdx 
 	  ` jge err_bc 
 		` mov BYTE [rax+8+rdi],sil
     //
+  _hp.to { r h } ⊢ s
   ∎ { s i c }
 § _rsz { s l }
   _id.s8 s ⊢ s 
@@ -300,26 +308,23 @@
   ∎ { s l }
 § _arr_len # a 
   _id.arr0 a ⊢ a 
-  _hp.rpc a ⊢ { a r }
-  !^ r ⊢ r,l 
+  _hp.of a ⊢ { r h } 
+  !^ r ⊢ *r,l 
     ` mov rdi,0x0000_ffff_ffff_ffff 
     ` and rdi,QWORD [rax]
     //
+  _hp.to { r h } ⊢ a
   ∎ { a l }
 § _s8_len # s 
   _id.s8 s ⊢ s 
-  _hp.rpc s ⊢ { s r }
-  !^ r ⊢ r,l 
-    ` mov rdi,0x0000_ffff_ffff_ffff 
-    ` and rdi,QWORD [rax]
-    //
-  ∎ { s l }
+  _arr_len s ⊢| 
 § _st_s8_len # s 
   _id.st_s8 s ⊢ s 
-  _hp.rpc s ⊢ { s r }
-  !^ r ⊢ _,l 
+  _hp.of s ⊢ { r h } 
+  !^ r ⊢ *r,l 
     ` mov rdi,QWORD [rax-8]
     //
+  _hp.to { r h } ⊢ s 
   ∎ { s l }
 § _s8_hsh # s 
   _id.s8 s ⊢ s 
@@ -455,3 +460,24 @@
   ∐. .
     ∎ { s i ‹› }
 § _byt = _grm◂◂_byt_F
+
+§§ _emt 
+  ¶¶ f a' : a' → a' 
+  § r64 x 
+     !^ x ⊢ *x 
+      ` sub rsp,32 
+      ` mov rdi,rsp 
+      ` mov BYTE [rdi],'0'
+      ` mov BYTE [rdi+1],'x' 
+      ` add rdi,2 
+      ` call pf_x 
+      ` mov BYTE [rdi+rax],'r' 
+      ` sub rdi,2  
+      ` add rax,3 
+      ` mov rsi,rax  
+      ` C_CALL fw
+      ` add rsp,32 
+      //
+    ∎ x 
+  ¶§ f = r64 
+  ∎∎ 

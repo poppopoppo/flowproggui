@@ -61,10 +61,15 @@ th0_1:
 	jmp th0
 
 pf_x_tb: db "0123456789abcdef"
-pf_x: ; rdi=buf rax=num 
-	lzcnt rcx,rax 
+pf_x: ; rdi=buf rax=num ⊢ rdi=buf rax=add-n
+	;lzcnt rcx,rax 
+	mov rcx,rax 
+	or rcx,1 
+	bsr rsi,rcx 
+	mov rcx,63 
+	sub rcx,rsi 
 	shr rcx,2
-	mov rsi,17 
+	mov rsi,16 
 	sub rsi,rcx 
 	mov r8,rsi 
 	mov BYTE [rdi+rsi],0
