@@ -462,6 +462,26 @@ is_spc_1:
 	mov rax,1 
 	ret  
 
+scf_d_F: 
+	lea rsi,[rdi+8]
+  mov rdi,QWORD [rdi]
+  mov rdx,0x0000_ffff_ffff_ffff 
+  and rdi,rdx 
+  mov r8,10 
+  call scf_F
+  mov rdi,r10
+	ret
+
+scf_x_F:  
+	lea rsi,[rdi+8]
+  mov rdi,QWORD [rdi]
+  mov rdx,0x0000_ffff_ffff_ffff 
+  and rdi,rdx 
+  mov r8,16 
+  call scf_F
+  mov rdi,r10
+	ret
+
 scf_F:
 	cmp rax,rdi
 	jge scf_F_0
@@ -737,4 +757,18 @@ line_1:
 	jz line_0
 line_2:
 	mov r10,0
+	ret
+
+byt_F:
+	lea rsi,[rdi+8]
+  mov rdx,0x0000_ffff_ffff_ffff 
+  and rdx,QWORD [rdi] 
+  mov rcx,1 
+  cmp rax,rdx 
+  jge byt_F_0 
+  mov rcx,0 
+  movzx rsi,BYTE [rdi+8+rax]
+  add rax,1 
+byt_F_0:
+  mov rdi,rcx
 	ret
