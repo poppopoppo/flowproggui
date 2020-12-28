@@ -438,3 +438,40 @@
   pnt.f %[ "rrr" ] ⊢ s 
   _emt s ⊢ _ 
   ∎ {} 
+§ @.loop◂◂F { N v }
+  =+ N' 
+  ∐
+    ∎ v 
+  ∐
+    F v ⊢|
+  ∐
+    F v ⊢ v 
+    F v ⊢|
+  ∐
+    F v ⊢ v 
+    F v ⊢ v 
+    F v ⊢|
+  ∐. 
+    F v ⊢ v 
+    F v ⊢ v 
+    F v ⊢ v 
+    F v ⊢ v 
+    _sub_im◂◂4r N ⊢ N 
+    loop◂◂F { N v } ⊢|
+§ N = 100000r
+§ test◂◂F # v 
+  loop◂◂F { %[ N ] v } ⊢|
+§ l0 # x 
+  _emt.f x ⊢|
+§ main11 _ 
+  --test◂◂_emt %[ 10r ] ⊢ _ 
+  test◂◂_emt.f %[ 10r ] ⊢ _ 
+  ∎ {} 
+§ main12 _ 
+  _emt.f %[ 17r ] ⊢ _ 
+  ∎ {} 
+§ main13 _ 
+  test◂◂_emt %[ 10r ] ⊢ _ 
+  --test◂◂_emt.f %[ 10r ] ⊢ _ 
+  ∎ {} 
+  

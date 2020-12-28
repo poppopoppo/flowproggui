@@ -17,18 +17,6 @@
 #include <sys/ucontext.h>
 #include <ucontext.h>
 
-struct OP_SRC_0
-{
-};
-struct OP_SRC_1
-{
-  void *r0;
-};
-struct OP_SRC_2
-{
-  void* r0; 
-  void* r1;
-};
 void *calloc_sf(size_t n, size_t size){
   void* p = calloc(n,size);
   if (p==NULL){
@@ -48,7 +36,7 @@ int ini_prc(void** p){
   rc = setrlimit(RLIMIT_AS, &rl);
   if (rc < 0)
   {
-    printf("Error: setrlimit(%d) %s\n", errno, strerror(errno));
+    printf("Error: setrlimit(%d)\n", errno);
     return (-1);
   }
   return 0;
@@ -79,8 +67,8 @@ int set_handler(int n,void* f){
 	};
 void* set_usr_hdl(void* usr,void *extra){
 		ucontext_t *p = (ucontext_t *)extra;
-		void* rip = p->uc_mcontext.gregs[REG_RIP];
-		p->uc_mcontext.gregs[REG_RIP] = usr; 
+		void* rip = (void*)p->uc_mcontext.gregs[REG_RIP];
+		p->uc_mcontext.gregs[REG_RIP] = (long long int)usr; 
 		return rip;
 	};
 
@@ -150,3 +138,12 @@ u_int64_t MurmurHash64A ( const void * key, int len, u_int64_t seed )
   return h;
 } 
 
+
+int fw(char* s,int l){
+  int r = fwrite(s,1,l,stdout);
+  if(r<0){
+    printf("fw:0");
+    exit(EXIT_FAILURE);
+  }
+  return 0;
+};

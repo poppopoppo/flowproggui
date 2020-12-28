@@ -1,3 +1,6 @@
+; tmp 
+	TMP : resq 64 
+
 	EXIT: resq 0
 	FLG0: resq 1 
 	FLG1: resq 1
@@ -9,11 +12,7 @@
 	SS_RCD_N: resq 64 
 	GLV: resq GLV_N
 	PAGE_SIZE: resq 1
-	;tmp: resq 64
-	;ret_vct: resq 64
- ;rsp_tmp: resq 1
-	;RB: resq 1 
-
+	
 ; emt buffer 
 	GD_BUF_PT: resq 1 
 	GD_BUF_IT: resq 1
