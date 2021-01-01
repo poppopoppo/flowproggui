@@ -62,7 +62,7 @@
 		_clc_i { V k } ⊢ { V p } 
 		∎ { V p }
 	∎∎ 
-§ eml = _emt 
+§ eml = _emt.f 
 --§ eml = _id
 § eml_v◂◂F # { e v } 
 	F { e v } ⊢ { e v s } 
@@ -94,8 +94,8 @@
 	∐ o ⊢ _some◂a .
 		∎ a 
 	∐. . 
-		_emt %[ "smt_err 0" ] ⊢ _ 
-		_emt %[ E ] ⊢ _ 
+		_emt_im.f◂◂"smt_err 0" {} ⊢ {} 
+		_emt_im.f◂◂E {} ⊢ {} 
 		∎| 
 § nnt # o 
 	∐ o ⊢ _none◂{} .
@@ -122,8 +122,8 @@
 	∐ o ⊢ _none◂{} . 
 		∎ {} 
 	∐. . 
-		_emt %[ "nnt_err_T" ] ⊢ _ 
-		_emt %[ E ] ⊢ _ 
+		_emt_im.f◂◂"nnt_err_T" {} ⊢ {} 
+		_emt_im.f◂◂E {} ⊢ {} 
 		∎| 
 § set_q # { v i a } 
 	exc_q { v i a } ⊢ { v i _ } 
@@ -152,7 +152,7 @@
 	∐ _some◂v . 
 		∎ { tv i v } 
 	∐. _none◂{} . 
-		_emt %[ "lod_tv" ] ⊢ _ 
+		_emt_im.f◂◂"lod_tv" {} ⊢ {} 
 		_arr_len tv ⊢ { tv l } 
 		_emt l ⊢ _ 
 		_emt i ⊢ _ 
@@ -2482,7 +2482,7 @@ unsigned long
 					--eml_v◂◂f_eml { tv y1 } ⊢ { tv y1 }
 					f { tv y0 y1 %[ 1r ] } ⊢ { tv b } 
 					∐ b'=0r . 
-						_emt %[ "unify:_,_" ] ⊢ _ 
+						_emt_im.f◂◂"unify:_,_" {} ⊢ {} 
 						∎| 
 					∐. . 
 						∎ tv 
@@ -2490,7 +2490,7 @@ unsigned long
 				§ f_lst { tv l0 l1 } 
 					f_lst { tv l0 l1 %[ 1r ] } ⊢ { tv b } 
 					∐ b'=0r . 
-						_emt %[ "unify:lst:" ] ⊢ _ 
+						_emt_im.f◂◂"unify:lst:" {} ⊢ {} 
 						∎| 
 					∐. . 
 						∎ tv 
@@ -3849,7 +3849,7 @@ unsigned long
 			$ y ⊢ y,y0,y1
 			∎ { tv TX.t_ct_imp◂{ TX.dmy◂y TX.t_imp◂{ y0 y1 } } }
 		∐. 
-			_emt i ⊢ _ 
+			_emt.f i ⊢ _ 
 			∎| 
 							
 			∎∎
@@ -4564,12 +4564,12 @@ unsigned long
 						∎ ret_vld◂{} 
 					∐. prs_err◂e . 
 						pnt_prs_err e ⊢ s 
-						_emt s ⊢ s 
+						_emt.f s ⊢ _ 
 						∎| 		
 				∐.# ⊢ { } 
-					^ _n,_r ⊢ n,r,sr 
+					^ _n,_r ⊢ _,_,sr 
 						"nls_err " 0d' "-" 1d' ":\n" //
-					_emt sr ⊢ sr 
+					_emt.f sr ⊢ _ 
 					∎|   
 			∐.# ⊢ { } 
 				∎ ret_vld◂{}
@@ -4584,7 +4584,7 @@ unsigned long
 						∎ ret_vld◂{}
 					∐. prs_err◂e . 
 						pnt_prs_err e ⊢ s 
-						_emt s ⊢ s 
+						_emt.f s ⊢ _ 
 						∎| 		
 					
 					∐.# ⊢ { } 
@@ -5221,8 +5221,7 @@ unsigned long
 				∐. prs_err◂e . 
 					∎ ret_err◂e
 			∐. ⊢ { }
-				$ %[ "lc_etr_body 0" ] ⊢ s
-				_emt s ⊢ s
+				_emt_im.f◂◂"lc_etr_body 0" {} ⊢ {} 
 				∎ _none◂{}
 		@.lc_clq_etr_i ^=
 			∐.# "@" !| "." def_word lc_etr_def ⊢ { {} {} w le } 
@@ -5375,7 +5374,7 @@ unsigned long
 					∐. _nil◂{} . 
 						^ w ⊢ _,sr 
 							"slv_ns 0:not found:" 0' "\n" //
-						_emt sr ⊢ sr 
+						_emt.f sr ⊢ _ 
 						∎|  
 			∐. ast.fst_n◂w . 
 				ASC_F { NS w } ⊢ { NS w o } 
@@ -5392,10 +5391,8 @@ unsigned long
 						$ _cns◂{ I m_l } ⊢ m_l 
 						∎ { MV NS m_l i_e }
 					∐. _nil◂{} . 
-						_emt w ⊢ w
-						^ _ ⊢ sr 
-							"slv_ns 1:not found\n" //
-						_emt sr ⊢ sr 
+						_emt.f w ⊢ _ 
+						_emt_im.f◂◂"slv_ns 1:not fount\n" {} ⊢ {} 
 						∎|  
 		§ MV_MAX = 3200r 
 		§§ MMV 
@@ -11970,7 +11967,7 @@ unsigned long
 								asm.to_s8 ec0 ⊢ ss 
 								_emt.f ss ⊢ _ 
 								_emt.f s ⊢ _ 
-								_emt %[ "STT_NON_EXH_ERR:" ] ⊢ _ 
+								_emt_im.f◂◂"STT_NON_EXH_ERR:" {} ⊢ {} 
 								∎|
 						∐ nm_e◂o .
 							stt_ir { VM evv tv FE EE ox f_c o is } ⊢| 						
@@ -12230,7 +12227,7 @@ unsigned long
 			_inc lv ⊢ lv  
 			T.iug_imp { tv lv TX.arr◂TX.s8◂{} RP.unt◂{} yk } ⊢ { tv lv ys yd yk } 
 								
-			_emt %[ "emt_rtm D3" ] ⊢ _ 
+			_emt_im.f◂◂"emt_rtm D3" {} ⊢ {} 
 			_st◂◂"RTM_0:\n" {} ⊢ sts0
 			asm.add_st_s8 { asm.e◂{} sts0 } ⊢ ec1 
 			$ asm.e◂{} ⊢ ew0 
@@ -12254,7 +12251,7 @@ unsigned long
 			asm.cct { ec1 ew0 } ⊢ ec1  
 			asm.cct { ec0 eg0 } ⊢ ec0 
 			asm.cct { ec0 ec1 } ⊢ ec0 
-			_emt %[ "emt_rtm D4" ] ⊢ _ 
+			_emt_im.f◂◂"emt_rtm D4" {} ⊢ {} 
 			--\
 
 			$ %[ RCD_N ] ⊢ ssN 
@@ -12303,7 +12300,7 @@ unsigned long
 		L0 { a l i } ⊢| 
 § E { fn0 m0 }
 	_in_fn fn0 ⊢ { _ sf1 } 
-	_emt %[ "E D0" ] ⊢ _ 
+	_emt_im.f◂◂"E D0" {} ⊢ {} 
 	_in_fn %[ "_ARCH.mdls" ] ⊢ { _ sf0 }
 	_prs◂◂OpADL.syntax.file { sf0 %[ 0r ] } ⊢ { _ _ aa0 }
 	$ aa0 ⊢ 
@@ -12316,13 +12313,13 @@ unsigned long
 			∐ _some◂a0 . 
 				$ a0 ⊢ 
 				∐ OpADL.syntax.prs_vld◂a0 . 
-					_emt %[ "opxcc:prs_vld" ] ⊢ _ 
+					_emt_im.f◂◂ "opxcc:prs_vld" {} ⊢ {} 
 					OpADL.ns.emt_rtm { m0 aa0 a0 } ⊢ ec0		
-					_emt %[ "opxcc:asm generated" ] ⊢ _ 
+					_emt_im.f◂◂"opxcc:asm generated" {} ⊢ {} 
 					OpADL.ns.asm.to_s8 ec0 ⊢ sec0
 					_cd %[ "rm SH.mdls.s\ntouch SH.mdls.s\n" ] ⊢ _ 
 					_emt_s8_to_im◂◂"SH.mdls.s" sec0 ⊢ _ 
-					_emt %[ "opxcc:wrote to SH.mdls.s" ] ⊢ _ 
+					_emt_im.f◂◂"opxcc:wrote to SH.mdls.s" {} ⊢ {} 
 
 					^ _ ⊢ sx0 
 						`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
@@ -12330,7 +12327,7 @@ unsigned long
     				--`gcc -pthread -lpthread -Wall stub.c out.o -nostartfiles -no-pie -O2 -o out.exe 
 						// 
 					_cd sx0 ⊢ _  
-					_emt %[ "opxcc:compiled to out.exe" ] ⊢ _ 
+					_emt_im.f◂◂"opxcc:compiled to out.exe" {} ⊢ {} 
 					--_info {} ⊢ {} 
 					∎ {} 
 				∐. OpADL.syntax.prs_err◂e0 .
@@ -12338,15 +12335,15 @@ unsigned long
 					_emt.f es0 ⊢ _  
 					∎|
 			∐. _none◂{} . 
-				_emt %[ "opxcc:_none" ] ⊢ _ 
+				_emt_im.f◂◂"opxcc:_none" {} ⊢ {} 
 				∎| 
 		∐. OpADL.syntax.prs_err◂e0 .
-			_emt %[ "_ARCH.mdls:prs_err" ] ⊢ _ 
+			_emt_im.f◂◂"_ARCH.mdls:prs_err" {} ⊢ {} 
 			OpADL.syntax.pnt_prs_err e0 ⊢ es0 
 			_emt.f es0 ⊢ _  
 			∎|
 	∐. _none◂{} . 
-		_emt %[ "opxcc:_ARCH.mdls:_none" ] ⊢ _ 
+		_emt_im.f◂◂"opxcc:_ARCH.mdls:_none" {} ⊢ {} 
 		∎| 
 			
 §§ args 
@@ -12374,7 +12371,7 @@ unsigned long
 § main args
 	_emt args ⊢ args
   args.f args ⊢ { f0 m0 }
-	_emt %[ "E 0" ] ⊢ _ 
+	_emt_im.f◂◂"E 0" {} ⊢ {} 
 	E { f0 m0 } ⊢ _  
 	∎ {}	
 § c0◂{ a b } = { a b } 
