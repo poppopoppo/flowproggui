@@ -492,5 +492,11 @@
   _add_im◂◂A %[ 4r ] ⊢ x 
   _emt x ⊢ _ 
   ∎ {} 
+§ m19 _ 
+  test◂◂(_emt_im.f◂◂"HELLO WORLD") {} ⊢ _
+  ∎ {} 
+§ m20 _ 
+  test◂◂_emt %[ "HELLO WORLD" ] ⊢ _
+  ∎ {}
 § a _ 
   ∎ {}
