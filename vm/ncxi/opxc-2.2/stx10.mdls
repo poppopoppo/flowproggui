@@ -6426,7 +6426,8 @@ unsigned long
 	§§ inl 
 		§§ m 
 			§ lc = 0r 
-			§ gl = 1r 
+			§ gl = 1r
+			§ lc_gl = 2r 
 			∎∎ 
 		§ app◂{ a b } = RP.atm◂ast.k_app◂{ a b } 
 			§ k_s8◂s = RP.atm◂ast.k_s8◂s 
@@ -6550,12 +6551,17 @@ unsigned long
 						$ { m SC mfv evv tv vv } ⊢ E
 						ct_ptn { E c0 } ⊢|
 					∐. .
-						$ { m SC mfv evv tv vv } ⊢ E
+						$ { %[ m.lc_gl ] SC mfv evv tv vv } ⊢ E
 						∎ { E RP.atm◂ast.k_ap◂{ p0 t0 } }
 				∐ c ⊢ ast.k_app◂{ c0 c1 } .
 					ct_ptn { E c0 } ⊢ { E c0 } 
 					ct_ptn { E c1 } ⊢ { E c1 }
+					$ E ⊢ { m SC mfv evv tv vv } 
+					∐ m'=m.lc_gl . 
+						$ { m SC mfv evv tv vv } ⊢ E
+						∎ { E RP.atm◂ast.k_app◂{ c0 c1 } }												
 					∐ c0 ⊢ RP.atm◂ast.k_op_axm◂{ ax la } . 
+						$ { m SC mfv evv tv vv } ⊢ E
 						∐ ax'=EX.ftr; la ⊢ _cns◂{ k2 _cns◂{ k3 _nil◂{} } } . 
 							$ ast.k_app◂{ k3 RP.atm◂ast.k_app◂{ k2 c1 } } ⊢ k0
 							cst { E k0 } ⊢|
@@ -6590,7 +6596,6 @@ unsigned long
 						∐. .
 							∎ { E RP.atm◂ast.k_op_axm◂{ ax ⟦ c1 < la ⟧ } } 
 					∐ c0 ⊢ RP.atm◂ast.k_op_gnr◂{ { c_n pg } o_n ibg lcg v } . 
-						$ E ⊢ { m SC mfv evv tv vv } 
 						slv.ct_ptn { { %[ 1r ] evv tv } c1 } ⊢ { { lv evv tv } c1 y1 }
 						inst { tv lv RP.atm◂var◂T.p◂v } ⊢ { tv lv y } 
 						newvar_l { tv lv } ⊢ { tv lv yy }
@@ -6625,6 +6630,7 @@ unsigned long
 							$ { m SC { gev ggev AP } evv tv vv } ⊢ E
 							∎ { E RP.atm◂ast.k_op◂{ ‹ { { c_n pg } c1 } › o_n ibg ie v } }
 					∐. . 
+						$ { m SC mfv evv tv vv } ⊢ E
 						∎ { E RP.atm◂ast.k_app◂{ c0 c1 } }							
 				∐. . 
 					∎ { E RP.atm◂c } 
