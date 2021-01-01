@@ -401,7 +401,7 @@
 
 § add_im◂◂X # r
   !^ r ⊢ r 
-    "\tadd rax,0x" (_ct.scf_x◂◂X) "\n" // 
+    "\tadd rax,0x" (_ct.pf_x◂◂X) "\n" // 
    ∎ r
 § main9 _ 
   $ %[ 3r ] ⊢ x
@@ -463,15 +463,32 @@
   loop◂◂F { %[ N ] v } ⊢|
 § l0 # x 
   _emt.f x ⊢|
-§ main11 _ 
-  --test◂◂_emt %[ 10r ] ⊢ _ 
+§ m11 _ 
   test◂◂_emt.f %[ 10r ] ⊢ _ 
   ∎ {} 
-§ main12 _ 
-  _emt.f %[ 17r ] ⊢ _ 
-  ∎ {} 
-§ main13 _ 
+§ m13 _ 
   test◂◂_emt %[ 10r ] ⊢ _ 
   --test◂◂_emt.f %[ 10r ] ⊢ _ 
   ∎ {} 
+§ m14 _ 
+  test◂◂_emt %[ "HELLO WORLD!!" ] ⊢ _ 
+  ∎ {} 
+§ m15 _ 
+  test◂◂_emt.f %[ "HELLO WORLD!!" ] ⊢ _ 
+  ∎ {} 
   
+§ m16 _ 
+  test◂◂_emt ⟦ %[ 4r ] %[ 4r ] %[ 4r ] %[ 4r ] %[ 4r ] ⟧ ⊢ _ 
+  ∎ {} 
+§ m17 _ 
+  test◂◂_emt.f ⟦ %[ 4r ] %[ 4r ] %[ 4r ] %[ 4r ] %[ 4r ] ⟧ ⊢ _ 
+  ∎ {} 
+¶¶ A a' : a' 
+¶§ A = 4r 
+§ m18 _ 
+  --_emt_im.f◂◂"HELLO!!" {} ⊢ {}
+  --_emt_im.f◂◂3r {} ⊢ {} 
+  _add_im◂◂A %[ 4r ] ⊢ _ 
+  ∎ {} 
+§ a _ 
+  ∎ {} 

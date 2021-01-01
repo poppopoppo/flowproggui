@@ -763,3 +763,36 @@ v ~~ x -- value unification
 ¶ @.t -#- long,no_dlt,no_emt,no_rpc 
 
 !^ .. | .. ⊢ .. | .. < .. 
+
+  closed,open ad-hoc polymorphism 
+  closed : 
+  open 
+
+§¶ f : t = f0,f1,..fn 
+
+§ arr0 : _arr◂k'→_arr◂k' = .. -- generic op 
+§ s8 = .. -- s8 specilized op
+§¶ arr : _arr◂k' → _arr◂k' = s8,arr0 -- combine 
+
+
+¶ _s8 = _arr◂{ _r8 { _arr_t_opq _arr_std } }
+¶ _arr◂k' = _arr◂{ k' { _arr_t_gen _arr_std } }
+¶ _arr◂k' = _arr◂{ } 
+§ _arr_len : 
+
+¶¶ emt_C : { f~a'→a' f_arr~_arr◂a'→_arr◂a' }
+§ { f~emt f_arr~emt_arr } = emt_C 
+§ arr_dft = ..
+¶§ emt_C = { f~s8 f_arr~arr_s8 } 
+¶§ emt_C = { f~r64 f_arr~arr_dft } 
+¶§ emt = { f~(emt_C.~f_arr) f_arr~arr_dft }
+
+
+¶¶ F : a'→→
+
+
+  \a' :[ t0 t1 t2 .. tn ] . 
+
+
+
+§ mk_stk_G : { { _r64 k' } (_r64→k')→→(a'→b') }→→
