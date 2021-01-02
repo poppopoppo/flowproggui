@@ -20,8 +20,12 @@
 	§ ila = 17r
 	§ dmy = 18r
 	§ hp = 19r 
+  § r2 = 20r 
+  § rcd = 21r 
+  § unt = 22r 
   ∎∎ 
 
+-- prm 
 ¶ _r64 =# 0r
 ¶ _r8 =# 10r 
 ¶ _arr0 =# 2r 
@@ -35,6 +39,10 @@
 ¶ _st =# 16r 
 ¶ _dmy =# 18r
 ¶ _hp =# 19r 
+-- adt 
+¶ _lst =# 0x0001000000000000r
+¶ _opn =# 0x0001000000000001r
+
 -- id 
 §§ _id 
   §: r64 = _r64
@@ -101,13 +109,18 @@
 § _st =# 47r
 § _ccs =# 48r
 § _mk_stk =# 49r 
+
+-- ctr 
+§ _nil =# 0x0001000000000000r
+§ _cns =# 0x0001000000000001r
+§ _some =# 0x0001000000000002r
+§ _none =# 0x0001000000000003r
+
 §§ _ila 
-  § f = 50r 
-  §§ t 
-    § O =# 51r 
-    § S =# 52r
-    § C =# 53r
-    ∎∎
+  § f =# 50r 
+  § O =# 51r 
+  § S =# 52r
+  § C =# 53r
   ∎∎
 § _ct =# 54r
 §§ _ct 
@@ -125,8 +138,17 @@
     ∎ { a r0 }
   ∎∎ 
 § _id_T =# 60r 
+§ _prd =# 61r
 
 -- non-atomic 
+§ A0 L 
+   $ L ⊢ { r0 r1 } 
+   _ila.f◂◂{ _ila.S◂◂_ila.O _ila.O "" } { r0 } ⊢|
+   --_ila.f◂◂{ _ila.S◂◂(_ila.S◂◂_ila.O) _ila.O "" } { r0 r1 } ⊢|
+§ f { r0 r1 }
+  --!^ r0,r1 ⊢ {} 
+   -- // 
+  ∎ {}
 § _emt_s8_to_im◂◂F # s 
   _id.s8 s ⊢ s 
   _st◂◂F {} ⊢ f 
@@ -141,14 +163,27 @@
     ` jz err 
     //
   ∎ s
+§ op_im◂◂{ O X } # %r 
+  !^ %r ⊢ %r 
+    "\tmov rdi,0x" (_ct.pf_x◂◂X) "\n" 
+    "\t" O " rax,rdi\n" //
+   ∎ %r
 § _add_im◂◂X # r
-  !^ r ⊢ r 
-    "\tadd rax,0x" (_ct.pf_x◂◂X) "\n" // 
-   ∎ r
+  op_im◂◂{ "add" X } r ⊢| 
 § _sub_im◂◂X # r
   !^ r ⊢ r 
     "\tsub rax,0x" (_ct.pf_x◂◂X) "\n" // 
    ∎ r  
+§ _shr_im◂◂X # r 
+  !^ r ⊢ r 
+    "\tshr rax,0x" (_ct.pf_x◂◂X) "\n" // 
+   ∎ r
+§ _shl_im◂◂X # r 
+  !^ r ⊢ r 
+    "\tshl rax,0x" (_ct.pf_x◂◂X) "\n" // 
+   ∎ r
+§ _and_im◂◂X # r 
+  op_im◂◂{ "and" X } r ⊢| 
 § _inc # r 
   !^ r ⊢ r 
     ` add rax,1 
@@ -159,14 +194,6 @@
     ` sub rax,1 
     //
   ∎ r  
-§ _shr_im◂◂X # r 
-  !^ r ⊢ r 
-    "\tshr rax,0x" (_ct.pf_x◂◂X) "\n" // 
-   ∎ r
-§ _shl_im◂◂X # r 
-  !^ r ⊢ r 
-    "\tshl rax,0x" (_ct.pf_x◂◂X) "\n" // 
-   ∎ r
 § op2◂◂OP # { r0 r1 } 
   !^ r0,r1 ⊢ r0,r1 
     "\t" OP " rax,rdi\n" // 
@@ -505,6 +532,7 @@
     cst◂◂"{}" {} ⊢ {}
     ∎ {}
   ¶§ f0 = unt
+  -\
   § rcd2 # { a b }
     cst◂◂"{ " {} ⊢ {}
     f0 a ⊢ a 
@@ -513,6 +541,10 @@
     cst◂◂" }" {} ⊢ {}
     ∎ { a b }
   ¶§ f0 = rcd2 
+  § prd # L
+    _prd L ⊢ { h L } 
+    f0 L ⊢ L 
+  -/
   § r64 x 
      !^ x ⊢ *x 
       ` sub rsp,32 

@@ -796,3 +796,23 @@ v ~~ x -- value unification
 
 
 § mk_stk_G : { { _r64 k' } (_r64→k')→→(a'→b') }→→
+
+
+
+¶ @._rcd ◂ _ 
+  ∐ _prd : _tpl◂a'◂(_rcd◂r') ⊢ _rcd◂(_prd◂a'◂r')
+  ∐ _unt : {} ⊢ _rcd◂{}
+  _prl : a'→(_prl◂a')
+  _prd : (_rcd◂(prd◂a'◂r'))◂◂(_rcd◂(_prd◂a'◂(_prd◂(_rcd◂r')◂_unt)))
+  _unt : _rcd◂_unt
+  _ipr : 
+
+
+  { a | b } : _prd◂a'◂b' 
+
+¶¶ of_rcd : _rcd◂l' → T.t_p
+§ unt {} 
+  ∎ RP.unt◂{}
+§ prd { a < b }
+  
+¶§ of_rcd
