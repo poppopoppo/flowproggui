@@ -816,3 +816,11 @@ v ~~ x -- value unification
 § prd { a < b }
   
 ¶§ of_rcd
+
+
+  _arr_a : { * {  [ _l_fix◂[ _l8 _l16 _l32 _l64 >[ _ : _r64 ] ] _l_ex ] [ _t_r2 _t_r8 _t16 _t_std ] [ {} _I◂Glb.t ] [ _p_std _p_st _p_pub ] } }
+
+
+_Clr.M.t◂{ k' v' }
+_Clr.M.in : { _Clr.t_in◂{ k' v' } w' }→_Clr.t_in◂{ k' { v' w' } }
+_Clr.M.pt : _Clr.M.t◂{ k' v' }→_Clr.M.t◂{ k' { _Clr.M.pt◂k' v' } }
