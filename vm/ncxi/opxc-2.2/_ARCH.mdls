@@ -39,6 +39,7 @@
 ¶ _st =# 16r 
 ¶ _dmy =# 18r
 ¶ _hp =# 19r 
+¶ _rcd =# 21r
 -- adt 
 ¶ _lst =# 0x0001000000000000r
 ¶ _opn =# 0x0001000000000001r
@@ -51,11 +52,15 @@
   §: arr k' = _arr◂k'
   §: st_s8 = _st◂_s8
   §: Clr k' = _Clr◂k'
+  §: pt k' = _pt◂k' 
   §§ hp 
     §: s8 = _hp◂_s8 
     §: Clr k' = _hp◂(_Clr◂k') 
     §: pt k' = _hp◂(_pt◂k') 
     ∎∎ 
+  §§ arr 
+    §: s8 = _arr◂_s8 
+    ∎∎
   ∎∎
 
 -- rank-0
@@ -139,7 +144,7 @@
   ∎∎ 
 § _id_T =# 60r 
 § _prd =# 61r
-
+§ _ipr =# 62r
 -- non-atomic 
 § A0 L 
    $ L ⊢ { r0 r1 } 
@@ -512,6 +517,10 @@
     cst◂◂"{}: {}" {} ⊢ {} 
     ∎ {}
   ¶§ f0 = unt
+  -\
+  § prd p 
+    _prd p ⊢ { h t }
+-/
   § r64◂◂X # {} 
     cst◂◂(_ccs◂◂{ "0x" _ccs◂◂{ (_ct.pf_x◂◂X) "r: _r64" } }) {} ⊢ {} 
     ∎ {}
@@ -528,23 +537,25 @@
     f0 a ⊢ a
     cst◂◂"\n" {} ⊢ {}
     ∎ a 
+  ¶¶ f_rcd r' : _rcd◂r'→_rcd◂r' 
+  § rcd # r 
+    cst◂◂"{" {} ⊢ {}
+    f_rcd r ⊢|
   § unt # {} 
     cst◂◂"{}" {} ⊢ {}
     ∎ {}
-  ¶§ f0 = unt
-  -\
-  § rcd2 # { a b }
-    cst◂◂"{ " {} ⊢ {}
-    f0 a ⊢ a 
-    cst◂◂" " {} ⊢ {}
-    f0 b ⊢ b
+  § rcd_unt # {} 
     cst◂◂" }" {} ⊢ {}
-    ∎ { a b }
-  ¶§ f0 = rcd2 
-  § prd # L
-    _prd L ⊢ { h L } 
-    f0 L ⊢ L 
-  -/
+    ∎ {}
+  § prd # p 
+    _ipr p ⊢ { h t } 
+    cst◂◂" " {} ⊢ {} 
+    f0 h ⊢ h 
+    f_rcd t ⊢ t 
+    _prd { h t } ⊢| 
+  ¶§ f_rcd = rcd_unt 
+  ¶§ f_rcd = prd 
+  ¶§ f0 = rcd  
   § r64 x 
      !^ x ⊢ *x 
       ` sub rsp,32 
@@ -588,12 +599,20 @@
     ∐. .
       cst◂◂"}" {} ⊢ {} 
       ∎ a 
-  § arr0 # a 
+  § arr # a 
     _arr_len a ⊢ { a l }
     cst◂◂"{+ " {} ⊢ {} 
     arr_i { { a l } %[ 0r ] } ⊢| 
-  --§¶ arr k' : _arr◂k'→_arr◂k' = s8,arr0
-  --§ f0 = arr
+  § pt # p 
+    _id.pt p ⊢ p 
+    cst◂◂"[=]" {} ⊢ {} 
+    ∎ p
+  ¶§ f0 = pt
+  § Clr # C 
+    _id.Clr C ⊢ C 
+    cst◂◂"{= .. }" {} ⊢ {} 
+    ∎ C
+  ¶§ f0 = Clr
   § lst l 
     $ l ⊢ 
     ∐ _cns◂d . 

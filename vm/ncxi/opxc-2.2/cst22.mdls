@@ -499,4 +499,20 @@
   test◂◂_emt %[ "HELLO WORLD" ] ⊢ _
   ∎ {}
 § a _ 
+  --_emt  { %[ 0r ] %[ "JOO" ] {} } ⊢ _ 
+  _emt.f { {} } ⊢ _ 
   ∎ {}
+§ m21 _ 
+  test◂◂_emt { %[ 0r ] %[ "HHOO" ] {} } ⊢ _ 
+  ∎ {}
+§ m22 _ 
+  test◂◂_emt.f { %[ 0r ] %[ "HHOO" ] {} } ⊢ _ 
+  ∎ {}
+§ m23 _ 
+  _mk_arr { %[ 32r ] { %[ 0r ] %[ "KK" ] } } ⊢ { _ _ v }
+  test◂◂_emt v ⊢ _ 
+  ∎ {} 
+§ m24 _ 
+  _mk_arr { %[ 32r ] { %[ 0r ] %[ "KK" ] } } ⊢ { _ _ v }
+  test◂◂_emt.arr v ⊢ _ 
+  ∎ {} 
