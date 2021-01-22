@@ -3160,6 +3160,7 @@ unsigned long
 					∎|
 			∐. . 
 				∎|
+		-\
 		§ @.agl_of_cst { evv c } 
 			∐ c ⊢ k_name◂i . 
 				EVV.lod_evv { evv i } ⊢ { evv i c }
@@ -3169,6 +3170,7 @@ unsigned long
 					∎|
 			∐. . 
 				∎| 
+		-/
 		§ @.rt_of_ct_atm { evv c } 
 			∐ c ⊢ k_name◂i . 
 				EVV.lod_evv { evv i } ⊢ { evv i c }
@@ -3182,13 +3184,13 @@ unsigned long
 			∐ agl_d : b' 
 			∐ agl_b : {} 
 		§ agl_rt { evv p }
-			∐ p ⊢ RP.atm◂hp_im◂c0 . 
-				∐ c0 ⊢ RP.atm◂c0 . 
-					agl_of_cst { evv c0 } ⊢ { evv { ia0 na0 va0 ca0 } }
-					rt_of_ct { evv ca0 } ⊢ { evv pa0 } 
-					∎ { evv agl_s◂{ ia0 na0 pa0 } }
-				∐. . 
-					∎|
+			∐ p ⊢ RP.atm◂hp_im◂RP.atm◂c0 . 
+				-\
+				agl_of_cst { evv c0 } ⊢ { evv { ia0 na0 va0 ca0 } }
+				rt_of_ct { evv ca0 } ⊢ { evv pa0 } 
+				∎ { evv agl_s◂{ ia0 na0 pa0 } }
+				-/
+				∎|
 			∐ p ⊢ RP.atm◂stt_adt◂{ ia na pa } . 
 				∎ { evv agl_s◂{ ia na pa } }
 			∐ p ⊢ RP.atm◂dyn_adt◂{ L ri rd } . 
@@ -8999,16 +9001,19 @@ unsigned long
 						∐ ast.hp_im◂ _ . 
 							∎|
 						∐ ast.stt_adt◂{ ia1 na1 pa1 } . 
+							-\
 							ast.agl_of_cst { evv c0 } ⊢ { evv { ia0 na0 _ c0 } }
 							∐ ia0'=ia1' . 
 								RP.atm_a pa1 ⊢ pa1 
 								RP.atm_a c0 ⊢ c0 
 								im_to_atm { L e0 {  evv tav tv eds } GV c0 pa1 } ⊢|  
 							∐. . 
+							-/
 								∎|
 						∐ ast.rt_usr◂_ . 
 							∎| 
 						∐. ast.dyn_adt◂{ { ax al } ri rd } .
+							-\
 							ast.agl_of_cst { evv c0 } ⊢ { evv { ia0 na0 _ c0 } }
 							RP.atm_a c0 ⊢ c0 
 							dta_n { tav ax } ⊢ { tav ax { _ vl1 kl1 } } 
@@ -9030,6 +9035,7 @@ unsigned long
 							∐ c_n'=1r . 
 								∎| 
 							∐. . 
+							-/
 								∎| 
 				§	
 					@.im_to_sgm_atm { e0 {  evv tav tv eds } GV c0 a1 }
@@ -9048,14 +9054,17 @@ unsigned long
 						∐ ast.rt_usr◂_ . 
 							∎| 
 						∐ ast.stt_adt◂{ ia1 na1 pa1 } . 
+							-\
 							ast.agl_of_cst { evv c0 } ⊢ { evv { ia0 na0 _ c0 } }
 							∐ ia0'=ia1' . 
 								RP.atm_a pa1 ⊢ pa1 
 								RP.atm_a c0 ⊢ c0 
 								im_to_sgm_atm { e0 {  evv tav tv eds } GV c0 pa1 } ⊢|  
 							∐. . 
+							-/
 								∎|
 						∐. ast.dyn_adt◂{ { ax al } ri rd } .
+							-\
 							ast.agl_of_cst { evv c0 } ⊢ { evv { ia0 na0 _ c0 } }
 							RP.atm_a c0 ⊢ c0 
 							dta_n { tav ax } ⊢ { tav ax { _ vl1 kl1 } } 
@@ -9097,6 +9106,8 @@ unsigned long
 								_st◂◂"\tpop DST_REG\n" {} ⊢ s0 
 								asm.add_st_s8 { e0 s0 } ⊢ e0 
 								∎ { e0 {  evv tav tv eds } GV }
+								-/
+								∎|
 				§
 					@.to_sgm_ptn { e0 {  evv tav tv eds } GV p0 p1 } 
 						∐ p0 ⊢ RP.rcd◂l0; p1 ⊢ RP.rcd◂l1 . 
