@@ -2978,7 +2978,7 @@ unsigned long
 				∐ k_agl : { e' CP◂e'◂s' }
 				∐ k_ply : { _r64 RP.t◂_r64 SP◂_r64◂e'◂s' }
 				∐ k_ap : { _pt◂(ap◂e') T.t_p } 
-				∐ k_unv : _r64 
+				--∐ k_unv : _r64 
 				--∐ k_t : T.pt
 			@.fmt
 				∐ fmt_s : {}
@@ -3174,10 +3174,12 @@ unsigned long
 					agl_of_cst { evv c } ⊢| 
 				∐. . 
 					∎|
-			∐ c ⊢ k_agl◂{ v c } . 
+			-\
+      ∐ c ⊢ k_agl◂{ v c } . 
 				ctr_of_k { evv k_name◂%v } ⊢ { evv { i n v } }
 				∎ { evv { i n v c } } 
-			∐. . 
+			-/
+      ∐. . 
 				∎| 
 		§ @.rt_of_ct_atm { evv c } 
 			∐ c ⊢ k_agl◂{ v c } . 
@@ -4347,12 +4349,14 @@ unsigned long
 			∐. _nil◂{} . 
 				∎| 
 		§§ grm 
-			§ unv◂x = RP.atm◂ast.k_unv◂x 
+		  -\
+      § unv◂x = RP.atm◂ast.k_unv◂x 
 			§ k_some◂{} = unv◂%[ UNV.id.some ] 
 			§ k_none◂{} = unv◂%[ UNV.id.none ] 
 			§ k_cns◂{} = unv◂%[ UNV.id.cns ] 
 			§ k_nil◂{} = unv◂%[ UNV.id.nil ] 
-			§ ax = ast.axm 
+			-/
+      § ax = ast.axm 
 			§ seq = ast.seq 
 			§ reg◂n = RP.atm◂ast.re_reg◂n 
 			§ reg_d◂n = RP.atm◂n 
@@ -5431,8 +5435,8 @@ unsigned long
 			∐# "=^" !| "\n" s8_ptn_lst ⊢ { {} {} l } 
 				∎ ret_vld◂ast.lc_ln◂RP.atm◂ast.k_pf◂l 
 			∐# "=#" !| r "\n" ⊢ { {} x {} } 
-				--∎ ret_vld◂ast.lc_unv◂x 
-				∎ ret_vld◂ast.lc_ln◂RP.atm◂ast.k_unv◂x
+				--∎ ret_vld◂ast.lc_ln◂RP.atm◂ast.k_unv◂x
+				∎ ret_vld◂ast.lc_unv◂x 
 			∐# "=|" !| "\n" ⊢ { {} {} }
 				∎ ret_vld◂ast.lc_neg◂{}
 			∐# "=" !| ct_ptn "\n" ⊢ { {} c {} }
@@ -5823,8 +5827,6 @@ unsigned long
 						∎|
 					∐ ast.k_ap◂K . 
 						∎| 
-					∐ ast.k_unv◂x . 
-						∎ { env0 ast.k_unv◂x } 
 					∐. ast.k_op_axm◂{ a al } . 
 						∐ al ⊢ _nil◂{} .
 							∎ { env0 ast.k_op_axm◂{ a ⟦⟧ } }
@@ -6446,13 +6448,6 @@ unsigned long
 					$ t ⊢ t,t0 
 					$ { lv evv tv } ⊢ E 
 					∎ { E RP.atm◂ast.k_ap◂{ p t } t0 }
-				∐ c ⊢ ast.k_unv◂x . 
-					$ E ⊢ { lv evv tv } 
-					$ x ⊢ x,x0 
-					UNV.t { tv x0 } ⊢ { tv t }
-					inst { tv lv t } ⊢ { tv lv t }
-					$ { lv evv tv } ⊢ E 
-					∎ { E RP.atm◂ast.k_unv◂x t }
 				∐ c ⊢ ast.k_arr◂v .
 					∎| 
 				∐ c ⊢ ast.k_op◂{ og o_n ib lc v } . 
@@ -6790,13 +6785,6 @@ unsigned long
 					∎ { E c } 
 				∐ c ⊢ ast.k_arr◂v . 
 					 ∎ { E RP.atm◂ast.k_arr◂v }
-				∐ c ⊢ ast.k_unv◂x . 
-					$ E ⊢ { m SC mfv evv tv vv } 
-					$ mfv ⊢ { apv gev ggev AP } 
-					UNV.f { { apv tv } x } ⊢ { { apv tv } k } 
-					$ { apv gev ggev AP } ⊢ mfv 
-					$ { m SC mfv evv tv vv } ⊢ E
-					ct_ptn { E k } ⊢|
 				∐ c ⊢ ast.k_ap◂{ p0 t0 } .
 					$ E ⊢ { m SC mfv evv tv vv } 
 					∐ m'=m.gl . 
@@ -9018,8 +9006,6 @@ unsigned long
 							∎| 
 						∐ ast.k_ap◂_ .
 							∎| 
-						∐ ast.k_unv◂x .
-							∎|
 						∐ ast.k_op◂_ . 
 							∎| 
 						∐ ast.k_app◂_ . 
@@ -11062,8 +11048,6 @@ unsigned long
 								AP.slv { tv AP p t } ⊢ { tv AP o } 
 								$ { apv gev ggev AP } ⊢ mfv
 								stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys is o } } ⊢| 								
-							∐ k ⊢ ast.k_unv◂x .
-								∎| 
 							∐ k ⊢ ast.k_ctr◂{ ia na _ } . 
 								∎|
 							∐ k ⊢ ast.k_ply◂{ _ p0 p1 } . 
