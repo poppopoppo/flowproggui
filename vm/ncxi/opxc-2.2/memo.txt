@@ -824,3 +824,24 @@ v ~~ x -- value unification
 _Clr.M.t◂{ k' v' }
 _Clr.M.in : { _Clr.t_in◂{ k' v' } w' }→_Clr.t_in◂{ k' { v' w' } }
 _Clr.M.pt : _Clr.M.t◂{ k' v' }→_Clr.M.t◂{ k' { _Clr.M.pt◂k' v' } }
+
+
+§¶ A = { C _[ 88r : _r64 ] [> B ] }
+
+  >[ ] : t'→[ V ]→>[ V : t' ]
+  >[ ]◂◂◂87r 
+  _UNV : _r64→[ x ]→ 
+  _UNV◂◂◂44r 
+
+  ◂/◂
+
+  
+_adt◂
+  _UNV : _dep◂_r64 &[ _r64 ] 
+
+  _dep◂t' 
+  ◂◂◂ : _dep◂t' t' →→→ _
+
+
+  _adt◂{ p◂k t }
+  

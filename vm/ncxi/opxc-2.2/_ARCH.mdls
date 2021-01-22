@@ -46,6 +46,7 @@
 
 -- id 
 §§ _id 
+  §: eq_t a' = { a' a' }
   §: r64 = _r64
   §: s8 = _s8  
   §: arr0 t',k' = _arr0◂t'◂k' 
@@ -120,6 +121,8 @@
 § _cns =# 0x0001000000000001r
 § _some =# 0x0001000000000002r
 § _none =# 0x0001000000000003r
+-- ap
+--§ _emt0 =# 0x0002000000000000r
 
 §§ _ila 
   § f =# 50r 
@@ -557,7 +560,7 @@
   ¶§ f_rcd = prd 
   ¶§ f0 = rcd  
   § r64 x 
-     !^ x ⊢ *x 
+    !^ x ⊢ *x 
       ` sub rsp,32 
       ` mov rdi,rsp 
       ` mov BYTE [rdi],'0'
@@ -591,7 +594,7 @@
   § @.arr_i { { a l } i } 
     ∐ l'<>i' .
       _alc_o { a i } ⊢ { a k }
-      f0 k ⊢ k 
+      f0 k ⊢ k  
       cst◂◂" " {} ⊢ {} 
       _alc_i { a k } ⊢ { a i } 
       _inc i ⊢ i 
@@ -624,4 +627,5 @@
       f0 d ⊢ d 
       ∎ _nil◂d 
   ¶§ f0 = lst
+  --¶§ _emt0 = lst 
   ∎∎  

@@ -500,7 +500,8 @@
   ∎ {}
 § a _ 
   --_emt  { %[ 0r ] %[ "JOO" ] {} } ⊢ _ 
-  _emt.f { {} } ⊢ _ 
+  --_emt.f { {} } ⊢ _ 
+  _emt0 ⟦ {} {} ⟧ ⊢ _
   ∎ {}
 § m21 _ 
   test◂◂_emt { %[ 0r ] %[ "HHOO" ] {} } ⊢ _ 
@@ -516,3 +517,26 @@
   _mk_arr { %[ 32r ] { %[ 0r ] %[ "KK" ] } } ⊢ { _ _ v }
   test◂◂_emt.arr v ⊢ _ 
   ∎ {} 
+
+¶ a a',b' 
+  ∐ c0 : a' 
+  ∐ c1 : b' 
+§ @.f c 
+  $ c ⊢ 
+  ∐ c0◂a . 
+    _emt.f a ⊢ a
+    ∎ c0◂a
+  ∐. c1◂b . 
+    _emt.f b ⊢ b 
+    ∎ c1◂b 
+¶§ _emt.f0 = f
+§ m25 _ 
+  $ c0◂%[ 55r ] ⊢ v0  
+  $ c1◂%[ "))" ] ⊢ v1 
+  _id.eq_t { v0 v1 } ⊢ { v0 v1 } 
+  _emt.f v0 ⊢ _ 
+  _emt.f v1 ⊢ _ 
+  --_emt0 v0 ⊢ _ 
+  --_emt0 v1 ⊢ _ 
+  ∎ {} 
+
