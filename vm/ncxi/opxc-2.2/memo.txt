@@ -845,3 +845,20 @@ _adt◂
 
   _adt◂{ p◂k t }
   
+¶¶ mk_emt : { { _s8 _ctr◂{ s' d' } } < l' } →→ (d'→d')
+  § mk_emt_c◂◂{ { s0 c0 } { s1 c1 } .. { sn cn } } d 
+    $ d ⊢ 
+    ∐ c0◂d0 .
+      _emt.cst◂◂(_ccs◂◂{ s0 "◂" }) {} ⊢ {} 
+      _emt.f0 d0 ⊢ d0 
+      ∎ c0◂d0 
+    ∐ 
+      ..
+    ∐. cn◂dn .
+      _emt.cst◂◂(_ccs◂◂{ sn "◂" }) {} ⊢ {} 
+      _emt.f dn ⊢ dn 
+      ∎ cn◂dn 
+¶§ mk_emt = mk_emt_c 
+
+
+  '[> t' ]→→
