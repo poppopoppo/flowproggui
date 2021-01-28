@@ -862,3 +862,13 @@ _adt◂
 
 
   '[> t' ]→→
+
+
+  _vpa : { T' (>[ _ : T' ]→→d') }→→d' -- value polymorphic application 
+  _vra : (T'→→(a'→b'))→→({ >[ v' : T' ] a' }→b') 
+  _via : (T'→→(a'→b'))→→({ _im◂T' a' }→b')
+  _r.via : (_r64→→(a'→b'))→→({ _r◂{ _i64 '{ v~'im < l' } } a' })→→b'
+
+
+  _ciq.f : { _ciq.op◂{ a' T' b' } T'→→{ b' c' }→d' { a' c' }→d' }→→{ a' c' }→d' 
+  
