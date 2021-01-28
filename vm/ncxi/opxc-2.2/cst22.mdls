@@ -560,3 +560,11 @@
   _emt.f c0◂%[ 3r ] ⊢ _ 
   --_emt.f ⟦ %[ 0r ] ⟧ ⊢ _ 
   ∎ {} 
+§ F0◂◂A = A 
+§ F◂◂{ A B } = A◂◂B 
+§ G◂◂X = _add_im◂◂X
+§ C◂◂X = F◂◂{ _add_im X }
+§ m28 _ 
+  F◂◂{ _add_im 55r } %[ 4r ] ⊢ x 
+  _emt.f x ⊢ _ 
+  ∎ {} 
