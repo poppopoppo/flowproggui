@@ -1,7 +1,7 @@
 %include "HD.s"  
 ;	v.0
 %define RCD_N 64
-%define GLV_N 134
+%define GLV_N 167
  
 section .bss
 %include "BSS.s"
@@ -10,18 +10,36 @@ section .data
 %include "DATA.s"
 LB_5_H: dq 0x4
 LB_5: db 101,109,116,58,0,0,0,0,0,0,0,0,0
-LB_7_H: dq 0x7
-LB_7: db 32,58,32,95,114,54,52,0,0,0,0,0,0,0,0,0
-LB_9_H: dq 0x1
-LB_9: db 10,0,0,0,0,0,0,0,0,0
+LB_11_H: dq 0x5
+LB_11: db 99,48,226,151,130,0,0,0,0,0,0,0,0,0
+LB_13_H: dq 0x7
+LB_13: db 32,58,32,95,114,54,52,0,0,0,0,0,0,0,0,0
+LB_15_H: dq 0x5
+LB_15: db 99,49,226,151,130,0,0,0,0,0,0,0,0,0
+LB_17_H: dq 0x1
+LB_17: db 34,0,0,0,0,0,0,0,0,0
+LB_18_H: dq 0x7
+LB_18: db 34,32,58,32,95,115,56,0,0,0,0,0,0,0,0,0
+LB_21_H: dq 0x1
+LB_21: db 10,0,0,0,0,0,0,0,0,0
+LB_33_H: dq 0x5
+LB_33: db 99,50,226,151,130,0,0,0,0,0,0,0,0,0
+LB_34_H: dq 0x1
+LB_34: db 123,0,0,0,0,0,0,0,0,0
+LB_35_H: dq 0x2
+LB_35: db 32,125,0,0,0,0,0,0,0,0,0
+LB_36_H: dq 0x5
+LB_36: db 99,51,226,151,130,0,0,0,0,0,0,0,0,0
+LB_37_H: dq 0x1
+LB_37: db 32,0,0,0,0,0,0,0,0,0
 section .text
 global _start
 _start:
 %include "START.s"
 	jmp RTM_0
-LB_6: ;; #0x◂◂(_none◂{}) 131'(= r ) ⊢ 0'(= r ) : ((_r64◂)→(_r64◂))
-JMP_6:
-	MOV_RBX rax,GLX(0x83)
+LB_12: ;; #0x◂◂(_none◂{}) 133'(= r ) ⊢ 0'(= r ) : ((_r64◂)→(_r64◂))
+JMP_12:
+	MOV_RBX rax,GLX(0x85)
  sub rsp,32 
  mov rdi,rsp 
  mov BYTE [rdi],'0'
@@ -34,12 +52,205 @@ JMP_6:
  mov rsi,rax  
  C_CALL fw
  add rsp,32 
-	mov GLX(0x84),LB_7
+	mov GLX(0x86),LB_13
+	MOV_RBX rax,GLX(0x86)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	MOV_RBX GLX(0x0),GLX(0x85)
+ ret 
+LB_16: ;; #0x◂◂(_none◂{}) 138'(= {| r8 |} ) ⊢ 0'(= {| r8 |} ) : ((_arr◂(_r8◂)◂{  })→(_arr◂(_r8◂)◂{  }))
+JMP_16:
+	mov GLX(0x8b),LB_17
+	MOV_RBX rax,GLX(0x8b)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	MOV_RBX rax,GLX(0x8a)
+ mov rsi,0x0000_ffff_ffff_ffff 
+ and rsi,QWORD [rax]
+ lea rdi,[rax+8]
+ C_CALL fw 
+	mov GLX(0x8c),LB_18
+	MOV_RBX rax,GLX(0x8c)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	MOV_RBX GLX(0x0),GLX(0x8a)
+ ret 
+LB_6: ;; #0x◂◂(_none◂{}) 130'◂131'' ⊢ 0'◂1'' : ((.a5◂)→(.a5◂))
+JMP_6:
+	MOV_RBX rdi,GLX(0x82)
+	jmp QWORD [LB_10+8*rdi]
+LB_10: dq LB_8,LB_9
+LB_8:
+	mov GLX(0x84),LB_11
 	MOV_RBX rax,GLX(0x84)
  mov rdi,rax 
  mov rsi,QWORD [rax-8]
  C_CALL fw 
-	MOV_RBX GLX(0x0),GLX(0x83)
+	push EXH_14
+	MOV_RBX GLX(0x85),GLX(0x83)
+	call LB_12
+	add rsp,8
+	mov GLX(0x87),0x0
+	sub rsp,8
+	mov DST_REG,rsp
+	MOV_RDI DX(0x0),GLX(0x0)
+	pop rax
+	MOV_RBX GLX(0x88),rax
+	MOV_RBX GLX(0x0),GLX(0x87)
+	MOV_RBX GLX(0x1),GLX(0x88)
+ ret 
+LB_9:
+	mov GLX(0x89),LB_15
+	MOV_RBX rax,GLX(0x89)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	push EXH_19
+	MOV_RBX GLX(0x8a),GLX(0x83)
+	call LB_16
+	add rsp,8
+	mov GLX(0x8d),0x1
+	sub rsp,8
+	mov DST_REG,rsp
+	MOV_RDI DX(0x0),GLX(0x0)
+	pop rax
+	MOV_RBX GLX(0x8e),rax
+	MOV_RBX GLX(0x0),GLX(0x8d)
+	MOV_RBX GLX(0x1),GLX(0x8e)
+ ret 
+LB_7:
+EXH_14:
+	add rsp,0x8
+	pop rax
+	jmp rax
+EXH_19:
+	add rsp,0x8
+	pop rax
+	jmp rax
+LB_22: ;; 
+	jmp QWORD [LB_25+8*r10]
+LB_25: dq LB_23,LB_24
+LB_23:
+	jmp LB_26
+LB_24:
+	MOV_RBX rdi,r8
+	FREE_OPQ 27
+	jmp LB_26
+LB_26:
+ ret 
+LB_28: ;; #0x◂◂(_none◂{}) 147'◂148'' ⊢ 0'◂1'' : ((.a6◂)→(.a6◂))
+JMP_28:
+	MOV_RBX rdi,GLX(0x93)
+	jmp QWORD [LB_32+8*rdi]
+LB_32: dq LB_30,LB_31
+LB_30:
+	mov GLX(0x95),LB_33
+	MOV_RBX rax,GLX(0x95)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	mov GLX(0x96),LB_34
+	MOV_RBX rax,GLX(0x96)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	mov GLX(0x97),LB_35
+	MOV_RBX rax,GLX(0x97)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	mov GLX(0x98),0x0
+	MOV_RBX GLX(0x0),GLX(0x98)
+ ret 
+LB_31:
+	MOV_RBX rdi,GLX(0x94)
+	push SRC_REG 
+	mov SRC_REG,rdi 
+	add SRC_REG,8
+	MOV_RDI GLX(0x99),SX(0x0)
+	MOV_RDI GLX(0x9a),SX(0x1)
+	MOV_RDI GLX(0x9b),SX(0x2)
+	sub SRC_REG,8 
+	mov rdi,SRC_REG  
+	pop SRC_REG 
+	FREE_RCD 4,rdi
+	mov GLX(0x9c),LB_36
+	MOV_RBX rax,GLX(0x9c)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	mov GLX(0x9d),LB_34
+	MOV_RBX rax,GLX(0x9d)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	mov GLX(0x9e),LB_37
+	MOV_RBX rax,GLX(0x9e)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	push EXH_38
+	MOV_RBX GLX(0x85),GLX(0x99)
+	call LB_12
+	add rsp,8
+	mov GLX(0x9f),LB_37
+	MOV_RBX rax,GLX(0x9f)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	lea rsp,[rsp-(8*0x1)]
+	MOV_RDI QWORD [rsp+8*0x0],GLX(0x0)
+	push EXH_39
+	MOV_RBX GLX(0x93),GLX(0x9a)
+	MOV_RBX GLX(0x94),GLX(0x9b)
+	call LB_28
+	add rsp,8
+	MOV_RDI GLX(0xa0),QWORD [rsp+8*0x0]
+	lea rsp,[rsp+(8*0x1)]
+	mov GLX(0xa1),LB_35
+	MOV_RBX rax,GLX(0xa1)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	mov GLX(0xa2),0x1
+	ALC_RCD 4,rax
+	MOV_RBX GLX(0xa3),rax
+	lea DST_REG,[rax+8]
+	MOV_RDI DX(0x0),GLX(0xa0)
+	MOV_RDI DX(0x1),GLX(0x0)
+	MOV_RDI DX(0x2),GLX(0x1)
+	MOV_RBX GLX(0x0),GLX(0xa2)
+	MOV_RBX GLX(0x1),GLX(0xa3)
+ ret 
+LB_29:
+EXH_38:
+	add rsp,0x8
+	pop rax
+	jmp rax
+EXH_39:
+	add rsp,0x8
+	pop rax
+	jmp rax
+LB_41: ;; 
+	jmp QWORD [LB_44+8*r10]
+LB_44: dq LB_42,LB_43
+LB_42:
+	jmp LB_45
+LB_43:
+	push SRC_REG 
+	lea SRC_REG,[r8+8]
+	push r8 
+	MOV_RBX r10,SX(0x1)
+	MOV_RBX r8,SX(0x2)
+	call LB_41
+	pop r8
+	FREE_RCD 4,r8
+	pop SRC_REG
+	jmp LB_45
+LB_45:
  ret 
 LB_0: ;; #0x◂◂(_none◂{}) 128'(= {| ? |} ) ⊢ { } : ((_arr◂(_arr◂(_r8◂)◂{  })◂{  })→{  })
 JMP_0:
@@ -63,38 +274,75 @@ LB_2:
 	pop rdi
 	pop SRC_REG 
 	FREE_OPQ 4
-	mov GLX(0x81),0x4
+	mov GLX(0x81),LB_5
 	MOV_RBX rax,GLX(0x81)
-	mov rdi,0x37
-	add rax,rdi
-	MOV_RBX GLX(0x81),rax
-	mov GLX(0x82),LB_5
-	MOV_RBX rax,GLX(0x82)
  mov rdi,rax 
  mov rsi,QWORD [rax-8]
  C_CALL fw 
-	push EXH_8
-	MOV_RBX GLX(0x83),GLX(0x81)
+	push EXH_20
+	mov GLX(0x8f),0x0
+	sub rsp,8
+	mov DST_REG,rsp
+	mov rax,0x3
+	mov DX(0x0),rax
+	pop rax
+	MOV_RBX GLX(0x90),rax
+	MOV_RBX GLX(0x82),GLX(0x8f)
+	MOV_RBX GLX(0x83),GLX(0x90)
 	call LB_6
 	add rsp,8
-	mov GLX(0x85),LB_9
-	MOV_RBX rax,GLX(0x85)
+	mov GLX(0x91),LB_21
+	MOV_RBX rax,GLX(0x91)
  mov rdi,rax 
  mov rsi,QWORD [rax-8]
  C_CALL fw 
+	MOV_RBX r10,GLX(0x0)
+	MOV_RBX r8,GLX(0x1)
+	call LB_22
+	mov GLX(0x92),LB_5
+	MOV_RBX rax,GLX(0x92)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	lea rsp,[rsp-(8*0x0)]
+	push EXH_40
+	mov GLX(0xa4),0x1
+	ALC_RCD 4,rax
+	MOV_RBX GLX(0xa5),rax
+	lea DST_REG,[rax+8]
+	mov rax,0x4
+	mov DX(0x0),rax
+	mov DX(0x1),0x0
+	MOV_RBX GLX(0x93),GLX(0xa4)
+	MOV_RBX GLX(0x94),GLX(0xa5)
+	call LB_28
+	add rsp,8
+	lea rsp,[rsp+(8*0x0)]
+	mov GLX(0xa6),LB_21
+	MOV_RBX rax,GLX(0xa6)
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+	MOV_RBX r10,GLX(0x0)
+	MOV_RBX r8,GLX(0x1)
+	call LB_41
  ret 
-EXH_8:
+EXH_20:
+	add rsp,0x8
+	pop rax
+	jmp rax
+EXH_40:
 	add rsp,0x8
 	pop rax
 	jmp rax
 RTM_0:
-	push EXH_10
+	push EXH_46
 	MOV_RBX GLX(0x80),GLX(0x7f)
 	call LB_0
 	add rsp,8
 	mov QWORD [EXIT],1
 	C_CALL exit
-EXH_10:
+EXH_46:
 	add rsp,0x8
 	pop rax
 	jmp rax

@@ -123,6 +123,7 @@
 § _none =# 0x0001000000000003r
 -- ap
 § _emt0 =# 0x0002000000000000r
+§ _emt_mo =# 0x0002000000000001r
 
 §§ _ila 
   § f =# 50r 
@@ -534,13 +535,20 @@
   ¶§ f0 = s8
   ∎∎
 §§ _emt 
-  --¶¶ f0 a' : a' → a' 
   § f0 = _emt0 
   § f # a 
     cst◂◂"emt:" {} ⊢ {} 
     f0 a ⊢ a
     cst◂◂"\n" {} ⊢ {}
     ∎ a 
+  § mo_e◂◂{ S C } # k 
+    cst◂◂(_ccs◂◂{ S "◂" }) {} ⊢ {} 
+    f0 k ⊢ k 
+    _ctr◂◂C k ⊢ k 
+    ∎ k
+  § mo◂◂{ S C M } = _mcp◂◂{ _mop◂◂C _moo◂◂(mo_e◂◂{ S C }) M }
+  ¶§ _emt_mo = mo 
+  --¶¶ f0 a' : a' → a' 
   ¶¶ f_rcd r' : _rcd◂r'→_rcd◂r' 
   § rcd # r 
     cst◂◂"{" {} ⊢ {}
