@@ -23,6 +23,7 @@
   § r2 = 20r 
   § rcd = 21r 
   § unt = 22r 
+  § adt = 23r 
   ∎∎ 
 
 -- prm 
@@ -177,12 +178,9 @@
     "\tmov rdi,0x" (_ct.pf_x◂◂X) "\n" 
     "\t" O " rax,rdi\n" //
    ∎ %r
-§ _add_im◂◂X # r
-  op_im◂◂{ "add" X } r ⊢| 
-§ _sub_im◂◂X # r
-  !^ r ⊢ r 
-    "\tsub rax,0x" (_ct.pf_x◂◂X) "\n" // 
-   ∎ r  
+§ _add_im◂◂X = op_im◂◂{ "add" X } 
+§ _sub_im◂◂X = op_im◂◂{ "sub" X }
+§ _and_im◂◂X = op_im◂◂{ "and" X } 
 § _shr_im◂◂X # r 
   !^ r ⊢ r 
     "\tshr rax,0x" (_ct.pf_x◂◂X) "\n" // 
@@ -191,8 +189,6 @@
   !^ r ⊢ r 
     "\tshl rax,0x" (_ct.pf_x◂◂X) "\n" // 
    ∎ r
-§ _and_im◂◂X # r 
-  op_im◂◂{ "and" X } r ⊢| 
 § _inc # r 
   !^ r ⊢ r 
     ` add rax,1 
