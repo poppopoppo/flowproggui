@@ -875,4 +875,13 @@ _adt◂
 
 ¶ t◂{ a' b' < l' } = s◂{ _r64 a' {} b' < l' }
 ¶¶ Q L' : { t◂L' _s8→_r64 } 
+  _p.ini : {}→_p◂t' 
+  _p.mk : v'→{ v' _p◂v' } 
+  _p.ct : (_p◂t'→→v'→w')→→{ _p◂t' v' }→w'
+
+¶¶ sp a' : _p◂a'→→_p.sp 
+§ _emt a 
+
+¶§ _emt_arr = _emt_s8 : _arr◂_r8
+¶§ _emt_arr = _emt_arr_dft : _arr◂a' 
 
