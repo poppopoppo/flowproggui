@@ -1,3 +1,4 @@
+
 -- rank-1
 §§ _TX 
   § r64 = 0r 
@@ -66,90 +67,98 @@
   ∎∎
 
 -- rank-0
-§ _mk_arr =# 0r 
-§ _emt =# 1r 
---§ _ila2 =# 2r
-§ _rpc =# 3r 
-§ _app =# 4r 
-§ _prs =# 5r 
-§ _id =# 6r 
-§ _dlt =# 7r 
-§ _cst =# 8r 
-§ _psc =# 9r 
-§ _synt =# 10r 
-§ _line =# 11r 
-§ _grm =# 12r 
-§ _grm_ftr =# 13r 
-§ _ftr =# 14r 
-§ _inl =# 15r 
-§ _tj =# 16r 
-§ _clp =# 17r 
-§ _cln =# 18r 
-§ _cls =# 19r 
-§ _cld =# 20r 
-§ _pf =# 21r 
-§ _pf_x =# 22r 
-§ _clc_i =# 23r 
-§ _clc_o =# 24r 
-§ _clc_d =# 25r 
-§ _seq =# 26r 
-§ _alc_i =# 27r 
-§ _alc_o =# 28r 
-§ _mk_arr_x =# 29r
-§ _push =# 30r 
-§ _pop =# 31r  
-§ _id_par =# 32r  
-§ _ctr =# 33r
-§ _oom =# 34r
-§ _moo =# 35r
-§ _mcp =# 36r
-§ _mcn =# 37r
-§ _mop =# 38r 
-§ _mt_e =# 39r 
-§ _mt_ne =# 40r
-§ _mt_le =# 41r
-§ _exn =# 42r
-§ _tj =# 43r
-§ _tjn =# 44r
-§ _tjc =# 45r
-§ _sqc =# 46r
-§ _st =# 47r
-§ _ccs =# 48r
-§ _mk_stk =# 49r 
+§ _mk_arr = _[ 0r ] 
+--§ _emt = _[ 1r ] 
+--§ _ila2 = _[ 2r ]
+§ _rpc = _[ 3r ] 
+§ _app = _[ 4r ] 
+§ _prs = _[ 5r ] 
+§ _id = _[ 6r ] 
+§ _dlt = _[ 7r ] 
+§ _cst = _[ 8r ] 
+§ _psc = _[ 9r ] 
+§ _synt = _[ 10r ] 
+§ _line = _[ 11r ] 
+§ _grm = _[ 12r ] 
+§ _grm_ftr = _[ 13r ] 
+§ _ftr = _[ 14r ] 
+§ _inl = _[ 15r ] 
+§ _tj = _[ 16r ] 
+§ _clp = _[ 17r ] 
+§ _cln = _[ 18r ] 
+§ _cls = _[ 19r ] 
+§ _cld = _[ 20r ] 
+§ _pf = _[ 21r ] 
+§ _pf_x = _[ 22r ] 
+§ _clc_i = _[ 23r ] 
+§ _clc_o = _[ 24r ] 
+§ _clc_d = _[ 25r ] 
+§ _seq = _[ 26r ] 
+§ _alc_i = _[ 27r ] 
+§ _alc_o = _[ 28r ] 
+§ _mk_arr_x = _[ 29r ]
+§ _push = _[ 30r ] 
+§ _pop = _[ 31r ]  
+§ _id_par = _[ 32r ]  
+§ _ctr = _[ 33r ]
+§ _oom = _[ 34r ]
+§ _moo = _[ 35r ]
+§ _mcp = _[ 36r ]
+§ _mcn = _[ 37r ]
+§ _mop = _[ 38r ] 
+§ _mt_e = _[ 39r ] 
+§ _mt_ne = _[ 40r ]
+§ _mt_le = _[ 41r ]
+§ _exn = _[ 42r ]
+§ _tj = _[ 43r ]
+§ _tjn = _[ 44r ]
+§ _tjc = _[ 45r ]
+§ _sqc = _[ 46r ]
+§ _st = _[ 47r ]
+§ _ccs = _[ 48r ]
+§ _mk_stk = _[ 49r ] 
 
 -- ctr 
-§ _nil =# 0x0001000000000000r
-§ _cns =# 0x0001000000000001r
-§ _some =# 0x0001000000000002r
-§ _none =# 0x0001000000000003r
+§ _nil = _[ 0x0001000000000000r ]
+§ _cns = _[ 0x0001000000000001r ]
+§ _some = _[ 0x0001000000000002r ]
+§ _none = _[ 0x0001000000000003r ]
 -- ap
-§ _emt0 =# 0x0002000000000000r
-§ _emt_mo =# 0x0002000000000001r
-
+§§ _ap 
+  § emt = _[ 0x0002000000000000r ]
+  § emt_mo = _[ 0x0002000000000001r ]
+  § dlt = _[ 0x0002000000000002r ]
+  § dlt_mo = _[ 0x0002000000000003r ]
+  § rpc = _[ 0x0002000000000004r ]
+  § rpc_mo = _[ 0x0002000000000005r ]
+  ∎∎
 §§ _ila 
-  § f =# 50r 
-  § O =# 51r 
-  § S =# 52r
-  § C =# 53r
+  § f = _[ 50r ] 
+  § O = _[ 51r ] 
+  § S = _[ 52r ]
+  § C = _[ 53r ]
   ∎∎
-§ _ct =# 54r
+§ _ct = _[ 54r ]
 §§ _ct 
-  § pf_d =# 55r 
-  § pf_x =# 56r 
+  § pf_d = _[ 55r ] 
+  § pf_x = _[ 56r ] 
   ∎∎
+
 §§ _hp 
-  § of =# 57r
-  § to =# 58r 
-  § ini =# 59r 
+  § of = _[ 57r ]
+  § to = _[ 58r ] 
+  § ini = _[ 59r ] 
   § rpc # a 
     of a ⊢ { r h } 
+    --_rpc r ⊢ { r r0 } 
     $ r ⊢ r,r0 
     to { r h } ⊢ a 
     ∎ { a r0 }
+    --∎|
   ∎∎ 
-§ _id_T =# 60r 
-§ _prd =# 61r
-§ _ipr =# 62r
+§ _id_T = _[ 60r ] 
+§ _prd = _[ 61r ]
+§ _ipr = _[ 62r ]
 -- non-atomic 
 § A0 L 
    $ L ⊢ { r0 r1 } 
@@ -306,7 +315,7 @@
   _id.s8 s ⊢ s 
   --_hp.rpc s ⊢ { s r }
   _hp.of s ⊢ { r h } 
-  !^ r,i,c ⊢ *r,*i,c 
+  !^ r,i,c ⊢ *r,*i,*c 
     ` mov rdx,0x0000_ffff_ffff_ffff 
     ` and rdx,QWORD [rax]
     ` cmp rdi,rdx 
@@ -531,7 +540,7 @@
   ¶§ f0 = s8
   ∎∎
 §§ _emt 
-  § f0 = _emt0 
+  § f0 = _ap.emt 
   § f # a 
     cst◂◂"emt:" {} ⊢ {} 
     f0 a ⊢ a
@@ -543,7 +552,7 @@
     _ctr◂◂C k ⊢ k 
     ∎ k
   § mo◂◂{ S C M } = _mcp◂◂{ _mop◂◂C _moo◂◂(mo_e◂◂{ S C }) M }
-  ¶§ _emt_mo = mo 
+  ¶§ _ap.emt_mo = mo 
   --¶¶ f0 a' : a' → a' 
   ¶¶ f_rcd r' : _rcd◂r'→_rcd◂r' 
   § rcd # r 
@@ -634,3 +643,10 @@
   ¶§ f0 = lst
   --¶§ _emt0 = lst 
   ∎∎  
+§ _emt = _emt.f
+
+§§ _dlt 
+  --§ f = _ap.dlt 
+  ∎∎ 
+§ _emt_im = _emt_im.f
+§ _emt0 = _emt.f0

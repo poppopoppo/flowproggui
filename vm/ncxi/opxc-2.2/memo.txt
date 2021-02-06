@@ -885,3 +885,8 @@ _adt◂
 ¶§ _emt_arr = _emt_s8 : _arr◂_r8
 ¶§ _emt_arr = _emt_arr_dft : _arr◂a' 
 
+
+¶ @.t _ 
+  ∐ cct : { t◂a' t◂a' } ⊢ t◂a' 
+  ∐ d0 : {} ⊢ t◂{ _r64 < l' }
+  ∐ d1 : {} ⊢ t◂{ k0' _r64 < l' } 
