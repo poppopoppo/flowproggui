@@ -551,7 +551,7 @@
     f0 k ⊢ k 
     _ctr◂◂C k ⊢ k 
     ∎ k
-  § mo◂◂{ S C M } = _mcp◂◂{ _mop◂◂C _moo◂◂(mo_e◂◂{ S C }) M }
+  § mo◂◂{ S C } = _moo◂◂(mo_e◂◂{ S C })
   ¶§ _ap.emt_mo = mo 
   --¶¶ f0 a' : a' → a' 
   ¶¶ f_rcd r' : _rcd◂r'→_rcd◂r' 
