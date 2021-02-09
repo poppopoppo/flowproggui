@@ -131,6 +131,8 @@
   § dlt_mo = _[ 0x0002000000000003r ]
   § rpc = _[ 0x0002000000000004r ]
   § rpc_mo = _[ 0x0002000000000005r ]
+  § emt_adt = _[ 0x0002000000000006r ]
+  § dlt_adt = _[ 0x0002000000000007r ]
   ∎∎
 §§ _ila 
   § f = _[ 50r ] 
@@ -646,7 +648,23 @@
 § _emt = _emt.f
 
 §§ _dlt 
-  --§ f = _ap.dlt 
+  § f = _ap.dlt 
+  § lst l 
+    $ l ⊢ 
+    ∐ _cns◂{ a l } .
+      f a ⊢| 
+    ∐. _nil◂{} . 
+      ∎ {}
+  § opn o 
+    $ o ⊢ 
+    ∐ _some◂a . 
+      f a ⊢| 
+    ∐. _none◂{} . 
+      ∎ {}
+  ¶§ f = lst
+  § adt = _ap.dlt_adt
+  ¶§ f = adt 
+  ¶§ f = _dlt
   ∎∎ 
 § _emt_im = _emt_im.f
 § _emt0 = _emt.f0
