@@ -655,13 +655,14 @@
       f a ⊢| 
     ∐. _nil◂{} . 
       ∎ {}
+  ¶§ f = lst
   § opn o 
     $ o ⊢ 
     ∐ _some◂a . 
       f a ⊢| 
     ∐. _none◂{} . 
       ∎ {}
-  ¶§ f = lst
+  ¶§ f = opn
   § adt = _ap.dlt_adt
   ¶§ f = adt 
   ¶§ f = _dlt
