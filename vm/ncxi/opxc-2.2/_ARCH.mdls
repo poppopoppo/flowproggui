@@ -161,6 +161,8 @@
 § _id_T = _[ 60r ] 
 § _prd = _[ 61r ]
 § _ipr = _[ 62r ]
+§ _dlt_r64 = _[ 63r ] 
+§ _cnc_lod = _[ 64r ] 
 -- non-atomic 
 § A0 L 
    $ L ⊢ { r0 r1 } 
@@ -649,8 +651,8 @@
 
 §§ _dlt 
   § f = _ap.dlt 
-  --§ r64 = _[ 65r ]  
-  --¶§ f = r64
+  § r64 = _[ 63r ]  
+  ¶§ f = r64
   § s8 # s 
     _id.s8 s ⊢ s 
     _hp.rpc s ⊢ { _ r } 
@@ -660,8 +662,7 @@
       // 
     ∎ {}
   ¶§ f = s8
-  -\
-  §: arr0 = { _hp◂k' k' }
+  §: arr0 t',k' = { _hp◂(_arr0◂t'◂k') k' }
   § @.arr_i { { h r } i } 
     ∐ i'<>0r .
       _cnc_lod r ⊢ { r q } 
@@ -673,8 +674,7 @@
       ∎ {} 
   § arr # a 
     _arr_len a ⊢ { a l } 
-    _id.arr a ⊢ a 
-    _hp.rpc a ⊢ { h r } 
+    _hp.of a ⊢ { r h } 
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     arr_i { { h r0 } l } ⊢ {}
@@ -684,7 +684,6 @@
       // 
     ∎ {}
   ¶§ f = arr
-  -/
   § Clr # c 
     _id.Clr c ⊢ c 
     _hp.rpc c ⊢ { _ r } 
