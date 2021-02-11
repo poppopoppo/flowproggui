@@ -1993,9 +1993,6 @@ unsigned long
 			¶ t_t t' 
 				∐ t : t' 
 			¶
-			@.id 
-				∐ prm : _r64 
-				∐ adt : _r64
 			@.t_atm v'
 				∐ dta : { _r64 _lst◂(t◂v') }
 				∐ imp : { t◂v' t◂v' }
@@ -3490,14 +3487,11 @@ unsigned long
 		§ id_T = 60r
 		§ prd = 61r
 		§ ipr = 62r
-		§ adt_map = 63r 
-		§ adt_fld = 64r 
-		§ dlt_r64 = 65r 
-		§ dlt_s8 = 66r 
-		§ dlt_Clr = 67r 
-		§ dlt_pt = 68r
-		§ dlt_st = 69r
-		§ N = 70r 
+		§ dlt_r64 = 63r 
+		§ cnc_lod = 64r 
+		§ cnc_sto = 65r 
+		§ cnc_siz = 66r
+		§ N = 67r 
 
 	§ slv { tv i }  
 		=+ i' 
@@ -3870,6 +3864,21 @@ unsigned long
 			$ y ⊢ y,y0 
 			$ yr ⊢ yr,yr0
 			∎ { tv TX.t_imp◂{ TX.rcd◂TX.prd◂{ y yr } TX.cns2◂{ y0 TX.rcd◂yr0 } } }
+		-- dlt_r64 
+		∐ 
+			∎ { tv TX.t_imp◂{ TX.r64◂{} TX.cns0◂{} } }
+		-- cnc_lod 
+		∐ 
+			T.newvar_q tv ⊢ { tv y }
+			∎ { tv TX.t_imp◂{ TX.r64◂{} TX.cns2◂{ TX.r64◂{} y } } }
+		-- cnc_sto
+		∐ 
+			T.newvar_q tv ⊢ { tv y }
+			∎ { tv TX.t_imp◂{ TX.cns2◂{ TX.r64◂{} y } TX.r64◂{} } }
+		-- cnc_siz
+		∐
+			T.newvar_q tv ⊢ { tv y }
+			∎ { tv TX.t_ct_imp◂{ TX.dmy◂y TX.r64◂{} } }
 		∐. 
 			_emt.f i ⊢ _ 
 			∎| 
@@ -11075,7 +11084,7 @@ unsigned long
 							asm.cct { ee0 ew0 } ⊢ ee0 
 							asm.cct { eg0 ee0 } ⊢ eg0 
 							∎ { VM bf { rfb rfv } R0 { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds } } 
-					@.stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys is o } } 
+					@.stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys ysd is o } } 
 						$ o ⊢ 
 						∐ RP.rcd◂_ . 
 							∎|  
@@ -11084,7 +11093,7 @@ unsigned long
 								$ mfv ⊢ { apv gev ggev AP } 
 								AP.slv { evv tv apv AP p t } ⊢ { evv tv apv AP o } 
 								$ { apv gev ggev AP } ⊢ mfv
-								stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys is o } } ⊢| 								
+								stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys ysd is o } } ⊢| 								
 							∐ k ⊢ ast.k_ctr◂{ ia na _ } . 
 								∎|
 							∐ k ⊢ ast.k_fnc◂_ . 
@@ -11225,7 +11234,7 @@ unsigned long
 									∐ la ⊢ _cns◂{ k1 la }; la ⊢ _nil◂{} . 
 										∐ k1 ⊢ RP.atm◂k1; k1 ⊢ ast.k_op_axm◂{ ax1 axl1 } . 
 											∐ ax1'=EX.grm; axl1 ⊢ _cns◂{ k1 axl1 }; axl1 ⊢ _nil◂{} .
-												stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys is k1 } } ⊢| 									 
+												stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys ysd is k1 } } ⊢| 									 
 											∐. . 
 												∐ is ⊢ RP.rcd◂l0; l0 ⊢ _cns◂{ p0 l0 }; l0 ⊢ _cns◂{ p1 l0 }; l0 ⊢ _nil◂{} . 
 													GV.new_i GV ⊢ { GV rm0 i0 } 
@@ -11667,9 +11676,7 @@ unsigned long
 										∎|
 								-- oom 
 								∐
-									--$ eds ⊢ { SC SCM eds } 
 									mk_ir { { VM eds mfv evv tv ys } RP.atm◂ast.k_op_axm◂{ a la } } ⊢ { VM eds mfv evv tv o yd }
-									--$ { SC SCM eds } ⊢ eds 
 									stt_ir { VM evv tv { rfv gfl mfv  ev_n eg0 eds ew0 } { GV lb_n tav ec0 } ox f_c o is } ⊢|					
 								-- moo 
 								∐ 
@@ -11751,9 +11758,7 @@ unsigned long
 										gen { tv lv v0 } ⊢ { tv lv v0 } 	
 										gen { tv lv w0 } ⊢ { tv lv w0 } 	
 										$ v0 ⊢ v0,v00,v000
-										--$ eds ⊢ { SC SCM eds } 
 										mk_ir { { VM eds mfv evv tv TX.cns2◂{ TX.cns3◂{ TX.r64◂{} v00 TX.arr◂v000 } w0 } } f } ⊢ { VM eds mfv evv tv o yd }
-										--$ { SC SCM eds } ⊢ eds 
 										$ GV ⊢ { GV gn } 
 										$ v0 ⊢ v0,v00 
 										alc_type_k.f_i { tav tv { GV %[ 0r ] } v00 } ⊢ { tav tv { GV c_n } pa0 } 
@@ -11814,7 +11819,7 @@ unsigned long
 										$ vn0 ⊢ vn,vn0 
 										mk_vl { vn0 is } ⊢ { vl is } 
 										$ { lbi { vn vl vyl0 } f_c } ⊢ f_c
-										stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { yd is RP.atm◂ast.k_op_axm◂{ %[ EX.id ] ⟦⟧ } } } ⊢|	
+										stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { yd ysd is RP.atm◂ast.k_op_axm◂{ %[ EX.id ] ⟦⟧ } } } ⊢|	
 									∐. .
 									 	∎|
 								-- ila 
@@ -11907,6 +11912,34 @@ unsigned long
 										stt_jmp_axm { VM evv tv { GV lb_n tav  ec0 } { rfv gfl mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|
 									∐. .
 										∎|
+								-- dlt_r64 
+								∐ 
+									$ is ⊢ _ 
+									$ RP.unt◂{} ⊢ iy
+									stt_jmp_axm { VM evv tv { GV lb_n tav ec0 } { rfv gfl mfv ev_n eg0 eds ew0 } iy f_c } ⊢|
+								-- cnc_lod
+								∐ 
+									r64_to_hp { evv GV is ec0 } ⊢ { evv GV r0 ec0 } 
+									inst { tv %[ 1r ] ysd } ⊢ { tv lv ysd }
+									newvar_l { tv lv } ⊢ { tv lv v0 } 
+									$ v0 ⊢ v0,v0_0  
+									T.unify.f { tv TX.cns2◂{ TX.r64◂{} v0_0 } ysd } ⊢ tv 
+									_dec lv ⊢ lv 
+									gen { tv lv v0 } ⊢ { tv lv yk } 
+									$ GV ⊢ { GV gn } 								
+									alc_type_k.f_i { tav tv { GV %[ 0r ] } yk } ⊢ { tav tv { GV c_n } pa0 }
+									$ { GV gn } ⊢ GV 
+									GV.lod { GV r0 } ⊢ { GV r0 i0 } 
+									$ i0 ⊢ i0,i1 
+									asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] i0 } } ⊢ ec0 										
+									^ c_n ⊢ _,sc0 
+										`	mov SRC_REG,rax
+										"\tadd rax,0x" 0x' "\n" //
+									asm.add_s8 { ec0 sc0 } ⊢ ec0 
+									asm.add_nd { ec0 asm.mov_glx_op◂{ i1 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ ec0 										
+									lod_sgm.ptn { { ec0 GV } pa0 } ⊢ { { ec0 GV } pa1 } 
+									$ RP.cns2◂{ stt_v.r64_reg◂r0 pa1 } ⊢ iy
+									stt_jmp_axm { VM evv tv { GV lb_n tav ec0 } { rfv gfl mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|
 								∐.  
 									^ a ⊢ _,ee1 
 										"; ##0x" 0x' ".. ⊢ ..\n"
@@ -11930,10 +11963,10 @@ unsigned long
 						$ o ⊢ 
 						∐ ast.cn_o◂_ . 
 							∎| 
-						∐ ast.cn_e◂{ ys o _ } .
+						∐ ast.cn_e◂{ ys o yd } .
 							$ FE ⊢ { rfv gfl mfv ev_n eg0 eds ew0 }
 							$ EE ⊢ { GV lb_n tav ec0 }
-							stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys is o } } ⊢|
+							stt_jmp { VM rfv ox f_c { gfl mfv } GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { ys yd is o } } ⊢|
 						∐ ast.cn_m◂{ ys { m b } yd } .
 							∐ b'=<1r . 
 								stt_mtc { { VM ⟦⟧ m } ox f_c evv tv FE EE is } ⊢|
