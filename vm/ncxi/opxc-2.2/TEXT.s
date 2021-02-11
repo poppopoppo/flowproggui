@@ -273,6 +273,15 @@ sig_dft:
 %define N 0xe654_6b64 
 %define SEED 0x9848_3cbf  
 
+free_opq: 
+	bt QWORD [rdi],63 
+	jc free_opq_stk
+	C_CALL_SF free 
+	ret
+free_opq_stk:
+	mov QWORD [rdi],rdi
+	ret
+
 mm32: ; rdi=s  
 	mov rsi,0x0000_ffff_ffff_ffff 
 	and rsi,QWORD [rdi]
