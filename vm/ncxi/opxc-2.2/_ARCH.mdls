@@ -691,15 +691,44 @@
     _hp.rpc c ⊢ { _ r } 
     $ r ⊢ _
     ∎ {}
-  §: pt0 k' = { _hp◂(_pt◂k') k' }
-  § pt_T◂◂C # { k r }
-    ∎| 
-  § pt # p 
+  §: pt0 k' = { _hp◂k' k' }
+  §: pt1 k' = { _hp◂(_pt◂k') _hp◂k' }
+  § pt_T { h r }
+    !^ r ⊢ *r,c 
+      ` xor rdi,rdi 
+      ` bt QWORD [rax+8],63 
+      ` rcl rdi,1 
+      //
+    ∐ c'=0r .
+      $ c ⊢ _ 
+      _add_im◂◂24r r ⊢ r 
+      _cnc_lod r ⊢ { r k } 
+      pt0 { h k } ⊢ { h _ }
+      _sub_im◂◂24r r ⊢ r 
+      ∎ { h r } 
+    ∐. .
+      ∎ { h r }
+  § pt_C◂◂C # { h r } 
+    !^ r ⊢ {}
+      "\tFREE_RCD (" (_ct.pf_d◂◂C) "+3),rax\n" // 
+    ∎ {}  
+  § pt p 
     _id.pt p ⊢ p 
     _hp.of p ⊢ { r h } 
-    _cnc_lod r ⊢ { r k } 
-    pt0 { h k } ⊢ { h k }
-    ∎|
+    !^ r ⊢ *r,c 
+      ` mov rdi,QWORD [rax+16] 
+      ` sub rdi,1 
+      ` mov QWORD [rax+16],rdi 
+      //
+    ∐ c'=0r . 
+      $ c ⊢ _ 
+      _hp.ini {} ⊢ hk 
+      pt1 { h hk } ⊢ { _ h } 
+      pt_T { h r } ⊢ { h r } 
+      _cnc_siz◂◂pt_C { h r } ⊢|
+    ∐. .
+      ∎ {}
+  ¶§ f = pt
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .

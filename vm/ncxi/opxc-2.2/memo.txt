@@ -903,7 +903,7 @@ _A : (∀ p' . a')→→a'
 _A :: (*→*)→*
 _a : _A◂C'→→(C'◂p')
 _a : _A◂(\p' . Q')→→()
-_vpa : { a' _A◂(\v' . >[ v' : a' ]→→c') }→→c' 
+_vpa : a',c' . { a' _A◂(\v' . >[ v' : a' ]→→c') }→→c' 
 
 _mk : _A◂C'→→() 
 
@@ -921,3 +921,14 @@ _mk : _A◂C'→→()
 
 
 
+
+  \a' . A◂a' →→ a'→b'  
+
+  _ctr_a◂{ { s' d' } t' }
+  _ctr◂{ s' d' } = ctr_a◂{ { s' d' } '{ rev~{} not_rev~{} } }
+
+  _nil : { { {} _lst◂a' } '{ not_rev~{} < l' } }
+  _iso : { { a' _iso◂a' } '{ rev~{} < l' } }
+  _cpr : { ctr_a◂{ { a0' a1' } t' } ctr_a◂{ { a1' a2' } t' } }→→ctr_a◂{ { a0' a2' } t' }
+  _rev : ctr_a◂{ { a' b' } '{ rev~{} not_rev~| < l' } }→→ctr_a◂{ { b' a' } '{ rev~{} not_rev~| < l' } }
+  
