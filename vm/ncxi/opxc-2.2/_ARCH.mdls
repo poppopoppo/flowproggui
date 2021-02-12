@@ -163,6 +163,8 @@
 § _ipr = _[ 62r ]
 § _dlt_r64 = _[ 63r ] 
 § _cnc_lod = _[ 64r ] 
+§ _cnc_sto = _[ 65r ] 
+§ _cnc_siz = _[ 66r ]
 -- non-atomic 
 § A0 L 
    $ L ⊢ { r0 r1 } 
@@ -689,6 +691,15 @@
     _hp.rpc c ⊢ { _ r } 
     $ r ⊢ _
     ∎ {}
+  §: pt0 k' = { _hp◂(_pt◂k') k' }
+  § pt_T◂◂C # { k r }
+    ∎| 
+  § pt # p 
+    _id.pt p ⊢ p 
+    _hp.of p ⊢ { r h } 
+    _cnc_lod r ⊢ { r k } 
+    pt0 { h k } ⊢ { h k }
+    ∎|
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
