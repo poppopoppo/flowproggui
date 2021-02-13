@@ -931,4 +931,25 @@ _mk : _A◂C'→→()
   _iso : { { a' _iso◂a' } '{ rev~{} < l' } }
   _cpr : { ctr_a◂{ { a0' a1' } t' } ctr_a◂{ { a1' a2' } t' } }→→ctr_a◂{ { a0' a2' } t' }
   _rev : ctr_a◂{ { a' b' } '{ rev~{} not_rev~| < l' } }→→ctr_a◂{ { b' a' } '{ rev~{} not_rev~| < l' } }
+
+
+  _nil : _adt◂{ _lst◂a' '{ nil~{} < l' } }
+  _nil : _adt◂{ _lst◂a' '{ cns~{} < l' } } 
+  nil_lst a' = _adt◂{ _lst◂a' '{ _nil~{} } }
+
+¶§ _nil : _adt◂{ _lst◂a' t' }
+§ _nil_f d 
+  $.[ _adt◂{ d'◂a' '{ nil~| < l' } } ] d ⊢ d  
+
+
+  f = \[ { a' b' } . { a' b' } ]
+  g = \[ { a' b' } . { t b' } ]
+  h = \[ { a' b' } . { a' t } ]
+  g~h
+    ∀{ a' b' } . { t b' } ~ ∀{ a' b' } . { a' t }
+    \[ {} . ∀b' . { t b' } ] ~ \[ {} . ∀a' . { a' t } ]
+    \[ {} . { t t } ]
+  i = \[ t' . a'→→t' ]
+  i◂_r64 = a'→→_r64
+
   
