@@ -56,6 +56,7 @@
   §: st_s8 = _st◂_s8
   §: Clr k' = _Clr◂k'
   §: pt k' = _pt◂k' 
+  §: hp k' = _hp◂k' 
   §§ hp 
     §: s8 = _hp◂_s8 
     §: Clr k' = _hp◂(_Clr◂k') 
@@ -655,15 +656,37 @@
   § f = _ap.dlt 
   § r64 = _[ 63r ]  
   ¶§ f = r64
+  -\
+  ¶¶ f_rcd r' : _rcd◂r' → {} 
+  § unt = _id 
+  ¶§ f_rcd = unt 
+  § prd # p 
+    _ipr p ⊢ { h t } 
+    f h ⊢ {} 
+    f_rcd t ⊢| 
+  ¶§ f_rcd = prd 
+  ¶§ f = f_rcd
+  -/
   § s8 # s 
     _id.s8 s ⊢ s 
-    _hp.rpc s ⊢ { _ r } 
+    _hp.of s ⊢ { r _ } 
     !^ r ⊢ {} 
       ` mov rdi,rax
       ` call free_opq
       // 
     ∎ {}
   ¶§ f = s8
+  -\
+  § st # s 
+    _id.st_s8 s ⊢ s 
+    _hp.of s ⊢ { r _ } 
+    _dlt_r64 r ⊢|
+  ¶§ f = st
+  § hp # h 
+    _id.hp h ⊢ h 
+    _dlt h ⊢| 
+  ¶§ f = hp
+  -/
   §: arr0 t',k' = { _hp◂(_arr0◂t'◂k') k' }
   § @.arr_i { { h r } i } 
     ∐ i'<>0r .
