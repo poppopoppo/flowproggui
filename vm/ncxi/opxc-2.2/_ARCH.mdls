@@ -749,14 +749,18 @@
     $ r ⊢ _
     ∎ {}
   --\
+  ¶§ f = Clr 
   § Clr_lc # C 
     _clc_d C ⊢ C 
     Clr C ⊢| 
   --/
-  --¶§ f = Clr 
-  --¶§ f = Clr_lc
+  ¶§ f = Clr_lc
   §: pt0 k' = { _hp◂k' k' }
   §: pt1 k' = { _hp◂(_pt◂k') _hp◂k' }
+  § pt_C◂◂C # { h r } 
+    !^ r ⊢ {}
+      "\tFREE_RCD (" (_ct.pf_d◂◂C) "+3),rax\n" // 
+    ∎ {}  
   § pt_T { h r }
     !^ r ⊢ *r,c 
       ` xor rdi,rdi 
@@ -765,17 +769,13 @@
       //
     ∐ c'=0r .
       $ c ⊢ _ 
-      _add_im◂◂24r r ⊢ r 
-      _ap.cnc_lod r ⊢ { r k } 
+      $ r ⊢ r,r0 
+      _add_im◂◂24r r0 ⊢ r0 
+      _ap.cnc_lod r0 ⊢ { _ k } 
       pt0 { h k } ⊢ { h _ }
-      _sub_im◂◂24r r ⊢ r 
       ∎ { h r } 
     ∐. .
       ∎ { h r }
-  § pt_C◂◂C # { h r } 
-    !^ r ⊢ {}
-      "\tFREE_RCD (" (_ct.pf_d◂◂C) "+3),rax\n" // 
-    ∎ {}  
   § pt p 
     _id.pt p ⊢ p 
     _hp.of p ⊢ { r h } 
@@ -792,7 +792,7 @@
       _cnc_siz◂◂pt_C { h r } ⊢|
     ∐. .
       ∎ {}
-  --¶§ f = pt
+  ¶§ f = pt
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
