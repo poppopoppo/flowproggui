@@ -953,3 +953,17 @@ _mk : _A◂C'→→()
   i◂_r64 = a'→→_r64
 
   
+  ∐ _cns : { a _lst◂{ a' t' } } ⊢ _lst◂{ a' 'cns◂{} } 
+  ∐ _nil : {} ⊢ _lst◂{ a' 'nil◂{} }
+
+
+  _btm : a'→b' 
+  _seq◂◂{ _btm F } = btm
+
+  (a'→b')→→{ a' _hp◂b' }→→b' 
+  §: i = { _hp◂b' b' }
+  § v◂◂F { x h }
+    F a ⊢ b 
+    i { h b } ⊢ { _ b } 
+    ∎ b 
+    

@@ -1,0 +1,31 @@
+
+§% 
+  _mk_arr { %[ 3r ] %[ 4r ] } ⊢ { _ _ a0 } 
+  _emt a0 ⊢ a0 
+  _mk_arr { %[ 4r ] { %[ "aa" ] %[ 567r ] } } ⊢ { _ _ a1 } 
+  _emt a1 ⊢ a1
+  _exc_q { a0 %[ 1r ] %[ 0xfffr ] } ⊢ { a0 _ x0 } 
+  _emt { a0 x0 } ⊢ { _ _ }
+  _exc_q { a1 %[ 2r ] { %[ "hello" ] %[ 99r ] } } ⊢ { a1 _ p0 } 
+  _emt { a1 p0 } ⊢ { a1 _ } 
+  _lod_q { a1 %[ 0r ] } ⊢ { a1 _ p0 } 
+  _emt { a1 p0 } ⊢ { a1 _ } 
+  $ a1 ⊢ a1,a2 
+  _emt a1 ⊢ _
+  _emt a2 ⊢ _
+  _mk_arr { %[ 3r ] { _some◂_some◂%[ 0r ] ⟦ %[ "ff" ] %[ "bc" ] ⟧ } } ⊢ { _ _ ax0 }
+  _emt %[ 0r ] ⊢ _ 
+  $ ax0 ⊢ ax0,ax1 
+  _emt ax0 ⊢ _
+  _emt ax1 ⊢ _ 
+  \[
+  \]
+  ∎
+
+§ f0 o 
+  $ o ⊢ 
+  ∐ _some◂a . 
+    ∎ a 
+  ∐. _none◂{} . 
+    ∎ %[ 0r ]
+
