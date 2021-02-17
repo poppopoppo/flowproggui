@@ -35,8 +35,10 @@
 ¶ _arr_x_t =# 11r 
 ¶ _arr_x = _arr0◂_arr_x_t 
 ¶ _arr = _arr0◂{} 
+¶ _arr_lc =# 9r 
 ¶ _s8 = _arr◂_r8 
-¶ _Clr =# 3r 
+¶ _Clr =# 3r
+¶ _Clr_lc =# 8r 
 ¶ _pt =# 4r 
 ¶ _st =# 16r 
 ¶ _dmy =# 18r
@@ -53,8 +55,11 @@
   §: s8 = _s8  
   §: arr0 t',k' = _arr0◂t'◂k' 
   §: arr k' = _arr◂k'
+  §: arr_x k' = _arr_x◂k'
+  §: arr_lc k' = _arr_lc◂k' 
   §: st_s8 = _st◂_s8
   §: Clr k' = _Clr◂k'
+  §: Clr_lc k' = _Clr_lc◂k' 
   §: pt k' = _pt◂k' 
   §: hp k' = _hp◂k' 
   §§ hp 
@@ -134,6 +139,8 @@
   § rpc_mo = _[ 0x0002000000000005r ]
   § emt_adt = _[ 0x0002000000000006r ]
   § dlt_adt = _[ 0x0002000000000007r ]
+  § rpc_adt = _[ 0x0002000000000008r ]
+  § cnc_lod = _[ 0x0002000000000009r ]
   ∎∎
 §§ _ila 
   § f = _[ 50r ] 
@@ -178,7 +185,7 @@
 § _emt_s8_to_im◂◂F # s 
   _id.s8 s ⊢ s 
   _st◂◂F {} ⊢ f 
-  _hp.rpc f ⊢ { f r0 }
+  _hp.of f ⊢ { r0 _ }
   _hp.rpc s ⊢ { s r1 } 
   !^ r0,r1 ⊢ {}
     ` mov rdx,QWORD [rdi]
@@ -280,7 +287,6 @@
   ∎ { s0 s1 z }
 § _lds # { s i } 
   _id.s8 s ⊢ s 
-  --_hp.rpc s ⊢ { s r }
   _hp.of s ⊢ { r h } 
   !^ r,i ⊢ *r,*i,c 
     ` mov rsi,0x0000_ffff_ffff_ffff 
@@ -293,7 +299,6 @@
   ∎ { s i c }
 § _lds64 # { s i }
   _id.s8 s ⊢ s 
-  --_hp.rpc s ⊢ { s r }
   _hp.of s ⊢ { r h } 
   !^ r,i ⊢ *r,*i,c 
     ` mov rsi,0x0000_ffff_ffff_ffff 
@@ -307,7 +312,6 @@
   ∎ { s i c }		
 § _sts_C◂◂C # { s i }
   _id.s8 s ⊢ s 
-  --_hp.rpc s ⊢ { s r }
   _hp.of s ⊢ { r h } 
   !^ r,i ⊢ *r,*i 
     ` mov rsi,0x0000_ffff_ffff_ffff 
@@ -320,7 +324,6 @@
   ∎ { s i }
 § _sts # { s i c }
   _id.s8 s ⊢ s 
-  --_hp.rpc s ⊢ { s r }
   _hp.of s ⊢ { r h } 
   !^ r,i,c ⊢ *r,*i,*c 
     ` mov rdx,0x0000_ffff_ffff_ffff 
@@ -333,7 +336,7 @@
   ∎ { s i c }
 § _rsz { s l }
   _id.s8 s ⊢ s 
-  _hp.rpc s ⊢ { s r }
+  _hp.of s ⊢ { r h }
   $ l ⊢ l,l0 
   !^ r,l0 ⊢ r  
     ` push rdi 
@@ -353,6 +356,7 @@
     ` shr rsi,3 
     ` and QWORD [rax+8+8*rsi],rdi
     //
+  _hp.to { r h } ⊢ s
   ∎ { s l }
 § _arr_len # a 
   _id.arr0 a ⊢ a 
@@ -627,6 +631,7 @@
     _arr_len a ⊢ { a l }
     cst◂◂"{+ " {} ⊢ {} 
     arr_i { { a l } %[ 0r ] } ⊢| 
+  ¶§ f0 = arr 
   § pt # p 
     _id.pt p ⊢ p 
     cst◂◂"[=]" {} ⊢ {} 
@@ -648,15 +653,20 @@
       f0 d ⊢ d 
       ∎ _nil◂d 
   ¶§ f0 = lst
+  § dft # x 
+    cst◂◂"?" {} ⊢ {} 
+    ∎ x 
+  ¶§ f0 = dft
   --¶§ _emt0 = lst 
   ∎∎  
 § _emt = _emt.f
+§ _emt_im = _emt_im.f
+§ _emt0 = _emt.f0
 
 §§ _dlt 
   § f = _ap.dlt 
   § r64 = _[ 63r ]  
   ¶§ f = r64
-  -\
   ¶¶ f_rcd r' : _rcd◂r' → {} 
   § unt = _id 
   ¶§ f_rcd = unt 
@@ -666,22 +676,25 @@
     f_rcd t ⊢| 
   ¶§ f_rcd = prd 
   ¶§ f = f_rcd
-  -/
-  § s8 # s 
+  § s8  s 
     _id.s8 s ⊢ s 
+    --_emt_im◂◂"D0" {} ⊢ {}
     _hp.of s ⊢ { r _ } 
+    --_emt_im◂◂"D1" {} ⊢ {}
     !^ r ⊢ {} 
       ` mov rdi,rax
       ` call free_opq
       // 
     ∎ {}
   ¶§ f = s8
-  -\
-  § st # s 
+  § st s 
     _id.st_s8 s ⊢ s 
+    --_emt_im◂◂"D2" {} ⊢ {}
     _hp.of s ⊢ { r _ } 
+    --_emt_im◂◂"D3" {} ⊢ {}
     _dlt_r64 r ⊢|
   ¶§ f = st
+  -\
   § hp # h 
     _id.hp h ⊢ h 
     _dlt h ⊢| 
@@ -690,14 +703,15 @@
   §: arr0 t',k' = { _hp◂(_arr0◂t'◂k') k' }
   § @.arr_i { { h r } i } 
     ∐ i'<>0r .
-      _cnc_lod r ⊢ { r q } 
+      _ap.cnc_lod r ⊢ { r q } 
       arr0 { h q } ⊢ { h q } 
       f q ⊢ {} 
       _dec i ⊢ i
       arr_i { { h r } i } ⊢|
     ∐. .
       ∎ {} 
-  § arr # a 
+  § arr a 
+    _id.arr a ⊢ a 
     _arr_len a ⊢ { a l } 
     _hp.of a ⊢ { r h } 
     $ r ⊢ r,r0 
@@ -709,11 +723,38 @@
       // 
     ∎ {}
   ¶§ f = arr
+  § arr_x a 
+    _id.arr_x a ⊢ a 
+    _arr_len a ⊢ { a l } 
+    _hp.of a ⊢ { r h } 
+    $ r ⊢ r,r0 
+    _add_im◂◂8r r0 ⊢ r0 
+    arr_i { { h r0 } l } ⊢ {}
+    !^ r ⊢ {} 
+      ` mov rdi,rax
+      ` call free_opq
+      // 
+    ∎ {}
+  § arr_lc = _[ 67r ]
+  --§ Clr_lc = _[ 68r ] 
+  ¶§ f = arr_lc
+  -\
+  § arr_lc # l 
+    _id.arr_lc l ⊢ l 
+    _dlt∎|
+  -/
   § Clr # c 
     _id.Clr c ⊢ c 
-    _hp.rpc c ⊢ { _ r } 
+    _hp.of c ⊢ { r _ } 
     $ r ⊢ _
     ∎ {}
+  --\
+  § Clr_lc # C 
+    _clc_d C ⊢ C 
+    Clr C ⊢| 
+  --/
+  --¶§ f = Clr 
+  --¶§ f = Clr_lc
   §: pt0 k' = { _hp◂k' k' }
   §: pt1 k' = { _hp◂(_pt◂k') _hp◂k' }
   § pt_T { h r }
@@ -725,7 +766,7 @@
     ∐ c'=0r .
       $ c ⊢ _ 
       _add_im◂◂24r r ⊢ r 
-      _cnc_lod r ⊢ { r k } 
+      _ap.cnc_lod r ⊢ { r k } 
       pt0 { h k } ⊢ { h _ }
       _sub_im◂◂24r r ⊢ r 
       ∎ { h r } 
@@ -751,7 +792,7 @@
       _cnc_siz◂◂pt_C { h r } ⊢|
     ∐. .
       ∎ {}
-  ¶§ f = pt
+  --¶§ f = pt
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
@@ -770,5 +811,3 @@
   ¶§ f = adt 
   ¶§ f = _dlt
   ∎∎ 
-§ _emt_im = _emt_im.f
-§ _emt0 = _emt.f0

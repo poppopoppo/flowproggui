@@ -1,0 +1,32 @@
+\[
+§ 
+  @.f0 { x y z } 
+    _inc x ⊢ x 
+    f1 { x y z } ⊢| 
+  @.f1 { x y z }
+    _inc y ⊢ y 
+    f2 { x y z } ⊢| 
+  @.f2 { x y z } 
+    _inc z ⊢ z 
+    f3 { x y z } ⊢| 
+  @.f3 { x y z } 
+    _emt { x y z } ⊢ { x y z } 
+    f0 { x y z } ⊢| 
+§ f1 x 
+  _add { x %[ 5r ] } ⊢ { x _ }
+  ∎ x 
+\]
+
+§% 
+  \\_emt %[ 0r ] ⊢ _ 
+  \\f0 { %[ 0r ] %[ 0r ] %[ 0r ] } ⊢ _ 
+  \\$ %[ 3r ] ⊢ x 
+  \\_xor { x %[ 5r ] } ⊢ { x y } 
+  \\_emt x ⊢ x 
+  \\f1 x ⊢ x 
+  \\_emt x ⊢ x 
+  \\f1 x ⊢ x 
+  \\_emt x ⊢ _ 
+  \\_mk_arr { %[ 4r ] %[ 0r ] } ⊢ { _ _ a } 
+  \\_lod_q { a %[ 5r ] } ⊢ { a _ v } 
+  ∎
