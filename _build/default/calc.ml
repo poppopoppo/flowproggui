@@ -1,2 +1,0 @@
-let _ =
-  Repl.run ()

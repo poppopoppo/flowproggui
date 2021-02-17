@@ -1,5 +1,0 @@
-(executable
- (name       mytoplevel)
- (libraries  compiler-libs.toplevel batteries implib)
- (link_flags (-linkall))
- (modes      byte))
