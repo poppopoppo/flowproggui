@@ -5,4 +5,6 @@ SGN_SH.txt
 *.exe 
 perf.data
 perf.data.old
+*.7z
+*.zip
 
