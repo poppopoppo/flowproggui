@@ -667,6 +667,8 @@
   § f = _ap.dlt 
   § r64 = _[ 63r ]  
   ¶§ f = r64
+  --§ hp = _[ 70r ] 
+  --¶§ f = hp 
   ¶¶ f_rcd r' : _rcd◂r' → {} 
   § unt = _id 
   ¶§ f_rcd = unt 
@@ -694,12 +696,12 @@
     --_emt_im◂◂"D3" {} ⊢ {}
     _dlt_r64 r ⊢|
   ¶§ f = st
-  -\
+  --\
   § hp # h 
     _id.hp h ⊢ h 
     _dlt h ⊢| 
   ¶§ f = hp
-  -/
+  --/
   §: arr0 t',k' = { _hp◂(_arr0◂t'◂k') k' }
   § @.arr_i { { h r } i } 
     ∐ i'<>0r .
@@ -722,7 +724,7 @@
       ` call free_opq
       // 
     ∎ {}
-  ¶§ f = arr
+  --¶§ f = arr
   § arr_x a 
     _id.arr_x a ⊢ a 
     _arr_len a ⊢ { a l } 
@@ -736,7 +738,6 @@
       // 
     ∎ {}
   § arr_lc = _[ 67r ]
-  --§ Clr_lc = _[ 68r ] 
   ¶§ f = arr_lc
   -\
   § arr_lc # l 
