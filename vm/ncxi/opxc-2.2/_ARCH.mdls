@@ -667,22 +667,26 @@
   § f = _ap.dlt 
   § r64 = _[ 63r ]  
   ¶§ f = r64
-  --§ hp = _[ 70r ] 
-  --¶§ f = hp 
+  § hp = _[ 70r ] 
+  ¶§ f = hp 
   ¶¶ f_rcd r' : _rcd◂r' → {} 
   § unt = _id 
   ¶§ f_rcd = unt 
+  § c0◂{ t {} } = t 
+  § c1◂{ x y } = { y x }
+  § p0 = _seq◂◂{ _ctr◂◂c0 f_rcd }
+  § prd = _seq◂◂{ _ipr _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂f _seq◂◂{ _ctr◂◂c0 f_rcd } } } }
+  -\
   § prd # p 
     _ipr p ⊢ { h t } 
     f h ⊢ {} 
     f_rcd t ⊢| 
+  -/
   ¶§ f_rcd = prd 
   ¶§ f = f_rcd
-  § s8  s 
+  § s8 s 
     _id.s8 s ⊢ s 
-    --_emt_im◂◂"D0" {} ⊢ {}
     _hp.of s ⊢ { r _ } 
-    --_emt_im◂◂"D1" {} ⊢ {}
     !^ r ⊢ {} 
       ` mov rdi,rax
       ` call free_opq
@@ -691,17 +695,16 @@
   ¶§ f = s8
   § st s 
     _id.st_s8 s ⊢ s 
-    --_emt_im◂◂"D2" {} ⊢ {}
     _hp.of s ⊢ { r _ } 
-    --_emt_im◂◂"D3" {} ⊢ {}
     _dlt_r64 r ⊢|
   ¶§ f = st
-  --\
+  -\
   § hp # h 
     _id.hp h ⊢ h 
     _dlt h ⊢| 
+  -/
+  § hp = _[ 70r ] 
   ¶§ f = hp
-  --/
   §: arr0 t',k' = { _hp◂(_arr0◂t'◂k') k' }
   § @.arr_i { { h r } i } 
     ∐ i'<>0r .
@@ -724,7 +727,7 @@
       ` call free_opq
       // 
     ∎ {}
-  --¶§ f = arr
+  ¶§ f = arr
   § arr_x a 
     _id.arr_x a ⊢ a 
     _arr_len a ⊢ { a l } 
@@ -736,7 +739,8 @@
       ` mov rdi,rax
       ` call free_opq
       // 
-    ∎ {}
+    ∎ {} 
+  ¶§ f = arr_x
   § arr_lc = _[ 67r ]
   ¶§ f = arr_lc
   -\
@@ -810,5 +814,9 @@
   ¶§ f = opn
   § adt = _ap.dlt_adt
   ¶§ f = adt 
-  ¶§ f = _dlt
+  --¶§ f = _dlt
   ∎∎ 
+§§ _rpc 
+  § f = _ap.rpc
+  ¶§ f = _rpc  
+  ∎∎
