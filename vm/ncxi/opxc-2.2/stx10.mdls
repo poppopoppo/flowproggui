@@ -9547,7 +9547,7 @@ unsigned long
 						mk_jmp_tbl { lb_n n } ⊢ { lb_n sj lbl } 
 						inc_x lb_n ⊢ { lb0 lb_n }
 						inc_x lb_n ⊢ { lb1 lb_n }
-						^ lb0,sj ⊢ lb0,sj,s0  
+						^ lb0,sj ⊢ lb0,_,s0  
 							"\tjmp QWORD [LB_" 0d' "+8*r10]\n"
 							"LB_" 0d' ": dq " 1' "\n" //
 						asm.add_s8 { e0 s0 } ⊢ e0 
