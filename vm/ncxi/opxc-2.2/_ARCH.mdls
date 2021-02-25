@@ -182,6 +182,11 @@
   --!^ r0,r1 ⊢ {} 
    -- // 
   ∎ {}
+
+§ c0◂{ t {} } = t 
+§ c1◂{ x y } = { y x }
+§ _par_id◂◂F = _seq◂◂{ _ctr◂◂c1 _id_par◂◂F }
+§ _par◂◂{ F G } = _seq◂◂{ _id_par◂◂G _par_id◂◂F }
 § _emt_s8_to_im◂◂F # s 
   _id.s8 s ⊢ s 
   _st◂◂F {} ⊢ f 
@@ -662,49 +667,39 @@
 § _emt = _emt.f
 § _emt_im = _emt_im.f
 § _emt0 = _emt.f0
-
+§ c2◂{ {} {} } = {}
 §§ _dlt 
   § f = _ap.dlt 
   § r64 = _[ 63r ]  
   ¶§ f = r64
   § hp = _[ 70r ] 
-  ¶§ f = hp 
+  ¶§ f = hp
   ¶¶ f_rcd r' : _rcd◂r' → {} 
   § unt = _id 
   ¶§ f_rcd = unt 
-  § c0◂{ t {} } = t 
-  § c1◂{ x y } = { y x }
   § p0 = _seq◂◂{ _ctr◂◂c0 f_rcd }
   § prd = _seq◂◂{ _ipr _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂f _seq◂◂{ _ctr◂◂c0 f_rcd } } } }
-  -\
-  § prd # p 
-    _ipr p ⊢ { h t } 
-    f h ⊢ {} 
-    f_rcd t ⊢| 
-  -/
   ¶§ f_rcd = prd 
   ¶§ f = f_rcd
   § s8 s 
     _id.s8 s ⊢ s 
-    _hp.of s ⊢ { r _ } 
+    _hp.of s ⊢ { r h } 
+    hp h ⊢ {}
     !^ r ⊢ {} 
       ` mov rdi,rax
       ` call free_opq
       // 
     ∎ {}
   ¶§ f = s8
+  -\
   § st s 
     _id.st_s8 s ⊢ s 
-    _hp.of s ⊢ { r _ } 
+    _hp.of s ⊢ { r h } 
+    hp h ⊢ {} 
     _dlt_r64 r ⊢|
-  ¶§ f = st
-  -\
-  § hp # h 
-    _id.hp h ⊢ h 
-    _dlt h ⊢| 
   -/
-  § hp = _[ 70r ] 
-  ¶§ f = hp
+  § st = _seq◂◂{ _id.st_s8 _seq◂◂{ _hp.of _seq◂◂{ _par◂◂{ r64 hp } _ctr◂◂c2 } } }
+  ¶§ f = st
   §: arr0 t',k' = { _hp◂(_arr0◂t'◂k') k' }
   § @.arr_i { { h r } i } 
     ∐ i'<>0r .
@@ -747,18 +742,20 @@
   § arr_lc # l 
     _id.arr_lc l ⊢ l 
     _dlt∎|
-  -/
   § Clr # c 
     _id.Clr c ⊢ c 
-    _hp.of c ⊢ { r _ } 
-    $ r ⊢ _
-    ∎ {}
-  --\
+    _hp.of c ⊢ { r h } 
+    hp h ⊢ {} 
+    r64 r ⊢|
+  -/
+  § Clr = _seq◂◂{ _id.Clr _seq◂◂{ _hp.of _seq◂◂{ _id_par◂◂hp _seq◂◂{ _ctr◂◂c0 r64 } } } }
   ¶§ f = Clr 
+  -\
   § Clr_lc # C 
     _clc_d C ⊢ C 
     Clr C ⊢| 
-  --/
+  -/
+  § Clr_lc = _seq◂◂{ _clc_d Clr }
   ¶§ f = Clr_lc
   §: pt0 k' = { _hp◂k' k' }
   §: pt1 k' = { _hp◂(_pt◂k') _hp◂k' }
@@ -818,5 +815,54 @@
   ∎∎ 
 §§ _rpc 
   § f = _ap.rpc
+  ¶¶ f_rcd r' : _rcd◂r' → { _rcd◂r' _rcd◂r' } 
+  § unt0◂{} = { {} {} }
+  ¶§ f_rcd = _ctr◂◂unt0 
+  § prd0◂{ { h0 h1 } { t0 t1 } } = { { h0 t0 } { h1 t1 } }
+  § prd = _seq◂◂{ _ipr _seq◂◂{ _par◂◂{ f f_rcd } _seq◂◂{ _ctr◂◂prd0 _par◂◂{ _prd _prd } } } }
+  ¶§ f_rcd = prd 
+  --§ f = f_rcd 
+  § r64 # r 
+    !^ r ⊢ *r,r0 
+      ` mov rdi,rax 
+      // 
+    ∎ { r r0 } 
+  ¶§ f = r64
+  § hp # h 
+    _hp.ini {} ⊢ h0 
+    _id.eq_t { h h0 } ⊢|
+  ¶§ f = hp 
+  § s8 # s 
+    _id.s8 s ⊢ s 
+    _hp.of s ⊢ { r h } 
+    !^ r ⊢ *r,r0
+      ` mov rdi,rax 
+      ` call rpc_s8 
+      ` mov rdi,rax 
+      //
+    hp h ⊢ { h h0 } 
+    _hp.to { r h } ⊢ s 
+    _hp.to { r0 h0 } ⊢ s0 
+    ∎ { s s0 } 
+  ¶§ f = s8 
+
+  § opn o 
+    $ o ⊢ 
+    ∐ _some◂a . 
+      f a ⊢ { a a0 } 
+      ∎ { ‹ a › ‹ a0 › }
+    ∐. _none◂{} .
+      ∎ { ‹› ‹› }
+  ¶§ f = opn
+  § @.lst l 
+    $ l ⊢ 
+    ∐ _cns◂{ a l } .
+      f a ⊢ { a a0 }
+      lst l ⊢ { l l0 }
+      ∎ { ⟦ a < l ⟧ ⟦ a0 < l0 ⟧ }
+    ∐. _nil◂{} .
+      ∎ { ⟦⟧ ⟦⟧ }
+  ¶§ f = lst
+  ¶§ f = _ap.rpc_adt 
   ¶§ f = _rpc  
   ∎∎
