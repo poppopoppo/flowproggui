@@ -5804,8 +5804,9 @@ unsigned long
 					∎ { env0 ast.k_ctr◂K }
 				∐ ast.k_arr◂K . 
 					∎|
-				∐ ast.k_ply◂K . 
-					∎|
+				∐ ast.k_ply◂{ n s d } . 
+					src_ptn { env0 d } ⊢ { env0 d } 
+					∎ { env0 ast.k_ply◂{ n s d } }
 				∐ ast.k_ap◂K . 
 					∎| 
 				∐. ast.k_op_axm◂{ a al } . 
@@ -5813,6 +5814,18 @@ unsigned long
 						∎ { env0 ast.k_op_axm◂{ a ⟦⟧ } }
 					∐. . 
 						∎|
+			@.src { env0 a }
+				$ a ⊢ 
+				∐ ast.re_reg◂i .
+					∎ { env0 ast.re_reg◂i }
+				∐ ast.re_agl◂{ n sp } . 
+					cst { env0 n } ⊢ { env0 n } 
+					src_ptn { env0 sp } ⊢ { env0 sp } 
+					∎ { env0 ast.re_agl◂{ n sp } }				
+				∐. ast.re_v◂c .
+					ct_ptn { env0 c } ⊢ { env0 c }
+					∎ { env0 ast.re_v◂c }
+			@.src_ptn = RP.map_l◂◂src 
 			@.exp_s8 { env0 e } 
 				$ e ⊢ 
 				∐ ast.exp_s8_cst◂c . 
@@ -6980,6 +6993,34 @@ unsigned long
 				∐. _nil◂{} .
 					∎ gl
 			∎∎
+		§§ rpc
+			§ ply◂c = RP.atm◂ast.k_ply◂c 
+			§ agl_n◂{ c n } = RP.atm◂ast.re_agl◂{ c RP.atm◂ast.re_reg◂n }
+			§ c◂{ c0 c1 } = ply◂{ %[ 2r ] RP.cns2◂{ RP.atm◂%[ 0r ] RP.atm◂%[ 1r ] } RP.cns2◂{ agl_n◂{ c0 %[ 0r ] } agl_n◂{ c1 %[ 1r ] } } }
+			§ @.mo_n l 
+				$ l ⊢ 
+				∐ _cns◂{ { w i n v } l } .
+					mo_n l ⊢ m 
+					$ ast.k_ctr◂{ i n v } ⊢ c,c0,c1
+					$ mcp_k◂{ mop_k◂RP.atm◂c moo_k◂seq_k◂{ unv_k◂%[ UNV.id.rpc ] ctr◂c◂{ c0 c1 } } m } ⊢ m 
+					--$ mcp_k◂{ mop_k◂RP.atm◂c moo_k◂seq_k◂{ unv_k◂%[ UNV.id.rpc ] ctr◂RP.atm◂c0 } m } ⊢ m 
+					∎ m
+				∐. _nil◂{} .
+					∎ mcn_k◂{}
+			§ f_gl # cl 
+				mo_n cl ⊢ m 
+				$ ast.lc_etr◂{ { %[ 1r ] %[ ".e0" ] } ast.lc_def◂{ ‹› ip.reg◂%[ "s" ] bl.f◂{} ast.jmp◂{ oom_k◂m ip.reg◂%[ "s" ] } } } ⊢ e0 
+				$ ast.lc_ap◂{ ast.abs_n◂%[ UNV.id.rpc_adt ] fst_n_k◂%[ ".e0" ] } ⊢ e1
+				∎ { e0 e1 }
+			§ @.lp_gl { gl cll } 
+				$ cll ⊢ 
+				∐ _cns◂{ cl cll } .
+					f_gl cl ⊢ { e0 e1 } 
+					$ ⟦ e0 e1 < gl ⟧ ⊢ gl
+					lp_gl { gl cll } ⊢|
+				∐. _nil◂{} .
+					∎ gl
+			∎∎
 		∎∎
 		§§ mk_ir 
 			§ 
@@ -7731,10 +7772,12 @@ unsigned long
 							add_t { tv ns_t w k } ⊢ { tv ns_t }
 							slv_dt_def { cn ⟦⟧ ⟦⟧ { mmv mev ns_m il } evv %[ 0r ] mtv al yx tv ns_t ev_n ns_e dl { dd ep0 } } ⊢ { cl { mmv mev ns_m il } evv an mtv al yx tv ns_t ev_n ns_e { dd ep0 } ac kl }
 							set_tv { tav x0 { ac ql kl } } ⊢ { tav x } 
-							$ cl ⊢ cl,cl0 
+							$ cl ⊢ cl,cl0,cl1 
 							mk_ap.emt.f_gl cl ⊢ { e0 e1 } 
 							$ ⟦ e0 e1 < gel ⟧ ⊢ gel
 							mk_ap.dlt.f_gl cl0 ⊢ { e0 e1 } 
+							$ ⟦ e0 e1 < gel ⟧ ⊢ gel
+							mk_ap.rpc.f_gl cl1 ⊢ { e0 e1 } 
 							$ ⟦ e0 e1 < gel ⟧ ⊢ gel
 							iso_file { { mmv mev mtv mfv mv_n } { ns_T ns_m ns_e ns_t } {    ev_n tv tav evv } { el dd ep0 } } ⊢ {  MV NS LCV EC }
 							slv_file_lp { i il SC VM MV LCV tx_n NS gel  EC } ⊢|
@@ -7752,16 +7795,16 @@ unsigned long
 						
 					∐. ast.dt_qlq_etr◂q .
 						slv_dt_clq.f { ns_T q { mmv mev ns_m ns_e il } tx_n tav evv ev_n mtv tv ns_t { dd ep0 } } ⊢ { cll ns_T { mmv mev ns_m ns_e il } tx_n tav evv ev_n mtv tv ns_t { dd ep0 } }
-						$ cll ⊢ cll,cll0 
+						$ cll ⊢ cll,cll0,cll1
 						mk_ap.emt.lp_gl { gel cll } ⊢ gel 
 						mk_ap.dlt.lp_gl { gel cll0 } ⊢ gel 
+						mk_ap.rpc.lp_gl { gel cll1 } ⊢ gel 
 						iso_file { { mmv mev mtv mfv mv_n } { ns_T ns_m ns_e ns_t } { ev_n tv tav evv } { el dd ep0 } } ⊢ {  MV NS LCV EC }
 						slv_file_lp { i il SC VM MV LCV tx_n NS gel EC } ⊢|
 				∐. _nil◂{} . 
 					iso_file { { mmv mev mtv mfv mv_n } { ns_T ns_m ns_e ns_t } { ev_n tv tav evv } { el dd ep0 } } ⊢ {  MV NS LCV EC }
 					∎ { i il SC VM MV LCV tx_n NS EC }
 			§ slv_file { ael gel }
-				_emt_im◂◂"S0" {} ⊢ {} 
 				$ %[ TX.N0 ] ⊢ tx_n 
 				NS_M.ini {} ⊢ ns_m 
 				NS_T.ini {} ⊢ ns_t 
@@ -7775,7 +7818,6 @@ unsigned long
 				_cli {} ⊢ evv 
 				_cli {} ⊢ tv 
 				$ T.t◂{ tv %[ 1r ] } ⊢ tv
-				_emt_im◂◂"S1" {} ⊢ {} 
 				$ %[ 1r ] ⊢ mv_n
 				$ %[ 0r ] ⊢ ev_n
 				$ %[ 0r ] ⊢ i 
@@ -7829,7 +7871,8 @@ unsigned long
 				T.newvar_q tv ⊢ { tv t0 }   
 				T.newvar_q tv ⊢ { tv s0 } 
 				$ s0 ⊢ s0,s1,s2
-				$ TX.t_ct_imp◂{ TX.cns3◂{ TX.s8◂{} TX.t_ctr◂{ t0 s0 } TX.t_mtc◂{ s1 TX.cns0◂{} } } TX.t_mtc◂{ s2 TX.cns0◂{} } }	⊢ tx 
+				$ t0 ⊢ t0,t1,t2,t3,t4 
+				$ TX.t_ct_imp◂{ TX.cns3◂{ TX.s8◂{} TX.t_ctr◂{ t0 s0 } TX.t_mtc◂{ s1 TX.cns2◂{ t1 t2 } } } TX.t_mtc◂{ s2 TX.cns2◂{ t3 t4 } } }	⊢ tx 
 				AP.new { AP tx } ⊢ { AP c1 }
 				_push { c1 apv } ⊢ apv
 				-- emt_adt 
