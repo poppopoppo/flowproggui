@@ -9999,6 +9999,7 @@ unsigned long
 					∎ { d c_n e }
 				∐.  
 					∎| 
+			-\
 			§ stt_mk_arr { d gfl is evv tav tv ys GV lb_n eds }
 					$ asm.e◂{} ⊢ e0 
 					$ asm.e◂{} ⊢ eg0 
@@ -10074,7 +10075,7 @@ unsigned long
 						∎ { gfl evv tav tv GV lb_n { eds eg0 e0 } pd1 }
 					∐. . 
 						∎| 
-			
+			-/
 				∎∎ 
 			§§ lc_code 
 				¶ rf t',f',k'
@@ -11206,11 +11207,14 @@ unsigned long
 								=+ a' 
 								-- mk_arr 
 								∐ 
+									-\
 									arr.stt_mk_arr { %[ ast.hp.arr.std ] gfl is evv tav tv ys GV lb_n eds } ⊢ { gfl evv tav tv GV lb_n  { eds eg1 e0 } iy }
 									asm.cct { ec0 e0 } ⊢ ec0  
 									--asm.cct { eg0 eg1 } ⊢ eg0 
 									asm.blt_buf { eg0 eg1 } ⊢ eg0 
 									stt_jmp_axm { VM evv tv { GV lb_n tav ec0 } { rfv gfl mfv ev_n eg0 eds ew0 } iy f_c } ⊢|
+								-/
+								∎| 
 								-- emt 
 								∐ 
 									∎| 
@@ -11219,6 +11223,7 @@ unsigned long
 									∎| 
 								-- rpc 
 								∐ 
+									-\
 									GV.rpc_d { GV is } ⊢ { GV is id }
 									rpc.ptn { gfl _nil◂{} tv tav evv lb_n GV id { eds ec0 } } ⊢ { gfl fl tv tav evv lb_n GV id { eds ec0 } } 
 									$ asm.e◂{} ⊢ eg1 
@@ -11226,6 +11231,8 @@ unsigned long
 									asm.blt_buf { eg0 eg1 } ⊢ eg0 
 									$ RP.cns2◂{ is id } ⊢ iy
 									stt_jmp_axm { VM evv tv { GV lb_n tav  ec0 } { rfv gfl mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|
+									-/
+									∎| 
 											-- getchar 
 								-- app 
 								∐ 
@@ -11595,11 +11602,14 @@ unsigned long
 										∎|  
 								-- mk_arr_x 
 								∐ 
+									-\
 									arr.stt_mk_arr { %[ ast.hp.arr.x ] gfl is evv tav tv ys GV lb_n eds } ⊢ { gfl evv tav tv GV lb_n  { eds eg1 e0 } iy }
 									asm.cct { ec0 e0 } ⊢ ec0  
 									--asm.cct { eg0 eg1 } ⊢ eg0 
 									asm.blt_buf { eg0 eg1 } ⊢ eg0 
 									stt_jmp_axm { VM evv tv { GV lb_n tav ec0 } { rfv gfl mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|
+								-/
+								∎| 
 								-- push 
 								∐ 
 									inst { tv %[ 1r ] ys } ⊢ { tv lv ys }
