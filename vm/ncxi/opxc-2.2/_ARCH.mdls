@@ -999,6 +999,27 @@
   --¶§ f = _rpc  
   ∎∎
 §§ _arr 
+  § alc_x◂◂C { h l }
+    !^ l ⊢ *l,b,i 
+			`	cmp rax,0 
+			`	jz err 
+			`	bsr rsi,rax 
+			`	add rsi,1 
+			`	xor rdi,rdi
+			`	bts rdi,rsi 
+			//
+		_imul_im◂◂C b ⊢ b 
+		!^ b ⊢ r 
+			`	lea rsi,[8+8*rax]
+			`	mov rdi,1 
+			`	CALLOC_SF
+			//
+		!^ l,r,i ⊢ *l,*r 
+			`	mov QWORD [rdi],rax 
+			`	mov BYTE [rdi+7],sil
+      //
+		∎ { h { l r } }
+	§ alc_x = _cnc_siz◂◂alc_x
   § @.mk_i { { n k r } i } 
     ∐ n'<>i' .
       $ k ⊢ k,k0 
@@ -1009,10 +1030,10 @@
       ∎ { n k } 
   §: i0 k' = { k' _hp◂k' }
   §: i1 k' = { k' _hp◂(_arr◂k') } 
-  § mk { n k }
+  § mk◂◂ALC { n k }
     _hp.ini {} ⊢ h 
     i0 { k h } ⊢ { k h } 
-    alc { h n } ⊢ { h { n r } }
+    ALC { h n } ⊢ { h { n r } }
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     mk_i { { n k r0 } %[ 0r ] } ⊢ { n k }
@@ -1021,4 +1042,6 @@
     _hp.to { r ha } ⊢ a 
     ∎ { n k a }
   ∎∎
-§ _mk_arr = _arr.mk
+§ _mk_arr = _arr.mk◂◂alc 
+§ _mk_arr_x = _arr.mk◂◂_arr.alc_x 
+
