@@ -35,3 +35,9 @@ l = &[ _unt _prd◂l' ]
   F→G→H = _seq◂◂{ F _seq◂◂{ G H } }
   _par◂◂{ F G }→ 
 
+  >[ v'' : ]
+
+    \{ a' b' } . a'→b' : { t0' t1' }→_t 
+    q'' : _t 
+    _r64 : _t 
+    \_arr◂k' . k' : _arr◂t' → t'
