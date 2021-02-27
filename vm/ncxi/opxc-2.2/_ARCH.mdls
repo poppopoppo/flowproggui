@@ -1053,10 +1053,27 @@
 
 § _mk_arr = _arr.mk◂◂{ alc _id.arr }
 § _mk_arr_x = _arr.mk◂◂{ _arr.alc_x _id.arr_x }
-
-§ mk_stk◂◂F { n a p }
+§: i1 k' = { k' _hp◂(_arr◂k') } 
+§ _mk_stk◂◂F { { n k } p }
   _hp.ini {} ⊢ h 
-  _arr.i0 { p h } ⊢ { p h } 
+  _arr.i0 { k h } ⊢ { k h } 
   $ n ⊢ n,b 
-  siz_arr { h b } ⊢ { h b }
-  ∎| 
+  siz_arr { h b } ⊢ { _ b }
+  !^ n,b ⊢ *n,*b,r,r0 
+    ` sub rsp,rdi 
+    ` bts rax,63 
+    ` mov QWORD [rsp],rax
+    ` mov rsi,rsp 
+    ` lea rdx,[rsi+8]
+    //    
+  _arr.mk_i { { n k r0 } %[ 0r ] } ⊢ { n k }
+  _hp.ini {} ⊢ ha 
+  i1 { k ha } ⊢ { k ha } 
+  _hp.to { r ha } ⊢ a
+  F { { n k a } p } ⊢ d 
+  !^ b ⊢ {} 
+    ` mov rsi,QWORD [rsp]
+    ` mov rsi,QWORD [rsi]
+    ` add rsp,rax 
+    //
+  ∎ d 
