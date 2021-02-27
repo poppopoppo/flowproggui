@@ -1054,7 +1054,7 @@
 § _mk_arr = _arr.mk◂◂{ alc _id.arr }
 § _mk_arr_x = _arr.mk◂◂{ _arr.alc_x _id.arr_x }
 
-§ __mk_stk◂◂F { n a p }
+§ mk_stk◂◂F { n a p }
   _hp.ini {} ⊢ h 
   _arr.i0 { p h } ⊢ { p h } 
   $ n ⊢ n,b 
