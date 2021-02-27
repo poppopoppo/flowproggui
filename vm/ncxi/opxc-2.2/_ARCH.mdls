@@ -1029,8 +1029,8 @@
     ∐. .
       ∎ { n k } 
   §: i0 k' = { k' _hp◂k' }
-  §: i1 k' = { k' _hp◂(_arr◂k') } 
-  § mk◂◂ALC { n k }
+  §: i1 t',k' = { k' _hp◂(_arr0◂t'◂k') } 
+  § mk◂◂{ ALC I } { n k }
     _hp.ini {} ⊢ h 
     i0 { k h } ⊢ { k h } 
     ALC { h n } ⊢ { h { n r } }
@@ -1040,8 +1040,10 @@
     _hp.ini {} ⊢ ha 
     i1 { k ha } ⊢ { k ha } 
     _hp.to { r ha } ⊢ a 
+    I a ⊢ a 
     ∎ { n k a }
   ∎∎
-§ _mk_arr = _arr.mk◂◂alc 
-§ _mk_arr_x = _arr.mk◂◂_arr.alc_x 
+
+§ _mk_arr = _arr.mk◂◂{ alc _id.arr }
+§ _mk_arr_x = _arr.mk◂◂{ _arr.alc_x _id.arr_x }
 
