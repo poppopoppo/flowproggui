@@ -1021,3 +1021,4 @@
     _hp.to { r ha } ⊢ a 
     ∎ { n k a }
   ∎∎
+§ _mk_arr = _arr.mk
