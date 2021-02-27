@@ -73,14 +73,14 @@
   ∎∎
 
 -- rank-0
-§ _mk_arr = _[ 0r ] 
+--§ _mk_arr = _[ 0r ] 
 --§ _emt = _[ 1r ] 
 --§ _ila2 = _[ 2r ]
-§ _rpc = _[ 3r ] 
+--§ _rpc = _[ 3r ] 
 § _app = _[ 4r ] 
 § _prs = _[ 5r ] 
 § _id = _[ 6r ] 
-§ _dlt = _[ 7r ] 
+--§ _dlt = _[ 7r ] 
 § _cst = _[ 8r ] 
 § _psc = _[ 9r ] 
 § _synt = _[ 10r ] 
@@ -102,7 +102,7 @@
 § _seq = _[ 26r ] 
 § _alc_i = _[ 27r ] 
 § _alc_o = _[ 28r ] 
-§ _mk_arr_x = _[ 29r ]
+--§ _mk_arr_x = _[ 29r ]
 § _push = _[ 30r ] 
 § _pop = _[ 31r ]  
 § _id_par = _[ 32r ]  
@@ -122,7 +122,7 @@
 § _sqc = _[ 46r ]
 § _st = _[ 47r ]
 § _ccs = _[ 48r ]
-§ _mk_stk = _[ 49r ] 
+--§ _mk_stk = _[ 49r ] 
 
 -- ctr 
 § _nil = _[ 0x0001000000000000r ]
@@ -1005,6 +1005,7 @@
   --¶§ f = _rpc  
   ∎∎
 § _rpc = _rpc.f 
+§: i0 k' = { k' _hp◂k' }
 §§ _arr 
   § alc_x◂◂C { h l }
     !^ l ⊢ *l,b,i 
@@ -1035,7 +1036,6 @@
       mk_i { { n k r } i } ⊢|
     ∐. .
       ∎ { n k } 
-  §: i0 k' = { k' _hp◂k' }
   §: i1 t',k' = { k' _hp◂(_arr0◂t'◂k') } 
   § mk◂◂{ ALC I } { n k }
     _hp.ini {} ⊢ h 
@@ -1056,7 +1056,7 @@
 §: i1 k' = { k' _hp◂(_arr◂k') } 
 § _mk_stk◂◂F { { n k } p }
   _hp.ini {} ⊢ h 
-  _arr.i0 { k h } ⊢ { k h } 
+  i0 { k h } ⊢ { k h } 
   $ n ⊢ n,b 
   siz_arr { h b } ⊢ { _ b }
   !^ n,b ⊢ *n,*b,r,r0 
@@ -1077,3 +1077,24 @@
     ` add rsp,rax 
     //
   ∎ d 
+§: i2 k' = { k' _hp◂(_pt◂k') }
+§ _clp0◂◂N { h { C k } }
+  _hp.of C ⊢ { rC hC } 
+  !^ rC ⊢ *rC,r,b 
+    "\tALC_RCD (0x" (_ct.pf_x◂◂N) "+3),rdi\n"
+    ` mov QWORD [rdi+8],rdi 
+    ` mov QWORD [rdi+16],1 
+    ` lea rsi,[rdi+24] 
+    //
+  _hp.ini {} ⊢ hp 
+  i2 { k hp } ⊢ { k hp } 
+  _cnc_sto { b k } ⊢ _ 
+  _hp.to { r hp } ⊢ p 
+  _hp.to { rC hC } ⊢ C 
+  ∎ { h { C p } }
+-\
+§ _clp # { C k }
+  _hp.mk k ⊢ { k h }
+  _cnc_siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
+  ∎ { C p }
+-/
