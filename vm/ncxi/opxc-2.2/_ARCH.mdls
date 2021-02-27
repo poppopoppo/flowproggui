@@ -163,7 +163,6 @@
   § ini = _[ 59r ] 
   § rpc # a 
     of a ⊢ { r h } 
-    --_rpc r ⊢ { r r0 } 
     $ r ⊢ r,r0 
     to { r h } ⊢ a 
     ∎ { a r0 }
@@ -878,6 +877,13 @@
     ∐. .
       ∎ { a0 a1 %[ 0r ] }      
   ∎∎
+§ siz_arr◂◂C # { h l } 
+  _imul_im◂◂C l ⊢ l 
+  !^ l ⊢ b 
+    ` lea rax,[8+8*rax]
+    //
+  ∎ { h b }
+§ siz_arr = _cnc_siz◂◂siz_arr
 § alc◂◂C { h l }
   $ l ⊢ l,s 
   _imul_im◂◂C s ⊢ s 
@@ -998,6 +1004,7 @@
   ¶§ f = _ap.rpc_adt 
   --¶§ f = _rpc  
   ∎∎
+§ _rpc = _rpc.f 
 §§ _arr 
   § alc_x◂◂C { h l }
     !^ l ⊢ *l,b,i 
@@ -1047,3 +1054,9 @@
 § _mk_arr = _arr.mk◂◂{ alc _id.arr }
 § _mk_arr_x = _arr.mk◂◂{ _arr.alc_x _id.arr_x }
 
+§ __mk_stk◂◂F { n a p }
+  _hp.ini {} ⊢ h 
+  _arr.i0 { p h } ⊢ { p h } 
+  $ n ⊢ n,b 
+  siz_arr { h b } ⊢ { h b }
+  ∎| 
