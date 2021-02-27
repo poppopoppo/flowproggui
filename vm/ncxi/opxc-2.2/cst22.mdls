@@ -597,6 +597,17 @@
 § m30 _ 
   _dlt.f ⟦ %[ 3r ] %[ 33r ] ⟧ ⊢ {}
   ∎ {} 
-§ m31_i
-§ m31 _ 
-  loop◂◂
+§ m31 _
+  _imul_im◂◂0r %[ 3r ] ⊢ x 
+  _emt x ⊢ _ 
+  _imul_im◂◂1r %[ 3r ] ⊢ x 
+  _emt x ⊢ _ 
+  _imul_im◂◂2r %[ 3r ] ⊢ x 
+  _emt x ⊢ _ 
+  _imul_im◂◂3r %[ 3r ] ⊢ x 
+  _emt x ⊢ _ 
+  _emt ‹› ⊢ _
+  _mk_arr { %[ 12r ] { %[ "33r3r" ] ⟦ %[ 4r ] %[ 5r ] %[ 6r ] ⟧ ‹ { %[ 3r ] {} } › } } ⊢ { _ _ a } 
+  $ a ⊢ a,a0,a1,a2 
+  _emt { a a0 } ⊢ _ 
+  ∎ {} 
