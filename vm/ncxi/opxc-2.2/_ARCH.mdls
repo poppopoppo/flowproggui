@@ -155,6 +155,11 @@
   § if = _[ 71r ]
   § eq = _[ 72r ]
   § if_eq◂◂{ { C X } a b } = if◂◂{ eq◂◂{ C X } a b }
+  §§ op2 
+    § f = _[ 74r ] 
+    § add = f◂◂0r 
+    § sub = f◂◂1r 
+    ∎∎ 
   ∎∎
 
 §§ _hp 
@@ -1077,12 +1082,18 @@
     ` add rsp,rax 
     //
   ∎ d 
+
+§§ _siz 
+  ¶¶ f k' : { _hp◂k' _r64 }
+  --¶¶ f k',p0',p1' : (_r64→→({ _hp◂k' p0' }→{ _hp◂k' p1' }))→→({ _hp◂k' p0' }→{ _hp◂k' p1' })
+  --¶§ f = { '[ _ct.hp.ini : _r64◂{} ] 1r }  
+  ∎∎
 §: i2 k' = { k' _hp◂(_pt◂k') }
 § _clp0◂◂N { h { C k } }
   _hp.of C ⊢ { rC hC } 
   !^ rC ⊢ *rC,r,b 
-    "\tALC_RCD (0x" (_ct.pf_x◂◂N) "+3),rdi\n"
-    ` mov QWORD [rdi+8],rdi 
+    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op2.add◂◂{ N 3r })) ",rdi\n"
+    ` mov QWORD [rdi+8],rax 
     ` mov QWORD [rdi+16],1 
     ` lea rsi,[rdi+24] 
     //
