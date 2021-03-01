@@ -42,4 +42,40 @@ l = &[ _unt _prd◂l' ]
     _r64 : _t 
     \_arr◂k' . k' : _arr◂t' → t'
 
-  
+  \\{ F H } .
+    \\ { F H } = '[ _ct.id : _id◂(_r64→→{ { _hp◂k' p' }→q' _hp◂k' }) ]◂◂{ F H } .
+      \\ N = siz◂◂H . 
+        F◂◂H
+
+  _hp.cr : _hp◂k'→→(_hp◂k'→_hp◂k')
+  _apr : (∀k' . (_hp◂k' →→ (p0'→p1'))) →→ ({ _hp◂k' p0' }→p1') = 
+  _apr : (_hp◂k' →[ k' ]→ (p0'→p1')) →→ ({ _hp◂k' p0' }→p1') = 
+  _apr : (_hp◂k'' →→ (p0'→p1')) →→ ({ _hp◂k' p0' }→p1') = 
+    _apr◂◂{ F H } { h p }
+      _hp.cr◂◂H h ⊢ h 
+      F◂◂H p ⊢|
+
+  f◂◂{ F H } { h p } 
+  _hp.cr◂◂H h ⊢ h 
+  F◂◂(_siz◂◂H) p ⊢| 
+    _siz : { _hp◂k' _r64 }
+    _siz = (\\{ H N } . N)◂◂_siz
+
+
+    &[ { a' b' _r64 } ] ~ &[ { a' _s8 b' } ] 
+    &[ { a' b' c' } ]
+
+    _ct_imp◂&[ _adt◂{ _lst0 &[ a' ] } ]◂b' ~ _ct_imp◂&[ _adt◂{ _lst0 &[ _r64 ] } ]◂_s8 
+    _ct_imp◂&[ _adt◂{ _lst0 &[ _r64 ] } ]◂_s8 
+
+    _r64→→_s8 ~ _r2→→a' 
+    s'→→_s8 
+
+
+  &[ a' ]→→a' ~ &[ _64 ]→→_r64 
+    &[ q' ]→→_r64 
+    &[ v ] : &[ q' ] →→ q' 
+
+    (&[ q' →→_r64 ])→→_r64 
+    \&\   
+
