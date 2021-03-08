@@ -1103,9 +1103,16 @@
   _hp.to { r hp } ⊢ p 
   _hp.to { rC hC } ⊢ C 
   ∎ { h { C p } }
+§§ _cnc 
+  ¶¶ siz y',z',w' : (_r64→→({ _hp◂y' z' }→w'))→→({ _hp◂y' z' }→w')
+  ¶§ siz = _cnc_siz 
+  ∎∎
 -\
+\a = _arr◂v' . { v' v' }
+\a = { _r64 a } . a 
+-/
 § _clp # { C k }
   _hp.mk k ⊢ { k h }
+  --_cnc.siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
   _cnc_siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
   ∎ { C p }
--/
