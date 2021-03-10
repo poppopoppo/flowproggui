@@ -141,6 +141,7 @@
   § dlt_adt = _[ 0x0002000000000007r ]
   § rpc_adt = _[ 0x0002000000000008r ]
   § cnc_lod = _[ 0x0002000000000009r ]
+  § cnc_sto = _[ 0x000200000000000ar ]
   ∎∎
 §§ _ila 
   § f = _[ 50r ] 
@@ -180,8 +181,8 @@
 § _prd = _[ 61r ]
 § _ipr = _[ 62r ]
 § _dlt_r64 = _[ 63r ] 
-§ _cnc_lod = _[ 64r ] 
-§ _cnc_sto = _[ 65r ] 
+--§ _cnc_lod = _[ 64r ] 
+--§ _cnc_sto = _[ 65r ] 
 § _cnc_siz = _[ 66r ]
 --§ _rmv = _[ 73r ]
 -- non-atomic 
@@ -968,7 +969,7 @@
         _alc_o { a0 i } ⊢ { a0 q0 } 
         f q0 ⊢ { q0 q1 } 
         _alc_i { a0 q0 } ⊢ { a0 i } 
-        _cnc_sto { r1 q1 } ⊢ r1
+        _ap.cnc_sto { r1 q1 } ⊢ r1
         _inc i ⊢ i
         arr_i { { a0 r1 l } i } ⊢|
       ∐. .
@@ -1036,7 +1037,7 @@
   § @.mk_i { { n k r } i } 
     ∐ n'<>i' .
       $ k ⊢ k,k0 
-      _cnc_sto { r k0 } ⊢ r 
+      _ap.cnc_sto { r k0 } ⊢ r 
       _inc i ⊢ i 
       mk_i { { n k r } i } ⊢|
     ∐. .
@@ -1088,31 +1089,41 @@
   --¶¶ f k',p0',p1' : (_r64→→({ _hp◂k' p0' }→{ _hp◂k' p1' }))→→({ _hp◂k' p0' }→{ _hp◂k' p1' })
   --¶§ f = { '[ _ct.hp.ini : _r64◂{} ] 1r }  
   ∎∎
-§: i2 k' = { k' _hp◂(_pt◂k') }
-§ _clp0◂◂N { h { C k } }
-  _hp.of C ⊢ { rC hC } 
-  !^ rC ⊢ *rC,r,b 
-    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op2.add◂◂{ N 3r })) ",rdi\n"
-    ` mov QWORD [rdi+8],rax 
-    ` mov QWORD [rdi+16],1 
-    ` lea rsi,[rdi+24] 
-    //
-  _hp.ini {} ⊢ hp 
-  i2 { k hp } ⊢ { k hp } 
-  _cnc_sto { b k } ⊢ _ 
-  _hp.to { r hp } ⊢ p 
-  _hp.to { rC hC } ⊢ C 
-  ∎ { h { C p } }
 §§ _cnc 
   ¶¶ siz y',z',w' : (_r64→→({ _hp◂y' z' }→w'))→→({ _hp◂y' z' }→w')
   ¶§ siz = _cnc_siz 
+  ¶¶ sto k' : { _r64 k' } → _r64 
+  ¶§ sto = _ap.cnc_sto 
   ∎∎
+§: i2 k' = { k' _hp◂(_pt◂k') }
+§ _clp0◂◂N { h { C k } }
+  _hp.of C ⊢ { rC hC } 
+  $ rC ⊢ rC,rC0 
+  _hp.to { rC hC } ⊢ C 
+  !^ rC0 ⊢ r 
+    ` push rax 
+    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op2.add◂◂{ N 3r })) ",rdi\n"
+    ` pop QWORD [rdi+8] 
+    ` mov QWORD [rdi+16],1 
+    ` mov rax,rdi
+    --` mov QWORD [rdi+8],rax 
+    --` lea rsi,[rdi+24] 
+    //
+  $ r ⊢ r,b 
+  _add_im◂◂24r b ⊢ b 
+  _hp.ini {} ⊢ hp 
+  i2 { k hp } ⊢ { k hp } 
+  _cnc.sto { b k } ⊢ _ 
+  _hp.to { r hp } ⊢ p 
+  ∎ { h { C p } }
 -\
 \a = _arr◂v' . { v' v' }
 \a = { _r64 a } . a 
 -/
+-\
 § _clp # { C k }
   _hp.mk k ⊢ { k h }
   --_cnc.siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
-  _cnc_siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
+  _cnc.siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
   ∎ { C p }
+-/
