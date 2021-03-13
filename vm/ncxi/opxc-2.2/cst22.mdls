@@ -611,3 +611,12 @@
   $ a ⊢ a,a0,a1,a2 
   _emt { a a0 } ⊢ _ 
   ∎ {} 
+
+§ m32 _ 
+  $ %[ "OIJfjie" ] ⊢ S 
+  $ %[ 3r ] ⊢ I 
+  _prs◂◂(_psc◂◂"OIJf") { S I } ⊢ { S I o } 
+  _emt o ⊢ _ 
+  _prs◂◂(_psc◂◂"f") { S I } ⊢ { S I o } 
+  _emt { S I o } ⊢ _ 
+  ∎ {} 

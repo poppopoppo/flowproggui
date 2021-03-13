@@ -612,6 +612,81 @@
   ∐. .
     ∎ { s i ‹› }
 § _byt = _grm◂◂_byt_F
+§ _line = _[ 0x000200000000000fr ]
+§ _line_F { s i } 
+  _id.s8 s ⊢ s 
+  _s8_len s ⊢ { s l } 
+  _hp.rpc s ⊢ { s r }   
+  !^ i,r,l ⊢ i 
+    ` jmp .L1 
+    `.L0:
+	  ` add rax,1 
+    `.L1:						
+	  ` cmp rax,rsi
+	  ` jge .L2
+	  ` movzx MCR_REG,BYTE [rdi+8+rax]
+	  ` cmp MCR_REG,9 
+	  ` jz .L0
+	  ` cmp MCR_REG,32 
+	  ` jz .L0
+    `.L2:
+    //
+  ∎ { s i ‹ {} › }
+¶§ _line = _grm◂◂_line_F
+§ _synt = _[ 0x0002000000000010r ]
+§ _synt_F { s i } 
+  _id.s8 s ⊢ s 
+  _s8_len s ⊢ { s l } 
+  _hp.rpc s ⊢ { s r }   
+  !^ i,r,l ⊢ i 
+    ` jmp .L1 
+    `.L0:
+	  ` add rax,1 
+    `.L1:						
+	  ` cmp rax,rsi
+	  ` jge .L2
+	  ` movzx MCR_REG,BYTE [rdi+8+rax]
+	  ` cmp MCR_REG,9 
+	  ` jz .L0
+    ` cmp MCR_REG,10
+    ` jz .L0
+	  ` cmp MCR_REG,32 
+	  ` jz .L0
+    `.L2:
+    //
+  ∎ { s i ‹ {} › }
+¶§ _synt = _grm◂◂_synt_F
+§ psc_F_0 { s b i }
+  _s8_len s ⊢ { s l } 
+  _hp.rpc s ⊢ { s rs }
+  !^ i,rs,b,l ⊢ i,x 
+    ` lea rdi,[rdi+8+rax]
+    ` mov rcx,QWORD [rsi-8] 
+    ` mov rbx,rax
+    ` add rax,rcx 
+    ` cmp rax,rdx
+    ` jg .L0 
+    ` cld 
+    ` repe cmpsb 
+    ` jnz .L0 
+    ` mov rdi,1 
+    ` jmp .L1
+    `.L0:
+    ` mov rax,rbx 
+    ` mov rdi,0
+    `.L1:
+    //
+  ∐ x'=0r .
+    ∎ { s i ‹› }
+  ∐. .
+    ∎ { s i ‹ {} › }
+§ psc_F◂◂S # { s i }
+  _st◂◂S {} ⊢ b 
+  _hp.of b ⊢ { rb _ }
+  psc_F_0 { s rb i } ⊢| 
+  
+§ _psc = _[ 0x0002000000000011r ]
+¶§ _psc = \\S . _grm◂◂(psc_F◂◂S)
 § cst◂◂S # {} 
   _st◂◂S {} ⊢ b 
   _id.st_s8 b ⊢ b 
@@ -654,7 +729,7 @@
     cst◂◂(_ccs◂◂{ S "◂" }) {} ⊢ {} 
     f0 k ⊢ k 
     _ctr◂◂C k ⊢ k 
-    ∎ k
+    ∎ k 
   § mo◂◂{ S C } = _moo◂◂(mo_e◂◂{ S C })
   ¶§ _ap.emt_mo = mo 
   --¶¶ f0 a' : a' → a' 
