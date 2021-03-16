@@ -181,6 +181,7 @@
     ∎∎
   ∎∎
 §§ _ct 
+  § id = \\X . X 
   § pf_d = _[ 55r ] 
   § pf_x = _[ 56r ] 
   § if = _[ 71r ]
@@ -702,7 +703,7 @@
   ∎ {} 
 §§ _emt_im 
   ¶¶ f0 a' : a'→→({}→{}) 
-  § f◂◂C # {} 
+  § f◂◂C ## {} 
     cst◂◂"emt_im:" {} ⊢ {} 
     f0◂◂C {} ⊢ {}
     cst◂◂"\n" {} ⊢ {}
@@ -722,7 +723,7 @@
   ∎∎
 §§ _emt 
   § f0 = _ap.emt 
-  § f # a 
+  § f ## a 
     cst◂◂"emt:" {} ⊢ {} 
     f0 a ⊢ a
     cst◂◂"\n" {} ⊢ {}
@@ -736,16 +737,16 @@
   ¶§ _ap.emt_mo = mo 
   --¶¶ f0 a' : a' → a' 
   ¶¶ f_rcd r' : _rcd◂r'→_rcd◂r' 
-  § rcd # r 
+  § rcd ## r 
     cst◂◂"{" {} ⊢ {}
     f_rcd r ⊢|
-  § unt # {} 
+  § unt ## {} 
     cst◂◂"{}" {} ⊢ {}
     ∎ {}
-  § rcd_unt # {} 
+  § rcd_unt ## {} 
     cst◂◂" }" {} ⊢ {}
     ∎ {}
-  § prd # p 
+  § prd ## p 
     _ipr p ⊢ { h t } 
     cst◂◂" " {} ⊢ {} 
     f0 h ⊢ h 
@@ -797,17 +798,17 @@
     ∐. .
       cst◂◂"}" {} ⊢ {} 
       ∎ a 
-  § arr # a 
+  § arr ## a 
     _arr_len a ⊢ { a l }
     cst◂◂"{+ " {} ⊢ {} 
     arr_i { { a l } %[ 0r ] } ⊢| 
   ¶§ f0 = arr 
-  § pt # p 
+  § pt ## p 
     _id.pt p ⊢ p 
     cst◂◂"[=]" {} ⊢ {} 
     ∎ p
   ¶§ f0 = pt
-  § Clr # C 
+  § Clr ## C 
     _id.Clr C ⊢ C 
     cst◂◂"{= .. }" {} ⊢ {} 
     ∎ C
@@ -834,7 +835,7 @@
 			cst◂◂"‹›" {} ⊢ {} 
 			∎ ‹› 
 	¶§ f0 = opn 
-	§ dft # x 
+	§ dft ## x 
     cst◂◂"?" {} ⊢ {} 
     ∎ x 
   ¶§ f0 = dft
@@ -857,7 +858,7 @@
   § prd = _seq◂◂{ _ipr _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂f _seq◂◂{ _ctr◂◂c0 f_rcd } } } }
   ¶§ f_rcd = prd 
   ¶§ f = f_rcd
-  § s8 s 
+  § s8 ## s 
     _id.s8 s ⊢ s 
     _hp.of s ⊢ { r h } 
     hp h ⊢ {}
@@ -1024,11 +1025,11 @@
     § f1 = _seq◂◂{ _ctr◂◂c0 f0 } 
     ¶§ f = f1 
     ∎∎
-  § hp # h 
+  § hp ## h 
     _hp.ini {} ⊢ h0 
     _id.eq_t { h h0 } ⊢|
   ¶§ f = hp 
-  § s8 # s 
+  § s8 ## s 
 		_id.s8 s ⊢ s 
     _hp.of s ⊢ { r h } 
     !^ r ⊢ *r,r0
@@ -1041,7 +1042,7 @@
     _hp.to { r0 h0 } ⊢ s0 
 		∎ { s s0 } 
   ¶§ f = s8 
-	§ pt # s 
+	§ pt ## s 
     _id.pt s ⊢ s 
     _hp.of s ⊢ { r h } 
     !^ r ⊢ *r,r0 
@@ -1053,7 +1054,7 @@
     _hp.to { r0 h0 } ⊢ s0 
     ∎ { s s0 }  
   ¶§ f = pt 
-  § st # s 
+  § st ## s 
     _id.st_s8 s ⊢ s 
     _hp.of s ⊢ { r h } 
     !^ r ⊢ *r,r0 
