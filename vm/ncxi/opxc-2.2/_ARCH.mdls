@@ -1214,7 +1214,8 @@
   ¶§ sto = _ap.cnc_sto 
   ∎∎
 §: i2 k' = { k' _hp◂(_pt◂k') }
---§ _cls 
+--§ _cls { }
+-\
 § _clp0◂◂N { h { C k } }
   _hp.of C ⊢ { rC hC } 
   $ rC ⊢ rC,rC0 
@@ -1233,6 +1234,7 @@
   _cnc.sto { b k } ⊢ _ 
   _hp.to { r hp } ⊢ p 
   ∎ { h { C p } }
+-/
 -\
 \a = _arr◂v' . { v' v' }
 \a = { _r64 a } . a 
