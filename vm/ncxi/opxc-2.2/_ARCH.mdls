@@ -45,10 +45,12 @@
 ¶ _dmy =# 18r
 ¶ _hp =# 19r 
 ¶ _rcd =# 21r
+
 -- adt 
 ¶ _lst =# 0x0001000000000000r
 ¶ _opn =# 0x0001000000000001r
 
+¶ _id k' = k'→k' 
 -- combinator 
 § _ftr = \\k3 . \\k2 . \\k1 . k3◂◂(k2◂◂k1)
 -- id 
@@ -181,6 +183,7 @@
     ∎∎
   ∎∎
 §§ _ct 
+  ¶ id k' = k' →→ k' 
   § id = \\X . X 
   § pf_d = _[ 55r ] 
   § pf_x = _[ 56r ] 
@@ -195,9 +198,13 @@
   ∎∎
 
 §§ _hp 
-  § of = _[ 57r ]
-  § to = _[ 58r ] 
+  § of0 = _[ 57r ]
+  § to0 = _[ 58r ] 
   § ini = _[ 59r ] 
+  ¶¶ of k' : k' → { _r64 _hp◂k' }
+  ¶§ of = of0 
+  ¶¶ to k' : { _r64 _hp◂k' } → k' 
+  ¶§ to = to0 
   § rpc # a 
     of a ⊢ { r h } 
     $ r ⊢ r,r0 
@@ -838,6 +845,11 @@
 	§ dft ## x 
     cst◂◂"?" {} ⊢ {} 
     ∎ x 
+  § hp ## h 
+    _id.hp h ⊢ h 
+    cst◂◂"?hp" {} ⊢ {} 
+    ∎ h  
+  ¶§ f0 = hp 
   ¶§ f0 = dft
   --¶§ _emt0 = lst 
   ∎∎  
@@ -1202,6 +1214,7 @@
   ¶§ sto = _ap.cnc_sto 
   ∎∎
 §: i2 k' = { k' _hp◂(_pt◂k') }
+--§ _cls 
 § _clp0◂◂N { h { C k } }
   _hp.of C ⊢ { rC hC } 
   $ rC ⊢ rC,rC0 
@@ -1212,8 +1225,6 @@
     ` pop QWORD [rdi+8] 
     ` mov QWORD [rdi+16],1 
     ` mov rax,rdi
-    --` mov QWORD [rdi+8],rax 
-    --` lea rsi,[rdi+24] 
     //
   $ r ⊢ r,b 
   _add_im◂◂24r b ⊢ b 
@@ -1228,9 +1239,11 @@
 -/
 -\
 § _clp # { C k }
+  _emt k ⊢ k 
   _hp.mk k ⊢ { k h }
-  --_cnc.siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
-  _cnc.siz◂◂_clp0 { h { C k } } ⊢ { _ { C p } }
+  _emt h ⊢ h
+  _cnc.siz◂◂_clp0 { h { C k } } ⊢ { h { C p } }
+  _emt { h p } ⊢ { _ p }
   ∎ { C p }
 -/
 -\
