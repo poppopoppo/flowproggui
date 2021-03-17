@@ -123,3 +123,20 @@ l = &[ _unt _prd◂l' ]
 
 
 \a' = _adt◂'{ } . a'
+
+
+§ hp_cr = '[ (\\H . _id) : _hp◂k' →→ (_hp◂k'→_hp◂k') ]
+§ _cns_siz◂◂{ F H } ## { h k } 
+  F◂◂((\\{ H S } . S)◂◂(_siz◂◂H)) k ⊢|
+
+¶¶ _siz : { (_r64→→(a'→b')) _r64 }→→({ _hp◂k' a' }→b')
+
+
+§ _cnc_siz◂◂H # { h k } 
+  hp_cr◂◂H h ⊢ h 
+  F◂◂(_siz◂◂H) k ⊢|
+
+
+  _siz : _hp◂k' → _siz◂k'
+
+¶¶¶ _siz : * → * 
