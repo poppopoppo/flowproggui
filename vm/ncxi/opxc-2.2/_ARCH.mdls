@@ -927,7 +927,7 @@
   ¶§ f = Clr_lc
   §: pt0 k' = { _hp◂k' k' }
   §: pt1 k' = { _hp◂(_pt◂k') _hp◂k' }
-  § pt_C◂◂C # { h r } 
+  § pt_C◂◂C # r 
     !^ r ⊢ {}
       "\tFREE_RCD (" (_ct.pf_d◂◂C) "+3),rax\n" // 
     ∎ {}  
@@ -1002,14 +1002,14 @@
     ∐. .
       ∎ { a0 a1 %[ 0r ] }      
   ∎∎
-§ siz_arr◂◂C # { h l } 
+§ siz_arr◂◂C # l 
   _imul_im◂◂C l ⊢ l 
   !^ l ⊢ b 
     ` lea rax,[8+8*rax]
     //
-  ∎ { h b }
+  ∎ b
 § siz_arr = _cnc_siz◂◂siz_arr
-§ alc◂◂C { h l }
+§ alc◂◂C l
   $ l ⊢ l,s 
   _imul_im◂◂C s ⊢ s 
   !^ l,s ⊢ *l,r
@@ -1021,7 +1021,7 @@
     ` pop QWORD [rax]
     ` mov rdi,rax
     //
-  ∎ { h { l r } }
+  ∎ { l r }
 § alc = _cnc_siz◂◂alc
 §§ _rpc 
   § f = _ap.rpc
@@ -1100,7 +1100,7 @@
       arr2 { h a } ⊢ { h a }
 		  _hp.ini {} ⊢ hk 
       arr1 { h hk } ⊢ { h hk } 
-		  alc { hk l } ⊢ { _ { l r1 } }  
+		  alc { hk l } ⊢  { l r1 }  
       $ r1 ⊢ r1,r2 
       _hp.to { r1 h } ⊢ a1 
 	    _add_im◂◂8r r2 ⊢ r2
@@ -1132,7 +1132,7 @@
 § _rpc = _rpc.f 
 §: i0 k' = { k' _hp◂k' }
 §§ _arr 
-  § alc_x◂◂C { h l }
+  § alc_x◂◂C l
     !^ l ⊢ *l,b,i 
 			`	cmp rax,0 
 			`	jz err 
@@ -1151,7 +1151,7 @@
 			`	mov QWORD [rdi],rax 
 			`	mov BYTE [rdi+7],sil
       //
-		∎ { h { l r } }
+		∎ { l r }
 	§ alc_x = _cnc_siz◂◂alc_x
   § @.mk_i { { n k r } i } 
     ∐ n'<>i' .
@@ -1165,7 +1165,7 @@
   § mk◂◂{ ALC I } { n k }
     _hp.ini {} ⊢ h 
     i0 { k h } ⊢ { k h } 
-    ALC { h n } ⊢ { h { n r } }
+    ALC { h n } ⊢ { n r }
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     mk_i { { n k r0 } %[ 0r ] } ⊢ { n k }
@@ -1183,7 +1183,7 @@
   _hp.ini {} ⊢ h 
   i0 { k h } ⊢ { k h } 
   $ n ⊢ n,b 
-  siz_arr { h b } ⊢ { _ b }
+  siz_arr { h b } ⊢ b
   !^ n,b ⊢ *n,*b,r,r0 
     ` sub rsp,rdi 
     ` bts rax,63 
@@ -1209,46 +1209,45 @@
   --¶§ f = { '[ _ct.hp.ini : _r64◂{} ] 1r }  
   ∎∎
 §§ _cnc 
-  ¶¶ siz y',z',w' : (_r64→→({ _hp◂y' z' }→w'))→→({ _hp◂y' z' }→w')
-  ¶§ siz = _cnc_siz 
-  ¶¶ sto k' : { _r64 k' } → _r64 
-  ¶§ sto = _ap.cnc_sto 
+  § siz = _cnc_siz 
+  § sto = _ap.cnc_sto 
   ∎∎
 §: i2 k' = { k' _hp◂(_pt◂k') }
 --§ _cls { }
+--\
+§ alc_pt_T◂◂N # {} 
+  !^ _ ⊢ r 
+    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op2.add◂◂{ N 3r })) ",rax\n"
+    //
+  ∎ r 
+§ alc_pt = _cnc.siz◂◂alc_pt_T
 -\
-§ _clp0◂◂N { h { C k } }
-  _hp.of C ⊢ { rC hC } 
-  $ rC ⊢ rC,rC0 
-  _hp.to { rC hC } ⊢ C 
-  !^ rC0 ⊢ r 
-    ` push rax 
-    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op2.add◂◂{ N 3r })) ",rdi\n"
-    ` pop QWORD [rdi+8] 
-    ` mov QWORD [rdi+16],1 
-    ` mov rax,rdi
+§ _clp { C k }
+  _hp.mk k ⊢ { k hk } 
+  alc_pt { hk {} } ⊢ r  
+  _hp.rpc C ⊢ { C rC }
+  !^ r,rC ⊢ *r 
+    ` mov QWORD [rax+8],rdi 
+    ` mov QWORD [rax+16],1 
     //
   $ r ⊢ r,b 
   _add_im◂◂24r b ⊢ b 
   _hp.ini {} ⊢ hp 
-  i2 { k hp } ⊢ { k hp } 
+  '[ _id : k' . _id◂{ k' _hp◂(_pt◂k') } ] { k hp } ⊢ { k hp }
+  --i2 { k hp } ⊢ { k hp } 
   _cnc.sto { b k } ⊢ _ 
   _hp.to { r hp } ⊢ p 
-  ∎ { h { C p } }
--/
+  ∎ { C p }
+  -/
+
+--/
 -\
 \a = _arr◂v' . { v' v' }
 \a = { _r64 a } . a 
 -/
--\
-§ _clp # { C k }
-  _emt k ⊢ k 
-  _hp.mk k ⊢ { k h }
-  _emt h ⊢ h
-  _cnc.siz◂◂_clp0 { h { C k } } ⊢ { h { C p } }
-  _emt { h p } ⊢ { _ p }
-  ∎ { C p }
--/
+--\
+
+--/
 -\
 § _push_ra n 
 	`	xor rdi,rdi
@@ -1258,11 +1257,12 @@
 	_bts { %[ 0r ] n } ⊢ { l n } 
   _imul_im◂◂ 
   imul_im◂◂"rdi" { c_n ec0 } ⊢ { c_n ec0 }
-										$~ _^ ⊢ sc0 
-											`	lea rsi,[8+8*rdi]
-											`	mov rdi,rax 
-											` C_CALL_SF realloc
-											`	mov rsi,QWORD [rax] 
+	$~ _^ ⊢ sc0 
+		`	lea rsi,[8+8*rdi]
+		`	mov rdi,rax 
+		` C_CALL_SF realloc
+		`	mov rsi,QWORD [rax] 
+    
 § _push { k v }
   _id.arr_x v ⊢ v 
   _hp.of v ⊢ { rv hv } 
@@ -1282,4 +1282,4 @@
 		`	push rsi 
 		`	bts rdi,rsi 
     //
-    -/
+-/

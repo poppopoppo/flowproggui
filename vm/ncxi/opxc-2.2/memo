@@ -140,3 +140,5 @@ l = &[ _unt _prd◂l' ]
   _siz : _hp◂k' → _siz◂k'
 
 ¶¶¶ _siz : * → * 
+
+  _cnc_cst : (_r64→→a') →→ _hp◂b' → a' 
