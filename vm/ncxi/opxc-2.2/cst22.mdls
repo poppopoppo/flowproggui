@@ -620,3 +620,16 @@
   _prs◂◂(_psc◂◂"f") { S I } ⊢ { S I o } 
   _emt { S I o } ⊢ _ 
   ∎ {} 
+§ m33 _ 
+  _cli {} ⊢ C0 
+  _clp { C0 { %[ 0r ] ⟦ %[ 3r ] %[ 33r ] ⟧ ‹› %[ "FFF" ] } } ⊢ { C0 p0 } 
+  _clc_o { C0 p0 } ⊢ { Cl0 i } 
+  $ i ⊢ i,i0 
+  _clc_i { Cl0 i } ⊢ { C0 p0 } 
+  _emt i0 ⊢ _
+  -\
+  -/
+  ∎ {} 
+§ m34 as 
+  _dlt.arr as ⊢ {} 
+  ∎ {} 

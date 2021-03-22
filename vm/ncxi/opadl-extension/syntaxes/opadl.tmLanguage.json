@@ -63,7 +63,21 @@
 				{
 					"name": "support.class.opadl",
 					"match": "(\u27e6|\u27e7|\u25c2\\+\u25c2|\u25c2\u25c2|\u25C2|_\\^|(\\b_\\b)|\\$|=<|=|\\^)"
-				}
+				},
+				{
+					"name": "keyword.operator.sp_t.opadl",
+					"begin": "'\\[",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.operator.sp_t.begin"
+						}
+					},
+					"end": "\\]",
+					"endCaptures": {
+						"1": {
+							"name": "keyword.operator.sp_t.end"
+						}
+					}
 			]
 		},
 		
