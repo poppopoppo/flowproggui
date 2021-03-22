@@ -223,6 +223,8 @@
 --§ _cnc_sto = _[ 65r ] 
 § _cnc_siz = _[ 66r ]
 --§ _rmv = _[ 73r ]
+-- sp 
+¶¶ _undef t' : t'
 -- non-atomic 
 § A0 L 
    $ L ⊢ { r0 r1 } 
@@ -232,7 +234,12 @@
   --!^ r0,r1 ⊢ {} 
    -- // 
   ∎ {}
+-\
 
+¶ _arr_lc t',k'
+  ∐ _arr_lc : { _r64 _arr0◂t'◂k' }
+§ _arr_o { a i } 
+-/
 § c0◂{ t {} } = t 
 § c1◂{ x y } = { y x }
 § _par_id◂◂F = _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂F _ctr◂◂c1 } }
@@ -710,7 +717,7 @@
   ∎ {} 
 §§ _emt_im 
   ¶¶ f0 a' : a'→→({}→{}) 
-  § f◂◂C ## {} 
+  § f◂◂C # {} 
     cst◂◂"emt_im:" {} ⊢ {} 
     f0◂◂C {} ⊢ {}
     cst◂◂"\n" {} ⊢ {}
@@ -905,6 +912,10 @@
       ` call free_opq
       // 
     ∎ {}
+    
+  § A _ 
+    ∎ {} 
+
   ¶§ f = arr
   § arr_x a 
     _id.arr_x a ⊢ a 
@@ -1222,7 +1233,7 @@
   ∎ r 
 § alc_pt = _cnc.siz◂◂alc_pt_T
 -\
-§ _clp { C k }
+§ _clp ## { C k }
   _hp.mk k ⊢ { k hk } 
   alc_pt { hk {} } ⊢ r  
   _hp.rpc C ⊢ { C rC }
@@ -1234,7 +1245,6 @@
   _add_im◂◂24r b ⊢ b 
   _hp.ini {} ⊢ hp 
   '[ _id : k' . _id◂{ k' _hp◂(_pt◂k') } ] { k hp } ⊢ { k hp }
-  --i2 { k hp } ⊢ { k hp } 
   _cnc.sto { b k } ⊢ _ 
   _hp.to { r hp } ⊢ p 
   ∎ { C p }
