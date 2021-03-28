@@ -29,18 +29,19 @@
   ∎∎ 
 
 -- prm 
-¶ _r64 =# 0r
-¶ _r8 =# 10r 
-¶ _arr0 =# 2r 
+¶ _r64 = _[ 0r ]
+¶ _r8 = _[ 10r ] 
+¶ _arr0 = _[ 2r ] 
 --¶ _arr_t◂t'◂k' = _arr0◂t'◂k'
-¶ _arr_x_t =# 11r 
+¶ _arr_x_t = _[ 11r ] 
 ¶ _arr_x = _arr0◂_arr_x_t 
 ¶ _arr = _arr0◂{} 
-¶ _arr_lc =# 9r 
+¶ _arr_lc0 = _[ 9r ]
+¶ _arr_lc = _arr_lc0◂{} 
 ¶ _s8 = _arr◂_r8 
-¶ _Clr =# 3r
-¶ _Clr_lc =# 8r 
-¶ _pt =# 4r 
+¶ _Clr =  _[ 3r ]
+¶ _Clr_lc = _[ 8r ] 
+¶ _pt = _[ 4r ] 
 ¶ _st =# 16r 
 ¶ _dmy =# 18r
 ¶ _hp =# 19r 
@@ -234,12 +235,6 @@
   --!^ r0,r1 ⊢ {} 
    -- // 
   ∎ {}
--\
-
-¶ _arr_lc t',k'
-  ∐ _arr_lc : { _r64 _arr0◂t'◂k' }
-§ _arr_o { a i } 
--/
 § c0◂{ t {} } = t 
 § c1◂{ x y } = { y x }
 § _par_id◂◂F = _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂F _ctr◂◂c1 } }
@@ -1091,9 +1086,6 @@
   ¶§ f = st 
   §§ arr 
 		
-    §: arr0 t',k' = { _hp◂(_arr◂k') k' }
-    §: arr1 t',k' = { _hp◂(_arr◂k') _hp◂k' }
-    §: arr2 a' = { _hp◂a' a' }
     § @.arr_i { { a0 r1 l } i } 
       ∐ i'<>l' .
         _alc_o { a0 i } ⊢ { a0 q0 } 
@@ -1108,15 +1100,16 @@
 		  _id.arr a ⊢ a 
       _arr_len a ⊢ { a l } 
       _hp.ini {} ⊢ h
-      arr2 { h a } ⊢ { h a }
+      '[ _id : a' . _id◂{ _hp◂a' a' } ] { h a } ⊢ { h a }
 		  _hp.ini {} ⊢ hk 
-      arr1 { h hk } ⊢ { h hk } 
-		  alc { hk l } ⊢  { l r1 }  
+		  '[ _id : k' . _id◂{ _hp◂(_arr◂k') _hp◂k' } ] { h hk } ⊢ { h hk } 
+      alc { hk l } ⊢  { l r1 }  
       $ r1 ⊢ r1,r2 
       _hp.to { r1 h } ⊢ a1 
 	    _add_im◂◂8r r2 ⊢ r2
       arr_i { { a r2 l } %[ 0r ] } ⊢ { a _ }
       ∎ { a a1 }
+      
     ¶§ f = arr
 		∎∎
   
@@ -1142,6 +1135,10 @@
   ∎∎
 § _rpc = _rpc.f 
 §: i0 k' = { k' _hp◂k' }
+§ _A a 
+  ∎ a
+§ _B◂◂X a 
+  ∎ a
 §§ _arr 
   § alc_x◂◂C l
     !^ l ⊢ *l,b,i 
@@ -1164,28 +1161,61 @@
       //
 		∎ { l r }
 	§ alc_x = _cnc_siz◂◂alc_x
-  § @.mk_i { { n k r } i } 
-    ∐ n'<>i' .
+  § @.mk_i { { k r } i } 
+    ∐ i'<>0r .
       $ k ⊢ k,k0 
       _ap.cnc_sto { r k0 } ⊢ r 
-      _inc i ⊢ i 
-      mk_i { { n k r } i } ⊢|
+      _dec i ⊢ i 
+      mk_i { { k r } i } ⊢|
     ∐. .
-      ∎ { n k } 
-  §: i1 t',k' = { k' _hp◂(_arr0◂t'◂k') } 
+      ∎ k 
+  § @.mk_i_F◂◂F { { v r } i } 
+    ∐ i'<>0r .
+      F v ⊢ { v k } 
+      _ap.cnc_sto { r k } ⊢ r 
+      _dec i ⊢ i
+      mk_i_F◂◂F { { v r } i } ⊢| 
+    ∐. .
+      ∎ v
   § mk◂◂{ ALC I } { n k }
     _hp.ini {} ⊢ h 
     i0 { k h } ⊢ { k h } 
     ALC { h n } ⊢ { n r }
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
-    mk_i { { n k r0 } %[ 0r ] } ⊢ { n k }
+    $ n ⊢ n,n0
+    mk_i { { k r0 } n0 } ⊢ k
     _hp.ini {} ⊢ ha 
-    i1 { k ha } ⊢ { k ha } 
+    '[ _id : t',k' . _id◂{ k' _hp◂(_arr0◂t'◂k') } ] { k ha } ⊢ { k ha } 
     _hp.to { r ha } ⊢ a 
     I a ⊢ a 
     ∎ { n k a }
+  § q0 = '[ (\\F . _id) : v',k' . (v'→{ v' k' })→→(_hp◂k'→_hp◂k') ]
+  § mk_F◂◂{ F ALC I } # { n v }
+    _hp.ini {} ⊢ h 
+    q0◂◂F h ⊢ h 
+    _hp.ini {} ⊢ ha 
+    '[ _id : t',k' . _id◂{ _hp◂k' _hp◂(_arr0◂t'◂k') } ] { h ha } ⊢ { h ha } 
+    ALC { h n } ⊢ { n r }
+    $ r ⊢ r,r0 
+    _add_im◂◂8r r0 ⊢ r0 
+    $ n ⊢ n,n0
+    mk_i_F◂◂F { { v r0 } n0 } ⊢ v
+   _hp.to { r ha } ⊢ a 
+    I a ⊢ a 
+    ∎ { n v a }
+
+  § f0◂◂F # {} 
+    F {} ⊢ k 
+    ∎ { {} k }
+  § mk_cst◂◂{ P ALC I } # n
+    mk_F◂◂{ f0◂◂P ALC I } { n {} } ⊢ { n {} a } 
+    ∎ { n a }
   ∎∎
+§ _mk_arr_F◂◂F = _arr.mk_F◂◂{ F alc _id.arr }
+§ _mk_arr_x_F◂◂F = _arr.mk_F◂◂{ F _arr.alc_x _id.arr_x }
+§ _mk_arr_cst◂◂P = _arr.mk_cst◂◂{ P alc _id.arr } 
+§ _mk_arr_x_cst◂◂P = _arr.mk_cst◂◂{ P _arr.alc_x _id.arr_x }
 
 § _mk_arr = _arr.mk◂◂{ alc _id.arr }
 § _mk_arr_x = _arr.mk◂◂{ _arr.alc_x _id.arr_x }
@@ -1202,7 +1232,8 @@
     ` mov rsi,rsp 
     ` lea rdx,[rsi+8]
     //    
-  _arr.mk_i { { n k r0 } %[ 0r ] } ⊢ { n k }
+  $ n ⊢ n,n0
+  _arr.mk_i { { k r0 } n0 } ⊢ k 
   _hp.ini {} ⊢ ha 
   i1 { k ha } ⊢ { k ha } 
   _hp.to { r ha } ⊢ a
@@ -1293,3 +1324,6 @@
 		`	bts rdi,rsi 
     //
 -/
+
+--_agl : { _ctr◂{ a' b' } a'→c' b'→c' }→→b'→c'
+--_tj 
