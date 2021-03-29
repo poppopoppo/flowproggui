@@ -42,18 +42,20 @@
 ¶ _Clr =  _[ 3r ]
 ¶ _Clr_lc = _[ 8r ] 
 ¶ _pt = _[ 4r ] 
-¶ _st =# 16r 
-¶ _dmy =# 18r
-¶ _hp =# 19r 
-¶ _rcd =# 21r
+¶ _st = _[ 16r ] 
+¶ _dmy = _[ 18r ]
+¶ _hp = _[ 19r ]
+¶ _rcd = _[ 21r ]
 
 -- adt 
-¶ _lst =# 0x0001000000000000r
-¶ _opn =# 0x0001000000000001r
+¶ _lst = _[ 0x0001000000000000r ]
+¶ _opn = _[ 0x0001000000000001r ]
 
 ¶ _id k' = k'→k' 
 -- combinator 
 § _ftr = \\k3 . \\k2 . \\k1 . k3◂◂(k2◂◂k1)
+§ _cst◂◂C # {} 
+  ∎ %[ C ]
 -- id 
 §§ _id 
   §: eq_t a' = { a' a' }
@@ -87,7 +89,7 @@
 § _prs = _[ 5r ] 
 § _id = _[ 6r ] 
 --§ _dlt = _[ 7r ] 
-§ _cst = _[ 8r ] 
+--§ _cst = _[ 8r ] 
 --§ _psc = _[ 9r ] 
 --§ _synt = _[ 10r ] 
 --§ _line = _[ 11r ] 
@@ -191,10 +193,15 @@
   § if = _[ 71r ]
   § eq = _[ 72r ]
   § if_eq◂◂{ { C X } a b } = if◂◂{ eq◂◂{ C X } a b }
+  § op = _[ 74r ] 
+  §§ op1 
+    § bsr◂◂X = (op◂◂3r)◂◂{ X 0r }
+    § flo2◂◂X = (op◂◂4r)◂◂{ X 0r }
+    ∎∎
   §§ op2 
-    § f = _[ 74r ] 
-    § add = f◂◂0r 
-    § sub = f◂◂1r 
+    § add = op◂◂0r 
+    § sub = op◂◂1r 
+    § bts = op◂◂2r
     ∎∎ 
   ∎∎
 
@@ -224,17 +231,7 @@
 --§ _cnc_sto = _[ 65r ] 
 § _cnc_siz = _[ 66r ]
 --§ _rmv = _[ 73r ]
--- sp 
-¶¶ _undef t' : t'
 -- non-atomic 
-§ A0 L 
-   $ L ⊢ { r0 r1 } 
-   _ila.f◂◂{ _ila.S◂◂_ila.O _ila.O "" } { r0 } ⊢|
-   --_ila.f◂◂{ _ila.S◂◂(_ila.S◂◂_ila.O) _ila.O "" } { r0 r1 } ⊢|
-§ f { r0 r1 }
-  --!^ r0,r1 ⊢ {} 
-   -- // 
-  ∎ {}
 § c0◂{ t {} } = t 
 § c1◂{ x y } = { y x }
 § _par_id◂◂F = _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂F _ctr◂◂c1 } }
@@ -290,6 +287,7 @@
 § _and = op2◂◂"and" 
 § _or = op2◂◂"or" 
 § _xor = op2◂◂"xor" 
+§ _bts = op2◂◂"bts" 
 §§ _imul 
   § im_0 # _
     ∎ %[ 0r ]
@@ -349,6 +347,46 @@
     ` cmovge rsi,rdx 
     //
   ∎ { x y z }
+
+§ alc_rcd◂◂N ## {} 
+  !^ _ ⊢ r 
+    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) ",rax\n"
+    //
+  ∎ r 
+§ free_rcd◂◂N ## r 
+  !^ r ⊢ {} 
+    "\tFREE_RCD " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) ",rax\n"
+    //
+  ∎ {} 
+§ alc_pt_T◂◂N # {} 
+  alc_rcd◂◂(_ct.op2.add◂◂{ N 3r }) {} ⊢|
+§ free_pt_T◂◂N # r
+  free_rcd◂◂(_ct.op2.add◂◂{ N 3r }) r ⊢|
+§ free_pt = _cnc_siz◂◂free_pt_T
+§ alc_pt = _cnc_siz◂◂alc_pt_T
+
+§ ofs_arr◂◂C # l 
+  _imul_im◂◂C l ⊢ l 
+  !^ l ⊢ b 
+    ` lea rax,[8+8*rax]
+    //
+  ∎ b
+§ ofs_arr = _cnc_siz◂◂ofs_arr
+§ alc◂◂C l
+  $ l ⊢ l,s 
+  _imul_im◂◂C s ⊢ s 
+  !^ l,s ⊢ *l,r
+    ` push rax
+    ` lea rdi,[8+8*rdi]
+    ` mov rsi,1
+    ` xor rax,rax 
+    ` CALLOC_SF
+    ` pop QWORD [rax]
+    ` mov rdi,rax
+    //
+  ∎ { l r }
+§ alc = _cnc_siz◂◂alc
+
 § _getchar {} 
   !^ _ ⊢ c 
     `	mov rdi,fmt_getchar 
@@ -933,10 +971,6 @@
   ¶§ f = Clr_lc
   §: pt0 k' = { _hp◂k' k' }
   §: pt1 k' = { _hp◂(_pt◂k') _hp◂k' }
-  § pt_C◂◂C # r 
-    !^ r ⊢ {}
-      "\tFREE_RCD (" (_ct.pf_d◂◂C) "+3),rax\n" // 
-    ∎ {}  
   § pt_T { h r }
     !^ r ⊢ *r,c 
       ` xor rdi,rdi 
@@ -965,7 +999,8 @@
       _hp.ini {} ⊢ hk 
       pt1 { h hk } ⊢ { _ h } 
       pt_T { h r } ⊢ { h r } 
-      _cnc_siz◂◂pt_C { h r } ⊢|
+      free_pt { h r } ⊢|
+      --_cnc_siz◂◂pt_C { h r } ⊢|
     ∐. .
       ∎ {}
   ¶§ f = pt
@@ -1008,27 +1043,7 @@
     ∐. .
       ∎ { a0 a1 %[ 0r ] }      
   ∎∎
-§ siz_arr◂◂C # l 
-  _imul_im◂◂C l ⊢ l 
-  !^ l ⊢ b 
-    ` lea rax,[8+8*rax]
-    //
-  ∎ b
-§ siz_arr = _cnc_siz◂◂siz_arr
-§ alc◂◂C l
-  $ l ⊢ l,s 
-  _imul_im◂◂C s ⊢ s 
-  !^ l,s ⊢ *l,r
-    ` push rax
-    ` lea rdi,[8+8*rdi]
-    ` mov rsi,1
-    ` xor rax,rax 
-    ` CALLOC_SF
-    ` pop QWORD [rax]
-    ` mov rdi,rax
-    //
-  ∎ { l r }
-§ alc = _cnc_siz◂◂alc
+
 §§ _rpc 
   § f = _ap.rpc
   ¶¶ f_rcd r' : _rcd◂r' → { _rcd◂r' _rcd◂r' } 
@@ -1224,7 +1239,7 @@
   _hp.ini {} ⊢ h 
   i0 { k h } ⊢ { k h } 
   $ n ⊢ n,b 
-  siz_arr { h b } ⊢ b
+  ofs_arr { h b } ⊢ b
   !^ n,b ⊢ *n,*b,r,r0 
     ` sub rsp,rdi 
     ` bts rax,63 
@@ -1255,16 +1270,12 @@
   § sto = _ap.cnc_sto 
   ∎∎
 §: i2 k' = { k' _hp◂(_pt◂k') }
---§ _cls { }
+§ _clc_g # { C p } 
+  _clc_o { C p } ⊢ { C k } 
+  _clc_d C ⊢ C 
+  ∎ { C k }
 --\
-§ alc_pt_T◂◂N # {} 
-  !^ _ ⊢ r 
-    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op2.add◂◂{ N 3r })) ",rax\n"
-    //
-  ∎ r 
-§ alc_pt = _cnc.siz◂◂alc_pt_T
--\
-§ _clp ## { C k }
+§ _clp # { C k }
   _hp.mk k ⊢ { k hk } 
   alc_pt { hk {} } ⊢ r  
   _hp.rpc C ⊢ { C rC }
@@ -1279,10 +1290,8 @@
   _cnc.sto { b k } ⊢ _ 
   _hp.to { r hp } ⊢ p 
   ∎ { C p }
-  -/
-
---/
--\
+§ _cls
+ -\ 
 \a = _arr◂v' . { v' v' }
 \a = { _r64 a } . a 
 -/
