@@ -423,7 +423,9 @@
   § lod_F # { {} k } 
     $ k ⊢ k,k0 
     ∎ { k0 k } 
-  § lod = f◂◂lod_F
+  § lod # p 
+    f◂◂lod_F { {} p } ⊢ { k p }
+    ∎ { p k }
   § mk # k 
     _hp.mk k ⊢ { k h }
     $ h ⊢ h,h0 
@@ -1416,7 +1418,7 @@
   _add_im◂◂24r b ⊢ b 
   _hp.ini {} ⊢ hp 
   '[ _id : k' . _id◂{ k' _hp◂(_pt◂k') } ] { k hp } ⊢ { k hp }
-  _cnc.sto { b k } ⊢ _ 
+  _cnc_sto { b k } ⊢ _ 
   _hp.to { r hp } ⊢ p 
   ∎ { C p }
 § _cls # { C p k } 
