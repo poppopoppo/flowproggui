@@ -2665,7 +2665,7 @@ unsigned long
 				∐ k_ply : { _r64 RP.t◂r' SP◂r'◂(CP◂e'◂s'◂t'◂r') }
 				∐ k_ap : { _pt◂(ap◂(CP◂e'◂s8_p◂T.t_p◂_r64)) T.t_p } 
 				∐ k_unv : _r64
-				∐ k_btm : T.t_p	
+				∐ k_btm : {}
 			-\
 			@.ct_e
 				∐ e_app : { ct_e ct_e }
@@ -4646,6 +4646,8 @@ unsigned long
 					∎ _some◂RP.atm◂ast.k_ply◂{ %[ 0r ] s d }
 				∐# "'[" !| ct_ptn ":" args "." type "]" ⊢ { {} c {} as {} y {} }
 					∎ _some◂RP.atm◂ast.k_t◂{ c { as y } }
+				∐# "_[" "]" ⊢ { {} {} } 
+					∎ _some◂RP.atm◂ast.k_btm◂{}
 				∐.# cst ⊢ { c } 
 					∎ _some◂RP.atm◂c
 			@.src ^= 
@@ -5078,12 +5080,23 @@ unsigned long
 					∎ ret_vld◂ast.seq◂{ { RP.atm◂ast.k_app◂{ ax◂%[ EX.st ] c } RP.unt◂{} m } lc }
 				∐. prs_err◂e . 
 					∎ ret_err◂e
-			∐# nls "$" !| ; ⊢ { nn {} },r
-				prs_act◂◂act.id_0 { {} r } ⊢|
+			∐# nls "$" !| ; ⊢ { _ {} },r
+				--prs_act◂◂act.id_0 { {} r } ⊢|
 
+				∎ ‹ r ›
+
+				∐# "." !| "[" args "." type "]" src_ptn "⊢" mtc_ptn "\n" lc_code ⊢ { {} {} as {} t {} s {} d {} lc }
+					$ lc ⊢ 
+					∐ prs_vld◂lc . 
+						$ t ⊢ t0,t1
+						$ RP.atm◂ast.k_t◂{ ax◂%[ EX.id ] { as TX.t_imp◂{ t0 t1 } } } ⊢ l
+						∎ ret_vld◂ast.seq◂{ { l s d } lc }
+					∐. prs_err◂e . 
+						∎ ret_err◂e
 				∐# src_ptn "⊢" !| ; ⊢ { s {} },il 
-					prs_add { s il } ⊢ a 
-					∎ _some◂a 
+					prs_add { s il } ⊢ r 
+					--∎ _some◂a 
+					prs_act◂◂act.id_0 { {} r } ⊢|
 					
 					∐# "\n" !| nls lc_id_mtc ⊢ { {} _ m }
 						prs_act◂◂act.id_mtc { {} m } ⊢|	
@@ -6837,7 +6850,7 @@ unsigned long
 						gen_dlt_lst { { tv %[ 0r ] } al } ⊢ { tv _ }
 						∎ { evv tv apv AP c }
 					∐. _none◂{} .
-						$ RP.atm◂ast.k_btm◂y ⊢ c 
+						$ RP.atm◂ast.k_btm◂{} ⊢ c 
 						∎ { evv tv apv AP c }
 				∐. .
 					∎|
@@ -7112,6 +7125,18 @@ unsigned long
 									_bsr x ⊢ { _ x }
 									_inc x ⊢ x 
 									_bts { %[ 0r ] x } ⊢ { x _ }
+									∎ { E RP.atm◂ast.k_r64◂x }
+								-- imul 
+								∐ 
+									_imul { x0 x1 } ⊢ { x _ } 
+									∎ { E RP.atm◂ast.k_r64◂x }
+								-- shl 
+								∐ 
+									_shl { x0 x1 } ⊢ { x _ } 
+									∎ { E RP.atm◂ast.k_r64◂x }
+								-- shr 
+								∐ 
+									_shr { x0 x1 } ⊢ { x _ } 
 									∎ { E RP.atm◂ast.k_r64◂x }
 								∐. 
 									∎|
@@ -9447,8 +9472,6 @@ unsigned long
 							∎ { e0 {  evv tav tv eds } GV }  
 						∐ ast.k_op_gnr◂_ . 
 							∎| 
-						∐ ast.k_btm◂_ .
-							∎| 
 						∐ ast.k_unv◂_ .
 							∎| 
 						∐ ast.k_ap◂_ .
@@ -10719,8 +10742,8 @@ unsigned long
 								=+ b' 
 								-- not btm 
 								∐
-									T.pnt_type_k { tv t } ⊢ { tv s } 
-									_emt s ⊢ _
+									--T.pnt_type_k { tv t } ⊢ { tv s } 
+									--_emt s ⊢ _
 									∎| 
 								-- btm 
 								∐. 
@@ -10850,7 +10873,7 @@ unsigned long
 													$ { rfv mfv ev_n eg0 eds ew0 } ⊢ FE
 													∎ {  evv tv FE EE ‹› }
 								∐. _none◂{} .
-									$ RP.atm◂ast.k_btm◂T.var◂T.p◂v ⊢ o 
+									$ RP.atm◂ast.k_btm◂{} ⊢ o 
 									stt_jmp {  rfv ox f_c  mfv  GV lb_n { ev_n evv } tav tv { eg0 eds ec0 ew0 } { is o } } ⊢|
 							∐ k ⊢ ast.k_app◂{ k0 k1 } . 
 								_emt_im◂◂"SJ0" {} ⊢ {} 
@@ -11454,9 +11477,8 @@ unsigned long
 										^ c_n ⊢ _,sc0 
 											`	push SRC_REG 
 											`	mov SRC_REG,rax
-											"\tadd rax,(8*0x" 0x' ")\n" //
+											//
 										asm.add_s8 { ec0 sc0 } ⊢ ec0 
-										asm.add_nd { ec0 asm.mov_glx_op◂{ i1 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ ec0 										
 										lod_sgm.ptn { { ec0 GV } pa0 } ⊢ { { ec0 GV } pa1 } 
 										asm.add_st_s8_im◂◂"\tpop SRC_REG\n" ec0 ⊢ ec0 
 										$ RP.cns2◂{ stt_v.r64_reg◂r0 pa1 } ⊢ iy
@@ -11486,9 +11508,8 @@ unsigned long
 											^ c_n ⊢ _,sc0 
 												`	push DST_REG
 												`	mov DST_REG,rax
-												"\tadd rax,(8*0x" 0x' ")\n" // 
+												// 
 											asm.add_s8 { ec0 sc0 } ⊢ ec0 
-											asm.add_nd { ec0 asm.mov_glx_op◂{ i1 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ ec0 										
 											mov_ptn2.to_sgm_ptn { ec0 { evv tav tv eds } GV pk pa0 } ⊢ { ec0 { evv tav tv eds } GV } 
 											asm.add_st_s8_im◂◂"\tpop DST_REG\n" ec0 ⊢ ec0 
 											$ stt_v.r64_reg◂r0 ⊢ iy 
