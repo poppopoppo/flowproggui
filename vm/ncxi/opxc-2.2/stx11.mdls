@@ -7604,7 +7604,7 @@ unsigned long
 					gen { tv %[ 0r ] y } ⊢ { tv _ y } 
 					$ y ⊢ y,y0 
 					T.pnt_type_k { tv y0 } ⊢ { tv sy }
-					^ dd,w,sy ⊢ dd,w,_,ep1 
+					^ dd,w,sy ⊢ dd,_,_,ep1 
 						0'*"\t" "§ " 1' " : " 2' "\n" // 
 					rp8.add_s8 { ep0 ep1 } ⊢ ep0 
 					EVV.exc_evv { evv en c } ⊢ { evv _ _ } 
