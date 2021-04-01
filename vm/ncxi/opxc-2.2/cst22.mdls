@@ -647,6 +647,9 @@
 § m35 _ 
   _ref.mk { %[ "33" ] %[ 545r ] } ⊢ p 
   $ p ⊢ p,p0 
-  _emt p ⊢ _ 
-  _emt p0 ⊢ _
+  _emt p0 ⊢ _ 
+  _ref.o p ⊢ { pl k } 
+  _emt k ⊢ k 
+  _ref.i { pl k } ⊢ p 
+  _emt p ⊢ _
   ∎ {} 
