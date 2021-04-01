@@ -379,7 +379,9 @@
 
 §§ _ref 
   ¶ t k' 
-    ∐ t : { _hp◂k' _r64 } 
+    ∐ t : { _hp◂k' _r64 }
+  ¶ lc k' 
+    ∐ lc : { _hp◂k' _r64 } 
   § alc_T◂◂N ## {} 
     alc_rcd◂◂(_ct.op2.add◂◂{ N 1r }) {} ⊢|
   § free_T◂◂N ## r
@@ -411,6 +413,26 @@
       ` mov rdi,QWORD [rax]
       //
     ∎ { t◂{ h r } s }
+  § o # t◂{ h r } 
+    !^ r ⊢ *r 
+      ` mov rdi,QWORD [rax]
+      ` bts rdi,63 
+      ` jc err_clc_o
+      ` mov QWORD [rax],rdi
+      //
+    $ r ⊢ r,r0 
+    _add_im◂◂8r r0 ⊢ r0 
+    _cnc_lod_hp { r0 h } ⊢ { _ h k }
+    ∎ { lc◂{ h r } k } 
+  § i # { lc◂{ h r } k }
+    _eq_hp { k h } ⊢ { k h } 
+    $ r ⊢ r,r0 
+    _add_im◂◂8r r0 ⊢ r0 
+    _cnc_sto { r0 k } ⊢ _ 
+    !^ r ⊢ *r 
+      ` btr QWORD [rax],63
+      //
+    ∎ t◂{ h r }
   § f◂◂F # { v p }
     $ p ⊢ t◂{ h r } 
     !^ r ⊢ *r 
@@ -458,12 +480,14 @@
       $ h ⊢ _ 
       $ r ⊢ _ 
       ∎ {}
+  § dlt_lc = '[ _[] : k' . lc◂k'→{} ]
   § rpc # p 
     inc p ⊢ p 
     $ p ⊢ t◂{ h r } 
     $ h ⊢ h,h0 
     $ r ⊢ r,r0 
     ∎ { t◂{ h r } t◂{ h0 r0 } }
+  § rpc_lc = '[ _[] : k' . lc◂k'→{ lc◂k' lc◂k' } ]
   ∎∎
 § _emt_s8_to_im◂◂F # s 
   _id.s8 s ⊢ s 
@@ -1144,6 +1168,7 @@
       ∎ {}
   ¶§ f = pt
   ¶§ f = _ref.dlt
+  ¶§ f = _ref.dlt_lc 
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
@@ -1216,6 +1241,7 @@
 		∎ { s s0 } 
   ¶§ f = s8 
   ¶§ f = _ref.rpc
+  ¶§ f = _ref.rpc_lc
 	§ pt ## s 
     _id.pt s ⊢ s 
     _hp.of s ⊢ { r h } 

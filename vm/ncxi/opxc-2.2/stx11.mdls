@@ -5081,8 +5081,6 @@ unsigned long
 				∐. prs_err◂e . 
 					∎ ret_err◂e
 			∐# nls "$" !| ; ⊢ { _ {} },r
-				--prs_act◂◂act.id_0 { {} r } ⊢|
-
 				∎ ‹ r ›
 
 				∐# "." !| "[" args "." type "]" src_ptn "⊢" mtc_ptn "\n" lc_code ⊢ { {} {} as {} t {} s {} d {} lc }
