@@ -377,6 +377,16 @@
     //
   ∎ b
 § ofs_arr = _cnc_siz◂◂ofs_arr 
+§§ _r64 
+  § eq # { x0 x1 } 
+    !^ x0,x1 ⊢ *x0,*x1,b 
+      ` xor rsi,rsi 
+      ` mov rdx,1 
+      ` cmp rax,rdi 
+      ` cmovz rsi,rdx 
+      //
+    ∎ { { x0 x1 } b } 
+  ∎∎
 §§ _sgn 
   ¶ t 
     ∐ t : _r64 
@@ -387,25 +397,17 @@
       // 
     ∎ t◂n
   § eq # { t◂n0 t◂n1 }
-    ∐ n0'=n1' .
-      ∎ { { t◂n0 t◂n1 } %[ 1r ] } 
-    ∐. .
-      ∎ { { t◂n0 t◂n1 } %[ 0r ] }
+    _r64.eq { n0 n1 } ⊢ { { n0 n1 } b } 
+    ∎ { { t◂n0 t◂n1 } b } 
   § t =| 
   ∎∎
+¶ _sgn = _sgn.t
 §§ _ref 
   ¶ t k' 
     ∐ t : { _hp◂k' _r64 }
-  § X p 
-    --$.[ a' . t◂a'  ] p ⊢ p
-    ∎ p
   ¶ lc k' 
     ∐ lc : { _hp◂k' _r64 } 
-    § X p 
-    $.[ a' . lc◂a'  ] p ⊢ p
-    --_ref.o p ⊢ p 
-    ∎ p
-  § alc_T◂◂N ## {} 
+   § alc_T◂◂N ## {} 
     alc_rcd◂◂(_ct.op2.add◂◂{ N 1r }) {} ⊢|
   § free_T◂◂N ## r
     free_rcd◂◂(_ct.op2.add◂◂{ N 1r }) r ⊢|
@@ -417,8 +419,8 @@
       ` mov rdi,QWORD [rax] 
       ` sub rdi,1 
       ` mov QWORD [rax],rdi 
-      ` btr rdi,63 
       ` xor rsi,rsi
+      ` btr rdi,63 
       ` setc sil
       //
     ∎ { { h r } c b }
@@ -562,10 +564,7 @@
     ∎ { t◂{ h r } t◂{ h0 r0 } }
   § rpc_lc = '[ _[] : k' . lc◂k'→{ lc◂k' lc◂k' } ]
   ∎∎
-  § X p 
-    $.[ a' . _ref.t◂a'  ] p ⊢ p
-    _ref.o p ⊢ p 
-    ∎ p
+¶ _ref = _ref.t 
 § _emt_s8_to_im◂◂F # s 
   _id.s8 s ⊢ s 
   _st◂◂F {} ⊢ f 
