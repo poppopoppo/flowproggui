@@ -212,3 +212,9 @@ slv_file
   _ref : k' → _ref◂k' 
   _ref_cst : k'→→({}→_ref◂k')
   _act◂{ a' b' }
+
+  _I.sto : { _I.t◂i' k' } → { _I.t◂(_s◂i') _I.n◂{ k' i' } }
+  _I.lod : _I.n◂{ k' i' } → { _I.n◂{ k' i' } k' }
+  ¶ t { _ _ } 
+    ∐ d : { _hp◂k' _r64 } ⊢ t◂{ k' ref_d }
+    ∐ s : { _hp◂k' I◂i' } ⊢ t◂{ k' ref_s }
