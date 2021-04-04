@@ -270,197 +270,190 @@
 § t = bl.t 
 § f = bl.f
 §§ BST_s8 
-	¶ @.nd v'
-		∐ p : { _opn◂(_pt◂(nd◂v')) { _s8 v' } _opn◂(_pt◂(nd◂v')) } 
-		--∐ p : nd◂v'
-	¶ t v' = { _Clr◂(nd◂v') _pt◂(nd◂v') }
+	¶ 
+		@.pt v' = _ref.t◂(nd◂v')
+		@.nd v'
+			∐ p : { _opn◂(pt◂v') { _s8 v' } _opn◂(pt◂v') } 
+	¶ t v' = pt◂v'
 	§ ini # {} 
-		_cli {} ⊢ C 
-		∎ { C ‹› } 
-	§ is_empty { C T } 
-		∐ T ⊢ _none◂{} . 
-			∎ { { C ‹› } bl.t◂{} } 
-		∐. . 
-			∎ { { C T } bl.f◂{} }
-	§ @.asc { { C t } k0 } 
+	§ is_empty T 
+		$ T ⊢ 
+		∐ _some◂t .
+			∎ { ‹ t › bl.t◂{} }
+		∐. _none◂{} .
+			∎ { ‹› bl.f◂{} }
+	§ @.asc { t k0 } 
 		$ t ⊢ 
 		∐ _some◂t . 
-			_clc_o { C t } ⊢ { Cl p◂{ l { k v } r } } 
+			_ref.o t ⊢ { Cl p◂{ l { k v } r } } 
 			_cmp_s8 { k k0 } ⊢ { k k0 c } 
 			=+ c' 
 			∐ 
 				$ r ⊢ r,r0 
-				_clc_i { Cl p◂{ l { k v } r } } ⊢ { C _ }
-				asc { { C r0 } k0 } ⊢| 
+				_ref.i { Cl p◂{ l { k v } r } } ⊢ _
+				asc { r0 k0 } ⊢| 
 			∐ 
 				$ v ⊢ v,v0 
-				_clc_i { Cl p◂{ l { k v } r } } ⊢ { C _ }
-				∎ { C k0 ‹ v0 › }
+				_ref.i { Cl p◂{ l { k v } r } } ⊢ _
+				∎ { k0 ‹ v0 › }
 			∐. 
 				$ l ⊢ l,l0 
-				_clc_i { Cl p◂{ l { k v } r } } ⊢ { C _ }
-				asc { { C l0 } k0 } ⊢| 
+				_ref.i { Cl p◂{ l { k v } r } } ⊢ _
+				asc { l0 k0 } ⊢| 
 		∐. _none◂{} . 
-			∎ { C k0 ‹› }
-  § asc # { { C T } k0 } 
+			∎ { k0 ‹› }
+  § asc # { T k0 } 
     $ T ⊢ T,t 
-    asc { { C t } k0 } ⊢ { C k0 o } 
-    ∎ { { C T } { k0 o } } 
-	§ @.set { { C t } { k0 v0 } } 
-		_clc_o { C t } ⊢ { Cl p◂{ l { k v } r } } 
+    asc { t k0 } ⊢ { k0 o } 
+    ∎ { T { k0 o } } 
+	§ @.set { t { k0 v0 } } 
+		_ref.o t ⊢ { Cl p◂{ l { k v } r } } 
 		_cmp_s8 { k k0 } ⊢ { k k0 c } 
 		=+ c' 
 		∐ 
 			$ r ⊢ 
 			∐ _some◂r . 
 				$ r ⊢ r,r0 
-				_clc_i { Cl p◂{ l { k v } ‹ r › } } ⊢ { C _ }
-				set { { C r0 } { k0 v0 } } ⊢| 
+				_ref.i { Cl p◂{ l { k v } ‹ r › } } ⊢ _
+				set { r0 { k0 v0 } } ⊢| 
 			∐. _none◂{} . 
 				$ k0 ⊢ k0,k1 
-				_clc_i { Cl p◂{ l { k v } ‹› } } ⊢ { C t }
-				_clp { C p◂{ ‹› { k1 v0 } ‹› } } ⊢ { C r1 }
-				_clc_o { C t } ⊢ { Cl p◂{ l { k v } _ } } 
-				_clc_i { Cl p◂{ l { k v } ‹ r1 › } } ⊢ { C _ }
-				∎ { C k0 ‹› } 
+				_ref.mk p◂{ ‹› { k1 v0 } ‹› } ⊢ r1
+				--_ref.i { Cl p◂{ l { k v } ‹› } } ⊢ t
+				--_ref.o t ⊢ { Cl p◂{ l { k v } _ } } 
+				_ref.i { Cl p◂{ l { k v } ‹ r1 › } } ⊢ _
+				∎ { k0 ‹› } 
 		∐  
-			_clc_i { Cl p◂{ l { k v0 } r } } ⊢ { C _ }
-			∎ { C k0 ‹ v › }
+			_ref.i { Cl p◂{ l { k v0 } r } } ⊢ _
+			∎ { k0 ‹ v › }
 		∐. 
 			$ l ⊢ 
 			∐ _some◂l . 
 				$ l ⊢ l,l0 
-				_clc_i { Cl p◂{ ‹ l › { k v } r } } ⊢ { C _ }
-				set { { C l0 } { k0 v0 } } ⊢| 
+				_ref.i { Cl p◂{ ‹ l › { k v } r } } ⊢ _
+				set { l0 { k0 v0 } } ⊢| 
 			∐. _none◂{} . 
 				$ k0 ⊢ k0,k1 
-				_clc_i { Cl p◂{ ‹› { k v } r } } ⊢ { C t }
-				_clp { C p◂{ ‹› { k1 v0 } ‹› } } ⊢ { C l1 }
-				_clc_o { C t } ⊢ { Cl p◂{ _ { k v } r } } 
-				_clc_i { Cl p◂{ ‹ l1 › { k v } r } } ⊢ { C _ }
-				∎ { C k0 ‹› } 
-	§ set { { C t } { k0 v0 } }	
+				_ref.mk p◂{ ‹› { k1 v0 } ‹› } ⊢ l1
+				_ref.i { Cl p◂{ ‹ l1 › { k v } r } } ⊢ _
+				∎ { k0 ‹› } 
+	§ set { t { k0 v0 } }	
 		$ t ⊢ 
 		∐ _some◂t . 
 			$ t ⊢ t,t0 
-			set { { C t0 } { k0 v0 } } ⊢ { C k0 o } 
-			∎ { { C ‹ t › } { k0 o } }
+			set { t0 { k0 v0 } } ⊢ { k0 o } 
+			∎ { ‹ t › { k0 o } }
 		∐. _none◂{} . 
 			$ k0 ⊢ k0,k1 
-			_clp { C p◂{ ‹› { k1 v0 } ‹› } } ⊢ { C t } 
-			∎ { { C ‹ t › } { k0 ‹› } }
-	§ @.get_m { { C T } l r } 
-		_clc_o { C l } ⊢ { Cl p◂{ l1 { k v } r1 } }
+			_ref.mk p◂{ ‹› { k1 v0 } ‹› } ⊢ t 
+			∎ { ‹ t › { k0 ‹› } }
+	§ @.get_m { T l r } 
+		_ref.o l ⊢ { Cl p◂{ l1 { k v } r1 } }
 		$ r1 ⊢ 
 		∐ _some◂r1 . 
 			$ r1 ⊢ r1,r2 
-			_clc_i { Cl p◂{ l1 { k v } ‹ r1 › } } ⊢ { C _ } 
-			get_m { { C T } r2 r } ⊢| 
+			_ref.i { Cl p◂{ l1 { k v } ‹ r1 › } } ⊢ _ 
+			get_m { T r2 r } ⊢| 
 		∐. _none◂{} .
-			_clc_i { Cl p◂{ l1 { k v } ‹ r › } } ⊢ { C _ } 
-			∎ { C T } 
-	§ get_r # { { C T } w o } 
-		_clc_o { C w } ⊢ { Cl p◂{ l { k v } _ } }
-		_clc_i { Cl p◂{ l { k v } o } } ⊢ { C _ } 
-		∎ { C T }  
-	§ get_l # { { C T } w o } 
-		_clc_o { C w } ⊢ { Cl p◂{ _ { k v } r } }
-		_clc_i { Cl p◂{ o { k v } r } } ⊢ { C _ } 
-		∎ { C T }  
-	§ get_e # { { C _ } T o } 
-		∎ { C o }
-	§	@.get_T◂◂F { { C T } x t k0 } 
-			_clc_o { C t } ⊢ { Cl p◂{ l { k v } r } } 
+			_ref.i { Cl p◂{ l1 { k v } ‹ r › } } ⊢ _ 
+			∎ T 
+	§ get_r # { T w o } 
+		_ref.o w ⊢ { Cl p◂{ l { k v } _ } }
+		_ref.i { Cl p◂{ l { k v } o } } ⊢ _
+		∎ T  
+	§ get_l # { T w o } 
+		_ref.o w ⊢ { Cl p◂{ _ { k v } r } }
+		_ref.i { Cl p◂{ o { k v } r } } ⊢ _ 
+		∎ T  
+	§ get_e # { _ T o } 
+		∎ o
+	§	@.get_T◂◂F { T x t k0 } 
+			_ref.o t ⊢ { Cl p◂{ l { k v } r } } 
 			_cmp_s8 { k k0 } ⊢ { k k0 c } 
 			=+ c' 
 			∐ 
 				$ r ⊢ 
 				∐ _some◂r .          
           $ r ⊢ r,r0 
-					_clc_i { Cl p◂{ l { k v } ‹ r › } } ⊢ { C t }
-					get_T◂◂get_r { { C T } t r0 k0 } ⊢|
+					_ref.i { Cl p◂{ l { k v } ‹ r › } } ⊢ t
+					get_T◂◂get_r { T t r0 k0 } ⊢|
         ∐. _none◂{} . 
-					_clc_i { Cl p◂{ l { k v } ‹› } } ⊢ { C t }
-					∎ { { C T } { k0 ‹› } }
+					_ref.i { Cl p◂{ l { k v } ‹› } } ⊢ t
+					∎ { T { k0 ‹› } }
 			∐  
         $ v ⊢ v,v0 
-				_clc_i { Cl p◂{ ‹› { k v0 } ‹› } } ⊢ { C _ }
+				_ref.i { Cl p◂{ ‹› { k v0 } ‹› } } ⊢ _
         ∐ l ⊢ _none◂{}; r ⊢ _none◂{} . 
-					F { { C T } x ‹› } ⊢ { C T }
-					∎ { { C T } { k0 ‹ v › } }
+					F { T x ‹› } ⊢ T
+					∎ { T { k0 ‹ v › } }
 				∐ l ⊢ _some◂l; r ⊢ _none◂{} . 
-					F { { C T } x ‹ l › } ⊢ { C T } 
-					∎ { { C T } { k0 ‹ v › } }
+					F { T x ‹ l › } ⊢ T 
+					∎ { T { k0 ‹ v › } }
 				∐ l ⊢ _none◂{}; r ⊢ _some◂r . 
-					F { { C T } x ‹ r › } ⊢ { C T }  
-					∎ { { C T } { k0 ‹ v › } }
+					F { T x ‹ r › } ⊢ T  
+					∎ { T { k0 ‹ v › } }
 				∐. l ⊢ _some◂l; r ⊢ _some◂r . 
           $ l ⊢ l,l0 
-					get_m { { C T } l0 r } ⊢ { C T } 
-					F { { C T } x ‹ l › } ⊢ { C T } 
-					∎ { { C T } { k0 ‹ v › } }			
+					get_m { T l0 r } ⊢ T 
+					F { T x ‹ l › } ⊢ T 
+					∎ { T { k0 ‹ v › } }			
 			∐. 
 				$ l ⊢ 
 				∐ _some◂l . 
 					$ l ⊢ l,l0 
-					_clc_i { Cl p◂{ ‹ l › { k v } r } } ⊢ { C t }
-					get_T◂◂get_l { { C T } t l0 k0 } ⊢|
+					_ref.i { Cl p◂{ ‹ l › { k v } r } } ⊢ t
+					get_T◂◂get_l { T t l0 k0 } ⊢|
 				∐. _none◂{} . 
-					_clc_i { Cl p◂{ ‹› { k v } r } } ⊢ { C t }
-					∎ { { C T } { k0 ‹› } }  
-		§ get { { C T } k0 } 
+					_ref.i { Cl p◂{ ‹› { k v } r } } ⊢ t
+					∎ { T { k0 ‹› } }  
+		§ get { T k0 } 
 			$ T ⊢ 
 			∐ _some◂T . 
 				$ T ⊢ T,t,t0 
-        get_T◂◂get_e { { C ‹ T › } t0 t k0 } ⊢| 
+        get_T◂◂get_e { ‹ T › t0 t k0 } ⊢| 
 			∐. _none◂{} . 
-				∎ { { C ‹› } { k0 ‹› } } 
+				∎ { ‹› { k0 ‹› } } 
 	
-	§ @.rpc { { C t } C1 }
+	§ @.rpc t
 		$ t ⊢ 
 		∐ _some◂t . 
-			_clc_o { C t } ⊢ { Cl p◂{ l { k v } r } } 
+			_ref.o t ⊢ { Cl p◂{ l { k v } r } } 
 			$ l ⊢ l,l0 
 			$ r ⊢ r,r0 
 			$ { k v } ⊢ { k v },k_v 
-			_clc_i { Cl p◂{ l { k v } r } } ⊢ { C t } 
-			rpc { { C l0 } C1 } ⊢ { { C _ } { C1 l1 } } 
-			rpc { { C r0 } C1 } ⊢ { { C _ } { C1 r1 } } 
-			_clp { C1 p◂{ l1 k_v r1 } } ⊢ { C1 t1 } 
-			∎ { { C ‹ t › } { C1 ‹ t1 › } } 
+			_ref.i { Cl p◂{ l { k v } r } } ⊢ t 
+			rpc l0 ⊢ { _ l1 } 
+			rpc r0 ⊢ { _ r1 } 
+			_ref.mk p◂{ l1 k_v r1 } ⊢ t1 
+			∎ { ‹ t › ‹ t1 › } 
 		∐. _none◂{} . 
-			∎ { { C ‹› } { C1 ‹› } } 
-  § rpc # { C T } 
-		_cli {} ⊢ C1 
-		rpc { { C T } C1 } ⊢| 
-	§ @.itr◂◂F { { C t } e } 
+			∎ { ‹› ‹› } 
+  § @.itr◂◂F { t e } 
 		$ t ⊢ 
 		∐ _some◂t . 
-			_clc_o { C t } ⊢ { C p◂{ l { k v } r } } 
+			_ref.o t ⊢ { Cl p◂{ l { k v } r } } 
 			$ l ⊢ l,l0 
 			$ r ⊢ r,r0 
 			$ { k v } ⊢ { k v },k_v 
-			_clc_i { C p◂{ l { k v } r } } ⊢ { C t } 
+			_ref.i { Cl p◂{ l { k v } r } } ⊢ t 
 			F { e k_v } ⊢ e 
-			itr◂◂F { { C l0 } e } ⊢ { { C _ } e } 
-			itr◂◂F { { C r0 } e } ⊢ { { C _ } e } 
-			∎ { { C ‹ t › } e } 
+			itr◂◂F { l0 e } ⊢ { _ e } 
+			itr◂◂F { r0 e } ⊢ { _ e } 
+			∎ { ‹ t › e } 
 		∐. _none◂{} . 
-			∎ { { C ‹› } e } 
-	§ @.fld_i◂◂F { { C t } e } 
+			∎ { ‹› e } 
+	§ @.fld_i◂◂F { t e } 
 		$ t ⊢ 
 		∐ _some◂t . 
-			_clc_o { C t } ⊢ { C p◂{ l { k v } r } } 
-			_clc_d C ⊢ C 
+			_ref.o t ⊢ { _ p◂{ l { k v } r } } 
 			F { e { k v } } ⊢ e 
-			fld_i◂◂F { { C l } e } ⊢ { C e } 
-			fld_i◂◂F { { C r } e } ⊢ { C e } 
-			∎ { C e } 
+			fld_i◂◂F { l e } ⊢ e 
+			fld_i◂◂F { r e } ⊢ e 
+			∎ e 
 		∐. _none◂{} . 
-			∎ { C e }
+			∎ e
 	§ fld◂◂F # { B e } 
-		fld_i◂◂F { B e } ⊢ { _ e } 
-		∎ e 
+		fld_i◂◂F { B e } ⊢|
 	§ main0 {} 
 		ini {} ⊢ B 
 		set { B { %[ "" ] %[ 65r ] } } ⊢ { B _ } 
@@ -7736,7 +7729,6 @@ unsigned long
 							slv_file_lp { mv_n_0 il SC  MV  LCV tx_n NS0 gel0 EC } ⊢ { mv_n_0 il SC  MV  LCV tx_n NS0 EC }
 							inv_file { MV NS0 LCV EC } ⊢ { { mmv mev mtv mfv mv_n } { ns_T ns_m ns_e ns_t } {    ev_n tv tav evv } { el dd ep0 } }
 							MMV.set { mmv mv_n_0 ns_m } ⊢ { mmv mv_n_0 } 
-							--\
 							MTV.set { mtv mv_n_0 ns_t } ⊢ { mtv mv_n_0 } 
 							MEV.set { mev mv_n_0 ns_e } ⊢ { mev mv_n_0 } 
 							^ dd ⊢ dd,ep1 
@@ -7751,8 +7743,6 @@ unsigned long
 							∐. _nil◂{} . 
 								_emt_im◂◂76r {} ⊢ {} 
 								∎| 
-								--/
-								--∎|
 						∐. ast.mdl_ln◂n0 .						
 							$ n0 ⊢ n0,n0_0 
 							ast.pnt_name n0_0 ⊢ sn0  							
