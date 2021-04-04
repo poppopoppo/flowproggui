@@ -10673,9 +10673,9 @@ unsigned long
 									_dec lv ⊢ lv 
 									T.gen { lv yk } ⊢ {  _ yk }
 									gen_dlt_lst { %[ 0r ] al } ⊢ _
-									$ { apv  AP } ⊢ mfv 
+									$ { apv AP } ⊢ mfv 
 									$ eds ⊢ { SCM eds } 
-									inl.cst_evl_gl { { mfv  SCM  o } } ⊢ { SCM mfv o } 
+									inl.cst_evl_gl { { mfv SCM o } } ⊢ { SCM mfv o } 
 									$ { SCM eds } ⊢ eds 	
 									mk_ir { { eds mfv } o } ⊢ { eds mfv o } 
 									stt_ir { { rfv mfv ev_n eg0 eds ew0 } { GV lb_n tav ec0 } ox f_c o is } ⊢|
@@ -11044,6 +11044,7 @@ unsigned long
 									stt_ir {  { rfv mfv  ev_n eg0 eds ew0 } { GV lb_n tav ec0 } ox f_c o is } ⊢|
 								-- alc_i 
 								∐ 	
+									-\
 									ast.smt_ap ya ⊢ ya
 									inst { %[ 1r ] ya } ⊢ { lv ya }
 									newvar_l lv  ⊢ {  lv v0 } 
@@ -11070,18 +11071,20 @@ unsigned long
 										$ RP.cns2◂{ RP.atm◂ast.hp◂rc0 stt_v.r64_reg◂rp0 } ⊢ iy 
 										stt_jmp_axm {  { GV lb_n tav  ec0 } { rfv mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|
 									∐. . 
+										-/
 										∎|
 								-- alc_o 
 								∐ 
+									-\
 									ast.smt_ap ya ⊢ ya
 									inst { %[ 1r ] ya } ⊢ { lv ya }
-									newvar_l lv  ⊢ {  lv v0 } 
-									newvar_l lv  ⊢ {  lv v1 } 
+									newvar_l lv  ⊢ { lv v0 } 
+									newvar_l lv  ⊢ { lv v1 } 
 									$ v0 ⊢ v0,v0_0,v01,v02  
 									$ v1 ⊢ v1,v10,v11 
 									T.unify.f { TX.t_imp◂{ TX.cns2◂{ TX.arr_q◂{ v0_0 v10 } TX.r64◂{} } TX.cns2◂{ TX.arr_lc_q◂{ v01 v11 } v02 } } ya } ⊢ {} 
 									_dec lv ⊢ lv 
-									gen { lv v0 } ⊢ {  lv yk } 
+									gen { lv v0 } ⊢ { lv yk } 
 									gen_dlt { lv v1 } ⊢ lv
 									∐ is ⊢ RP.rcd◂_cns◂{ RP.atm◂ast.hp◂rc0 _cns◂{ pr0 _nil◂{} } } .
 										r64_to_hp { GV pr0 ec0 } ⊢ { GV rp0 ec0 } 
@@ -11107,6 +11110,7 @@ unsigned long
 										$ RP.cns2◂{ RP.cns2◂{ stt_v.r64_reg◂rp0 RP.atm◂ast.hp◂rc0 } pa1 } ⊢ iy 
 										stt_jmp_axm {  { GV lb_n tav  ec0 } { rfv mfv  ev_n eg0 eds ew0 } iy f_c } ⊢|
 									∐. . 
+									-/
 										∎|  
 								-- mk_arr_x 
 								∐ 
@@ -11119,7 +11123,7 @@ unsigned long
 									$ v0 ⊢ v0,v0_0,v0_1,v02
 									T.unify.f { TX.t_imp◂{ TX.cns2◂{ v0_0 TX.arr_x◂v0_1 } TX.arr_x◂v02 } ya } ⊢ {} 
 									_dec lv ⊢ lv 
-									gen { lv v0 } ⊢ {  lv yk } 	
+									gen { lv v0 } ⊢ { lv yk } 	
 									∐ is ⊢ RP.rcd◂_cns◂{ pk _cns◂{ RP.atm◂ast.hp◂r0 _nil◂{} } } . 
 										$ GV ⊢ { GV gn } 
 										alc_type_k.f_i { tav { GV %[ 0r ] } yk } ⊢ { tav { GV c_n } pa0 }
@@ -11183,8 +11187,8 @@ unsigned long
 										∎|
 								-- oom 
 								∐
-									mk_ir { {  eds mfv } RP.atm◂ast.k_op_axm◂{ a la ya } } ⊢ {  eds mfv o }
-									stt_ir {  { rfv mfv  ev_n eg0 eds ew0 } { GV lb_n tav ec0 } ox f_c o is } ⊢|					
+									mk_ir { { eds mfv } RP.atm◂ast.k_op_axm◂{ a la ya } } ⊢ {  eds mfv o }
+									stt_ir { { rfv mfv  ev_n eg0 eds ew0 } { GV lb_n tav ec0 } ox f_c o is } ⊢|					
 								-- moo 
 								∐ 
 									∎| 
@@ -11219,7 +11223,7 @@ unsigned long
 										asm.add_s8 { ec0 ec1 } ⊢ ec0 
 										$ { rfv mfv ev_n eg0 eds ew0 } ⊢ FE
 										$ { GV lb_n tav ec0 } ⊢ EE			
-										∎ {  FE EE ‹› }
+										∎ { FE EE ‹› }
 									∐. . 
 										∎|
 								-- tj 
@@ -11756,7 +11760,7 @@ unsigned long
 			$ %[ 0r ] ⊢ lb_n 
 			
 			_mk_arr_x { %[ 1r ] gnr.lc_code.rf_k◂{} } ⊢ { _ _ rfv } 
-			$ mfv ⊢ { apv  AP } 
+			$ mfv ⊢ { apv AP } 
 			_emt_im.f◂◂"emt_rtm D1" {} ⊢ {} 
 			slv.ct_ptn { { ⟦⟧ %[ 1r ] apv } RP.atm◂ast.k_name◂i_e } ⊢ { { al lv apv } m yk }
 			_emt_im.f◂◂"emt_rtm D2" {} ⊢ {} 

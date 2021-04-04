@@ -113,8 +113,8 @@
 § _clc_o = _[ 24r ] 
 § _clc_d = _[ 25r ] 
 § _seq = _[ 26r ] 
-§ _alc_i = _[ 27r ] 
-§ _alc_o = _[ 28r ] 
+--§ _alc_i = _[ 27r ] 
+--§ _alc_o = _[ 28r ] 
 § _push = _[ 30r ] 
 § _pop = _[ 31r ]  
 § _id_par = _[ 32r ]  
@@ -402,12 +402,59 @@
   § t =| 
   ∎∎
 ¶ _sgn = _sgn.t
+§ chk_len # { l i } 
+  !^ l,i ⊢ *l,*i 
+    ` cmp rdi,rax 
+    ` jge err_alc_o 
+    //
+  ∎ { l i }
+§§ _arr 
+  ¶ lc k',t' 
+    ∐ lc : { _r64 _arr0◂t'◂k' }
+  § len # a 
+    _id.arr0 a ⊢ a 
+    _hp.of a ⊢ { r h } 
+    !^ r ⊢ *r,l 
+     ` mov rdi,0x0000_ffff_ffff_ffff 
+     ` and rdi,QWORD [rax]
+      //
+    _hp.to { r h } ⊢ a
+   ∎ { a l }
+  § o # { a i } 
+    len a ⊢ { a l } 
+    chk_len { l i } ⊢ { l i } 
+    _hp.ini {} ⊢ h 
+    $.[ k',t' . { _hp◂k' _arr0◂t'◂k' } ] { h a } ⊢ { h a } 
+    $ i ⊢ i,b 
+    $ h ⊢ h,h0 
+    ofs_arr { h0 b } ⊢ b 
+    _hp.rpc a ⊢ { a ra } 
+    _add { ra b } ⊢ { ra _ } 
+    _cnc_lod_hp { ra h } ⊢ { ra _ k }
+    ∎ { lc◂{ i a } k }	
+  § i # { lc◂{ i a } k } 
+    _hp.ini {} ⊢ h 
+    $.[ k',t' . { _hp◂k' _arr0◂t'◂k' k' } ] { h a k } ⊢ { h a k } 
+    $ i ⊢ i,b 
+    ofs_arr { h b } ⊢ b 
+    _hp.rpc a ⊢ { a ra } 
+    _add { ra b } ⊢ { ra _ } 
+    _cnc_sto { ra k } ⊢ _
+    ∎ { a i }	
+  § emt_lc = '[ _[] : k',t' . (lc◂k'◂t')→(lc◂k'◂t') ]
+  § dlt_lc = '[ _[] : k',t' . (lc◂k'◂t')→{} ]
+  § rpc_lc = '[ _[] : k',t' . (lc◂k'◂t')→{ (lc◂k'◂t') (lc◂k'◂t') } ]
+  § lc =|
+  ∎∎
+§ _arr_len = _arr.len
+§ _alc_i = _arr.i 
+§ _alc_o = _arr.o
 §§ _ref 
   ¶ t k' 
     ∐ t : { _hp◂k' _r64 }
   ¶ lc k' 
     ∐ lc : { _hp◂k' _r64 } 
-   § alc_T◂◂N ## {} 
+  § alc_T◂◂N ## {} 
     alc_rcd◂◂(_ct.op2.add◂◂{ N 1r }) {} ⊢|
   § free_T◂◂N ## r
     free_rcd◂◂(_ct.op2.add◂◂{ N 1r }) r ⊢|
@@ -727,15 +774,6 @@
     //
   _hp.to { r h } ⊢ s
   ∎ { s l }
-§ _arr_len # a 
-  _id.arr0 a ⊢ a 
-  _hp.of a ⊢ { r h } 
-  !^ r ⊢ *r,l 
-    ` mov rdi,0x0000_ffff_ffff_ffff 
-    ` and rdi,QWORD [rax]
-    //
-  _hp.to { r h } ⊢ a
-  ∎ { a l }
 § _s8_len # s 
   _id.s8 s ⊢ s 
   _arr_len s ⊢| 
@@ -1102,7 +1140,7 @@
     cst◂◂"{= .. }" {} ⊢ {} 
     ∎ C
   ¶§ f0 = Clr
-  
+  ¶§ f0 = _arr.emt_lc
   § lst l 
     $ l ⊢ 
     ∐ _cns◂d . 
@@ -1248,6 +1286,7 @@
   ¶§ f = pt
   ¶§ f = _ref.dlt
   ¶§ f = _ref.dlt_lc 
+  ¶§ f = _arr.dlt_lc
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
@@ -1374,7 +1413,7 @@
       
     ¶§ f = arr
 		∎∎
-  
+  ¶§ f = _arr.rpc_lc
   § opn o 
     $ o ⊢ 
     ∐ _some◂a . 
