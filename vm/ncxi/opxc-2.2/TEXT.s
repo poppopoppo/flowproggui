@@ -705,6 +705,16 @@ err_clc_o:
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
+err_ref_o:
+	mov rbx,0xe0cd_0000_0000_0000
+	or rax,rbx 
+	mov QWORD [err_n],rax
+	jmp err 
+err_ref_f:
+	mov rbx,0xefcd_0000_0000_0000
+	or rax,rbx 
+	mov QWORD [err_n],rax
+	jmp err 
 err_alc_o: 
 	mov rbx,0xe0e1_0000_0000_0000
 	or rax,rbx 
