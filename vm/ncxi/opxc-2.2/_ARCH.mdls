@@ -109,12 +109,7 @@
 § _tj = _[ 16r ] 
 § _pf = _[ 21r ] 
 § _pf_x = _[ 22r ] 
-§ _clc_i = _[ 23r ] 
-§ _clc_o = _[ 24r ] 
-§ _clc_d = _[ 25r ] 
 § _seq = _[ 26r ] 
---§ _alc_i = _[ 27r ] 
---§ _alc_o = _[ 28r ] 
 § _push = _[ 30r ] 
 § _pop = _[ 31r ]  
 § _id_par = _[ 32r ]  
@@ -161,7 +156,6 @@
 § _ct = _[ 54r ]
 §§ _mt
   §§ e 
-    --§ f = _[ 0x000200000000000br ]
    § f = _[ 0x0002000000000009r ]
     § r64 = _[ 76r ]
     § pt = _[ 77r ]
@@ -171,7 +165,6 @@
     ¶§ f = s8 
     ∎∎
   §§ ne 
-    --§ f = _[ 0x000200000000000cr ]
     § f = _[ 0x000200000000000ar ]
     § r64 = _[ 79r ]
     § pt = _[ 80r ]
@@ -181,7 +174,6 @@
     ¶§ f = s8 
     ∎∎
   §§ le 
-    --§ f = _[ 0x000200000000000dr ]
     § f = _[ 0x000200000000000br ]
     § r64 = _[ 82r ]
     § s8 = _[ 83r ]
@@ -210,12 +202,15 @@
     § shl = op◂◂6r 
     § shr = op◂◂7r
     ∎∎ 
+  § cnc_siz = _[ 88r ]
+  § hp = _[ 89r ]
   ∎∎
 
 §§ _hp 
   § of0 = _[ 57r ]
   § to0 = _[ 58r ] 
   § ini = _[ 59r ] 
+  § ct_ini = '[ _[] : t' . _hp◂t' ]
   § ini_ct = '[ (\\C . ini) : c' . c'→→({}→_hp◂c') ]
   ¶¶ of k' : k' → { _r64 _hp◂k' }
   ¶§ of = of0 
@@ -236,8 +231,14 @@
 § _dlt_r64 = _[ 63r ] 
 § _cnc_lod = _[ 64r ] 
 § _cnc_sto = _[ 65r ] 
-§ _cnc_siz = _[ 66r ]
+--§ _cnc_siz = _[ 66r ]
 -- non-atomic 
+§ _cnc_siz0◂◂{ F H } # { h a }
+  _hp.ini_ct◂◂H {} ⊢ hH 
+  $.[ t' . { _hp◂(_hp◂t') _hp◂t' } ] { hH h } ⊢ { hH h }
+  F◂◂(_ct.cnc_siz◂◂H) a ⊢|
+§ _cnc_siz◂◂F = _cnc_siz0◂◂{ F _ct.hp }
+
 § op_im◂◂{ O X } # %r 
   !^ %r ⊢ %r 
     "\tmov rdi,0x" (_ct.pf_x◂◂X) "\n" 
@@ -441,6 +442,21 @@
     _add { ra b } ⊢ { ra _ } 
     _cnc_sto { ra k } ⊢ _
     ∎ { a i }	
+  § e◂◂F { a i v }
+    len a ⊢ { a l } 
+    chk_len { l i } ⊢ { l i } 
+    _hp.ini {} ⊢ h
+    _hp.ini_ct◂◂F {} ⊢ hF 
+    $.[ k',t',v',w' . { _hp◂({ v' k' }→{ w' k' }) _hp◂k' _arr0◂t'◂k' } ] { hF h a } ⊢ { hF h a } 
+    $ i ⊢ i,b 
+    $ h ⊢ h,h0 
+    ofs_arr { h0 b } ⊢ b 
+    _hp.rpc a ⊢ { a ra } 
+    _add { ra b } ⊢ { ra _ } 
+    _cnc_lod_hp { ra h } ⊢ { ra _ k }
+    F { v k } ⊢ { w k }
+    _cnc_sto { ra k } ⊢ _
+    ∎ { a i w }
   § emt_lc = '[ _[] : k',t' . (lc◂k'◂t')→(lc◂k'◂t') ]
   § dlt_lc = '[ _[] : k',t' . (lc◂k'◂t')→{} ]
   § rpc_lc = '[ _[] : k',t' . (lc◂k'◂t')→{ (lc◂k'◂t') (lc◂k'◂t') } ]
@@ -1634,8 +1650,6 @@
 
 §§ _siz 
   ¶¶ f k' : { _hp◂k' _r64 }
-  --¶¶ f k',p0',p1' : (_r64→→({ _hp◂k' p0' }→{ _hp◂k' p1' }))→→({ _hp◂k' p0' }→{ _hp◂k' p1' })
-  --¶§ f = { '[ _ct.hp.ini : _r64◂{} ] 1r }  
   ∎∎
 §: i2 k' = { k' _hp◂(_pt◂k') }
 § _clc_g # { C p } 
