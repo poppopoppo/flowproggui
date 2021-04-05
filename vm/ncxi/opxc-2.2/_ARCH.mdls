@@ -612,6 +612,62 @@
   § rpc_lc = '[ _[] : k' . lc◂k'→{ lc◂k' lc◂k' } ]
   ∎∎
 ¶ _ref = _ref.t 
+§§ _Clr 
+  ¶ lc k'
+    ∐ lc : {  _Clr◂k' _pt◂k' } 
+  § chk_id # { C p } 
+    _hp.of C ⊢ { rC hC } 
+    _hp.of p ⊢ { rp hp } 
+    !^ rC,rp ⊢ *rC,*rp 
+      `	mov rsi,QWORD [rdi+8]
+			`	cmp rax,rsi
+			`	jnz err_clc_o 
+			// 
+    _hp.to { rC hC } ⊢ C 
+    _hp.to { rp hp } ⊢ p 
+    ∎ { C p } 
+  § bts # r 
+    !^ r ⊢ *r 
+			`	bts QWORD [rax+8],63
+      //
+    ∎ r 											
+  § o # { C p } 
+    _hp.ini {} ⊢ h 
+    $.[ k',t' . { _hp◂k' _Clr◂k' _pt◂k' } ] { h C p } ⊢ { h C p } 
+    chk_id { C p } ⊢ { C p } 
+    _hp.rpc p ⊢ { p rp } 
+    bts rp ⊢ rp 
+    _add_im◂◂24r rp ⊢ rp
+    _cnc_lod_hp { rp h } ⊢ { _ _ k }
+    ∎ { lc◂{ C p } k }	
+  § i # { lc◂{ C p } k }
+    _hp.rpc p ⊢ { p rp } 
+    !^ rp ⊢ *rp 
+      ` btr QWORD [rax+8],63 
+      // 
+    _add_im◂◂24r rp ⊢ rp 
+    _cnc_sto { rp k } ⊢ _
+    ∎ { C p }
+  § d lc◂{ C p }
+    _hp.of p ⊢ { rp hp } 
+    _hp.ini {} ⊢ h 
+    $.[ k' . { _hp◂k' _Clr◂k' } ] { h C } ⊢ { h C } 
+    !^ rp ⊢ *rp,b 
+      ` xor rdi,rdi 
+      ` mov rsi,1 
+      ` sub QWORD [rax+16],1 
+      ` cmovz rdi,rsi 
+      //
+    ∐ b'=1r .
+      free_pt { h rp } ⊢ {} 
+      ∎ C 
+    ∐. .
+      ∎ C 
+  ∎∎
+§ _clc_o = _Clr.o 
+§ _clc_i = _Clr.i 
+§ _clc_d = _Clr.d
+
 § _emt_s8_to_im◂◂F # s 
   _id.s8 s ⊢ s 
   _st◂◂F {} ⊢ f 
