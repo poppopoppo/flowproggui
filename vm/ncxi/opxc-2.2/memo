@@ -230,3 +230,5 @@ _gl.t◂{ k' i' }
 new : { _gl.I◂i' k' }→{ _gl.I◂(_gl.s◂i') _gl.t◂{ k' i' } } 
 o : _gl.t◂{ k' i' }→{ _gl.lc◂{ k' i' } k' }
 i : { _gl.lc◂{ k' i' } k' }→_gl.t◂{ k' i' }
+
+slv UNV APV AP slv

@@ -422,6 +422,11 @@
   § dlt_lc = _[ 24r ]
   § o = _[ 21r ]
   § i = _[ 22r ]
+  § f◂◂F # { k V }
+    o V ⊢ { Vl v }
+    F { k v } ⊢ { k v }
+    i { Vl v } ⊢ V 
+    ∎ { k V }
   § new = _[ 20r ]
   § dlt # V 
     o V ⊢ { Vl k } 
@@ -775,7 +780,7 @@
   _eq_hp { k h } ⊢ { k _ } 
   _cnc_sto { o k } ⊢ _ 
   ∎ { a i w }
-§ alc◂◂C l
+§ alc◂◂C # l
   $ l ⊢ l,s 
   _imul_im◂◂C s ⊢ s 
   !^ l,s ⊢ *l,r
