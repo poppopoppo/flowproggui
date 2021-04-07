@@ -653,3 +653,10 @@
   _ref.i { pl k } ⊢ p 
   _emt p ⊢ _
   ∎ {} 
+
+§ m36 { _ I } 
+  _gl.new { I { %[ 33r ] %[ "LL" ] } } ⊢ { I V }
+  _gl.o V ⊢ { V k } 
+  _emt k ⊢ k 
+  _gl.i { V k } ⊢ _ 
+  ∎ {} 
