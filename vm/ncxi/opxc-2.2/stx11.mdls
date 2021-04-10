@@ -4186,7 +4186,7 @@ unsigned long
 
 		§§ AP 
 			§ new # y 
-				_mk_arr_x { %[ 1r ] { TX.unt◂{} RP.unt◂{} } } ⊢ { _ _ V }
+				_base {} ⊢ V 
 				$ y ⊢ y,y0 
 				_ref.mk { y V } ⊢ p
 				∎ { p y0 }
@@ -4264,7 +4264,7 @@ unsigned long
 				T.ciu { y s } ⊢ { y s b } 
 				∐ b'=1r .
 					_arr_len V ⊢ { V l } 
-					slv_i { V l %[ 1r ] y } ⊢ { V y c }
+					slv_i { V l %[ 0r ] y } ⊢ { V y c }
 					_ref.i { P { s V } } ⊢ p
 					$ c ⊢ 
 					∐ _some◂c .
@@ -11201,8 +11201,5 @@ unsigned long
   $ OpADL.ns.asm.e◂{} ⊢ B 
   OpADL.ns.asm.mlc_buf %[ 4r ] ⊢ s
   OpADL.ns.asm.to_s8_i { B s %[ 0r ] } ⊢ { s l }
-  ∎ {}  
-§ main10 _ 
-	_mk_arr_x { %[ 1r ] { OpADL.RP.unt◂{} OpADL.RP.unt◂{} } } ⊢ { _ _ V } 
-  ∎| 
-   
+  ∎ {}
+	
