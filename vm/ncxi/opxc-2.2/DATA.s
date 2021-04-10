@@ -1,4 +1,5 @@
 	SGN: dq 0
+	ARR_X_UNT: dq 0	
 	tmp: dq 0 
 	BC_PT: dq 0x00ff0f0f
 	SIG_FLG: dq 0 
