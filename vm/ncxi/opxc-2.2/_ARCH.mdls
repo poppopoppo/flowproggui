@@ -111,7 +111,7 @@
 § _pf = _[ 2r ] 
 § _pf_x = _[ 3r ] 
 § _seq = _[ 0x00010023r ] 
-§ _push = _[ 1r ] 
+--§ _push = _[ 1r ] 
 § _id_par = _[ 9r ]  
 § _ctr = _[ 5r ] 
 § _oom = _[ 0x00010000r ]
@@ -594,6 +594,7 @@
     _add_im◂◂8r r0 ⊢ r0 
     _cnc_sto { r0 k } ⊢ _ 
     ∎ t◂{ h r }
+  § new = mk
   § n # {} 
     _hp.ini {} ⊢ h 
     $ h ⊢ h,h0 
@@ -996,6 +997,12 @@
     ` cmovg rax,rdi 
     //
   ∎ r
+§ _max # { x y } 
+  !^ x,y ⊢ r 
+    ` cmp rax,rdi 
+    ` cmovl rax,rdi 
+    //
+  ∎ r
 § _lod_q # { a i } 
   _alc_o { a i } ⊢ { a k }
   $ k ⊢ k,k0 
@@ -1118,8 +1125,6 @@
   _st◂◂S {} ⊢ b 
   _hp.of b ⊢ { rb _ }
   psc_F_0 { s rb i } ⊢| 
---§ _psc = _[ 0x0002000000000011r ]
-  
 § _psc = _[ 0x000200000000000fr ]
 ¶§ _psc = \\S . _grm◂◂(psc_F◂◂S)
 § cst◂◂S # {} 
@@ -1552,7 +1557,7 @@
   ∎ a
 §§ _arr 
   § alc_x◂◂C l
-    !^ l ⊢ *l,b,i 
+    !^ l ⊢ *l,b
 			`	cmp rax,0 
 			`	jz err 
 			`	bsr rsi,rax 
@@ -1566,12 +1571,11 @@
 			`	mov rdi,1 
 			`	CALLOC_SF
 			//
-		!^ l,r,i ⊢ *l,*r 
+		!^ l,r ⊢ *l,*r 
 			`	mov QWORD [rdi],rax 
-			`	mov BYTE [rdi+7],sil
       //
 		∎ { l r }
-	§ alc_x = _cnc_siz◂◂alc_x
+  § alc_x = _cnc_siz◂◂alc_x
   § @.mk_i { { k r h } i } 
     ∐ i'<>0r .
       $ k ⊢ k,k0 
@@ -1744,42 +1748,41 @@
   _hp.to { r hp } ⊢ p 
   ∎ { C p }
  
--\
-§ _push_ra n 
-	`	xor rdi,rdi
-	`	bts rdi,rsi 
-	//
-	asm.add_st_s8 { ec0 sc0 } ⊢ ec0 
-	_bts { %[ 0r ] n } ⊢ { l n } 
-  _imul_im◂◂ 
-  imul_im◂◂"rdi" { c_n ec0 } ⊢ { c_n ec0 }
-	$~ _^ ⊢ sc0 
-		`	lea rsi,[8+8*rdi]
-		`	mov rdi,rax 
-		` C_CALL_SF realloc
-		`	mov rsi,QWORD [rax] 
-    
-§ _push { k v }
-  _id.arr_x v ⊢ v 
-  _hp.of v ⊢ { rv hv } 
-  !^ rv ⊢ *rv,l,c,n
-    `	movzx rdx,BYTE [rax+7]
-		`	mov rdi,0x0000_ffff_ffff_ffff 
-		`	and rdi,QWORD [rax]
-		`	add rdi,1
-		`	bt rdi,rdx 
-    ` xor rsi,rsi 
-    ` setc sil
-    //
-  ∐ c'=1r . 
-		_inc n ⊢ n 
-    `	push rdi 
-		`	xor rdi,rdi
-		`	add rsi,1 
-		`	push rsi 
-		`	bts rdi,rsi 
-    //
--/
-
 --_agl : { _ctr◂{ a' b' } a'→c' b'→c' }→→b'→c'
 --_tj 
+§ push_ra { h r l c }
+  ∐ c'=0r . 
+    $ c ⊢ _ 
+    _inc l ⊢ b 
+    _shl_im◂◂1r b ⊢ b
+    ofs_arr { h b } ⊢ b
+    !^ b,r ⊢ r 
+      ` mov rsi,rax 
+		  ` C_CALL_SF realloc		
+      `	mov rsi,QWORD [rax] 
+	  	//
+    ∎ r
+  ∐. .
+    $ c ⊢ _
+    ∎ r
+§ _push { a v }
+  _hp.ini {} ⊢ h
+  $.[ k' . { k' _arr_x◂k' _hp◂k' } ] { a v h } ⊢ { a v h } 
+  _arr_len v ⊢ { v l } 
+  _hp.of v ⊢ { r hv }
+  !^ r,l ⊢ *r,*l,c 
+		` cmp rdi,0 
+		`	jz err_clc_o
+    ` mov rsi,rdi 
+    `	add rdi,1
+    ` and rsi,rdi
+    ` add QWORD [rax],1
+	  //
+	$ l ⊢ l,l0 
+  $ h ⊢ h,h0 
+  push_ra { h0 r l0 c } ⊢ r 
+  ofs_arr { h l } ⊢ b 
+	_add { b r } ⊢ { b r } 
+  _cnc_sto { b a } ⊢ _
+  _hp.to { r hv } ⊢ v 
+  ∎ v
