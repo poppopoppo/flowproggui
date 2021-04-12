@@ -90,7 +90,8 @@ bits 64
 
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
-	call emt_stg 
+	mov rsi,8
+	C_CALL fw
 	mov QWORD [err_n],%1 
 	jmp err 
 %endmacro
