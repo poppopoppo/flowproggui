@@ -30,11 +30,10 @@
 	fmt_nl: db 10,0
 	fmt_spc: db " ",0
 	fmt_emt: db "_emt:",0
-	fmt_getchar: db "_getchar:",0
 	fmt_test0: db "sig segv handled!!:",0
-	rt_err0: db "rt_err 0:",10,0 
+	rt_err0: db "rt_err:",10,0 
 	emt_bof_msg: db "EMT_BOF:",10,0 
- s8_e: dq 0,0
+s8_e: dq 0,0
 
 	fmt_info:
 		db "info:",10

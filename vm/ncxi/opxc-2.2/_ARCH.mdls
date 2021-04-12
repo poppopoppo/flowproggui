@@ -100,7 +100,6 @@
 § _pf = _[ 2r ] 
 § _pf_x = _[ 3r ] 
 § _seq = _[ 0x00010023r ] 
---§ _push = _[ 1r ] 
 § _id_par = _[ 9r ]  
 § _ctr = _[ 5r ] 
 § _oom = _[ 0x00010000r ]
@@ -115,14 +114,8 @@
 § _tj = _[ 0x10008r ]
 § _tjn = _[ 0x10009r ]
 § _tjc = _[ 0x1000ar ]
---§ _sqc = _[ 46r ]
 § _st = _[ 19r ]
 § _ccs = _[ 0x0001000br ]
---§ C = _tjn 
-§ A  x 
-  =+ x' 
-  ∐. 
-    ∎ {}
 -- ctr 
 § _nil = _[ 0x0001000000000000r ]
 § _cns = _[ 0x0001000000000001r ]
@@ -638,6 +631,30 @@
       ∐. .
         ∎ {}  
     ∎∎
+  § l # { a i }
+    o { a i } ⊢ { a k }
+    $ k ⊢ k,k0 
+    i { a k } ⊢ { a i } 
+    ∎ { a i k0 }
+  § u # { a i k }
+    o { a i } ⊢ { a _ }
+    i { a k } ⊢ { a i } 
+    ∎ { a i }
+  § @.itr_r_i◂◂F { k v i }
+    ∐ i'<>0r .
+      _dec i ⊢ i 
+      l { v i } ⊢ { v i s }
+      F { k s } ⊢ k 
+      itr_r_i◂◂F { k v i } ⊢| 
+    ∐. .
+      ∎ { k v }
+  § itr_r◂◂F # { k v }
+    len v ⊢ { v l }
+    itr_r_i◂◂F { k v l } ⊢|
+  § sum_i # { m i }
+    _add { m i } ⊢ { m _ }
+    ∎ m 
+  § sum = itr_r◂◂sum_i
   ∎∎ 
 § _arr_len = _arr.len
 § _alc_i = _arr.i 
@@ -905,30 +922,7 @@
 § _clc_d = _Clr.d
 § _cli = _Clr.ini 
 § _cl_N = _Clr.ini_pt
-
-§ _emt_s8_to_im◂◂F # s 
-  _id.s8 s ⊢ s 
-  _st◂◂F {} ⊢ f 
-  _hp.of f ⊢ { r0 _ }
-  _hp.rpc s ⊢ { s r1 } 
-  !^ r0,r1 ⊢ {}
-    ` mov rdx,QWORD [rdi]
-    ` lea rsi,[rdi+8]
-    ` mov rdi,rax
-    ` C_CALL_SF emt_s8_to 
-    ` cmp rax,-1 
-    ` jz err 
-    //
-  ∎ s
-
-§ _getchar {} 
-  !^ _ ⊢ c 
-    `	mov rdi,fmt_getchar 
-		`	call emt_stg 
-		`	xor rax,rax 
-		`	C_CALL_SF getchar 
-		//
-  ∎ c 
+ 
 § _shr # { r c } 
   !^ r,c ⊢ r,c
     ` mov rcx,rdi 
@@ -1069,6 +1063,40 @@
   _id.hp.s8 h ⊢ h 
   _hp.to { m h } ⊢ s 
   ∎ { l s }
+
+§ emt_cst◂◂S # {} 
+  _st◂◂S {} ⊢ b 
+  _id.st_s8 b ⊢ b 
+  _hp.of b ⊢ { r h }
+  !^ r ⊢ *r 
+    ` mov rdi,rax 
+    ` mov rsi,QWORD [rax-8]
+    ` C_CALL fw 
+    //
+  _hp.to { r h } ⊢ _ 
+  ∎ {} 
+§ _emt_s8_to_im◂◂F # s 
+  _id.s8 s ⊢ s 
+  _st◂◂F {} ⊢ f 
+  _hp.of f ⊢ { r0 _ }
+  _hp.rpc s ⊢ { s r1 } 
+  !^ r0,r1 ⊢ {}
+    ` mov rdx,QWORD [rdi]
+    ` lea rsi,[rdi+8]
+    ` mov rdi,rax
+    ` C_CALL_SF emt_s8_to 
+    ` cmp rax,-1 
+    ` jz err 
+    //
+  ∎ s
+
+§ _getchar {} 
+  emt_cst◂◂"_getchar:" {} ⊢ {} 
+  !^ _ ⊢ c 
+    `	xor rax,rax 
+		`	C_CALL_SF getchar 
+		//
+  ∎ c
 § _in_fn f 
   _hp.rpc f ⊢ { f r } 
   !^ r ⊢ m 
@@ -1169,7 +1197,17 @@
   _id.s8 s ⊢ s 
   _hp.rpc s ⊢ { s r } 
   !^ i,r ⊢ i,j,x 
-    ` call byt_F
+    ` lea rsi,[rdi+8]
+    ` mov rdx,0x0000_ffff_ffff_ffff 
+    ` and rdx,QWORD [rdi] 
+    ` mov rcx,1 
+    ` cmp rax,rdx 
+    ` jge .F0 
+    ` mov rcx,0 
+    ` movzx rsi,BYTE [rdi+8+rax]
+    ` add rax,1
+    `.F0:
+    ` mov rdi,rcx
     //
   ∐ j'=0r .
     ∎ { s i ‹ x › }
@@ -1252,46 +1290,35 @@
   psc_F_0 { s rb i } ⊢| 
 § _psc = _[ 0x000200000000000fr ]
 ¶§ _psc = \\S . _grm◂◂(psc_F◂◂S)
-§ cst◂◂S # {} 
-  _st◂◂S {} ⊢ b 
-  _id.st_s8 b ⊢ b 
-  _hp.of b ⊢ { r h }
-  !^ r ⊢ *r 
-    ` mov rdi,rax 
-    ` mov rsi,QWORD [rax-8]
-    ` C_CALL fw 
-    //
-  _hp.to { r h } ⊢ _ 
-  ∎ {} 
 §§ _emt_im 
   ¶¶ f0 a' : a'→→({}→{}) 
   § f◂◂C # {} 
-    cst◂◂"emt_im:" {} ⊢ {} 
+    emt_cst◂◂"emt_im:" {} ⊢ {} 
     f0◂◂C {} ⊢ {}
-    cst◂◂"\n" {} ⊢ {}
+    emt_cst◂◂"\n" {} ⊢ {}
     ∎ {}
   § unt◂◂{} # {} 
-    cst◂◂"{}: {}" {} ⊢ {} 
+    emt_cst◂◂"{}: {}" {} ⊢ {} 
     ∎ {}
   ¶§ f0 = unt
   § r64◂◂X # {} 
-    cst◂◂(_ccs◂◂{ "0x" _ccs◂◂{ (_ct.pf_x◂◂X) "r: _r64" } }) {} ⊢ {} 
+    emt_cst◂◂(_ccs◂◂{ "0x" _ccs◂◂{ (_ct.pf_x◂◂X) "r: _r64" } }) {} ⊢ {} 
     ∎ {}
   ¶§ f0 = r64
   § s8◂◂S # {} 
-    cst◂◂(_ccs◂◂{ "\"" _ccs◂◂{ S "\" : _s8" } }) {} ⊢ {} 
+    emt_cst◂◂(_ccs◂◂{ "\"" _ccs◂◂{ S "\" : _s8" } }) {} ⊢ {} 
     ∎ {}  
   ¶§ f0 = s8
   ∎∎
 §§ _emt 
   § f0 = _ap.emt 
   § f ## a 
-    cst◂◂"emt:" {} ⊢ {} 
+    emt_cst◂◂"emt:" {} ⊢ {} 
     f0 a ⊢ a
-    cst◂◂"\n" {} ⊢ {}
+    emt_cst◂◂"\n" {} ⊢ {}
     ∎ a 
   § mo_e◂◂{ S C } # k 
-    cst◂◂(_ccs◂◂{ S "◂" }) {} ⊢ {} 
+    emt_cst◂◂(_ccs◂◂{ S "◂" }) {} ⊢ {} 
     f0 k ⊢ k 
     _ctr◂◂C k ⊢ k 
     ∎ k 
@@ -1299,17 +1326,17 @@
   ¶§ _ap.emt_mo = mo 
   ¶¶ f_rcd r' : _rcd◂r'→_rcd◂r' 
   § rcd ## r 
-    cst◂◂"{" {} ⊢ {}
+    emt_cst◂◂"{" {} ⊢ {}
     f_rcd r ⊢|
   § unt ## {} 
-    cst◂◂"{}" {} ⊢ {}
+    emt_cst◂◂"{}" {} ⊢ {}
     ∎ {}
   § rcd_unt ## {} 
-    cst◂◂" }" {} ⊢ {}
+    emt_cst◂◂" }" {} ⊢ {}
     ∎ {}
   § prd ## p 
     _ipr p ⊢ { h t } 
-    cst◂◂" " {} ⊢ {} 
+    emt_cst◂◂" " {} ⊢ {} 
     f0 h ⊢ h 
     f_rcd t ⊢ t 
     _prd { h t } ⊢| 
@@ -1334,11 +1361,11 @@
     ∎ x
   § r64 # x 
     r640 x ⊢ x 
-    cst◂◂" : _r64" {} ⊢ {}
+    emt_cst◂◂" : _r64" {} ⊢ {}
     ∎ x 
   ¶§ f0 = r64
   § s8 s 
-    cst◂◂"\"" {} ⊢ {} 
+    emt_cst◂◂"\"" {} ⊢ {} 
     _id.s8 s ⊢ s
     _hp.of s ⊢ { r h }
     !^ r ⊢ *r 
@@ -1348,23 +1375,23 @@
       ` C_CALL fw 
       //
     _hp.to { r h } ⊢ s 
-    cst◂◂"\" : _s8" {} ⊢ {} 
+    emt_cst◂◂"\" : _s8" {} ⊢ {} 
     ∎ s   
   ¶§ f0 = s8
   § @.arr_i { { a l } i } 
     ∐ l'<>i' .
       _alc_o { a i } ⊢ { a k }
       f0 k ⊢ k  
-      cst◂◂" " {} ⊢ {} 
+      emt_cst◂◂" " {} ⊢ {} 
       _alc_i { a k } ⊢ { a i } 
       _inc i ⊢ i 
       arr_i { { a l } i } ⊢| 
     ∐. .
-      cst◂◂"}" {} ⊢ {} 
+      emt_cst◂◂"}" {} ⊢ {} 
       ∎ a 
   § arr ## a 
     _arr_len a ⊢ { a l }
-    cst◂◂"{+ " {} ⊢ {} 
+    emt_cst◂◂"{+ " {} ⊢ {} 
     arr_i { { a l } %[ 0r ] } ⊢| 
   ¶§ f0 = arr 
   § ref_i ## { {} k }
@@ -1373,54 +1400,54 @@
   § ref ## p
     $.[ k' . _ref.t◂k' ] p ⊢ p
     --$.[ k' . _ref.t◂k' ] p ⊢ p
-    cst◂◂"*[ " {} ⊢ {} 
+    emt_cst◂◂"*[ " {} ⊢ {} 
     _ref.lod_hd p ⊢ { p h } 
     r640 h ⊢ _
-    cst◂◂" | " {} ⊢ {} 
+    emt_cst◂◂" | " {} ⊢ {} 
     _ref.f◂◂ref_i { {} p } ⊢ { {} p } 
-    cst◂◂" ]" {} ⊢ {} 
+    emt_cst◂◂" ]" {} ⊢ {} 
     ∎ p
   ¶§ f0 = ref
     
   § pt ## p 
     $.[ k' . _pt◂k' ] p ⊢ p 
-    cst◂◂"[=]" {} ⊢ {} 
+    emt_cst◂◂"[=]" {} ⊢ {} 
     ∎ p
   ¶§ f0 = pt
   § Clr ## C 
     $.[ k' . _Clr◂k' ] C ⊢ C 
-    cst◂◂"{= .. }" {} ⊢ {} 
+    emt_cst◂◂"{= .. }" {} ⊢ {} 
     ∎ C
   ¶§ f0 = Clr
   ¶§ f0 = _arr.emt_lc
   § lst l 
     $ l ⊢ 
     ∐ _cns◂d . 
-      cst◂◂"_cns◂" {} ⊢ {} 
+      emt_cst◂◂"_cns◂" {} ⊢ {} 
       f0 d ⊢ d 
       ∎ _cns◂d 
     ∐. _nil◂d .
-      cst◂◂"_nil◂" {} ⊢ {}
+      emt_cst◂◂"_nil◂" {} ⊢ {}
       f0 d ⊢ d 
       ∎ _nil◂d 
   ¶§ f0 = lst
   § opn o  
 		$ o ⊢ 
 		∐ _some◂a .
-			cst◂◂"‹ " {} ⊢ {} 
+			emt_cst◂◂"‹ " {} ⊢ {} 
 			f0 a ⊢ a 
-			cst◂◂" ›" {} ⊢ {} 
+			emt_cst◂◂" ›" {} ⊢ {} 
 			∎ ‹ a › 
 		∐. _none◂{} . 
-			cst◂◂"‹›" {} ⊢ {} 
+			emt_cst◂◂"‹›" {} ⊢ {} 
 			∎ ‹› 
 	¶§ f0 = opn 
 	§ dft ## x 
-    cst◂◂"?" {} ⊢ {} 
+    emt_cst◂◂"?" {} ⊢ {} 
     ∎ x 
   § hp ## h 
     _id.hp h ⊢ h 
-    cst◂◂"?hp" {} ⊢ {} 
+    emt_cst◂◂"?hp" {} ⊢ {} 
     ∎ h  
   ¶§ f0 = hp 
   ¶§ f0 = _ap.emt_adt
@@ -1668,7 +1695,6 @@
     ` add rsp,rax 
     //
   ∎ d 
-
 §§ _siz 
   ¶¶ f k' : { _hp◂k' _r64 }
   ∎∎

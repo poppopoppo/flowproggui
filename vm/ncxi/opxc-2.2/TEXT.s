@@ -248,13 +248,6 @@ sig_dft_alc_rcd:
 	;mov rdi,rbx 
 	jmp sig_alc_rcd
 sig_dft: 
-	;mov rbx,QWORD [SIG_FLG] 
-	;and rbx,0xffff_0000 
-	;cmp rbx,0xf00f_0000 
-	;je sig_dft_alc_rcd
-	push rdi 
-	push rsi 
-	push rdx 
 	xor rax,rax 
 	mov rsi,rdi 
 	mov rdi,fmt_sig_hdl
@@ -595,92 +588,7 @@ in_fn:
 	add rsp,16
 	add rsp,144
 	ret 
-
-emt_stg: ; rdi=stg 
-	xor rax,rax 
-	C_CALL_SF printf
-	ret
-
-emt_cst: ; rdi=stg,rax=len 
-	mov rdx,rdi 
-	jmp emt_s8_stg 
-emt_s8: ; rdi=s8 
-	mov rax,0x0000_ffff_ffff_ffff
-	and rax,QWORD [rdi] 
-	lea rdx,[rdi+8]
-emt_s8_stg: ; rax=len,rdx=stg-ptr
-	mov rcx,rax 
-	mov r9,QWORD [GD_BUF_PT] 
-	mov r10,QWORD [GD_BUF_N]
-	cmp rax,2048 
-	jge emt_s8_flsh 
-	lea rsi,[r10+rax+16] 
-	cmp rsi,4096 
-	jl emt_s8_add
-	push rcx 
-	push rdx 
-	call flsh
-	pop rdx 
-	pop rcx 
-	mov r10,0
-emt_s8_add:
-	lea rdi,[r9+r10] 
-	mov BYTE [rdi],34 
-	add rdi,1 
-	lea rax,[rcx+2]
-	add QWORD [GD_BUF_N],rax
-	mov rsi,rdx 
-	cld  
-	rep movsb 
-	mov BYTE [rdi],34 
-	ret
-emt_s8_flsh:
-	push rdx 
-	call flsh 
-	pop rsi 
-	mov rdi,fmt_s8 
-	C_CALL_SF printf 
-	ret 
-
-flsh: 
-	mov rax,SYS_write 
-	mov rdi,STDOUT 
-	mov rsi,QWORD [GD_BUF_PT] 
-	mov rdx,QWORD [GD_BUF_N] 
-	mov rbx,rsi 
-	syscall 
-	cmp rax,-1 
-	jz err  
-	mov QWORD [GD_BUF_N],0
-	mov QWORD [rbx],0
-	ret
-emt_bof_hdl: 
-	call flsh
-	mov rdi,QWORD [GD_BUF_PT]
-	jmp QWORD [SIG_RIP] 
-
-emt_r64: ;rdi=r64
-	mov rdx,rdi
-	mov r9,QWORD [GD_BUF_PT] 
-	mov r10,QWORD [GD_BUF_N]
-	cmp r10,3940
-	jl emt_r64_add
-	call flsh 
-	mov r10,0 
-emt_r64_add:
-	mov rax,rdx 
-	lea rdi,[r9+r10]
-	push rdi 
-	call pf_d 
-	pop rdi 
-	mov BYTE [rdi+rax],'r'
-	mov BYTE [rdi+rax+1],0
-	add rax,2 
-	add QWORD [GD_BUF_N],rax 
-	ret
-
 					
-
 exn_grm: 
   mov rax,0xff01_0000_0000_0000
 	mov QWORD [err_n],rax
@@ -748,51 +656,3 @@ exn:
 	C_CALL printf
 	mov rax,SYS_exit
 	syscall
-
-synt:
-	jmp synt_1 
-synt_0:
-	add rax,1 
-synt_1:						
-	cmp rax,rdi
-	jge synt_2
-	movzx MCR_REG,BYTE [rsi+rax]
-	cmp MCR_REG,9 
-	jz synt_0
-	cmp MCR_REG,10 
-	jz synt_0
-	cmp MCR_REG,32 
-	jz synt_0
-synt_2:
-	mov r10,0
-	ret
-
-line:
-	jmp line_1 
-line_0:
-	add rax,1 
-line_1:						
-	cmp rax,rdi
-	jge line_2
-	movzx MCR_REG,BYTE [rsi+rax]
-	cmp MCR_REG,9 
-	jz line_0
-	cmp MCR_REG,32 
-	jz line_0
-line_2:
-	mov r10,0
-	ret
-
-byt_F:
-	lea rsi,[rdi+8]
-  mov rdx,0x0000_ffff_ffff_ffff 
-  and rdx,QWORD [rdi] 
-  mov rcx,1 
-  cmp rax,rdx 
-  jge byt_F_0 
-  mov rcx,0 
-  movzx rsi,BYTE [rdi+8+rax]
-  add rax,1 
-byt_F_0:
-  mov rdi,rcx
-	ret

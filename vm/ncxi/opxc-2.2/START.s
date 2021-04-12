@@ -32,22 +32,6 @@ ini_ss_rcd:
 	cmp rdi,RCD_N
 	jnz ini_ss_rcd  
 	
-	 
-
-; init emt buffer 
-	mov rdi,PAGE_SIZE
-	C_CALL alc_gd_buf
-	mov QWORD [GD_BUF_PT],rax
-	mov QWORD [GD_BUF_IT],rax
-	mov rax,0 
-	mov rdi,fmt_d 
-	mov rsi,QWORD [PAGE_SIZE]
-	C_CALL printf
-
-	mov rdi,0
-	mov QWORD [EMT_BUF],0
-	mov QWORD [EMT_BUF_OFS],0
-
 ; _args 
 	mov rdi,QWORD [rsp]
  lea rdi,[rdi+1]
@@ -68,6 +52,7 @@ args_lp:
 	jmp args_lp 
 args_lp_end:
 	mov GLX(127),rbx
+	;mov QWORD [GLV_2],rbx
  ; exn_root 
 	push exn_dft 
 	push exn_dft
