@@ -191,7 +191,10 @@
   § cnc_siz = _[ 0x00010020r ]
   § hp = _[ 0x00010021r ]
   ∎∎
-
+§§ _p 
+  ¶ t k'   
+    ∐ t : k'
+  ∎∎
 §§ _hp 
   § of0 = _[ 10r ]
   § to0 = _[ 11r ] 
@@ -1312,7 +1315,7 @@
   ∎∎
 §§ _emt 
   § f0 = _ap.emt 
-  § f ## a 
+  § f # a 
     emt_cst◂◂"emt:" {} ⊢ {} 
     f0 a ⊢ a
     emt_cst◂◂"\n" {} ⊢ {}
@@ -1534,7 +1537,7 @@
     ∐. _nil◂{} . 
       ∎ {}
   ¶§ f = lst
-  § opn o 
+  § opn # o 
     $ o ⊢ 
     ∐ _some◂a . 
       f a ⊢| 
@@ -1616,7 +1619,7 @@
   ¶§ f = st 
   ¶§ f = _arr.std.rpc
   ¶§ f = _arr.rpc_lc
-  § opn o 
+  § opn # o 
     $ o ⊢ 
     ∐ _some◂a . 
       f a ⊢ { a a0 } 
@@ -1645,7 +1648,7 @@
 § _mk_arr = _arr.mk◂◂{ alc _id.arr }
 § _mk_arr_x = _arr.mk◂◂{ _arr.alc_x _id.arr_x }
 §: i1 k' = { k' _hp◂(_arr◂k') } 
-§ _mk_stk◂◂F { { n k } p }
+§ _mk_stk◂◂F # { { n k } p }
   _hp.ini {} ⊢ h 
   i0 { k h } ⊢ { k h } 
   $ n ⊢ n,b 
@@ -1670,7 +1673,7 @@
     ` add rsp,rax 
     //
   ∎ d 
-§ _mk_stk_F◂◂{ F H } { { n v } p }
+§ _mk_stk_F◂◂{ F H } # { { n v } p }
   _hp.ini_ct◂◂H {} ⊢ hF 
   _hp.ini {} ⊢ h 
   _hp.ini {} ⊢ ha
