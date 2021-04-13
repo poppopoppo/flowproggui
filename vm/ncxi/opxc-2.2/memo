@@ -257,3 +257,8 @@ slv UNV APV AP slv
 0x4r : _r64 0xdr : _r64 0x7r : _r64 0x19r : _r64 
 0x8r : _r64 0x11r : _r64 0x1ar : _r64 0x7r : _r64 
 0x5r : _r64 0x0r : _r64 }
+
+run time polymophic operator 
+  rpo : a' → {}
+  _rp_dlt : 
+  
