@@ -482,9 +482,6 @@
     _cnc_sto { ra k } ⊢ _
     ∎ { a i w }
   § emt_lc = '[ _[] : k',t' . (lc◂k'◂t')→(lc◂k'◂t') ]
-  § dlt_lc = '[ _[] : k',t' . (lc◂k'◂t')→{} ]
-  § rpc_lc = '[ _[] : k',t' . (lc◂k'◂t')→{ (lc◂k'◂t') (lc◂k'◂t') } ]
-  § lc =|
   § alc_x◂◂C l
     ∐ l'<>0r .
       !^ l ⊢ *l,b
@@ -572,6 +569,20 @@
       dlt_i { { h r } i } ⊢|
     ∐. .
       ∎ {} 
+  § @.dlt_lc_i { { h r j } i } 
+    ∐ i'<>0r .
+      ∐ i'<>j' . 
+        _cnc_lod_hp { r h } ⊢ { r h q } 
+        _cnc_add { r h } ⊢ { r h }
+        $ q ⊢ _ 
+        _dec i ⊢ i
+        dlt_lc_i { { h r j } i } ⊢|
+      ∐. .
+        _cnc_add { r h } ⊢ { r h }
+        _dec i ⊢ i
+        dlt_lc_i { { h r j } i } ⊢|
+    ∐. .
+      ∎ {} 
   §§ std
     § dlt a 
     _id.arr a ⊢ a 
@@ -587,7 +598,20 @@
       ` call free_opq
       // 
     ∎ {}
-
+    § dlt_lc lc◂{ j a } 
+    _id.arr a ⊢ a 
+    len a ⊢ { a l } 
+    _hp.of a ⊢ { r ha }
+    _hp.ini {} ⊢ h 
+    $.[ k' . { _hp◂(_arr◂k') _hp◂k' } ] { ha h } ⊢ { _ h } 
+    $ r ⊢ r,r0 
+    _add_im◂◂8r r0 ⊢ r0 
+    dlt_lc_i { { h r0 j } l } ⊢ {}
+    !^ r ⊢ {} 
+      ` mov rdi,rax
+      ` call free_opq
+      // 
+    ∎ {}
     § @.rpc_i { { a0 h r1 l } i } 
       ∐ i'<>l' .
         o { a0 i } ⊢ { a0 q0 } 
@@ -632,6 +656,23 @@
         // 
        ∎ {}
       ∐. .
+        ∎ {} 
+    § dlt_lc lc◂{ j a } 
+      _id.arr_x a ⊢ a 
+      len a ⊢ { a l } 
+      _hp.of a ⊢ { r ha } 
+      ∐ l'<>0r .
+        _hp.ini {} ⊢ h 
+        $.[ k' . { _hp◂(_arr_x◂k') _hp◂k' } ] { ha h } ⊢ { _ h } 
+        $ r ⊢ r,r0 
+        _add_im◂◂8r r0 ⊢ r0 
+        dlt_lc_i { { h r0 j } l } ⊢ {}
+       !^ r ⊢ {} 
+         ` mov rdi,rax
+          ` call free_opq
+        // 
+       ∎ {}
+      ∐. .
         ∎ {}  
     ∎∎
   § l # { a i }
@@ -658,6 +699,9 @@
     _add { m i } ⊢ { m _ }
     ∎ m 
   § sum = itr_r◂◂sum_i
+  --§ dlt_lc = '[ _[] : k',t' . (lc◂k'◂t')→{} ]
+  § rpc_lc = '[ _[] : k',t' . (lc◂k'◂t')→{ (lc◂k'◂t') (lc◂k'◂t') } ]
+  § lc =|
   ∎∎ 
 § _arr_len = _arr.len
 § _alc_i = _arr.i 
@@ -1217,7 +1261,6 @@
   ∐. .
     ∎ { s i ‹› }
 § _byt = _grm◂◂_byt_F
---§ _line = _[ 0x000200000000000fr ]
 § _line = _[ 0x000200000000000dr ]
 § _line_F { s i } 
   _id.s8 s ⊢ s 
@@ -1492,6 +1535,8 @@
   
   ¶§ f = _arr.std.dlt  
   ¶§ f = _arr.x.dlt
+  ¶§ f = _arr.std.dlt_lc
+  ¶§ f = _arr.x.dlt_lc
   ¶§ f = _Clr.dlt_t 
   ¶§ f = _Clr.dlt_lc 
   §: pt0 k' = { _hp◂k' k' }
@@ -1529,7 +1574,6 @@
   ¶§ f = pt
   ¶§ f = _ref.dlt
   ¶§ f = _ref.dlt_lc 
-  ¶§ f = _arr.dlt_lc
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
