@@ -114,10 +114,6 @@
 § get_q = lod_q 
 § exc_q = exc_q
 § mk_arr = _mk_arr
-§ arr_of_lst_len # l 
-  arr_of_lst l ⊢ a 
-  _arr_len a ⊢ { a n } 
-  ∎ { a n }
 
 § lod_tv { a i } 
 	lod_q { a i } ⊢ { a i v } 
@@ -9553,10 +9549,7 @@ unsigned long
 										GV.ix GV ⊢ { GV i1 } 
 										$ i1 ⊢ i1,i10 
 										asm.add_nd { e0 asm.mov_glx_op◂{ i10 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ e0 
-										$~ _^ ⊢ ec1 
-											`	lea DST_REG,[rax+8]
-											//
-										asm.add_st_s8 { e0 ec1 } ⊢ e0 
+										asm.add_st_s8_im◂◂"\tlea DST_REG,[rax+8]\n" e0 ⊢ e0 
 										to_sgm_ptn { e0 pa0 pa1 } ⊢ e0 
 										$ ⟦ { i1 rd } < L ⟧ ⊢ L 
 										∎ { L e0 GV }
@@ -9594,7 +9587,8 @@ unsigned long
 						$ i1 ⊢ 
 						∐ _some◂i1 .
 							∐ i1'=iS' .
-								push { e iS } ⊢ e
+								--push { e iS } ⊢ e
+								asm.add_nd { e asm.mov_rax_glx◂iS } ⊢ e 
 								mov_e { i0 i1 e } ⊢ { _ _ e } 
 								∎ { e A bl.t◂{} }
 							∐. .
@@ -9616,7 +9610,8 @@ unsigned long
 								$ b ⊢ 
 								∐ bl.t◂{} .
 									$ i0 ⊢ _
-									pop { e i1 } ⊢ e 
+									--pop { e i1 } ⊢ e 
+									asm.add_nd { e asm.mov_glx_rax◂i1 } ⊢ e 
 									f2 { { e A } l } ⊢| 
 								∐. bl.f◂{} . 
 									mov_e { i0 i1 e } ⊢ { _ _ e }
@@ -10039,14 +10034,14 @@ unsigned long
 							$ { GXV GV lb_n tav e } ⊢ EE
 							$ { mfv  eg0 eds ew0 } ⊢ FE
 							∎ {  FE EE ‹› }
-				§ stt_alc_hp { tav GV e0 r pa0 } 
+				§ stt_alc_hp { GV e0 r pa0 } 
 					$ pa0 ⊢ 
 					∐ _some◂{ c_n pa0 } .
 					  ∐ c_n'=0r . 
-					  	∎ { tav GV e0 ‹ pa0 › }  
+					  	∎ { GV e0 ‹ pa0 › }  
 				  	∐ c_n'=1r . 
 				  		lod_sgm.ptn_1 { r pa0 } ⊢ { _ pa1 } 
-				  		∎ { tav GV e0 ‹ pa1 › }  
+				  		∎ { GV e0 ‹ pa1 › }  
 				  	∐. . 
 							asm.add_nd { e0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] r } } ⊢ e0 
 				  		asm.add_st_s8_im◂◂"\tlea SRC_REG,[rdi+8]\n" e0 ⊢ e0
@@ -10056,9 +10051,9 @@ unsigned long
 				  			//
 				  		asm.add_st_s8 { e0 sc0 } ⊢ e0 
 							free_rcd◂◂"rdi" { c_n e0 } ⊢ { _ e0 } 
-				  		∎ { tav GV e0 ‹ pa1 › }  
+				  		∎ { GV e0 ‹ pa1 › }  
 		  		∐. _none◂{} . 
-		  			∎ { tav GV e0 ‹› }
+		  			∎ { GV e0 ‹› }
 			§ stt_jmp_axm # {  EE FE p1 fc }
 				$ fc ⊢ { _ { _ vl _ } f_c } 
 				stt_f_c {  EE FE vl p1 f_c } ⊢| 
@@ -11099,14 +11094,14 @@ unsigned long
 							∐ a0 ⊢ ast.btm◂{} . 
 								$ EE ⊢ { GXV GV lb_n tav  ec0 } 
 								asm.add_st_s8_im◂◂"\tRT_ERR 0xffff_2e17\n" ec0 ⊢ ec0
-								∎ {  FE { GXV GV lb_n tav ec0 } ‹› }
+								∎ { FE { GXV GV lb_n tav ec0 } ‹› }
 							∐. . 
 								∎| 
 					∐. RP.atm◂a1 .
 						$ a1 ⊢ 
 						∐ IR.stt_r◂r1 . 
 							idx.set { AV r1 isp } ⊢ { AV r1 }
-							stt_mtc_K { { RP.atm◂ stt_r◂r1 ps m0 S pb p1 } ox f_c AV K FE  EE } ⊢|
+							stt_mtc_K { { RP.atm◂stt_r◂r1 ps m0 S pb p1 } ox f_c AV K FE  EE } ⊢|
 						∐ IR.stt_v◂_ . 
 							∎| 
 						∐. stt_a◂{ ia1 mpa1 } . 
@@ -11116,7 +11111,7 @@ unsigned long
 									stt_mtc_lp { { pa0 mpa1 ps m0 S pb p1 } ox f_c AV K FE  EE } ⊢|
 								∐. . 
 									stt_rb_K { RP.atm◂ast.stt_adt◂{ ia0 pa0 } AV K } ⊢ { is _ } 
-									stt_mtc { {  S pb } ox f_c FE EE is } ⊢| 
+									stt_mtc { { S pb } ox f_c FE EE is } ⊢| 
 							∐ isp ⊢ RP.atm◂ast.dyn_adt◂{ D ri rd } . 
 								$ RP.atm◂stt_a◂{ ia1 mpa1 } ⊢ mpa1 
 								$ EE ⊢ { GXV GV lb_n tav  ec0 } 
@@ -11164,7 +11159,7 @@ unsigned long
 							_ref.o hl ⊢ { H D } 
 							_lod_q { D i } ⊢ { D i h } 
 							_ref.i { H D } ⊢ hl 
-							stt_alc_hp { tav GV e0 rd0 h } ⊢ { tav GV e0 pi } 
+							stt_alc_hp { GV e0 rd0 h } ⊢ { GV e0 pi } 
 							$ pi ⊢ 
         		  ∐ _none◂{} . 
 								_inc i ⊢ i 
@@ -11192,7 +11187,7 @@ unsigned long
 							_ref.o hl ⊢ { H D } 
 							_lod_q { D i } ⊢ { D i h } 
 							_ref.i { H D } ⊢ hl
-							stt_alc_hp { tav GV e0 rd h } ⊢ { tav GV e0 pi } 
+							stt_alc_hp { GV e0 rd h } ⊢ { GV e0 pi } 
 							$ pi ⊢ 
         		  ∐ _none◂{} . 
 								asm.add_st_s8_im◂◂"\tRT_ERR 0xbbfe_2e17\n" e0 ⊢ e0
@@ -11223,7 +11218,6 @@ unsigned long
 				∎ { e v }
 			∐. .
 				_arr.l { v i } ⊢ { v i n }
-				--_inc n ⊢ n 
 				^ i,n ⊢ i,_,sc0
 					"\t GLV_" 0d' ": resq " 1d' "\n" // 
 				asm.add_s8 { e sc0 } ⊢ e 
