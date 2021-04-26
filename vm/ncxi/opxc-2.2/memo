@@ -285,3 +285,15 @@ $ v ⊢ {= c0 c1 c2 .. cn < v }
 
   mio : _ctr◂{ y1' y0' } →→ _mop◂{ { t' y0' } { t' y1' } }
   mcc : { _ctr◂{ y0' y1' } _mtc◂{ y1' y2' } } →→ _mtc◂{ y0' y2' }
+
+
+type , tag -> pattern 
+pattern -> tag 
+
+
+  arr < { _ _ }
+  ∐ arr_r2 : arr_r2 ⊢ { _r2 t' }
+  ∐ arr_r8 : arr_r8 ⊢ { _r8 t' }
+  ∐ arr_q : arr_q◂k' ⊢ { k' t' }
+  add < _ 
+    ∐ add : 
