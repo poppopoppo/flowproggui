@@ -2202,20 +2202,26 @@ unsigned long
 				@.gen_abs # { v { a y0 } } 
 					gen { v y0 } ⊢ { v y0 } 
 					∎ { v abs◂{ %a %y0 } }
+				@.gen_F # y 
+					$ y ⊢ y,y0 
+					∎ { y var_ln◂y0 }
 				@.gen_var { lv i }
-					TV.lod i ⊢ { i v } 
+					TV.o i ⊢ { I v } 
 					$ v ⊢ 
 					∐ var_ln◂y1 . 
+						_ref.to◂◂gen_F { y1 I } ⊢ y1
 						gen { lv y1 } ⊢|
 					∐ var_l◂lv1 .
 						∐ lv1'=<lv' . 
+							TV.i { I var_l◂lv1 } ⊢ i 
 							∎ { lv var◂p◂%i }
 						∐. .
-							$ i ⊢ i,i0 
 							_sgn.mk {} ⊢ N 
-							TV.u { i var_q◂{ N p◂i0 } } ⊢ i
+							_ref.lc_rpc I ⊢ { I i0 } 
+							TV.i { I var_q◂{ N p◂i0 } } ⊢ i
 							∎ { lv var◂p◂%i }
-					∐. var_q◂_ . 
+					∐. var_q◂q . 
+						TV.i { I var_q◂q } ⊢ i 
 						∎ { lv var◂p◂%i } 
 				@.gen = map_k◂◂{ gen_dta gen_abs gen_var }
 				@.gen_lst = map_k_lst◂◂{ gen_dta gen_abs gen_var }
@@ -2515,6 +2521,7 @@ unsigned long
 				∐ cn_a : { _r64 _lst◂e' axm_t } 
 				∐ cn_b : {}
 				∐ cn_o : { bl.t o_pt◂e' } 
+				---∐ cn_c : c'
 				--∐ cn_h : 
 			@. mop e',c' 
 				∐ mop : { { c' c' c' } mn◂e'◂c' } 
@@ -8716,7 +8723,6 @@ unsigned long
 			§ s_i = F_i◂◂alc_s 
 			§ s_o = F_o◂◂alc_s 
 			§ s_x = F_x◂◂alc_s 
-			§ f_i = F_i◂◂alc_i 
 			§ f_o = F_o◂◂alc_i 
 			§ f_x = F_x◂◂alc_i
 			§ g_x = F_x◂◂alc_g 
@@ -9138,12 +9144,12 @@ unsigned long
 		§ ini_n # n 
 			_mk_arr { n RP.atm◂ast.btm◂{} } ⊢ { n _ v } 
 			∎ { n v }
+		§ lod = _arr.l 
 		§ get # { v i } 
 			exc_q { v i RP.atm◂ast.btm◂{} } ⊢| 
 		§ set # { v i a } 
 			exc_q { v i a } ⊢ { v i _ } 
 			∎ { v i }
-		§ rpc = _rpc 
 		§ get_2 { L i } 
 			∐ L ⊢ _cns◂{ { i0 p0 } L }; 
 				∐ i'=i0' . 
@@ -9310,7 +9316,7 @@ unsigned long
 				∐. . 
 					∎|
 		§ csm_tpl # { V r } 
-			get { V r } ⊢ { V _ ip } 
+			lod { V r } ⊢ { V _ ip } 
 			∎ { V ip } 
 		§ csm_tpl_ptn = RP.map_l_atm◂◂csm_tpl
 		∎∎
@@ -10127,8 +10133,6 @@ unsigned long
 							∐. _none◂{} .
 								$ RP.atm◂ast.btm◂{} ⊢ pr,pr0
 								∎ { GV tav lb_n { lbi vl f_ret◂‹› } pr0 e }
-					
-			
 			§§ RV = ast.RV 
 			§ 
 				@.rt_of_m { RV m } 
@@ -10758,7 +10762,7 @@ unsigned long
 										asm.add_st_s8_im◂◂"\tRT_ERR 0xffff_eb47\n" ec0 ⊢ ec0 
 										$ { APV eg0 eds ew0 } ⊢ FE
 										$ { GXV GV lb_n tav ec0 } ⊢ EE
-										∎ {  FE EE ‹› }	
+										∎ { FE EE ‹› }	
 									∐. .
 										∎|
 								-- dlt_r64 
@@ -10793,11 +10797,11 @@ unsigned long
 								∐ 
 									ast.smt_ap_err◂◂45r ya ⊢ t
 									inst { %[ 1r ] t } ⊢ { lv t }
-									newvar_l lv  ⊢ {  lv v0 } 
+									newvar_l lv  ⊢ { lv v0 } 
 									$ v0 ⊢ v0,v0_0
 									T.unify.f { TX.t_imp◂{ TX.cns2◂{ TX.r64◂{} v0_0 } TX.r64◂{} } t } ⊢ {} 
 									_dec lv ⊢ lv 
-									gen { lv v0 } ⊢ {  lv yk } 
+									gen { lv v0 } ⊢ { lv yk } 
 									∐ is ⊢ RP.rcd◂_cns◂{ r0  _cns◂{ pk _nil◂{} } } .
 										r64_to_hp { GV r0 ec0 } ⊢ { GV r0 ec0 }
 										alc_cnc.s_o { tav %[ 0r ] yk } ⊢ { tav _ pa0 }
@@ -11000,8 +11004,9 @@ unsigned long
 								$ c0 ⊢ c0,c0t
 								stt_ac { c0t is } ⊢ is 
 								∐ is ⊢ RP.rcd◂_cns◂{ is0 _cns◂{ is _nil◂{} } } .
-									idx.ini_n nc ⊢ { _ AV } 
 									$ { c0 is0 c1 } ⊢ C
+									idx.ini_n nc ⊢ { _ AV } 
+									_ref.new AV ⊢ AV 
 									stt_mtc_lp { { is pm ps m S pb nxp C } ox f_c AV ⟦⟧ FE EE } ⊢| 				
 								∐. .
 									∎|
@@ -11054,7 +11059,9 @@ unsigned long
 						∐. K_a◂ia . 
 							stt_mtc_K { { RP.atm◂stt_a◂{ ia pi } ps m0 S pb p1 C } ox f_c AV K FE  EE } ⊢|
 					∐. _nil◂{} .
-						idx.csm_tpl_ptn { AV ps } ⊢ { _ is } 
+						_ref.o AV ⊢ { AV av } 
+						idx.csm_tpl_ptn { av ps } ⊢ { av is }
+						_ref.i { AV av } ⊢ _ 
 						$ ⟦ m0 < S ⟧ ⊢ S 
 						$ C ⊢ { _ is0 c1 } 
 						stt_ac { c1 RP.cns2◂{ is0 is } } ⊢ is 
@@ -11076,7 +11083,9 @@ unsigned long
 					∐. RP.atm◂a1 .
 						$ a1 ⊢ 
 						∐ IR.stt_r◂r1 . 
-							idx.set { AV r1 isp } ⊢ { AV r1 }
+							_ref.o AV ⊢ { AV av } 
+							idx.set { av r1 isp } ⊢ { av r1 }
+							_ref.i { AV av } ⊢ AV
 							stt_mtc_K { { RP.atm◂stt_r◂r1 ps m0 S pb p1 C } ox f_c AV K FE  EE } ⊢|
 						∐ IR.stt_v◂_ . 
 							∎| 
@@ -11114,7 +11123,9 @@ unsigned long
 				@.stt_rb_K_l { { AV l0 } k } 
 					$ k ⊢ 
 					∐ _cns◂{ pi k } . 
-						rt_of_mp_T◂◂idx.get { AV pi } ⊢ { AV pi } 
+						_ref.o AV ⊢ { AV av }
+						rt_of_mp_T◂◂idx.lod { av pi } ⊢ { av pi }
+						_ref.i { AV av } ⊢ AV 
 						stt_rb_K_l { { AV ⟦ pi < l0 ⟧ } k } ⊢| 
 					∐. _nil◂{} . 
 						∎ { AV l0 }
@@ -11156,7 +11167,7 @@ unsigned long
 								$ p1 ⊢ p1,p10 
 								$ m0 ⊢ m0,m00
 								$ C ⊢ C,C0
-								idx.rpc AV ⊢ { AV AV0 } 
+								$ AV ⊢ AV,AV0 
 								$ S ⊢ S,S0 
 								$ { GXV GV lb_n tav e0 } ⊢ EE 
 								stt_mtc_lp { { RP.atm◂ast.stt_adt◂{ i0 pi } mpa1_0 ps0 m00 S0 pb0 p10 C0 } ox0 f_c0 AV0 K0 FE  EE } ⊢ {  FE { GXV GV lb_n tav  e0 } _ }
