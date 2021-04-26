@@ -668,3 +668,12 @@
   _mk_arr_x { %[ 1r ] %[ 4r ] } ⊢ { _ _ v } 
   _push { %[ 3r ] v } ⊢ v
   ∎ {} 
+§ m38 # { a I }
+  _dlt.f I ⊢ _ 
+  --_dlt.f a ⊢ _
+  _hp.of a ⊢ _
+  ∎ {} 
+§ f0 = _seq◂◂{ _id_par◂◂_dlt.f _dlt.f } 
+§ f1 = _arr.std.dlt
+--§ f1 = _seq◂◂{ _hp.of _dlt.f } 
+§ m39 = _seq◂◂{ _id_par◂◂_gl.dlt_I _seq◂◂{ _ctr◂◂(\{ a {} } . a) f1 } }
