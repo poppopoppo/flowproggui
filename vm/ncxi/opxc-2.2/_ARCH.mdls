@@ -825,6 +825,27 @@
         ` btr QWORD [rax],63
         //
       ∎ k0
+  § to◂◂F # { k lc◂{ h r } }
+    !^ r ⊢ *r,c 
+      ` mov rdi,QWORD [rax]
+      ` btr rdi,63
+      //
+    ∐ c'=1r . 
+      $ c ⊢ _ 
+      free { h r } ⊢ {}
+      ∎ k
+    ∐. .
+      $ c ⊢ _ 
+      F k ⊢ { k k0 }
+      _eq_hp { k0 h } ⊢ { k0 h } 
+      $ r ⊢ r,r0 
+      _add_im◂◂8r r0 ⊢ r0 
+      _cnc_sto { r0 k0 } ⊢ _
+      !^ r ⊢ *r 
+        ` sub QWORD [rax],1
+        ` btr QWORD [rax],63
+        //
+      ∎ k
   § lod_F # { {} k } 
     $ k ⊢ k,k0 
     ∎ { k0 k } 
