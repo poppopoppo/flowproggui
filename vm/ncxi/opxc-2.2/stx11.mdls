@@ -10656,11 +10656,10 @@ unsigned long
 								$ f_c ⊢ 
 								∐ f_seq◂{} . 
 									asm.add_st_s8_im◂◂"\tsub rsp,8\n" ec0 ⊢ ec0
-									$ is ⊢ is,is0 
 									mov_ptn2.ptn { ec0 GV is p0 } ⊢ { ec0 GV _ }
 									call_lb { lb ec0 } ⊢ { _ ec0 } 
 									asm.add_st_s8_im◂◂"\tadd rsp,8\n" ec0 ⊢ ec0 
-									GV.free.ptn { GV is0 } ⊢ GV 
+									GV.set_gl { GV { %[ 0r ] ⟦⟧ } } ⊢ GV 
 									$ { APV eg0 eds ew0 } ⊢ FE
 									$ { GXV GV lb_n tav ec0 } ⊢ EE			
 									∎ { FE EE p1 }
