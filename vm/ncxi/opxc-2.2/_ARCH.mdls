@@ -115,6 +115,7 @@
   § dlt_adt = _[ 0x0002000000000007r ]
   § rpc_adt = _[ 0x0002000000000008r ]
   ∎∎
+§ _dlt = _ap.dlt
 §§ _ila 
   § f = _[ 6r ] 
   § O = _[ 0x0001000cr ] 
@@ -799,7 +800,7 @@
         ` btr QWORD [rax],63
         //
       ∎ k0
-  § to◂◂F # { k lc◂{ h r } }
+  § to◂◂{ F0 F1 } # { k lc◂{ h r } }
     !^ r ⊢ *r,c 
       ` mov rdi,QWORD [rax]
       ` btr rdi,63
@@ -807,10 +808,10 @@
     ∐ c'=1r . 
       $ c ⊢ _ 
       free { h r } ⊢ {}
-      ∎ k
+      F0 k ⊢| 
     ∐. .
       $ c ⊢ _ 
-      F k ⊢ { k k0 }
+      F1 k ⊢ { k k0 }
       _eq_hp { k0 h } ⊢ { k0 h } 
       $ r ⊢ r,r0 
       _add_im◂◂8r r0 ⊢ r0 
@@ -820,6 +821,9 @@
         ` btr QWORD [rax],63
         //
       ∎ k
+  § to_i_F # k 
+    ∎ { {} k }
+  § to_i = to◂◂{ _dlt to_i_F } 
   § lod_F # { {} k } 
     $ k ⊢ k,k0 
     ∎ { k0 k } 
