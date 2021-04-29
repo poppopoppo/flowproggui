@@ -331,7 +331,7 @@
     //
   ∎ r 
 § free_rcd◂◂N ## r 
-  !^ r ⊢ {} 
+  !^ r ⊢ *r 
     "\tFREE_RCD " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) ",rax\n"
     //
   ∎ {} 
@@ -571,7 +571,7 @@
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     dlt_i { { h r0 } l } ⊢ {}
-    !^ r ⊢ {} 
+    !^ r ⊢ *r 
       ` mov rdi,rax
       ` call free_opq
       // 
@@ -585,10 +585,11 @@
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     dlt_lc_i { { h r0 j } l } ⊢ {}
-    !^ r ⊢ {} 
+    !^ r ⊢ *r 
       ` mov rdi,rax
       ` call free_opq
       // 
+    $ r ⊢ _ 
     ∎ {}
     § @.rpc_i { { a0 h r1 l } i } 
       ∐ i'<>l' .
@@ -628,10 +629,11 @@
         $ r ⊢ r,r0 
         _add_im◂◂8r r0 ⊢ r0 
         dlt_i { { h r0 } l } ⊢ {}
-       !^ r ⊢ {} 
+       !^ r ⊢ *r 
          ` mov rdi,rax
           ` call free_opq
         // 
+       $ r ⊢ _ 
        ∎ {}
       ∐. .
         ∎ {} 
@@ -645,10 +647,11 @@
         $ r ⊢ r,r0 
         _add_im◂◂8r r0 ⊢ r0 
         dlt_lc_i { { h r0 j } l } ⊢ {}
-       !^ r ⊢ {} 
+       !^ r ⊢ *r 
          ` mov rdi,rax
           ` call free_opq
         // 
+       $ r ⊢ _ 
        ∎ {}
       ∐. .
         ∎ {}  
@@ -1131,16 +1134,18 @@
       ∎| 
   ∎∎ 
 § _min # { x y } 
-  !^ x,y ⊢ r 
+  !^ x,y ⊢ r,*d 
     ` cmp rax,rdi 
     ` cmovg rax,rdi 
     //
+  $ d ⊢ _ 
   ∎ r
 § _max # { x y } 
-  !^ x,y ⊢ r 
+  !^ x,y ⊢ r,*d 
     ` cmp rax,rdi 
     ` cmovl rax,rdi 
     //
+  $ d ⊢ _ 
   ∎ r
 § _lod_q # { a i } 
   _alc_o { a i } ⊢ { a k }
@@ -1451,10 +1456,11 @@
     _id.s8 s ⊢ s 
     _hp.of s ⊢ { r h } 
     hp h ⊢ {}
-    !^ r ⊢ {} 
+    !^ r ⊢ *r 
       ` mov rdi,rax
       ` call free_opq
       // 
+    $ r ⊢ _ 
     ∎ {}
   ¶§ f = s8
   § st = _seq◂◂{ _id.st_s8 _seq◂◂{ _hp.of _seq◂◂{ _par◂◂{ r64 hp } _ctr◂◂c2 } } }
@@ -1601,11 +1607,12 @@
   i1 { k ha } ⊢ { k ha } 
   _hp.to { r ha } ⊢ a
   F { { n k a } p } ⊢ d 
-  !^ b ⊢ {} 
+  !^ b ⊢ *b 
     ` mov rsi,QWORD [rsp]
     ` mov rsi,QWORD [rsi]
     ` add rsp,rax 
     //
+  $ b ⊢ _ 
   ∎ d 
 § _mk_stk_F◂◂{ F H } # { { n v } p }
   _hp.ini_ct◂◂H {} ⊢ hF 
@@ -1626,15 +1633,14 @@
   _arr.mk_i_F◂◂H { { v r0 h } n0 } ⊢ v
   _hp.to { r ha } ⊢ a
   F { { n v a } p } ⊢ d 
-  !^ b ⊢ {} 
+  !^ b ⊢ *b 
     ` mov rsi,QWORD [rsp]
     ` mov rsi,QWORD [rsi]
     ` add rsp,rax 
     //
+  $ b ⊢ _ 
   ∎ d 
-§§ _siz 
-  ¶¶ f k' : { _hp◂k' _r64 }
-  ∎∎
+
 
  
 --_agl : { _ctr◂{ a' b' } a'→c' b'→c' }→→b'→c'
