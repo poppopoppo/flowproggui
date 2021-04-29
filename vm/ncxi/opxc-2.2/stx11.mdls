@@ -2509,18 +2509,6 @@ unsigned long
 				∐ exp_s8_cst : c'
 				∐ exp_s8_idx : { fmt _r64 }
 				∐ exp_s8_for : { _r64 c' } 
-			-\
-			@.cn e',c'
-				∐ cn_id : { T.t_p cn◂e'◂c' }
-				∐ cn_p : { _ref.t◂(cn◂e'◂c') _ref.t◂(cn◂e'◂c') }
-				---∐ cn_e : e'  
-				∐ cn_m : { T.t_p { mn◂e'◂c' _r64 } T.t_p } 
-				∐ cn_a : { _r64 _lst◂e' axm_t } 
-				∐ cn_b : {}
-				∐ cn_o : { bl.t o_pt◂e' } 
-				∐ cn_c : c'
-				--∐ cn_h : 
-			-/
 			@.mn e',c' 
 				∐ nm_e : cn◂e'◂c' 
 				∐ nm_m : _ref.t◂{ (mop◂e'◂c') mn◂e'◂c' } 
@@ -8509,7 +8497,6 @@ unsigned long
 		§ ini # I 
 			BST_r64.ini {} ⊢ GXV
 			_gl.new { I GXV } ⊢| 
-			--∎ { I GXV }
 		§ add { n p GXV } 
 			$ p ⊢ p,p0 
 			ast.pnt.rt { rp8.e◂{} p0 } ⊢ s 
@@ -8538,12 +8525,12 @@ unsigned long
 				_inc M ⊢ M
 				_mk_arr { M %[ 0r ] } ⊢ { _ _ gvv }
 				_arr.u { gvv %[ 0r ] %[ 128r ] } ⊢ { gvv _ }
-				_gl.new { I { gvv { %[ 2r ] %[ 0r ] ⟦⟧ } %[ 128r ] } } ⊢|
+				_gl.new { I { gvv { %[ 2r ] { %[ 0r ] ⟦⟧ } } %[ 128r ] } } ⊢|
 			§ ix V 
-				o V ⊢ { Vl { gvv { h n gl } N } } 
+				o V ⊢ { Vl { gvv { h { n gl } } N } } 
 				$ gl ⊢ 
 				∐ _cns◂{ i gl } .
-					i { Vl { gvv { h n gl } N } } ⊢ V 
+					i { Vl { gvv { h { n gl } } N } } ⊢ V 
 					∎ { V i }
 				∐. _nil◂{} .
 					_inc N ⊢ N
@@ -8551,20 +8538,20 @@ unsigned long
 					$ h ⊢ h,h0 
 					_shl_im◂◂24r h0 ⊢ h0 
 					_or { i h0 } ⊢ { i _ }
-					i { Vl { gvv { h n ⟦⟧ } N } } ⊢ V 
+					i { Vl { gvv { h { n ⟦⟧ } } N } } ⊢ V 
 					∎ { V i }
 			§ new = ix 
 			§§ free 
 				§ f { V i }
-					o V ⊢ { Vl { gvv { h n gl } N } } 
+					o V ⊢ { Vl { gvv { h { n gl } } N } } 
 					$ i ⊢ i,i0 
 					_shr_im◂◂24r i0 ⊢ i0 
 					∐ i0'=h' . 
 						$ i0 ⊢ _ 
-						i { Vl { gvv { h n ⟦ i < gl ⟧ } N } } ⊢| 
+						i { Vl { gvv { h { n ⟦ i < gl ⟧ } } N } } ⊢| 
 					∐. . 
 						$ { i i0 } ⊢ _ 
-						i { Vl { gvv { h n gl } N } } ⊢| 
+						i { Vl { gvv { h { n gl } } N } } ⊢| 
 				§ lst = lst.fld_l◂◂f 
 				§ 
 					@.atm { GV a } 
@@ -8592,34 +8579,36 @@ unsigned long
 				i { Vl { gvv H N } } ⊢ V 
 				∎ { V iG }
 			§ upd_h # V
-				o V ⊢ { Vl { gvv { h1 n1 gl } N } }
+				o V ⊢ { Vl { gvv { h1 { n1 gl } } N } }
 				_arr.o { gvv h1 } ⊢ { gvv n2 }
 				 $ n1 ⊢ n1,n10 
 				 _max { n10 n2 } ⊢ n2 
 				_arr.i { gvv n2 } ⊢ { gvv h1 } 
-				i { Vl { gvv { h1 n1 gl } N } } ⊢| 
+				i { Vl { gvv { h1 { n1 gl } } N } } ⊢| 
 			§ inc # { V h1 }
 				o V ⊢ { Vl { gvv H N } } 
-				i { Vl { gvv { h1 %[ 0r ] ⟦⟧ } N } } ⊢ V 
+				i { Vl { gvv { h1 { %[ 0r ] ⟦⟧ } } N } } ⊢ V 
 				∎ { V H }
 			§ dec # { V H }
-				o V ⊢ { Vl { gvv { h1 n1 _ } N } }
+				o V ⊢ { Vl { gvv { h1 { n1 _ } } N } }
 				_arr.o { gvv h1 } ⊢ { gvv n2 }
 				_max { n1 n2 } ⊢ n1 
 				_arr.i { gvv n1 } ⊢ { gvv _ } 
 				i { Vl { gvv H N } } ⊢| 
-			§ set_n # { V n } 
-				o V ⊢ { Vl { gvv { h _ _ } N } }
-				i { Vl { gvv { h n ⟦⟧ } N } } ⊢| 
+			§ set_n # { V { n gl } } 
+				o V ⊢ { Vl { gvv { h _ } N } }
+				i { Vl { gvv { h { n gl } } N } } ⊢| 
 			§ lod_gl # V 
-				o V ⊢ { Vl { gvv { h1 n1 gl } N } }
-				$ gl ⊢ gl,gl0 
-				i { Vl { gvv { h1 n1 gl } N } } ⊢ V 
-				∎ { V gl0 } 
-			§ set_gl # { V gl }
-				o V ⊢ { Vl { gvv { h1 n1 _ } N } }
-				$ gl ⊢ gl,gl0 
-				i { Vl { gvv { h1 n1 gl } N } } ⊢| 
+				o V ⊢ { Vl { gvv { h1 ng } N } }
+				$ ng ⊢ ng,ng0 
+				i { Vl { gvv { h1 ng } N } } ⊢ V 
+				∎ { V ng0 } 
+			§ set_gl # { V ng }
+				o V ⊢ { Vl { gvv { h1 { n1 _ } } N } }
+				_arr.o { gvv h1 } ⊢ { gvv n2 }
+				 _max { n2 n1 } ⊢ n2 
+				_arr.i { gvv n2 } ⊢ { gvv h1 } 
+				i { Vl { gvv { h1 ng } N } } ⊢| 
 			§ imv { L r0 r1 }
 				∐ r0'=r1' . 
 					∎ L
