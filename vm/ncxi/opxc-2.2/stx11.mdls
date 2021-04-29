@@ -10097,6 +10097,19 @@ unsigned long
 						mk_id_ptn { vl RP.cns2◂{ q p } } ⊢|
 					∐. _nil◂{} . 
 						∎ p 
+				§ @.mk_jmp { { vl p0 } { pl p1 } } 
+					$ pl ⊢ 
+					∐ _cns◂{ p1i pl } .
+						$ vl ⊢ 
+						∐ _cns◂{ q vl } . 
+							$ p1i ⊢ p1i,p1j 
+							mk_jmp { { vl RP.cns2◂{ q p0 } } { pl RP.cns2◂{ p1j p1 } } } ⊢ { { pl pr } q0 q1 }
+							∎ { { ⟦ p1i < pl ⟧ pr } q0 q1 }				
+						∐. _nil◂{} .
+							∎|
+					∐. _nil◂{} . 
+						$ p1 ⊢ p1,p1t
+						∎ { { vl p1 } p0 p1t } 
 				§ stt_f_c { EE FE vl p1 f_c }   	
 					$ f_c ⊢ 
 					∐ f_seq◂{} . 
@@ -10104,10 +10117,8 @@ unsigned long
 					∐ f_jmp◂{ LBR j } . 
 						$ EE ⊢ { GXV GV lb_n tav e }
 						$ FE ⊢ { mfv eg0 eds ew0 }
-						mk_id_ptn { vl p1 } ⊢ p1 
-						$ j ⊢ j,j0 
-						mk_id_ptn j0 ⊢ pr0
-						mov_ptn2.ptn { e GV p1 pr0 } ⊢ { e GV _ } 
+						mk_jmp { { vl p1 } j } ⊢ { j q0 q1 }
+						mov_ptn2.ptn { e GV q0 q1 } ⊢ { e GV _ } 
 						jmp_lb { LBR e } ⊢ { LBR e } 
 						$ { GXV GV lb_n tav e } ⊢ EE
 						$ { mfv eg0 eds ew0 } ⊢ FE
@@ -10254,26 +10265,27 @@ unsigned long
 					∐. _none◂{} . 
 						∎ ‹›  
 					
-					§ stt_oom { GV tav lb_n yd f_c e } 
+					§ stt_oom { GV tav lb_n yd f_c ec0 e } 
 						$ f_c ⊢ { vl f_c } 
 						$ f_c ⊢ 
 						∐ f_seq◂{} .
 							LB.new lb_n ⊢ { LBR lb_n } 
 							lb_etr { LBR e } ⊢ { LBR e } 
 							$ vl ⊢ { vl vyl }
-							$ vyl ⊢ vyl,vyl0
-							--alc_cnc.f_x_lst { { tav GV } vyl0 } ⊢ { { tav GV } pl }
+							alc_gl.f { { GV ec0 } vl } ⊢ { { GV ec0 } vl } 
 							$ %[ 0r ] ⊢ n 
 							alc_cnc.s_i { tav n yd } ⊢ { tav n pa0 }	
-							alc_cnc.s_i_lst { { tav n } vyl0 } ⊢ { { tav n } pl }
-							$ { pl pa0 } ⊢ j,j0 
-							∎ { GV tav lb_n { { vl vyl } f_jmp◂{ LBR j } } ‹ j0 › e } 
+							$ pa0 ⊢ pa0,pa1 
+							$ { ⟦⟧ pa0 } ⊢ j
+							$ vl ⊢ vl,vl0
+							$ { vl0 pa1 } ⊢ j0
+							∎ { GV tav lb_n { { vl vyl } f_jmp◂{ LBR j } } ec0 ‹ j0 › e } 
 						∐ f_jmp◂{ LBR j } . 
 							$ j ⊢ j,j0 
-							∎ { GV tav lb_n { vl f_jmp◂{ LBR j } } ‹ j0 › e } 
+							∎ { GV tav lb_n { vl f_jmp◂{ LBR j } } ec0 ‹ j0 › e } 
 						∐. f_ret◂j .
 							$ j ⊢ j,j0 
-							∎ { GV tav lb_n { vl f_ret◂j } j0 e } 
+							∎ { GV tav lb_n { vl f_ret◂j } ec0 j0 e } 
 			§§ RV = ast.RV 
 			§ 
 				@.rt_of_m_T◂◂GET { RV m } 
@@ -10604,7 +10616,7 @@ unsigned long
 								stt_mtc { { ⟦⟧ m } f_c FE EE is } ⊢|
 							∐. .
 								$ EE ⊢ { GXV GV lb_n tav ec0 }
-								stt_oom { GV tav lb_n yd f_c asm.e◂{} } ⊢ { GV tav lb_n f_c iy e1 }
+								stt_oom { GV tav lb_n yd f_c ec0 asm.e◂{} } ⊢ { GV tav lb_n f_c ec0 iy e1 }
 								$ { GXV GV lb_n tav ec0 } ⊢ EE 
 								stt_mtc { { ⟦⟧ m } f_c FE EE is } ⊢ { FE EE _ }
 								$ EE ⊢ { GXV GV lb_n tav ec0 }
@@ -11185,6 +11197,8 @@ unsigned long
 								$ n ⊢ n,n0 
 								mk_jmp_tbl { lb_n n0 } ⊢ { lb_n sj lbl } 
 								LB.new lb_n ⊢ { lb0 lb_n }
+								$ ri ⊢ ri,ri0 
+								GV.free.f { GV ri0 } ⊢ GV 
 								asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] ri } } ⊢ ec0 
 								^ lb0,sj ⊢ lb0,_,sc0  
 									"\tjmp QWORD [LB_" 0d' "+8*rdi]\n"
