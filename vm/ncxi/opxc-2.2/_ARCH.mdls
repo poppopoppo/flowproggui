@@ -941,13 +941,14 @@
   _id.s8 s1 ⊢ s1 
   _hp.rpc s0 ⊢ { s0 r0 }
   _hp.rpc s1 ⊢ { s1 r1 }
-  !^ r0,r1 ⊢ z
+  !^ r0,r1 ⊢ z,*m
     ` lea rsi,[rdi+8]
     ` mov rdx,QWORD [rdi]
     ` lea rdi,[rax+8]
     ` mov rax,QWORD [rax]
     ` call cmp_stg 
     //
+  $ m ⊢ _ 
   ∎ { s0 s1 z }
 § _lds # { s i } 
   _id.s8 s ⊢ s 
@@ -1002,7 +1003,7 @@
   _id.s8 s ⊢ s 
   _hp.of s ⊢ { r h }
   $ l ⊢ l,l0 
-  !^ r,l0 ⊢ r  
+  !^ r,l0 ⊢ r,*m  
     ` push rdi 
     ` mov rsi,~7 
     ` and rdi,rsi
@@ -1020,6 +1021,7 @@
     ` shr rsi,3 
     ` and QWORD [rax+8+8*rsi],rdi
     //
+  $ m ⊢ _ 
   _hp.to { r h } ⊢ s
   ∎ { s l }
 § _s8_len # s 
@@ -1069,7 +1071,7 @@
   _st◂◂F {} ⊢ f 
   _hp.of f ⊢ { r0 _ }
   _hp.rpc s ⊢ { s r1 } 
-  !^ r0,r1 ⊢ {}
+  !^ r0,r1 ⊢ *m0,*m1
     ` mov rdx,QWORD [rdi]
     ` lea rsi,[rdi+8]
     ` mov rdi,rax
@@ -1077,6 +1079,7 @@
     ` cmp rax,-1 
     ` jz err 
     //
+  $ { m0 m1 } ⊢ _ 
   ∎ s
 
 § _getchar {} 
@@ -1098,41 +1101,13 @@
   ∎ { f s }
 § _cd c 
   _hp.rpc c ⊢ { c r } 
-  !^ r ⊢ {} 
+  !^ r ⊢ *m 
     ` lea rdi,[rax+8]
     ` C_CALL system 
     // 
+  $ m ⊢ _ 
   ∎ c
 
-
-§§ _r2 
-  ¶ t 
-    ∐ i : _r64 
-  § f◂{} = i◂%[ 0r ] 
-  § t◂{} = i◂%[ 1r ]
-  § op2◂◂OP # { i◂r0 i◂r1 } 
-  !^ r0,r1 ⊢ r 
-    "\t" OP " rax,rdi\n" // 
-    ∎ i◂r
-  § and = op2◂◂"and" 
-  § or = op2◂◂"or" 
-  § not i◂b 
-    !^ b ⊢ b 
-      ` not rax 
-      // 
-    ∎ i◂b
-  § sub # { i◂r0 i◂r1 }
-    !^ r0,r1 ⊢ r 
-      ` not rdi 
-      ` and rax,rdi 
-      //
-    ∎ i◂r
-  § is_t i◂r 
-    ∐ r'=1r .
-      ∎ {} 
-    ∐. .  
-      ∎| 
-  ∎∎ 
 § _min # { x y } 
   !^ x,y ⊢ r,*d 
     ` cmp rax,rdi 
@@ -1651,11 +1626,12 @@
     _inc l ⊢ b 
     _shl_im◂◂1r b ⊢ b
     ofs_arr { h b } ⊢ b
-    !^ b,r ⊢ r 
+    !^ b,r ⊢ r,*z 
       ` mov rsi,rax 
 		  ` C_CALL_SF realloc		
       `	mov rsi,QWORD [rax] 
 	  	//
+    $ z ⊢ _ 
     ∎ r
   ∐. .
     $ c ⊢ _
