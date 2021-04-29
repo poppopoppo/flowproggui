@@ -10043,31 +10043,6 @@ unsigned long
 					§ ptn = RP.map_l◂◂atm 
 					§ f = lst.map_l◂◂ptn 
 					∎∎
-				§ @.stt_f_jmp { e GV vl pl } 
-					$ pl ⊢ 
-					∐ _cns◂{ p1 pl } .
-						∐ vl ⊢ _cns◂{ p0 vl } .
-							$ p1 ⊢ p1,p1t 
-							mov_ptn2.ptn { e GV p0 p1t } ⊢ { e GV }
-							stt_f_jmp { e GV vl pl } ⊢ { e GV vl } 
-							∎ { e GV ⟦ p1 < vl ⟧ } 
-						∐. .
-							∎| 
-					∐. _nil◂{} . 
-						∐ vl ⊢ _nil◂{} . 
-							∎ { e GV ⟦⟧ }
-						∐. .
-							∎| 	
-				§ @.stt_f_ret { e GV vl pl } 
-					∐ pl ⊢ _cns◂{ p1 pl }; vl ⊢ _cns◂{ p0 vl } .
-						$ p1 ⊢ p1,p1t 
-						mov_ptn2.ptn { e GV p0 p1t } ⊢ { e GV }
-						stt_f_ret { e GV vl pl } ⊢ { e GV vl } 
-						∎ { e GV ⟦ p1 < vl ⟧ } 
-					∐ pl ⊢ _nil◂{}; vl ⊢ _nil◂{} . 
-						∎ { e GV ⟦⟧ }
-					∐. .
-						∎|					
 				§ @.mk_id_ptn { vl p } 
 					$ vl ⊢ 
 					∐ _cns◂{ q vl } . 
@@ -10094,7 +10069,6 @@ unsigned long
 						$ FE ⊢ { mfv eg0 eds ew0 }
 						$ or ⊢ 
 						∐ _some◂j .
-							--stt_f_ret { e GV vl pl } ⊢ { e GV vl } 
 							mk_id_ptn { vl p1 } ⊢ p1 
 							$ j ⊢ j,j0 
 							mk_id_ptn j0 ⊢ pr0
@@ -10651,13 +10625,11 @@ unsigned long
 								
 							∐. .
 								∐ bf ⊢ bl.t◂{} .
-									push_gl.f { { ec0 GV } vl } ⊢ { { ec0 GV l c } vl }  
-									
+									push_gl.f { { ec0 GV } vl } ⊢ { { ec0 GV l c } vl }  			
 									asm.add_st_s8_im◂◂"\tsub rsp,8\n" ec0 ⊢ ec0
 									mov_ptn2.ptn { ec0 GV is p0 } ⊢ { ec0 GV }
 									call_lb { lb ec0 } ⊢ { _ ec0 } 
-									asm.add_st_s8_im◂◂"\tadd rsp,8\n" ec0 ⊢ ec0 
-										
+									asm.add_st_s8_im◂◂"\tadd rsp,8\n" ec0 ⊢ ec0 										
 									pop_gl.f { ec0 l c } ⊢ ec0 
 									$ p1 ⊢ 
 									∐ _some◂p1 .
@@ -10670,13 +10642,11 @@ unsigned long
 										$ { APV eg0 eds ew0 } ⊢ FE
 										∎ { FE EE ‹› }
 								∐. .
-									alc_gl.f { { GV ec0 } vl } ⊢ { { GV ec0 } vl } 
-									
+									alc_gl.f { { GV ec0 } vl } ⊢ { { GV ec0 } vl } 					
 									asm.add_st_s8_im◂◂"\tsub rsp,8\n" ec0 ⊢ ec0
 									mov_ptn2.ptn { ec0 GV is p0 } ⊢ { ec0 GV }
 									call_lb { lb ec0 } ⊢ { _ ec0 } 
-									asm.add_st_s8_im◂◂"\tadd rsp,8\n" ec0 ⊢ ec0 
-									
+									asm.add_st_s8_im◂◂"\tadd rsp,8\n" ec0 ⊢ ec0 									
 									$ p1 ⊢ 
 									∐ _some◂p1 .
 										$ { GXV GV lb_n tav ec0 } ⊢ EE
@@ -10866,7 +10836,7 @@ unsigned long
 									asm.add_st_s8 { ec0 sc0 } ⊢ ec0 
 									lod_sgm.ptn { { ec0 GV } pa0 } ⊢ { { ec0 GV } pa1 } 
 									$ RP.cns2◂{ stt_v.r64_reg◂r0 pa1 } ⊢ iy
-									stt_jmp_axm {  { GXV GV lb_n tav ec0 } { APV eg0 eds ew0 } iy f_c } ⊢|
+									stt_jmp_axm { { GXV GV lb_n tav ec0 } { APV eg0 eds ew0 } iy f_c } ⊢|
 								
 								-- cnc_sto 
 								∐ 
@@ -10884,13 +10854,10 @@ unsigned long
 										$ r0 ⊢ r0,i0
 										$ i0 ⊢ i0,i1 
 										asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] i0 } } ⊢ ec0 										
-										$~ _^ ⊢ sc0 
-											`	mov DST_REG,rax
-											// 
-										asm.add_st_s8 { ec0 sc0 } ⊢ ec0 
+										asm.add_st_s8_im◂◂"\tmov DST_REG,rax\n" ec0 ⊢ ec0 
 										mov_ptn2.to_sgm_ptn { ec0 pk pa0 } ⊢ ec0 
 										$ stt_v.r64_reg◂r0 ⊢ iy 
-										stt_jmp_axm {  { GXV GV lb_n tav  ec0 } { APV  eg0 eds ew0 } iy f_c } ⊢|
+										stt_jmp_axm { { GXV GV lb_n tav ec0 } { APV  eg0 eds ew0 } iy f_c } ⊢|
 									∐. . 
 										∎|  
 								-- hp_dlt 
