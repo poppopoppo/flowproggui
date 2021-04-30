@@ -2,15 +2,15 @@
 -- rank-1
 §§ _TX 
   § r64 = 0r 
-  § s8 = 1r 
+  --§ s8 = 1r 
 	§ arr = 2r  
-	§ Clr = 3r 
-	§ pt = 4r 
+	--§ Clr = 3r 
+	--§ pt = 4r 
 	§ prd = 5r 
 	§ grm = 6r 
 	§ pf = 7r 
-	§ Clr_lc = 8r 
-  § arr_lc = 9r 
+	--§ Clr_lc = 8r 
+  --§ arr_lc = 9r 
 	§ r8 = 10r 
 	§ arr_x = 11r 
 	§ ctr = 12r 
@@ -98,6 +98,7 @@
 § _tjc = _[ 0x1000ar ]
 § _st = _[ 19r ]
 § _ccs = _[ 0x0001000br ]
+§ _ctr_rev = _[ 25r ] 
 -- ctr 
 § _nil = _[ 0x0001000000000000r ]
 § _cns = _[ 0x0001000000000001r ]

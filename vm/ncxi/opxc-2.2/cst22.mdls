@@ -679,3 +679,10 @@
 § f1 = _arr.std.dlt
 --§ f1 = _seq◂◂{ _hp.of _dlt.f } 
 § m39 = _seq◂◂{ _id_par◂◂_gl.dlt_I _seq◂◂{ _ctr◂◂(\{ a {} } . a) f1 } }
+¶ p a'
+  ∐ p : a' 
+§ m40 _ 
+  $ p◂%[ 33r ] ⊢ p 
+  _ctr_rev◂◂(\a . p◂a) p ⊢ r 
+  _emt r ⊢ _ 
+  ∎ {} 
