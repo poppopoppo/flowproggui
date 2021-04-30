@@ -297,3 +297,8 @@ pattern -> tag
   ∐ arr_q : arr_q◂k' ⊢ { k' t' }
   add < _ 
     ∐ add : 
+¶ RP k' 
+  ∐ iso : RP◂k' 
+  ∐ rcd : _lst◂k' 
+  ∐ atm : k' 
+  
