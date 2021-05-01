@@ -3065,10 +3065,6 @@ unsigned long
 			∎ TX.mt◂TX.r64◂{} 
 		-- 0x1a mt_e_pt = 77r 
 		∐ 
-			-\
-			T.newvar_q {} ⊢ y0
-			∎ TX.mt◂TX.pt◂y0 
-			-/
 			∎|
 		-- 0x1b mt_e_s8 = 78r
 		∐ 
@@ -3138,8 +3134,8 @@ unsigned long
 				∐.
 					∎|
 			∐. 
-			_emt.f i ⊢ _ 
-			∎| 
+				_emt.f i ⊢ _ 
+				∎| 
 		∎∎
 	§§ EX = e_axm 
 	
@@ -9497,16 +9493,6 @@ unsigned long
 							∎| 
 						∐. ast.k_ply◂_ . 
 							∎| 
-				§ im_to_atm { L e0 GV c0 a1 }
-					∐ a1 ⊢ ast.hp◂r1 . 
-						im_to_rax { e0 c0 } ⊢ e0 
-						GV.new GV ⊢ { GV i } 
-						$ i ⊢ i,i0 
-						asm.add_nd { e0 asm.mov_glx_op◂{ i0 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ e0 
-						$ ⟦ { i r1 } < L ⟧ ⊢ L 
-						∎ { L e0 GV }
-					∐. .		
-						∎| 
 				§§ to_sgm
 					§ 
 						@.ptn { e0 fl ql p0 p1 } 
@@ -9518,6 +9504,7 @@ unsigned long
 										im_to_rax { e0 c0 } ⊢ e0 
 										^ r1 ⊢ _,sc0 
 											"\tmov DX(0x" 0x' "),rax\n" // 
+										asm.add_s8 { e0 sc0 } ⊢ e0 
 										∎ { e0 fl ql }
 									∐. .
 										∎|
@@ -9577,7 +9564,6 @@ unsigned long
 								∎ { e0 fl ql }
 							∐. . 
 								∎|  
-					§ 
 						@.f_l = lst.fld_l◂◂f_i 
 						@.f_i # { { e fl } { p0 p1 } }
 							asm.add_st_s8_im◂◂"\tpop DST_REG\n" e ⊢ e 
@@ -9594,9 +9580,16 @@ unsigned long
 						∐ p0 ⊢ RP.atm◂a0; p1 ⊢ RP.atm◂a1;
 							∐ a0 ⊢ ast.hp_im◂c0 . 
 								$ c0 ⊢ 
-								∐ RP.atm◂c0 .
-									im_to_atm { L e0 GV c0 a1 } ⊢ { L e0 GV }
-									∎ { L e0 GV fl } 								
+								∐ RP.atm◂c0;
+									∐ a1 ⊢ ast.hp◂r1 . 
+										im_to_rax { e0 c0 } ⊢ e0 
+										GV.new GV ⊢ { GV i } 
+										$ i ⊢ i,i0 
+										asm.add_nd { e0 asm.mov_glx_op◂{ i0 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ e0 
+										$ ⟦ { i r1 } < L ⟧ ⊢ L 
+										∎ { L e0 GV fl }
+									∐. .		
+										∎| 
 								∐. RP.rcd◂l0 .
 									∎|	
 							∐ a0 ⊢ ast.hp◂r0; a1 ⊢ ast.hp◂r1 . 
