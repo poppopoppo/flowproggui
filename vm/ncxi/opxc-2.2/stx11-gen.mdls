@@ -2323,46 +2323,32 @@ unsigned long
 			∎ { y0 y1 b }
 		§ iut # { y0 y1 } 
 			$ y1 ⊢ y1,y10 
-			inst { %[ 1r ] y10 } ⊢ { lv y10 } 
-			inst { lv y0 } ⊢ { lv y0 } 
+			inst { %[ 1r ] y10 } ⊢ { _ y10 } 
+			inst { %[ 1r ] y0 } ⊢ { _ y0 } 
 			$ y0 ⊢ y0,y00 
 			unify.f_b { y00 y10 } ⊢  b  
-			_dec lv ⊢ lv
-			gen { lv y0 } ⊢ { _ y0 }
+			gen.lv◂◂0r y0 ⊢ y0
 			∎ { y0 y1 b }
 		§ ci # { y0 y1 } 
-			inst { %[ 1r ] y1 } ⊢ { lv y1 } 
+			inst { %[ 1r ] y1 } ⊢ { _ y1 } 
 			$ y1 ⊢ y1,y1t 
 			unify.f_b { y0 y1 } ⊢  b  
-			_dec lv ⊢ lv
-			gen { lv y1t } ⊢ { _ _ }
+			gen_dlt { %[ 0r ] y1t } ⊢ _
 			∎ b
 		§	ciu # { y0 y1 } 
 			$ y1 ⊢ y1,y1_0 
 			$ y0 ⊢ y0,y00 
-			inst { %[ 1r ] y1_0 } ⊢ { lv y2 } 
+			inst { %[ 1r ] y1_0 } ⊢ { _ y2 } 
 			$ y2 ⊢ y2,y20 
 			unify.f_b { y00 y2 } ⊢  b  
-			_dec lv ⊢ lv 
-			gen { lv y20 } ⊢ { _ _ }
+			gen_dlt { %[ 0r ] y20 } ⊢ _
 			∎ { y0 y1 b }
 		§ ci_lst # { l0 l1 }
-			inst_lst { %[ 1r ] l1 } ⊢ { lv l1 } 
+			inst_lst { %[ 1r ] l1 } ⊢ { _ l1 } 
 			$ l1 ⊢ l1,l1t 
 			unify.f_lst_b { l0 l1 } ⊢ b  
-			_dec lv ⊢ lv
-			gen_dlt_lst { lv l1t } ⊢ _
+			gen_dlt_lst { %[ 0r ] l1t } ⊢ _
 			∎ b
-		§ iug { lv y0 y1 } 
-			_inc lv ⊢ lv 
-			inst { lv y0 } ⊢ { lv y0 } 
-			inst { lv y1 } ⊢ { lv y1 } 
-			$ y0 ⊢ y0,y00 
-			$ y1 ⊢ y1,y10
-			unify.f { y00 y10 } ⊢ {}
-			_dec lv ⊢ lv 
-			gen { lv y0 } ⊢ { lv y0 }
-			∎ { lv y0 y1 }  
 		§ of_imp y
 			newvar_l %[ 1r ]  ⊢ {  lv ys } 
 			newvar_l lv  ⊢ {  lv yd } 
@@ -2371,8 +2357,8 @@ unsigned long
 			$ yd ⊢ yd,yd0 
 			unify.f { imp◂{ ys0 yd0 } y } ⊢ {} 
 			_dec lv ⊢ lv 
-			gen { lv ys } ⊢ {  lv ys }
-			gen { lv yd } ⊢ {  lv yd }
+			gen { lv ys } ⊢ { lv ys }
+			gen { lv yd } ⊢ { lv yd }
 			∎ { ys yd }
 		§ @.iug_axm_i_j { N vl yl } 
 			∐ vl ⊢ _cns◂{ v vl }; yl ⊢ _cns◂{ y yl } .
