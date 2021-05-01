@@ -2393,12 +2393,6 @@ unsigned long
 			iug_axm_i_j◂◂2r { N vl yl } ⊢ _ 
 			gen.lv.lst◂◂1r { {} kl } ⊢ { {} kl } 
 			∎ kl
-		§ iug_axm_i # { vl k yl } 
-			_sgn.mk {} ⊢ N
-			inst.al { { N %[ 2r ] } k } ⊢ { { N lv } k }
-			iug_axm_i_j◂◂2r { N vl yl } ⊢ _ 
-			gen.lv.f◂◂1r { {} k } ⊢ { {} k } 
-			∎ k
 		§ iug_axm_i_j =|
 		§ @.inst_prd { lv i y } 
 			∐ i'=0r .
