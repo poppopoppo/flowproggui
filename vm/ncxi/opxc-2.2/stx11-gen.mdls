@@ -2261,6 +2261,41 @@ unsigned long
 					@.f = fld.f◂◂{ DTA ABS VAR }
 					@.lst = fld.lst◂◂{ DTA ABS VAR }
 				∎∎
+			§§ lv 
+				§ 
+					@.f_dta◂◂L # { {} { a l } } 
+						lst◂◂L { {} l } ⊢ { {} l }
+						∎ { {} dta◂{ %a %l } }
+					@.f_abs◂◂L # { {} { a y0 } } 
+						f◂◂L { {} y0 } ⊢ { {} y0 } 
+						∎ { {} abs◂{ %a %y0 } }
+					@.F # y 
+						$ y ⊢ y,y0 
+						∎ { y var_ln◂y0 }
+					@.f_var◂◂L { {} i }
+						TV.o i ⊢ { I v } 
+						$ v ⊢ 
+						∐ var_ln◂y1 . 
+							_ref.to◂◂{ _id F } { y1 I } ⊢ y1
+							f◂◂L { {} y1 } ⊢|
+						∐ var_l◂lv1 .
+							∐ lv1'=<L . 
+								TV.i { I var_l◂lv1 } ⊢ i 
+								∎ { {} var◂p◂%i }
+							∐. .
+								_sgn.mk {} ⊢ N 
+								_ref.lc_rpc I ⊢ { I i0 } 
+								TV.i { I var_q◂{ N p◂i0 } } ⊢ i
+								∎ { {} var◂p◂%i }
+						∐. var_q◂q . 
+							TV.i { I var_q◂q } ⊢ i 
+							∎ { {} var◂p◂%i } 
+					@.f◂◂L = map.f◂◂{ f_dta◂◂L f_abs◂◂L f_var◂◂L }
+					@.lst◂◂L = map.lst◂◂{ f_dta◂◂L f_abs◂◂L f_var◂◂L }
+					∎∎
+				§ lv◂◂L # y 
+					lv.f◂◂L { {} y } ⊢ { {} y } 
+					∎ y
 			∎∎
 		§ gen # { lv y } 
 			gen.gen { lv y } ⊢ { lv y } 
@@ -2339,30 +2374,22 @@ unsigned long
 			gen { lv ys } ⊢ {  lv ys }
 			gen { lv yd } ⊢ {  lv yd }
 			∎ { ys yd }
-		§ @.iug_axm_i_j { { N lv } vl yl } 
+		§ @.iug_axm_i_j { N vl yl } 
 			∐ vl ⊢ _cns◂{ v vl }; yl ⊢ _cns◂{ y yl } .
-				inst.al { { N lv } var◂p◂v } ⊢ { { N lv } v } 
-				inst.al { { N lv } y } ⊢ { { N lv } y } 
+				inst.al { { N %[ 1r ] } var◂p◂v } ⊢ { { N _ } v } 
+				inst.al { { N %[ 1r ] } y } ⊢ { { N _ } y } 
 				unify.f { v y } ⊢ {} 
-				iug_axm_i_j { { N lv } vl yl } ⊢| 
+				iug_axm_i_j { N vl yl } ⊢| 
 			∐ vl ⊢ _nil◂{}; yl ⊢ _nil◂{} . 
-				∎ { N lv } 
+				∎ {} 
 			∐. . 
 				∎|
 		§ iug_axm # { vl kl yl } 
 			_sgn.mk {} ⊢ N 
-			inst.lst { { N %[ 2r ] } kl } ⊢ { { N lv } kl }
-			iug_axm_i_j { { N lv } vl yl } ⊢ { _ lv } 
-			_dec lv ⊢ lv 
-			gen_lst { lv kl } ⊢ { _ kl } 
+			inst.lst { { N %[ 1r ] } kl } ⊢ { { N _ } kl }
+			iug_axm_i_j { N vl yl } ⊢ {} 
+			gen_lst { %[ 0r ] kl } ⊢ { _ kl } 
 			∎ kl
-		§ iug_axm_i # { vl k yl } 
-			_sgn.mk {} ⊢ N
-			inst.al { { N %[ 2r ] } k } ⊢ { { N lv } k }
-			iug_axm_i_j { { N lv } vl yl } ⊢ { _ lv } 
-			_dec lv ⊢ lv 
-			gen { lv k } ⊢ {  _ k } 
-			∎ k
 		§ iug_axm_i_j =|
 		§ @.inst_prd { lv i y } 
 			∐ i'=0r .
@@ -2373,15 +2400,6 @@ unsigned long
 				inst_prd { lv i y } ⊢ { lv yr } 
 				newvar_l lv  ⊢ { lv w } 
 				∎ { lv X.prd◂{ w yr } }
-		
-		§ inst_imp { lv y } 
-			inst { lv y } ⊢ { lv y }
-			newvar_l lv  ⊢ {  lv y0 }
-			newvar_l lv  ⊢ {  lv y1 } 
-			$ y0 ⊢ y0,y0_0 
-			$ y1 ⊢ y1,y1_0 
-			unify.f { y X.t_imp◂{ y0_0 y1_0 } } ⊢ {} 
-			∎ { lv y0 y1 }
 		∎∎ 
 		§§ T = type
 		§§ TX = T.t_axm			
@@ -3658,7 +3676,6 @@ unsigned long
 		§ gen_lst = T.gen_lst
 		§ gen_dlt = T.gen_dlt 
 		§ gen_dlt_lst = T.gen_dlt_lst
-		§ inst_imp = T.inst_imp 
 		§ dta = T.dta 
 		§ imp = T.imp 
 		§ ct_imp = T.ct_imp 
@@ -10834,6 +10851,9 @@ unsigned long
 								∐ 
 									∐ is ⊢ RP.atm◂ast.hp◂r . 
 										GV.free.f { GV r } ⊢ GV 
+										$ RP.unt◂{} ⊢ iy
+										stt_jmp_axm { { GXV GV lb_n tav ec0 } { APV eg0 eds ew0 } iy f_c } ⊢|
+									∐ is ⊢ RP.atm◂ast.hp_im◂_ . 
 										$ RP.unt◂{} ⊢ iy
 										stt_jmp_axm { { GXV GV lb_n tav ec0 } { APV eg0 eds ew0 } iy f_c } ⊢|
 									∐. .
