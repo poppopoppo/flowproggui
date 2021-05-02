@@ -301,4 +301,17 @@ pattern -> tag
   ∐ iso : RP◂k' 
   ∐ rcd : _lst◂k' 
   ∐ atm : k' 
-  
+
+    ∐ 
+      ..
+      ∎.c0 .. 
+    ∐
+      ..
+      ∎.c1 .. 
+
+    _sqk.(l') : { a'→b' }
+
+
+    (_ctr_rev◂{ a' { b' c' } })→→
+
+    
