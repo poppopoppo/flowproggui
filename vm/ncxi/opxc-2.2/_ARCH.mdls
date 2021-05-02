@@ -203,13 +203,23 @@
 § _prd = _[ 13r ]
 § _ipr = _[ 14r ]
 § _dlt_r64 = _[ 15r ] 
-§ _cnc_lod = _[ 16r ] 
-§ _cnc_sto = _[ 17r ] 
+§ _cnc_lod_ctr = _[ 16r ] 
+§ _cnc_sto_ctr = _[ 17r ] 
+§ _cnc_lod = _cnc_lod_ctr◂◂(\a . { a {} }) 
+§ _cnc_sto = _cnc_sto_ctr◂◂(\a . { a {} }) 
 -- non-atomic 
 § _cnc_siz0◂◂{ F H } # { h a }
   _hp.ini_ct◂◂H {} ⊢ hH 
   $.[ t' . { _hp◂(_hp◂t') _hp◂t' } ] { hH h } ⊢ { hH h }
   F◂◂(_ct.cnc_siz◂◂H) a ⊢|
+§ _cnc_lod_hp # { r h } 
+  _cnc_lod r ⊢ { r k }  
+  _eq_hp { k h } ⊢ { k h }
+  ∎ { r h k }
+§ _cnc_lod_hp_ctr◂◂C # { r h } 
+  _cnc_lod_ctr◂◂C r ⊢ { r k }  
+  _eq_hp { k h } ⊢ { k h }
+  ∎ { r h k }  
 § _cnc_siz◂◂F = _cnc_siz0◂◂{ F _ct.hp }
 
 § op_im◂◂{ O X } # %r 
@@ -240,10 +250,6 @@
     //
   ∎ r  
 
-§ _cnc_lod_hp # { r h } 
-  _cnc_lod r ⊢ { r k }  
-  _eq_hp { k h } ⊢ { k h }
-  ∎ { r h k }
 § _cnc_add # { r h }
   $ h ⊢ h,h0 
   _cnc_siz◂◂(\\N . _add_im◂◂(_ct.op2.shl◂◂{ N 3r })) { h0 r } ⊢ r
@@ -772,6 +778,24 @@
     F { v k } ⊢ { w k }
     _eq_hp { k h } ⊢ { k h } 
     _cnc_sto { r0 k } ⊢ _ 
+    !^ r ⊢ *r 
+      ` btr QWORD [rax],63
+      //
+    ∎ { w t◂{ h r } }
+  § f_ctr◂◂{ C F } # { v p }
+    $ p ⊢ t◂{ h r } 
+    !^ r ⊢ *r 
+      ` mov rdi,QWORD [rax]
+      ` bts rdi,63 
+      ` jc err_ref_f
+      ` mov QWORD [rax],rdi
+      //
+    $ r ⊢ r,r0 
+    _add_im◂◂8r r0 ⊢ r0 
+    _cnc_lod_hp_ctr◂◂C { r0 h } ⊢ { r0 h k }
+    F { v k } ⊢ { w k }
+    _eq_hp { k h } ⊢ { k h } 
+    _cnc_sto_ctr◂◂C { r0 k } ⊢ _ 
     !^ r ⊢ *r 
       ` btr QWORD [rax],63
       //
@@ -1410,7 +1434,6 @@
 § _emt = _emt.f
 § _emt_im = _emt_im.f
 § _emt0 = _emt.f0
-§ c2◂{ {} {} } = {}
 § c2 = (\{ {} {} } . {}) 
 §§ _dlt 
   § f = _ap.dlt 
@@ -1466,6 +1489,7 @@
   § adt = _ap.dlt_adt
   ¶§ f = adt 
   ∎∎ 
+-\
 §§ _eq 
   § @.arr_i { { a0 a1 } l } 
     ∐ l'<>0r .
@@ -1487,6 +1511,7 @@
     ∐. .
       ∎ { a0 a1 %[ 0r ] }      
   ∎∎
+-/
 
 §§ _rpc 
   § f = _ap.rpc
@@ -1616,8 +1641,6 @@
     //
   $ b ⊢ _ 
   ∎ d 
-
-
  
 --_agl : { _ctr◂{ a' b' } a'→c' b'→c' }→→b'→c'
 --_tj 
