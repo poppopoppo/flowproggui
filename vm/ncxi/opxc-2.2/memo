@@ -314,4 +314,8 @@ pattern -> tag
 
     (_ctr_rev◂{ a' { b' c' } })→→
 
-    
+
+  x,y,z { _ _ _ _ c◂y _ { x z } } 
+  &[ x,y,z . { _ _ _ _ y _ { x z } } ] p ⊢ { { x y z } P }
+
+  

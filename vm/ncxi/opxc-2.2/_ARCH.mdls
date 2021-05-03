@@ -26,6 +26,8 @@
   § unt = 22r 
   § adt = 23r 
   § mt = 24r 
+	§ rev = 30r 
+	§ irv = 31r 
   ∎∎ 
 
 -- prm 
@@ -41,7 +43,11 @@
 ¶ _dmy = _[ 18r ]
 ¶ _hp = _[ 19r ]
 ¶ _rcd = _[ 21r ]
-
+¶ _ctr = _[ 12r ]
+¶ _rev = _[ 30r ] 
+¶ _irv = _[ 31r ]
+¶ _ctr_rev = _ctr◂_rev
+¶ _ctr_irv = _ctr◂_irv
 -- adt 
 ¶ _lst = _[ 0x0001000000000000r ]
 ¶ _opn = _[ 0x0001000000000001r ]
@@ -216,10 +222,6 @@
   _cnc_lod r ⊢ { r k }  
   _eq_hp { k h } ⊢ { k h }
   ∎ { r h k }
-§ _cnc_lod_hp_ctr◂◂C # { r h } 
-  _cnc_lod_ctr◂◂C r ⊢ { r k }  
-  _eq_hp { k h } ⊢ { k h }
-  ∎ { r h k }  
 § _cnc_siz◂◂F = _cnc_siz0◂◂{ F _ct.hp }
 
 § op_im◂◂{ O X } # %r 
@@ -792,9 +794,12 @@
       //
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
-    _cnc_lod_hp_ctr◂◂C { r0 h } ⊢ { r0 h k }
+    _hp.ini_ct◂◂C {} ⊢ hC 
+    _cnc_lod_ctr◂◂C r0 ⊢ { r0 k }  
+    _hp.ini {} ⊢ hk 
+    $.[ x',y',z' . { _hp◂(_ctr_rev◂x'◂{ y' z' }) _hp◂x' y' _hp◂y' } ] { hC h k hk } ⊢ { _ h k hk } 
     F { v k } ⊢ { w k }
-    _eq_hp { k h } ⊢ { k h } 
+    _eq_hp { k hk } ⊢ { k _ } 
     _cnc_sto_ctr◂◂C { r0 k } ⊢ _ 
     !^ r ⊢ *r 
       ` btr QWORD [rax],63
@@ -828,7 +833,7 @@
         ` btr QWORD [rax],63
         //
       ∎ k0
-  § to◂◂{ F0 F1 } # { k lc◂{ h r } }
+  § to◂◂{ F0 F1 } # { lc◂{ h r } k }
     !^ r ⊢ *r,c 
       ` mov rdi,QWORD [rax]
       ` btr rdi,63
@@ -858,6 +863,10 @@
   § lod # p 
     f◂◂lod_F { {} p } ⊢ { k p }
     ∎ { p k }
+  § lod_ctr◂◂C # p 
+    f_ctr◂◂{ C lod_F } { {} p } ⊢ { k p }
+    ∎ { p k }
+  § l_ctr = lod_ctr 
   § u_F # { s _ } 
     ∎ { {} s } 
   § u # { p s }
