@@ -833,7 +833,7 @@
         ` btr QWORD [rax],63
         //
       ∎ k0
-  § to◂◂{ F0 F1 } # { lc◂{ h r } k }
+  § to◂◂{ F0 F1 } { lc◂{ h r } k }
     !^ r ⊢ *r,c 
       ` mov rdi,QWORD [rax]
       ` btr rdi,63
