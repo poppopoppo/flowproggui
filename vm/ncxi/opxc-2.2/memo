@@ -316,6 +316,22 @@ pattern -> tag
 
 
   x,y,z { _ _ _ _ c◂y _ { x z } } 
-  &[ x,y,z . { _ _ _ _ y _ { x z } } ] p ⊢ { { x y z } P }
+  &[ x,y,z . { _ _ _ _ y _ { x z } } ] p ⊢ { { x y z } P 
 
-  
+  §§ _Lc 
+    _rcd◂{ _o { _f _f _f _f } { a0' .. a3' } }
+    _prd : 
+    _unt : 
+    _n : _t◂{ {} l' s' r' }
+    _e : _t◂{ a' l' s' r' } →→ _t◂{ { i' < a' } { _f < l' } { _t < s' } { i' < r' } } 
+    _c : _t◂{ a' l' s' r' } →→ _t◂{ a' { b' < l' } { b' < s' } { i' < r' } } 
+
+    _o : _t◂{ a' l' s' r' }→→( { _hp◂{ l' r' } _r64 }→{ _hp◂{ s' r' } _r64 a' })
+    _i : _t◂{ a' l' s' r' }→→( { _hp◂{ s' r' } _r64 a' }→{ _hp◂{ l' r' } _r64 })
+    
+    _n : _t◂{ {} {} {} }
+    _e : _t◂{ a' s' r' } →→ _t◂{ { i' < a' } { _f < s' } { i' < r' } } 
+    _c : _t◂{ a' s' r' } →→ _t◂{ a' { _t < s' } { i' < r' } } 
+
+    _o : _t◂{ a' s' r' }→→(_r64→{ _hp◂{ a' s' r' } _r64 a' })
+    _i : _t◂{ a' s' r' }→→({ _hp◂{ a' s' r' } _r64 a' }→_r64)

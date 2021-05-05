@@ -425,14 +425,6 @@
 		∐. _none◂{} . 
 			∎ e
 	§ fld = fld_i 
-	§ main0 {} 
-		ini {} ⊢ B 
-		set { B { %[ "" ] %[ 65r ] } } ⊢ { B _ } 
-		∎ B
-	§ main _ 
-		main0 {} ⊢ B0 
-		
-			∎ {} 
 	∎∎
 §§ BST_r64 
 	¶ k = _r64 
@@ -2608,14 +2600,15 @@ unsigned long
 		§ axm_pp◂i = RP.atm◂k_op_axm◂{ i ⟦⟧ pp_none◂{} }
 		§ axm_ap◂i = RP.atm◂k_op_axm◂{ i ⟦⟧ ap_none◂{} }
 		§§ SCM
+			§§ M = BST_s8 
 			§ o = _gl.o 
 			§ i = _gl.i 
 			§ ini # I
-				BST_s8.ini {} ⊢ scm 
+				M.ini {} ⊢ scm 
 				_gl.new { I scm } ⊢| 
 			§ asc # { M w } 
 				o M ⊢ { Ml m } 
-				BST_s8.asc { m w } ⊢ { m p }
+				M.asc { m w } ⊢ { m p }
 				i { Ml m } ⊢ M 
 				∎ { M p }
 			§ set # { M p }
@@ -2634,11 +2627,13 @@ unsigned long
 					set { SCM { s p } } ⊢ { SCM { s _ } } 
 					_ref.i { P { s ‹› } } ⊢ p 
 					∎ { SCM p }  
+			§ set =|
 			§ len_p # p 
 				_ref.o p ⊢ { P { s lb } }
 				_s8_len s ⊢ { s ls }  
 				_ref.i { P { s lb } } ⊢ p
 				∎ { p ls }
+			 
 			∎∎
 		
 		§§ EVV 
@@ -2754,6 +2749,8 @@ unsigned long
 		§ dlt_gl_I = 23r 
 		§ dlt_gl_lc = 24r
 		§ ctr_rev = 25r
+		§ lc_o = 26r 
+		§ lc_i = 27r
 		-- fn
 		§ oom = 0x10000r 
 		§ moo = 0x10001r  
@@ -2795,6 +2792,9 @@ unsigned long
 		§ grm = 0x00010025r 
 		§ inl = 0x00010026r 
 		§ sqc = 0x00010027r 
+		§ lc_n = 0x00010027r
+		§ lc_e = 0x00010028r
+		§ lc_c = 0x00010029r
 
 	§ slv i  
 		$ i ⊢ i,i0 
@@ -3759,10 +3759,6 @@ unsigned long
 		§ if_ap i 
 			∐ i'=EX.oom . 
 				∎ %[ 1r ]
-			--∐ i'=EX.id_par . 
-			--	∎ %[ 1r ]
-			--∐ i'=EX.push . 
-			--	∎ %[ 1r ]
 			∐ i'=EX.hp_to . 
 				∎ %[ 1r ]
 			∐ i'=EX.cnc_lod . 
@@ -3781,7 +3777,7 @@ unsigned long
 				∎ %[ 1r ]
 			∐. .
 				∎ %[ 0r ]
-		§ f { APV x } 
+		§ f { APV x }
 			$ x ⊢ x,x0 
 			_and_im◂◂0x0000ffffffffffffr x ⊢ x 
 			_shr_im◂◂48r x0 ⊢ t  
@@ -6045,18 +6041,10 @@ unsigned long
 		    	∎ { env0 ast.k_r64◂x }
 		    ∐ ast.k_s8◂s . 
 			    $ %env0 ⊢ { V { SCM   m_ns e_ns t_ns m_l } }
-			  	SCM.asc { SCM s } ⊢ { SCM { s o } } 
-					∐ o ⊢ _some◂p . 
-			  	  $ { V { SCM   m_ns e_ns t_ns m_l } } ⊢ env0 	
-						∎ { env0 ast.k_s8◂p }
-					∐. . 
-						_ref.n {} ⊢ P
-						_ref.lc_rpc P ⊢ { P p }
-						SCM.set { SCM { s p } } ⊢ { SCM { s _ } } 
-						_ref.i { P { s ‹› } } ⊢ p
-						$ { V { SCM   m_ns e_ns t_ns m_l } } ⊢ env0 	
-						∎ { env0 ast.k_s8◂p }
-	    	∐ ast.k_app◂{ c0 c1 } . 
+			  	SCM.set_s { SCM s } ⊢ { SCM p }
+					$ { V { SCM m_ns e_ns t_ns m_l } } ⊢ env0 	
+					∎ { env0 ast.k_s8◂p }
+				∐ ast.k_app◂{ c0 c1 } . 
 					ct_ptn { env0 c0 } ⊢ { env0 c0 }
 					ct_ptn { env0 c1 } ⊢ { env0 c1 }
 					∎ { env0 ast.k_app◂{ c0 c1 } }
@@ -7303,7 +7291,7 @@ unsigned long
 			∎∎	
 		§§ upd_h 
 			§ 
-				@.f_i # { { M0 h0 } p }
+				@.f_i { { M0 h0 } p }
 					$ p ⊢ 
 					∐ ast.o_p◂p .
 						$ h0 ⊢ h0,h00
@@ -7317,7 +7305,7 @@ unsigned long
 						_max { M0 M1 } ⊢ M0
 						∎ { M0 h0 }
 				@.f_l = lst.fld_l◂◂f_i
-				@.f # { h0 p }
+				@.f { h0 p }
 					_ref.o p ⊢ { P { oi pl h1 pi on y o } }
 					∐ h0'=<h1' .
 						$ h0 ⊢ _ 
@@ -7580,7 +7568,6 @@ unsigned long
 							_ref.to_i { Kl o1 } ⊢ {}
 							∎ { E0 o0 }
 						∐ a'=EX.id_par; la ⊢ _cns◂{ o _nil◂{} } . 
-							ast.smt_ap_err◂◂9r ya ⊢ ya 
 							_inc vn ⊢ vn 
 							f_r { { E0 vn } o } ⊢ { E0 o }
 							∎ { E0 ast.cn_s◂{ ast.cn_id◂o K } }
@@ -9239,35 +9226,47 @@ unsigned long
 				∎ { r0 x e }   
 			∎∎
 			§§ EDS 
-				§ lod_p { p lb_n { SCM eds } }
+				§§ M = BST_s8 
+				§ lod_p { p lb_n }
 					_ref.o p ⊢ { P { s l } }
 					_s8_len s ⊢ { s ls } 
 					$ l ⊢ 
 					∐ _some◂l . 
 						$ l ⊢ l,l0 
 						_ref.i { P { s ‹ l › } } ⊢ p
-						∎ { p lb_n { SCM eds } { ls l0 } } 
+						∎ { p lb_n { ls l0 } } 
 					∐. _none◂{} . 
 						LB.new lb_n ⊢ { l lb_n }
-						$ s ⊢ s,s0 
-						$ l ⊢ l,l0,l1 
-						asm.add_nd { eds asm.db◂{ l1 s0 } } ⊢ eds 
+						$ l ⊢ l,l0
 						_ref.i { P { s ‹ l › } } ⊢ p
-						∎ { p lb_n { SCM eds } { ls l0 } } 
+						∎ { p lb_n { ls l0 } } 
 				§ lod_ps # p
 					_ref.o p ⊢ { P { s l } }
 					$ s ⊢ s,s0 
 					_ref.i { P { s l } } ⊢ p
 					∎ { p s0 } 
-				§ set_s # { s { SCM eds } } 
+				§ set_s # { s SCM } 
 					SCM.set_s { SCM s } ⊢ { SCM p } 
-					∎ { p { SCM eds } }
+					∎ { p SCM }
 				§ to_rax # { p e0 }
 					_ref.o p ⊢ { P { s0 o } }
 					mk_s8_64 s0 ⊢ { s0 es }
 					_ref.i { P { s0 o } } ⊢ p
 					asm.cct { e0 es } ⊢ e0 
 					∎ { p e0 }
+				§§ gnr 
+					§ f_i { e { _ p } }
+						_ref.of p ⊢ { s o } 
+						$ o ⊢ 
+						∐ _some◂l . 
+							asm.add_nd { e asm.db◂{ l s } } ⊢|
+						∐. _none◂{} . 
+							∎ e 
+					§ f # M		
+						SCM.o M ⊢ { _ M } 
+						asm.add_st_s8_im◂◂"section .data\n%include \"DATA.s\"\n" asm.e◂{} ⊢ e
+						M.fld◂◂f_i { M e } ⊢| 
+					∎∎
 				∎∎
 			§§ lod_sgm 
 				§ 
@@ -9820,7 +9819,7 @@ unsigned long
 								∎ { eds ⟦⟧ } 
 					§ 
 						@.s8 # { GV { eds e0 } ld lb_n  ar s0 rr pl }
-							EDS.lod_p { s0 lb_n eds } ⊢ { _ lb_n eds { l0 lb0 } } 
+							EDS.lod_p { s0 lb_n } ⊢ { _ lb_n { l0 lb0 } } 
 							_add { ld l0 } ⊢ { ld l0 } 
 							lp1 { GV { eds e0 } ld lb_n  ar rr pl } ⊢ { GV { eds e0 } ld lb_n  ar }
 							_sub { ld l0 } ⊢ { ld l0 }
@@ -9912,7 +9911,7 @@ unsigned long
 							∐. for◂{ j0 s0 } . 
 								lod_tv { ar j0 } ⊢ { ar j0 p0 }
 								r64_to_rax { GV p0 e0 } ⊢ { GV e0 }
-								EDS.lod_p { s0 lb_n eds } ⊢ { _ lb_n eds { l0 lb1 } } 
+								EDS.lod_p { s0 lb_n } ⊢ { _ lb_n { l0 lb1 } } 
 								asm.add_st_s8_im◂◂"\tmov rsi,rdi\n\tmov rdi,rax\n\tpush rax\n" e0 ⊢ e0 
 								imul_im { l0 e0 } ⊢ { l0 e0 } 
 								asm.add_st_s8_im◂◂"\tadd rdi,rsi\n" e0 ⊢ e0 
@@ -10705,9 +10704,7 @@ unsigned long
 							∐ 
 								∐ la ⊢ _cns◂{ k0 la }; la ⊢ _nil◂{}; k0 ⊢ RP.atm◂a0; a0 ⊢ ast.k_pf◂lf; is ⊢ RP.rcd◂_cns◂{ m0 _cns◂{ x0 _cns◂{ RP.rcd◂sl _nil◂{} } } } . 
 									exp_s8.ip0 { eds lf } ⊢ { eds pl } 
-									$ eds ⊢ { SCM eds } 
 									s8_to_hp { GV m0 ec0 } ⊢ { GV rm0 ec0 } 
-									$ { SCM eds } ⊢ eds 
 									r64_to_hp { GV x0 ec0 } ⊢ { GV rx0 ec0 }
 									$ sl ⊢ sl,sl0 
 									exp_s8.lp0_c { %[ 0r ] sl0 } ⊢ { _ ar }
@@ -10745,11 +10742,9 @@ unsigned long
 										ila.n { t_s %[ 0r ] } ⊢ n_s
 										ast.s8_of_k c0 ⊢ s0
 										ila.sd { { GV l0 ⟦⟧ n_s t_d ec0 asm.e◂{} } %[ 0r ] } ⊢ { GV iy ec0 ec1 }
-										$ eds ⊢ { SCM eds } 
 										_ref.o s0 ⊢ { P { s0 lb } }
 										$ s0 ⊢ s0,s00 
 										_ref.to_i { P { s0 lb } } ⊢ {}
-										$ { SCM eds } ⊢ eds
 										LB.new lb_n ⊢ { lb lb_n } 
 										lb_etr { lb ec0 } ⊢ { _ ec0 } 
 										asm.add_s8 { ec0 s00 } ⊢ ec0
@@ -10904,7 +10899,7 @@ unsigned long
 									$ is ⊢ _ 
 									∐ la ⊢ _cns◂{ k _nil◂{} } . 
 										ast.s8_of_k k ⊢ s 
-										EDS.lod_p { s lb_n eds } ⊢ { s lb_n eds { ls lb } } 
+										EDS.lod_p { s lb_n } ⊢ { s lb_n { ls lb } } 
 										^ lb ⊢ _,sc0 
 											"LB_" 0d' //
 										GV.new GV ⊢ { GV r } 
@@ -11306,8 +11301,6 @@ unsigned long
 			s8_of_s8_lst ep0 ⊢ sep0 
 			_emt_s8_to_im◂◂"SGN_SH.txt" sep0 ⊢ _ 
 
-			_st◂◂"section .data\n%include \"DATA.s\"\n" {} ⊢ eds
-			$ asm.of_st_s8◂eds ⊢ eds 
 			_emt_im.f◂◂"emt_rtm D1" {} ⊢ {} 
 			slv.ct_ptn { { ⟦⟧ %[ 1r ] APV } RP.atm◂ast.k_name◂i_e } ⊢ { { al _ APV } m yk }
 			_emt_im.f◂◂"emt_rtm D2" {} ⊢ {} 
@@ -11328,7 +11321,6 @@ unsigned long
 			mk_ir.f_r { { { SCM APV RFV tav ⟦⟧ } %[ 0r ] } m } ⊢ { { SCM APV RFV tav plf } o }
 			upd_h.f_l { { %[ 2r ] %[ 2r ] } plf } ⊢ { M _ }
 			RFV.o RFV ⊢ { _ { _ _ _ _ } } 
-			$ { SCM eds } ⊢ eds 
 			_emt_im.f◂◂"emt_rtm D5" {} ⊢ {} 
 			_emt M ⊢ M
 			GV.ini { I M } ⊢ { I GV }
@@ -11336,17 +11328,17 @@ unsigned long
 			$ RP.cns2◂{ stt_v.arr_reg◂i RP.unt◂{} } ⊢ ax0 
 			asm.ini_buf {} ⊢ eg0 
 			GXV.ini I ⊢ { I GXV }
-			$ { APV eg0 eds ew0 } ⊢ FE
+			$ { APV eg0 SCM ew0 } ⊢ FE
 			$ { GXV GV lb_n tav ec1 } ⊢ EE	
 			_emt_im.f◂◂"emt_rtm D5.1" {} ⊢ {} 
 			$ { ⟦⟧ f_seq◂{} } ⊢ f_c
 			gnr.lc_code.stt_ir { FE EE f_c o ax0 } ⊢ { FE EE _ } 
 			$ EE ⊢ { GXV GV _ _ ec1 }
 			GV.upd_h GV ⊢ GV
-			$ FE ⊢ { _ eg0 eds ew0 }		
+			$ FE ⊢ { _ eg0 SCM ew0 }		
 			_emt_im.f◂◂"emt_rtm D6" {} ⊢ {} 			
 			asm.of_buf eg0 ⊢ eg0 
-			$ eds ⊢ { _ eds } 
+			gnr.EDS.gnr.f SCM ⊢ eds
 			asm.add_st_s8_im◂◂"\tmov QWORD [EXIT],1\n\tC_CALL exit\n" ec1 ⊢ ec1			
 			asm.cct { ec1 ew0 } ⊢ ec1  
 			$~ _^ ⊢ sc1 

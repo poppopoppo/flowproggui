@@ -213,6 +213,8 @@
 § _cnc_sto_ctr = _[ 17r ] 
 § _cnc_lod = _cnc_lod_ctr◂◂(\a . { a {} }) 
 § _cnc_sto = _cnc_sto_ctr◂◂(\a . { a {} }) 
+§ A _ 
+  ∎ {} 
 -- non-atomic 
 § _cnc_siz0◂◂{ F H } # { h a }
   _hp.ini_ct◂◂H {} ⊢ hH 
