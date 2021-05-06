@@ -698,6 +698,13 @@
 § _arr_len = _arr.len
 § _alc_i = _arr.i 
 § _alc_o = _arr.o
+§§ _lc 
+  § o = _[ 26r ] 
+  § i = _[ 27r ] 
+  § n = _[ 0x00010028r ]	
+  § e = _[ 0x00010029r ]
+	§ c = _[ 0x0001002ar ] 
+  ∎∎
 §§ _ref 
   ¶ t k' 
     ∐ t : { _hp◂k' _r64 }
@@ -945,6 +952,30 @@
     $ r ⊢ r,r0 
     ∎ { t◂{ h r } t◂{ h0 r0 } }
   § rpc_lc = '[ _[] : k' . lc◂k'→{ lc◂k' lc◂k' } ]
+  §§ Lc   
+    § ref = t   
+    ¶ t a',b',r' 
+      ∐ t : { _hp◂{ a' b' r' } _r64 }
+    § o◂◂T # ref◂{ hk r }
+      !^ r ⊢ *r 
+        ` mov rdi,QWORD [rax]
+        ` bts rdi,63 
+        ` jc err_ref_o
+        ` mov QWORD [rax],rdi
+        //
+      $ r ⊢ r,r0 
+      _add_im◂◂8r r0 ⊢ r0 
+      _lc.o◂◂T { hk r0 } ⊢ { ht _ a }
+      ∎ { t◂{ ht r } a }
+    § i◂◂T # { t◂{ ht r } a }
+      _lc.i◂◂T { ht r a } ⊢ { hk r }
+      ∎ ref◂{ hk r }
+    § rpc = '[ _[] : a',b',r' . t◂a'◂b'◂r'→{ t◂a'◂b'◂r' t◂a'◂b'◂r' } ]
+    § dlt = '[ _[] : a',b',r' . t◂a'◂b'◂r'→{} ]
+    § t =| 
+    ∎∎ 
+  § lc =| 
+  § t =| 
   ∎∎
 ¶ _ref = _ref.t 
 
@@ -1483,6 +1514,7 @@
   
   ¶§ f = _ref.dlt
   ¶§ f = _ref.dlt_lc 
+  ¶§ f = _ref.Lc.dlt
   § lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
