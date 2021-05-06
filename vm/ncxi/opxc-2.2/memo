@@ -335,3 +335,9 @@ pattern -> tag
 
     _o : _t◂{ a' s' r' }→→(_r64→{ _hp◂{ a' s' r' } _r64 a' })
     _i : _t◂{ a' s' r' }→→({ _hp◂{ a' s' r' } _r64 a' }→_r64)
+
+  i'=|=B,C,D,E 
+  i'=&=B,C,D,E 
+
+
+  ∐ m a ⊢ b 

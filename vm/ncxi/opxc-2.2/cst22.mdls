@@ -686,3 +686,18 @@
   _ctr_rev◂◂(\a . p◂a) p ⊢ r 
   _emt r ⊢ _ 
   ∎ {} 
+§ f0◂◂T _ 
+  _ref.new { %[ 2r ] %[ "DD" ] {} ⟦ %[ 2r ] ⟧ } ⊢ p 
+  _ref.Lc.o◂◂T p ⊢| 
+§ f1 _ 
+  ∎ { %[ _lc.e ] %[ _lc.c ] %[ _lc.n ] }
+§ T = _lc.e◂◂_lc.n
+§ f1 _ 
+  ∎ %[ _ref.Lc.o ]
+§ m41 _ 
+  _ref.new { %[ 2r ] %[ "DD" ] {} ⟦ %[ 2r ] ⟧ } ⊢ p 
+  _ref.Lc.o◂◂&{ _ * _ * } p ⊢ { P A }
+  _emt A ⊢ A
+  _ref.Lc.i◂◂&{ _ * _ * } { P A } ⊢ _ 
+  ∎ {}
+  
