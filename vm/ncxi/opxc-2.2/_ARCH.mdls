@@ -275,7 +275,7 @@
 § _and = op2◂◂"and" 
 § _or = op2◂◂"or" 
 § _xor = op2◂◂"xor" 
-§ _bts = op2◂◂"bts" 
+§ _bts = op2◂◂"bts"
 §§ _imul 
   § im_0 # _
     ∎ %[ 0r ]
@@ -405,6 +405,13 @@
     dlt_lc Vl ⊢ {} 
     ∎ {}
   ∎∎
+§§ _lc 
+  § o = _[ 26r ] 
+  § i = _[ 27r ] 
+  § n = _[ 0x00010028r ]	
+  § e = _[ 0x00010029r ]
+	§ c = _[ 0x0001002ar ] 
+  ∎∎
 § alc◂◂C # l
   $ l ⊢ l,s 
   _imul_im◂◂C s ⊢ s 
@@ -421,8 +428,8 @@
 § alc = _cnc_siz◂◂alc
 
 §§ _arr 
-  ¶ lc k',t' 
-    ∐ lc : { _r64 _arr0◂t'◂k' }
+  ¶ lc b',k',t' 
+    ∐ lc : { _hp◂b' _r64 _arr0◂t'◂k' }
   § len # a 
     _id.arr0 a ⊢ a 
     _hp.of a ⊢ { r h } 
@@ -443,8 +450,11 @@
     _hp.rpc a ⊢ { a ra } 
     _add { ra b } ⊢ { ra _ } 
     _cnc_lod_hp { ra h } ⊢ { ra _ k }
-    ∎ { lc◂{ i a } k }	
-  § i # { lc◂{ i a } k } 
+    _hp.ini {} ⊢ hb 
+    $.[ . _hp◂{} ] hb ⊢ hb
+    ∎ { lc◂{ hb i a } k }	
+  § i # { lc◂{ hb i a } k } 
+    $.[ . _hp◂{} ] hb ⊢ hb
     _hp.ini {} ⊢ h 
     $.[ k',t' . { _hp◂k' _arr0◂t'◂k' k' } ] { h a k } ⊢ { h a k } 
     $ i ⊢ i,b 
@@ -452,7 +462,46 @@
     _hp.rpc a ⊢ { a ra } 
     _add { ra b } ⊢ { ra _ } 
     _cnc_sto { ra k } ⊢ _
-    ∎ { a i }	
+    ∎ { a i }
+  §§ Lc 
+    § o◂◂T # { a i }
+      len a ⊢ { a l } 
+      chk_len { l i } ⊢ { l i } 
+      _hp.ini {} ⊢ h 
+      $.[ k',t' . { _hp◂k' _arr0◂t'◂k' } ] { h a } ⊢ { h a } 
+      $ i ⊢ i,b 
+      $ h ⊢ h,h0 
+      ofs_arr { h0 b } ⊢ b 
+      _hp.rpc a ⊢ { a ra } 
+      _add { ra b } ⊢ { ra _ } 
+      _lc.o◂◂T { h ra } ⊢ { _ _ ht k }
+      ∎ { lc◂{ ht i a } k }	
+    § i◂◂T # { lc◂{ ht i a } k } 
+       _hp.ini {} ⊢ h 
+      $.[ k',t' . { _hp◂k' _arr0◂t'◂k' } ] { h a } ⊢ { h a } 
+      $ i ⊢ i,b 
+      $ h ⊢ h,h0
+      ofs_arr { h b } ⊢ b 
+      _hp.rpc a ⊢ { a ra } 
+      _add { ra b } ⊢ { ra _ } 
+      _lc.i◂◂T { h0 ra ht k } ⊢ { _ _ }
+      ∎ { a i }
+    § l◂◂T { a i } 
+      len a ⊢ { a l } 
+      chk_len { l i } ⊢ { l i } 
+      _hp.ini {} ⊢ h 
+      $.[ k',t' . { _hp◂k' _arr0◂t'◂k' } ] { h a } ⊢ { h a } 
+      $ i ⊢ i,b 
+      $ h ⊢ h,h0 
+      ofs_arr { h0 b } ⊢ b 
+      _hp.rpc a ⊢ { a ra } 
+      _add { ra b } ⊢ { ra _ } 
+      _lc.o◂◂T { h ra } ⊢ { h ra ht k }
+      $ k ⊢ k,k0
+      _lc.i◂◂T { h ra ht k } ⊢ _ 
+      ∎ { a i k0 }
+    § dlt = '[ _[] : a',b',k',t' . (lc◂{ a' b' }◂k'◂t')→{} ]
+    ∎∎
   § e◂◂F { a i v }
     len a ⊢ { a l } 
     chk_len { l i } ⊢ { l i } 
@@ -468,7 +517,7 @@
     F { v k } ⊢ { w k }
     _cnc_sto { ra k } ⊢ _
     ∎ { a i w }
-  § emt_lc = '[ _[] : k',t' . (lc◂k'◂t')→(lc◂k'◂t') ]
+  § emt_lc = '[ _[] : b',k',t' . (lc◂b'◂k'◂t')→(lc◂b'◂k'◂t') ]
   § alc_x◂◂C l
     ∐ l'<>0r .
       !^ l ⊢ *l,b
@@ -587,7 +636,8 @@
       ` call free_opq
       // 
     ∎ {}
-  § dlt_lc lc◂{ j a } 
+  § dlt_lc lc◂{ hb j a } 
+    $.[ . _hp◂{} ] hb ⊢ hb
     _id.arr a ⊢ a 
     len a ⊢ { a l } 
     _hp.of a ⊢ { r ha }
@@ -648,7 +698,8 @@
        ∎ {}
       ∐. .
         ∎ {} 
-    § dlt_lc lc◂{ j a } 
+    § dlt_lc lc◂{ hb j a } 
+      $.[ . _hp◂{} ] hb ⊢ hb
       _id.arr_x a ⊢ a 
       len a ⊢ { a l } 
       _hp.of a ⊢ { r ha } 
@@ -691,20 +742,12 @@
     _add { m i } ⊢ { m _ }
     ∎ m 
   § sum = itr_r◂◂sum_i
-  --§ dlt_lc = '[ _[] : k',t' . (lc◂k'◂t')→{} ]
-  § rpc_lc = '[ _[] : k',t' . (lc◂k'◂t')→{ (lc◂k'◂t') (lc◂k'◂t') } ]
+  § rpc_lc = '[ _[] : b',k',t' . (lc◂b'◂k'◂t')→{ (lc◂b'◂k'◂t') (lc◂b'◂k'◂t') } ]
   § lc =|
   ∎∎ 
 § _arr_len = _arr.len
 § _alc_i = _arr.i 
 § _alc_o = _arr.o
-§§ _lc 
-  § o = _[ 26r ] 
-  § i = _[ 27r ] 
-  § n = _[ 0x00010028r ]	
-  § e = _[ 0x00010029r ]
-	§ c = _[ 0x0001002ar ] 
-  ∎∎
 §§ _ref 
   ¶ t k' 
     ∐ t : { _hp◂k' _r64 }
@@ -971,12 +1014,12 @@
       ∎ { lc◂{ ht hk r } a }
     § i◂◂T # { lc◂{ ht hk r } k }
       $.[ a',b' . { _hp◂{ a' b' } a' } ] { ht k } ⊢ { ht k }
-      !^ r ⊢ *r 
-      ` btr QWORD [rax],63
-      //
       $ r ⊢ r,r0 
       _add_im◂◂8r r0 ⊢ r0 
       _lc.i◂◂T { hk r0 ht k } ⊢ { hk _ }
+      !^ r ⊢ *r 
+      ` btr QWORD [rax],63
+      //
       ∎ t◂{ hk r }
     § dlt = '[ _[] : t',r' . lc◂t'◂r'→{} ]
     ∎∎ 
@@ -1440,11 +1483,20 @@
     $.[ k' . _ref.t◂k' ] p ⊢ p
     emt_cst◂◂"*[ " {} ⊢ {} 
     _ref.lod_hd p ⊢ { p h } 
-    r640 h ⊢ _
-    emt_cst◂◂" | " {} ⊢ {} 
-    _ref.f◂◂ref_i { {} p } ⊢ { {} p } 
-    emt_cst◂◂" ]" {} ⊢ {} 
-    ∎ p
+    !^ h ⊢ *h,b 
+      ` xor rdi,rdi 
+      ` bt rax,63 
+      ` setc dil
+      //
+    r640 h ⊢ h
+    ∐ b'<>0r .
+      emt_cst◂◂" | @ ]" {} ⊢ {} 
+      ∎ p
+    ∐. .
+      emt_cst◂◂" | " {} ⊢ {} 
+      _ref.f◂◂ref_i { {} p } ⊢ { {} p } 
+      emt_cst◂◂" ]" {} ⊢ {} 
+      ∎ p
   ¶§ f0 = ref
   ¶§ f0 = _arr.emt_lc
   § lst l 
@@ -1518,7 +1570,7 @@
   ¶§ f = _arr.x.dlt
   ¶§ f = _arr.std.dlt_lc
   ¶§ f = _arr.x.dlt_lc
-  
+  ¶§ f = _arr.Lc.dlt
   ¶§ f = _ref.dlt
   ¶§ f = _ref.dlt_lc 
   ¶§ f = _ref.Lc.dlt

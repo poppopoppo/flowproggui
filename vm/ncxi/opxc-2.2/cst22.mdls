@@ -700,4 +700,21 @@
   _emt A ⊢ A
   _ref.Lc.i◂◂&{ _ * _ * } { P A } ⊢ _ 
   ∎ {}
-  
+
+§ m42 _ 
+  _mk_arr { %[ 5r ] { %[ 2r ] %[ "DD" ] {} ⟦ %[ 2r ] ⟧ } } ⊢ { _ _ a }
+  _arr.Lc.o◂◂&{ _ * _ * } { a %[ 3r ] } ⊢ { P A }
+  _emt A ⊢ A
+  _arr.Lc.i◂◂&{ _ * _ * } { P A } ⊢ { a i } 
+  _arr.Lc.l◂◂&{ _ * * * } { a i } ⊢ { a i l }
+  _emt { a i l } ⊢ _ 
+  ∎ {}
+§ m43 _
+  _ref.new { %[ 2r ] %[ "DD" ] {} ⟦ %[ 2r ] ⟧ } ⊢ p 
+  _emt p ⊢ p 
+  _ref.o p ⊢ { P A }
+  _ref.lc_rpc P ⊢ { P p }
+  _emt P ⊢ _ 
+  _emt A ⊢ _
+  _emt p ⊢ _ 
+  ∎ {}
