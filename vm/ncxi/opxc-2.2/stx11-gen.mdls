@@ -1676,6 +1676,7 @@ unsigned long
 			§ cns1◂a = rcd◂prd◂{ a rcd_unt◂{} }
 			§ cns2◂{ a0 a1 } = rcd◂prd◂{ a0 prd◂{ a1 rcd_unt◂{} } }
 			§ cns3◂{ a0 a1 a2 } = rcd◂prd◂{ a0 prd◂{ a1 prd◂{ a2 rcd_unt◂{} } } }
+			§ cns4◂{ a0 a1 a2 a3 } = rcd◂prd◂{ a0 prd◂{ a1 prd◂{ a2 prd◂{ a3 rcd_unt◂{} } } } }
 			§ ila◂y = t_prm_a◂{ %[ id.ila ] y } 
 			§ dmy◂y = dta◂{ %[ id.dmy ] ⟦ y ⟧ } 
 			§ hp◂y = dta◂{ %[ id.hp ] ⟦ y ⟧ } 
@@ -2978,7 +2979,7 @@ unsigned long
 				$ s ⊢ s,s0 
 				$ r ⊢ r,r0,r1
 				$ TX.lc◂{ a s r } ⊢ y0
-				$ TX.t_imp◂{ TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } TX.cns3◂{ TX.hp◂TX.cns3◂{ a0 s0 r0 } TX.r64◂{} a2 } } ⊢ y1
+				$ TX.t_imp◂{ TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } } ⊢ y1
 				∎ TX.t_ct_imp◂{ y0 y1 }
 			-- lc_i 
 			∐ 
@@ -2989,7 +2990,7 @@ unsigned long
 				$ s ⊢ s,s0 
 				$ r ⊢ r,r0,r1
 				$ TX.lc◂{ a s r } ⊢ y0
-				$ TX.t_imp◂{ TX.cns3◂{ TX.hp◂TX.cns3◂{ a0 s0 r0 } TX.r64◂{} a2 } TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } } ⊢y1
+				$ TX.t_imp◂{ TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } } ⊢y1
 				∎ TX.t_ct_imp◂{ y0 y1 }
 			∐. 
 				∎|
@@ -4395,10 +4396,11 @@ unsigned long
 				∐ i'<>0r . 
 					_dec i ⊢ i 
 					_arr.o { gl i } ⊢ { Gl pi } 
-							--		op.yg pi ⊢ { ygt pi } 
-					_ref.o pi ⊢ { Pi { oi pl h pi fn yg of } } 
+					--_ref.o pi ⊢ { Pi { oi pl h pi fn yg of } } 
+					_ref.Lc.o◂◂&{ _ _ _ _ _ * _ } pi ⊢ { Pi { yg } }
 					$ yg ⊢ yg,ygt 
-					_ref.i { Pi { oi pl h pi fn yg of } } ⊢ pi 
+					_ref.Lc.i◂◂&{ _ _ _ _ _ * _ } { Pi { yg } } ⊢ pi
+					--_ref.i { Pi { oi pl h pi fn yg of } } ⊢ pi 
 					$ y0 ⊢ y0,y0t
 					T.ciu { y0t ygt } ⊢ { y0t ygt b0 }
 					T.ci { ygt y0t } ⊢ b1
@@ -7152,7 +7154,7 @@ unsigned long
 						$ o ⊢ 
 						∐ _some◂ie . 
 							$ v0 ⊢ _ 
-							_ref.i { lcGG { w lcg gfl } } ⊢ lcg 
+							_ref.to_i { lcGG { w lcg gfl } } ⊢ {} 
 							T.newvar_ln v1 ⊢ v1
 							$ { m SC APV tav } ⊢ E
 							∎ { E RP.atm◂ast.k_op◂{ ibg ie v1 } }	
@@ -11111,7 +11113,7 @@ unsigned long
 										$ s ⊢ s,s0,st 
 										$ r ⊢ r,r0,r1,rt
 										$ TX.lc◂{ a s r } ⊢ y0
-										$ TX.t_imp◂{ TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } TX.cns3◂{ TX.hp◂TX.cns3◂{ a0 s0 r0 } TX.r64◂{} a2 } } ⊢ y1
+										$ TX.t_imp◂{ TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } } ⊢ y1
 										$ TX.t_ct_imp◂{ y0 y1 } ⊢ yt 
 										inst { %[ 1r ] ya } ⊢ { _ ya }
 										T.unify.f { ya yt } ⊢ {} 
@@ -11125,7 +11127,7 @@ unsigned long
 											asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] i0 } } ⊢ ec0 										
 											asm.add_st_s8_im◂◂"\tmov SRC_REG,rax\n" ec0 ⊢ ec0 
 											lc.o { { ec0 GV } lp l } ⊢ { { ec0 GV } l }
-											$ RP.cns3◂{ RP.unt◂{} stt_v.r64_reg◂r0 RP.rcd◂l } ⊢ iy 
+											$ RP.cns4◂{ RP.unt◂{} stt_v.r64_reg◂r0 RP.unt◂{} RP.rcd◂l } ⊢ iy 
 											stt_jmp_axm { { GXV GV lb_n tav ec0 } { APV eg0 eds ew0 } iy f_c } ⊢|
 										∐. .
 											∎|
@@ -11133,7 +11135,7 @@ unsigned long
 										∎|
 								-- lc_i 
 								∐ 
-									∐ la ⊢ _cns◂{ l _nil◂{} }; is ⊢ RP.cns3◂{ _ ir0 is } . 
+									∐ la ⊢ _cns◂{ l _nil◂{} }; is ⊢ RP.cns4◂{ _ ir0 _ is } . 
 										ast.smt_ap_err◂◂0xccdr ya ⊢ ya 
 										T.nvl_lv◂◂1r {} ⊢ a
 										T.nvl_lv◂◂1r {} ⊢ s
@@ -11142,7 +11144,7 @@ unsigned long
 										$ s ⊢ s,s0,st 
 										$ r ⊢ r,r0,r1,rt
 										$ TX.lc◂{ a s r } ⊢ y0
-										$ TX.t_imp◂{ TX.cns3◂{ TX.hp◂TX.cns3◂{ a0 s0 r0 } TX.r64◂{} a2 } TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } } ⊢ y1
+										$ TX.t_imp◂{ TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } } ⊢ y1
 										$ TX.t_ct_imp◂{ y0 y1 } ⊢ yt 
 										inst { %[ 1r ] ya } ⊢ { _ ya }
 										T.unify.f { ya yt } ⊢ {} 
