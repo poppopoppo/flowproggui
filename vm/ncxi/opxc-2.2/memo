@@ -341,3 +341,8 @@ pattern -> tag
 
 
   ∐ m a ⊢ b 
+  o & pi,{ _ _ _ _ _ yg _ } ⊢ Pi
+  i P ⊢ & p,{ * * * x * y }
+
+  o p ⊢& { * * * y * }
+  i p &⊢ { * * * y * }
