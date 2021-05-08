@@ -1018,6 +1018,7 @@
       _add_im◂◂8r r0 ⊢ r0 
       _lc.i◂◂T { hk r0 ht k } ⊢ { hk _ }
       !^ r ⊢ *r 
+      `_ref_lc_i:
       ` btr QWORD [rax],63
       //
       ∎ t◂{ hk r }
@@ -1571,6 +1572,7 @@
   ¶§ f = _arr.std.dlt_lc
   ¶§ f = _arr.x.dlt_lc
   ¶§ f = _arr.Lc.dlt
+  
   ¶§ f = _ref.dlt
   ¶§ f = _ref.dlt_lc 
   ¶§ f = _ref.Lc.dlt

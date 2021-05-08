@@ -158,6 +158,36 @@ pf_x_bc:
 	std
 	ret
 
+alc_rcd_n: 
+	cmp MCR_REG,0
+	jz alc_rcd_h
+	cmp MCR_REG,~0
+	jz alc_rcd_h 
+	ret
+alc_rcd_h: 
+	mov rbx,rax 
+	C_PUSH_REGS 
+	push rdi 
+	push rsi 
+	push rax
+	mov rdi,rbx 
+	xor rax,rax
+	add rdi,1 
+	shl rdi,10 
+	mov rsi,rdi 
+	xor rdi,rdi 
+	mov rdi,8
+	CALLOC_SF
+	mov rdx,rbx 
+	mov rbx,rax 
+	mov rdi,1000 
+	call ss_lp
+	pop rax 
+	pop rsi 
+	pop rdi 
+	C_POP_REGS 
+	ret
+
 sig_alc_rcd: ; rbx=n 
 	C_PUSH_REGS 
 	push rdi 
@@ -190,8 +220,9 @@ ss_lp:
 	mov rax,rsi 
 	jmp ss_lp
 ss_end:
-	mov rsi,0xffff_ffff_ffff_0000 
-	add rsi,rdx
+	;mov rsi,0xffff_ffff_ffff_0000 
+	mov rsi,0 
+	;add rsi,rdx
 	mov [rax],rsi 
 	ret
 	
@@ -206,7 +237,8 @@ init_ss_lp:
 	mov rdi,rdx 
 	jmp init_ss_lp
 init_ss_end: 
-	mov rsi,-65522
+	;mov rsi,-65522
+	mov rsi,0 
 	mov [rdi],rsi 
 	ret 
 
@@ -245,7 +277,6 @@ sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void* context
 sig_dft_alc_rcd: 
 	mov rbx,QWORD [SIG_FLG]
 	and rbx,0xffff 
-	;mov rdi,rbx 
 	jmp sig_alc_rcd
 sig_dft: 
 	xor rax,rax 
@@ -253,7 +284,7 @@ sig_dft:
 	mov rdi,fmt_sig_hdl
 	mov rdx,QWORD [SIG_FLG]
 	C_CALL printf 
-	call exit 
+	C_CALL exit 
 	mov QWORD [err_n],0xfff
 	jmp err
 
