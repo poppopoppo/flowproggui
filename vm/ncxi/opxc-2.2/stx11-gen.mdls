@@ -3551,7 +3551,7 @@ unsigned long
 					bl.of_r b ⊢ b 
 					∎ { k_ap◂{ p0 t0 } k_ap◂{ p1 t1 } b }
 				∐. . 
-					∎ { c0 c1 bl.f◂{ } }
+					∎ { c0 c1 bl.f◂{} }
 		§ @.r64_of_k c 
 			RP.atm_a c ⊢ c 
 			∐ c ⊢ k_r64◂x . 
@@ -8437,7 +8437,7 @@ unsigned long
       ∐ jl_lb : lb
 			∐ jle_lb : lb  
       ∐ jg_lb : lb 
-      ∐ alc_rcd : { _r64 _st◂_s8 }
+      ∐ alc_rcd : _r64
       ∐ free_rcd : { _r64 _st◂_s8 }
     § mov_op_sx◂{ o i } = mov_op_op◂{ o op.sx◂i } 
 		§ mov_glx_sx◂{ i0 i1 } = mov_glx_op◂{ i0 op.sx◂i1 }
@@ -8566,10 +8566,12 @@ unsigned long
       ∐ jg_lb◂lb . 
         _pf_x◂◂pf.jg_lb { B { lb } } ⊢ { B _ }
         ∎ { LB B }  
-      ∐ alc_rcd◂{ c r } . 
-        _pf_x ^ { B { c r } } ⊢ { B _ }
-	        "\tALC_RCD " 0d' "," 1st' "\n" //
-        ∎ { LB B }  
+      ∐ alc_rcd◂c . 
+				LB.new LB ⊢ { l LB }
+        _pf_x ^ { B { c l } } ⊢ { B _ }
+					"LB_" 1d' ":\n"
+					"\tALC_N " 0d' "\n" //
+				∎ { LB B }  
       ∐. free_rcd◂{ c r } .
         _pf_x◂◂pf.free_rcd { B { c r } } ⊢ { B _ }
         ∎ { LB B }  
@@ -9077,15 +9079,14 @@ unsigned long
 			$ lb ⊢ lb,lb0 
 			asm.cct { e asm.lf◂asm.jle_lb◂lb0 } ⊢ e 
 			∎ { lb e } 
-		§ alc_rcd◂◂R # { i e }
+		§ alc_rcd # { i e }
 			∐ i'<>0r . 
 				_dec i ⊢ i 
 				_bsr i ⊢ { i j }
   			_inc i ⊢ i 
 				_inc j ⊢ j 
 				_bts { %[ 0r ] j } ⊢ { i0 _ }
-				_st◂◂R {} ⊢ r 
-				asm.cct { e asm.lf◂asm.alc_rcd◂{ i0 r } } ⊢ e 
+				asm.cct { e asm.lf◂asm.alc_rcd◂i0 } ⊢ e 
 				∎ { i e }
 			∐. .
 				∎|
@@ -9648,7 +9649,7 @@ unsigned long
 											$ ⟦ { pa pa1 } < ql ⟧ ⊢ ql
 											∎ { e0 fl ql }
 										∐. . 
-    									alc_rcd◂◂"rax" { c_n e0 } ⊢ { _ e0 } 
+    									alc_rcd { c_n e0 } ⊢ { _ e0 } 
 											^ rd ⊢ _,ec1 
 												"\tmov DX(0x" 0x' "),rax\n" 
 												`	add rax,8 
@@ -9734,7 +9735,7 @@ unsigned long
 										$ ⟦ { i1 rd } < L ⟧ ⊢ L 
 										∎ { L e0 GV fl }
 									∐. . 
-    								alc_rcd◂◂"rax" { c_n e0 } ⊢ { _ e0 } 
+    								alc_rcd { c_n e0 } ⊢ { _ e0 } 
 										GV.new GV ⊢ { GV i1 } 
 										$ i1 ⊢ i1,i10 
 										asm.add_nd { e0 asm.mov_glx_op◂{ i10 asm.op.rx◂%[ asm.rx.rax ] } } ⊢ e0 
@@ -11618,7 +11619,7 @@ unsigned long
 			_emt gvv ⊢ _
 			asm.cct { eh eds } ⊢ eds 
 			asm.cct { eds ec0 } ⊢ ec0
-			rcd_sig_lp { %[ 1r ] ssN ec0 } ⊢ ec0 
+			--rcd_sig_lp { %[ 1r ] ssN ec0 } ⊢ ec0 
 			_st◂◂"\n%include \"TEXT.s\"\n" {} ⊢ ec1 
 			asm.add_st_s8 { ec0 ec1 } ⊢ ec0 
 			∎ { lb_n ec0 }

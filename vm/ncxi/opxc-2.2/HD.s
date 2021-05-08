@@ -200,14 +200,26 @@ LB_%1_2:
 %endmacro
  
 %macro ALC_RCD 2 ; n,reg-name!=rbx 
-	;mov QWORD [SIG_ETR],sig_alc_rcd_%1 
 	mov MCR_REG,QWORD [(SS_RCD_TOP+8*%1)]
 	mov rax,%1 
 	call alc_rcd_n 
 	mov %2,QWORD [MCR_REG]
 	mov QWORD [(SS_RCD_TOP+8*%1)],%2
 	mov %2,MCR_REG
-	;mov QWORD [SIG_ETR],sig_dft
+%endmacro 
+
+%macro ALC_N 1 ; n,reg-name!=rbx 
+	mov rbx,QWORD [(SS_RCD_TOP+8*%1)]
+	cmp rbx,0 
+	jz .L0 
+	jmp .L1
+.L0:	
+	mov rax,%1 
+	call alc_rcd_h 
+.L1:
+	mov rax,QWORD [rbx]
+	mov QWORD [(SS_RCD_TOP+8*%1)],rax
+	mov rax,rbx
 %endmacro 
 
 %macro FREE_RCD 2 ; n,reg-name!=rbx 
