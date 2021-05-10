@@ -276,6 +276,27 @@
 § _or = op2◂◂"or" 
 § _xor = op2◂◂"xor" 
 § _bts = op2◂◂"bts"
+§ _btr = op2◂◂"btr"
+§ _bt # { r i } 
+  !^ r,i ⊢ *r,*i,c 
+    `xor rsi,rsi 
+    ` bt rax,rdi 
+    ` setc rsi 
+    //
+  ∎ { r i c }
+§ _btx # { r i c } 
+  !^ r,i,c ⊢ *r,*i,c 
+    ` cmp rsi,0 
+    ` jz .L0 
+    ` bts rax,rdi
+    ` jmp .L1
+    `.L0: 
+    ` btr rax,rdi
+    `.L1:
+    ` setc rsi 
+    ` and rsi,1
+    //
+  ∎ { r i c }
 §§ _imul 
   § im_0 # _
     ∎ %[ 0r ]
@@ -500,6 +521,19 @@
       $ k ⊢ k,k0
       _lc.i◂◂T { h ra ht k } ⊢ _ 
       ∎ { a i k0 }
+    § x◂◂T { a i k0 } 
+      len a ⊢ { a l } 
+      chk_len { l i } ⊢ { l i } 
+      _hp.ini {} ⊢ h 
+      $.[ k',t' . { _hp◂k' _arr0◂t'◂k' } ] { h a } ⊢ { h a } 
+      $ i ⊢ i,b 
+      $ h ⊢ h,h0 
+      ofs_arr { h0 b } ⊢ b 
+      _hp.rpc a ⊢ { a ra } 
+      _add { ra b } ⊢ { ra _ } 
+      _lc.o◂◂T { h ra } ⊢ { h ra ht k1 }
+      _lc.i◂◂T { h ra ht k0 } ⊢ _ 
+      ∎ { a i k1 }
     § dlt = '[ _[] : a',b',k',t' . (lc◂{ a' b' }◂k'◂t')→{} ]
     ∎∎
   § e◂◂F { a i v }
@@ -1572,7 +1606,7 @@
   ¶§ f = _arr.std.dlt_lc
   ¶§ f = _arr.x.dlt_lc
   ¶§ f = _arr.Lc.dlt
-  
+
   ¶§ f = _ref.dlt
   ¶§ f = _ref.dlt_lc 
   ¶§ f = _ref.Lc.dlt
