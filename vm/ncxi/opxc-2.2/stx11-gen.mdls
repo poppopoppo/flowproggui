@@ -8313,16 +8313,22 @@ unsigned long
 			§ rsp = 15r  
 			§ pnt { r B } 
 				=+ r' 
+				-- 0 
 				∐
 					blt_im◂◂"r13" B ⊢|
+				-- 1 
 				∐
 					blt_im◂◂"r14" B ⊢|
+				-- 2 
 				∐
 					blt_im◂◂"r8" B ⊢|
+				-- 3 
 				∐
 					blt_im◂◂"r9" B ⊢|
+				-- 4 
 				∐
 					blt_im◂◂"r10" B ⊢|
+				-- 5 
 				∐
 					blt_im◂◂"r11" B ⊢|
 				∐
@@ -8335,8 +8341,17 @@ unsigned long
 					blt_im◂◂"rdi" B ⊢|
 				∐  
 					blt_im◂◂"rsi" B ⊢|
+				-- 11 
 				∐  
 					blt_im◂◂"rbx" B ⊢|
+				∐  
+					blt_im◂◂"r12" B ⊢|
+				∐  
+					blt_im◂◂"r15" B ⊢|
+				∐  
+					blt_im◂◂"rbp" B ⊢|
+				∐  
+					blt_im◂◂"rsp" B ⊢|
 				∐.  
 					∎|
 			∎∎
@@ -8395,28 +8410,34 @@ unsigned long
 				∐ rsp_n : _r64 
 				∐ dx : _r64 
 				∐ sx : _r64 
+				∐ gx : _r64
 			
 			§ pnt { o B } 
 				$ o ⊢ 
 				∐ lt◂s . 
 					_pf_x ^ { B { s } } ⊢ { B _ } 
 						0' //
-					∎ B
+					∎ { B %[ 0r ] }
 				∐ im◂x . 
 					_pf_x ^ { B { x } } ⊢ { B _ } 
 						0d' //
-					∎ B				
+					∎ { B %[ 1r ] }				
 				∐ rx◂r . 
-					rx.pnt { r B } ⊢| 
+					rx.pnt { r B } ⊢ B 
+					∎ { B %[ 1r ] } 
 				∐ rsp_n◂n . 
 					_pf_x◂◂pf.rsp_n { B { n } } ⊢ { B _ } 
-					∎ B
+					∎ { B %[ 0r ] }
 				∐ dx◂n . 
 					_pf_x◂◂pf.dx { B { n } } ⊢ { B _ } 
-					∎ B
-				∐. sx◂n . 
+					∎ { B %[ 0r ] }
+				∐ sx◂n . 
 					_pf_x◂◂pf.sx { B { n } } ⊢ { B _ } 
-					∎ B
+					∎ { B %[ 0r ] }
+				∐. gx◂i . 
+					_pf_x ^ { B { i } } ⊢ { B _ }
+						"QWORD [GLV+8*0x" 0x' "]" //
+					∎ { B %[ 0r ] } 
 			∎∎ 
 		¶ gx = _r64
 		¶ a
@@ -8505,46 +8526,71 @@ unsigned long
 				RFV.lv◂◂&{ _ _ _ * _ _ _ _ } { V i } ⊢ { V i { h } }
 				_add { x h } ⊢ { x _ }
 				∎ { { G V } x }
+			§ m { B o1 o0 } 
+				$ B ⊢ { B n } 
+				$ n ⊢ n,m 
+				_add_im◂◂9r m ⊢ m 
+				$ { B m } ⊢ B
+				op.pnt { o1 B } ⊢ { B b0 }
+				blt_im◂◂"," B ⊢ B				 
+				op.pnt { o0 B } ⊢ { B b1 }
+				blt_im◂◂"\n" B ⊢ B
+				_or { b0 b1 } ⊢ { b _ }
+				$ B ⊢ { B m } 
+				∐ b'=1r . 
+					$ b ⊢ _ 
+					blt_im◂◂"\tmov     " { B n } ⊢ { B _ }
+					∎ { B m }
+				∐. .
+					blt_im◂◂"\tMOV_RBX " { B n } ⊢ { B _ }
+					∎ { B m }
 		§§ mov 
 			-- r12,r13,r14,r15 
-			§ f # { B i0 i1 } 
-				-\
-				=+ i0' 
-				-- 0 r12 
+			¶ r 
+				∐ gr : _r64 
+				∐ gi : _r64 
+			§ r i 
+				=+ i' 
 				∐
-				-- 1 r13 
+					∎ op.rx◂%[ rx.r12 ]
 				∐
-				-- 2 r14 
+					∎ op.rx◂%[ rx.r13 ]
 				∐
-				-- 3 r15 
+					∎ op.rx◂%[ rx.r14 ]
 				∐
+					∎ op.rx◂%[ rx.r15 ]
 				∐. 
-					-/
-					_pf_x ^ { B { i1 i0 } } ⊢ { B _ }
-						"\tMOV_RBX QWORD [GLV+8*0x" 0x' "],QWORD [GLV+8*0x" 1x' "]\n" // 
+					∎ op.gx◂i
+			§ rp { B i } 
+				=+ i' 
+				∐
+					rx.pnt { %[ rx.r12 ] B } ⊢|
+				∐
+					rx.pnt { %[ rx.r13 ] B } ⊢|
+				∐
+					rx.pnt { %[ rx.r14 ] B } ⊢|
+				∐
+					rx.pnt { %[ rx.r15 ] B } ⊢|
+				∐. 
+					_pf_x ^ { B { i } } ⊢ { B _ }
+						"QWORD [GLV+8*0x" 0x' "]" //
 					∎ B 
+			§ f # { B i0 i1 } 
+				r i0 ⊢ o0 
+				r i1 ⊢ o1 
+				m { B o1 o0 } ⊢|
 			§ op_i # { B o i }
-				blt_im◂◂"\tMOV_RBX " B ⊢ B 
-				op.pnt { o B } ⊢ B 
-				_pf_x ^ { B { i } } ⊢ { B _ }
-					",QWORD [GLV+8*0x" 0x' "]\n" // 
-				∎ B
+				r i ⊢ i 
+				m { B o i } ⊢| 
 			§ i_op # { B i o }
-				_pf_x ^ { B { i } } ⊢ { B _ }
-					"\tMOV_RBX QWORD [GLV+8*0x" 0x' "]," // 
-				op.pnt { o B } ⊢ B 
-				blt_im◂◂"\n" B ⊢|
+				r i ⊢ i 
+				m { B i o } ⊢| 	
 			§ rx_i # { B r i }
-				blt_im◂◂"\tmov " B ⊢ B 
-				rx.pnt { r B } ⊢ B 
-				_pf_x ^ { B { i } } ⊢ { B _ }
-					",QWORD [GLV+8*0x" 0x' "]\n" // 
-				∎ B
+				r i ⊢ i 
+				m { B op.rx◂r i } ⊢| 
 			§ i_rx # { B i r }
-				_pf_x ^ { B { i } } ⊢ { B _ }
-					"\tmov QWORD [GLV+8*0x" 0x' "]," // 
-				rx.pnt { r B } ⊢ B 
-				blt_im◂◂"\n" B ⊢|
+				r i ⊢ i 
+				m { B i op.rx◂r } ⊢| 
 			∎∎ 
 		§§ slv_L 
 			§§ A = BST_r64
@@ -8614,11 +8660,7 @@ unsigned long
 					0st' //
 				∎ { V B }
 			∐ mov_op_op◂{ o0 o1 } . 
-				blt_im◂◂"\tMOV_RBX " B ⊢ B 
-				op.pnt { o0 B } ⊢ B 
-				blt_im◂◂"," B ⊢ B 
-				op.pnt { o1 B } ⊢ B 
-				blt_im◂◂"\n" B ⊢ B
+				m { B o0 o1 } ⊢ B
 				∎ { V B }
 			∐ mov_glx◂{ r0 r1 } .
 				$ V ⊢ { LB F G } 
