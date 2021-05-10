@@ -359,7 +359,7 @@
 
 § alc_rcd◂◂N ## {} 
   !^ _ ⊢ r 
-    "\tALC_RCD " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) ",rax\n"
+    "\tALC_N " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) "\n"
     //
   ∎ r 
 § free_rcd◂◂N ## r 

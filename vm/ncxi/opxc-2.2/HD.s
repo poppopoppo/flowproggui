@@ -70,12 +70,6 @@
 bits 64 
 ; macros 
 
-%macro DIV10 0 ; rax ⊢ rax
-	mov MCR_REG,0xcccc_cccc_cccc_cccd 
-  mul MCR_REG 
-  mov rax,rdx 
-  shr rax,3
-%endmacro
 %macro DIV_MOD10 0 ; rax ⊢ rax,rdi 
 	mov rdi,rax 
 	mov MCR_REG,0xcccc_cccc_cccc_cccd 
@@ -181,33 +175,7 @@ LB_%1_2:
 	cmp rax,0 
 	jz err
 %endmacro
-%macro JZ_SPC 2
-	movzx MCR_REG,%1
-	cmp MCR_REG,9 
-	jz %2
-	cmp MCR_REG,10 
-	jz %2
-	cmp MCR_REG,32 
-	jz %2
-%endmacro
  
-%macro JZ_LINE_SPC 2
-	movzx MCR_REG,%1 
-	cmp MCR_REG,9 
-	jz %2
-	cmp MCR_REG,32 
-	jz %2
-%endmacro
- 
-%macro ALC_RCD 2 ; n,reg-name!=rbx 
-	mov MCR_REG,QWORD [(SS_RCD_TOP+8*%1)]
-	mov rax,%1 
-	call alc_rcd_n 
-	mov %2,QWORD [MCR_REG]
-	mov QWORD [(SS_RCD_TOP+8*%1)],%2
-	mov %2,MCR_REG
-%endmacro 
-
 %macro ALC_N 1 ; n,reg-name!=rbx 
 	mov rbx,QWORD [(SS_RCD_TOP+8*%1)]
 	cmp rbx,0 
@@ -258,15 +226,6 @@ LB_%1_2:
 %macro BSS_SS_RCD 2 
 	SS_RCD_%1_VCT: resq (%1+1)*(%2+4)
 %endmacro 
-
-%define RX0 r13
-%define RX1 r14
-%define RX2 r8
-%define RX3 r9 
-%define RX4 r10 
-%define RX5 r11 
-%define RX6 rcx 
-%define RX7 rdx
 
 %define SEED 0x_f7f7_65d7_9dab_bace
 
