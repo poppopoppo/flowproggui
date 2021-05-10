@@ -60,8 +60,8 @@
 %define SIG_SEGV 11
 %define SS_MAX 4000
 %define MCR_REG rbx
-%define SRC_REG r13 
-%define DST_REG r14
+%define SRC_REG rbp 
+%define DST_REG rbp
 
 %define GLX(n) QWORD [(GLV+8*n)] 
 %define SX(n) QWORD [SRC_REG+(8*n)]
@@ -72,16 +72,15 @@ bits 64
 
 %macro DIV_MOD10 0 ; rax ⊢ rax,rdi 
 	mov rdi,rax 
-	mov MCR_REG,0xcccc_cccc_cccc_cccd 
-	mul MCR_REG 
+	mov rdx,0xcccc_cccc_cccc_cccd 
+	mul rdx 
 	mov rax,rdx 
 	shr rax,3
-	mov rsi,rax  
-	add rsi,rsi ; *2
-	lea rsi,[rsi+4*rsi] 
-	sub rdi,rsi 
+	sub rdi,rax ; 1
+	lea rdx,[rax+8*rax] 
+	sub rdi,rdx ; -9
 %endmacro
-
+	
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
 	mov rsi,8

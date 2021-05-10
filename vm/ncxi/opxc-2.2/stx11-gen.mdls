@@ -8506,10 +8506,23 @@ unsigned long
 				_add { x h } ⊢ { x _ }
 				∎ { { G V } x }
 		§§ mov 
+			-- r12,r13,r14,r15 
 			§ f # { B i0 i1 } 
-				_pf_x ^ { B { i1 i0 } } ⊢ { B _ }
-					"\tMOV_RBX QWORD [GLV+8*0x" 0x' "],QWORD [GLV+8*0x" 1x' "]\n" // 
-				∎ B 
+				-\
+				=+ i0' 
+				-- 0 r12 
+				∐
+				-- 1 r13 
+				∐
+				-- 2 r14 
+				∐
+				-- 3 r15 
+				∐
+				∐. 
+					-/
+					_pf_x ^ { B { i1 i0 } } ⊢ { B _ }
+						"\tMOV_RBX QWORD [GLV+8*0x" 0x' "],QWORD [GLV+8*0x" 1x' "]\n" // 
+					∎ B 
 			§ op_i # { B o i }
 				blt_im◂◂"\tMOV_RBX " B ⊢ B 
 				op.pnt { o B } ⊢ B 
