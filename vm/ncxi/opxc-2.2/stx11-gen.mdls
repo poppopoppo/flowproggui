@@ -10366,10 +10366,15 @@ unsigned long
 							asm.cct { e e1 } ⊢ e 
 							∎ { { e GV } vl ast.o_pr◂{} }
 						∐. bl.f◂{} . 
-							alc_gl.f { { GV e %[ 0r ] } vl } ⊢ { { GV e M } vl } 					
-							call { e GV lb is p0 } ⊢ { e GV } 
-							$ M ⊢ M,n 
-							GV.set_n { GV M } ⊢ GV 
+							GV.h GV ⊢ { GV h } 
+							sep_gl.f { h vl is } ⊢ { vl is N _ L } 
+							$ N ⊢ N,n 
+							GV.set_gl { GV { N ⟦⟧ } } ⊢ GV 
+							asm.add_nd { e asm.mov_glx_l◂L } ⊢ e 
+							asm.add_st_s8_im◂◂"\tsub rsp,8\n" e ⊢ e
+							mov_ptn2.ptn { e GV is p0 } ⊢ { e GV }
+							call_lb { lb e } ⊢ { _ e } 
+							asm.add_st_s8_im◂◂"\tadd rsp,8\n" e ⊢ e 
 							∎ { { e GV } vl ast.o_p◂n }
 					∎∎
 				§ @.mk_id_ptn { vl p } 
