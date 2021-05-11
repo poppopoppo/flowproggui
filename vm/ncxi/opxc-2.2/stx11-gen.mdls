@@ -6918,6 +6918,18 @@ unsigned long
 				∐. f◂{} . 
 					i { RFVl { rfb rfv } } ⊢ RFV
 					∎ { RFV bl.f◂{} }
+			§ emt_i # { i { _ _ _ h n _ _ _ } }
+				_dec i ⊢ i 
+				^ i,h,n ⊢ i,_,_,s 
+					"i=" 0d' ",h=" 1d' ",n=" 2d' "\n" //
+				_emt s ⊢ _ 
+				∎ i 
+			§ emt V 
+				o V ⊢ { _ { _ v } }
+				_arr_len v ⊢ { v l } 
+				_arr.itr_r◂◂emt_i { l v } ⊢ _ 
+				∎ {} 
+					
 			∎∎	
 		§§ find_gf 
 			§ @.ge_lp { V y0 gl i }
@@ -8880,7 +8892,8 @@ unsigned long
 				∐. _nil◂{} . 
 					∎ ⟦⟧ 
 			§ set_n # { V n } 
-				o V ⊢ { Vl { gvv { h { _ gl } } N pl } }
+				o V ⊢ { Vl { gvv { h { n0 gl } } N pl } }
+				_max { N n0 } ⊢ N 
 				$ n ⊢ n,n0 
 				set_n0 { n0 gl } ⊢ gl 
 				i { Vl { gvv { h { n gl } } N pl } } ⊢| 
@@ -10560,8 +10573,6 @@ unsigned long
 						∐ f_seq◂{} .
 							LB.new lb_n ⊢ { LBR lb_n } 
 							lb_etr { LBR e } ⊢ { LBR e } 
-							--$ vl ⊢ vl
-							--alc_gl.f { { GV ec0 %[ 0r ] } vl } ⊢ { { GV ec0 _ } vl } 
 							GV.h GV ⊢ { GV G }
 							sep_gl.f { G vl is } ⊢ { vl is N M L }
 							GV.set_gl { GV { M ⟦⟧ } } ⊢ GV 
@@ -10839,8 +10850,8 @@ unsigned long
 							LB.new lb_n ⊢ { lbg lb_n } 
 							T.of_imp v ⊢ { ys yd }
 							_ref.o oi ⊢ { Oi { w lc gl } }
-							^ lbg,w,hn ⊢ lbg,w,_,ec1 
-								"LB_" 0d' ": ;; " 1' ",h=" 2d' "\n" // 
+							^ lbg,w,pf ⊢ lbg,w,pf,ec1 
+								"LB_" 0d' ": ;; " 1' ",i=" 2d' "\n" // 
 							_emt ec1 ⊢ ec1 
 							_ref.to_i { Oi { w lc gl } } ⊢ {}
 							GV.inc { GV pf pl } ⊢ { GV hp }
@@ -11859,14 +11870,15 @@ unsigned long
 					_emt_im.f◂◂ "opxcc:prs_vld" {} ⊢ {} 
 					OpADL.ns.emt_rtm { I m0 aa0 a0 } ⊢ { G F LB ec0 }		
 					_emt_im.f◂◂"opxcc:asm generated" {} ⊢ {} 
-					OpADL.ns.asm.to_s8 { { LB F G } ec0 } ⊢ { _ sec0 }
+					OpADL.ns.asm.to_s8 { { LB F G } ec0 } ⊢ { { _ F _ } sec0 }
+					OpADL.ns.RFV.emt F ⊢ _ 
 					_cd %[ "rm SH.mdls.s\ntouch SH.mdls.s\n" ] ⊢ _ 
 					_emt_s8_to_im◂◂"SH.mdls.s" sec0 ⊢ _ 
 					_emt_im.f◂◂"opxcc:wrote to SH.mdls.s" {} ⊢ {} 
 
 					^ _ ⊢ sx0 
 						`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
-    				`gcc -pthread -lpthread -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O2 -o out.exe 
+    				`gcc -pthread -lpthread -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O3 -o out.exe 
 						// 
 					_cd sx0 ⊢ _  
 					_emt_im.f◂◂"opxcc:compiled to out.exe" {} ⊢ {} 
