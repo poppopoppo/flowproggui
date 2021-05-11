@@ -8770,20 +8770,23 @@ unsigned long
 				_not s1 ⊢ s1 
 				∎ { s0 s1 }
 			§ len { s0 s1 }
+				_not s1 ⊢ s1 
 				∐ s1'<>0r .
-					_not s1 ⊢ s1 
 					_bsr s1 ⊢ { s1 i }
 					_not s1 ⊢ s1 
 					_add_im◂◂65r i ⊢ i 
 					∎ { { s0 s1 } i }
-				∐ s0'<>0r .
-					_not s0 ⊢ s0 
-					_bsr s0 ⊢ { s0 i }
-					_not s0 ⊢ s0 
-					_inc i ⊢ i 
-					∎ { { s0 s1 } i }
 				∐. .
-					∎|
+					_not s1 ⊢ s1
+					_not s0 ⊢ s0 
+					∐  s0'<>0r .
+						_bsr s0 ⊢ { s0 i }
+						_not s0 ⊢ s0 
+						_inc i ⊢ i 
+						∎ { { s0 s1 } i }
+					∐. .
+						_not s0 ⊢ s0 
+						∎ { { s0 s1 } %[ 0r ] }
 			§ alc { s0 s1 }
 				∐ s0'<>0r .
 					_bsf s0 ⊢ { s0 i }
