@@ -253,7 +253,11 @@
     ` sub rax,1 
     //
   ∎ r  
-
+§ _not # r 
+  !^ r ⊢ r 
+    ` not rax 
+    //
+  ∎ r 
 § _cnc_add # { r h }
   $ h ⊢ h,h0 
   _cnc_siz◂◂(\\N . _add_im◂◂(_ct.op2.shl◂◂{ N 3r })) { h0 r } ⊢ r
@@ -279,13 +283,13 @@
 § _btr = op2◂◂"btr"
 § _bt # { r i } 
   !^ r,i ⊢ *r,*i,c 
-    `xor rsi,rsi 
+    ` xor rsi,rsi 
     ` bt rax,rdi 
-    ` setc rsi 
+    ` setc sil 
     //
   ∎ { r i c }
 § _btx # { r i c } 
-  !^ r,i,c ⊢ *r,*i,c 
+  !^ r,i,c ⊢ r,*i,c 
     ` cmp rsi,0 
     ` jz .L0 
     ` bts rax,rdi
@@ -293,7 +297,7 @@
     `.L0: 
     ` btr rax,rdi
     `.L1:
-    ` setc rsi 
+    ` setc sil 
     ` and rsi,1
     //
   ∎ { r i c }
@@ -1087,6 +1091,12 @@
     ` bsr rax,rax
     //
 	∎ { x r } 
+§ _bsf # x 
+	$ x ⊢ x,x0 
+	!^ x0 ⊢ r 
+    ` bsf rax,rax
+    //
+	∎ { x r }
 
 § _cmp_s8 { s0 s1 }
   _id.s8 s0 ⊢ s0 
