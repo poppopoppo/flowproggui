@@ -8755,11 +8755,11 @@ unsigned long
 			§ t◂{} = { %[ 0xffffffffffffffffr ] %[ 0xffffffffffffffffr ] }
 			§ n N 
 				∐ N'=<63r . 
-					_shr { %[ 0xffffffffffffffffr ] N } ⊢ { s _ }
+					_shl { %[ 0xffffffffffffffffr ] N } ⊢ { s _ }
 					∎ { s %[ 0xffffffffffffffffr ] }
 				∐. .
 					_sub_im◂◂64r N ⊢ N 
-					_shr { %[ 0xffffffffffffffffr ] N } ⊢ { s _ }
+					_shl { %[ 0xffffffffffffffffr ] N } ⊢ { s _ }
 					∎ { %[ 0r ] s }
 				
 			§ l { { s0 s1 } i }
@@ -10429,8 +10429,7 @@ unsigned long
 							GV.h GV ⊢ { GV h } 
 							sep_gl.f { h vl is } ⊢ { vl is N _ L } 
 							$ N ⊢ N,n 
-							GV.S.n N ⊢ S 
-							GV.set_gl { GV S } ⊢ GV 
+							GV.ini_n { GV N } ⊢ GV 
 							asm.add_nd { e asm.mov_glx_l◂L } ⊢ e 
 							asm.add_st_s8_im◂◂"\tsub rsp,8\n" e ⊢ e
 							mov_ptn2.ptn { e GV is p0 } ⊢ { e GV }
