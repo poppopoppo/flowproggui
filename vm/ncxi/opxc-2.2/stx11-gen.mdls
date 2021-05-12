@@ -10348,8 +10348,7 @@ unsigned long
 						f1 { { G S N ⟦⟧ } vl } ⊢ { { G S N l } vl }
 						ptn2 { S p } ⊢ { S p }
 						ptn3 { { G S N l } p } ⊢ { { _ S N l } p }
-						GV.S.len S ⊢ { _ M }
-						∎ { vl p N M l }
+						∎ { vl p N S l }
 					∎∎  
 				§§ push_gl 
 					§ alc { { e0 e1 GV c M } r }
@@ -10621,8 +10620,8 @@ unsigned long
 							LB.new lb_n ⊢ { LBR lb_n } 
 							lb_etr { LBR e } ⊢ { LBR e } 
 							GV.h GV ⊢ { GV G }
-							sep_gl.f { G vl is } ⊢ { vl is N M L }
-							GV.ini_n { GV M } ⊢ GV 
+							sep_gl.f { G vl is } ⊢ { vl is N S L }
+							GV.set_gl { GV S } ⊢ GV 
 							asm.add_nd { ec0 asm.mov_glx_l◂L } ⊢ ec0 
 							$ %[ 0r ] ⊢ n 
 							alc_cnc.s_i { tav n yd } ⊢ { tav n pa0 }	
@@ -11557,8 +11556,8 @@ unsigned long
 								∐ is ⊢ RP.rcd◂_cns◂{ is0 _cns◂{ is _nil◂{} } } .
 									$ { c0 is0 c1 } ⊢ C
 									idx.ini_n nc ⊢ { _ AV } 
-									_ref.new AV ⊢ AV 
-									stt_mtc_lp { { is pm ps m S pb nxp C } f_c AV ⟦⟧ FE EE } ⊢| 				
+									_ref.new { AV ps m S pb nxp C f_c } ⊢ AV 
+									stt_mtc_lp { { is pm } AV ⟦⟧ FE EE } ⊢| 				
 								∐. .
 									∎|
 							∐. mt◂{ t { n x y } pb } . 
@@ -11593,57 +11592,59 @@ unsigned long
 						_inc i ⊢ i 
 						GV.set_gl { GV gl } ⊢ GV 
 						stt_tj { { is S v r lb0 lb1 i l } f_c FE  { RFV GXV GV lb_n tav  ec0 } } ⊢|						
-				@.stt_mtc_lp_lst { { k l0 l1 ps m0 S pb p1 C } f_c AV K FE  EE }
+				@.stt_mtc_lp_lst { { k l0 l1 } AV K FE EE }
 					∐ l0 ⊢ _cns◂{ isp l0 }; l1 ⊢ _cns◂{ mp l1 } .
 						$ ⟦ K_l◂{ k l0 l1 } < K ⟧ ⊢ K
-						stt_mtc_lp { { isp mp ps m0 S pb p1 C } f_c AV K FE  EE } ⊢|
+						stt_mtc_lp { { isp mp } AV K FE  EE } ⊢|
 					∐ l0 ⊢ _nil◂{}; l1 ⊢ _nil◂{} . 
 						lst.rev k ⊢ k 
-						stt_mtc_K { { RP.rcd◂k ps m0 S pb p1 C } f_c AV K FE  EE } ⊢|
+						stt_mtc_K { RP.rcd◂k AV K FE EE } ⊢|
 					∐. . 
 						∎| 
-				@.stt_mtc_K { { pi ps m0 S pb p1 C } f_c AV K FE  EE } 
+				@.stt_mtc_K { pi AV K FE EE } 
 					$ K ⊢ 
 					∐ _cns◂{ k K } .
 						$ k ⊢ 
 						∐ K_l◂{ k l0 l1 } . 
 							$ ⟦ pi < k ⟧ ⊢ k 
-							stt_mtc_lp_lst { { k l0 l1 ps m0 S pb p1 C } f_c AV K FE  EE } ⊢| 
+							stt_mtc_lp_lst { { k l0 l1 } AV K FE EE } ⊢| 
 						∐. K_a◂ia . 
-							stt_mtc_K { { RP.atm◂stt_a◂{ ia pi } ps m0 S pb p1 C } f_c AV K FE  EE } ⊢|
+							stt_mtc_K { RP.atm◂stt_a◂{ ia pi } AV K FE EE } ⊢|
 					∐. _nil◂{} .
-						_ref.o AV ⊢ { AV av } 
+						_ref.Lc.l◂◂&{ _ * _ _ _ _ _ _ } AV ⊢ { AV { ps } }
+						_ref.Lc.o◂◂&{ * _ _ _ _ _ _ _ } AV ⊢ { AV { av } } 
 						idx.csm_tpl_ptn { av ps } ⊢ { av is }
-						_ref.to_i { AV av } ⊢ {} 
+						_ref.Lc.i◂◂&{ * _ _ _ _ _ _ _ } { AV { av } } ⊢ AV
+						_ref.Lc.l◂◂&{ _ _ * * _ * * * } AV ⊢ { _ { m0 S p1 C f_c } }
 						$ ⟦ m0 < S ⟧ ⊢ S 
 						$ C ⊢ { _ is0 c1 } 
 						stt_ac { c1 RP.cns2◂{ is0 is } } ⊢ is 
 						stt_mtc { { S p1 } f_c FE EE is } ⊢| 
-						
-				@.stt_mtc_lp { { isp mp ps m0 S pb p1 C } f_c AV K FE EE }
+				@.stt_mtc_lp { { isp mp } AV K FE EE }
 					$ mp ⊢ 
 					∐ RP.rcd◂l1 . 
 						$ isp ⊢ 
 						∐ RP.rcd◂l0 . 
-							stt_mtc_lp_lst { { ⟦⟧ l0 l1 ps m0 S pb p1 C } f_c AV K FE  EE } ⊢|
+							stt_mtc_lp_lst { { ⟦⟧ l0 l1 } AV K FE  EE } ⊢|
 						∐. RP.atm◂a0 . 		
 							∎| 
 					∐. RP.atm◂a1 .
 						$ a1 ⊢ 
 						∐ IR.stt_r◂r1 . 
-							_ref.o AV ⊢ { AV av } 
+							_ref.Lc.o◂◂&{ * _ _ _ _ _ _ _ } AV ⊢ { AV { av } } 
 							idx.set { av r1 isp } ⊢ { av r1 }
-							_ref.i { AV av } ⊢ AV
-							stt_mtc_K { { RP.atm◂stt_r◂r1 ps m0 S pb p1 C } f_c AV K FE  EE } ⊢|
+							_ref.Lc.i◂◂&{ * _ _ _ _ _ _ _ } { AV { av } } ⊢ AV
+							stt_mtc_K { RP.atm◂stt_r◂r1 AV K FE  EE } ⊢|
 						∐ IR.stt_v◂_ . 
 							∎| 
 						∐. stt_a◂{ ia1 mpa1 } . 
 							∐ isp ⊢ RP.atm◂ast.stt_adt◂{ ia0 pa0 } .
 								∐ ia0'=ia1' . 
 									$ ⟦ K_a◂ia0 < K ⟧ ⊢ K
-									stt_mtc_lp { { pa0 mpa1 ps m0 S pb p1 C } f_c AV K FE  EE } ⊢|
+									stt_mtc_lp { { pa0 mpa1 } AV K FE  EE } ⊢|
 								∐. . 
-									stt_rb_K { RP.atm◂ast.stt_adt◂{ ia0 pa0 } AV K } ⊢ { is _ } 
+									stt_rb_K { RP.atm◂ast.stt_adt◂{ ia0 pa0 } AV K } ⊢ { is AV } 
+									_ref.Lc.l◂◂&{ _ _ _ * * _ * * } AV ⊢ { _ { S pb C f_c } }
 									$ C ⊢ { c0 is0 _ }
 									stt_rb { c0 RP.cns2◂{ is0 is } } ⊢ is
 									stt_mtc { { S pb } f_c FE EE is } ⊢| 
@@ -11662,15 +11663,15 @@ unsigned long
 									"\tjmp QWORD [LB_" 0d' "+8*rdi]\n"
 									"LB_" 0d' ": dq " 1' "\n" //
 								asm.add_s8 { ec0 sc0 } ⊢ ec0  
-								stt_obs_i { { rd mpa1 ps m0 S pb p1 C } { RFV GXV GV lb_n tav } ec0 lbl D %[ 0r ] f_c AV K FE  } ⊢|							
+								stt_obs_i { { rd mpa1 } { RFV GXV GV lb_n tav } ec0 lbl D %[ 0r ] AV K FE  } ⊢|							
 							∐. . 
 								∎|
 				@.stt_rb_K_l { { AV l0 } k } 
 					$ k ⊢ 
 					∐ _cns◂{ pi k } . 
-						_ref.o AV ⊢ { AV av }
+						_ref.Lc.o◂◂&{ * _ _ _ _ _ _ _ } AV ⊢ { AV { av } } 
 						rt_of_mp_T◂◂idx.lod { av pi } ⊢ { av pi }
-						_ref.i { AV av } ⊢ AV 
+						_ref.Lc.i◂◂&{ * _ _ _ _ _ _ _ } { AV { av } } ⊢ AV
 						stt_rb_K_l { { AV ⟦ pi < l0 ⟧ } k } ⊢| 
 					∐. _nil◂{} . 
 						∎ { AV l0 }
@@ -11686,7 +11687,7 @@ unsigned long
 					∐. _nil◂{} .
 						∎ { pi AV } 
 				
-					@.stt_obs_i { { rd mpa1 ps m0 S pb p1 C } { RFV GXV GV lb_n tav  } e0 lbl hl i f_c AV K FE }
+					@.stt_obs_i { { rd mpa1 } { RFV GXV GV lb_n tav  } e0 lbl hl i AV K FE }
 						∐ lbl ⊢ p_cns◂{ lbi lbl } .
 							lb_etr { lbi e0 } ⊢ { _ e0 } 
 							$ rd ⊢ rd,rd0 
@@ -11700,24 +11701,17 @@ unsigned long
 								_inc i ⊢ i 
 								asm.add_st_s8_im◂◂"\tRT_ERR 0xbbff_2e17\n" e0 ⊢ e0
 								GV.set_gl { GV gl } ⊢ GV 
-								stt_obs_i { { rd mpa1 ps m0 S pb p1 C } { RFV GXV GV lb_n tav } e0 lbl hl i f_c AV K FE  } ⊢|
+								stt_obs_i { { rd mpa1 } { RFV GXV GV lb_n tav } e0 lbl hl i AV K FE  } ⊢|
 							∐. _some◂pi . 
 								$ i ⊢ i,i0 
 							  _inc i ⊢ i 
 							  $ K ⊢ K,K0 
 							  $ mpa1 ⊢ mpa1,mpa1_0
-								$ f_c ⊢ f_c,f_c0
-								$ ps ⊢ ps,ps0 
-								$ pb ⊢ pb,pb0 
-								$ p1 ⊢ p1,p10 
-								$ m0 ⊢ m0,m00
-								$ C ⊢ C,C0
 								$ AV ⊢ AV,AV0 
-								$ S ⊢ S,S0 
 								$ { RFV GXV GV lb_n tav e0 } ⊢ EE 
-								stt_mtc_lp { { RP.atm◂ast.stt_adt◂{ i0 pi } mpa1_0 ps0 m00 S0 pb0 p10 C0 } f_c0 AV0 K0 FE  EE } ⊢ {  FE { RFV GXV GV lb_n tav  e0 } _ }
+								stt_mtc_lp { { RP.atm◂ast.stt_adt◂{ i0 pi } mpa1_0 } AV0 K0 FE  EE } ⊢ {  FE { RFV GXV GV lb_n tav  e0 } _ }
 								GV.set_gl { GV gl } ⊢ GV 
-								stt_obs_i { { rd mpa1 ps m0 S pb p1 C } { RFV GXV GV lb_n tav } e0 lbl hl i f_c AV K FE  } ⊢|
+								stt_obs_i { { rd mpa1 } { RFV GXV GV lb_n tav } e0 lbl hl i AV K FE  } ⊢|
 						∐ lbl ⊢ p_end◂lbi .
 							lb_etr { lbi e0 } ⊢ { _ e0 } 
 							_ref.o hl ⊢ { H D } 
@@ -11731,7 +11725,7 @@ unsigned long
 								∎ { FE EE ‹› }
 							∐. _some◂pi . 
 								$ { RFV GXV GV lb_n tav e0 } ⊢ EE 
-							  stt_mtc_lp { { RP.atm◂ast.stt_adt◂{ i pi } mpa1 ps m0 S pb p1 C } f_c AV K FE EE } ⊢|
+							  stt_mtc_lp { { RP.atm◂ast.stt_adt◂{ i pi } mpa1 } AV K FE EE } ⊢|
 						∐. . 
 							∎|
 			∎∎			

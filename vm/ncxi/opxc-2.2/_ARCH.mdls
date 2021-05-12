@@ -1056,10 +1056,26 @@
       _add_im◂◂8r r0 ⊢ r0 
       _lc.i◂◂T { hk r0 ht k } ⊢ { hk _ }
       !^ r ⊢ *r 
-      `_ref_lc_i:
       ` btr QWORD [rax],63
       //
       ∎ t◂{ hk r }
+    § l◂◂T t◂{ hk r } 
+      !^ r ⊢ *r 
+        ` mov rdi,QWORD [rax]
+        ` bts rdi,63 
+        ` jc err_ref_o
+        ` mov QWORD [rax],rdi
+        //
+      $ r ⊢ r,r0 
+      _add_im◂◂8r r0 ⊢ r0 
+      _lc.o◂◂T { hk r0 } ⊢ { hk r0 ht a }
+      $.[ a',b' . { _hp◂{ a' b' } a' } ] { ht a } ⊢ { ht a }
+      $ a ⊢ a,a0 
+      _lc.i◂◂T { hk r0 ht a } ⊢ { hk _ }
+      !^ r ⊢ *r 
+        ` btr QWORD [rax],63
+      //
+      ∎ { t◂{ hk r } a0 }
     § dlt = '[ _[] : t',r' . lc◂t'◂r'→{} ]
     ∎∎ 
 
