@@ -643,6 +643,15 @@
       dlt_i { { h r } i } ⊢|
     ∐. .
       ∎ {} 
+  § @.fld_i◂◂F { { h r k } i } 
+    ∐ i'<>0r .
+      _cnc_lod_hp { r h } ⊢ { r h q } 
+      _cnc_add { r h } ⊢ { r h }
+      F { k q } ⊢ k 
+      _dec i ⊢ i
+      fld_i◂◂F { { h r k } i } ⊢|
+    ∐. .
+      ∎ k 
       
   § @.dlt_lc_i { { h r j } i } 
     ∐ i'<>0r .
@@ -690,6 +699,20 @@
       // 
     $ r ⊢ _ 
     ∎ {}
+    § fld_r◂◂F # { a k } 
+    _id.arr a ⊢ a 
+    len a ⊢ { a l } 
+    _hp.of a ⊢ { r ha }
+    _hp.ini {} ⊢ h 
+    $.[ k' . { _hp◂(_arr◂k') _hp◂k' } ] { ha h } ⊢ { _ h } 
+    $ r ⊢ r,r0 
+    _add_im◂◂8r r0 ⊢ r0 
+    fld_i◂◂F { { h r0 k } l } ⊢ k
+    !^ r ⊢ *r 
+      ` mov rdi,rax
+      ` call free_opq
+      // 
+    ∎ k
     § @.rpc_i { { a0 h r1 l } i } 
       ∐ i'<>l' .
         o { a0 i } ⊢ { a0 q0 } 
@@ -755,7 +778,26 @@
        ∎ {}
       ∐. .
         ∎ {}  
-    ∎∎
+    § fld_r◂◂F { a k } 
+      _id.arr_x a ⊢ a 
+      len a ⊢ { a l } 
+      _hp.of a ⊢ { r ha } 
+      ∐ l'<>0r .
+        _hp.ini {} ⊢ h 
+        $.[ k' . { _hp◂(_arr_x◂k') _hp◂k' } ] { ha h } ⊢ { _ h } 
+        $ r ⊢ r,r0 
+        _add_im◂◂8r r0 ⊢ r0 
+        fld_i◂◂F { { h r0 k } l } ⊢ k
+       !^ r ⊢ *r 
+         ` mov rdi,rax
+          ` call free_opq
+        // 
+       $ r ⊢ _ 
+       ∎ k
+      ∐. .
+        ∎ k
+    ∎∎ 
+  § fld_r = std.fld_r
   § l # { a i }
     o { a i } ⊢ { a k }
     $ k ⊢ k,k0 
