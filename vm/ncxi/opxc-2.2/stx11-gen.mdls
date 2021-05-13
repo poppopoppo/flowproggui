@@ -4165,8 +4165,8 @@ unsigned long
 					$ y1 ⊢ y1,y10 
 					T.unify.f { ct_imp◂{ y1 yy0 } y0 } ⊢ {}  
 					_dec lv ⊢ lv 
-					gen { lv y10 } ⊢ {  lv _ } 
-					gen { lv yy } ⊢ {  lv yy } 
+					gen { lv y10 } ⊢ { lv _ } 
+					gen { lv yy } ⊢ { lv yy } 
 					inst { lv yy } ⊢ { lv yy }  
 					∎ { { al lv APV } RP.atm◂ast.k_app◂{ c0 c1 } yy }
 				∐ ast.k_ctr◂{ i v } . 
@@ -4176,12 +4176,10 @@ unsigned long
 					∎ { { al lv APV } RP.atm◂ast.k_ctr◂{ i v } y }
 				∐ ast.k_op_axm◂{ i l o } . 
 					$ E ⊢ { al lv APV } 
-					$ i ⊢ i,i0 
 					slv_axm { al lv i o } ⊢ { al lv i o y }
-					newvar_l lv  ⊢ {  lv yy }
+					newvar_l lv  ⊢ { lv yy }
 					$ yy ⊢ yy,yy0 
 					ct_abs { { al lv APV } yy l } ⊢ { { al lv APV } yy l } 
-					$ y ⊢ y,y0,y1 
 					T.unify.f { y yy } ⊢ {} 
 					$ { al lv APV } ⊢ E 
 					∎ { E RP.atm◂ast.k_op_axm◂{ i l o } yy0 }
