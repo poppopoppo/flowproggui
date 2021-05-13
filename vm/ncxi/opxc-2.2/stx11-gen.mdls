@@ -2322,11 +2322,18 @@ unsigned long
 					al◂◂{ ini_l A_l } { V t } ⊢|
 				§ f_lst_al # { V l } 
 					lst◂◂{ ini_l A_l } { V l } ⊢|			
+				§ f_al_lv◂◂L # { { N al } t } 
+					al◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t tx } 
+					∎ { { N al } t tx }
 				§§ N
 					§ lv◂◂L # y 
 						_sgn.mk {} ⊢ N 
 						f_lv◂◂L { N y } ⊢ { _ y yx }
 						∎ { y yx } 
+					§ al_lv◂◂L # { al y } 
+						_sgn.mk {} ⊢ N 
+						f_al_lv◂◂L { { N al } y } ⊢ { { _ al } y yx }
+						∎ { al y yx }  
 					∎∎ 
 				∎∎ 
 			§§ l 
@@ -2496,23 +2503,17 @@ unsigned long
 			∎ { lv l }
 		
 		§ iu { y0 y1 } 
-			--$ y1 ⊢ y1,y10 
-			--$ y0 ⊢ y0,y00 
-			--inst_lv◂◂1r y10 ⊢ y10 
-			--inst_lv◂◂1r y00 ⊢ y00 
 			inst.rpc.N.lv◂◂1r y1 ⊢ { y1 y10 }
-			inst.rpc.N.lv◂◂1r y0 ⊢ { y0 y00 }
-			$ y00 ⊢ y00,yt 
+			inst.rpc.N.al_lv◂◂1r { ⟦⟧ y0 } ⊢ { al y0 y00 }
 			unify.f_b { y00 y10 } ⊢  b  
-			gen_lv_dlt◂◂0r yt ⊢ {} 
+			gen.lv.dlt.var_lst◂◂0r al ⊢ {}
 			∎ { y0 y1 b }
 		§ iut { y0 y1 } 
-			$ y1 ⊢ y1,y10 
-			inst { %[ 1r ] y10 } ⊢ { _ y10 } 
-			inst { %[ 1r ] y0 } ⊢ { _ y0 } 
+			inst.rpc.N.al_lv◂◂1r { ⟦⟧ y1 } ⊢ { al y1 y10 }
+			inst_lv◂◂1r y0 ⊢ y0 
 			$ y0 ⊢ y0,y00 
 			unify.f_b { y00 y10 } ⊢  b  
-			gen.lv◂◂0r y0 ⊢ y0
+			gen.lv.dlt.var_lst◂◂0r al ⊢ {}
 			∎ { y0 y1 b }
 		§ ci { y0 y1 } 
 			inst { %[ 1r ] y1 } ⊢ { _ y1 } 
