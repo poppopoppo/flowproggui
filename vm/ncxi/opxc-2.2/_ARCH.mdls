@@ -397,6 +397,7 @@
       ` add QWORD [SGN],1
       // 
     ∎ t◂n
+  § new = mk 
   § eq # { t◂n0 t◂n1 }
     _r64.eq { n0 n1 } ⊢ { { n0 n1 } b } 
     ∎ { { t◂n0 t◂n1 } b } 
