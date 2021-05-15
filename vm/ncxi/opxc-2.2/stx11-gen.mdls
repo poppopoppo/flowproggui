@@ -1647,6 +1647,28 @@ unsigned long
 			_sgn.mk {} ⊢ i
 			_ref.i { p var_q◂{ i p◂np } } ⊢ p 
 			∎ var◂p◂p
+		§ nvq = newvar_q 
+		§ nvq2 # {} 
+			_ref.n {} ⊢ p 
+			_ref.lc_rpc p ⊢ { p np }
+			_sgn.new {} ⊢ i
+			_ref.i { p var_q◂{ i p◂np } } ⊢ p 
+			$ p ⊢ p,p0 
+			∎ { var◂p◂p var◂p◂p0 }
+		§ nvq3 # {} 
+			_ref.n {} ⊢ p 
+			_ref.lc_rpc p ⊢ { p np }
+			_sgn.new {} ⊢ i
+			_ref.i { p var_q◂{ i p◂np } } ⊢ p 
+			$ p ⊢ p,p0,p1 
+			∎ { var◂p◂p var◂p◂p0 var◂p◂p1 }
+		§ nvq4 # {} 
+			_ref.n {} ⊢ p 
+			_ref.lc_rpc p ⊢ { p np }
+			_sgn.new {} ⊢ i
+			_ref.i { p var_q◂{ i p◂np } } ⊢ p 
+			$ p ⊢ p,p0,p1,p2 
+			∎ { var◂p◂p var◂p◂p0 var◂p◂p1 var◂p◂p2 }
 		§ ini_q # {}
 			_ref.n {} ⊢ p 
 			_ref.lc_rpc p ⊢ { p np }
@@ -2494,6 +2516,9 @@ unsigned long
 			§ f_al_lv◂◂L # { { N al } t } 
 				al◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t } 
 				∎ { { N al } t }	
+			§ f_lst_al_lv◂◂L # { { N al } t } 
+				lst◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t } 
+				∎ { { N al } t }	
 			§§ N
 				§ f # { lv y }
 					_sgn.mk {} ⊢ N 
@@ -2656,6 +2681,9 @@ unsigned long
 				§ f_al_lv◂◂L # { { N al } t } 
 					al◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t tx } 
 					∎ { { N al } t tx }
+				§ f_lst_al_lv◂◂L # { { N al } t } 
+					lst◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t tx } 
+					∎ { { N al } t tx }
 				§§ N
 					§ f # { lv y }
 						_sgn.mk {} ⊢ N 
@@ -2729,15 +2757,15 @@ unsigned long
 							f { lv y1 } ⊢|
 						∐ var_l◂lv1 .
 							∐ lv1'=<lv' . 
-								TV.i { I var_l◂lv1 } ⊢ i 
+								TV.to_i { I var_l◂lv1 } ⊢ {} 
 								∎ lv
 							∐. .
 								_sgn.mk {} ⊢ N 
 								_ref.lc_rpc I ⊢ { I i0 } 
-								TV.i { I var_q◂{ N p◂i0 } } ⊢ i
+								TV.to_i { I var_q◂{ N p◂i0 } } ⊢ {}
 								∎ lv
 						∐. var_q◂q . 
-							TV.i { I var_q◂q } ⊢ i 
+							TV.to_i { I var_q◂q } ⊢ {} 
 							∎ lv 
 					@.f = fld.f◂◂{ DTA ABS VAR }
 					@.lst = fld.lst◂◂{ DTA ABS VAR }
@@ -3142,7 +3170,7 @@ unsigned long
 				∐ k_name : e' 
 				∐ k_t : { CP◂e'◂s'◂t'◂r' t' }
 				∐ k_ply : { _r64 RP.t◂r' SP◂r'◂(CP◂e'◂s'◂t'◂r') }
-				∐ k_ap : { _ref◂(ap◂(CP◂e'◂s8_p◂T.t_p◂_r64)) T.t_p } 
+				∐ k_ap : { _ref◂(ap◂(CP◂e'◂s8_p◂T.t_p◂_r64)) { _lst◂T.t_p T.t_p } } 
 				∐ k_unv : _r64
 				∐ k_btm : {}
 			@.exp_s8 c'
@@ -3445,174 +3473,139 @@ unsigned long
 			=+ i' 
 			-- 0 id 
 			∐ 
-				T.newvar_q {} ⊢ yv
-				$ yv ⊢ yv,yv0 
+				T.nvq2 {} ⊢ { yv yv0 }
 				∎ TX.t_imp◂{ yv yv0 } 
 			-- 1 push 
 			∐ 
-				T.newvar_q {} ⊢ yv
-				$ yv ⊢ yv,yv0
-				$ TX.arr_x◂yv0 ⊢ a0,a1
+				T.nvq3 {} ⊢ { yv yv0 yv1 }
+				$ TX.arr_x◂yv0 ⊢ a0
+				$ TX.arr_x◂yv1 ⊢ a1
 				∎ TX.t_imp◂{ TX.cns2◂{ yv a0 } a1 }
 			-- 2 pf 
 			∐ 
-				T.newvar_q {} ⊢ yk
-				$ yk ⊢ yk,yk1,yk2
+				T.nvq3 {} ⊢ { yk yk1 yk2 }
 				∎ TX.t_ct_imp◂{ TX.pf◂yk TX.t_imp◂{ yk1 TX.cns2◂{ yk2 TX.s8◂{} } } }			
 			-- 3 pf_x 
 			∐ 
-				T.newvar_q {} ⊢ yk
-				$ yk ⊢ yk,yk1,yk2
+				T.nvq3 {} ⊢ { yk yk1 yk2 }
 				∎ TX.t_ct_imp◂{ TX.pf◂yk TX.t_imp◂{ TX.cns2◂{ TX.cns2◂{ TX.s8◂{} TX.r64◂{} } yk1 } TX.cns2◂{ TX.cns2◂{ TX.s8◂{} TX.r64◂{} } yk2 } } }			
 			-- 4 exn 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ yx
+				T.nvq {} ⊢ y0
+				T.nvq {} ⊢ yx
 				∎ TX.t_ct_imp◂{ yx TX.t_imp◂{ TX.cns0◂{} y0 } }			
 			-- 5 ctr 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				$ y0 ⊢ y0,y0t 
-				$ y1 ⊢ y1,y1t 
-				T.newvar_q {} ⊢ yt
+				T.nvq2 {} ⊢ { y0 y0t }
+				T.nvq2 {} ⊢ { y1 y1t }
+				T.nvq {} ⊢ yt
 				∎ TX.t_ct_imp◂{ TX.t_ctr◂{ y0 y1 yt } TX.t_imp◂{ y0t y1t } } 		
 			-- 6 ila 
 			∐ 
-				T.newvar_q {} ⊢ ys
-				T.newvar_q {} ⊢ yd
-				$ ys ⊢ ys,ys0 
-				$ yd ⊢ yd,yd0 
+				T.nvq2 {} ⊢ { ys ys0 }
+				T.nvq2 {} ⊢ { yd yd0 }
 				∎ TX.t_ct_imp◂{ TX.cns3◂{ TX.ila◂ys TX.ila◂yd TX.s8◂{} } TX.t_imp◂{ ys0 yd0 } }		
 			-- 7 nop 
 			∐ 
 				∎|
 			-- 8 app 
 			∐ 
-				T.newvar_q {} ⊢ yx
-				$ yx ⊢ yx,yx0 	
-				T.newvar_q {} ⊢ yy
-				$ yy ⊢ yy,yy0
+				T.nvq2 {} ⊢ { yx yx0 	 }
+				T.nvq2 {} ⊢ { yy yy0 }
 				∎ TX.t_imp◂{ TX.cns2◂{ TX.t_imp◂{ yx yy } yx0 } yy0 } 
 			-- 9 id_par 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				T.newvar_q {} ⊢ y2
-				$ y0 ⊢ y0,y0t 
-				$ y1 ⊢ y1,y1t 
-				$ y2 ⊢ y2,y2t 
+				T.nvq2 {} ⊢ { y0 y0t  }
+				T.nvq2 {} ⊢ { y1 y1t  }
+				T.nvq2 {} ⊢ { y2 y2t  }
 				∎ TX.t_ct_imp◂{ TX.t_imp◂{ y0 y1 } TX.t_imp◂{ TX.cns2◂{ y2 y0t } TX.cns2◂{ y2t y1t } } } 		
 			-- 57 hp_of
 			∐ 
-				T.newvar_q {} ⊢ y
-				$ y ⊢ y,y0
+				T.nvq2 {} ⊢ { y y0 }
 				∎ TX.t_imp◂{ y TX.cns2◂{ TX.r64◂{} TX.hp◂y0 } }
 			-- 58 hp_to
 			∐ 
-				T.newvar_q {} ⊢ y
-				$ y ⊢ y,y0
+				T.nvq2 {} ⊢ { y y0 }
 				∎ TX.t_imp◂{ TX.cns2◂{ TX.r64◂{} TX.hp◂y } y0 }
 			-- 59 hp_ini 
 			∐ 
-				T.newvar_q {} ⊢ y
+				T.nvq {} ⊢ y
 				∎ TX.t_imp◂{ TX.cns0◂{} TX.hp◂y }
 			-- 61 prd 
 			∐ 
-				T.newvar_q {} ⊢ y
-				T.newvar_q {} ⊢ yr
-				$ y ⊢ y,y0 
-				$ yr ⊢ yr,yr0
+				T.nvq2 {} ⊢ { y y0  }
+				T.nvq2 {} ⊢ { yr yr0 }
 				∎ TX.t_imp◂{ TX.cns2◂{ y0 TX.rcd◂yr0 } TX.rcd◂TX.prd◂{ y yr } }
 			-- 62 ipr 
 			∐ 
-				T.newvar_q {} ⊢ y
-				T.newvar_q {} ⊢ yr
-				$ y ⊢ y,y0 
-				$ yr ⊢ yr,yr0
+				T.nvq2 {} ⊢ { y y0  }
+				T.nvq2 {} ⊢ { yr yr0 }
 				∎ TX.t_imp◂{ TX.rcd◂TX.prd◂{ y yr } TX.cns2◂{ y0 TX.rcd◂yr0 } }
 			-- dlt_r64 
 			∐ 
 				∎ TX.t_imp◂{ TX.r64◂{} TX.cns0◂{} }
 			-- cnc_lod 
 			∐ 
-				T.newvar_q {} ⊢ y
-				T.newvar_q {} ⊢ z
-				T.newvar_q {} ⊢ w 
-				$ z ⊢ z,z0
+				T.nvq {} ⊢ y
+				T.nvq {} ⊢ w 
+				T.nvq2 {} ⊢ { z z0 }
 				∎ TX.t_ct_imp◂{ TX.t_ctr_rev◂{ y TX.cns2◂{ z w } } TX.t_imp◂{ TX.r64◂{} TX.cns2◂{ TX.r64◂{} z0 } } }
 			-- cnc_sto
 			∐ 
-				T.newvar_q {} ⊢ y
-				T.newvar_q {} ⊢ z
-				T.newvar_q {} ⊢ w 
-				$ z ⊢ z,z0
+				T.nvq {} ⊢ y
+				T.nvq {} ⊢ w 
+				T.nvq2 {} ⊢ { z z0 }
 				∎ TX.t_ct_imp◂{ TX.t_ctr_rev◂{ y TX.cns2◂{ z w } } TX.t_imp◂{ TX.cns2◂{ TX.r64◂{} z0 } TX.r64◂{} } }
 			-- hp_dlt 
 			∐ 
-				T.newvar_q {} ⊢ y
+				T.nvq {} ⊢ y
 				∎ TX.t_imp◂{ TX.hp◂y TX.cns0◂{} }
 			-- 47 st 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				$ y0 ⊢ y0,y00 
+				T.nvq2 {} ⊢ { y0 y00  }
 				∎ TX.t_ct_imp◂{ y0 TX.t_imp◂{ TX.cns0◂{} TX.st◂y00 } }
 			-- gl_new 
 			∐ 
-				T.newvar_q {} ⊢ yi
-				T.newvar_q {} ⊢ yk
-				$ yi ⊢ yi,yi0,yi1 
-				$ yk ⊢ yk,yk0,yk1 
+				T.nvq3 {} ⊢ { yi yi0 yi1 }
+				T.nvq3 {} ⊢ { yk yk0 yk1 }
 				∎ TX.t_imp◂{ TX.cns2◂{ TX.gl_I◂yi yk } TX.cns2◂{ TX.gl_I◂TX.gl_S◂yi0 TX.gl_t◂{ yk1 yi1 } } }
 			-- gl_o
 			∐ 
-				T.newvar_q {} ⊢ yi
-				T.newvar_q {} ⊢ yk
-				$ yi ⊢ yi,yi0 
-				$ yk ⊢ yk,yk0,yk1 
+				T.nvq2 {} ⊢ { yi yi0 }
+ 				T.nvq3 {} ⊢ { yk yk0 yk1 }
 				∎ TX.t_imp◂{ TX.gl_t◂{ yk yi } TX.cns2◂{ TX.gl_lc◂{ yk0 yi0 } yk1 } }
 			-- gl_i
 			∐ 
-				T.newvar_q {} ⊢ yi
-				T.newvar_q {} ⊢ yk
-				$ yi ⊢ yi,yi0 
-				$ yk ⊢ yk,yk0,yk1 
+				T.nvq3 {} ⊢ { yk yk0 yk1 }
+				T.nvq2 {} ⊢ { yi yi0  }
 				∎ TX.t_imp◂{ TX.cns2◂{ TX.gl_lc◂{ yk0 yi0 } yk1 } TX.gl_t◂{ yk yi } }
 			-- dlt_gl_I 
 			∐
-				T.newvar_q {} ⊢ yi
+				T.nvq {} ⊢ yi
 				∎ TX.t_imp◂{ TX.gl_I◂yi TX.cns0◂{} }
 			-- dlt_gl_lc 
 			∐
-				T.newvar_q {} ⊢ yi
-				T.newvar_q {} ⊢ yk
+				T.nvq {} ⊢ yi
+				T.nvq {} ⊢ yk
 				∎ TX.t_imp◂{ TX.gl_lc◂{ yk yi } TX.cns0◂{} }
 			-- ctr_rec 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				$ y0 ⊢ y0,y0t 
-				$ y1 ⊢ y1,y1t 
+				T.nvq2 {} ⊢ { y0 y0t  }
+				T.nvq2 {} ⊢ { y1 y1t  }
 				∎ TX.t_ct_imp◂{ TX.t_ctr_rev◂{ y1 y0 } TX.t_imp◂{ y0t y1t } } 		
 			-- lc_o 
 			∐ 
-				T.newvar_q {} ⊢ a
-				T.newvar_q {} ⊢ s
-				T.newvar_q {} ⊢ r
-				$ a ⊢ a,a0,a1,a2
-				$ s ⊢ s,s0 
-				$ r ⊢ r,r0,r1
+				T.nvq4 {} ⊢ { a a0 a1 a2 }
+				T.nvq3 {} ⊢ { r r0 r1 }
+				T.nvq2 {} ⊢ { s s0  }
 				$ TX.lc◂{ a s r } ⊢ y0
 				$ TX.t_imp◂{ TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } } ⊢ y1
 				∎ TX.t_ct_imp◂{ y0 y1 }
 			-- lc_i 
 			∐ 
-				T.newvar_q {} ⊢ a
-				T.newvar_q {} ⊢ s
-				T.newvar_q {} ⊢ r
-				$ a ⊢ a,a0,a1,a2
-				$ s ⊢ s,s0 
-				$ r ⊢ r,r0,r1
+				T.nvq4 {} ⊢ { a a0 a1 a2 }
+				T.nvq3 {} ⊢ { r r0 r1 }
+				T.nvq2 {} ⊢ { s s0  }
 				$ TX.lc◂{ a s r } ⊢ y0
 				$ TX.t_imp◂{ TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } } ⊢y1
 				∎ TX.t_ct_imp◂{ y0 y1 }
@@ -3622,92 +3615,77 @@ unsigned long
 			=+ i' 
 			-- 0x0 oom 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
+				T.nvq {} ⊢ y0
+				T.nvq {} ⊢ y1
 				$ y0 ⊢ y0,y0t 
 				$ y1 ⊢ y1,y1t 
 				∎ TX.t_ct_imp◂{ TX.t_mtc◂{ y0 y1 } TX.t_imp◂{ y0t y1t } }
 			-- 0x1 moo 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
+				T.nvq {} ⊢ y0
+				T.nvq {} ⊢ y1
 				$ y0 ⊢ y0,y0t 
 				$ y1 ⊢ y1,y1t 
 				∎ TX.t_ct_imp◂{ TX.t_imp◂{ y0t y1t } TX.t_mtc◂{ y0 y1 } }
 			-- 0x2 mcp 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				T.newvar_q {} ⊢ y2
-				$ y0 ⊢ y0,y0t,y0s 
+				T.nvq3 {} ⊢ { y0 y0t y0s }
+				T.nvq {} ⊢ y1
+				T.nvq3 {} ⊢ { y2 y2t y2s }
 				$ y1 ⊢ y1,y1t 
-				$ y2 ⊢ y2,y2t,y2s
 				∎ TX.t_ct_imp◂{ TX.cns3◂{ TX.t_mop◂{ y0 y1 } TX.t_mtc◂{ y1t y2 } TX.t_mtc◂{ y0t y2t } } TX.t_mtc◂{ y0s y2s } }
 			-- 0x3 mcn 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
+				T.nvq {} ⊢ y0
+				T.nvq {} ⊢ y1
 				∎ TX.t_ct_imp◂{ TX.cns0◂{} TX.t_mtc◂{ y0 y1 } }		 			
 			-- 0x4 mop 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				T.newvar_q {} ⊢ yi
-				T.newvar_q {} ⊢ ys
-				T.newvar_q {} ⊢ yd
-				$ y0 ⊢ y0,y0t
-				$ y1 ⊢ y1,y1t 
-				$ yi ⊢ yi,yi0
-				$ ys ⊢ ys,ys0 
-				$ yd ⊢ yd,yd0
-				T.newvar_q {} ⊢ yt
+				T.nvq2 {} ⊢ { y0 y0t }
+				T.nvq2 {} ⊢ { y1 y1t  }
+				T.nvq2 {} ⊢ { yi yi0 }
+				T.nvq2 {} ⊢ { ys ys0  }
+				T.nvq2 {} ⊢ { yd yd0 }
+				T.nvq {} ⊢ yt
 				∎ TX.t_ct_imp◂{ TX.cns3◂{ TX.t_ctr_rev◂{ ys TX.cns2◂{ yi y0 } } TX.t_ctr◂{ y1 y0t yt } TX.t_ctr_rev◂{ TX.cns2◂{ yi0 y1t } yd } } TX.t_mop◂{ ys0 yd0 } } 
 			-- 0x5 mt_e 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				T.newvar_q {} ⊢ y2
-				$ y0 ⊢ y0,y0t,y0s 
-				$ y1 ⊢ y1,y1t 
+				T.nvq3 {} ⊢ { y0 y0t y0s }
+				T.nvq {} ⊢ y2
+				T.nvq2 {} ⊢ { y1 y1t  }
 				∎ TX.t_ct_imp◂{ TX.t_ctr_rev◂{ y0 TX.cns2◂{ TX.cns2◂{ y1 y1t } y2 } } TX.t_mop◂{ y0t y0s } } 
 			-- 0x6 mt_ne 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				T.newvar_q {} ⊢ y2
-				$ y0 ⊢ y0,y0t,y0s 
+				T.nvq3 {} ⊢ { y0 y0s y0t }
+				T.nvq {} ⊢ y1
+				T.nvq {} ⊢ y2
 				$ y1 ⊢ y1,y1t 
 				∎ TX.t_ct_imp◂{ TX.t_ctr_rev◂{ y0 TX.cns2◂{ TX.cns2◂{ y1 y1t } y2 } } TX.t_mop◂{ y0t y0s } } 
 			-- 0x7 mt_le 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
-				T.newvar_q {} ⊢ y2
-				$ y0 ⊢ y0,y0t,y0s 
+				T.nvq3 {} ⊢ { y0 y0t y0s }
+				T.nvq {} ⊢ y1
+				T.nvq {} ⊢ y2
 				$ y1 ⊢ y1,y1t 
 				∎ TX.t_ct_imp◂{ TX.t_ctr_rev◂{ y0 TX.cns2◂{ TX.cns2◂{ y1 y1t } y2 } } TX.t_mop◂{ y0t y0s } } 
 			-- 0x8 tj 
 			∐ 
-				T.newvar_q {} ⊢ ya
-				T.newvar_q {} ⊢ yb
-				T.newvar_q {} ⊢ yc
-				--T.newvar_q {} ⊢ yv
-				$ ya ⊢ ya,ya0,ya1 
+				T.nvq3 {} ⊢ { ya ya0 ya1 }
+				T.nvq {} ⊢ yb
+				T.nvq {} ⊢ yc
 				$ yc ⊢ yc,yc0 
 				∎ TX.t_ct_imp◂{ TX.cns2◂{ TX.t_ctr_rev◂{ ya TX.cns2◂{ TX.r64◂{} yb } } TX.t_tj◂{ ya0 yc } } TX.t_mtc◂{ ya1 yc0 } }
 			-- 0x9 tjn 
 			∐ 
-				T.newvar_q {} ⊢ y0
-				T.newvar_q {} ⊢ y1
+				T.nvq {} ⊢ y0
+				T.nvq {} ⊢ y1
 				$ y0 ⊢ y0,y0t 
 				$ y1 ⊢ y1,y1t
 				∎ TX.t_ct_imp◂{ TX.t_mtc◂{ y0 y1 } TX.t_tj◂{ y0t y1t } } 
 			-- 0xa tjc 
 			∐ 
-				T.newvar_q {} ⊢ ya
-				T.newvar_q {} ⊢ yb
-				$ ya ⊢ ya,ya0,ya1 
-				$ yb ⊢ yb,yb0,yb1 
+				T.nvq3 {} ⊢ { ya ya0 ya1  }
+				T.nvq3 {} ⊢ { yb yb0 yb1  }
 				∎ TX.t_ct_imp◂{ TX.cns2◂{ TX.t_mtc◂{ ya yb } TX.t_tj◂{ ya0 yb0 } } TX.t_tj◂{ ya1 yb1 } } 
 			-- 0xb ccs 
 			∐
@@ -3717,18 +3695,18 @@ unsigned long
 				∎ TX.ila◂TX.rcd◂TX.rcd_unt◂{}
 			-- 0xd ila_i 
 			∐ 
-				T.newvar_q {} ⊢ y
+				T.nvq {} ⊢ y
 				$ y ⊢ y,y0
 				∎ TX.t_ct_imp◂{ TX.ila◂TX.rcd◂y TX.ila◂TX.rcd◂TX.prd◂{ TX.r64◂{} y0 } } 
 				-- 0xe ila_c 
 			∐ 
-				T.newvar_q {} ⊢ y
+				T.nvq {} ⊢ y
 				$ y ⊢ y,y0
 				∎ TX.t_ct_imp◂{ TX.ila◂TX.rcd◂y TX.ila◂TX.rcd◂TX.prd◂{ TX.r64◂{} y0 } } 
 		-- 0xf ct 
 		∐ 
-			T.newvar_q {} ⊢ ys
-			T.newvar_q {} ⊢ yd
+			T.nvq {} ⊢ ys
+			T.nvq {} ⊢ yd
 			$ ys ⊢ ys,ys0
 			$ yd ⊢ yd,yd0
 			∎ TX.t_ct_imp◂{ TX.t_imp◂{ ys yd } TX.t_ct_imp◂{ ys0 yd0 } } 
@@ -3740,12 +3718,11 @@ unsigned long
 			∎ TX.t_ct_imp◂{ TX.r64◂{} TX.s8◂{} }
 		-- 0x12 ct_if 
 		∐ 
-			T.newvar_q {} ⊢ y
-			$ y ⊢ y,y0,y1 
+			T.nvq3 {} ⊢ { y y0 y1  }
 			∎ TX.t_ct_imp◂{ TX.cns3◂{ TX.r64◂{} y y0 } y1 }
 		-- 0x13 ct_eq 
 		∐ 
-			T.newvar_q {} ⊢ y
+			T.nvq {} ⊢ y
 			$ y ⊢ y,y0
 			∎ TX.t_ct_imp◂{ TX.cns2◂{ y y0 } TX.r64◂{} }
 		-- 0x14 ct_op2 
@@ -3753,11 +3730,9 @@ unsigned long
 			∎ TX.t_ct_imp◂{ TX.r64◂{} TX.t_ct_imp◂{ TX.cns2◂{ TX.r64◂{} TX.r64◂{} } TX.r64◂{} } }
 		-- 0x15 mt 
 		∐ 
-			T.newvar_q {} ⊢ y0
-			T.newvar_q {} ⊢ y1
-			T.newvar_q {} ⊢ y2
-			$ y0 ⊢ y0,y0t,y0s 
-			$ y1 ⊢ y1,y1t,y1u 
+			T.nvq {} ⊢ y2
+			T.nvq3 {} ⊢ { y0 y0t y0s  }
+			T.nvq3 {} ⊢ { y1 y1t y1u  }
 			∎ TX.t_ct_imp◂{ TX.cns2◂{ TX.mt◂y1u TX.t_ctr_rev◂{ y0 TX.cns2◂{ TX.cns2◂{ y1 y1t } y2 } } } TX.t_mop◂{ y0t y0s } } 
 		-- 0x16 mt_e_r64 = 76r 
 		∐ 
@@ -3791,12 +3766,12 @@ unsigned long
 			∎ TX.mt◂TX.s8◂{} 
 		-- 0x20 ct_cnc_siz
 		∐
-			T.newvar_q {} ⊢ t0
+			T.nvq {} ⊢ t0
 			$ TX.t_ct_imp◂{ TX.hp◂t0 TX.r64◂{} } ⊢ yx
 			∎ yx 	
 		-- 0x21 ct_hp
 		∐
-			T.newvar_q {} ⊢ t0
+			T.nvq {} ⊢ t0
 			$ TX.hp◂t0 ⊢ yx
 			∎ yx 	
 		-- 0x22  nop2 
@@ -3804,40 +3779,36 @@ unsigned long
 			∎| 
 		-- 0x23 seq 
 		∐ 
-			T.newvar_q {} ⊢ y0
-			T.newvar_q {} ⊢ y1
-			T.newvar_q {} ⊢ y2
-			$ y0 ⊢ y0,y0t 
-			$ y1 ⊢ y1,y1t 
-			$ y2 ⊢ y2,y2t 
+			T.nvq2 {} ⊢ { y0 y0t  }
+			T.nvq2 {} ⊢ { y1 y1t  }
+			T.nvq2 {} ⊢ { y2 y2t  }
 			∎ TX.t_ct_imp◂{ TX.cns2◂{ TX.t_imp◂{ y0t y1 } TX.t_imp◂{ y1t y2t } } TX.t_imp◂{ y0 y2 } } 
 		-- 0x24 prs
 			∐ 
-				T.newvar_q {} ⊢ yv 
+				T.nvq {} ⊢ yv 
 				$ yv ⊢ yv,yv0 
 				∎ T.ct_imp◂{ TX.grm◂yv TX.prs_opn◂yv0 } 
 			-- 0x25 grm 
 			∐ 
-				T.newvar_q {} ⊢ yv
+				T.nvq {} ⊢ yv
 					$ yv ⊢ yv,yv0 
 					∎ T.ct_imp◂{ TX.prs_opn◂yv0 TX.grm◂yv }  
 			-- 0x26 inl 
 			∐ 
-				T.newvar_q {} ⊢ yv
-				T.newvar_q {} ⊢ yw
+				T.nvq {} ⊢ yv
+				T.nvq {} ⊢ yw
 				$ yv ⊢ yv,yv0 
 				$ yw ⊢ yw,yw0 
 				∎ TX.t_ct_imp◂{ TX.t_imp◂{ yv yw } TX.t_imp◂{ yv0 yw0 } }  
 					-- 0x27 sqc
 				∐ 
-					T.newvar_q {} ⊢ y0
-					T.newvar_q {} ⊢ y1
-					T.newvar_q {} ⊢ y2
+					T.nvq {} ⊢ y0
+					T.nvq {} ⊢ y1
+					T.nvq {} ⊢ y2
 					$ y0 ⊢ y0,y0t 
 					$ y1 ⊢ y1,y1t 
 					$ y2 ⊢ y2,y2t 
-					T.newvar_q {} ⊢ yt
-					$ yt ⊢ yt,yt0,yt1 
+					T.nvq3 {} ⊢ { yt yt0 yt1  }
 					∎ TX.t_ct_imp◂{ TX.cns2◂{ TX.t_ctr◂{ y0t y1 yt } TX.t_ctr◂{ y1t y2t yt0 } } TX.t_ctr◂{ y0 y2 yt1 } } 
 				-- lc_n 
 				∐
@@ -3845,11 +3816,10 @@ unsigned long
 				-- lc_e 
 				∐ 
 					$ i ⊢ _ 
-					T.newvar_q {} ⊢ a
-					T.newvar_q {} ⊢ s
-					T.newvar_q {} ⊢ r
-					T.newvar_q {} ⊢ i
-					$ i ⊢ i,i0,i1
+					T.nvq {} ⊢ a
+					T.nvq {} ⊢ s
+					T.nvq {} ⊢ r
+					T.nvq3 {} ⊢ { i i0 i1 }
 					$ a ⊢ a,a0
 					$ s ⊢ s,s0 
 					$ r ⊢ r,r0
@@ -3860,14 +3830,10 @@ unsigned long
 				-- _c : _t◂{ a' s' r' } →→ _t◂{ a' { _t < s' } { i' < r' } } 
 				∐ 
 					$ i ⊢ _ 
-					T.newvar_q {} ⊢ a
-					T.newvar_q {} ⊢ s
-					T.newvar_q {} ⊢ r
-					T.newvar_q {} ⊢ i
-					$ i ⊢ i,i0
-					$ a ⊢ a,a0
-					$ s ⊢ s,s0 
-					$ r ⊢ r,r0
+					T.nvq2 {} ⊢ { i i0 }
+					T.nvq2 {} ⊢ { a a0 }
+					T.nvq2 {} ⊢ { s s0  }
+					T.nvq2 {} ⊢ { r r0 }
 					$ TX.lc◂{ a TX.rcd◂s TX.rcd◂r } ⊢ y0 
 					$ TX.lc◂{ a0 TX.cns◂{ TX.lc_t◂{} s0 } TX.cns◂{ i0 r0 } } ⊢ y1 
 					∎ TX.t_ct_imp◂{ y0 y1 } 
@@ -4403,7 +4369,7 @@ unsigned long
 		§ var_ln = T.var_ln 
 		§ newvar_i = T.newvar_i 
 		§ newvar_l = T.newvar_l 
-		§ newvar_q = T.newvar_q 
+		§ nvq = T.nvq 
 	
 	§§ APV0 
 		§ lod # { V i }
@@ -4491,29 +4457,29 @@ unsigned long
 				=+ x' 
 				-- nil 
 				∐ 
-					T.newvar_q {} ⊢  y0 
+					T.nvq {} ⊢  y0 
 
 					$ TX.t_ctr_irv◂{ TX.unt◂{} TX.lst◂y0 } ⊢ yx 
 					k_ctr { %[ 1r ] yx } ⊢ k 
 					∎ { APV RP.atm◂k	}
 				-- cns 
 				∐ 
-					T.newvar_q {} ⊢  y0 
-					$ y0 ⊢ y0,y1 
-					$ TX.lst◂y0 ⊢ y0,y2 
+					T.nvq3 {} ⊢ { y0 y1 y2  }
+					$ TX.lst◂y0 ⊢ y0 
+					$ TX.lst◂y2 ⊢ y2 
 					$ TX.t_ctr_irv◂{ TX.cns2◂{ y1 y0 } %y2 } ⊢ yx 
 					k_ctr { %[ 0r ] yx } ⊢ k 
 					∎ { APV  RP.atm◂k	}
 				-- some 
 				∐ 
-					T.newvar_q {} ⊢  y0  
+					T.nvq {} ⊢  y0  
 					$ y0 ⊢ y0,y1 
 					$ TX.t_ctr_irv◂{ y0 TX.opn◂y1 } ⊢ yx
 					k_ctr { %[ 0r ] yx } ⊢ k 
 					∎ { APV  RP.atm◂k }
 				-- none 
 				∐ 
-					T.newvar_q {} ⊢  y0 
+					T.nvq {} ⊢  y0 
 					$ TX.opn◂y0 ⊢ y0 
 					$ TX.t_ctr_irv◂{ TX.unt◂{} %y0 } ⊢ yx
 					k_ctr { %[ 1r ] yx } ⊢ k 
@@ -4565,7 +4531,7 @@ unsigned long
 				nnt o ⊢ {} 
 				∎ { lv n0 rv y }
 		§ exc_tpl # { { lv el } i } 
-			T.newvar_l lv  ⊢ {  lv y1 } 
+			T.newvar_l lv  ⊢ { lv y1 } 
 			$ y1 ⊢ y1,y10 
 			EVV.x { ast.k_v◂y10 i } ⊢ { p i } 
 			$ i ⊢ i,i0 
@@ -4676,11 +4642,13 @@ unsigned long
 					T.unify.f { y yy } ⊢ {} 
 					$ { al lv APV } ⊢ E 
 					∎ { E RP.atm◂ast.k_op_axm◂{ i l o } yy0 }
-				∐ ast.k_ap◂{ p t } .
+				∐ ast.k_ap◂{ p { vl t } } .
 					$ E ⊢ { al lv APV } 
-					T.inst.i_rpc.N.al_lv◂◂1r{ al t } ⊢ { al t t0 }
+					_sgn.new {} ⊢ N 
+					T.inst.i_rpc.f_al_lv◂◂1r { { N al } t } ⊢ { { N al } t t0 }
+					T.inst.f_lst_al_lv◂◂1r { { N al } vl } ⊢ { { _ al } vl }
 					$ { al lv APV } ⊢ E 
-					∎ { E RP.atm◂ast.k_ap◂{ p t } t0 }
+					∎ { E RP.atm◂ast.k_ap◂{ p { vl t } } t0 }
 				∐ ast.k_arr◂v .
 					∎| 
 				∐ ast.k_op◂{ ib lc v } . 
@@ -4805,9 +4773,10 @@ unsigned long
 		§§ AP 
 			§ new # { vl y }
 				_base {} ⊢ V 
-				$ y ⊢ y,y0 
-				_ref.mk { { vl y } V } ⊢ p
-				∎ { p y0 }
+				$ y ⊢ y,y0
+				$ vl ⊢ vl,vl0 
+				_ref.new { { vl y } V } ⊢ p
+				∎ { p { vl0 y0 } }
 			§ @.add_i { V l i c y } 
 				∐ l'<>i' .
 					_alc_o { V i } ⊢ { V { t ct } }
@@ -4880,14 +4849,10 @@ unsigned long
 					T.pnt_type_k_lst vl ⊢ s 
 					_emt.f s ⊢ _ 
 					∎ { V ‹› }
-			§ slv { APV p y } 
+			§ slv { APV p { yl y } } 
 				_ref.o p ⊢ { P { { vl s } V } }
-				_sgn.new {} ⊢ N 
-				T.inst.rpc.f_lv◂◂1r { N s } ⊢ { N s st }
-				T.inst.rpc.f_lst_lv◂◂1r { N vl } ⊢ { N vl vlt }
-				T.unify_v.f { y st } ⊢ y  
 				_arr_len V ⊢ { V l } 
-				slv_i { V l %[ 0r ] vlt } ⊢ { V c }
+				slv_i { V l %[ 0r ] yl } ⊢ { V c }
 				_ref.to_i { P { { vl s } V } } ⊢ {}
 				$ c ⊢ 
 				∐ _some◂c .
@@ -4904,83 +4869,78 @@ unsigned long
 	§§ APV 
 		§ ini I 
 			-- emt 
-			T.newvar_q {} ⊢  t0  
-			$ t0 ⊢ t0,t1,v0  
+			T.nvq3 {} ⊢ { t0 t1 v0   }
 			_base {} ⊢ APV 
 			AP.new { ⟦ v0 ⟧ TX.t_imp◂{ t0 t1 } } ⊢ c0
 			_push { c0 APV } ⊢ APV 
 			-- emt_mo 
-			T.newvar_q {} ⊢  t0    
-			T.newvar_q {} ⊢  s0  
-			$ s0 ⊢ s0,s1,v0
-			$ t0 ⊢ t0,t1,v1
-			T.newvar_q {} ⊢  b  
+			T.nvq3 {} ⊢ { s0 s1 v0 }
+			T.nvq3 {} ⊢ { t0 t1 v1 }
+			T.nvq {} ⊢  b  
 			$ TX.t_ct_imp◂{ TX.cns2◂{ TX.s8◂{} TX.t_ctr◂{ t0 s0 b } } TX.t_mtc◂{ t1 s1 } }	⊢ tx 
 			AP.new { ⟦ v0 v1 ⟧ tx } ⊢ c1
 			_push { c1 APV } ⊢  APV 
 			-- dlt 
-			T.newvar_q {} ⊢ t0
+			T.nvq {} ⊢ t0
 			$ t0 ⊢ t0,v0  
 			AP.new { ⟦ v0 ⟧ TX.t_imp◂{ t0 TX.cns0◂{} } } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 			-- dlt_mo 
-			T.newvar_q {} ⊢  t0
+			T.nvq {} ⊢  t0
 			$ t0 ⊢ t0,v0    
-			T.newvar_q {} ⊢  s0
-			$ s0 ⊢ s0,s1,s2,v1
-			T.newvar_q {} ⊢  b
+			T.nvq4 {} ⊢  { s0 s1 s2 v1 }
+			T.nvq {} ⊢  b
 			$ b ⊢ b,v2  
 			$ TX.t_ct_imp◂{ TX.cns3◂{ TX.s8◂{} TX.t_ctr◂{ t0 s0 b } TX.t_mtc◂{ s1 TX.cns0◂{} } } TX.t_mtc◂{ s2 TX.cns0◂{} } }	⊢ tx 
 			AP.new { ⟦ v0 v1 v2 ⟧ tx } ⊢ c1
 			_push { c1 APV } ⊢  APV 
 			-- rpc 
-			T.newvar_q {} ⊢  t0
-			$ t0 ⊢ t0,t1,t2,v0 
+			T.nvq4 {} ⊢  { t0 t1 t2 v0 }
 			AP.new { ⟦ v0 ⟧ TX.t_imp◂{ t0 TX.cns2◂{ t1 t2 } } } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 			-- rpc_mo 
-			T.newvar_q {} ⊢  t0    
-			T.newvar_q {} ⊢  s0  
-			$ s0 ⊢ s0,s1,s2,v1
-			$ t0 ⊢ t0,t1,t2,t3,t4,v0 
-			T.newvar_q {} ⊢  b
+			T.nvq4 {} ⊢  { t0 t1 t2 t3 }
+			T.nvq4 {} ⊢  { s0 s1 s2 v1 }  
+			$ t0 ⊢ t0,t4,v0 
+			T.nvq {} ⊢  b
 			$ b ⊢ b,v2  
 			$ TX.t_ct_imp◂{ TX.cns3◂{ TX.s8◂{} TX.t_ctr◂{ t0 s0 b } TX.t_mtc◂{ s1 TX.cns2◂{ t1 t2 } } } TX.t_mtc◂{ s2 TX.cns2◂{ t3 t4 } } }	⊢ tx 
 			AP.new { ⟦ v0 v1 v2 ⟧ tx } ⊢ c1
 			_push { c1 APV } ⊢  APV 
 			-- emt_adt 
-			T.newvar_q {} ⊢  t0 
-			$ t0 ⊢ t0,t1,v 
+			T.nvq3 {} ⊢ { t0 t1 v  }
 			AP.new { ⟦ v ⟧ TX.t_imp◂{ TX.t_adt◂t0 TX.t_adt◂t1 } } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 				-- dlt_adt 
-			T.newvar_q {} ⊢  t0
+			T.nvq {} ⊢  t0
 			$ t0 ⊢ t0,v  
 			AP.new { ⟦ v ⟧ TX.t_imp◂{ TX.t_adt◂t0 TX.cns0◂{} } } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 			-- rpc_adt 
-			T.newvar_q {} ⊢  t0
-			$ t0 ⊢ t0,v 
-			$ TX.t_adt◂t0 ⊢ t0,t1,t2
+			T.nvq {} ⊢  t0
+			$ t0 ⊢ t0,v,t1,t2 
+			$ TX.t_adt◂t0 ⊢ t0
+			$ TX.t_adt◂t1 ⊢ t1
+			$ TX.t_adt◂t2 ⊢ t2
 			AP.new { ⟦ v ⟧ TX.t_imp◂{ t0 TX.cns2◂{ t1 t2 } } } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 			-- mt_e 
-			T.newvar_q {} ⊢  t0
+			T.nvq {} ⊢  t0
 			$ t0 ⊢ t0,v0 
 			AP.new { ⟦ v0 ⟧ TX.mt◂t0 } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 			-- mt_ne 
-			T.newvar_q {} ⊢  t0
+			T.nvq {} ⊢  t0
 			$ t0 ⊢ t0,v0  
 			AP.new { ⟦ v0 ⟧ TX.mt◂t0 } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 			-- mt_le 
-			T.newvar_q {} ⊢  t0
+			T.nvq {} ⊢  t0
 			$ t0 ⊢ t0,v 
 			AP.new { ⟦ v ⟧ TX.mt◂t0 } ⊢ c0
 			_push { c0 APV } ⊢  APV 
 			-- mt_g
-			T.newvar_q {} ⊢  t0
+			T.nvq {} ⊢  t0
 			$ t0 ⊢ t0,v 
 			AP.new { ⟦ v ⟧ TX.mt◂t0 } ⊢ c0
 			_push { c0 APV } ⊢  APV 
@@ -5285,7 +5245,9 @@ unsigned long
 		§ tpl_atm { { wl lv } w } 		
 			ast.of_fst_n w ⊢ w 
 			T.ini_l lv ⊢ { lv t0 }
-			$ T.var◂T.p◂t0 ⊢ y,y0 			
+			$ t0 ⊢ t0,y0 
+			$ T.var◂T.p◂t0 ⊢ y
+			$ T.var◂T.p◂y0 ⊢ y0 			
 			EVV.alc_var y0 ⊢ n0
 			$ n0 ⊢ n0,n1
 			BST_s8.push { wl { w n0 } } ⊢ wl 
@@ -7911,7 +7873,7 @@ unsigned long
 						
 					∐ c0 ⊢ RP.atm◂ast.k_op_gnr◂{ pg ibg lcg { v0 v1 } } . 
 						_ref.o lcg ⊢ { lcGG { w lcg gfl } }
-						 find_gf.e_lp { { v0 v1 c1 } gfl } ⊢ { { { v0 v1 c1 } o } gfl } 
+						find_gf.e_lp { { v0 v1 c1 } gfl } ⊢ { { { v0 v1 c1 } o } gfl } 
 						$ o ⊢ 
 						∐ _some◂ie . 
 							$ v0 ⊢ _ 
@@ -7981,7 +7943,9 @@ unsigned long
 				$ l ⊢ 
 				∐ _cns◂{ { w i _ v } l } .
 					mo_n l ⊢ mf 
-					$ RP.atm◂ast.k_ctr◂{ i v } ⊢ c,c0
+					$ { i v } ⊢ { i v },{ i0 v0 } 
+					$ RP.atm◂ast.k_ctr◂{ i v } ⊢ c
+					$ RP.atm◂ast.k_ctr◂{ i0 v0 } ⊢ c0
 					$ app_k◂{ unv_k◂%[ UNV.id.emt_mo ] RP.cns2◂{ RP.atm◂ast.k_s8◂w c0 } } ⊢ m 
 					$ mcp_k◂{ mop_k◂{ pc_u0◂{} c pc_u1◂{} } m mf } ⊢ m 
 					∎ m
@@ -8033,7 +7997,10 @@ unsigned long
 				$ l ⊢ 
 				∐ _cns◂{ { w i _ v } l } .
 					mo_n l ⊢ m 
-					$ RP.atm◂ast.k_ctr◂{ i v } ⊢ c,c0,c1
+					$ { i v } ⊢ { i v },{ i0 v0 },{ i1 v1 } 
+					$ RP.atm◂ast.k_ctr◂{ i v } ⊢ c
+					$ RP.atm◂ast.k_ctr◂{ i0 v0 } ⊢ c0
+					$ RP.atm◂ast.k_ctr◂{ i1 v1 } ⊢ c1
 					$ mcp_k◂{ mop_k◂{ pc_u0◂{} c pc_u1◂{} } moo_k◂seq_k◂{ unv_k◂%[ UNV.id.rpc ] ctr◂c◂{ c0 c1 } } m } ⊢ m 
 					∎ m
 				∐. _nil◂{} .
@@ -8382,7 +8349,7 @@ unsigned long
 	
 		§ ctr_t { n x y } 
 			∐ n'=1r . 
-				T.newvar_q {} ⊢  b  
+				T.nvq {} ⊢  b  
 				∎ TX.t_ctr◂{ x y b }
 			∐. .
 				∎ TX.t_ctr_irv◂{ x y }
@@ -9320,7 +9287,7 @@ unsigned long
 				$ V ⊢ { LB F G }
 				LB.new LB ⊢ { l LB }
         _pf_x ^ { B { c l } } ⊢ { B _ }
-					"LB_" 1d' ":\n"
+					"LB_" 1d' ": ; alc_rcd\n"
 					"\tALC_N " 0d' "\n" //
 				∎ { { LB F G } B }  
       ∐. free_rcd◂{ c r } .
@@ -11854,11 +11821,11 @@ unsigned long
 								∐ 
 									∐ is ⊢ RP.rcd◂_cns◂{ RP.atm◂ast.hp◂r _cns◂{ RP.rcd◂_nil◂{} _nil◂{} } } .
 										ast.smt_ap ya ⊢ ya 
-										inst { %[ 1r ] ya } ⊢ { lv ya }
+										--inst { %[ 1r ] ya } ⊢ { lv ya }
 										T.nvl_lv◂◂1r {} ⊢ v0 
 										$ v0 ⊢ v0,v0_0,v1
 										T.unify.f { TX.t_imp◂{ TX.cns2◂{ TX.r64◂{} TX.hp◂v0_0 } v1 } ya } ⊢ {} 
-										gen_lv◂◂0r v0 ⊢ v0 	
+										--gen_lv◂◂0r v0 ⊢ v0 	
 										alc_cnc.s_x { tav %[ 0r ] v0 } ⊢ { tav c_n pa0 } 
 										∐ pa0 ⊢ RP.atm◂ast.hp◂_ .
 											$ RP.atm◂ast.hp◂r ⊢ iy 
@@ -11904,7 +11871,7 @@ unsigned long
 									∐ la ⊢ _cns◂{ c _nil◂{} } . 
 										r64_to_hp { GV is ec0 } ⊢ { GV r0 ec0 } 
 										ast.smt_ap_err◂◂44r ya ⊢ t
-										inst { %[ 1r ] t } ⊢ { _ t }
+										--inst { %[ 1r ] t } ⊢ { _ t }
 										T.nvl_lv◂◂1r {} ⊢ v 
 										T.nvl_lv◂◂1r {} ⊢ w 
 										T.nvl_lv◂◂1r {} ⊢ z 
@@ -11912,10 +11879,10 @@ unsigned long
 										$ w ⊢ w,w0,w1 
 										$ z ⊢ z,z0  
 										T.unify.f { TX.t_ct_imp◂{ TX.t_ctr_rev◂{ v0 TX.cns2◂{ w0 z0 } } TX.t_imp◂{ TX.r64◂{} TX.cns2◂{ TX.r64◂{} w1 } } } t } ⊢ {} 
-										gen_lv◂◂0r v ⊢ yk
-										gen_lv_dlt◂◂0r w ⊢ {} 
-										gen_lv_dlt◂◂0r z ⊢ {} 
-										alc_cnc.s_x { tav %[ 0r ] yk } ⊢ { tav _ pa0 }
+										--gen_lv◂◂0r v ⊢ yk
+										--gen_lv_dlt◂◂0r w ⊢ {} 
+										--gen_lv_dlt◂◂0r z ⊢ {} 
+										alc_cnc.s_x { tav %[ 0r ] v } ⊢ { tav _ pa0 }
 										$ r0 ⊢ r0,i0  
 										asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] i0 } } ⊢ ec0 										
 										IR.ctr_of c ⊢ c 
@@ -11933,7 +11900,7 @@ unsigned long
 								∐ 
 									∐ la ⊢ _cns◂{ c _nil◂{} } . 
 										ast.smt_ap_err◂◂45r ya ⊢ t
-										inst { %[ 1r ] t } ⊢ { _ t }
+										--inst { %[ 1r ] t } ⊢ { _ t }
 										T.nvl_lv◂◂1r {} ⊢ v 
 										T.nvl_lv◂◂1r {} ⊢ w 
 										T.nvl_lv◂◂1r {} ⊢ z 
@@ -11941,12 +11908,12 @@ unsigned long
 										$ w ⊢ w,w0,w1 
 										$ z ⊢ z,z0  
 										T.unify.f { TX.t_ct_imp◂{ TX.t_ctr_rev◂{ v0 TX.cns2◂{ w0 z0 } } TX.t_imp◂{ TX.cns2◂{ TX.r64◂{} w1 } TX.r64◂{} } } t } ⊢ {} 
-										gen_lv◂◂0r v ⊢ yk
-										gen_lv_dlt◂◂0r w ⊢ {} 
-										gen_lv_dlt◂◂0r z ⊢ {}
+									--	gen_lv◂◂0r v ⊢ yk
+									--	gen_lv_dlt◂◂0r w ⊢ {} 
+										--gen_lv_dlt◂◂0r z ⊢ {}
 										∐ is ⊢ RP.rcd◂_cns◂{ r0  _cns◂{ pk _nil◂{} } } .
 											r64_to_hp { GV r0 ec0 } ⊢ { GV r0 ec0 }
-											alc_cnc.s_x { tav %[ 0r ] yk } ⊢ { tav _ pa0 }
+											alc_cnc.s_x { tav %[ 0r ] v } ⊢ { tav _ pa0 }
 
 											IR.ctr_of c ⊢ c 
 											stt_ac { c pa0 } ⊢ pa0 
@@ -11988,17 +11955,17 @@ unsigned long
 								∐
 									∐ is ⊢ RP.rcd◂_cns◂{ gi _cns◂{ k _nil◂{} } } .
 										ast.smt_ap_err◂◂440r ya ⊢ t
-										inst { %[ 1r ] t } ⊢ { lv t }
+										--inst { %[ 1r ] t } ⊢ { lv t }
 										T.nvl_lv◂◂1r {} ⊢ vi 
 										$ vi ⊢ vi,vi0,vi1,vi2  
 										T.nvl_lv◂◂1r {} ⊢ vk 
 										$ vk ⊢ vk,vk0,vk1  
 										$ TX.t_imp◂{ TX.cns2◂{ TX.gl_I◂vi0 vk0 } TX.cns2◂{ TX.gl_I◂TX.gl_S◂vi1 TX.gl_t◂{ vk1 vi2 } } } ⊢ yt
 										T.unify.f { yt t } ⊢ {} 
-										gen_lv◂◂0r vi ⊢ yi 
-										TX.n_of_gl_I yi ⊢ n 
-										gen_lv◂◂0r vk ⊢ yk 
-										alc_cnc.g_x { tav GV yk } ⊢ { tav GV pa0 }
+										--gen_lv◂◂0r vi ⊢ yi 
+										TX.n_of_gl_I vi ⊢ n 
+										--gen_lv◂◂0r vk ⊢ yk 
+										alc_cnc.g_x { tav GV vk } ⊢ { tav GV pa0 }
 										$ pa0 ⊢ pa0,pa1 
 										GXV.add { n pa1 GXV } ⊢ GXV 
 										$ k ⊢ k,k0 
@@ -12012,17 +11979,17 @@ unsigned long
 								∐
 									$ is ⊢ _ 
 									ast.smt_ap_err◂◂440r ya ⊢ t
-									inst { %[ 1r ] t } ⊢ { lv t }
+									--inst { %[ 1r ] t } ⊢ { lv t }
 									T.nvl_lv◂◂1r {} ⊢ vi 
 									$ vi ⊢ vi,vi0,vi1 
 									T.nvl_lv◂◂1r {} ⊢ vk 
 									$ vk ⊢ vk,vk0,vk1,vk2  
 									$ TX.t_imp◂{ TX.gl_t◂{ vk0 vi0 } TX.cns2◂{ TX.gl_lc◂{ vk1 vi1 } vk2 } } ⊢ yt
 									T.unify.f { yt t } ⊢ {} 
-									gen_lv◂◂0r vi ⊢ yi 
-									gen_lv◂◂0r vk ⊢ yk 
-									alc_cnc.f_x { tav GV yk } ⊢ { tav GV pa0 }
-									TX.n_of_gl_I yi ⊢ n
+									--gen_lv◂◂0r vi ⊢ yi 
+									--gen_lv◂◂0r vk ⊢ yk 
+									alc_cnc.f_x { tav GV vk } ⊢ { tav GV pa0 }
+									TX.n_of_gl_I vi ⊢ n
 									GXV.lod { GXV n } ⊢ { GXV _ pG }
 									$ pa0 ⊢ pa0,pa1
 									mov_ptn2.ptn { ec0 GV pG pa0 } ⊢ { ec0 GV }
@@ -12032,16 +11999,16 @@ unsigned long
 								∐
 									∐ is ⊢ RP.rcd◂_cns◂{ _ _cns◂{ k _nil◂{} } } .
 										ast.smt_ap_err◂◂441r ya ⊢ t
-										inst { %[ 1r ] t } ⊢ { _ t }
+										--inst { %[ 1r ] t } ⊢ { _ t }
 										T.nvl_lv◂◂1r {} ⊢ vi 
 										$ vi ⊢ vi,vi0,vi1 
 										T.nvl_lv◂◂1r {} ⊢ vk 
 										$ vk ⊢ vk,vk0,vk1,vk2  
 										$ TX.t_imp◂{ TX.cns2◂{ TX.gl_lc◂{ vk0 vi0 } vk1 } TX.gl_t◂{ vk2 vi1 } } ⊢ yt
 										T.unify.f { yt t } ⊢ {} 
-										gen_lv◂◂0r vi ⊢ yi 
-										gen_lv_dlt◂◂0r vk ⊢ {} 
-										TX.n_of_gl_I yi ⊢ n
+										--gen_lv◂◂0r vi ⊢ yi 
+										--gen_lv_dlt◂◂0r vk ⊢ {} 
+										TX.n_of_gl_I vi ⊢ n
 										GXV.lod { GXV n } ⊢ { GXV _ pG }
 										$ k ⊢ k,k0
 										mov_ptn2.ptn { ec0 GV k pG } ⊢ { ec0 GV }
@@ -12081,11 +12048,11 @@ unsigned long
 										$ TX.lc◂{ a s r } ⊢ y0
 										$ TX.t_imp◂{ TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } } ⊢ y1
 										$ TX.t_ct_imp◂{ y0 y1 } ⊢ yt 
-										inst { %[ 1r ] ya } ⊢ { _ ya }
+										--inst { %[ 1r ] ya } ⊢ { _ ya }
 										T.unify.f { ya yt } ⊢ {} 
-										gen_lv_dlt◂◂0r at ⊢ {} 
-										gen_lv_dlt◂◂0r st ⊢ {} 
-										gen_lv◂◂0r rt ⊢ rt 
+										--gen_lv_dlt◂◂0r at ⊢ {} 
+										--gen_lv_dlt◂◂0r st ⊢ {} 
+										--gen_lv◂◂0r rt ⊢ rt 
 										alc_cnc.s_x { tav %[ 0r ] rt } ⊢ { tav _ pa0 }
 										∐ pa0 ⊢ RP.rcd◂lp . 
 											r64_to_hp { GV is ec0 } ⊢ { GV r0 ec0 } 
@@ -12112,11 +12079,11 @@ unsigned long
 										$ TX.lc◂{ a s r } ⊢ y0
 										$ TX.t_imp◂{ TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } } ⊢ y1
 										$ TX.t_ct_imp◂{ y0 y1 } ⊢ yt 
-										inst { %[ 1r ] ya } ⊢ { _ ya }
+										--inst { %[ 1r ] ya } ⊢ { _ ya }
 										T.unify.f { ya yt } ⊢ {} 
-										gen_lv_dlt◂◂0r at ⊢ {} 
-										gen_lv_dlt◂◂0r st ⊢ {} 
-										gen_lv◂◂0r rt ⊢ rt 
+										--gen_lv_dlt◂◂0r at ⊢ {} 
+										--gen_lv_dlt◂◂0r st ⊢ {} 
+										--gen_lv◂◂0r rt ⊢ rt 
 										alc_cnc.s_x { tav %[ 0r ] rt } ⊢ { tav _ pa0 }
 										∐ pa0 ⊢ RP.rcd◂lp; is ⊢ RP.rcd◂q . 
 											r64_to_hp { GV ir0 ec0 } ⊢ { GV r0 ec0 } 
