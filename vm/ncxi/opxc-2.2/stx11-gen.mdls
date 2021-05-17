@@ -1632,6 +1632,11 @@ unsigned long
 			_ref.mk var_l◂lv0 ⊢ p
 			∎ { lv var◂p◂p }
 		§ nvl = newvar_l 
+		§ nvl2 # lv 
+			$ lv ⊢ lv,lv0 
+			_ref.mk var_l◂lv0 ⊢ p
+			$ p ⊢ p,p0 
+			∎ { lv { var◂p◂p var◂p◂p0 } }
 		§ nvl_lv◂◂L # {} 
 			_ref.new var_l◂%[ L ] ⊢ p
 			∎ var◂p◂p
@@ -4774,12 +4779,11 @@ unsigned long
 					_inc lv ⊢ lv 
 					ct_ptn { { al lv APV } c0 } ⊢ { E c0 y0 } 
 					ct_ptn { E c1 } ⊢ { { al lv APV } c1 y1 } 
-					newvar_l lv  ⊢ { lv yy }
-					$ yy ⊢ yy,yy0 
-					T.unify_v_al.f { ⟦⟧ ct_imp◂{ y1 yy0 } y0 } ⊢ { ll yi }  
 					_dec lv ⊢ lv 
+					T.nvl2 lv  ⊢ { lv { yy yy0 } }
+					T.unify_v_al.f { ⟦⟧ ct_imp◂{ y1 yy0 } y0 } ⊢ { ll yi }  
 					T.gen.dlt.var_lst { lv ll } ⊢ lv
-					inst { lv yy } ⊢ { lv yy }  
+					--inst { lv yy } ⊢ { lv yy }  
 					∎ { { al lv APV } RP.atm◂ast.k_app◂{ c0 c1 } yy }
 				∐ ast.k_ctr◂{ i v } . 
 					$ E ⊢ { al lv APV } 
@@ -4834,15 +4838,15 @@ unsigned long
 						∎ { { al lv APV } RP.atm◂ast.k_op_gnr◂{ g ib ‹› lc { ql { y0 y1 } } } yx }
 				∐ ast.k_fnc◂{ T f } . 
 					$ E ⊢ { al lv APV } 
-					_inc lv ⊢ lv 
+					--_inc lv ⊢ lv 
 					exc_tpl { { lv ⟦⟧ } T } ⊢ { { lv el } T yT } 
 					ct_ptn { { al lv APV } f } ⊢ { { al lv APV } f yf } 
 					pop_tpl el ⊢ {} 
-					_dec lv ⊢ lv 
-					gen { lv yT } ⊢ { lv yT } 
-					gen { lv yf } ⊢ { lv yf } 
+					--_dec lv ⊢ lv 
+					--gen { lv yT } ⊢ { lv yT } 
+					--gen { lv yf } ⊢ { lv yf } 
 					$ TX.t_ct_imp◂{ yT yf } ⊢ y
-					inst { lv y } ⊢ { lv y }
+					--inst { lv y } ⊢ { lv y }
 					$ { al lv APV } ⊢ E 
 					∎ { E RP.atm◂ast.k_fnc◂{ T f } y }
 					
@@ -4854,15 +4858,15 @@ unsigned long
 					∎ { E RP.atm◂ast.k_pf◂pl TX.pf◂w }
 				∐ ast.k_ply◂{ nc p0 p1 } . 
 					$ E ⊢ { al lv APV } 
-					_inc lv ⊢ lv 
+					--_inc lv ⊢ lv 
 					$ lv ⊢ lv,lv0
 					_mk_stk_F◂◂{ cst_ply cst_ply_F } { { nc lv0 } { { al lv APV } p0 p1 } } ⊢ { nc { al lv APV } p0 p1 y yp b } 
-					_dec lv ⊢ lv 
-					gen { lv y } ⊢ { lv y } 
-					gen { lv yp } ⊢ { lv yp } 
-					gen { lv b } ⊢ { lv b } 
+					--_dec lv ⊢ lv 
+					--gen { lv y } ⊢ { lv y } 
+					--gen { lv yp } ⊢ { lv yp } 
+					--gen { lv b } ⊢ { lv b } 
 					$ TX.t_ctr◂{ y yp b } ⊢ y 
-					inst { lv y } ⊢ { lv y }
+					--inst { lv y } ⊢ { lv y }
 					∎ { { al lv APV } RP.atm◂ast.k_ply◂{ nc p0 p1 } y }
 				∐. ast.k_t◂{ c y } .
 					ct_ptn { E c } ⊢ { E c yc }
@@ -4918,18 +4922,17 @@ unsigned long
 					$ var◂T.p◂vi ⊢ y 
 					∎ { { E rv b } ast.re_reg◂i y }
 				∐ ast.re_agl◂{ e sp } .
-					lod_src_ptn { { E rv b } sp } ⊢ { { E rv b } sp yp } 
 					$ E ⊢ { al lv APV } 
 					_inc lv ⊢ lv 
-					ct_ptn { { al lv APV } e } ⊢ { { al lv APV } e y } 
-					newvar_l lv  ⊢ { lv yd } 
-					$ yd ⊢ yd,yd0 
+					lod_src_ptn { { { al lv APV } rv b } sp } ⊢ { { E rv b } sp yp } 
+					ct_ptn { E e } ⊢ { { al lv APV } e y } 
+					_dec lv ⊢ lv 
+					T.nvl2 lv ⊢ { lv { yd yd0 } }
 					$ y ⊢ y,y0 
 					$ b ⊢ b,b0
 					T.unify.f { TX.t_ctr◂{ yp yd0 b0 } y } ⊢ {} 
-					_dec lv ⊢ lv 
 					gen_dlt { lv y0 } ⊢ lv
-					inst { lv yd } ⊢ { lv yd } 
+					--inst { lv yd } ⊢ { lv yd } 
 					$ { al lv APV } ⊢ E
 					∎ { { E rv b } ast.re_agl◂{ e sp } yd } 					
 				∐. ast.re_v◂c .
