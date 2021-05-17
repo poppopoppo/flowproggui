@@ -901,6 +901,13 @@
       ` btr QWORD [rax],63
       //
     ∎ t◂{ h r }
+  § chk # t◂{ h r } 
+    !^ r ⊢ *r,c 
+      ` xor rdi,rdi 
+      ` bt QWORD [rax],63
+      ` setc dil 
+      //
+    ∎ { t◂{ h r } c } 
   § f◂◂F # { v p }
     $ p ⊢ t◂{ h r } 
     !^ r ⊢ *r 
