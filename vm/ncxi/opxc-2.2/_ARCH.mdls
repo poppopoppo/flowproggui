@@ -1794,6 +1794,7 @@
   ¶§ f = _ap.rpc_adt 
   ∎∎
 § _rpc = _rpc.f 
+
 §: i0 k' = { k' _hp◂k' }
 § _mk_arr_F◂◂F = _arr.mk_F◂◂{ F alc _id.arr }
 § _mk_arr_x_F◂◂F = _arr.mk_F◂◂{ F _arr.alc_x _id.arr_x }
