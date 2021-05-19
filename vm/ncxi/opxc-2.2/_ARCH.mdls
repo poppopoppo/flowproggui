@@ -864,10 +864,8 @@
     ∎ { t◂{ h r } c b }
   § inc # t◂{ h r } 
     !^ r ⊢ *r 
-      ` mov rdi,QWORD [rax] 
-      ` add rdi,1 
-      ` mov QWORD [rax],rdi 
-      //
+      `add QWORD [rax],1 
+			//
     ∎ t◂{ h r }
   § mov # t◂{ h r } 
     $ r ⊢ r,r0 
@@ -881,16 +879,15 @@
     ∎ { t◂{ h r } s }
   § o # t◂{ h r } 
     !^ r ⊢ *r 
-      ` mov rdi,QWORD [rax]
-      ` bts rdi,63 
+      ` bts QWORD [rax],63 
       ` jc err_ref_o
-      ` mov QWORD [rax],rdi
       //
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     _cnc_lod_hp { r0 h } ⊢ { _ h k }
     '[ _hp.ini : . {} → _hp◂{} ] {} ⊢ ht 
     ∎ { lc◂{ ht h r } k } 
+  
   § i # { lc◂{ ht h r } k }
     $.[ . _hp◂{} ] ht ⊢ ht 
     _eq_hp { k h } ⊢ { k h } 
@@ -911,10 +908,8 @@
   § f◂◂F # { v p }
     $ p ⊢ t◂{ h r } 
     !^ r ⊢ *r 
-      ` mov rdi,QWORD [rax]
-      ` bts rdi,63 
+      ` bts QWORD [rax],63 
       ` jc err_ref_f
-      ` mov QWORD [rax],rdi
       //
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
@@ -926,13 +921,34 @@
       ` btr QWORD [rax],63
       //
     ∎ { w t◂{ h r } }
+
+  § f_if◂◂{ F G } { v p }
+    $ p ⊢ t◂{ h r } 
+    !^ r ⊢ *r,c 
+      ` xor rdi,rdi 
+      ` bts QWORD [rax],63 
+      ` setc dil 
+      //
+    ∐ c'=0r . 
+      $ c ⊢ _ 
+			$ r ⊢ r,r0 
+    	_add_im◂◂8r r0 ⊢ r0 
+      _cnc_lod_hp { r0 h } ⊢ { r0 h k }
+      F { v k } ⊢ { w k }
+      _eq_hp { k h } ⊢ { k h } 
+      _cnc_sto { r0 k } ⊢ _ 
+      !^ r ⊢ *r 
+        ` btr QWORD [rax],63
+        //
+      ∎ { w t◂{ h r } }
+		∐. .
+			$ c ⊢ _ 
+			G { v t◂{ h r } } ⊢|
   § f_ctr◂◂{ C F } # { v p }
     $ p ⊢ t◂{ h r } 
     !^ r ⊢ *r 
-      ` mov rdi,QWORD [rax]
-      ` bts rdi,63 
-      ` jc err_ref_f
-      ` mov QWORD [rax],rdi
+      `	bts QWORD [rax],63 
+			` jc err_ref_f
       //
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
@@ -1055,6 +1071,12 @@
       ∎ { { t◂{ h0 r0 } t◂{ h1 r1 } } %[ 1r ] } 
     ∐. .
       ∎ { { t◂{ h0 r0 } t◂{ h1 r1 } } %[ 0r ] } 
+	§ eq_lc # { lc◂{ ht0 h0 r0 } t◂{ h1 r1 } }
+    $.[ k' . { _hp◂k' _hp◂k' } ] { h0 h1 } ⊢ { h0 h1 }
+    ∐ r0'=r1' .
+      ∎ { { lc◂{ ht0 h0 r0 } t◂{ h1 r1 } } %[ 1r ] } 
+    ∐. .
+      ∎ { { lc◂{ ht0 h0 r0 } t◂{ h1 r1 } } %[ 0r ] } 
   § dlt p 
     dec p ⊢ { p c b }
     ∐ c'=0r . 
