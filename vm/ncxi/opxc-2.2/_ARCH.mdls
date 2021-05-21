@@ -164,6 +164,7 @@
   § pf_x = _[ 0x00010011r ] 
   § if = _[ 0x00010012r ]
   § eq = _[ 0x00010013r ]
+	§ if◂◂{ t a b } = if◂◂{ t b a }
   § if_eq◂◂{ { C X } a b } = if◂◂{ eq◂◂{ C X } a b }
   § op = _[ 0x00010014r ] 
   §§ op1 
@@ -1764,7 +1765,7 @@
     § f1 = _seq◂◂{ _ctr◂◂c0 f0 } 
     ¶§ f = f1 
     ∎∎
-		
+
   § hp ## h 
     _hp.ini {} ⊢ h0 
     _id.eq_t { h h0 } ⊢|

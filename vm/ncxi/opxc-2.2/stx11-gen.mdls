@@ -2282,6 +2282,7 @@ unsigned long
 			¶ l_2 =. 
 			¶ t l'
 				∐ t : l'
+			§ t_n = '[ t : . _ctr_rev◂_r64◂(t◂_r64) ] 
 			§ ini_0 # {} 
 				_hp.ini {} ⊢ h 
 				$.[ . _hp◂l_0 ] h ⊢ h 
@@ -2294,10 +2295,42 @@ unsigned long
 				_hp.ini {} ⊢ h 
 				$.[ . _hp◂l_2 ] h ⊢ h 
 				∎ t◂h
-			
 			§ ini_n n 
 				$.[ . _r64 ] n ⊢ n 
-				∎ t◂n 
+				∎ t◂n
+			§ f_0◂◂F # v 
+				ini_0 {} ⊢ l 
+				F { l v } ⊢|
+			§ f_1◂◂F # v 
+				ini_1 {} ⊢ l 
+				F { l v } ⊢|
+			§ f_2◂◂F # v 
+				ini_2 {} ⊢ l 
+				F { l v } ⊢|
+			§ f_im◂◂{ L { F0 F1 F2 } } = _ct.if_eq◂◂{ { 0r L } f_0◂◂F0 _ct.if_eq◂◂{ { 1r L } f_1◂◂F1 _ct.if_eq◂◂{ { 2r L } f_2◂◂F2 _[] } } }
+			§§ new 
+				¶¶ f l' : t◂l'→{ t◂l' _r64 }
+				§ l_1 # L 
+					$.[ . t◂(_hp◂l_1) ] L ⊢ L 
+					∎ { L %[ 1r ] }
+				¶§ f = l_1
+				§ l_0 # L 
+					$.[ . t◂(_hp◂l_0) ] L ⊢ L 
+					∎ { L %[ 0r ] }
+				¶§ f = l_0
+				§ l_2 # L 
+					$.[ . t◂(_hp◂l_2) ] L ⊢ L 
+					∎ { L %[ 2r ] }
+				¶§ f = l_2 
+				§ l_n # t◂n 
+					$ n ⊢ n,i
+					∎ { t◂n i }
+				¶§ f = l_n
+				§ var # L 
+					f L ⊢ { L l }
+					_ref.mk var_l◂l ⊢ p
+					∎ { L p }
+				∎∎ 
 			§§ cmp 
 				¶¶ f l' : { t◂l' _r64 }→{ t◂l' _r64 _r64 } 
 				§ l_0 # { L l }
@@ -2989,28 +3022,28 @@ unsigned long
 			§§ rpc0 = rpc 
 			§§ rpc 
 				§ 
-					@.al_dta◂◂{ L A } # { V { a l } } 
-						lst◂◂{ L A } { V l } ⊢ { V l lx }
+					@.al_dta◂◂A # { V { a l } } 
+						lst◂◂A { V l } ⊢ { V l lx }
 						$ a ⊢ a,ax
 						∎ { V dta◂{ a l } dta◂{ ax lx } } 
-					@.al_abs◂◂{ L A } { { N lv al } { p◂a0 y0 } }
+					@.al_abs◂◂A { { N lv al } { p◂a0 y0 } }
 						TV.o a0 ⊢ { T v0 } 
 						∐ v0 ⊢ var_q◂_ . 
 							il_lv◂◂0r {} ⊢ p0 
 							$ N ⊢ N,t0
 							$ p0 ⊢ p0,p00 
 							TV.i { T var_q◂q_L◂{ t0 p◂p00 } } ⊢ a0
-							al◂◂{ L A } { { N lv al } y0 } ⊢ { V y0 yx0 } 
+							al◂◂A { { N lv al } y0 } ⊢ { V y0 yx0 } 
 							∎ { V abs◂{ p◂a0 y0 } abs◂{ p◂p0 yx0 } }
 						∐ v0 ⊢ var_ln◂_ . 
 							∎| 
 						∐. . 
 							∎|
-					@.al_var◂◂{ L A } { { N lv al } i } 
+					@.al_var◂◂A { { N lv al } i } 
 						TV.o i ⊢ { i v } 
 						$ v ⊢
 						∐ var_ln◂y . 
-							al◂◂{ L A } { { N lv al } y } ⊢ { E y yi }
+							al◂◂A { { N lv al } y } ⊢ { E y yi }
 							TV.i { i var_ln◂y } ⊢ i 
 							∎ { E var◂p◂i yi }
 						∐ var_q◂Q .
@@ -3020,41 +3053,47 @@ unsigned long
 								TV.i { i var_q◂q_L◂{ qn qv0 } } ⊢ i 
 								∎ { { N lv al } var◂p◂i var◂qv } 
 							∐. . 
-								$ N ⊢ N,t0
-								L lv ⊢ { lv p0 } 
-								A { p0 al } ⊢ { p0 al } 
+								lv.new.var lv ⊢ { lv p0 } 
 								$ p0 ⊢ p0,p0_0  
+								$ N ⊢ N,t0
 								TV.i { i var_q◂q_L◂{ t0 p◂p0_0 } } ⊢ i 
+								A { p0 al } ⊢ { p0 al } 
 								∎ { { N lv al } var◂p◂i var◂p◂p0 }  
 						∐. var_l◂lv1 . 
 							TV.i { i var_l◂lv1 } ⊢ i 
 							$ i ⊢ i,ix 
 							∎ { { N lv al } var◂p◂i var◂p◂ix } 
 					
-					@.al◂◂{ L A } = rpc.f◂◂{ al_dta◂◂{ L A } al_abs◂◂{ L A } al_var◂◂{ L A } }
-					@.lst◂◂{ L A } = rpc.lst◂◂{ al_dta◂◂{ L A } al_abs◂◂{ L A } al_var◂◂{ L A } }
+					@.al◂◂A = rpc.f◂◂{ al_dta◂◂A al_abs◂◂A al_var◂◂A }
+					@.lst◂◂A = rpc.lst◂◂{ al_dta◂◂A al_abs◂◂A al_var◂◂A }
 				§ f # { { N lv } t } 
-					al◂◂{ ini_l _id } { { N lv {} } t } ⊢ { { N lv {} } t tx } 
+					al◂◂_id { { N lv.t◂lv {} } t } ⊢ { { N lv.t◂lv {} } t tx } 
 					∎ { { N lv } t tx }
 				§ f_lst { { N lv } l } 
-					lst◂◂{ ini_l _id } { { N lv {} } l } ⊢ { { N lv {} } l lx } 
+					lst◂◂_id { { N lv.t◂lv {} } l } ⊢ { { N lv.t◂lv {} } l lx } 
 					∎ { { N lv } l lx }
-				§ f_lv◂◂L # { N t } 
-					al◂◂{ (L_lv◂◂L) _id } { { N {} {} } t } ⊢ { { N {} {} } t tx } 
-					∎ { N t tx } 
-				§ f_lst_lv◂◂L # { N l } 
-					lst◂◂{ (L_lv◂◂L) _id } { { N {} {} } l } ⊢ { { N {} {} } l lx } 
-					∎ { N l lx } 
-				§ f_al # { V t } 
-					al◂◂{ ini_l A_l } { V t } ⊢|
-				§ f_lst_al # { V l } 
-					lst◂◂{ ini_l A_l } { V l } ⊢|			
-				§ f_al_lv◂◂L # { { N al } t } 
-					al◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t tx } 
+				§ f_lv_im◂◂A # { lv { { N al } t } }
+					al◂◂A { { N lv al } t } ⊢ { { N _ al } t tx }
 					∎ { { N al } t tx }
-				§ f_lst_al_lv◂◂L # { { N al } l } 
-					lst◂◂{ (L_lv◂◂L) A_l } { { N {} al } l } ⊢ { { N {} al } l lx } 
-					∎ { { N al } l lx }
+				§ f_lst_lv_im◂◂A # { lv { { N al } t } }
+					lst◂◂A { { N lv al } t } ⊢ { { N _ al } t tx }
+					∎ { { N al } t tx }
+				§ f_lv_A◂◂{ L A } = lv.f_im◂◂{ L { f_lv_im◂◂A f_lv_im◂◂A f_lv_im◂◂A } }
+				§ f_lst_lv_A◂◂{ L A } = lv.f_im◂◂{ L { f_lst_lv_im◂◂A f_lst_lv_im◂◂A f_lst_lv_im◂◂A } }
+				§ f_lv◂◂L # { N t }
+					f_lv_A◂◂{ L _id } { { N {} } t } ⊢ { { N {} } t tx }
+					∎ { N t tx }
+				§ f_lst_lv◂◂L # { N t }
+					f_lst_lv_A◂◂{ L _id } { { N {} } t } ⊢ { { N {} } t tx }
+					∎ { N t tx }
+				§ f_al # { { N lv al } t } 
+					al◂◂A_l { { N lv.t◂lv al } t } ⊢ { { N lv.t◂lv al } t tx }
+					∎ { { N lv al } t tx }
+				§ f_lst_al # { { N lv al } t } 
+					lst◂◂A_l { { N lv.t◂lv al } t } ⊢  { { N lv.t◂lv al } t tx }
+					∎ { { N lv al } t tx }			
+				§ f_al_lv◂◂L = f_lv_A◂◂{ L A_l } 
+				§ f_lst_al_lv◂◂L = f_lst_lv_A◂◂{ L A_l }
 				§§ N
 					§ f # { lv y }
 						_sgn.mk {} ⊢ N 
@@ -3071,27 +3110,27 @@ unsigned long
 					∎∎ 
 				∎∎
 				§ 
-				@.al_dta◂◂{ L A } # { V { a l } } 
-					lst◂◂{ L A } { V l } ⊢ { V l }
+				@.al_dta◂◂A # { V { a l } } 
+					lst◂◂A { V l } ⊢ { V l }
 					∎ { V dta◂{ %a %l } } 
-				@.al_abs◂◂{ L A } { { N lv al } { p◂a0 y0 } }
+				@.al_abs◂◂A { { N lv al } { p◂a0 y0 } }
 					TV.o a0 ⊢ { T v0 } 
 					∐ v0 ⊢ var_q◂_ . 
 						il_lv◂◂0r {} ⊢ p0 
 						$ N ⊢ N,t0
 						$ p0 ⊢ p0,p00 
 						TV.to_i { T var_q◂q_L◂{ t0 p◂p00 } } ⊢ {}
-						al◂◂{ L A } { { N lv al } y0 } ⊢ { V y0 } 
+						al◂◂A { { N lv al } y0 } ⊢ { V y0 } 
 						∎ { V abs◂{ p◂%p0 %y0 } }
 					∐ v0 ⊢ var_ln◂_ . 
 						∎| 
 					∐. . 
 						∎|
-				@.al_var◂◂{ L A } { { N lv al } i0 } 
+				@.al_var◂◂A { { N lv al } i0 } 
 					TV.o i0 ⊢ { i0 v0 } 
 					$ v0 ⊢
 					∐ var_ln◂y0 . 
-						rpc.al◂◂{ L A } { { N lv al } y0 } ⊢ { E y0 y0i }
+						rpc.al◂◂A { { N lv al } y0 } ⊢ { E y0 y0i }
 						TV.to_i { i0 var_ln◂y0 } ⊢ {} 
 						∎ { E y0i }
 					∐ var_q◂Q .
@@ -3102,38 +3141,46 @@ unsigned long
 							TV.to_i { i0 var_q◂q_L◂{ qn qv0 } } ⊢ {} 
 							∎ { { N lv al } var◂qv } 
 						∐. _none◂{} . 
+							lv.new.var lv ⊢ { lv p0 } 
 							$ N ⊢ N,t0
-							L lv ⊢ { lv p0 } 
-							A { p0 al } ⊢ { p0 al } 
 							$ p0 ⊢ p0,p0_0 
 							TV.to_i { i0 var_q◂q_L◂{ t0 p◂p0_0 } } ⊢ _
+							A { p0 al } ⊢ { p0 al } 
 							∎ { { N lv al } var◂p◂p0 }  
 					∐. var_l◂lv1 . 
 						TV.i { i0 var_l◂lv1 } ⊢ i0 
 						∎ { { N lv al } var◂p◂%i0 } 
-				@.al◂◂{ L A } = map.f◂◂{ al_dta◂◂{ L A } al_abs◂◂{ L A } al_var◂◂{ L A } }
-				@.lst◂◂{ L A } = map.lst◂◂{ al_dta◂◂{ L A } al_abs◂◂{ L A } al_var◂◂{ L A } }
+				@.al◂◂A = map.f◂◂{ al_dta◂◂A al_abs◂◂A al_var◂◂A }
+				@.lst◂◂A = map.lst◂◂{ al_dta◂◂A al_abs◂◂A al_var◂◂A }
 			§ f # { { N lv } t } 
-				al◂◂{ ini_l _id } { { N lv {} } t } ⊢ { { N lv {} } t } 
+				al◂◂_id { { N lv.t◂lv {} } t } ⊢ { { N lv.t◂lv {} } t } 
 				∎ { { N lv } t }
 			§ f_lst { { N lv } l } 
-				lst◂◂{ ini_l _id } { { N lv {} } l } ⊢ { { N lv {} } l } 
+				lst◂◂_id { { N lv.t◂lv {} } l } ⊢ { { N lv.t◂lv {} } l } 
 				∎ { { N lv } l }
-			§ f_lv◂◂L # { N t } 
-				al◂◂{ (L_lv◂◂L) _id } { { N {} {} } t } ⊢ { { N {} {} } t } 
-				∎ { N t } 
-			§ f_lst_lv◂◂L # { N l } 
-				lst◂◂{ (L_lv◂◂L) _id } { { N {} {} } l } ⊢ { { N {} {} } l } 
-				∎ { N l } 
+			§ f_lv_im◂◂A # { lv { { N al } t } }
+				al◂◂A { { N lv al } t } ⊢ { { N _ al } t }
+				∎ { { N al } t }
+			§ f_lst_lv_im◂◂A # { lv { { N al } t } }
+				lst◂◂A { { N lv al } t } ⊢ { { N _ al } t }
+				∎ { { N al } t }
+			§ f_lv_A◂◂{ L A } = lv.f_im◂◂{ L { f_lv_im◂◂A f_lv_im◂◂A f_lv_im◂◂A } }
+			§ f_lst_lv_A◂◂{ L A } = lv.f_im◂◂{ L { f_lst_lv_im◂◂A f_lst_lv_im◂◂A f_lst_lv_im◂◂A } }
+			§ f_lv◂◂L # { N t }
+				f_lv_A◂◂{ L _id } { { N {} } t } ⊢ { { N {} } t }
+				∎ { N t }
+			§ f_lst_lv◂◂L # { N t }
+				f_lst_lv_A◂◂{ L _id } { { N {} } t } ⊢ { { N {} } t }
+				∎ { N t }
 			§ f_al # { V t } 
-				al◂◂{ ini_l A_l } { V t } ⊢|
+				al◂◂A_l { V t } ⊢|
 			§ f_lst_al # { V l } 
-				lst◂◂{ ini_l A_l } { V l } ⊢|
+				lst◂◂A_l { V l } ⊢|
 			§ f_al_lv◂◂L # { { N al } t } 
-				al◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t } 
+				f_lv_A◂◂{ L A_l } { { N al } t } ⊢ { { N al } t }
 				∎ { { N al } t }	
 			§ f_lst_al_lv◂◂L # { { N al } t } 
-				lst◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t } 
+				f_lst_lv_A◂◂{ L A_l } { { N al } t } ⊢ { { N al } t }
 				∎ { { N al } t }	
 			§§ N
 				§ f # { lv y }
@@ -3156,19 +3203,19 @@ unsigned long
 			
 			§§ i_rpc
 				§ f # { { N lv } t } 
-					al◂◂{ ini_l _id } { { N lv {} } t } ⊢ { { N lv {} } t } 
+					f { { N lv } t } ⊢ { { N lv } t } 
 					rpc_ln t ⊢ { t tx } 
 					∎ { { N lv } t tx }
 				§ f_lv◂◂L # { N t } 
-					al◂◂{ (L_lv◂◂L) _id } { { N {} {} } t } ⊢ { { N {} {} } t } 
+					f_lv◂◂L { N t } ⊢ { N t } 
 					rpc_ln t ⊢ { t tx } 
 					∎ { N t tx } 
 				§ f_al # { V t } 
-					al◂◂{ ini_l A_l } { V t } ⊢ { V t }
+					f_al { V t } ⊢ { V t }
 					rpc_ln t ⊢ { t tx } 
 					∎ { V t tx } 
 				§ f_al_lv◂◂L # { { N al } t } 
-					al◂◂{ (L_lv◂◂L) A_l } { { N {} al } t } ⊢ { { N {} al } t } 
+					f_al_lv◂◂L { { N al } t } ⊢ { { N al } t } 
 					rpc_ln t ⊢ { t tx } 
 					∎ { { N al } t tx }
 				§§ N
@@ -5256,7 +5303,6 @@ unsigned long
 					ct_ptn { E e } ⊢ { { al lv APV } e y } 
 					_dec lv ⊢ lv 
 					T.nvl2 lv ⊢ { lv { yd yd0 } }
-					$ y ⊢ y,y0 
 					$ b ⊢ b,b0
 					$ lv ⊢ lv,lv0
 					T.unify_gen.f { lv0 TX.t_ctr◂{ yp yd0 b0 } y } ⊢ {} 
