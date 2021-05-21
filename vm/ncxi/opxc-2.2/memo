@@ -365,5 +365,34 @@ pattern -> tag
     ∐ c0 : t0 ⊢ a0,a1 
     ∐ c1 : t1 ⊢ a2,a3 
 
+
   c0 : _ctr◂t'◂t0◂(d◂a0◂a1)
-  
+	_ap : { a' b' }→→b'
+	_ap_op : { a'→d' b'→d' }→→(b'→d')
+	_ap_m : { _ctr_rev◂a0'◂a1' a0'→d' b'→d' }→→(b'→d')
+	_ap◂◂{ A _ap◂◂{ B _ap◂◂{ C D } } }
+
+	∐ a ⊢ c◂b; A==x' 
+		∎ d 
+
+	∐∐ A==B  
+		$ a ⊢ { h < t }
+		f { h t } ⊢| 
+	∐∐. 
+		$ a ⊢ {} 
+		∎ {}
+	
+	$.[ { < l' } ] R ⊢ R
+	∐∐ 
+		$ R ⊢ { h < t }
+		..
+	∐∐
+		$ R ⊢ {} 
+		..
+	∐∐| 
+
+
+_arr_x◂{ k' l_0 }
+_arr_x◂{ k' l_n }
+
+_push : { k' _arr_x◂{ k' n' } }→_arr_x◂{ k' l_n }

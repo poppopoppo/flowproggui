@@ -1764,6 +1764,7 @@
     § f1 = _seq◂◂{ _ctr◂◂c0 f0 } 
     ¶§ f = f1 
     ∎∎
+		
   § hp ## h 
     _hp.ini {} ⊢ h0 
     _id.eq_t { h h0 } ⊢|
