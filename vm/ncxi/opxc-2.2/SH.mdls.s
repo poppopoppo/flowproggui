@@ -536,6 +536,110 @@ LB_163:
 LB_164:
 	mov     r12,QWORD [GLV+8*0x80]
  ret 
+LB_179: ;; of_lst_i,i=10
+	mov     rdi,QWORD [GLV+8*0x81]
+	jmp QWORD [LB_182+8*rdi]
+LB_182: dq LB_180,LB_181
+LB_180:
+	mov     rdi,QWORD [GLV+8*0x82]
+	lea SRC_REG,[rdi+8]
+	MOV_RBX QWORD [GLV+8*0x81],SX(0x0)
+	MOV_RBX QWORD [GLV+8*0x82],SX(0x1)
+	MOV_RBX QWORD [GLV+8*0x83],SX(0x2)
+	lea rdi,[SRC_REG-8]
+	FREE_RCD 4,rdi
+	mov     rax,QWORD [GLV+8*0x80]
+LB_183:
+ add rax,1 
+LB_184:
+	mov     QWORD [GLV+8*0x80],rax
+	lea rsp,[rsp-(8*0x1)]
+	MOV_RBX QWORD [rsp+8*0x0],QWORD [GLV+8*0x81]
+	sub rsp,8
+	MOV_RBX QWORD [GLV+8*0x81],QWORD [GLV+8*0x82]
+	MOV_RBX QWORD [GLV+8*0x82],QWORD [GLV+8*0x83]
+	call LB_179
+	add rsp,8
+	MOV_RBX QWORD [GLV+8*0x80],QWORD [rsp+8*0x0]
+	lea rsp,[rsp+(8*0x1)]
+	mov     rax,r12
+LB_185:
+	mov rdi,0x8
+	sub rax,rdi
+LB_186:
+	mov     r12,rax
+	mov     rax,r12
+	mov DST_REG,rax
+	MOV_RBX DX(0x0),QWORD [GLV+8*0x80]
+ ret 
+LB_181:
+	mov     rax,QWORD [GLV+8*0x80]
+LB_187:
+	mov rdi,rax
+LB_188:
+	mov     QWORD [GLV+8*0x81],rdi
+	mov     rax,QWORD [GLV+8*0x80]
+	mov     rdi,QWORD [GLV+8*0x81]
+LB_189:
+ push rax
+ lea rdi,[8+8*rdi]
+	push rdi 
+ mov rsi,1
+ xor rax,rax 
+ CALLOC_SF
+	pop rsi 
+ pop QWORD [rax]
+ mov rdi,rax
+LB_190:
+	mov     QWORD [GLV+8*0x81],rdi
+	mov     QWORD [GLV+8*0x82],rsi
+	mov     rax,QWORD [GLV+8*0x81]
+	mov     rdi,QWORD [GLV+8*0x82]
+LB_191:
+	add rax,rdi
+LB_192:
+	mov     QWORD [GLV+8*0x81],rax
+	mov     QWORD [GLV+8*0x82],rdi
+	mov     r12,QWORD [GLV+8*0x81]
+ ret 
+LB_178: ;; of_lst,i=9
+	lea rsp,[rsp-(8*0x0)]
+	sub rsp,8
+	MOV_RBX QWORD [GLV+8*0x82],QWORD [GLV+8*0x81]
+	MOV_RBX QWORD [GLV+8*0x81],QWORD [GLV+8*0x80]
+	mov rax,0x0
+	mov     QWORD [GLV+8*0x80],rax
+	call LB_179
+	add rsp,8
+	lea rsp,[rsp+(8*0x0)]
+	mov     rax,r12
+LB_193:
+	mov rdi,0x8
+	sub rax,rdi
+LB_194:
+	mov     r12,rax
+ ret 
+LB_209: ;; dlt_i,i=11
+	mov     rdi,QWORD [GLV+8*0x81]
+	cmp rdi,0x0
+	jz LB_210
+	mov     rax,QWORD [GLV+8*0x80]
+	mov SRC_REG,rax
+	MOV_RBX QWORD [GLV+8*0x82],SX(0x0)
+	mov     rax,QWORD [GLV+8*0x80]
+LB_211:
+	mov rdi,0x8
+	add rax,rdi
+LB_212:
+	mov     QWORD [GLV+8*0x80],rax
+	mov     rax,QWORD [GLV+8*0x81]
+LB_213:
+ sub rax,1 
+LB_214:
+	mov     QWORD [GLV+8*0x81],rax
+	jmp LB_209
+LB_210:
+ ret 
 LB_0: ;; m46,i=0
 	mov     rax,QWORD [GLV+8*0x80]
 LB_1:
@@ -733,6 +837,113 @@ LB_176:
  mov rdi,rax
  call free_opq
 LB_177:
+	sub rsp,8
+LB_217: ; alc_rcd
+	ALC_N 4
+	push rax
+	lea DST_REG,[rax+8]
+	mov rax,0x3
+	mov DX(0x0),rax
+	mov DX(0x1),0x0
+LB_218: ; alc_rcd
+	ALC_N 4
+	mov DX(0x2),rax
+	add rax,8 
+	push rax 
+	pop DST_REG
+	mov rax,0x22b
+	mov DX(0x0),rax
+	mov DX(0x1),0x0
+LB_219: ; alc_rcd
+	ALC_N 4
+	mov DX(0x2),rax
+	add rax,8 
+	push rax 
+	pop DST_REG
+	mov rax,0xc
+	mov DX(0x0),rax
+	mov DX(0x1),0x0
+LB_220: ; alc_rcd
+	ALC_N 4
+	mov DX(0x2),rax
+	add rax,8 
+	push rax 
+	pop DST_REG
+	mov rax,0x0
+	mov DX(0x0),rax
+	mov DX(0x1),0x1
+	mov rax,0x0
+	mov     QWORD [GLV+8*0x80],rax
+	pop rax
+	mov     QWORD [GLV+8*0x81],rax
+	call LB_178
+	add rsp,8
+	MOV_RBX QWORD [GLV+8*0x80],LB_36
+	mov     rax,QWORD [GLV+8*0x80]
+LB_195:
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+LB_196:
+	mov     rax,r12
+LB_197:
+ mov rdi,0x0000_ffff_ffff_ffff 
+ and rdi,QWORD [rax]
+LB_198:
+	mov     QWORD [GLV+8*0x80],rdi
+	MOV_RBX QWORD [GLV+8*0x81],LB_41
+	mov     rax,QWORD [GLV+8*0x81]
+LB_199:
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+LB_200:
+	sub rsp,8
+	MOV_RBX QWORD [GLV+8*0x81],QWORD [GLV+8*0x80]
+	mov     QWORD [GLV+8*0x80],r12
+	mov rax,0x0
+	mov     QWORD [GLV+8*0x82],rax
+	call LB_44
+	add rsp,8
+	MOV_RBX QWORD [GLV+8*0x80],LB_79
+	mov     rax,QWORD [GLV+8*0x80]
+LB_201:
+ mov rdi,rax 
+ mov rsi,QWORD [rax-8]
+ C_CALL fw 
+LB_202:
+	mov     rax,r12
+LB_203:
+ mov rdi,0x0000_ffff_ffff_ffff 
+ and rdi,QWORD [rax]
+LB_204:
+	mov     QWORD [GLV+8*0x80],rdi
+	mov     rax,r12
+LB_205:
+	mov rdi,rax
+LB_206:
+	mov     QWORD [GLV+8*0x81],rdi
+	mov     rax,QWORD [GLV+8*0x81]
+LB_207:
+	mov rdi,0x8
+	add rax,rdi
+LB_208:
+	mov     QWORD [GLV+8*0x81],rax
+	lea rsp,[rsp-(8*0x1)]
+	mov     QWORD [rsp+8*0x0],r12
+	sub rsp,8
+	mov     rax,QWORD [GLV+8*0x81]
+	MOV_RBX QWORD [GLV+8*0x81],QWORD [GLV+8*0x80]
+	mov     QWORD [GLV+8*0x80],rax
+	call LB_209
+	add rsp,8
+	MOV_RBX QWORD [GLV+8*0x80],QWORD [rsp+8*0x0]
+	lea rsp,[rsp+(8*0x1)]
+	mov     rax,QWORD [GLV+8*0x80]
+LB_215:
+ mov rdi,rax
+ call free_opq
+LB_216:
  ret 
 RTM_0:
 	sub rsp,8

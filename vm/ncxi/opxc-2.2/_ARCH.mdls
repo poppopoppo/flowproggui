@@ -457,6 +457,22 @@
     //
   ∎ { l r }
 § alc = _cnc_siz◂◂alc
+§ alc_l◂◂C # l
+  $ l ⊢ l,s 
+  _imul_im◂◂C s ⊢ s 
+  !^ l,s ⊢ *l,r,s
+    ` push rax
+    ` lea rdi,[8+8*rdi]
+    `	push rdi 
+		` mov rsi,1
+    ` xor rax,rax 
+    ` CALLOC_SF
+    `	pop rsi 
+    ` pop QWORD [rax]
+		` mov rdi,rax
+    //
+  ∎ { l r s }
+§ alc_l = _cnc_siz◂◂alc_l
 
 §§ _arr 
   ¶ lc b',k',t' 
@@ -873,6 +889,29 @@
 			map_r_e_i◂◂F { { v r0 h0 r1 h1 l } %[ 0r ] } ⊢ v
       free r0t ⊢ {} 
 			∎ { v a1 }
+	§ @.of_lst_i { { h i } l }
+  	$ l ⊢ 
+		∐ _cns◂{ x l } . 
+			_eq_hp { x h } ⊢ { x h } 
+			_inc i ⊢ i
+      of_lst_i { { h i } l } ⊢ { h r }
+      _cnc_sub { r h } ⊢ { r h }
+			_cnc_sto { r x } ⊢ r
+			∎ { h r }
+    ∐. _nil◂{} .
+      $ h ⊢ h,h0 
+			alc_l { h0 i } ⊢  { _ r S }  
+      _add { r S } ⊢ { r _ }
+			∎ { h r }
+    § of_lst l
+			_hp.ini {} ⊢ h
+			of_lst_i { { h %[ 0r ] } l } ⊢ { h r }
+			_sub_im◂◂8r r ⊢ r 
+			_hp.ini {} ⊢ ha 
+			$.[ k' . { _hp◂k' _hp◂(_arr◂k') } ] { h ha } ⊢ { _ ha }
+			_hp.to { r ha } ⊢ a 
+			∎ a
+		  
   § sum_i # { m i }
     _add { m i } ⊢ { m _ }
     ∎ m 

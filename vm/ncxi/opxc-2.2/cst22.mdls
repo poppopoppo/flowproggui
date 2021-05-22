@@ -736,5 +736,6 @@
 	_emt a ⊢ a 
 	_arr.map_r_e◂◂f0 { %[ 2r ] a } ⊢ { v a } 
 	_emt { v a } ⊢ _ 
+	_arr.of_lst ⟦ %[ 3r ] %[ 555r ] %[ 12r ] %[ 0r ] ⟧ ⊢ a 
+	_emt a ⊢ _
 	∎ {} 
-	
