@@ -353,7 +353,13 @@
       ` lea rax,[rax+8*rax]
       //
     ∎ x 
-  § im_a = {+ im_0 im_1 im_2 im_3 im_4 im_5 im_6 im_7 im_8 im_9 }
+	§ im_10 # x 
+		!^ x ⊢ x 
+      ` lea rax,[rax+4*rax]
+			`	add rax,rax
+      //
+    ∎ x 
+  § im_a = {+ im_0 im_1 im_2 im_3 im_4 im_5 im_6 im_7 im_8 im_9 im_10 }
 	§ im◂◂X = _ct.tj◂◂{ X im_a _imul_im◂◂X } 
 	∎∎
 § _mul_im = _imul.im
