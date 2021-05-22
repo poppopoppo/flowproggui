@@ -725,3 +725,16 @@
 § m45 _ 
   _mk_arr { %[ 1r ] { ⟦⟧ ‹› } } ⊢ { _ _ a } 
   ∎ {} 
+§ f0 # { v j }
+	_add { j v } ⊢ { j v }
+	^ j ⊢ _,s 
+		0d' //
+	_inc v ⊢ v 
+	∎ { v s }
+§ m46 _ 
+	_mk_arr { %[ 6r ] %[ 4r ] } ⊢ { _ _ a }
+	_emt a ⊢ a 
+	_arr.map_r_e◂◂f0 { %[ 2r ] a } ⊢ { v a } 
+	_emt { v a } ⊢ _ 
+	∎ {} 
+	

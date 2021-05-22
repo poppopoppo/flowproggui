@@ -263,7 +263,10 @@
   $ h ⊢ h,h0 
   _cnc_siz◂◂(\\N . _add_im◂◂(_ct.op2.shl◂◂{ N 3r })) { h0 r } ⊢ r
   ∎ { r h }
-
+§ _cnc_sub # { r h }
+  $ h ⊢ h,h0 
+  _cnc_siz◂◂(\\N . _sub_im◂◂(_ct.op2.shl◂◂{ N 3r })) { h0 r } ⊢ r
+  ∎ { r h }
 § c0◂{ t {} } = t 
 § c1◂{ x y } = { y x }
 § _par_id◂◂F = _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂F _ctr◂◂c1 } }
@@ -350,9 +353,10 @@
       //
     ∎ x 
   § if◂◂{ I X f g } = _ct.if_eq◂◂{ { I X } f g }
-  § im◂◂X = if◂◂{ 0r X im_0 if◂◂{ 1r X im_1 _imul_im◂◂X } }
+  § im◂◂X = if◂◂{ 0r X im_0 if◂◂{ 1r X im_1 if◂◂{ 2r X im_2 _imul_im◂◂X } } }
   ∎∎
 § _mul_im = _imul.im
+§ _imul_im = _imul.im
 § _setge { x y } 
   !^ x,y ⊢ x,y,z 
     ` cmp rax,rdi 
@@ -670,7 +674,13 @@
         dlt_lc_i { { h r j } i } ⊢|
     ∐. .
       ∎ {} 
-  §§ std
+  § free # r 
+		!^ r ⊢ *r 
+      ` mov rdi,rax
+      ` call free_opq
+      // 
+		∎ {}
+	§§ std
     § dlt # a 
     _id.arr a ⊢ a 
     len a ⊢ { a l } 
@@ -820,6 +830,49 @@
   § itr_r◂◂F # { k v }
     len v ⊢ { v l }
     itr_r_i◂◂F { k v l } ⊢|
+	§ @.map_r_i◂◂F { k v i }
+    ∐ i'<>0r .
+      _dec i ⊢ i 
+      o { v i } ⊢ { V s }
+      F { k s } ⊢ { k s }
+			i { V s } ⊢ { v i }
+      map_r_i◂◂F { k v i } ⊢| 
+    ∐. .
+      ∎ { k v }
+  § map_r◂◂F # { k v }
+    len v ⊢ { v l }
+    map_r_i◂◂F { k v l } ⊢|
+	§ @.map_r_e_i◂◂F { { v r0 h0 r1 h1 l } i } 
+    ∐ i'<>l' .
+			_cnc_lod r0 ⊢ { r0 q0 } 
+			_cnc_add { r0 h0 } ⊢ { r0 h0 }
+			F { v q0 } ⊢ { v q1 } 
+      _eq_hp { q1 h1 } ⊢ { q1 h1 } 
+			_cnc_sto { r1 q1 } ⊢ r1
+      _cnc_add { r1 h1 } ⊢ { r1 h1 }
+      _inc i ⊢ i 
+      map_r_e_i◂◂F { { v r0 h0 r1 h1 l } i } ⊢|
+    ∐. .
+      ∎ v
+    § map_r_e◂◂F { v a } 
+		  _hp.ini_ct◂◂F {} ⊢ hF 
+			_id.arr a ⊢ a 
+      len a ⊢ { a l } 
+      _hp.ini {} ⊢ h0
+      _hp.ini {} ⊢ h1
+      _hp.ini {} ⊢ ha1
+    	_hp.of a ⊢ { r0 ha0 }
+			$.[ k0',k1',v' . { _hp◂({ v' k0' }→{ v' k1' }) _hp◂k0' _hp◂k1' _hp◂(_arr◂k1') _hp◂(_arr◂k0') } ] { hF h0 h1 ha1 ha0 } ⊢ { hF h0 h1 ha1 ha0 }
+			$ h1 ⊢ h1,h10 
+      alc { h10 l } ⊢  { l r1 }  
+      $ r1 ⊢ r1,r1t 
+      _hp.to { r1t ha1 } ⊢ a1 
+	    _add_im◂◂8r r1 ⊢ r1
+      $ r0 ⊢ r0,r0t 
+			_add_im◂◂8r r0 ⊢ r0
+			map_r_e_i◂◂F { { v r0 h0 r1 h1 l } %[ 0r ] } ⊢ v
+      free r0t ⊢ {} 
+			∎ { v a1 }
   § sum_i # { m i }
     _add { m i } ⊢ { m _ }
     ∎ m 
