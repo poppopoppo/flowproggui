@@ -4005,6 +4005,7 @@ unsigned long
 		§ lc_n = 0x00010028r
 		§ lc_e = 0x00010029r
 		§ lc_c = 0x0001002ar
+		§ ct_tj = 0x0001002br
 
 	§ slv { lv i }  
 		$ i ⊢ i,i0 
@@ -4378,6 +4379,10 @@ unsigned long
 					$ TX.lc◂{ a TX.rcd◂s TX.rcd◂r } ⊢ y0 
 					$ TX.lc◂{ a0 TX.cns◂{ TX.lc_t◂{} s0 } TX.cns◂{ i0 r0 } } ⊢ y1 
 					∎ TX.t_ct_imp◂{ y0 y1 } 
+				-- ct_tj 
+				∐ 
+					T.nvl3 lv ⊢ { lv { y y0 y1 } }
+					∎ TX.t_ct_imp◂{ TX.cns3◂{ TX.r64◂{} TX.arr◂y y0 } y1 }
 				∐.
 					∎|
 			∐. 
@@ -4699,6 +4704,15 @@ unsigned long
 			∐ c ⊢ k_name◂i . 
 				EVV.of i ⊢ c
 				s8_of_k c ⊢| 
+			∐. . 
+				∎| 
+		§ @.arr_of_k c 
+			RP.atm_a c ⊢ c 
+			∐ c ⊢ k_arr◂a . 
+				∎ a 
+			∐ c ⊢ k_name◂i . 
+				EVV.of i ⊢ c
+				arr_of_k c ⊢| 
 			∐. . 
 				∎|  
 		§§ pnt 
@@ -5208,7 +5222,7 @@ unsigned long
 					$ E ⊢ { al lv APV }
 					T.nvl lv ⊢ { lv y }
 					_arr.map_r◂◂arr { { { al lv APV } y } v } ⊢ { { E y } v }
-					∎ { E RP.atm◂ast.k_arr◂v y }
+					∎ { E RP.atm◂ast.k_arr◂v TX.arr◂y }
 				∐ ast.k_op◂{ ib lc { ql v } } . 
 					$ E ⊢ { al lv APV } 
 					_sgn.new {} ⊢ N 
@@ -5999,7 +6013,8 @@ unsigned long
 				∐# "(" ct_ptn ")" ⊢ { {} a {} }
 					∎ _some◂a
 				∐# "{+" lst.stx_line◂◂ct_ptn "}" ⊢ { {} l {} } 
-					∎| 
+					_arr.of_lst l ⊢ a 
+					∎ _some◂RP.atm◂ast.k_arr◂a
 				∐# "{" lst.stx_line◂◂ct_ptn "}" ⊢ { {} l {} } 
 					∎ _some◂RP.rcd◂l
 				∐# "&{" ct_lc ⊢ { {} lc }
@@ -8401,12 +8416,24 @@ unsigned long
 							∐. .
 								∎|
 						∐ ax'=EX.ct_if .
-							∐ c1 ⊢ RP.rcd◂_cns◂{ cb _cns◂{ c10 _cns◂{ c11 _nil◂{} } } } .
+							∐ c1 ⊢ RP.cns3◂{ cb c10 c11 } .
 								ast.r64_of_k cb ⊢ x 
 								∐ x'=0r .
 									∎ { E c10 }
 								∐. .
 									∎ { E c11 }
+							∐. .
+								∎|
+						∐ ax'=EX.ct_tj .
+							∐ c1 ⊢ RP.cns3◂{ i a d } .
+								ast.r64_of_k i ⊢ i
+								ast.arr_of_k a ⊢ a
+								_arr_len a ⊢ { a l }
+								∐ l'=<i' . 
+									∎ { E d }
+								∐. .
+									_arr.l { a i } ⊢ { _ _ c }
+									∎ { E c }
 							∐. .
 								∎|
 						∐ ax'=EX.ct_op2; la ⊢ _cns◂{ i _nil◂{} } .

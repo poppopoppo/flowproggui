@@ -167,7 +167,8 @@
 	§ if◂◂{ t a b } = if◂◂{ t b a }
   § if_eq◂◂{ { C X } a b } = if◂◂{ eq◂◂{ C X } a b }
   § op = _[ 0x00010014r ] 
-  §§ op1 
+  § tj = _[ 0x0001002br ] 
+	§§ op1 
     § bsr◂◂X = (op◂◂3r)◂◂{ X 0r }
     § flo2◂◂X = (op◂◂4r)◂◂{ X 0r }
     ∎∎
@@ -352,9 +353,9 @@
       ` lea rax,[rax+8*rax]
       //
     ∎ x 
-  § if◂◂{ I X f g } = _ct.if_eq◂◂{ { I X } f g }
-  § im◂◂X = if◂◂{ 0r X im_0 if◂◂{ 1r X im_1 if◂◂{ 2r X im_2 _imul_im◂◂X } } }
-  ∎∎
+  § im_a = {+ im_0 im_1 im_2 im_3 im_4 im_5 im_6 im_7 im_8 im_9 }
+	§ im◂◂X = _ct.tj◂◂{ X im_a _imul_im◂◂X } 
+	∎∎
 § _mul_im = _imul.im
 § _imul_im = _imul.im
 § _setge { x y } 
