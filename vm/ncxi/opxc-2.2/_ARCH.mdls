@@ -480,6 +480,18 @@
     //
   ∎ { l r s }
 § alc_l = _cnc_siz◂◂alc_l
+§ alc_s_l◂◂C # l
+  $ l ⊢ l,s 
+  _imul_im◂◂C s ⊢ s 
+  !^ l,s ⊢ *l,r
+    `	mov rdi,rsp 
+		` lea rsi,[8+8*rdi]
+    `	sub rsp,rsi 
+		`	bts rax,63
+		`	mov QWORD [rdi],rax
+    //
+  ∎ { l r }
+§ alc_s_l = _cnc_siz◂◂alc_s_l
 
 §§ _arr 
   ¶ lc b',k',t' 
@@ -1979,7 +1991,38 @@
     //
   $ b ⊢ _ 
   ∎ d 
- 
+ §§ _mk_stk_lst 
+  § @.i { { h i } l }
+		$ l ⊢ 
+		∐ _cns◂{ x l } . 
+			_eq_hp { x h } ⊢ { x h } 
+			_inc i ⊢ i
+      i { { h i } l } ⊢ { { h i } r }
+      _cnc_sub { r h } ⊢ { r h }
+			_cnc_sto { r x } ⊢ r
+			∎ { { h i } r }
+		∐. _nil◂{} .
+			$ h ⊢ h,h0 
+			alc_s_l { h0 i } ⊢  { i S } 
+			∎ { { h i } S }
+  
+§ f◂◂F # { l p }
+  _hp.ini {} ⊢ h 
+	i { { h %[ 0r ] } l } ⊢ { { h n } r } 
+	_sub_im◂◂8r r ⊢ r 
+  _hp.ini {} ⊢ ha 
+	$.[ k' . { _hp◂k' _hp◂(_arr◂k') } ] { h ha } ⊢ { h ha }
+  ofs_arr { h n } ⊢ b
+  _hp.to { r ha } ⊢ a
+  F { a p } ⊢ d 
+  !^ b ⊢ *b 
+    ` mov rsi,QWORD [rsp]
+    ` mov rsi,QWORD [rsi]
+    ` add rsp,rax 
+    //
+  $ b ⊢ _ 
+  ∎ d 
+	∎∎
 --_agl : { _ctr◂{ a' b' } a'→c' b'→c' }→→b'→c'
 --_tj 
 § push_ra { h r l c }

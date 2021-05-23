@@ -8110,36 +8110,35 @@ unsigned long
 		§ tpl_atm # s 
 			∎ s 
 		§ tpl_ptn = RP.map_l◂◂mtc_atm
-		§ @.ct_x_pf_i { { E v0 } p } 
+		§ @.ct_x_pf_i { v0 p } 
 				$ p ⊢ 
 				∐ ast.exp_s8_cst◂s .
 					ast.s8_of_k s ⊢ s 
-					∎ { { E v0 } s }
+					∎ { v0 s }
 				∐ ast.exp_s8_idx◂{ f i } .
 					lod_q { v0 i } ⊢ { v0 i ki } 
 					∐ f ⊢ ast.fmt_d◂{} .
 						ast.r64_of_k ki ⊢ xi 
 						^ xi ⊢ _,s 
 							0d' // 
-						∎ { { E v0 } rp8.of_s8◂s }
+						∎ { v0 rp8.of_s8◂s }
 					∐ f ⊢ ast.fmt_x◂{} . 
 						ast.r64_of_k ki ⊢ xi 
 						^ xi ⊢ _,s 
 							0x' // 
-						∎ { { E v0 } rp8.of_s8◂s }
+						∎ { v0 rp8.of_s8◂s }
 					∐. . 
 						∎|
 				∐. ast.exp_s8_for◂_ . 
 					∎|
-			§ @.ct_x_pf { { E v0 } lf }
+			§ @.ct_x_pf { { e v0 } lf }
 				$ lf ⊢
 				∐ _cns◂{ p lf } .
-					ct_x_pf_i { { E v0 } p } ⊢ { { E v0 } s }
-					ct_x_pf { { E v0 } lf } ⊢ { { E v0 } c } 
-					∎ { { E v0 } app◂{ ast.axm_pp◂%[ EX.ccs ] RP.cns2◂{ k_s8◂s c } } }
+					ct_x_pf_i { v0 p } ⊢ { v0 s }
+					rp8.cct { e s } ⊢ e
+					ct_x_pf { { e v0 } lf } ⊢| 
 				∐. _nil◂{} . 
-					_st◂◂"" {} ⊢ s
-					∎ { { E v0 } k_s8◂rp8.of_st_s8◂s }
+					∎ { e v0 }
 		 
 			§	@.exp_s8 { E e } 
 				∐ e ⊢ ast.exp_s8_cst◂c . 
@@ -8377,12 +8376,14 @@ unsigned long
 				ct_ptn { { m SC APV tav } lcg } ⊢ { E lcg } 
 				pop_tpl el ⊢ {} 
 				∎ { E lcg }			
+			@.ct_x_s # { v lf }
+				ct_x_pf { { rp8.e◂{} v } lf } ⊢ { e _ }
+				∎ e
 			@.ct_x { E f c }
 				∐ f ⊢ RP.atm◂ast.k_op_axm◂{ a la _ } .
 					∐ a'=EX.pf; la ⊢ _cns◂{ RP.atm◂ast.k_pf◂lf _nil◂{} }; c ⊢ RP.rcd◂l0 .	
-						arr_of_lst { l0 RP.rcd◂⟦⟧ } ⊢ v0 
-						ct_x_pf { { E v0 } lf } ⊢ { { E _ } c }
-						ct_ptn { E c } ⊢| 
+						_mk_stk_lst.f◂◂ct_x_s { l0 lf } ⊢ e
+						∎ { E RP.atm◂ast.k_s8◂e }
 					∐. . 
 						∎|
 				∐. . 
