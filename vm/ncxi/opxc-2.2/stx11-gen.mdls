@@ -2497,6 +2497,10 @@ unsigned long
 		§ gen_dlt # { lv y } 
 			gen.dlt.f { lv y } ⊢| 
 		§ gen_dlt_lst = lst.fld_l◂◂gen_dlt 
+		§ pc_0 # v 
+			$ v ⊢ v,v0 
+			∎ { v var_ln◂var◂p◂v0 } 
+		§ pc = _ref.to◂◂{ _id pc_0 } 
 		§§ unify_v 
 			§ @.f_l1 { i0 lv y1 } 
 				∐ y1 ⊢ var◂p◂i1 . 
@@ -2577,13 +2581,22 @@ unsigned long
 					∎ ⟦⟧  
 				∐. . 
 					∎| 
-			@.f_l0 # { i0 y1 }   
+			@.f_l0 { i0 y1 }   
 				TV.o i0 ⊢ { i0 v0 } 
 				$ v0 ⊢ 
 				∐ var_ln◂y2 . 
-					$ y2 ⊢ y2,y2t 
-					TV.to_i { i0 var_ln◂y2t } ⊢ {}
-					f { y2 y1 } ⊢|
+					$ y2 ⊢ 
+					∐ var◂p◂i1 . 
+						pc { i0 i1 } ⊢ i1
+						f_l0 { i1 y1 } ⊢|
+					∐ dta◂d . 
+						f_l0_dta { { i0 d } y1 } ⊢|
+					∐ imp◂d . 
+						f_l0_imp { { i0 d } y1 } ⊢|
+					∐ ct_imp◂d . 
+						f_l0_ct_imp { { i0 d } y1 } ⊢|
+					∐. abs◂a .
+						∎| 
 				∐ var_l◂lv .  
 					$ lv ⊢ lv,lvt 
 					TV.i { i0 var_l◂lvt } ⊢ i0 
@@ -2591,6 +2604,123 @@ unsigned long
 				∐. var_q◂Q . 
 					TV.i { i0 var_q◂Q } ⊢ i0 
 					f_lq { i0 y1 } ⊢| 
+			@.f_l0_dta_l1 { { I0 { a0 l0 } } i1 } 
+				_ref.eq_lc { I0 i1 } ⊢ { { I0 i1 } b }
+				∐ b'=1r . 
+					$ b ⊢ _ 
+					_ref.to_i { I0 var_ln◂dta◂{ a0 l0 } } ⊢ {}
+					∎ var◂p◂i1 
+				∐. .
+					_ref.o i1 ⊢ { I1 v }
+					$ v ⊢ 
+					∐ var_q◂_ . 
+						∎| 
+					∐ var_l◂lv .
+						set.f_lst { lv l0 } ⊢ { _ l }
+						_ref.i { I0 var_ln◂dta◂{ a0 l } } ⊢ i
+						pc { I1 i } ⊢ i 
+						∎ var◂p◂i
+					∐. var_ln◂y1 .
+						∐ y1 ⊢ var◂p◂i2 . 
+							pc { I1 i2 } ⊢ i2 
+							f_l0_dta_l1 { { I0 { a0 l0 } } i2 } ⊢|
+						∐ y1 ⊢ dta◂{ a1 l1 }; a0'=a1'.
+							$ a1 ⊢ _
+							f_lst { l0 l1 } ⊢ l 
+							_ref.i { I0 var_ln◂dta◂{ a0 l } } ⊢ i
+							pc { I1 i } ⊢ i
+							∎ var◂p◂i
+						∐. .
+							∎|
+			@.f_l0_dta { { I { a0 l0 } } y }
+				∐ y ⊢ dta◂{ a1 l1 };
+					∐ a0'=a1' . 
+						$ a1 ⊢ _
+						f_lst { l0 l1 } ⊢ l 
+						_ref.i { I var_ln◂dta◂{ a0 l } } ⊢ i 
+						∎ var◂p◂i
+					∐. .
+						∎|
+				∐ y ⊢ var◂p◂i1 .
+					f_l0_dta_l1 { { I { a0 l0 } } i1 } ⊢|
+				∐. .
+					∎|	
+			@.f_l0_imp_l1 { { I0 { t0 t1 } } i1 } 
+				_ref.eq_lc { I0 i1 } ⊢ { { I0 i1 } b }
+				∐ b'=1r . 
+					_ref.to_i { I0 var_ln◂imp◂{ t0 t1 } } ⊢ {}
+					∎ var◂p◂i1 
+				∐. .
+					_ref.o i1 ⊢ { I1 v }
+					$ v ⊢ 
+					∐ var_q◂_ . 
+						∎| 
+					∐ var_l◂lv .
+						set.f { lv t0 } ⊢ { lv t0 }
+						set.f { lv t1 } ⊢ { _ t1 }
+						_ref.i { I0 var_ln◂imp◂{ t0 t1 } } ⊢ i
+						pc { I1 i } ⊢ i 
+						∎ var◂p◂i
+					∐. var_ln◂y1 .
+						∐ y1 ⊢ var◂p◂i2 . 
+							pc { I1 i2 } ⊢ i2 
+							f_l0_imp_l1 { { I0 { t0 t1 } } i2 } ⊢|
+						∐ y1 ⊢ imp◂{ s0 s1 } .
+							f { t0 s0 } ⊢ t0 
+							f { t1 s1 } ⊢ t1
+							_ref.i { I0 var_ln◂imp◂{ t0 t1 } } ⊢ i
+							pc { I1 i } ⊢ i
+							∎ var◂p◂i
+						∐. .
+							∎|
+			@.f_l0_imp { { I { t0 t1 } } y }
+				∐ y ⊢ imp◂{ s0 s1 } .
+					f { t0 s0 } ⊢ t0 
+					f { t1 s1 } ⊢ t1
+					_ref.i { I var_ln◂imp◂{ t0 t1 } } ⊢ i 
+					∎ var◂p◂i
+				∐ y ⊢ var◂p◂i1 .
+					f_l0_imp_l1 { { I { t0 t1 } } i1 } ⊢|
+				∐. .
+					∎|	
+			@.f_l0_ct_imp_l1 { { I0 { t0 t1 } } i1 } 
+				_ref.eq_lc { I0 i1 } ⊢ { { I0 i1 } b }
+				∐ b'=1r . 
+					_ref.to_i { I0 var_ln◂ct_imp◂{ t0 t1 } } ⊢ {}
+					∎ var◂p◂i1 
+				∐. .
+					_ref.o i1 ⊢ { I1 v }
+					$ v ⊢ 
+					∐ var_q◂_ . 
+						∎| 
+					∐ var_l◂lv .
+						set.f { lv t0 } ⊢ { lv t0 }
+						set.f { lv t1 } ⊢ { _ t1 }
+						_ref.i { I0 var_ln◂ct_imp◂{ t0 t1 } } ⊢ i
+						pc { I1 i } ⊢ i 
+						∎ var◂p◂i
+					∐. var_ln◂y1 .
+						∐ y1 ⊢ var◂p◂i2 . 
+							pc { I1 i2 } ⊢ i2 
+							f_l0_ct_imp_l1 { { I0 { t0 t1 } } i2 } ⊢|
+						∐ y1 ⊢ ct_imp◂{ s0 s1 } .
+							f { t0 s0 } ⊢ t0 
+							f { t1 s1 } ⊢ t1
+							_ref.i { I0 var_ln◂ct_imp◂{ t0 t1 } } ⊢ i
+							pc { I1 i } ⊢ i
+							∎ var◂p◂i
+						∐. .
+							∎|
+			@.f_l0_ct_imp { { I { t0 t1 } } y }
+				∐ y ⊢ ct_imp◂{ s0 s1 } .
+					f { t0 s0 } ⊢ t0 
+					f { t1 s1 } ⊢ t1
+					_ref.i { I var_ln◂ct_imp◂{ t0 t1 } } ⊢ i 
+					∎ var◂p◂i
+				∐ y ⊢ var◂p◂i1 .
+					f_l0_ct_imp_l1 { { I { t0 t1 } } i1 } ⊢|
+				∐. .
+					∎|
 			∎∎
 		§§ unify 
 			§ @.f_l1 { i0 lv y1 } 

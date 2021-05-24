@@ -411,3 +411,13 @@ dta
 
 t_var 
 	∐ var : 
+
+
+	∐ t0 ⊢ var◂p0 . 
+	 _ref.o p0 ⊢ { P0 v0 }
+	 ∐ v0 ⊢ var_ln◂◂t1; 
+	 	∐ t1 ⊢ var◂p1 . 
+			_ref.o p1 ⊢ { P1 v1 }
+			∐ v1 ⊢ var_ln◂t2 ; path compression
+				_ref.i { P0 }
+				
