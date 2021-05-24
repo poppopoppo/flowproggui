@@ -396,3 +396,18 @@ _arr_x◂{ k' l_0 }
 _arr_x◂{ k' l_n }
 
 _push : { k' _arr_x◂{ k' n' } }→_arr_x◂{ k' l_n }
+
+t 
+	∐ dta : dta 
+	∐ var : _ref◂var 
+dta 
+	∐ axm0 : _id
+	∐ axm1 : { _id t }
+	∐ axm2 : { _id t t }
+	∐ axm : { _id _lst◂t }
+	∐ axm_n.[ n' ] : { _id {= t n' } } 
+	∐ imp : { t t }
+	∐ ct_imp : { t t }
+
+t_var 
+	∐ var : 

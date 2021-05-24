@@ -399,6 +399,12 @@
       ` cmovz rsi,rdx 
       //
     ∎ { { x0 x1 } b } 
+	§ new # {} 
+		!^ _ ⊢ n 
+      ` mov rax,QWORD [SGN]
+      ` add QWORD [SGN],1
+      // 
+    ∎ n
   ∎∎
 §§ _sgn 
   ¶ t 
@@ -1991,29 +1997,46 @@
     //
   $ b ⊢ _ 
   ∎ d 
+§§ _lst 
+	§ @.len l 
+		$ l ⊢ 
+		∐ _cns◂{ a l } . 
+			len l ⊢ { l n } 
+			$ _cns◂{ a l } ⊢ l 
+			_inc n ⊢ n 
+			∎ { l n } 
+		∐. _nil◂{} . 
+			∎ { ⟦⟧ %[ 0r ] }
+	∎∎
  §§ _mk_stk_lst 
-  § @.i { { h i } l }
+  § @.i { { h s } l }
 		$ l ⊢ 
 		∐ _cns◂{ x l } . 
 			_eq_hp { x h } ⊢ { x h } 
-			_inc i ⊢ i
-      i { { h i } l } ⊢ { { h i } r }
-      _cnc_sub { r h } ⊢ { r h }
-			_cnc_sto { r x } ⊢ r
-			∎ { { h i } r }
+			_cnc_sto { s x } ⊢ s
+      _cnc_add { s h } ⊢ { s h }
+      i { { h s } l } ⊢| 
 		∐. _nil◂{} .
-			$ h ⊢ h,h0 
-			alc_s_l { h0 i } ⊢  { i S } 
-			∎ { { h i } S }
+			∎ {}
   
 § f◂◂F # { l p }
-  _hp.ini {} ⊢ h 
-	i { { h %[ 0r ] } l } ⊢ { { h n } r } 
-	_sub_im◂◂8r r ⊢ r 
+	_hp.ini {} ⊢ h 
   _hp.ini {} ⊢ ha 
 	$.[ k' . { _hp◂k' _hp◂(_arr◂k') } ] { h ha } ⊢ { h ha }
-  ofs_arr { h n } ⊢ b
-  _hp.to { r ha } ⊢ a
+  _lst.len l ⊢ { l n } 
+  $ n ⊢ n,n0 
+	$ h ⊢ h,h0
+	ofs_arr { h0 n0 } ⊢ b
+	$ b ⊢ b,b0 
+	!^ b0,n ⊢ r,s
+    `	sub rsp,rax 
+		`	mov rax,rsp
+		`	bts rdi,63
+		`	mov QWORD [rax],rdi 
+		`	lea rdi,[rax+8]
+    //
+	_hp.to { r ha } ⊢ a
+	i { { h s } l } ⊢ {} 
   F { a p } ⊢ d 
   !^ b ⊢ *b 
     ` mov rsi,QWORD [rsp]
