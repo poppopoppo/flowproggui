@@ -421,3 +421,22 @@ t_var
 			∐ v1 ⊢ var_ln◂t2 ; path compression
 				_ref.i { P0 }
 				
+
+
+	¶
+			@.t v'
+				∐ dta : { _r64 _lst◂(t◂v') }
+				∐ imp : { t◂v' t◂v' }
+				∐ ct_imp : { t◂v' t◂v' }
+				∐ abs : { v' t◂v' }
+				∐ var : v'
+			@.var v'
+				∐ var_l : {}
+				∐ var_q : { _sgn _opn◂v' _opn◂v' } 
+				∐ var_ln : t◂v'
+			@.pt = _ref.t◂{ var◂p _r64 }
+			@.tt v' 
+			;= { _lst◂v' t◂v' } 
+				∐ abs : { v' tt◂v' }
+				∐ t : t◂v' 
+
