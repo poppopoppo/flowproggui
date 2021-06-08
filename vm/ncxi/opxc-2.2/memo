@@ -440,3 +440,19 @@ t_var
 				∐ abs : { v' tt◂v' }
 				∐ t : t◂v' 
 
+
+	@.t v' 
+		∐ axm0 : _r64
+		∐ axm1 : { _r64 t◂v' }
+		∐ axm2 : { _r64 { t◂v' t◂v' } }
+		∐ axm3 : { _r64 { t◂v' t◂v' t◂v' } }
+		∐ axmN : { _r64 _arr◂(t◂v') }
+		∐ imp 
+		∐ ct_imp 
+		∐ var 
+
+
+	@.e # _,_
+		∐= var : v' ⊢ e◂T.v◂v' 
+		∐= imp : { e◂a'◂v' e◂b'◂v' } ⊢ e◂(T.imp◂a'◂b')◂v' 
+

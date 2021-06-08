@@ -43,11 +43,13 @@
 ¶ _dmy = _[ 18r ]
 ¶ _hp = _[ 19r ]
 ¶ _rcd = _[ 21r ]
+¶ _prd = _[ 5r ]
 ¶ _ctr = _[ 12r ]
 ¶ _rev = _[ 30r ] 
 ¶ _irv = _[ 31r ]
 ¶ _ctr_rev = _ctr◂_rev
 ¶ _ctr_irv = _ctr◂_irv
+¶ _cns h',t' = _rcd◂(_prd◂h'◂t')
 -- adt 
 ¶ _lst = _[ 0x0001000000000000r ]
 ¶ _opn = _[ 0x0001000000000001r ]
@@ -217,7 +219,13 @@
 § _cnc_sto = _cnc_sto_ctr◂◂(\a . { a {} }) 
 § A _ 
   ∎ {} 
--- non-atomic 
+
+-- non-atomic
+§§ _swp 
+	§ L = \x . x  
+	§ R = \{ L R } . { R L }
+	§ f◂◂O = _ctr◂◂(_ct.if_eq◂◂{ { O 0r } L R })
+	∎∎	 
 § _cnc_siz0◂◂{ F H } # { h a }
   _hp.ini_ct◂◂H {} ⊢ hH 
   $.[ t' . { _hp◂(_hp◂t') _hp◂t' } ] { hH h } ⊢ { hH h }
@@ -1553,7 +1561,7 @@
   _id.s8 s ⊢ s 
   _s8_len s ⊢ { s l } 
   _hp.rpc s ⊢ { s r }   
-  !^ i,r,l ⊢ i 
+  !^ i,r,l ⊢ i,*r,*l 
     ` jmp .L1 
     `.L0:
 	  ` add rax,1 
@@ -1567,6 +1575,7 @@
 	  ` jz .L0
     `.L2:
     //
+	$ { r l } ⊢ _
   ∎ { s i ‹ {} › }
 ¶§ _line = _grm◂◂_line_F
 --§ _synt = _[ 0x0002000000000010r ]

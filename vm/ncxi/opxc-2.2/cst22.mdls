@@ -739,3 +739,28 @@
 	_arr.of_lst ⟦ %[ 3r ] %[ 555r ] %[ 12r ] %[ 0r ] ⟧ ⊢ a 
 	_emt a ⊢ _
 	∎ {} 
+§ line_F { s i } 
+  _id.s8 s ⊢ s 
+  _s8_len s ⊢ { s l } 
+  _hp.rpc s ⊢ { s r }   
+  !^ i,r,l ⊢ i,*r,*l 
+    ` jmp .L1 
+    `.L0:
+	  ` add rax,1 
+    `.L1:						
+	  ` cmp rax,rsi
+	  ` jge .L2
+	  ` movzx MCR_REG,BYTE [rdi+8+rax]
+	  ` cmp MCR_REG,9 
+	  ` jz .L0
+	  ` cmp MCR_REG,32 
+	  ` jz .L0
+    `.L2:
+    //
+	$ { r l } ⊢ _
+  ∎ { s i ‹ {} › }
+§ m47 _ 
+	line_F { %[ "OIJOIOI" ] %[ 0r ] } ⊢ { s i o } 
+	_emt { s i o } ⊢ { s i _ }
+	_line_F { s i } ⊢ _
+	∎ {} 
