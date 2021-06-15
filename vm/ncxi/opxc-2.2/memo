@@ -456,3 +456,16 @@ t_var
 		∐= var : v' ⊢ e◂T.v◂v' 
 		∐= imp : { e◂a'◂v' e◂b'◂v' } ⊢ e◂(T.imp◂a'◂b')◂v' 
 
+
+§ f { a b c }
+	∐∐ a ⊢ C0◂x 
+		..
+	∐∐ a ⊢ C1◂x
+		..
+	∐∐|
+
+
+
+	''[ c : { t p' q'' } < d0 d1 .. dn ]
+	\\{ A B C } : ∀a',b' . { a' b' _r64 } . 
+		: { a' b' _r64 }→[ a',b' ]→c' 

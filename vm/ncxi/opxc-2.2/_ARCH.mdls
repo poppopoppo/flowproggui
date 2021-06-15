@@ -967,14 +967,14 @@
   § alc ## h 
    _cnc_siz◂◂alc_T { h {} } ⊢|
   § free = _cnc_siz◂◂free_T
-  § rc # { h r }
+  § rc # t◂{ h r }
     !^ r ⊢ *r,c,b 
       ` mov rdi,QWORD [rax] 
       ` xor rsi,rsi
       ` btr rdi,63 
       ` setc sil
       //
-    ∎ { { h r } c b }
+    ∎ { t◂{ h r } c b }
   § dec0 # { h r } 
     !^ r ⊢ *r,c,b 
       ` mov rdi,QWORD [rax] 
