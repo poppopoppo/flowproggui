@@ -1261,7 +1261,7 @@
       !^ r ⊢ *r 
         ` mov rdi,QWORD [rax]
         ` bts rdi,63 
-        ` jc err_ref_o
+        ` jc err_ref_f
         ` mov QWORD [rax],rdi
         //
       $ r ⊢ r,r0 

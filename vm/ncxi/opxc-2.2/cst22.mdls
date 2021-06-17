@@ -691,6 +691,8 @@
   _ref.Lc.o◂◂T p ⊢| 
 § f1 _ 
   ∎ { %[ _lc.e ] %[ _lc.c ] %[ _lc.n ] }
+§ h0 _ 
+	∎ {}
 § T = _lc.e◂◂_lc.n
 § f1 _ 
   ∎ %[ _ref.Lc.o ]
