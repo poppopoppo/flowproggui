@@ -2300,7 +2300,8 @@ unsigned long
 							∐. var_q◂q .
 								Q { { N lv } { I q } } ⊢| 
 					∐. 
-						--∎ { { N lv } t◂{ a lvt } }
+						∎ { { N lv } t◂{ a lvt } }
+						-\
 						$ a ⊢ 
 						∐ dta◂{ ax lx } . 
 							lst◂◂Q { { N lv } lx } ⊢ { { N lv } lx }
@@ -2331,6 +2332,8 @@ unsigned long
 								∎ { { N lv } t◂{ var◂p◂i lvt0 } } 
 							∐. var_q◂q .
 								Q { { N lv } { I q } } ⊢| 
+							-/
+
 			∎∎ 
 		§§ set 
 			§ f # { lv t }
@@ -2990,7 +2993,7 @@ unsigned long
 							∎ { { N lv al } t◂{ ct_imp◂{ k0 k1 } lvt } t }
 						∐. var◂p◂i0 
 							al_var◂◂AO { { N lv al } { i0 lvt } } ⊢|
-					@.al_var◂◂{ A O } { { N lv al } { i lv0 } } 
+					@.al_var◂◂{ A O } # { { N lv al } { i lv0 } } 
 						_ref.o i ⊢ { i v }
 						$ v ⊢
 						∐ var_ln◂y . 
@@ -3145,7 +3148,7 @@ unsigned long
 						∎ { { N lv al } t }
 					∐. var◂p◂i0 . 
 						al_var { { N lv al } i0 } ⊢|
-				@.al_var { { N lv al } i0 } 
+				@.al_var # { { N lv al } i0 } 
 					TV.o i0 ⊢ { i0 v0 } 
 					$ v0 ⊢
 					∐ var_ln◂y0 . 
