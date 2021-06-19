@@ -1673,6 +1673,9 @@ unsigned long
 			§§ lv 
 				§ GEN = 0xffffffffr 
 				§ q = 0r 
+				§ rcd # { lv l }
+					$ lv ⊢ lv,lv0 
+					∎ { lv t◂{ dta◂{ %[ id.rcd ] ⟦ l ⟧ } lv0 } } 
 				§ prd # { lv { h t } }
 					$ lv ⊢ lv,lv0 
 					∎ { lv t◂{ dta◂{ %[ id.prd ] ⟦ h t ⟧ } lv0 } }
@@ -1828,6 +1831,39 @@ unsigned long
 					∐ ct_imp : { s' d' }
 				¶ dta l' 
 					∐ dta : { _r64 l' }
+
+				§ t_args◂l = dta◂{ %[ CST.MAX ] l }
+				§ nul◂{} = dta◂{ %[ CST.MAX ] {} }
+				§ t_prm◂p = dta◂{ p {} } 
+				§ t_prm_a◂{ p a } = dta◂{ p { a } } 
+				§ t_dta◂d = dta◂d
+				§ t_adt◂a = dta◂{ %[ id.adt ] { a } } 
+				§ prd◂{ x r } = t_dta◂{ %[ id.prd ] { x r }  } 
+				§ rcd◂l = t_prm_a◂{ %[ id.rcd ] l } 
+				§ rcd_unt◂{} = y◂X.rcd_unt◂{} 
+				§ cns◂{ h t } = rcd◂prd◂{ h t }		
+				§ cns1◂a = rcd◂prd◂{ a rcd_unt◂{} }
+				§ cns2◂{ a0 a1 } = rcd◂prd◂{ a0 prd◂{ a1 rcd_unt◂{} } }
+				§ cns3◂{ a0 a1 a2 } = rcd◂prd◂{ a0 prd◂{ a1 prd◂{ a2 rcd_unt◂{} } } }
+				§ cns4◂{ a0 a1 a2 a3 } = rcd◂prd◂{ a0 prd◂{ a1 prd◂{ a2 prd◂{ a3 rcd_unt◂{} } } } }
+				§ ila◂y = t_prm_a◂{ %[ id.ila ] y } 
+				§ dmy◂y = t_prm_a◂{ %[ id.dmy ] y } 
+				§ hp◂y = t_prm_a◂{ %[ id.hp ] y } 
+				§ A _ 
+					∎|
+				§ t_dmy◂{} = nul◂{} 
+				§ t_ctr◂{ x y t } = t_dta◂{ %[ id.ctr ] { y x t } }
+				§ t_ctr_irv◂{ x y } = t_ctr◂{ x y y◂q◂X.dta◂{ %[ id.ctr_irv ] ⟦⟧ } }
+				§ t_ctr_rev◂{ x y } = t_ctr◂{ x y y◂q◂X.dta◂{ %[ id.ctr_rev ] ⟦⟧ } }
+				§ arr_x◂{} = dta◂{ %[ id.arr_x ] {} } 
+				§ arr_x◂y = t_dta◂{ %[ id.arr ] { y arr_x◂{} } } 
+				§ arr◂y = t_dta◂{ %[ id.arr ] { y y◂X.unt◂{} } } 
+				§ pf◂y = t_dta◂{ %[ id.pf ] { y } }
+				§ t_mtc◂{ x y } = t_dta◂{ %[ id.mtc ] { y x } }
+				§ t_adt◂a = t_prm_a◂{ %[ id.adt ] ⟦ a ⟧ } 
+				§ lst◂y = t_adt◂t_prm_a◂{ %[ id.lst ] y } 
+				§ opn◂y = t_adt◂t_prm_a◂{ %[ id.opn ] y }
+			
 				∎∎
 			§§ lv 
 				¶ var 
@@ -1867,6 +1903,9 @@ unsigned long
 				§ arr◂y = t_dta◂{ %[ id.arr ] { y y◂X.unt◂{} } } 
 				§ pf◂y = t_dta◂{ %[ id.pf ] { y } }
 				§ t_mtc◂{ x y } = t_dta◂{ %[ id.mtc ] { y x } }
+				§ t_adt◂a = t_prm_a◂{ %[ id.adt ] a } 
+				§ lst◂y = t_adt◂t_prm_a◂{ %[ id.lst ] y } 
+				§ opn◂y = t_adt◂t_prm_a◂{ %[ id.opn ] y }
 				∎∎ 
 			§§ mk 
 				¶¶ f t' : { lv t' } → { lv t_p } 
@@ -3556,10 +3595,10 @@ unsigned long
 					_ref.o i0 ⊢ { i0 v0 } 
 					$ v0 ⊢ 
 					∐ var_ln◂y2 .
-						$ y2 ⊢ y2,y2t 
-						_ref.i { i0 var_ln◂y2t } ⊢ i0
-						f { N y2 t◂{ y1 lv1 } } ⊢ { N _ y1 b }
-						--TV.i { i0 var_ln◂y2 } ⊢ i0
+						--$ y2 ⊢ y2,y2t 
+						--_ref.i { i0 var_ln◂y2t } ⊢ i0
+						f { N y2 t◂{ y1 lv1 } } ⊢ { N y2 y1 b }
+						TV.i { i0 var_ln◂y2 } ⊢ i0
 						∎ { N t◂{ var◂p◂i0 lv0 } y1 b }
 					∐ var_l◂lv .  
 						_emt lv ⊢ _ 
@@ -3576,10 +3615,10 @@ unsigned long
 					_ref.o i1 ⊢ { i1 v0 } 
 					$ v0 ⊢ 
 					∐ var_ln◂y2 . 
-						$ y2 ⊢ y2,y2t 
-						_ref.i { i1 var_ln◂y2t } ⊢ i1
-						f { N t◂{ y0 lv0 } y2 } ⊢ { N y0 _ b }
-						--TV.i { i1 var_ln◂y2 } ⊢ i1 
+						--$ y2 ⊢ y2,y2t 
+						--_ref.i { i1 var_ln◂y2t } ⊢ i1
+						f { N t◂{ y0 lv0 } y2 } ⊢ { N y0 y2 b }
+						TV.i { i1 var_ln◂y2 } ⊢ i1 
 						∎ { N y0 t◂{ var◂p◂i1 lv1 } b }
 					∐ var_l◂lv .  
 						∎|
@@ -5027,13 +5066,12 @@ unsigned long
 				-- nil 
 				∐ 
 					T.nvq {} ⊢  y0 
-
-					$ TX.t_ctr_irv◂{ TX.unt◂{} TX.lst◂y0 } ⊢ yx 
+					TT.mk_t { %[ 0r ] TT.lv.t_ctr_irv◂{ TT.y◂TX.unt◂{} TT.lv.lst◂TT.y◂y0 } } ⊢ yx  
 					k_ctr { %[ 1r ] yx } ⊢ k 
-					∎ { APV RP.atm◂k	}
+					∎ { APV RP.atm◂k }
 				-- cns 
 				∐ 
-					T.nvq3 {} ⊢ { y0 y1 y2  }
+					T.nvq3 {} ⊢ { y0 y1 y2 }
 					$ TX.lst◂y0 ⊢ y0 
 					$ TX.lst◂y2 ⊢ y2 
 					$ TX.t_ctr_irv◂{ TX.cns2◂{ y1 y0 } %y2 } ⊢ yx 
@@ -5313,7 +5351,8 @@ unsigned long
 				∐ _some◂{ i t } .
 					$ E ⊢ { al lv APV } 
 					T.inst_prd { lv i t } ⊢ { lv r } 
-					T.unify_v.f { w TX.rcd◂r } ⊢ w
+					TX.lv.rcd { lv r } ⊢ { lv r }
+					T.unify_v.f { w r } ⊢ w
 					∎ { { { al lv APV } w } p }
 				∐. _none◂{} . 
 					∎ { { E w } p }
