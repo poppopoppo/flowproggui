@@ -2332,56 +2332,26 @@ unsigned long
 							f◂◂Q { { N lv } k1 } ⊢ { { N lv } k1 } 
 							set { lv ct_imp◂{ k0 k1 } } ⊢ { lv t }
 							∎ { { N lv } t }
-						∐. var◂p◂i . 
-							_ref.o i ⊢ { I v } 
-							$ v ⊢ 
-							∐ var_ln◂y2 . 
-								f◂◂Q { { N lv } y2 } ⊢ { { N lv } y2 } 
-								TV.i { I var_ln◂y2 } ⊢ i 
-								set { lv var◂p◂i } ⊢ { lv t }
-								∎ { { N lv } t }
-							∐ var_l◂lv1 . 
-								$ lv ⊢ lv,lvt 
-								_min { lvt lv1 } ⊢ lvt 
-								$ lvt ⊢ lvt,lvt0 
-								TV.i { I var_l◂lvt } ⊢ i 
-								∎ { { N lv } t◂{ var◂p◂i lvt0 } } 
-							∐. var_q◂q .
-								Q { { N lv } { I q } } ⊢| 
+						∐. var◂p◂i 
+							f_var◂◂Q { { N lv } i } ⊢|
 					∐. 
 						∎ { { N lv } t◂{ a lvt } }
-						-\
-						$ a ⊢ 
-						∐ dta◂{ ax lx } . 
-							lst◂◂Q { { N lv } lx } ⊢ { { N lv } lx }
-							set { lvt dta◂{ ax lx } } ⊢ { _ t }
-							∎ { { N lv } t }
-						∐ imp◂{ k0 k1 } . 
-							f◂◂Q { { N lv } k0 } ⊢ { { N lv } k0 } 
-							f◂◂Q { { N lv } k1 } ⊢ { { N lv } k1 } 
-							set { lvt imp◂{ k0 k1 } } ⊢ { _ t }
-							∎ { { N lv } t }
-						∐ ct_imp◂{ k0 k1 } .
-							f◂◂Q { { N lv } k0 } ⊢ { { N lv } k0 } 
-							f◂◂Q { { N lv } k1 } ⊢ { { N lv } k1 } 
-							set { lvt ct_imp◂{ k0 k1 } } ⊢ { _ t }
-							∎ { { N lv } t }
-						∐. var◂p◂i . 
-							_ref.o i ⊢ { I v } 
-							$ v ⊢ 
-							∐ var_ln◂y2 . 
-								f◂◂Q { { N lv } y2 } ⊢ { { N lv } y2 } 
-								TV.i { I var_ln◂y2 } ⊢ i 
-								set { lvt var◂p◂i } ⊢ { _ t }
-								∎ { { N lv } t }
-							∐ var_l◂lv1 . 
-								_min { lvt lv1 } ⊢ lvt 
-								$ lvt ⊢ lvt,lvt0 
-								TV.i { I var_l◂lvt } ⊢ i 
-								∎ { { N lv } t◂{ var◂p◂i lvt0 } } 
-							∐. var_q◂q .
-								Q { { N lv } { I q } } ⊢| 
-							-/
+				@.f_var◂◂Q { { N lv } i }
+					_ref.o i ⊢ { I v } 
+					$ v ⊢ 
+					∐ var_ln◂y2 . 
+						f◂◂Q { { N lv } y2 } ⊢ { { N lv } y2 } 
+						TV.i { I var_ln◂y2 } ⊢ i 
+						set { lv var◂p◂i } ⊢ { lv t }
+						∎ { { N lv } t }
+					∐ var_l◂lv1 . 
+						$ lv ⊢ lv,lvt 
+						_min { lvt lv1 } ⊢ lvt 
+						$ lvt ⊢ lvt,lvt0 
+						TV.i { I var_l◂lvt } ⊢ i 
+						∎ { { N lv } t◂{ var◂p◂i lvt0 } } 
+					∐. var_q◂q .
+						Q { { N lv } { I q } } ⊢| 
 
 			∎∎ 
 		§§ set 
@@ -2389,6 +2359,13 @@ unsigned long
 				SET.f◂◂SET.Q { { {} lv } t } ⊢ { { {} lv } t }
 				∎ { lv t }
 			§ f_lst = lst.map_l◂◂f 
+			§ f_var # { lv { i lvt } }
+				∐ lv'=<lvt' 
+					$ lvt ⊢ _ 
+					SET.f_var◂◂SET.Q { { {} lv } i } ⊢ { { {} lv } i }
+					∎ { lv i } 
+				∐.
+					∎ { lv t◂{ var◂p◂i lvt } }
 			∎∎
 		§§ set_N 
 			§ f = SET.f◂◂SET.Q_N 
@@ -2696,6 +2673,9 @@ unsigned long
 		§ set_lst # { N lv t }
 			set.f_lst { lv t } ⊢ { lv t }
 			∎ { N lv t }
+		§ set_var # { N lv t }
+			set.f_var { lv t } ⊢ { lv t }
+			∎ { N lv t }
 		§ 
 			@.t_of_v { N v }
 				_ref.rc v ⊢ { v c _ }
@@ -2858,13 +2838,13 @@ unsigned long
 						f_l0_l1 { N { i0 lv0 } i_lv } ⊢|
 					∐ v0 ⊢ var_l◂lv 
 						_ref.i { I1 v1 } ⊢ i1
-						set { N lv t◂{ var◂p◂i1 lv1 } } ⊢ { N _ y }
-						_ref.to_i { I0 var_ln◂y } ⊢ {}
+						set_var { N lv { i1 lv1 } } ⊢ { N _ t }
+						_ref.to_i { I0 var_ln◂t } ⊢ {}
 						∎ { N %[ 1r ] }
 					∐ v1 ⊢ var_l◂lv 
 						_ref.i { I0 v0 } ⊢ i0
-						set { N lv t◂{ var◂p◂i0 lv0 } } ⊢ { N _ y }
-						_ref.to_i { I1 var_ln◂y } ⊢ {}
+						set_var { N lv { i0 lv0 } } ⊢ { N _ t }
+						_ref.to_i { I1 var_ln◂t } ⊢ {}
 						∎ { N %[ 1r ] }
 					∐ v0 ⊢ var_ln◂t◂{ dta◂{ a0 l0 } lv0d }; v1 ⊢ var_ln◂t◂{ dta◂{ a1 l1 } lv1d }; a0'=a1'
 						i_q I0 ⊢ i0 
