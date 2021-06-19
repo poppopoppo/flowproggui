@@ -1684,10 +1684,12 @@ unsigned long
 					∎ { lv t◂{ dta◂{ %[ id.ctr ] ⟦ y x t ⟧ } lv0 } }
 				∎∎
 			§§ q 
+				§ t_dta◂d = q◂dta◂d
 				§ t_prm_a◂{ p a } = q◂dta◂{ p ⟦ a ⟧ } 
 				§ prd◂{ x r } = q◂dta◂{ %[ id.prd ] ⟦ x r ⟧  } 
 				§ rcd◂l = t_prm_a◂{ %[ id.rcd ] l }
 				§ cns2◂{ a0 a1 } = rcd◂prd◂{ a0 prd◂{ a1 rcd_unt◂{} } }
+				§ lc◂{ a s r } = t_dta◂{ %[ id.lc ] ⟦ a s r ⟧ }
 				∎∎
 			§ GEN◂t = t_lv◂{ t %[ lv.GEN ] }
 			§ lv # { lv y }
@@ -3981,7 +3983,7 @@ unsigned long
 				T.nvl2 lv ⊢ { lv { y0 y0t } }
 				T.nvl2 lv ⊢ { lv { y1 y1t } }
 				T.nvl2 lv ⊢ { lv { y2 y2t } }
-				∎ TX.ct_imp◂{ TX.imp◂{ y0 y1 } TX.imp◂{ TX.cns2◂{ y2 y0t } TX.cns2◂{ y2t y1t } } } 		
+				TT.mk_t { lv TT.lv.ct_imp◂{ TT.lv.imp◂{ TT.y◂y0 TT.y◂y1 } TT.lv.imp◂{ TT.lv.cns2◂{ TT.y◂y2 TT.y◂y0t } TT.lv.cns2◂{ TT.y◂y2t TT.y◂y1t } } } } ⊢| 		
 			-- 57 hp_of
 			∐ 
 				T.nvl2 lv ⊢ { lv { y y0 } }
@@ -4241,9 +4243,9 @@ unsigned long
 			T.nvl2 lv ⊢ { lv { y0 y0t } }
 			T.nvl2 lv ⊢ { lv { y1 y1t } }
 			T.nvl2 lv ⊢ { lv { y2 y2t } }
-			∎ TX.ct_imp◂{ TX.cns2◂{ TX.imp◂{ y0t y1 } TX.imp◂{ y1t y2t } } TX.imp◂{ y0 y2 } } 
+			TT.mk_t { lv TT.lv.ct_imp◂{ TT.lv.cns2◂{ TT.lv.imp◂{ TT.y◂y0t TT.y◂y1 } TT.lv.imp◂{ TT.y◂y1t TT.y◂y2t } } TT.lv.imp◂{ TT.y◂y0 TT.y◂y2 } } } ⊢|
 		-- 0x24 prs
-			∐ 
+		∐ 
 			T.nvl2 lv ⊢ { lv { yv yv0 } }
 			$ TX.prs_opn◂yv0 ⊢ y1
 			∎ TX.ct_imp◂{ TX.grm◂yv y1 }
@@ -4270,7 +4272,7 @@ unsigned long
 					∎ TX.ct_imp◂{ TX.cns2◂{ TX.t_ctr◂{ y0t y1 yt } TX.t_ctr◂{ y1t y2t yt0 } } TX.t_ctr◂{ y0 y2 yt1 } } 
 				-- lc_n 
 				∐
-					∎ TX.lc◂{ TX.cns0◂{} TX.cns0◂{} TX.cns0◂{} } 
+					∎ TX.q.lc◂{ TX.cns0◂{} TX.cns0◂{} TX.cns0◂{} } 
 				-- lc_e 
 				∐ 
 					$ i ⊢ _ 
