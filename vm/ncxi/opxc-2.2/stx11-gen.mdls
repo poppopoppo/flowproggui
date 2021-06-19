@@ -2702,8 +2702,8 @@ unsigned long
 				$ v ⊢ 
 				∐ var_ln◂y; 
 					∐ y ⊢ t◂{ var◂p◂i lv } . 
-						pc { I { i lv } } ⊢ { i lv }
-						vv_f_l0_dta { N i { { a1 l1 } lv } } ⊢|
+						pc { I { i lv } } ⊢ { i _ }
+						vv_f_l0_dta { N i { { a1 l1 } lv1 } } ⊢|
 					∐ y ⊢ t◂{ dta◂{ a0 l0 } lv }; a0'=a1'
 						i_q I ⊢ i 
 						vv_f_lst { N l0 l1 } ⊢ { N l0 l1 b } 
@@ -2714,20 +2714,26 @@ unsigned long
 				∐. .
 					_ref.to_i { I var_ln◂y } ⊢ {} 
 					∎ { N t◂{ dta◂{ a1 l1 } lv1 } %[ 0r ] }
-			∐ var_l◂lv  
-				set { N lv t◂{ dta◂{ a1 l1 } lv1 } } ⊢ { N lv y } 
-				TV.i { I var_ln◂y } ⊢ i
-				∎ { N t◂{ var◂p◂i lv } %[ 1r ] } 
-			∐. var_q◂Q 
-				TV.to_i { I var_q◂Q } ⊢ {}
-				∎ { N t◂{ dta◂{ a1 l1 } lv1 } %[ 0r ] }
+				∐ var_l◂lv  
+					∐ lv1'=<lv' 
+						$ lv1 ⊢ lv1,lv1t 
+						TV.i { I var_ln◂t◂{ dta◂{ a1 l1 } lv1t } } ⊢ i
+						∎ { N t◂{ var◂p◂i lv1 } %[ 1r ] } 
+					∐.
+						set_lst { N lv l1 } ⊢ { N lv l1 } 
+						$ lv ⊢ lv,lv0 
+						TV.i { I var_ln◂t◂{ dta◂{ a1 l1 } lv0 } } ⊢ i
+						∎ { N t◂{ var◂p◂i lv } %[ 1r ] } 
+				∐. var_q◂Q 
+					TV.to_i { I var_q◂Q } ⊢ {}
+					∎ { N t◂{ dta◂{ a1 l1 } lv1 } %[ 0r ] }
 			@.vv_f_l0_IMP◂◂IMP { N i { { t0 t1 } lvt } }
 				TV.o i ⊢ { I v } 
 				$ v ⊢ 
 				∐ var_ln◂t◂{ y lvs }; 
 					∐ y ⊢ var◂p◂i  
-						pc { I { i lvs } } ⊢ { i lvs }
-						vv_f_l0_IMP◂◂IMP { N i { { t0 t1 } lvs } } ⊢|
+						pc { I { i lvs } } ⊢ { i _ }
+						vv_f_l0_IMP◂◂IMP { N i { { t0 t1 } lvt } } ⊢|
 					∐ y ⊢ IMP◂{ s0 s1 }
 						i_q I ⊢ i 
 						vv_f { N s0 t0 } ⊢ { N s0 t0 b0 }
@@ -2833,13 +2839,13 @@ unsigned long
 					∎ { N ⟦⟧ %[ 1r ] } 
 				∐.
 					∎|
-			@.f_l0_dta { N i { a1 l1 } }
+			@.f_l0_dta { N i { { a1 l1 } lv1 } }
 			TV.o i ⊢ { I v } 
 			$ v ⊢ 
 			∐ var_ln◂y; 
 				∐ y ⊢ t◂{ var◂p◂i lv } . 
 					pc { I { i lv } } ⊢ { i _ }
-					f_l0_dta { N i { a1 l1 } } ⊢|
+					f_l0_dta { N i { { a1 l1 } lv1 } } ⊢|
 				∐ y ⊢ t◂{ dta◂{ a0 l0 } lv }; a0'=a1'
 					i_q I ⊢ i 
 					$ a1 ⊢ _ 
@@ -2851,20 +2857,25 @@ unsigned long
 				∐. .
 					_ref.to_i { I var_ln◂y } ⊢ {} 
 					∎ { N %[ 0r ] }
-			∐ var_l◂lv   
-				set_lst { N lv l1 } ⊢ { N lv l1 }
-				TV.to_i { I var_ln◂t◂{ dta◂{ a1 l1 } lv } } ⊢ {}
-				∎ { N %[ 1r ] }
+			∐ var_l◂lv;   
+				∐ lv1'=<lv' 
+					TV.to_i { I var_ln◂t◂{ dta◂{ a1 l1 } lv1 } } ⊢ {}
+					∎ { N %[ 1r ] }
+				∐.
+					$ lv1 ⊢ _
+					set_lst { N lv l1 } ⊢ { N lv l1 }
+					TV.to_i { I var_ln◂t◂{ dta◂{ a1 l1 } lv } } ⊢ {}
+					∎ { N %[ 1r ] }
 			∐. var_q◂Q 
 				TV.to_i { I var_q◂Q } ⊢ {}
 				∎ { N %[ 0r ] }
-			@.f_l0_IMP◂◂IMP { N i { t0 t1 } }
+			@.f_l0_IMP◂◂IMP { N i { { t0 t1 } lv1 } }
 			TV.o i ⊢ { I v } 
 			$ v ⊢ 
-			∐ var_ln◂t◂{ y lv }; 
+			∐ var_ln◂t◂{ y lv2 }; 
 				∐ y ⊢ var◂p◂i  
-					pc { I { i lv } } ⊢ { i _ }
-					f_l0_IMP◂◂IMP { N i { t0 t1 } } ⊢|
+					pc { I { i lv2 } } ⊢ { i _ }
+					f_l0_IMP◂◂IMP { N i { { t0 t1 } lv1 } } ⊢|
 				∐ y ⊢ IMP◂{ s0 s1 }
 					i_q I ⊢ i 
 					v_f { N s0 t0 } ⊢ { N s0 b0 }
@@ -2872,16 +2883,21 @@ unsigned long
 					_ref.o i ⊢ { I _ }
 					_and { b0 b1 } ⊢ { b _ }
 					$ IMP◂{ s0 s1 } ⊢ y
-					_ref.to_i { I var_ln◂t◂{ y lv } } ⊢ {}
+					_ref.to_i { I var_ln◂t◂{ y lv2 } } ⊢ {}
 					∎ { N b }
 				∐. 
-					_ref.to_i { I var_ln◂t◂{ y lv } } ⊢ {} 
+					_ref.to_i { I var_ln◂t◂{ y lv2 } } ⊢ {} 
 					∎ { N %[ 0r ] }
 			∐ var_l◂lv   
-				set { N lv t0 } ⊢ { N lv t0 }
-				set { N lv t1 } ⊢ { N lv t1 }
-				TV.to_i { I var_ln◂t◂{ IMP◂{ t0 t1 } lv } } ⊢ {}
-				∎ { N %[ 1r ] }
+				∐ lv1'=<lv' 
+					TV.to_i { I var_ln◂t◂{ IMP◂{ t0 t1 } lv1 } } ⊢ {}
+					∎ { N %[ 1r ] }
+				∐.
+					$ lv1 ⊢ _ 
+					set { N lv t0 } ⊢ { N lv t0 }
+					set { N lv t1 } ⊢ { N lv t1 }
+					TV.to_i { I var_ln◂t◂{ IMP◂{ t0 t1 } lv } } ⊢ {}
+					∎ { N %[ 1r ] }
 			∐. var_q◂Q 
 				TV.to_i { I var_q◂Q } ⊢ {}
 				∎ { N %[ 0r ] }
@@ -2954,11 +2970,11 @@ unsigned long
 			∐ var◂p◂i1 
 				f_l0_l1 { N { i0 lv0 } { i1 lv1 } } ⊢|
 			∐ dta◂D 
-				f_l0_dta { N i0 D } ⊢|
+				f_l0_dta { N i0 { D lv1 } } ⊢|
 			∐ imp◂T 
-				f_l0_IMP◂◂imp { N i0 T } ⊢|
+				f_l0_IMP◂◂imp { N i0 { T lv1 } } ⊢|
 			∐. ct_imp◂T 
-				f_l0_IMP◂◂ct_imp { N i0 T } ⊢|
+				f_l0_IMP◂◂ct_imp { N i0 { T lv1 } } ⊢|
 			@.f { N t◂{ y0 lv0 } t◂{ y1 lv1 } }
 				∐ y0 ⊢ var◂p◂i0
 					f_l0 { N { i0 lv0 } t◂{ y1 lv1 } } ⊢|
