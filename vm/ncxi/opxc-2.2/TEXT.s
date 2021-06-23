@@ -2,7 +2,6 @@
 	unt: dq 0x0
 
 	unt_0: dq 0x0 
-
 thread_create: ; rdi=fn
 	push rdi
 	call stack_create
@@ -147,8 +146,7 @@ pf_d_rv_lp0:
 	ret 
 
 pf_x_bc: 
-	mov rbx,0x0000_ffff_ffff_ffff
-	and rbx,QWORD [rax] 
+	mov ebx,DWORD [rax] 
 	sub rbx,rdi 
 	jl err_bc
 	sub rbx,rsi 
@@ -307,8 +305,7 @@ free_opq_stk:
 	ret
 
 mm32: ; rdi=s  
-	mov rsi,0x0000_ffff_ffff_ffff 
-	and rsi,QWORD [rdi]
+	mov esi,DWORD [rdi]
 	add rdi,8	
 	mov r8,rsi 
 	shr r8,2 
@@ -356,42 +353,38 @@ mm32_i:
 	ret
 
 cmp_s8: ; rdi,rsi
-	mov rax,0x0000_ffff_ffff_ffff 
-	and rax,QWORD [rdi]
-	mov rdx,0x0000_ffff_ffff_ffff
-	and rdx,QWORD [rsi]
+	mov eax,DWORD [rdi]
+	mov edx,DWORD [rsi]
 	add rdi,8
 	add rsi,8
 cmp_stg: ;s0=rdi l0=rax s1=rsi l1=rdx
 	cmp rax,rdx
-	jg cmp_s8_g 
-	jl cmp_s8_l 
+	jg .g 
+	jl .l 
 	shr rax,3 
 	xor rbx,rbx
-cmp_s8_lp:
+.lp:
 	mov rdx,QWORD [rsi+8*rbx]
 	cmp QWORD [rdi+8*rbx],rdx 
-	jg cmp_s8_g 
-	jl cmp_s8_l  
+	jg .g 
+	jl .l  
 	cmp rbx,rax
-	jz cmp_s8_e
+	jz .e
 	add rbx,1 
-	jmp cmp_s8_lp 
-cmp_s8_l:
+	jmp .lp 
+.l:
 	mov rax,0 
 	ret 
-cmp_s8_e:
+.e:
 	mov rax,1 
 	ret
-cmp_s8_g: 
+.g: 
 	mov rax,2
 	ret
 
 eq_s8_q: ; rdi,rsi
-	mov rax,0x0000_ffff_ffff_ffff 
-	and rax,QWORD [rdi]
-	mov rdx,0x0000_ffff_ffff_ffff
-	and rdx,QWORD [rsi]
+	mov eax,DWORD [rdi]
+	mov edx,DWORD [rsi]
 	cmp rax,rdx
 	jnz eq_s8_q_f
 	;mov rcx,rax 
@@ -415,10 +408,8 @@ eq_s8_q_t:
 	ret
 eq_s8: ;rdi,rsi
 	push rdx
-	mov rax,0x0000_ffff_ffff_ffff 
-	and rax,QWORD [rdi]
-	mov rdx,0x0000_ffff_ffff_ffff
-	and rdx,QWORD [rsi]
+	mov eax,DWORD [rdi]
+	mov edx,DWORD [rsi]
 	cmp rax,rdx
 	jnz eq_s8_f 
 eq_s8_lp:
@@ -441,8 +432,7 @@ eq_s8_t:
 
 rpc_s8: ; rdi ⊢ rax
 	push rdi 
-	mov rsi,0x0000_ffff_ffff_ffff
-	and rsi,QWORD [rdi]  
+	mov esi,DWORD [rdi]
 	push rsi
 	mov rdi,rsi 
 	call mlc_s8
@@ -455,8 +445,7 @@ rpc_s8: ; rdi ⊢ rax
 	ret
      
 esc_s8: ; rdi ⊢ rax 
-	mov rsi,0x0000_ffff_ffff_ffff
-	and rsi,QWORD [rdi] 
+	mov esi,DWORD [rdi]
 	mov rax,rsi 
 	shl rax,1 
 	sub rsp,rax 
@@ -499,26 +488,6 @@ is_spc:
 is_spc_1: 
 	mov rax,1 
 	ret  
-
-scf_d_F: 
-	lea rsi,[rdi+8]
-  mov rdi,QWORD [rdi]
-  mov rdx,0x0000_ffff_ffff_ffff 
-  and rdi,rdx 
-  mov r8,10 
-  call scf_F
-  mov rdi,r10
-	ret
-
-scf_x_F:  
-	lea rsi,[rdi+8]
-  mov rdi,QWORD [rdi]
-  mov rdx,0x0000_ffff_ffff_ffff 
-  and rdi,rdx 
-  mov r8,16 
-  call scf_F
-  mov rdi,r10
-	ret
 
 scf_F:
 	cmp rax,rdi
@@ -572,7 +541,10 @@ mlc_s8: ; rdi=len
 	mov rsi,1 
 	xor rax,rax 
 	CALLOC_SF
-	pop QWORD [rax] 
+	mov rdi,0x0000_0001_0000_0000
+	pop rsi 
+	add rsi,rdi 
+	mov QWORD [rax],rsi
 	ret
 
 s8_of_c_stg: 
@@ -666,6 +638,14 @@ err_cls:
 	jmp err 
 err_NULL: 
 	mov rax,0xffff_ffff_0000_0000
+	mov QWORD [err_n],rax				
+	jmp err
+err_mk_stk: 
+	mov rax,0xffff_ffff_0000_eefb
+	mov QWORD [err_n],rax				
+	jmp err
+err_mk_stk_F: 
+	mov rax,0xffff_ffff_0000_eefc
 	mov QWORD [err_n],rax				
 	jmp err
 err_bc: 

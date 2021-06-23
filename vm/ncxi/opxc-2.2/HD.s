@@ -201,11 +201,6 @@ LB_%1_2:
 	call emt_cst 
 %endmacro
 
-%macro GET_LEN 2 
-	mov %1,0x0000_ffff_ffff_ffff
-	and %1,QWORD [%2]
-%endmacro
-
 %macro MOV_RAX 2 
 	mov rax,%2 
 	mov %1,rax
