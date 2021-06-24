@@ -1661,6 +1661,7 @@ unsigned long
 				§ ctr_irv = 31r 
 				§ lc = 32r 
 				§ lc_t = 33r 
+				--§ non_rpc = 34r
 				§ lst = 0x0001000000000000r 
   			§ opn = 0x0001000000000001r  
 				∎∎

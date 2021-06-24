@@ -268,6 +268,11 @@
     ` not rax 
     //
   ∎ r 
+§ _b_eq # { x y }
+	∐ x'=y' 
+		∎ { x y %[ 1r ] }
+	∐.
+		∎ { x y %[ 0r ] }
 § _cnc_add # { r h }
   $ h ⊢ h,h0 
   _cnc_siz◂◂(\\N . _add_im◂◂(_ct.op2.shl◂◂{ N 3r })) { h0 r } ⊢ r
@@ -1031,9 +1036,19 @@
 § _alc_o = _arr.o
 §§ _ref 
   ¶ t k' 
-    ∐ t : { _hp◂k' _r64 }
+    ∐ t : _arr◂k'
   ¶ lc t',k' 
     ∐ lc : { _hp◂t' _hp◂k' _r64 } 
+	§ t_o # t◂a 
+		_hp.of a ⊢ { r ha }
+		_hp.ini {} ⊢ h 
+		$.[ k' . { _hp◂(_arr◂k') _hp◂k' } ] { ha h } ⊢ {  _ h }
+		∎ { h r }
+	§ t_i # { h r } 
+		_hp.ini {} ⊢ ha 
+		$.[ k' . { _hp◂(_arr◂k') _hp◂k' } ] { ha h } ⊢ { ha _ }
+		_hp.to { r ha } ⊢ a
+		∎ t◂a
   § alc_T◂◂N ## {} 
     alc_rcd◂◂(_ct.op2.add◂◂{ N 1r }) {} ⊢|
   § free_T◂◂N ## r
@@ -1041,14 +1056,16 @@
   § alc ## h 
    _cnc_siz◂◂alc_T { h {} } ⊢|
   § free = _cnc_siz◂◂free_T
-  § rc # t◂{ h r }
-    !^ r ⊢ *r,c,b 
+  § rc # t
+    t_o t ⊢ { h r } 
+		!^ r ⊢ *r,c,b 
       ` mov rdi,QWORD [rax] 
       ` xor rsi,rsi
       ` btr rdi,63 
       ` setc sil
       //
-    ∎ { t◂{ h r } c b }
+    t_i { h r } ⊢ t 
+		∎ { t c b }
   § dec0 # { h r } 
     !^ r ⊢ *r,c,b 
       ` mov rdi,QWORD [rax] 
@@ -1059,25 +1076,34 @@
       ` setc sil
       //
     ∎ { { h r } c b }
-  § dec # t◂{ h r } 
+  § dec # t
+    t_o t ⊢ { h r }
     dec0 { h r } ⊢ { { h r } c b }
-    ∎ { t◂{ h r } c b }
-  § inc # t◂{ h r } 
+    t_i { h r } ⊢ t 
+    ∎ { t c b }
+  § inc # t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r 
       `add QWORD [rax],1 
 			//
-    ∎ t◂{ h r }
-  § mov # t◂{ h r } 
+    t_i { h r } ⊢ t 
+    ∎ t
+  § mov # t
+    t_o t ⊢ { h r }
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     _cnc_lod_hp { r0 h } ⊢ { _ h k } 
-    ∎ { t◂{ h r } k }
-  § lod_hd ## t◂{ h r } 
+		t_i { h r } ⊢ t
+    ∎ { t k }
+  § lod_hd ## t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r,s 
       ` mov rdi,QWORD [rax]
       //
-    ∎ { t◂{ h r } s }
-  § o # t◂{ h r } 
+    t_i { h r } ⊢ t 
+    ∎ { t s }
+  § o # t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r 
       ` bts QWORD [rax],63 
       ` jc err_ref_o
@@ -1097,16 +1123,20 @@
     !^ r ⊢ *r 
       ` btr QWORD [rax],63
       //
-    ∎ t◂{ h r }
-  § chk # t◂{ h r } 
+    t_i { h r } ⊢ t 
+    ∎ t
+  § chk # t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r,c 
       ` xor rdi,rdi 
       ` bt QWORD [rax],63
       ` setc dil 
       //
-    ∎ { t◂{ h r } c } 
+    t_i { h r } ⊢ t 
+    ∎ { t c } 
   § f◂◂F # { v p }
-    $ p ⊢ t◂{ h r } 
+    $ p ⊢ t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r 
       ` bts QWORD [rax],63 
       ` jc err_ref_f
@@ -1120,10 +1150,12 @@
     !^ r ⊢ *r 
       ` btr QWORD [rax],63
       //
-    ∎ { w t◂{ h r } }
+    t_i { h r } ⊢ t 
+    ∎ { w t }
 
   § f_if◂◂{ F G } { v p }
-    $ p ⊢ t◂{ h r } 
+    $ p ⊢ t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r,c 
       ` xor rdi,rdi 
       ` bts QWORD [rax],63 
@@ -1140,12 +1172,15 @@
       !^ r ⊢ *r 
         ` btr QWORD [rax],63
         //
-      ∎ { w t◂{ h r } }
+	    t_i { h r } ⊢ t 
+      ∎ { w t }
 		∐. .
 			$ c ⊢ _ 
-			G { v t◂{ h r } } ⊢|
+	    t_i { h r } ⊢ t 
+			G { v t } ⊢|
   § f_ctr◂◂{ C F } # { v p }
-    $ p ⊢ t◂{ h r } 
+    $ p ⊢ t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r 
       `	bts QWORD [rax],63 
 			` jc err_ref_f
@@ -1162,9 +1197,11 @@
     !^ r ⊢ *r 
       ` btr QWORD [rax],63
       //
-    ∎ { w t◂{ h r } }
+    t_i { h r } ⊢ t 
+    ∎ { w t }
   § of # p 
-    $ p ⊢ t◂{ h r } 
+    $ p ⊢ t
+    t_o t ⊢ { h r }
     !^ r ⊢ *r,c 
       ` mov rsi,QWORD [rax]
       ` mov rdi,rsi 
@@ -1244,7 +1281,8 @@
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     _cnc_sto { r0 k } ⊢ _ 
-    ∎ t◂{ h r }
+    t_i { h r } ⊢ t 
+    ∎ t
   § new = mk
   § n # {} 
     _hp.ini {} ⊢ h 
@@ -1264,32 +1302,35 @@
       //
     $ h ⊢ h,h0 
     $ r ⊢ r,r0 
-    ∎ { lc◂{ ht h r } t◂{ h0 r0 } }
-  § eq # { t◂{ h0 r0 } t◂{ h1 r1 } }
+    t_i { h0 r0 } ⊢ t 
+		∎ { lc◂{ ht h r } t }
+  § eq # { t0 t1 }
+    t_o t0 ⊢ { h0 r0 } 
+    t_o t1 ⊢ { h1 r1 } 
     $.[ k' . { _hp◂k' _hp◂k' } ] { h0 h1 } ⊢ { h0 h1 }
-    ∐ r0'=r1' .
-      ∎ { { t◂{ h0 r0 } t◂{ h1 r1 } } %[ 1r ] } 
-    ∐. .
-      ∎ { { t◂{ h0 r0 } t◂{ h1 r1 } } %[ 0r ] } 
-	§ eq_lc # { lc◂{ ht0 h0 r0 } t◂{ h1 r1 } }
-    $.[ k' . { _hp◂k' _hp◂k' } ] { h0 h1 } ⊢ { h0 h1 }
-    ∐ r0'=r1' .
-      ∎ { { lc◂{ ht0 h0 r0 } t◂{ h1 r1 } } %[ 1r ] } 
-    ∐. .
-      ∎ { { lc◂{ ht0 h0 r0 } t◂{ h1 r1 } } %[ 0r ] } 
+    _b_eq { r0 r1 } ⊢ { r0 r1 b }
+		t_i { h0 r0 } ⊢ t0
+		t_i { h1 r1 } ⊢ t1 
+		∎ { { t0 t1 } b } 
+  § eq_lc # { lc◂{ ht0 h0 r0 } t }
+    t_o t ⊢ { h1 r1 } 
+		$.[ k' . { _hp◂k' _hp◂k' } ] { h0 h1 } ⊢ { h0 h1 }
+    _b_eq { r0 r1 } ⊢ { r0 r1 b }
+		t_i { h1 r1 } ⊢ t1
+    ∎ { { lc◂{ ht0 h0 r0 } t1 } %[ 1r ] } 
   § dlt p 
     dec p ⊢ { p c b }
     ∐ c'=0r . 
       $ c ⊢ _ 
       ∐ b'=0r .
         mov p ⊢ { p _ }
-        $ p ⊢ t◂{ h r } 
+    		t_o p ⊢ { h r }
         free { h r } ⊢|
       ∐. .
-        $ p ⊢ t◂{ h r } 
+		    t_o p ⊢ { h r }
         free { h r } ⊢|
     ∐. .
-      $ p ⊢ t◂{ h r } 
+	    t_o p ⊢ { h r }
       $ h ⊢ _ 
       $ r ⊢ _ 
       ∎ {}
@@ -1305,13 +1346,16 @@
       ∎ {}
   § rpc # p 
     inc p ⊢ p 
-    $ p ⊢ t◂{ h r } 
+    t_o p ⊢ { h r }
     $ h ⊢ h,h0 
     $ r ⊢ r,r0 
-    ∎ { t◂{ h r } t◂{ h0 r0 } }
+    t_i { h r } ⊢ t 
+    t_i { h0 r0 } ⊢ t0 
+    ∎ { t t0 }
   § rpc_lc = '[ _[] : t',k' . lc◂t'◂k'→{ lc◂t'◂k' lc◂t'◂k' } ]
   §§ Lc   
-    § o◂◂T # t◂{ hk r }
+    § o◂◂T # t
+      t_o t ⊢ { hk r } 
       !^ r ⊢ *r 
         ` mov rdi,QWORD [rax]
         ` bts rdi,63 
@@ -1330,9 +1374,10 @@
       !^ r ⊢ *r 
       ` btr QWORD [rax],63
       //
-      ∎ t◂{ hk r }
-    § l◂◂T t◂{ hk r } 
-      !^ r ⊢ *r 
+     	t_i { hk r } ⊢|
+    § l◂◂T t
+      t_o t ⊢ { hk r } 
+			!^ r ⊢ *r 
         ` mov rdi,QWORD [rax]
         ` bts rdi,63 
         ` jc err_ref_f
@@ -1347,7 +1392,8 @@
       !^ r ⊢ *r 
         ` btr QWORD [rax],63
       //
-      ∎ { t◂{ hk r } a0 }
+      t_i { hk r } ⊢ t 
+			∎ { t a0 }
     § dlt = '[ _[] : t',r' . lc◂t'◂r'→{} ]
     ∎∎ 
 
