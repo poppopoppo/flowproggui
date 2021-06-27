@@ -295,15 +295,6 @@ sig_dft:
 %define N 0xe654_6b64 
 %define SEED 0x9848_3cbf  
 
-free_opq: 
-	bt QWORD [rdi],63 
-	jc free_opq_stk
-	C_CALL_SF free 
-	ret
-free_opq_stk:
-	mov QWORD [rdi],rdi
-	ret
-
 mm32: ; rdi=s  
 	mov esi,DWORD [rdi]
 	add rdi,8	
@@ -423,7 +414,7 @@ eq_s8_lp:
 eq_s8_f:
 	pop rdx 
 	mov rax,0 
-	stz
+	;stz
 	ret 
 eq_s8_t:
 	pop rdx 
@@ -541,7 +532,8 @@ mlc_s8: ; rdi=len
 	mov rsi,1 
 	xor rax,rax 
 	CALLOC_SF
-	mov rdi,0x0000_0001_0000_0000
+	mov rdi,0x0001_0000_0000_0000
+	;mov rdi,0x0000_0001_0000_0000
 	pop rsi 
 	add rsi,rdi 
 	mov QWORD [rax],rsi

@@ -20,7 +20,7 @@ ini_ss_rcd:
 	xor rax,rax 
 	C_CALL calloc
 	pop r13
-	mov rdi,0x0000_0001_0000_0000
+	mov rdi,0x0001_0000_0000_0000
 	add rdi,r13
 	mov QWORD [rax],rdi
 	xor r14,r14
