@@ -3921,8 +3921,6 @@ unsigned long
 			§ get = BST_r64.get 
 			§ asc = BST_r64.asc 
 			§ itr = BST_r64.itr 
-			--§ itr = to_err_T 
-			--§ fld = to_err_T 
 			§ fld◂◂F # { v l } 
 				BST_r64.fld◂◂F { l v } ⊢| 
 			
@@ -10911,10 +10909,13 @@ unsigned long
 							GV.new GV ⊢ { GV d }
 							$ d ⊢ d,d0 
 							asm.add_nd { e asm.mov_glx_sx◂{ d0 rd } } ⊢ e 
+							$ i ⊢ i,i0 
+							$ ri ⊢ ri,ri0
+							asm.add_nd { e asm.mov_glx_sx◂{ i0 ri0 } } ⊢ e 
 							^ ri ⊢ _,sc
 								"\tmov rax,QWORD [SRC_REG+(8*0x" 0x' ")]\n" 
 								` add rax,0x1_0000
-								`	cmp rax,0x1000_0000 
+								`	cmp rax,0x10_0000 
 								`	jge err 
 								"\tmov QWORD [SRC_REG+(8*0x" 0x' ")],rax\n" 
 								//
@@ -10976,7 +10977,7 @@ unsigned long
 							asm.add_nd { e0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] it } } ⊢ e0 
 							^ _ ⊢ sc0 
 								` add rax,0x1_0000
-								`	cmp rax,0x1000_0000 
+								`	cmp rax,0x10_0000 
 								`	jge err 
 								//
 							asm.add_s8 { e0 sc0 } ⊢ e0 
@@ -11868,12 +11869,12 @@ unsigned long
 							GV.free.f { GV r } ⊢ GV
 					  	∎ { LB GV e0 ‹ pa0 › }  
 				  	∐ c_n'=1r 
-				  		--rpc.lod.ptn_1 { { e0 r } pa0 } ⊢ { { e0 _ } pa1 } 
-				  		lod_sgm.ptn_1 { r pa0 } ⊢ { _ pa1 } 
+				  		rpc.lod.ptn_1 { { e0 r } pa0 } ⊢ { { e0 _ } pa1 } 
+				  		--lod_sgm.ptn_1 { r pa0 } ⊢ { _ pa1 } 
 							∎ { LB GV e0 ‹ pa1 › }  
 				  	∐. 
 							$ r ⊢ r,r0 
-							-\
+							--\
 							LB.new LB ⊢ { lb0 LB }
 							LB.new LB ⊢ { lb1 LB }
 							GV.free.f { GV r0 } ⊢ GV
@@ -11899,14 +11900,15 @@ unsigned long
 							asm.add_st_s8_im◂◂"\tlea rdi,[SRC_REG-8]\n" e0 ⊢ e0 							
 							free_adt { c_n e0 } ⊢ { _ e0 }
 							lb_etr { lb1 e0 } ⊢ { _ e0 }
-				  		-/
+				  		--/
+							-\
 							GV.free.f { GV r0 } ⊢ GV
 							asm.add_nd { e0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] r } } ⊢ e0 
 				  		asm.add_st_s8_im◂◂"\tlea SRC_REG,[rdi+8]\n" e0 ⊢ e0
 				  		lod_sgm.ptn { { e0 GV } pa0 } ⊢ { { e0 GV } pa1 } 
 				  		asm.add_st_s8_im◂◂"\tlea rdi,[SRC_REG-8]\n" e0 ⊢ e0 
 							free_rcd◂◂"rdi" { c_n e0 } ⊢ { _ e0 } 
-							
+							-/
 							∎ { LB GV e0 ‹ pa1 › }
 							
 		  		∐. _none◂{}
