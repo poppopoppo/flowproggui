@@ -2716,26 +2716,6 @@ unsigned long
 		§ set_var # { N lv t }
 			set.f_var { lv t } ⊢ { lv t }
 			∎ { N lv t }
-		§ 
-			@.t_of_v { N v }
-				_ref.rc v ⊢ { v c _ }
-				_ref.o v ⊢ { V v }
-				$ v ⊢ 
-				∐ var_ln◂t◂{ y lv }
-					∐ c'=1r .
-						$ V ⊢ _ 
-						∎ { N t◂{ y lv } }
-					∐.
-						$ lv ⊢ lv,lv0
-						_ref.i { V var_ln◂t◂{ y lv } } ⊢ v 
-						∎ { N t◂{ var◂p◂v lv0 } }
-				∐ var_l◂lv 
-					$ lv ⊢ lv,lv0
-					_ref.i { V var_l◂lv } ⊢ v 
-					∎ { N t◂{ var◂p◂v lv0 } }
-				∐. var_q◂Q 
-					_ref.i { V var_q◂Q } ⊢ v 
-					∎ { N X.q◂var◂p◂v }
 		§	
 			@.vv_f_l0_dta { N i { { a1 l1 } lv1 } }
 				TV.o i ⊢ { I v } 
@@ -2849,9 +2829,8 @@ unsigned long
 				∐. . 
 					∎ { N t◂{ x lv0 } t◂{ y lv1 } %[ 0r ] }
 			@.v_f # { N x y }
-				rpc_vln_lv x ⊢ { vx vxt lv }
-				f_l0 { N { vxt lv } y } ⊢ { N b }
-				t_of_v { N vx } ⊢ { N x } 
+				$ x ⊢ x,xx 
+				f { N xx y } ⊢ { N b }
 				∎ { N x b }
 			@.vv_f_lst { N l0 l1 }
 				∐ l0 ⊢ _cns◂{ t0 l0 }; l1 ⊢ _cns◂{ t1 l1 }
@@ -4328,7 +4307,7 @@ unsigned long
 			$ TX.prs_opn◂yv0 ⊢ y1
 			∎ TX.ct_imp◂{ TX.grm◂yv y1 }
 			-- 0x25 grm 
-			∐ 
+		∐ 
 			T.nvl2 lv ⊢ { lv { yv yv0 } }
 			∎ TX.ct_imp◂{ TX.prs_opn◂yv0 TX.grm◂yv }  
 			-- 0x26 inl 
