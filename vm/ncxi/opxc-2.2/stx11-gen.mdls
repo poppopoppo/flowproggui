@@ -959,15 +959,6 @@ unsigned long
 			∎ { _none◂{} _none◂{} bl.t◂{} } 
 		∐. . 
 			∎ { a b bl.f◂{} }
-	§ pnt◂◂P { v o } 
-		$ o ⊢ 
-		∐ _some◂a . 
-			P { v a } ⊢ { v s } 
-			^ s ⊢ _,s 
-				"_some◂" 0' // 
-			∎ { v s } 
-		∐. _none◂{} . 
-			∎ { v %[ "_none◂{}" ] }
 	§ eq_st_T◂◂E { e a b }
 		∐ a ⊢ _some◂a; b ⊢ _some◂b . 
 			E { e a b } ⊢ { e a b t } 
@@ -1373,22 +1364,7 @@ unsigned long
 		$ _some◂c ⊢ a
 		∎ a
 
-§
-	@.word ^=
-	∐. ch_a word_tl ⊢ { c0 cl }
-		rp8.pfx_chr { c0 cl } ⊢ cl 
-		rp8.to_s8 cl ⊢ s 
-		∎ ‹ s ›
-	@.word_tl ^=
-	∐ word_hd word_tl ⊢ { c tl }
-		rp8.pfx_chr { c tl } ⊢ l 
-		$ _some◂l ⊢ a
-		∎ a
-	∐. ⊢ { }
-		$ rp8.e◂{} ⊢ l 
-		$ _some◂l ⊢ a 
-		∎ a
-	@.word_hd ^=
+§	@.word_hd ^=
 	∐ ch_a ⊢ { c }
 		$ _some◂c ⊢ a
 		∎ a
@@ -1399,6 +1375,21 @@ unsigned long
 		$ %[ 95r ] ⊢ c
 		$ _some◂c ⊢ a
 		∎ a
+§
+	@.word_tl ^=
+	∐ word_hd word_tl ⊢ { c tl }
+		rp8.pfx_chr { c tl } ⊢ l 
+		$ _some◂l ⊢ a
+		∎ a
+	∐. ⊢ { }
+		$ rp8.e◂{} ⊢ l 
+		$ _some◂l ⊢ a 
+		∎ a
+§	@.word ^=
+	∐. ch_a word_tl ⊢ { c0 cl }
+		rp8.pfx_chr { c0 cl } ⊢ cl 
+		rp8.to_s8 cl ⊢ s 
+		∎ ‹ s ›
 
 §
 	@.prm_word ^=
@@ -3036,7 +3027,6 @@ unsigned long
 						_emt_im.f◂◂"unify_v.f_err:_,_" {} ⊢ {} 
 						∎|
 				∎∎
-			
 				§ f_b # { y0 y1 } 
 					f { {} y0 y1 } ⊢ { _ b }
 					∎ b
@@ -3065,7 +3055,21 @@ unsigned long
 						_emt_im.f◂◂"unify:lst:" {} ⊢ {} 
 						∎| 
 					∐. . 
-						∎ {} 
+						∎ {}
+			§§ ct_imp 
+				§ f { { { x y } lv } z }
+					∐ z ⊢ t◂{ ct_imp◂{ z0 z1 } _ }
+						f { x z0 } ⊢ {} 
+						f { y z1 } ⊢| 
+					∐ z ⊢ t◂{ var◂p◂i _ } 
+						f_l0_IMP◂◂ct_imp { {} i { { x y } lv } } ⊢ { {} b }
+						∐ b'=1r 
+							∎ {} 
+						∐.
+							∎|
+					∐.
+						∎|
+				∎∎ 
 		∎∎
 		§§ unify_v = unify.v 
 
@@ -3640,20 +3644,22 @@ unsigned long
 					∎ n 
 				∐. .
 					∎| 
-			§ @.pnt_name n
-				∐ n ⊢ mdl_n◂{ w n } .
-					pnt_name n ⊢ s
-					^ w,s ⊢ w,s,sr
-						0' "." 1' //
-					∎ sr
+			§ @.pnt_name { e n }
+				∐ n ⊢ mdl_n◂{ w n }
+					rp8.add_s8 { e w } ⊢ e 
+					rp8.add_st_s8_im◂◂"." e ⊢ e 
+					pnt_name { e n } ⊢|
 				∐. n ⊢ fst_n◂w .
-					∎ w
+					∎ rp8.of_s8◂w
+			§ pp_name n 
+				pnt_name { rp8.e◂{} n } ⊢ e 
+				rp8.to_s8 e ⊢|
 			§ pnt_abs_name n 
 				$ n ⊢ 
 				∐ abs_n◂i . 
 					∎ %[ "_[ _ ]" ]
 				∐. rel_n◂n .
-					pnt_name n ⊢| 
+					pp_name n ⊢| 
 		
 		¶ r = _r64 
 		§§ hp 
@@ -5167,9 +5173,11 @@ unsigned long
 					ct_ptn { { al lv APV } c0 } ⊢ { E c0 y0 } 
 					ct_ptn { E c1 } ⊢ { { al lv APV } c1 y1 } 
 					T.nvl2 lv  ⊢ { lv { yy yy0 } }
-					T.unify.f { TX.ct_imp◂{ y1 yy0 } y0 } ⊢ {}
+					--T.unify.f { TX.ct_imp◂{ y1 yy0 } y0 } ⊢ {}
+					$ lv ⊢ lv,lv0
+					T.unify.ct_imp.f { { { y1 yy0 } lv0 } y0 } ⊢ {}
 					∎ { { al lv APV } RP.atm◂ast.k_app◂{ c0 c1 } yy }
-				∐ ast.k_ctr◂{ i v } .
+				∐ ast.k_ctr◂{ i v }
 					$ E ⊢ { al lv APV }
 					$ v ⊢ v,v0
 					inst { lv TX.GEN◂var◂T.p◂v0 } ⊢ { lv y }
@@ -8934,13 +8942,6 @@ unsigned long
 					add_t { ns_t w iv } ⊢ ns_t			
 					BST_s8.ini {} ⊢ al
 					slv_type.args_ln_asc { { { ns_m ns_e il } ns_t as al l1 } y } ⊢ { { {  ns_m ns_e il } ns_t _ l1 } k } 
-					-\
-					$ k ⊢ k,k0 
-					T.pnt_type_k k0 ⊢ sv 
-					^ dd,w,sv ⊢ dd,_,_,ep1 
-						0'*"\t" "¶ " 1' " ~ " 2' // 
-					$ _cns◂{ ep1 ep0 } ⊢ ep0 
-					-/
 					_ref.to_i { T k } ⊢ {}
 					∎ { l1 { ns_m ns_e il } ns_t { dd ep0 } }
 				∐. _none◂{} . 
@@ -9218,7 +9219,7 @@ unsigned long
 								∎| 
 						∐. ast.mdl_ln◂n0 .						
 							$ n0 ⊢ n0,n0_0 
-							ast.pnt_name n0_0 ⊢ sn0  							
+							ast.pp_name n0_0 ⊢ sn0  							
 							^ dd,w,sn0 ⊢ dd,w,_,ep1 
 								0'*"\t" "§§ " 1' " = " 2' "\n" // 
 							$ _cns◂{ ep1 ep0 } ⊢ ep0
@@ -9373,13 +9374,6 @@ unsigned long
 							BST_s8.ini {} ⊢ l2
 							BST_s8.ini {} ⊢ al
 							slv_type.args_ln_asc { { env0 ns_t as al l2 } y } ⊢ { { {  ns_m ns_e il }   ns_t _ _ } k } 
-							-\
-							$ k ⊢ k,k0 
-							T.pnt_type_k k0 ⊢ sk 
-							^ dd,w,sk ⊢ dd,w,_,ep1 
-								0'*"\t" "¶ " 1' " ~ " 2' // 
-							$ _cns◂{ ep1 ep0 } ⊢ ep0 
-							-/
 							_ref.new k ⊢ k
 							add_t { ns_t w k } ⊢ ns_t 
 							iso_file { mfv { ns_T ns_m ns_e ns_t } TAV { el dd ep0 } } ⊢ {  MV NS LCV EC }
@@ -9554,8 +9548,6 @@ unsigned long
 				"LB_" 0d' "_H: dq 0x" 1x' "\n" //
 			§ db_etr =^
 				"LB_" 0d' ": db " // 
-			§ mov_lt_lt =^ 
-				"\tMOV_RBX " 0' "," 1' "\n" //
 			§ mov_st_st =^ 
 				"\tMOV_RBX " 0st' "," 1st' "\n" //
 			§ call_lb =^
@@ -11467,7 +11459,7 @@ unsigned long
 							∐ idx◂{ f0 j0 } . 
 								lod_tv { ar j0 } ⊢ { ar j0 p0 }
 								$ f0 ⊢ 
-								∐ ast.fmt_s◂{} . 
+								∐ ast.fmt_s◂{}
 									ast.s8_of_rt p0 ⊢ s0 
 									$ s0 ⊢ 
 									∐ ast.im_of◂s0 . 
