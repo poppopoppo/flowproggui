@@ -295,6 +295,25 @@ sig_dft:
 %define N 0xe654_6b64 
 %define SEED 0x9848_3cbf  
 
+
+rpc_dyn_adt: ; rax=i rdi=d 
+	mov esi,eax 
+	cmp rsi,0x10_0000 
+	jge .L0 
+	add rax,0x1_0000 
+	ret 
+.L0:
+	bt rax,32 
+	jc .L1 
+	and rax,0xffff 
+	ret
+.L1: 
+	mov rsi,0x0001_ffff_0000_0000
+	add QWORD [rdi],rsi
+	mov rsi,0x1_0000_ffff 
+	and rax,rsi
+	ret
+
 mm32: ; rdi=s  
 	mov esi,DWORD [rdi]
 	add rdi,8	
@@ -642,6 +661,8 @@ err_mk_stk_F:
 	jmp err
 err_bc: 
 	mov QWORD [err_n],0xff
+err_dyn_rpc: 
+	mov QWORD [err_n],0xffef_bbbc
 err: 
 	mov rdi,fmt_err_line
 	mov rsi,QWORD [err_n]

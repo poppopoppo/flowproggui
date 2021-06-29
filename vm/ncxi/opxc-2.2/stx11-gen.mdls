@@ -4148,12 +4148,9 @@ unsigned long
 				$ TX.lc◂{ a s r } ⊢ y0
 				$ TX.imp◂{ TX.cns4◂{ TX.hp◂r0 TX.r64◂{} TX.hp◂TX.cns2◂{ a0 s0 } a2 } TX.cns2◂{ TX.hp◂r1 TX.r64◂{} } } ⊢ y1
 				∎ TX.ct_imp◂{ y0 y1 }
-			-- rpc_adt 
+			-- rpc 
 			∐
-				T.nvl4 lv ⊢ { lv { t0 v t1 t2 } }
-				$ TX.t_adt◂t0 ⊢ t0
-				$ TX.t_adt◂t1 ⊢ t1
-				$ TX.t_adt◂t2 ⊢ t2
+				T.nvl3 lv ⊢ { lv { t0 t1 t2 } }
 				$ TX.imp◂{ t0 TX.cns2◂{ t1 t2 } } ⊢ y
 				∎ y
 			∐. 
@@ -5566,8 +5563,8 @@ unsigned long
 		§ op_ax = op_ax_pp
 		§ op_ax_ap◂i = ast.axm_ap◂i 
 		§ id_k◂{} = op_ax◂%[ EX.id ] 
-		§ rpc_unv_k◂{} = unv_k◂%[ UNV.id.rpc ]
-		--§ rpc_unv_k◂{} = ax◂%[ EX.rpc ]
+		--§ rpc_unv_k◂{} = unv_k◂%[ UNV.id.rpc ]
+		§ rpc_unv_k◂{} = ax◂%[ EX.rpc ]
 		§ app_ax_pp◂{ x k } = app_k◂{ op_ax◂x k }
 		§ app_ax_ap◂{ x k } = app_k◂{ op_ax_ap◂x k }
 		§ seq_k◂{ f g } = app_ax_pp◂{ %[ EX.seq ] RP.cns2◂{ f g } }
@@ -10882,6 +10879,22 @@ unsigned long
 							∎ { r ast.hp_im◂v }
 					@.ptn_1 = RP.map_l◂◂atm_1
 				∎∎
+		§§ dyn_t 
+			§ 
+				@.atm { t0 a0 }
+					$ a0 ⊢ 
+					∐ ast.hp◂{ r t } 
+						$ t ⊢ t,t1 
+						∎ { t1 ast.hp◂{ r t } }
+					∐ ast.stt_adt◂{ ia p0 } 
+						ptn { t0 p0 } ⊢ { t0 p0 }
+						∎ { t0 ast.stt_adt◂{ ia p0 } }
+					∐ ast.dyn_adt◂_ .
+							∎|
+					∐. ast.hp_im◂v .
+						∎ { t0 ast.hp_im◂v }
+					@.ptn = RP.map_l◂◂atm
+			∎∎
 		§§ rpc
 			§ hp { e { i t } }
 				∐ t'=ast.hp.r 
@@ -10907,21 +10920,20 @@ unsigned long
 						∐ ast.dyn_adt◂{ L ri rd }
 							GV.new GV ⊢ { GV i }
 							GV.new GV ⊢ { GV d }
-							$ d ⊢ d,d0 
-							asm.add_nd { e asm.mov_glx_sx◂{ d0 rd } } ⊢ e 
 							$ i ⊢ i,i0 
-							$ ri ⊢ ri,ri0
-							asm.add_nd { e asm.mov_glx_sx◂{ i0 ri0 } } ⊢ e 
-							^ ri ⊢ _,sc
+							^ ri,rd ⊢ ri,rd,sc
 								"\tmov rax,QWORD [SRC_REG+(8*0x" 0x' ")]\n" 
-								` add rax,0x1_0000
-								`	cmp rax,0x10_0000 
-								`	jge err 
+								"\tmov rdi,QWORD [SRC_REG+(8*0x" 1x' ")]\n" 
+								`	call rpc_dyn_adt 
 								"\tmov QWORD [SRC_REG+(8*0x" 0x' ")],rax\n" 
 								//
 							asm.add_s8 { er sc } ⊢ er 
 							$ i ⊢ i,ii 
 							asm.add_nd { er asm.mov_glx_op◂{ ii asm.op.rx◂%[ asm.rx.rax ] } } ⊢ er
+							$ d ⊢ d,d0 
+							asm.add_nd { e asm.mov_glx_sx◂{ d0 rd } } ⊢ e 
+							$ ri ⊢ ri,ri0
+							asm.add_nd { e asm.mov_glx_sx◂{ i0 ri0 } } ⊢ e 
 							∎ { { e er GV } ast.dyn_adt◂{ L i d } }
 						∐. ast.hp_im◂v .
 							∎ { { e er GV } ast.hp_im◂v }
@@ -10968,24 +10980,24 @@ unsigned long
 						∐ ast.stt_adt◂{ ia p0 } . 
 							ptn { { e0 GV } p0 } ⊢ { { e0 GV } p0 } 
 							∎ { { e0 GV } ast.stt_adt◂{ ia p0 } }
-						∐ ast.dyn_adt◂{ L i d } .
-							GV.new GV ⊢ { GV i0 }
-							GV.new GV ⊢ { GV d0 }
-							$ d0 ⊢ d0,d0t 
-							asm.add_nd { e0 asm.mov_glx◂{ d0t d } } ⊢ e0 
+						∐ ast.dyn_adt◂{ L i d }
+							GV.new GV ⊢ { GV ix }
+							GV.new GV ⊢ { GV dx }
 							$ i ⊢ i,it 
 							asm.add_nd { e0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rax ] it } } ⊢ e0 
+							$ d ⊢ d,dt 
+							asm.add_nd { e0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] dt } } ⊢ e0 
 							^ _ ⊢ sc0 
-								` add rax,0x1_0000
-								`	cmp rax,0x10_0000 
-								`	jge err 
+								`	call rpc_dyn_adt 
 								//
 							asm.add_s8 { e0 sc0 } ⊢ e0 
 							$ i ⊢ i,it 
 							asm.add_nd { e0 asm.mov_glx_op◂{ it asm.op.rx◂%[ asm.rx.rax ] } } ⊢ e0 
-							$ i0 ⊢ i0,i0t 
-							asm.add_nd { e0 asm.mov_glx_op◂{ i0t asm.op.rx◂%[ asm.rx.rax ] } } ⊢ e0 
-							∎ { { e0 GV } ast.dyn_adt◂{ L i0 d0 } }
+							$ ix ⊢ ix,ixt 
+							asm.add_nd { e0 asm.mov_glx_op◂{ ixt asm.op.rx◂%[ asm.rx.rax ] } } ⊢ e0 
+							$ dx ⊢ dx,dxt 
+							asm.add_nd { e0 asm.mov_glx_op◂{ dxt asm.op.rx◂%[ asm.rx.rdi ] } } ⊢ e0 
+							∎ { { e0 GV } ast.dyn_adt◂{ L ix dx } }
 						∐. ast.hp_im◂v .
 							∎ { { e0 GV } ast.hp_im◂v }
 					@.ptn = RP.map_l◂◂atm
@@ -11195,7 +11207,7 @@ unsigned long
 								∐ a0 ⊢ ast.stt_adt◂{ ia0 pa0 }; a1 ⊢ ast.stt_adt◂{ ia1 pa1 }; ia0'=ia1' .
 									ptn { e0 fl ql pa0 pa1 } ⊢| 			 								
 								∐ a0 ⊢ ast.stt_adt◂{ ia pa }; a1 ⊢ ast.dyn_adt◂{ D ri rd } .
-									^ ri,ia ⊢ _,ia,sc0 
+									^ ri,ia ⊢ ri,ia,sc0 
 										"\tmov DX(0x" 0x' "),0x" 1x' "\n" //
 									asm.add_s8 { e0 sc0 } ⊢ e0 
 									_ref.o D ⊢ { D d }
@@ -11206,17 +11218,30 @@ unsigned long
 										∐ c_n'=0r .
 											∎ { e0 fl ql }									
 										∐ c_n'=1r .
-											_shl_im◂◂3r rd ⊢ rd 
-											^ rd ⊢ _,ec1 
-												"\tlea rax,[DST_REG+0x" 0x' "]\n" 
-												`	push rax
-												//
-											asm.add_s8 { e0 ec1 } ⊢ e0 
-											$ ⟦ { pa pa1 } < ql ⟧ ⊢ ql
-											∎ { e0 fl ql }
+											dyn_t.ptn { %[ ast.hp.r ] pa1 } ⊢ { t pa1 }
+											∐ t'=ast.hp.r 
+												_shl_im◂◂3r rd ⊢ rd 
+												^ rd ⊢ _,ec1 
+													"\tlea rax,[DST_REG+0x" 0x' "]\n" 
+													`	push rax
+													//
+												asm.add_s8 { e0 ec1 } ⊢ e0 
+												$ ⟦ { pa pa1 } < ql ⟧ ⊢ ql
+												∎ { e0 fl ql }
+											∐.
+												_shl_im◂◂3r rd ⊢ rd 
+												^ rd,ri ⊢ _,_,ec1 
+													"\tbts DX(0x" 1x' "),32\n" 
+													"\tlea rax,[DST_REG+0x" 0x' "]\n" 
+													`	push rax
+													//
+												asm.add_s8 { e0 ec1 } ⊢ e0 
+												$ ⟦ { pa pa1 } < ql ⟧ ⊢ ql
+												∎ { e0 fl ql }
 										∐. . 
     									alc_rcd { c_n e0 } ⊢ { _ e0 } 
-											^ rd ⊢ _,ec1 
+											^ rd,ri ⊢ _,_,ec1 
+												"\tbts DX(0x" 0x' "),32\n" 
 												"\tmov DX(0x" 0x' "),rax\n" 
 												`	add rax,8 
 												`	push rax 
@@ -11285,18 +11310,24 @@ unsigned long
 								_ref.o D ⊢ { D d }
 								_lod_q { d ia0 } ⊢ { d ia0 pa1 }
 								_ref.to_i { D d } ⊢ {}						
-								$ ⟦ { ast.k_r64◂ia0 ri } < il ⟧ ⊢ il 
 								$ pa1 ⊢ 
 								∐ _some◂{ c_n pa1 _ }
 									∐ c_n'=0r 
+										$ ⟦ { ast.k_r64◂ia0 ri } < il ⟧ ⊢ il 
 										∎ { L e0 GV il sl }									
 									∐ c_n'=1r 
+										dyn_t.ptn { %[ ast.hp.r ] pa1 } ⊢ { t pa1 }
+										_shl_im◂◂32r t ⊢ t 
+										_add { ia0 t } ⊢ { ia0 _ }
+										$ ⟦ { ast.k_r64◂ia0 ri } < il ⟧ ⊢ il 
 										_st◂◂"\tsub rsp,8\n\tmov DST_REG,rsp\n" {} ⊢ s0
 										asm.add_st_s8 { e0 s0 } ⊢ e0 
 										to_sgm.f { { e0 ⟦⟧ } { pa0 pa1 } } ⊢ { e0 _ } 
 										$ ⟦ rd < sl ⟧ ⊢ sl 
-										∎ { L e0 GV il sl }
+										∎ { L e0 GV il sl }			
 									∐. . 
+										_add_im◂◂0x0000000100000000r ia0 ⊢ ia0 
+										$ ⟦ { ast.k_r64◂ia0 ri } < il ⟧ ⊢ il 
     								alc_rcd { c_n e0 } ⊢ { _ e0 } 
 										asm.add_st_s8_im◂◂"\tpush rax\n\tlea DST_REG,[rax+8]\n" e0 ⊢ e0 
 										$ ⟦ rd < sl ⟧ ⊢ sl 
@@ -13039,7 +13070,7 @@ unsigned long
 								GV.free.f { GV ri0 } ⊢ GV 
 								asm.add_nd { ec0 asm.mov_op_glx◂{ asm.op.rx◂%[ asm.rx.rdi ] ri } } ⊢ ec0 
 								^ lb0,sj ⊢ lb0,_,sc0  
-									`	mov rax,rdi 
+									`	mov eax,edi 
 									`	and rdi,0xffff 
 									"\tjmp QWORD [LB_" 0d' "+8*rdi]\n"
 									"LB_" 0d' ": dq " 1' "\n" //
