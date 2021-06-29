@@ -81,6 +81,7 @@
   ∎∎
 §: _eq_hp k' = { k' _hp◂k' }
 -- rank-0
+§ _rpc = _[ 28r ]
 § _app = _[ 8r ] 
 § _prs = _[ 0x00010024r ] 
 § _id = _[ 0r ] 
@@ -1263,7 +1264,8 @@
   § to_i_F # k 
     ∎ { {} k }
   § to_i = to◂◂{ _dlt to_i_F } 
-  § lod_F # { {} k } 
+  § to_o = to◂◂{ _id _rpc } 
+	§ lod_F # { {} k } 
     $ k ⊢ k,k0 
     ∎ { k0 k } 
   § lod # p 
@@ -2103,7 +2105,6 @@
   ∎∎
 -/
 --§ _rpc = _rpc.f 
-§ _rpc = _[ 28r ]
 §: i0 k' = { k' _hp◂k' }
 § _mk_arr_F◂◂F = _arr.mk_F◂◂{ F alc _id.arr }
 § _mk_arr_x_F◂◂F = _arr.mk_F◂◂{ F _arr.alc_x _id.arr_x }
