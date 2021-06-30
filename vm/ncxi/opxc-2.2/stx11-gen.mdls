@@ -2489,6 +2489,19 @@ unsigned long
 				∎∎
 			∎∎
 		§§ gen 
+			§ i a 
+				∎ a 
+			§	gen_D0 { I y1 }
+				_emt_im◂◂"gen_D0:0" {} ⊢ {} 
+				$ y1 ⊢ t,y1t 
+				--_ref.to_i { I var_ln◂y1t } ⊢ {}
+				_emt_im◂◂"gen_D0:0.0" {} ⊢ {} 
+				--_ref.to_i { I var_ln◂y1t } ⊢ {}
+				i var_ln◂y1t ⊢ v 
+				_emt_im◂◂"gen_D0:0.1" {} ⊢ {} 
+				_ref.to_D0 { I v } ⊢ {}
+				_emt_im◂◂"gen_D0:1" {} ⊢ {} 
+				∎ t
 			§ 
 				@.lst◂◂QX = lst.map_l◂◂(f◂◂QX) 
 				@.f◂◂{ Q Ql C } { { lv ql } t◂{ a lvt } } 
@@ -2518,7 +2531,13 @@ unsigned long
 							TV.o i ⊢ { I v } 
 							$ v ⊢ 
 							∐ var_ln◂y1
+								--to_vln { I y1 } ⊢ y1 
+								--f◂◂{ Q Ql C } { { lv ql } y1 } ⊢|
 								f◂◂{ Q Ql C } { { lv ql } y1 } ⊢ { { lv ql } y1 }
+								--gen_D0 { I y1 } ⊢ t 
+								--$ y1 ⊢ t,y1t 
+								--_ref.to_i { I var_ln◂y1t } ⊢ {}
+								--to_vln { I y1 } ⊢ t 
 								_ref.i { I var_ln◂y1 } ⊢ v
 								lv.new.t { lv var◂p◂v } ⊢ { lv t } 
 								∎ { { lv ql } t }
@@ -2528,7 +2547,7 @@ unsigned long
 									$ b ⊢ _ 
 									$ lv1 ⊢ lv1,lv2
 									TV.i { I var_l◂lv1 } ⊢ i 
-									∎ { { lv ql } t◂{ var◂p◂%i lv2 } }
+									∎ { { lv ql } t◂{ var◂p◂i lv2 } }
 								∐. .
 									$ b ⊢ _ 
 									Ql { I ql } ⊢ { i ql }
@@ -3279,9 +3298,12 @@ unsigned long
 					TV.o i0 ⊢ { i0 v0 } 
 					$ v0 ⊢
 					∐ var_ln◂y0 . 
-						rpc.al◂◂_id { { N lv al } y0 } ⊢ { E y0 y0i }
-						TV.to_i { i0 var_ln◂y0 } ⊢ {} 
-						∎ { E y0i }
+						$ y0 ⊢ y0,y0t 
+						_ref.to_i { i0 var_ln◂y0 } ⊢ {} 
+						f { { N lv al } y0t } ⊢|
+						--rpc.al◂◂_id { { N lv al } y0 } ⊢ { E y0 y0i }
+						--TV.to_i { i0 var_ln◂y0 } ⊢ {} 
+						--∎ { E y0i }
 					∐ var_q◂{ qn L R }
 						chk_q_L { N { qn L } } ⊢ { N Q } 
 						$ Q ⊢ 
@@ -3664,11 +3686,12 @@ unsigned long
 		¶
 			@.rt r',c' = RP.t◂(rt_atm◂r'◂c') 
 			@.hp_t = _r64
+			@.dyn_p c' = _ref◂(_arr◂(_opn◂{ _r64 rt◂r◂c' T.t_p }))
 			@.rt_atm r',c'
 				∐ hp : { r' hp_t }
 				∐ hp_im : c'
 				∐ stt_adt : { _r64 rt◂r'◂c' } 
-				∐ dyn_adt : { _ref◂(_arr◂(_opn◂{ _r64 rt◂r◂c' T.t_p })) r' r' } 
+				∐ dyn_adt : { dyn_p◂c' r' r' } 
 		§ hp_r◂r = hp◂{ r %[ hp.r ] }
 		§ hp_p◂r = hp◂{ r %[ hp.p ] }
 		¶	
@@ -3745,6 +3768,8 @@ unsigned long
 				∐ cn_a : { _r64 _lst◂e' axm_t } 
 				∐ cn_o : { bl.t o_pt◂e' } 
 				∐ cn_c : c'
+				-- dlt_adt
+				--∐ cn_da : { dyn_p _arr◂(cn◂e'◂c') }
 				--∐ cn_h : 
 			@. mop e',c' 
 				∐ mop : { { c' c' c' } mn◂e'◂c' } 
@@ -7941,7 +7966,7 @@ unsigned long
 						∎|
 				@.f_T { { tav n } T.t◂{ t0 _ } }
 					$ t0 ⊢ 
-					∐ dta◂{ a l } . 			
+					∐ dta◂{ a l }			
 						=+ a' 
 						-- r64 
 						∐ 
@@ -7978,6 +8003,9 @@ unsigned long
 							∐ a'=TX.id.gl_lc .  
 								∎ { tav n }
 							∐. . 
+								_emt a ⊢ _ 
+								T.pnt_type_k_lst l ⊢ s  
+								_emt.f s ⊢ _ 
 								∎| 
 					∐ var◂T.p◂i . 
 						_ref.of i ⊢ v
@@ -8467,7 +8495,7 @@ unsigned long
 		§§ emt
 			§ @.mo_n l 
 				$ l ⊢ 
-				∐ _cns◂{ { w i _ v } l } .
+				∐ _cns◂{ { w i _ v } l }
 					mo_n l ⊢ mf 
 					$ { i v } ⊢ { i v },{ i0 v0 } 
 					$ RP.atm◂ast.k_ctr◂{ i v } ⊢ c
@@ -10391,8 +10419,11 @@ unsigned long
 						-- arr 
 						∐ 
 							ALC s0 ⊢ { s0 j0 }
-							∐ l ⊢ _cns◂{ y _cns◂{ yt _nil◂{} } } . 
-								∎ { { tav s0 b } stt_v.arr_reg◂j0 }
+							∐ l ⊢ _cns◂{ y _cns◂{ yt _nil◂{} } } 
+								∐ yt ⊢ T.t◂{ dta◂{ ax _nil◂{} } _ }; ax'=TX.id.arr_x 
+									∎ { { tav s0 b } RP.atm◂ast.hp_r◂j0 }
+								∐. 
+									∎ { { tav s0 b } RP.atm◂ast.hp_p◂j0 }
 							∐. . 
 								∎| 
 						∐. 

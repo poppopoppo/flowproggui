@@ -301,6 +301,7 @@ rpc_dyn_adt: ; rax=i rdi=d
 	cmp rsi,0x10_0000 
 	jge .L0 
 	add rax,0x1_0000 
+	jo err_dyn_rpc
 	ret 
 .L0:
 	bt rax,32 
@@ -310,10 +311,10 @@ rpc_dyn_adt: ; rax=i rdi=d
 .L1: 
 	mov rsi,0x0001_ffff_0000_0000
 	add QWORD [rdi],rsi
+	jo err_dyn_rpc
 	mov rsi,0x1_0000_ffff 
 	and rax,rsi
 	ret
-
 mm32: ; rdi=s  
 	mov esi,DWORD [rdi]
 	add rdi,8	
@@ -461,29 +462,6 @@ esc_s8: ; rdi ⊢ rax
 	sub rsp,rax 
 esc_s8_lp0: 
 
-arr_of_lst: 
-	mov rsi,0 
-arr_of_lst_r:
-	cmp BYTE [rdi+6],1
-	jz arr_of_lst_end 
-	push QWORD [rdi+8]
-	mov rax,rdi
-	FREE_RCD 2,rax 
-	mov rdi,QWORD [rdi+16]
-	add rsi,1 
-	call arr_of_lst_r
-	sub rsi,1 
-	pop QWORD [rax+8+8*rsi]
-	ret 
-arr_of_lst_end: 
-	push rsi 
-	xor rax,rax
-	mov rdi,8
-	add rsi,1 
-	CALLOC_SF
-	pop rsi 
-	mov QWORD [rax],rsi
-	ret 
 
 
 is_spc: 
