@@ -1,9 +1,11 @@
 SHX*
 *.o
+out.o
 SH.mdls.s
 SGN_SH.txt
 *.exe 
 perf.data
+callgrind.*
 perf.data.old
 *.7z
 *.zip
