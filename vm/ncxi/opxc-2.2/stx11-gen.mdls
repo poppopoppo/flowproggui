@@ -2531,15 +2531,8 @@ unsigned long
 							TV.o i ⊢ { I v } 
 							$ v ⊢ 
 							∐ var_ln◂y1
-								--to_vln { I y1 } ⊢ y1 
-								--f◂◂{ Q Ql C } { { lv ql } y1 } ⊢|
 								f◂◂{ Q Ql C } { { lv ql } y1 } ⊢ { { lv ql } y1 }
-								--gen_D0 { I y1 } ⊢ t 
-								--$ y1 ⊢ t,y1t 
-								--_ref.to_i { I var_ln◂y1t } ⊢ {}
-								--to_vln { I y1 } ⊢ t 
-								_ref.i { I var_ln◂y1 } ⊢ v
-								lv.new.t { lv var◂p◂v } ⊢ { lv t } 
+								to_vln { I y1 } ⊢ t 
 								∎ { { lv ql } t }
 							∐ var_l◂lv1 .
 								lv.cmp.f { lv lv1 } ⊢ { lv lv1 b } 
