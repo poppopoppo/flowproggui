@@ -63,64 +63,17 @@
 %define SRC_REG rbp 
 %define DST_REG rbp
 
-%define GLX(n) QWORD [(GLV+8*n)] 
-%define SX(n) QWORD [SRC_REG+(8*n)]
 %define DX(n) QWORD [DST_REG+(8*n)]
 
 bits 64 
 ; macros 
 
-%macro DIV_MOD10 0 ; rax ⊢ rax,rdi 
-	mov rdi,rax 
-	mov rdx,0xcccc_cccc_cccc_cccd 
-	mul rdx 
-	mov rax,rdx 
-	shr rax,3
-	sub rdi,rax ; 1
-	lea rdx,[rax+8*rax] 
-	sub rdi,rdx ; -9
-%endmacro
-	
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
 	mov rsi,8
 	C_CALL fw
 	mov QWORD [err_n],%1 
 	jmp err 
-%endmacro
-%macro FREE_S8 1
-	mov rdi,%1 
-	C_CALL_SF free 
-%endmacro
-%macro FREE_OPQ 1
-	;jmp LB_%1_0 
-	;mov rax,0 
-	;mov rsi,1 
-	;lock cmpxchg QWORD [FTX0],rsi
-	;jnz LB_%1_0 
-	;mov QWORD [BUF0],rdi
-	;cmp QWORD [FLG1],0 
-	;jnz LB_%1_1 
-	;mov rax,SYS_futex 
-	;mov rdi,FTX0 
-	;mov rsi,FUTEX_WAKE 
-	;mov rdx,1 
-	;mov r10,0
-	;syscall
-	;cmp rax,-1  
-	;jz err
-	;jmp LB_%1_1
-;LB_%1_0:
-	;cmp rax,0 
-	;mov QWORD [err_n],0xffac
-	;jz err
-	bt QWORD [rdi],63 
-	jc LB_%1_1
-	C_CALL_SF free 
-	jmp LB_%1_2
-LB_%1_1:
-	mov QWORD [rdi],rdi
-LB_%1_2:
 %endmacro
 
 %macro C_PUSH_REGS 0 
@@ -175,7 +128,7 @@ LB_%1_2:
 	jz err
 %endmacro
  
-%macro ALC_N 1 ; n,reg-name!=rbx 
+%macro ALC_N 1 ; n
 	mov rbx,QWORD [(SS_RCD_TOP+8*%1)]
 	cmp rbx,0 
 	jz .L0 
@@ -195,31 +148,10 @@ LB_%1_2:
 	mov QWORD [(SS_RCD_TOP+8*%1)],%2
 %endmacro
 
-%macro EMT_CST 2 ; %1=label,%2=len
-	mov rdi,%1 
-	mov rax,%2 
-	call emt_cst 
-%endmacro
-
-%macro MOV_RAX 2 
-	mov rax,%2 
-	mov %1,rax
-	%endmacro
-
-%macro MOV_RDI 2 
-	mov rdi,%2 
-	mov %1,rdi
-%endmacro
-
 %macro MOV_RBX 2 
 	mov rbx,%2
 	mov %1,rbx
 %endmacro
-
-
-%macro BSS_SS_RCD 2 
-	SS_RCD_%1_VCT: resq (%1+1)*(%2+4)
-%endmacro 
 
 %define SEED 0x_f7f7_65d7_9dab_bace
 

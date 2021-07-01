@@ -81,6 +81,7 @@
 §: _eq_hp k' = { k' _hp◂k' }
 -- rank-0
 § _rpc = _[ 28r ]
+§ _dlt_adt = _[ 29r ]
 § _app = _[ 8r ] 
 § _prs = _[ 0x00010024r ] 
 § _id = _[ 0r ] 
@@ -387,7 +388,7 @@
     //
   ∎ { x y z }
 
-§ alc_rcd◂◂N ## {} 
+§ alc_rcd◂◂N {} 
   !^ _ ⊢ r 
     "\tALC_N " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) "\n"
     //
@@ -1998,7 +1999,7 @@
   § prd = _seq◂◂{ _ipr _seq◂◂{ _ctr◂◂c1 _seq◂◂{ _id_par◂◂f _seq◂◂{ _ctr◂◂c0 f_rcd } } } }
   ¶§ f_rcd = prd 
   ¶§ f = f_rcd
-  § s8 ## s 
+  § s8 s 
     _id.s8 s ⊢ s 
     _hp.of s ⊢ { r h } 
     hp h ⊢ {}
@@ -2030,7 +2031,8 @@
   ¶§ f = _ref.dlt
   ¶§ f = _ref.dlt_lc 
   ¶§ f = _ref.Lc.dlt
-  § lst l 
+  -\
+	§ lst l 
     $ l ⊢ 
     ∐ _cns◂{ a l } .
       f a ⊢| 
@@ -2044,7 +2046,10 @@
     ∐. _none◂{} . 
       ∎ {}
   ¶§ f = opn
-  § adt = _ap.dlt_adt
+	§ adt = _ap.dlt_adt
+  -/
+	§ adt d 
+		_dlt_adt d ⊢|
   ¶§ f = adt 
   ∎∎ 
 -\

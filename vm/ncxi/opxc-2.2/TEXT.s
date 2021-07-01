@@ -106,12 +106,22 @@ pf_x_rv_lp:
 	jnz pf_x_rv_lp 
 	ret  
 
+div_mod_10: ; rax ⊢ rax,rdi
+	mov rdi,rax 
+	mov rdx,0xcccc_cccc_cccc_cccd 
+	mul rdx 
+	mov rax,rdx 
+	shr rax,3
+	sub rdi,rax ; 1
+	lea rdx,[rax+8*rax] 
+	sub rdi,rdx ; -9
+	ret
 pf_d: ; rdi=buf rax=num 
 	mov r10,rdi
 	sub rsp,128 
 	mov r9,127
 pf_d_lp0:
-	DIV_MOD10 
+	call div_mod_10
 	lea rsi,[rdi+48] 
 	mov BYTE [rsp+r9],sil 
 	sub r9,1 
@@ -135,7 +145,7 @@ pf_d_rv: ; rdi=buf rax=num
 	mov r10,rdi
 	mov r9,rdi
 pf_d_rv_lp0:
-	DIV_MOD10 
+	call div_mod_10
 	lea rsi,[rdi+48] 
 	mov BYTE [r9],sil 
 	sub r9,1 
@@ -156,12 +166,22 @@ pf_x_bc:
 	std
 	ret
 
-alc_rcd_n: 
-	cmp MCR_REG,0
-	jz alc_rcd_h
-	cmp MCR_REG,~0
-	jz alc_rcd_h 
+alc_rcd_n: ; rdi=n ⊢ rax
+	mov rbx,QWORD [SS_RCD_TOP+8*rdi]
+	cmp rbx,0 
+	jz .L0 
+	jmp .L1
+.L0:	
+	mov rax,rdi 
+	call alc_rcd_h 
+.L1:
+	mov rax,QWORD [rbx]
+	mov QWORD [SS_RCD_TOP+8*rdi],rax
+	mov rax,rbx
+	mov rdi,0x0001_0000_0000_0000
+	mov QWORD [rax],rdi
 	ret
+
 alc_rcd_h: 
 	mov rbx,rax 
 	C_PUSH_REGS 
