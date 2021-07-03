@@ -63,8 +63,6 @@
 %define SRC_REG rbp 
 %define DST_REG rbp
 
-%define DX(n) QWORD [DST_REG+(8*n)]
-
 bits 64 
 ; macros 
 
@@ -102,14 +100,12 @@ bits 64
 
 %macro C_CALL_SF 1 
 	C_PUSH_REGS
-	;mov QWORD [rsp_tmp],rsp 
 	push rbx
 	mov rbx,rsp 
 	and rsp,~0xf 
 	call %1 
 	mov rsp,rbx 
 	pop rbx
-	;mov rsp,QWORD [rsp_tmp]
 	C_POP_REGS
 %endmacro 
 
@@ -126,31 +122,6 @@ bits 64
 	C_CALL_SF calloc 
 	cmp rax,0 
 	jz err
-%endmacro
- 
-%macro ALC_N 1 ; n
-	mov rbx,QWORD [(SS_RCD_TOP+8*%1)]
-	cmp rbx,0 
-	jz .L0 
-	jmp .L1
-.L0:	
-	mov rax,%1 
-	call alc_rcd_h 
-.L1:
-	mov rax,QWORD [rbx]
-	mov QWORD [(SS_RCD_TOP+8*%1)],rax
-	mov rax,rbx
-%endmacro 
-
-%macro FREE_RCD 2 ; n,reg-name!=rbx 
-	mov rbx,QWORD [(SS_RCD_TOP+8*%1)] 
-	mov QWORD [%2],rbx
-	mov QWORD [(SS_RCD_TOP+8*%1)],%2
-%endmacro
-
-%macro MOV_RBX 2 
-	mov rbx,%2
-	mov %1,rbx
 %endmacro
 
 %define SEED 0x_f7f7_65d7_9dab_bace

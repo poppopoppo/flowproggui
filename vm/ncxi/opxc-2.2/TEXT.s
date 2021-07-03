@@ -660,7 +660,8 @@ err_mk_stk_F:
 err_bc: 
 	mov QWORD [err_n],0xff
 err_dyn_rpc: 
-	mov QWORD [err_n],0xffef_bbbc
+	mov rax,0xffef_bbbc
+	mov QWORD [err_n],rax
 err: 
 	mov rdi,fmt_err_line
 	mov rsi,QWORD [err_n]

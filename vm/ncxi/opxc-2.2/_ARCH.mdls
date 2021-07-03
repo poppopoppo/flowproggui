@@ -388,15 +388,18 @@
     //
   ∎ { x y z }
 
-§ alc_rcd◂◂N {} 
+§ alc_rcd◂◂N ## {} 
   !^ _ ⊢ r 
-    "\tALC_N " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) "\n"
+    "\tmov rdi," (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) "\n"
+		`	call alc_rcd_n
     //
   ∎ r 
-§ free_rcd◂◂N ## r 
+§ free_rcd◂◂N r 
   !^ r ⊢ *r 
-    "\tFREE_RCD " (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) ",rax\n"
-    //
+    "\tmov rbx,QWORD [(SS_RCD_TOP+8*" (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) ")]\n" 
+		`	mov QWORD [rax],rbx
+		"\tmov QWORD [(SS_RCD_TOP+8*" (_ct.pf_d◂◂(_ct.op1.flo2◂◂N)) ")],rax\n"
+	//
   ∎ {} 
 § ofs_arr◂◂C # l 
   _imul_im◂◂C l ⊢ l 
@@ -471,7 +474,7 @@
   § e = _[ 0x00010029r ]
 	§ c = _[ 0x0001002ar ] 
   ∎∎
-§ alc◂◂C # l
+§ alc◂◂C l
   $ l ⊢ l,s 
   _imul_im◂◂C s ⊢ s 
   !^ l,s ⊢ *l,r
@@ -487,7 +490,7 @@
     //
   ∎ { l r }
 § alc = _cnc_siz◂◂alc
-§ alc_l◂◂C # l
+§ alc_l◂◂C l
   $ l ⊢ l,s 
   _imul_im◂◂C s ⊢ s 
   !^ l,s ⊢ *l,r,s
@@ -505,7 +508,7 @@
     //
   ∎ { l r s }
 § alc_l = _cnc_siz◂◂alc_l
-§ alc_s_l◂◂C # l
+§ alc_s_l◂◂C l
   $ l ⊢ l,s 
   _imul_im◂◂C s ⊢ s 
   !^ l,s ⊢ *l,r
@@ -771,6 +774,7 @@
         dlt_lc_i { { h r j } i } ⊢|
     ∐. .
       ∎ {} 
+	--§ C_CALL_SF◂◂S 
   § free # r 
 		!^ r ⊢ *r 
       ` mov rdi,rax
@@ -1325,10 +1329,6 @@
     _hp.mk k ⊢ { k h }
     $ h ⊢ h,h0 
     alc h0 ⊢ r 
-    !^ r ⊢ *r 
-			`	mov rdi,0x0001_0000_0000_0000
-      ` mov QWORD [rax],rdi 
-      //
     $ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     _cnc_sto { r0 k } ⊢ _ 
