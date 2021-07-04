@@ -130,7 +130,6 @@ extern stdout
 extern stdin
 extern futex
 extern ini_prc 
-;extern MurmurHash64A
 extern exit 
 extern printf 
 extern fwrite

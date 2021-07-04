@@ -1398,7 +1398,7 @@
 		$.[ k' . { _hp◂k' _hp◂k' } ] { h0 h1 } ⊢ { h0 h1 }
     _b_eq { r0 r1 } ⊢ { r0 r1 b }
 		t_i { h1 r1 } ⊢ t1
-    ∎ { { lc◂{ ht0 h0 r0 } t1 } %[ 1r ] } 
+    ∎ { { lc◂{ ht0 h0 r0 } t1 } b } 
   § dlt p 
     dec p ⊢ { p c b }
     ∐ c'=0r . 
