@@ -5137,11 +5137,14 @@ unsigned long
 		§ 
 			@.ct_abs { E y l }
 				$ l ⊢ 
-				∐ _cns◂{ c l } . 
+				∐ _cns◂{ c l }
 					ct_ptn { E c } ⊢ { E c yc } 
-					ct_abs { E TX.ct_imp◂{ yc y } l } ⊢ { E y l } 
-					∎ { E y ⟦ c < l ⟧ }
-				∐. _nil◂{} . 
+					ct_abs { E y l } ⊢ { E y l } 
+					$ E ⊢ { al lv APV }
+					$ lv ⊢ lv,lv0
+					T.unify.app.f { { yc lv0 } y } ⊢ y
+					∎ { { al lv APV } y ⟦ c < l ⟧ }
+				∐. _nil◂{} 
 					∎ { E y ⟦⟧ }
 			@.cst_ply_F # lv 
 				T.nvl lv ⊢ { lv t0 } 
@@ -5192,9 +5195,7 @@ unsigned long
 					$ E ⊢ { al lv APV } 
 					ct_ptn { { al lv APV } c0 } ⊢ { E c0 y0 } 
 					ct_ptn { E c1 } ⊢ { { al lv APV } c1 y1 } 
-					--T.nvl2 lv  ⊢ { lv { yy yy0 } }
 					$ lv ⊢ lv,lv0
-					--T.unify.ct_imp.f { { { y1 yy0 } lv0 } y0 } ⊢ {}
 					T.unify.app.f { { y1 lv0 } y0 } ⊢ yy
 					∎ { { al lv APV } RP.atm◂ast.k_app◂{ c0 c1 } yy }
 				∐ ast.k_ctr◂{ i v }
@@ -5204,12 +5205,11 @@ unsigned long
 					∎ { { al lv APV } RP.atm◂ast.k_ctr◂{ i v } y }
 				∐ ast.k_op_axm◂{ i l o } 
 					$ E ⊢ { al lv APV } 
-					T.nvl2 lv  ⊢ { lv { yy yy0 } }
+					--T.nvl2 lv  ⊢ { lv { yy yy0 } }
 					slv_axm { al lv i o } ⊢ { al lv i o y }
-					ct_abs { { al lv APV } yy l } ⊢ { { al lv APV } yy l } 
-					T.unify.f { y yy } ⊢ {} 
-					$ { al lv APV } ⊢ E 
-					∎ { E RP.atm◂ast.k_op_axm◂{ i l o } yy0 }
+					ct_abs { { al lv APV } y l } ⊢ { E y l } 
+					--T.unify.f { y yy } ⊢ {} 
+					∎ { E RP.atm◂ast.k_op_axm◂{ i l o } y }
 				∐ ast.k_ap◂{ p { vl t } }
 					$ E ⊢ { al lv APV } 
 					∐ al'=vt.gl . 
