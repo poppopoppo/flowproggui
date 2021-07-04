@@ -55,6 +55,35 @@
 
 ¶ _id k' = k'→k' 
 
+-- const 
+§ C_PUSH_REGS = "\tpush rdx\n\tpush rcx\n\tpush r8\n\tpush r9\n\tpush r10\n\tpush r11\n"
+
+§ C_POP_REGS =^=
+	`	pop r11 
+	`	pop r10 
+	`	pop r9 
+	`	pop r8 
+	`	pop rcx 
+	`	pop rdx
+	// 
+§ C_CALL◂◂S =^=
+	`	push rbx
+	`	mov rbx,rsp 
+	`	and rsp,~0xf 
+	"\tcall " S "\n" 
+	`	mov rsp,rbx 
+	`	pop rbx
+	//
+§ C_CALL_SF◂◂S =^=
+	C_PUSH_REGS 
+	`	push rbx
+	`	mov rbx,rsp 
+	`	and rsp,~0xf 
+	"\tcall " S "\n" 
+	`	mov rsp,rbx 
+	`	pop rbx
+	C_POP_REGS
+	//
 
   -- combinator 
 § _ftr = \\k3 . \\k2 . \\k1 . k3◂◂(k2◂◂k1)
@@ -774,12 +803,12 @@
         dlt_lc_i { { h r j } i } ⊢|
     ∐. .
       ∎ {} 
-	--§ C_CALL_SF◂◂S 
-  § free # r 
+	
+  § free r 
 		!^ r ⊢ *r 
       ` mov rdi,rax
-			`	C_CALL_SF free 
-      // 
+			(C_CALL_SF◂◂"free")
+			// 
 		∎ {}
 	§§ std
     § dlt # a 
@@ -803,7 +832,7 @@
 	    dlt_i { { h r0 } l } ⊢ {}
 			!^ r ⊢ *r 
 				`	mov rdi,rax 
-				`	C_CALL_SF free 
+				(C_CALL_SF◂◂"free") 
 				//
 			$ r ⊢ _
 	    ∎ {}
@@ -830,7 +859,7 @@
    		dlt_lc_i { { h r0 j } l } ⊢ {}
    		!^ r ⊢ *r 
       	` mov rdi,rax
-				`	C_CALL_SF free 
+				(C_CALL_SF◂◂"free") 
     		// 
   		$ r ⊢ _ 
    		∎ {}
@@ -877,7 +906,7 @@
         dlt_i { { h r0 } l } ⊢ {}
        !^ r ⊢ *r 
       	` mov rdi,rax
-				`	C_CALL_SF free 
+				(C_CALL_SF◂◂"free") 
         // 
        $ r ⊢ _ 
        ∎ {}
@@ -896,7 +925,7 @@
         dlt_lc_i { { h r0 j } l } ⊢ {}
        !^ r ⊢ *r 
          ` mov rdi,rax
-					`	C_CALL_SF free 
+				(C_CALL_SF◂◂"free") 
         // 
        $ r ⊢ _ 
        ∎ {}
@@ -1612,18 +1641,18 @@
   _hp.to { m h } ⊢ s 
   ∎ { l s }
 
-§ emt_cst◂◂S # {} 
+§ emt_cst◂◂S {} 
   _st◂◂S {} ⊢ b 
   _id.st_s8 b ⊢ b 
   _hp.of b ⊢ { r h }
   !^ r ⊢ *r 
     ` mov rdi,rax 
     ` mov rsi,QWORD [rax-8]
-    ` C_CALL fw 
+    (C_CALL◂◂"fw") 
     //
   _hp.to { r h } ⊢ _ 
   ∎ {} 
-§ _emt_s8_to_im◂◂F # s 
+§ _emt_s8_to_im◂◂F s 
   _id.s8 s ⊢ s 
   _st◂◂F {} ⊢ f 
   _hp.of f ⊢ { r0 _ }
@@ -1643,7 +1672,7 @@
   emt_cst◂◂"_getchar:" {} ⊢ {} 
   !^ _ ⊢ c 
     `	xor rax,rax 
-		`	C_CALL_SF getchar 
+		(C_CALL_SF◂◂"getchar") 
 		//
   ∎ c
 § _in_fn f 
@@ -1660,7 +1689,7 @@
   _hp.rpc c ⊢ { c r } 
   !^ r ⊢ *m 
     ` lea rdi,[rax+8]
-    ` C_CALL system 
+    (C_CALL◂◂"system") 
     // 
   $ m ⊢ _ 
   ∎ c
@@ -1873,7 +1902,7 @@
   ¶§ f_rcd = rcd_unt 
   ¶§ f_rcd = prd 
   ¶§ f0 = rcd  
-  § r640 ## x 
+  § r640 x 
     !^ x ⊢ *x 
       ` sub rsp,32 
       ` mov rdi,rsp 
@@ -1885,7 +1914,7 @@
       ` sub rdi,2  
       ` add rax,3 
       ` mov rsi,rax  
-      ` C_CALL fw
+      (C_CALL◂◂"fw")
       ` add rsp,32 
       //
     ∎ x
@@ -1901,7 +1930,7 @@
     !^ r ⊢ *r 
       `	mov esi,DWORD [rax]
       ` lea rdi,[rax+8]
-      ` C_CALL fw 
+      (C_CALL◂◂"fw") 
       //
     _hp.to { r h } ⊢ s 
     emt_cst◂◂"\" : _s8" {} ⊢ {} 
@@ -2013,7 +2042,7 @@
 			`	cmp rdi,0 
 			`	jnz .L0 
 			` mov rdi,rax
-			`	C_CALL_SF free 
+			(C_CALL_SF◂◂"free") 
 			`.L0:
       // 
     $ r ⊢ _ 

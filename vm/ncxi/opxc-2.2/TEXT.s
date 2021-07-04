@@ -262,12 +262,6 @@ init_ss_end:
 
 info:
 	C_PUSH_REGS
-	;mov rdi,fmt_info 
-	;mov rsi,QWORD [S8_N]
-	;mov rdx,QWORD [SS_LN_C]
-	;mov rcx,SS_LN_N 
-	;xor rax,rax 
-	;C_CALL printf
 	mov rax,0
 info_rcd:
 	push rax 
