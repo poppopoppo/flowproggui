@@ -1447,6 +1447,7 @@ unsigned long
 		§ eq◂◂E # { p0 p1 }
 			eq_v◂◂(eq_u◂◂E) { {} p0 p1 } ⊢ { {} p0 p1 b }
 			∎ { p0 p1 b }
+		
 		§ 
 			@.map_l◂◂F { v p } 
 				$ p ⊢ 
@@ -4500,65 +4501,76 @@ unsigned long
 		§ op_call◂{ c s m } = { c s m } 
 		§ op_inl◂{ c s m } = { c s m } 		
 		
-		§ 	
-			@.eq_ct_ptn = RP.eq◂◂eq_ct
-			@.eq_ct_lst = lst.eq_err◂◂eq_ct_ptn 
-			@.eq_ct { c0 c1 }
-				∐ c0 ⊢ k_name◂i0 . 
-					EVV.lod_evv i0 ⊢ { i0 c2 }
-					eq_ct_ptn  { c2 RP.atm◂c1 } ⊢ { _ c1 b  }
-					RP.atm_a c1 ⊢ c1
-					∎  { k_name◂i0 c1 b }
-				∐ c1 ⊢ k_name◂i1 . 
-					EVV.lod_evv i1 ⊢ { i1 c2  }
-					eq_ct_ptn  { RP.atm◂c0 c2 } ⊢ { c0 c2 b  }
-					RP.atm_a c0 ⊢ c0
-					∎ { c0 k_name◂i1 b }		
-				∐ c0 ⊢ k_op_gnr◂{ o_t0 ib0 o0 lc0 v0 }; c1 ⊢ k_op_gnr◂{ o_t1 ib1 o1 lc1 v1 } .
-					_ref.eq { lc0 lc1 } ⊢ { { lc0 lc1 } b } 
-					∐ b'=1r . 
-						$ b ⊢ _ 
-						∐ o0 ⊢ _some◂T0; o1 ⊢ _some◂T1 .
-							eq_ct_ptn { T0 T1 } ⊢ { T0 T1 b } 
-							∎  { k_op_gnr◂{ o_t0 ib0 ‹ T0 › lc0 v0 } k_op_gnr◂{ o_t1 ib1 ‹ T1 › lc1 v1  } b }
-						∐ o0 ⊢ _none◂{}; o1 ⊢ _none◂{} . 
-							∎  { k_op_gnr◂{ o_t0 ib0 ‹› lc0 v0 } k_op_gnr◂{ o_t1 ib1 ‹› lc1 v1  } bl.t◂{} }
+		§§ eq_ct 	
+			§ 
+				@.ptn { c0 c1 } 
+					∐ c0 ⊢ RP.atm◂a0; c1 ⊢ RP.atm◂a1 . 
+						f { a0 a1 } ⊢|
+					∐ c0 ⊢ RP.rcd◂l0; c1 ⊢ RP.rcd◂l1 . 
+						lst { l0 l1 } ⊢| 
+					∐. . 
+						∎ bl.f◂{}
+				@.lst { l0 l1 } 
+					∐ l0 ⊢ _cns◂{ p0 l0 }; l1 ⊢ _cns◂{ p1 l1 } .
+						ptn { p0 p1 } ⊢ b0 
+						$ b0 ⊢ 
+						∐ bl.t◂{} . 
+							lst { l0 l1 } ⊢|
+						∐. bl.f◂{} . 
+							∎ bl.f◂{}
+					∐ l0 ⊢ _nil◂{}; l1 ⊢ _nil◂{} . 
+						∎ bl.t◂{}
+					∐. . 
+						∎|
+				@.f { c0 c1 }
+					∐ c0 ⊢ k_name◂i0 . 
+						EVV.lod_evv i0 ⊢ { i0 c2 }
+						ptn { c2 RP.atm◂c1 } ⊢|
+					∐ c1 ⊢ k_name◂i1 . 
+						EVV.lod_evv i1 ⊢ { i1 c2  }
+						ptn  { RP.atm◂c0 c2 } ⊢|
+					∐ c0 ⊢ k_op_gnr◂{ o_t0 ib0 o0 lc0 v0 }; c1 ⊢ k_op_gnr◂{ o_t1 ib1 o1 lc1 v1 } .
+						_ref.eq { lc0 lc1 } ⊢ { { lc0 lc1 } b } 
+						∐ b'=1r . 
+							$ b ⊢ _ 
+							∐ o0 ⊢ _some◂T0; o1 ⊢ _some◂T1
+								ptn { T0 T1 } ⊢|
+							∐ o0 ⊢ _none◂{}; o1 ⊢ _none◂{} 
+								∎ bl.t◂{}
+							∐. .
+								∎|
 						∐. .
-							∎|
-					∐. .
-						∎  { k_op_gnr◂{ o_t0 ib0 o0 lc0 v0 } k_op_gnr◂{ o_t1 ib1 o1 lc1 v1  } bl.f◂{} }
-				∐ c0 ⊢ k_op◂{ ib0 lc0 v0 }; c1 ⊢ k_op◂{ ib1 lc1 v1 } .
+							∎ bl.f◂{}
+				∐ c0 ⊢ k_op◂{ ib0 lc0 v0 }; c1 ⊢ k_op◂{ ib1 lc1 v1 }
 					_ref.eq { lc0 lc1 } ⊢ { { lc0 lc1 } b } 
-					bl.of_r b ⊢ b 
-					∎  { k_op◂{ ib0 lc0 v0 } k_op◂{ ib1 lc1 v1  } b }
-				∐ c0 ⊢ k_r64◂x0; c1 ⊢ k_r64◂x1; x0'=x1' . 
-					∎  { k_r64◂x0 k_r64◂x1 bl.t◂{ } }
+					bl.of_r b ⊢|
+				∐ c0 ⊢ k_r64◂x0; c1 ⊢ k_r64◂x1; x0'=x1' 
+					∎ bl.t◂{} 
 				∐ c0 ⊢ k_s8◂s0; c1 ⊢ k_s8◂s1 . 
 					rp8.to_s8 s0 ⊢ s0 
 					rp8.to_s8 s1 ⊢ s1 
 					∐ s0'=s1' .
-						∎ { k_s8◂rp8.of_s8◂s0 k_s8◂rp8.of_s8◂s1 t◂{ } }
+						∎ t◂{ }
 					∐. .
-						∎ { k_s8◂rp8.of_s8◂s0 k_s8◂rp8.of_s8◂s1 bl.f◂{ } }
+						∎ bl.f◂{}
 				∐ c0 ⊢ k_ctr◂{ i0 v0 }; c1 ⊢ k_ctr◂{ i1 v1 }; i0'=i1' . 
-					∎ { k_ctr◂{ i0 v0 } k_ctr◂{ i1 v1 } t◂{ } }
+					∎ t◂{} 
 				∐ c0 ⊢ k_op_axm◂{ n0 l0 o0 }; c1 ⊢ k_op_axm◂{ n1 l1 o1 }; n0'=n1' . 
-					eq_ct_lst { l0 l1  } ⊢ { l0 l1 b  } 
-					∎ { k_op_axm◂{ n0 l0 o0 } k_op_axm◂{ n1 l1 o1  } b }
-				∐ c0 ⊢ k_app◂{ k0 k1 }; c1 ⊢ k_app◂{ k2 k3 } . 
-					eq_ct_ptn { k0 k2  } ⊢ { k0 k2 b0  } 
+					lst { l0 l1 } ⊢|
+				∐ c0 ⊢ k_app◂{ k0 k1 }; c1 ⊢ k_app◂{ k2 k3 }
+					ptn { k0 k2 } ⊢ b0
 					$ b0 ⊢ 
 					∐ bl.t◂{} . 
-						eq_ct_ptn { k1 k3 } ⊢ { k1 k3 b1  } 
-						∎ { k_app◂{ k0 k1 } k_app◂{ k2 k3  } b1 }
-					∐. bl.f◂{} .	
-						∎ { k_app◂{ k0 k1 } k_app◂{ k2 k3 } bl.f◂{ } }					
+						ptn { k1 k3 } ⊢|
+					∐. bl.f◂{}
+						∎ bl.f◂{}				
 				∐ c0 ⊢ k_ap◂{ p0 t0 }; c1 ⊢ k_ap◂{ p1 t1 }
 					_ref.eq { p0 p1 } ⊢ { { p0 p1 } b } 
-					bl.of_r b ⊢ b 
-					∎ { k_ap◂{ p0 t0 } k_ap◂{ p1 t1 } b }
+					bl.of_r b ⊢|
 				∐. . 
-					∎ { c0 c1 bl.f◂{} }
+					∎ bl.f◂{}
+			∎∎ 
+		§ eq_ct_ptn = eq_ct.ptn
 		§ @.r64_of_k c 
 			RP.atm_a c ⊢ c 
 			∐ c ⊢ k_r64◂x . 
@@ -8124,11 +8136,12 @@ unsigned long
 				T.cib { T TK } ⊢ { T TK b }
 				∐ b'=1r . 
 					$ b ⊢ _ 
-					ast.eq_ct_ptn C ⊢ { c ck b }
+					$ C ⊢ C,C0
+					ast.eq_ct_ptn C0 ⊢ b
 					∐ b ⊢ bl.t◂{} .
-						∎ { T TK { c ck } %[ 1r ]}
+						∎ { T TK C %[ 1r ] }
 					∐. .
-						∎ { T TK { c ck } %[ 0r ] }
+						∎ { T TK C %[ 0r ] }
 				∐. .
 					∎ { T TK C b } 
 			§ @.e_lp { { ql p } gfl i } 
@@ -8355,7 +8368,7 @@ unsigned long
 							ct_x { E f c1 } ⊢|
 						∐ ax'=EX.ct_eq . 
 							∐ c1 ⊢ RP.rcd◂_cns◂{ c10 _cns◂{ c11 _nil◂{} } } .
-								ast.eq_ct_ptn { c10 c11 } ⊢ { _ _ b }
+								ast.eq_ct_ptn { c10 c11 } ⊢ b
 								$ b ⊢ 
 								∐ bl.t◂{} .
 									∎ { E RP.atm◂ast.k_r64◂%[ 1r ] }
@@ -12256,7 +12269,7 @@ unsigned long
 					=+ t' 
 					-- e 
 					∐ 
-						ast.eq_ct_ptn { c0 c1 } ⊢ { c0 c1 b } 
+						ast.eq_ct_ptn { c0 c1 } ⊢ b
 						∐ b ⊢ bl.f◂{} . 
 							jmp_lb { lb_f e0 } ⊢ { lb_f e0 } 
 							∎ { lb_f e0 }
@@ -12264,7 +12277,7 @@ unsigned long
 							∎ { lb_f e0 }
 					-- ne 
 					∐ 
-						ast.eq_ct_ptn { c0 c1 } ⊢ { c0 c1 b } 
+						ast.eq_ct_ptn { c0 c1 } ⊢ b
 						∐ b ⊢ bl.t◂{} . 
 							jmp_lb { lb_f e0 } ⊢ { lb_f e0 } 
 							∎ { lb_f e0 }
