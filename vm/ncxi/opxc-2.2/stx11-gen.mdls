@@ -2065,7 +2065,6 @@ unsigned long
 		§ newvar_i = ini_q 
 		§ newvar_ln # y 
 			_ref.mk var_ln◂y ⊢|
-		§ nv_ln = newvar_ln 
 		§ set_q { N p v } 
 			$ N ⊢ N,n
 			_ref.o p ⊢  { P _ } 
@@ -2534,17 +2533,6 @@ unsigned long
 		§§ gen 
 			§ i a 
 				∎ a 
-			§	gen_D0 { I y1 }
-				_emt_im◂◂"gen_D0:0" {} ⊢ {} 
-				$ y1 ⊢ t,y1t 
-				--_ref.to_i { I var_ln◂y1t } ⊢ {}
-				_emt_im◂◂"gen_D0:0.0" {} ⊢ {} 
-				--_ref.to_i { I var_ln◂y1t } ⊢ {}
-				i var_ln◂y1t ⊢ v 
-				_emt_im◂◂"gen_D0:0.1" {} ⊢ {} 
-				_ref.to_D0 { I v } ⊢ {}
-				_emt_im◂◂"gen_D0:1" {} ⊢ {} 
-				∎ t
 			§ 
 				@.lst◂◂QX = lst.map_l◂◂(f◂◂QX) 
 				@.f◂◂{ Q Ql C } { { lv ql } t◂{ a lvt } } 
@@ -3347,8 +3335,7 @@ unsigned long
 					∎ { N b } 
 				∐. . 
 					$ N ⊢ N,t0
-					$ i1 ⊢ i1,i1t 
-					TV.u { i0 var_q◂{ t0 ‹ p◂i1t › ‹› } } ⊢ i0
+					TV.u { i0 var_q◂{ t0 ‹ p◂i1 › ‹› } } ⊢ i0
 					∎ { N %[ 1r ] }  
 			§ @.f_lq { N b i0 Q { i1 lv1 } } 
 					TV.o i1 ⊢ { i1 v1 } 
@@ -3375,18 +3362,31 @@ unsigned long
 		§ 
 			@.VAR◂◂O # S 
 					_ct.if_eq◂◂{ { O 0r } VAR_L VAR_R } S ⊢|
-			@.VAR_L # { N { i0 _ } { y1 lv1 } }
-				TV.lod i0 ⊢ { i0 v0 } 
+			@.VAR_L_q { N { i0 Q } y1 }
+				∐ y1 ⊢ var◂p◂i1
+					TV.o i1 ⊢ { i1 v1 } 
+					$ v1 ⊢ 
+					∐ var_ln◂y1
+						to_vln { i1 y1 } ⊢ t◂{ y1 _ }
+						VAR_L_q { N { i0 Q } y1 } ⊢| 
+					∐ var_l◂_ 
+						∎|
+	 				∐. var_q◂{ qn L R }
+						_ref.i { i1 var_q◂{ qn L R } } ⊢ i1
+						f_iq { N i0 Q i1 } ⊢|
+				∐.
+					∎ { N %[ 0r ] }
+			@.VAR_L # { N { i0 lv0 } { y1 lv1 } }
+				TV.lod i0 ⊢ { i0 v0 }
 				$ v0 ⊢ 
 				∐ var_ln◂y2 . 
 					f { N y2 t◂{ y1 lv1 } } ⊢|
 				∐ var_l◂lv .  
 					∎|
 				∐. var_q◂{ qn L _ }
-					∐ y1 ⊢ var◂p◂i1
-						f_lq { N %[ 0r ] i0 { qn L } { i1 lv1 } } ⊢| 
-					∐.
-						∎ { N %[ 0r ] }
+					$ { qn L } ⊢ Q 
+					VAR_L_q { N { i0 Q } y1 } ⊢| 
+					
 			@.VAR_R # { N { i0 _ } { y1 lv1 } }
 				TV.lod i0 ⊢ { i0 v0 } 
 				$ v0 ⊢ 
@@ -6253,10 +6253,10 @@ unsigned long
 				∐. _cns◂{ s1 l } . 
 					s8_of_s8_lst_rev ⟦ s s1 < l ⟧ ⊢ s 
 					∎ _some◂ast.exp_s8_cst◂RP.atm◂ast.k_s8◂%s
-			∐# abs_name ⊢ { n }
-				∎ _some◂ast.exp_s8_cst◂RP.atm◂ast.k_name◂%n
-			∐.# s8_fmt ⊢ { f }
+			∐# s8_fmt ⊢ { f }
 				∎ _some◂ast.exp_s8_idx◂%f
+			∐.# ct_ptn ⊢ { c }
+				∎ _some◂ast.exp_s8_cst◂c
 	§ 
     @.s8_ptn_lst_0 ^= 
 			∐# "//" ⊢ { {} } 
@@ -10381,9 +10381,9 @@ unsigned long
 							f_T_adt◂◂ALC { { tav s0 b } k } ⊢| 
 						∐. .
 							∎ { { tav s0 %[ 0r ] } ast.btm_k◂{} }
-					∐ ct_imp◂{ k0 k1 } .
+					∐ ct_imp◂{ k0 k1 }
 						∎|
-					∐. imp◂{ k0 k1 } .
+					∐. imp◂{ k0 k1 } 
 						∎|
 				@.f_T◂◂ALC { { tav s0 b } T.t◂{ t0 _ } }
 					$ t0 ⊢ 
@@ -10587,11 +10587,10 @@ unsigned long
 				`	mov rsi,1  
 				"\tmov rdi,0x" 1x' "\n" 
 				`	xor rax,rax 
-				`	C_CALL_SF calloc 
+				(C_CALL_SF◂◂"calloc")
 				`	cmp rax,0 
 				`	jz err
-				`	mov rdi,0x0001_0000_0000_0000
-				"\tadd rdi,0x" 0x' "\n"
+				"\tmov rdi,(0x0001_0000_0000_0000+0x" 0x' ")\n"
 				`	mov QWORD [rax],rdi
 				//
 			∎ { l e }   
@@ -11445,17 +11444,40 @@ unsigned long
 						@.s8 # { GV { SCM e0 } ld lb_n ar s0 rr pl }
 							rp8.to_s8 s0 ⊢ s 
 							_s8_len s ⊢ { s l0 } 
-							SCM.lod { SCM lb_n s } ⊢ { SCM lb_n _ lb0 } 
 							_add { ld l0 } ⊢ { ld l0 } 
-							lp1 { GV { SCM e0 } ld lb_n  ar rr pl } ⊢ { GV { SCM e0 } ld lb_n  ar }
+							lp1 { GV { SCM e0 } ld lb_n ar rr pl } ⊢ { GV { SCM e0 } ld lb_n  ar }
 							_sub { ld l0 } ⊢ { ld l0 }
-							^ lb0,l0 ⊢ _,_,sr 
-								"\tlea rsi,[LB_" 0d' "+0x" 1x' "-1]\n" 
-								"\tmov rcx,0x" 1x' "\n" 
-								`	rep movsb
-								//
-							asm.add_s8 { e0 sr } ⊢ e0 
-							∎ { GV { SCM e0 } ld lb_n ar }
+							∐ l0'=8r 
+								_lds64 { s %[ 0r ] } ⊢ { _ _ b }
+								^ b ⊢ _,sr 
+									"\tsub rdi,8\n"   
+									"\tmov rsi,0x" 0x' "\n"
+									`	mov QWORD [rdi+1],rsi
+									//
+								asm.add_s8 { e0 sr } ⊢ e0 
+								∎ { GV { SCM e0 } ld lb_n ar }
+							∐ l0'=<8r 
+								_lds64 { s %[ 0r ] } ⊢ { _ _ b }
+								^ b,l0 ⊢ _,_,sr 
+									"\tsub rdi,0x" 1x' "\n"   
+									`	mov rcx,QWORD [rdi+1]
+									"\tmov rsi,(-1<<(8*" 1x' "))\n" 
+									`	and rcx,rsi
+									"\tmov rsi,0x" 0x' "\n"
+									`	or rcx,rsi 
+									`	mov QWORD [rdi+1],rcx
+									//
+								asm.add_s8 { e0 sr } ⊢ e0 
+								∎ { GV { SCM e0 } ld lb_n ar }
+							∐.
+								SCM.lod { SCM lb_n s } ⊢ { SCM lb_n _ lb0 } 
+								^ lb0,l0 ⊢ _,_,sr 
+									"\tlea rsi,[LB_" 0d' "+0x" 1x' "-1]\n" 
+									"\tmov rcx,0x" 1x' "\n" 
+									`	rep movsb
+									//
+								asm.add_s8 { e0 sr } ⊢ e0 
+								∎ { GV { SCM e0 } ld lb_n ar }
 					@.lp1 { GV { eds e0 } ld lb_n ar rr pl }
 						$ pl ⊢ 
 						∐ _cns◂{ ps pl } . 
@@ -11512,8 +11534,8 @@ unsigned long
 								∐ ast.fmt_d◂{} .
 									r64_to_rax { GV p0 e0 } ⊢ { GV e0 }
 									$~ _^ ⊢ s1 
-										`	mov rsi,rdi  
 										`	sub rsp,32 
+										`	mov rsi,rdi  
 										`	lea rdi,[rsp+31]
 										`	push rsi 
 										`	call pf_d_rv 
@@ -13307,7 +13329,11 @@ unsigned long
 			$ FE ⊢ { _ eg0 SCM }		
 			_emt_im.f◂◂"emt_rtm D6" {} ⊢ {} 			
 			gnr.EDS.gnr.f SCM ⊢ eds
-			asm.add_st_s8_im◂◂"\tmov QWORD [EXIT],1\n\tC_CALL exit\n" ec1 ⊢ ec1			
+			$~ _^ ⊢ sc0 
+				`	mov QWORD [EXIT],1
+				(C_CALL◂◂"exit") 
+				//
+			asm.add_st_s8 { ec1 sc0 } ⊢ ec1			
 			$~ _^ ⊢ sc1 
 				`section .text
 				`global _start

@@ -13,7 +13,6 @@
 	CLR_N: dq 2 
 	CLR_NULL: dq 0,0,1
 
-	fmt_s8_l: db "%.*s",0
 	fmt_exn: db "exn:%lld",10,0 
 	fmt_err_line: db "err:%llx",10,0
 	fmt_r64: db "%dr",0
@@ -21,18 +20,11 @@
 	fmt_d: db "%lld",0
 	fmt_d_nl: db "%lld",10,0
 	fmt_x: db "%llx",0
-	fmt_arr_l: db "{+ ",0
-	fmt_arr_r: db "}",0
-	fmt_rcd_l: db "{ ",0
-	fmt_rcd_r: db "} ",0
-	fmt_Clr_l: db "{= ",0 
-	fmt_rcd_box_l: db "*{ "
 	fmt_nl: db 10,0
 	fmt_spc: db " ",0
 	fmt_emt: db "_emt:",0
 	fmt_test0: db "sig segv handled!!:",0
 	rt_err0: db "rt_err:",10,0 
-	emt_bof_msg: db "EMT_BOF:",10,0 
 s8_e: dq 0,0
 
 	fmt_info:

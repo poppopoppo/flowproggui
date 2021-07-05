@@ -10,10 +10,8 @@
 	SS_RCD_TOP: resq 64 
 	SS_RCD_BTM: resq 64 
 	SS_RCD_N: resq 64 
-	;GLV: resq GLV_N
 	PAGE_SIZE: resq 1
 	
-; emt buffer 
 	SS_RCD_C: resq (RCD_N+1)
 
 ;stat: resb 144

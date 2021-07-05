@@ -1539,9 +1539,9 @@
   _hp.of s ⊢ { r h } 
   !^ r,i ⊢ *r,*i,c 
     `	mov esi,DWORD [rax]
-	  ` sub rsi,7
+		`	and rsi,~7
     `	cmp rdi,rsi 
-		`	jge err_bc 
+		`	jg err_bc 
 	  `	mov rsi,QWORD [rax+8+rdi]
 		//
   _hp.to { r h } ⊢ s 
@@ -1586,7 +1586,7 @@
     ` add rdi,16
     ` mov rsi,rdi
     ` mov rdi,rax
-    ` C_CALL_SF realloc 
+    (C_CALL_SF◂◂"realloc") 
     `	cmp rax,QWORD [NULL] 
 		`	jz err_NULL 
 		`	pop QWORD [rax]
@@ -1661,7 +1661,7 @@
     ` mov rdx,QWORD [rdi]
     ` lea rsi,[rdi+8]
     ` mov rdi,rax
-    ` C_CALL_SF emt_s8_to 
+    (C_CALL_SF◂◂"emt_s8_to") 
     ` cmp rax,-1
 		`	jz err_cls
 		//
@@ -2221,7 +2221,7 @@
     ofs_arr { h b } ⊢ b
     !^ b,r ⊢ r,*z 
       ` mov rsi,rax 
-		  ` C_CALL_SF realloc		
+		  (C_CALL_SF◂◂"realloc")		
       `	mov rsi,QWORD [rax] 
 	  	//
     $ z ⊢ _ 

@@ -343,8 +343,10 @@
    -- 0d' // 
   --_emt s ⊢ _ 
   ^ %[ 0xbcd675756fd68066r ] ⊢ _,s 
-    "0x" 0x' // 
-  _emt s ⊢ _ 
+    0x' ";0xk" 0x' // 
+  _arr_len s ⊢ { s l }
+	_emt l ⊢ _ 
+	_emt s ⊢ _ 
   ∎ {} 
 § g1 { s0 s1 }
  ^ s0,s1 ⊢ _,_,s 

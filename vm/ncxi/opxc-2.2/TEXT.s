@@ -56,7 +56,6 @@ th0_1:
 	jz err_th0 
 	mov rax,QWORD [rdi] 
 	xor rax,rax 
-	;C_CALL_SF free 
 	jmp th0
 
 pf_x_tb: db "0123456789abcdef"
@@ -653,9 +652,11 @@ err_mk_stk_F:
 	jmp err
 err_bc: 
 	mov QWORD [err_n],0xff
+	jmp err
 err_dyn_rpc: 
 	mov rax,0xffef_bbbc
 	mov QWORD [err_n],rax
+	jmp err
 err: 
 	mov rdi,fmt_err_line
 	mov rsi,QWORD [err_n]
