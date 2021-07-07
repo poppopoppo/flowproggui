@@ -314,7 +314,6 @@ rpc_dyn_adt: ; rax=i rdi=d
 	cmp rsi,0x10_0000 
 	jge .L0 
 	add rax,0x1_0000 
-	jo err_dyn_rpc
 	ret 
 .L0:
 	bt rax,32 
