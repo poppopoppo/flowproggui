@@ -323,7 +323,7 @@ rpc_dyn_adt: ; rax=i rdi=d
 .L1: 
 	mov rsi,0x0001_ffff_0000_0000
 	add QWORD [rdi],rsi
-	jo err_dyn_rpc
+	jc err_dyn_rpc
 	mov rsi,0x1_0000_ffff 
 	and rax,rsi
 	ret

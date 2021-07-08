@@ -1,4 +1,10 @@
 
+	§ A _ 
+		∎|
+	§ A _ 
+		∎|
+	§ A _ 
+		∎|
 -- rank-1
 §§ _TX 
   § r64 = 0r 
@@ -2159,15 +2165,17 @@
   $ b ⊢ _ 
   ∎ d 
 §§ _lst 
-	§ @.len l 
+	§ @.len0 { l i } 
 		$ l ⊢ 
-		∐ _cns◂{ a l } . 
-			len l ⊢ { l n } 
-			$ _cns◂{ a l } ⊢ l 
-			_inc n ⊢ n 
-			∎ { l n } 
-		∐. _nil◂{} . 
-			∎ { ⟦⟧ %[ 0r ] }
+		∐ _cns◂{ a l } 
+			_inc i ⊢ i
+			len0 { l i } ⊢|
+		∐. _nil◂{} 
+			∎ i
+	§ len # l 
+		$ l ⊢ l,l0 
+		len0 { l0 %[ 0r ] } ⊢ n 
+		∎ { l n }
 	∎∎
  §§ _mk_stk_lst 
   § @.i { { h s } l }
