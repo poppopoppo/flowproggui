@@ -4416,7 +4416,7 @@
 			∎ y
 		-- 0x16 mt_e_r64 = 76r 
 		∐ 
-			∎ TX.q.mt◂TX.r64◂{} 
+			∎ TX.q.mt◂TX.r64◂{}
 		-- 0x17 mt_e_pt = 77r 
 		∐ 
 			∎|
@@ -8057,13 +8057,13 @@
 										∎ mt◂{ %[ ast.mt.e.pt ] mc pb } 
 									∐ i'=EX.mt_e_s8 . 
 										∎ mt◂{ %[ ast.mt.e.s8 ] mc pb } 
-									∐ i'=EX.mt_ne_r64 . 
+									∐ i'=EX.mt_ne_r64
 										∎ mt◂{ %[ ast.mt.ne.r64 ] mc pb } 
-									∐ i'=EX.mt_ne_r64 . 
+									∐ i'=EX.mt_ne_r64 
 										∎ mt◂{ %[ ast.mt.ne.pt ] mc pb } 
-									∐ i'=EX.mt_ne_s8 . 
+									∐ i'=EX.mt_ne_s8 
 										∎ mt◂{ %[ ast.mt.e.s8 ] mc pb } 
-									∐ i'=EX.mt_le_r64 . 
+									∐ i'=EX.mt_le_r64 
 										∎ mt◂{ %[ ast.mt.le.r64 ] mc pb } 
 									∐ i'=EX.mt_le_s8 . 
 										∎ mt◂{ %[ ast.mt.le.s8 ] mc pb } 
@@ -11451,14 +11451,14 @@
 					§ f_il_i { e { r q } }
 							$ q ⊢ 
 							∐ asm.dq.im◂x  
-								-\
-								∐ x'=<0xffffffffr 
+								_bsr x ⊢ { x j }
+								∐ j'=<30r
+									$ j ⊢ _ 
 									^ r,x ⊢ _,_,sc
 										"\tmov QWORD [DST_REG+(8*0x" 0x' ")],0x" 1x' "\n"
 									//
 									asm.add_s8 { e sc } ⊢|
 								∐.
-								-/
 									^ r,x ⊢ _,_,sc
 										"\tmov rax,0x" 1x' "\n"
 										"\tmov QWORD [DST_REG+(8*0x" 0x' ")],rax\n"
