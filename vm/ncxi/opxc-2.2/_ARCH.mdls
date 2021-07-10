@@ -2278,3 +2278,13 @@
   $.[ k' . _hp◂(_arr_x◂k') ] h ⊢ h 
   _hp.to { r h } ⊢ v 
   ∎ v 
+-\
+§§ _grm 
+	§ seq◂◂{ A < L } { { B I } r } 
+		A { B I } ⊢ { B i o }
+		$ o ⊢ 
+		∐ _some◂a 
+			seq◂◂L { { B I } r } 
+		∐. _none◂{}
+	∎∎
+-/

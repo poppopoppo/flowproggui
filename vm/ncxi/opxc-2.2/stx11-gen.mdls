@@ -3548,28 +3548,6 @@
 					$ N ⊢ N,t0
 					TV.u { i0 var_q◂{ t0 ‹ p◂i1 › ‹› } } ⊢ i0
 					∎ { N %[ 1r ] }  
-			§ @.f_lq { N b i0 Q { i1 lv1 } } 
-					TV.o i1 ⊢ { i1 v1 } 
-					$ v1 ⊢ 
-					∐ var_ln◂y2;
-						∐ y2 ⊢ t◂{ var◂p◂i2 lv2 }
-							pc { i1 { i2 lv2 } } ⊢ { i2 lv2 }
-							f_lq { N b i0 Q { i2 lv2 } } ⊢|  
-						∐.
-							_ref.to_i { i1 var_ln◂y2 } ⊢ {}
-							∎ { N %[ 0r ] }
-					∐ var_l◂_ 
-						∎|
- 					∐. var_q◂{ qn L R }
-						∐ b'=0r 
-							_ref.i { i1 var_q◂{ qn L R } } ⊢ i1
-							$ b ⊢ _ 
-							f_iq { N i0 Q i1 } ⊢|
-						∐. 
-							$ b ⊢ _ 
-							$ { qn L } ⊢ qn_L,{ qn L }
-							_ref.i { i1 var_q◂{ qn L R } } ⊢ i1							
-							f_iq { N i1 qn_L i0 } ⊢|	
 		§ 
 			@.VAR◂◂O # S 
 					_ct.if_eq◂◂{ { O 0r } VAR_L VAR_R } S ⊢|
@@ -3590,14 +3568,28 @@
 			@.VAR_L # { N { i0 lv0 } { y1 lv1 } }
 				TV.lod i0 ⊢ { i0 v0 }
 				$ v0 ⊢ 
-				∐ var_ln◂y2 . 
+				∐ var_ln◂y2
 					f { N y2 t◂{ y1 lv1 } } ⊢|
 				∐ var_l◂lv .  
 					∎|
 				∐. var_q◂{ qn L _ }
 					$ { qn L } ⊢ Q 
 					VAR_L_q { N { i0 Q } y1 } ⊢| 
-					
+			@.VAR_R_q { N { i0 Q } y1 }	
+				∐ y1 ⊢ var◂p◂i1
+					TV.o i1 ⊢ { i1 v1 } 
+					$ v1 ⊢ 
+					∐ var_ln◂y1
+						to_vln { i1 y1 } ⊢ t◂{ y1 _ }
+						VAR_R_q { N { i0 Q } y1 } ⊢| 
+					∐ var_l◂_ 
+						∎|
+ 					∐. var_q◂{ qn L R }
+						$ { qn L } ⊢ qn_L,{ qn L }
+						_ref.i { i1 var_q◂{ qn L R } } ⊢ i1							
+						f_iq { N i1 qn_L i0 } ⊢|
+				∐.
+					∎ { N %[ 0r ] }
 			@.VAR_R # { N { i0 _ } { y1 lv1 } }
 				TV.lod i0 ⊢ { i0 v0 } 
 				$ v0 ⊢ 
@@ -3605,11 +3597,8 @@
 					f { N t◂{ y1 lv1 } y2 } ⊢|
 				∐ var_l◂lv .  
 					∎|
-				∐. var_q◂{ qn L _ };
-					∐ y1 ⊢ var◂p◂i1
-						f_lq { N %[ 1r ] i0 { qn L } { i1 lv1 } } ⊢| 
-					∐.
-						∎ { N %[ 0r ] }
+				∐. var_q◂{ qn L _ }
+					VAR_R_q { N { i0 { qn L } } y1 } ⊢| 	
 			@.f = EQ_dlt.b.f◂◂VAR 
 			@.f_lst = EQ_dlt.b.f_lst◂◂VAR
 			
@@ -3866,9 +3855,6 @@
 				∐ hp_im : c'
 				∐ stt_adt : { _r64 rt◂r'◂c' }
 				∐ dyn_adt : { dyn_p◂CPV r' r' }
-			@.rt_im c'
-				∐ rt_im : c' 
-				∐ rt_agl : { _r64 RP.t◂(rt_im◂c') }
 			
 			@.k_t = _ref◂k_p 
 			@.TP = RP.t◂k_t
@@ -5828,18 +5814,18 @@
 					∎ { n f_name◂s }
 			§ rf { f lc } 
 				$ f ⊢ 
-				∐ ast.grm.line◂{} .
+				∐ ast.grm.line◂{}
 					∎ { ast.grm.line◂{} ast.seq◂{ op_prs◂line_unv_k◂{} seq◂{ opc◂{ dlt_unv_k◂{} reg◂%[ ".o" ] RP.unt◂{} } lc } } }
-				∐ ast.grm.synt◂{} . 
+				∐ ast.grm.synt◂{} 
 					∎ { ast.grm.synt◂{} ast.seq◂{ op_prs◂synt_unv_k◂{} seq◂{ opc◂{ dlt_unv_k◂{} reg◂%[ ".o" ] RP.unt◂{} } lc } } }
-				∐. ast.grm.lex◂{} .
+				∐. ast.grm.lex◂{}
 					∎ { ast.grm.lex◂{} lc }
 			§ 
 				@.rle { { n f_n el go g m lc f o op_f } r }
 					$ r ⊢ 
 					∐ ast.grm.ptn_cut◂r . 
 						rle_cut { { n f_n el go g m lc f o } r } ⊢|
-					∐ ast.grm.ptn_seq◂{ p r } .
+					∐ ast.grm.ptn_seq◂{ p r }
 						rN n ⊢ { n r0 } 
 						$ r0 ⊢ r0,r0_0 
 						_inc n ⊢ n 
@@ -10506,7 +10492,7 @@
 							T.iug_axm { { v k } l } ⊢ { { v k } l }
 							_alc_i { tav { B n v k } } ⊢ { tav _ }
 							TAV.i { TAVl tav } ⊢ TAV  
-							∐ l ⊢ _cns◂{ t _nil◂{} } . 
+							∐ l ⊢ _cns◂{ t _nil◂{} }
 								f_T { { TAV s0 } t } ⊢ { { TAV s0 } p } 
 								∎ { { TAV s0 } RP.atm◂ast.stt_adt◂{ %[ 0r ] p } } 
 							∐. . 
@@ -13739,7 +13725,7 @@
 
 					^ _ ⊢ sx0 
 						`yasm -g dwarf2 -f elf64 SH.mdls.s -o out.o
-    				`gcc -pthread -lpthread -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O3 -o out.exe 
+    				`gcc -lpthread -pthread -Wall stub.c out.o -nostartfiles -no-pie -pg -g -O3 -o out.exe 
 						// 
 					_cd sx0 ⊢ _  
 					_emt_im.f◂◂"opxcc:compiled to out.exe" {} ⊢ {} 
