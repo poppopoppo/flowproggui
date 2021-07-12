@@ -478,3 +478,11 @@ t_var
 		
 		∐ var_ln : .. ⊢ t◂t_c 
 		∐ var_ln_
+
+		∐ dta : 
+		∐ imp : 
+		∐ ct_imp : 
+		∐ iv : { _r64 t◂_r64 } 
+		∐ var : v'
+		id = iv◂{ %[ 1r ] imp◂{ var◂%[ 0r ] var◂%[ 0r ] } }
+		

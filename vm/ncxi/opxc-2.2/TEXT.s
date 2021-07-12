@@ -169,10 +169,6 @@ alc_rcd_n: ; rdi=n ⊢ rax
 	mov rbx,QWORD [SS_RCD_TOP+8*rdi]
 	cmp rbx,0 
 	jz .L0 
-	jmp .L1
-.L0:	
-	mov rax,rdi 
-	call alc_rcd_h 
 .L1:
 	mov rax,QWORD [rbx]
 	mov QWORD [SS_RCD_TOP+8*rdi],rax
@@ -180,6 +176,10 @@ alc_rcd_n: ; rdi=n ⊢ rax
 	mov rdi,0x0001_0000_0000_0000
 	mov QWORD [rax],rdi
 	ret
+.L0:	
+	mov rax,rdi 
+	call alc_rcd_h 
+	jmp .L1
 
 alc_rcd_h: 
 	mov rbx,rax 
