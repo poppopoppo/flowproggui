@@ -165,6 +165,13 @@ pf_x_bc:
 	std
 	ret
 
+mlc_s8_sf:
+	mov rsi,1
+	xor rax,rax 
+	C_CALL_SF calloc
+	cmp rax,0 
+	jz err
+	ret
 alc_rcd_n: ; rdi=n ⊢ rax
 	mov rbx,QWORD [SS_RCD_TOP+8*rdi]
 	cmp rbx,0 

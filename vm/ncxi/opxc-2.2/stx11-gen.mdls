@@ -1496,7 +1496,7 @@
 				_inc i1 ⊢ i1 
 				lp { s es l i0 i1 } ⊢| 
 			∐. . 
-				_sts { es i1 c } ⊢ { es i1 _ } 
+				_sts { es i1 c } ⊢ { es i1 _ }
 				_inc i1 ⊢ i1 
 				lp { s es l i0 i1 } ⊢| 
 	§ f # s 
@@ -8297,30 +8297,30 @@
 			§ ia = _arr.Lc.i 
 			§ la = _arr.Lc.l 
 			§ xa = _arr.Lc.x
-			§ ov◂◂T # { V i } 
+			§ ov◂◂T { V i } 
 				o V ⊢ { Vl { r v } }
 				oa◂◂T { v i } ⊢ { vo a }
 				∎ { { Vl { r vo } } a }
-			§ iv◂◂T # { { Vl { r vo } } a }
+			§ iv◂◂T { { Vl { r vo } } a }
 				ia◂◂T { vo a } ⊢ { v i } 
 				i { Vl { r v } } ⊢ V 
 				∎ { V i }
-			§ lv◂◂T # { V i } 
+			§ lv◂◂T { V i } 
 				o V ⊢ { Vl { r v } }
 				la◂◂T { v i } ⊢ { v i a }
 				i { Vl { r v } } ⊢ V 
 				∎ { V i a }
-			§ xv◂◂T # { V i k } 
+			§ xv◂◂T { V i k } 
 				o V ⊢ { Vl { r v } }
 				xa◂◂T { v i k } ⊢ { v i a }
 				i { Vl { r v } } ⊢ V 
 				∎ { V i a }
-			§ len # RFV 
+			§ len RFV 
 				o RFV ⊢ { RFVl { rfb rfv } } 
 				_arr.len rfv ⊢ { rfv l } 
 				i { RFVl { rfb rfv } } ⊢ RFV 
 				∎ { RFV l } 
-			§ inc # { { i pl pi y po } RFV } 
+			§ inc { { i pl pi y po } RFV } 
 				o RFV ⊢ { RFVl { rfb rfv } } 
 				_push { { k◂{} i pl %[ 0r ] %[ 0r ] pi y po } rfv } ⊢ rfv 
 				i { RFVl { %[ CST.MAX ] rfv } } ⊢ RFV 
@@ -10894,12 +10894,8 @@
 			_inc l0 ⊢ l0 
 			_shl_im◂◂3r l0 ⊢ l0  
 			^ l,l0 ⊢ l,_,e 
-				`	mov rsi,1  
 				"\tmov rdi,0x" 1x' "\n" 
-				`	xor rax,rax 
-				(C_CALL_SF◂◂"calloc")
-				`	cmp rax,0 
-				`	jz err
+				`	call mlc_s8_sf
 				"\tmov rdi,(0x0001_0000_0000_0000+0x" 0x' ")\n"
 				`	mov QWORD [rax],rdi
 				//
@@ -12237,7 +12233,7 @@
 								`	mov rsi,QWORD [rdi]
 								`	sub rsi,rax 
 								`	mov QWORD [rdi],rsi
-								"\tlea SRC_REG,[rdi+8]\n"
+								`	lea SRC_REG,[rdi+8]
 								`	push rsi
 								//
 							asm.add_st_s8 { e0 s } ⊢ e0
