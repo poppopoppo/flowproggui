@@ -34,9 +34,14 @@
 ¶ _r8 = _[ 10r ] 
 ¶ _arr0 = _[ 2r ] 
 --¶ _arr_t◂t'◂k' = _arr0◂t'◂k'
-¶ _arr_x_t = _[ 11r ] 
+¶ _arr_x_t = _[ 11r ]
+¶ _ref_t = _[ 35r ] 
+¶ _nr = _[ 34r ] 
 ¶ _arr_x = _arr0◂_arr_x_t 
 ¶ _arr = _arr0◂{} 
+¶ _arr_ref = _arr0◂_ref_t 
+¶ _arr_nr = _arr0◂_nr 
+¶ _Arr = _arr_nr 
 ¶ _s8 = _arr◂_r8 
 ¶ _st = _[ 16r ] 
 ¶ _dmy = _[ 18r ]
@@ -1206,19 +1211,20 @@
 § _arr_len = _arr.len
 § _alc_i = _arr.i 
 § _alc_o = _arr.o
+¶ _p64 = _arr_ref
 §§ _ref 
   ¶ t k' 
-    ∐ t : _arr◂k'
+    ∐ t : _p64◂k'
   ¶ lc t',k' 
     ∐ lc : { _hp◂t' _hp◂k' _r64 } 
 	§ t_o # t◂a 
 		_hp.of a ⊢ { r ha }
 		_hp.ini {} ⊢ h 
-		$.[ k' . { _hp◂(_arr◂k') _hp◂k' } ] { ha h } ⊢ {  _ h }
+		$.[ k' . { _hp◂(_p64◂k') _hp◂k' } ] { ha h } ⊢ {  _ h }
 		∎ { h r }
 	§ t_i # { h r } 
 		_hp.ini {} ⊢ ha 
-		$.[ k' . { _hp◂(_arr◂k') _hp◂k' } ] { ha h } ⊢ { ha _ }
+		$.[ k' . { _hp◂(_p64◂k') _hp◂k' } ] { ha h } ⊢ { ha _ }
 		_hp.to { r ha } ⊢ a
 		∎ t◂a
   § alc_T◂◂N ## {} 
