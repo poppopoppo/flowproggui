@@ -962,8 +962,9 @@
 			∎ { lf◂%s0 S } 
 	§ mk_s8 # r 
 		len r ⊢ { r l }
-		_s8.mlc l ⊢ { l s }
+		_s8.mlc_nr l ⊢ { l s }
 		mk_s8_i { r { s %[ 0r ] } } ⊢ { r { s _ } }
+		_arr.of_nr s ⊢ s
 		∎ { r s }
 	§ @.to_s8_i { r S }
 		$ r ⊢ 
@@ -988,8 +989,9 @@
 			∎ S 
 	§ to_s8 # r 
 		len r ⊢ { r l }
-		_s8.mlc l ⊢ { l s }
+		_s8.mlc_nr l ⊢ { l s }
 		to_s8_i { r { s %[ 0r ] } } ⊢ { s _ }
+		_arr.of_nr s ⊢ s
 		∎ s
 	§ in_s8 # x 
 		to_s8 x ⊢ s 
@@ -1112,11 +1114,11 @@
 			0' //
 		∎ S 
 	∐. _nil◂{} . 
-		_s8.mlc l ⊢ { l sr } 
+		_s8.mlc_nr l ⊢ { l sr } 
 		∎ { sr %[ 0r ] }
 § s8_of_s8_lst # l 
-	s8_of_s8_lst_i { %[ 0r ] l } ⊢ { s n } 
-	∎ s 
+	s8_of_s8_lst_i { %[ 0r ] l } ⊢ { s _ } 
+	_arr.of_nr s ⊢|
 § @.assoc_E◂◂E { l k }
 	∐ l ⊢ _cns◂{ { k0 o0 } l } .
 		E { k k0 } ⊢ { { k k0 } b } 
@@ -1427,63 +1429,10 @@
 		∐. p_end◂a .
 			F { v a } ⊢|
 	∎∎
-§§ esc_s8 
-	§ @.lp { s es l i0 i1 }
-		∐ l'=i0' . 
-			∎ { s es l i1 }
-		∐. . 
-			_s8.l { s i0 } ⊢ { s i0 c } 
-			_inc i0 ⊢ i0 
-			∐ c'=chr.nl . 
-				_s8.s_C◂◂chr.slsh { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				_s8.s_C◂◂chr.n { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				lp { s es l i0 i1 } ⊢| 
-			∐ c'=chr.tab . 
-				_s8.s_C◂◂chr.slsh { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				_s8.s_C◂◂chr.t { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				lp { s es l i0 i1 } ⊢| 
-			∐ c'=chr.slsh . 
-				_s8.s_C◂◂chr.slsh { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				_s8.s_C◂◂chr.slsh { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				lp { s es l i0 i1 } ⊢| 
-			∐ c'=chr.dq . 
-				_s8.s_C◂◂chr.slsh { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				_s8.s_C◂◂chr.dq { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				lp { s es l i0 i1 } ⊢| 
-			∐ c'=0r . 
-				_s8.s_C◂◂chr.slsh { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				_s8.s_C◂◂chr.d_0 { es i1 } ⊢ { es i1 }
-				_inc i1 ⊢ i1 
-				lp { s es l i0 i1 } ⊢| 
-			∐. . 
-				_s8.s { es i1 c } ⊢ { es i1 _ }
-				_inc i1 ⊢ i1 
-				lp { s es l i0 i1 } ⊢| 
-	§ f # s 
-		_s8.len s ⊢ { s l } 
-		$ l ⊢ l,x 
-		_shl_im◂◂2r x ⊢ x 
-		_s8.mlc x ⊢ { x es0 } 
-		lp { s es0 l %[ 0r ] %[ 0r ] } ⊢ { s es0 l i1 }
-		_s8.mlc i1 ⊢ { i1 es1 } 
-		_pf_x ^ { { es1 %[ 0r ] } { es0 } } ⊢ { { es1 _ } _ }
-			0' //
-		∎ { s es1 }
-	∎∎
-§ mk_esc_s8 = esc_s8.f 
+
 §
 	@.stg_ltr ^=
 	∐. "\"" stg_ltr_seq ⊢ { {} s }
-		--rp8.to_s8 cl ⊢ s
 		∎ ‹ s ›
 	@.stg_ltr_seq ^=
 	∐ "\n" !| ⊢ { xx } 
@@ -4106,7 +4055,7 @@
 			-- 3 pf_x 
 			∐ 
 				T.nvl3 lv ⊢ { lv { yk yk1 yk2 } }
-				TT.mk_t { lv TT.lv.ct_imp◂{ TT.y◂TX.pf◂yk TT.lv.imp◂{ TT.y◂TX.cns2◂{ TX.q.cns2◂{ TX.s8◂{} TX.r64◂{} } yk1 } TT.lv.cns2◂{ TT.y◂TX.q.cns2◂{ TX.s8◂{} TX.r64◂{} } TT.y◂yk2 } } } } ⊢|			
+				TT.mk_t { lv TT.lv.ct_imp◂{ TT.y◂TX.pf◂yk TT.lv.imp◂{ TT.y◂TX.cns2◂{ TX.q.cns2◂{ TX.s8_nr◂{} TX.r64◂{} } yk1 } TT.lv.cns2◂{ TT.y◂TX.q.cns2◂{ TX.s8_nr◂{} TX.r64◂{} } TT.y◂yk2 } } } } ⊢|			
 				-- ∎ T.axl◂{ %[ 3r ] lv AX.ct_imp◂TX.pf◂%[ 0r ] AX.imp◂{ }}
 			-- 4 exn 
 			∐ 
@@ -10103,12 +10052,13 @@
       ∐. lf◂a . 
         to_s8_a { V a B } ⊢| 
     § mlc_buf L 
-			_s8.mlc L ⊢ { _ B } 
+			_s8.mlc_nr L ⊢ { _ B } 
 			∎ B 
 		§ to_s8 # { V e }
 			mlc_buf %[ BUF_SIZE ] ⊢ b
       to_s8_i { V e { b %[ 0r ] } } ⊢ { V { b l } }
-      _s8.rsz { b l } ⊢ { b _ } 
+      _arr.of_nr b ⊢ b 
+			_s8.rsz { b l } ⊢ { b _ } 
       ∎ { V b }
 		§ ini_buf # {} 
 			mlc_buf %[ BUF_SIZE ] ⊢ b 

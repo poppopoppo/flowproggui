@@ -43,6 +43,7 @@
 ¶ _arr_nr = _arr0◂_nr 
 ¶ _Arr = _arr_nr 
 ¶ _s8 = _arr◂_r8 
+¶ _s8_nr = _arr_nr◂_r8
 ¶ _st = _[ 16r ] 
 ¶ _dmy = _[ 18r ]
 ¶ _hp = _[ 19r ]
@@ -605,6 +606,26 @@
 			//
     _hp.to { r h } ⊢ a
    ∎ a
+	§ nr_of a 
+    _hp.of a ⊢ { r h } 
+		_hp.ini {} ⊢ h0
+		$.[ k' . { _hp◂(_arr◂k') _hp◂( _arr_nr◂k')} ] { h h0 } ⊢ { _ h }
+    !^ r ⊢ *r 
+    	`	mov rsi,QWORD [rax]
+			`	btr rsi,63
+			`	jc err_bc
+			`	shr rsi,32 
+			`	cmp rsi,0x2_0000 
+			`	jae err_alc_o
+			//
+    _hp.to { r h } ⊢ a
+   ∎ a
+	§ of_nr a 
+		_hp.of a ⊢ { r h0 } 
+		_hp.ini {} ⊢ h
+		$.[ k' . { _hp◂(_arr◂k') _hp◂( _arr_nr◂k')} ] { h h0 } ⊢ { h _ }
+    _hp.to { r h } ⊢ a
+   ∎ a
 	§§ s8 
 	§ cmp { s0 s1 }
   _id.s8 s0 ⊢ s0 
@@ -619,7 +640,7 @@
   $ m ⊢ _ 
   ∎ { s0 s1 z }
 	§ l # { s i } 
-  _id.s8 s ⊢ s 
+	$.[ t' . _arr0◂t'◂_r8 ] s ⊢ s
   chk_bc { s i } ⊢ { s i } 
 	_hp.of s ⊢ { r h } 
   !^ r,i ⊢ *r,*i,c 
@@ -628,7 +649,7 @@
   _hp.to { r h } ⊢ s 
   ∎ { s i c }
 	§ l64 # { s i }
-  _id.s8 s ⊢ s 
+	$.[ t' . _arr0◂t'◂_r8 ] s ⊢ s
   _hp.of s ⊢ { r h } 
   !^ r,i ⊢ *r,*i,c 
     `	mov esi,DWORD [rax]
@@ -640,7 +661,7 @@
   _hp.to { r h } ⊢ s 
   ∎ { s i c }		
 § s_C◂◂C # { s i }
-  _id.s8 s ⊢ s 
+	$.[ t' . _arr0◂t'◂_r8 ] s ⊢ s
   _hp.of s ⊢ { r h } 
   !^ r,i ⊢ *r,*i 
     `	mov esi,DWORD [rax]
@@ -651,7 +672,7 @@
   _hp.to { r h } ⊢ s 
   ∎ { s i }
 § s # { s i c }
-  _id.s8 s ⊢ s 
+	$.[ t' . _arr0◂t'◂_r8 ] s ⊢ s
   _hp.of s ⊢ { r h } 
   !^ r,i,c ⊢ *r,*i,*c 
     `	mov edx,DWORD [rax]
@@ -705,7 +726,8 @@
     ` mov rdi,rax 
     //
   ∎ { s h }
-§ mlc l 
+
+§ mlc0 # l 
   $ l ⊢ l,l0 
   !^ l0 ⊢ m 
     ` mov rdi,rax 
@@ -721,10 +743,19 @@
 		`	add rdi,rsi
 		`	mov QWORD [rax],rdi 
     // 
-  _hp.ini {} ⊢ h 
-  _id.hp.s8 h ⊢ h 
-  _hp.to { m h } ⊢ s 
-  ∎ { l s }
+  ∎ { l m }
+	§ mlc l 
+		mlc0 l ⊢ { l m }
+	  _hp.ini {} ⊢ h 
+	  _id.hp.s8 h ⊢ h 
+	  _hp.to { m h } ⊢ s
+		∎ { l s } 
+	§ mlc_nr l 
+		mlc0 l ⊢ { l m }
+	  _hp.ini {} ⊢ h 
+	  $.[ . _hp◂(_arr_nr◂_r8) ] h ⊢ h 
+	  _hp.to { m h } ⊢ s
+		∎ { l s } 
 	∎∎
   § o # { a i } 
     chk { a i } ⊢ { a l i } 
@@ -1901,7 +1932,7 @@
   ¶§ f0 = r64
   § s8 s 
     emt_cst◂◂"\"" {} ⊢ {} 
-    _id.s8 s ⊢ s
+    $.[ t' . _arr0◂t'◂_r8 ] s ⊢ s
     _hp.of s ⊢ { r h }
     !^ r ⊢ *r 
       `	mov esi,DWORD [rax]
@@ -2024,6 +2055,17 @@
     $ r ⊢ _ 
     ∎ {}
   ¶§ f = s8
+	§ s8_nr s 
+    $.[ . _s8_nr ] s ⊢ s 
+    _hp.of s ⊢ { r h } 
+    hp h ⊢ {}
+    !^ r ⊢ *r 
+      ` mov rdi,rax
+			(C_CALL_SF◂◂"free") 
+      // 
+    $ r ⊢ _ 
+    ∎ {}
+  ¶§ f = s8_nr
   § st = _seq◂◂{ _id.st_s8 _seq◂◂{ _hp.of _seq◂◂{ _par◂◂{ r64 hp } _ctr◂◂c2 } } }
   ¶§ f = st
   
