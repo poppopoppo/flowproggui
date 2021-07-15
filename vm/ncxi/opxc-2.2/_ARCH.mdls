@@ -209,6 +209,9 @@
   § if_eq◂◂{ { C X } a b } = if◂◂{ eq◂◂{ C X } a b }
   § op = _[ 0x00010014r ] 
   § tj = _[ 0x0001002br ] 
+  §§ _arr
+		§ len = _[ 0x0001002br ] 
+		∎∎
 	§§ op1 
     § bsr◂◂X = (op◂◂3r)◂◂{ X 0r }
     § flo2◂◂X = (op◂◂4r)◂◂{ X 0r }
@@ -1199,11 +1202,13 @@
 			i { V s } ⊢ { v i }
       map_r_i◂◂F { k v i } ⊢| 
     ∐. .
+			of_nr v ⊢ v
       ∎ { k v }
   § map_r◂◂F # { k v }
     len v ⊢ { v l }
-    map_r_i◂◂F { k v l } ⊢|
-	§ @.map_r_e_i◂◂F { { v r0 h0 r1 h1 l } i } 
+    nr_of v ⊢ v 
+		map_r_i◂◂F { k v l } ⊢|
+	§ @.map_r_e_i◂◂F { { v r0 h0 r1 h1 l } i }
     ∐ i'<>l' .
 			_cnc_lod r0 ⊢ { r0 q0 } 
 			_cnc_add { r0 h0 } ⊢ { r0 h0 }
@@ -1252,7 +1257,10 @@
 				$ r0 ⊢ r0,r0t 
 				_add_im◂◂8r r0 ⊢ r0
 				map_r_e_ir◂◂F { { v r0 h0 r1 h1 l } %[ 0r ] } ⊢ v
-				_hp.to { r0t ha0 } ⊢ _ 
+				!^ r0t ⊢ *r0t 
+					`	mov rdi,0x0001_0000_0000_0000 
+					`	sub QWORD [rax],rdi 
+					//
 				∎ { v a1 }
 			∐.
 				$ c ⊢ _
@@ -1724,7 +1732,7 @@
   _id.st_s8 s ⊢ s 
   _hp.of s ⊢ { r h } 
   !^ r ⊢ *r,l 
-    ` mov rdi,QWORD [rax-8]
+    ` mov edi,DWORD [rax-8]
     //
   _hp.to { r h } ⊢ s 
   ∎ { s l }
@@ -1736,7 +1744,7 @@
   _hp.of b ⊢ { r h }
   !^ r ⊢ *r 
     ` mov rdi,rax 
-    ` mov rsi,QWORD [rax-8]
+    ` mov esi,DWORD [rax-8]
     (C_CALL◂◂"fw") 
     //
   _hp.to { r h } ⊢ _ 
@@ -1913,7 +1921,7 @@
   _hp.rpc s ⊢ { s rs }
   !^ i,rs,b,l ⊢ i,x 
     ` lea rdi,[rdi+8+rax]
-    ` mov rcx,QWORD [rsi-8] 
+    ` mov ecx,DWORD [rsi-8] 
     ` mov rbx,rax
     ` add rax,rcx 
     ` cmp rax,rdx
@@ -1928,7 +1936,7 @@
     ` mov rdi,0
     `.L1:
     //
-  ∐ x'=0r .
+  ∐ x'=0r
     ∎ { s i ‹› }
   ∐. .
     ∎ { s i ‹ {} › }
