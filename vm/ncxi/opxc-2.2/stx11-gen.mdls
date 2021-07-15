@@ -5300,9 +5300,9 @@
 						$ { al lv APV } ⊢ E 
 						∎ { E RP.atm◂ast.k_ap◂{ p { vl t } } t0 }
 				∐ ast.k_arr◂v .
-					_arr.std.rpc v ⊢ { _ v } 
 					$ E ⊢ { al lv APV }
 					T.nvl lv ⊢ { lv y }
+					_arr.std.rpc v ⊢ { _ v } 
 					_arr.map_r◂◂arr { { { al lv APV } y } v } ⊢ { { { al lv APV } y } v }
 					TX.lv.arr { lv y } ⊢ { lv y } 
 					∎ { { al lv APV } RP.atm◂ast.k_arr◂v y }
@@ -10057,17 +10057,14 @@
 		§ to_s8 # { V e }
 			mlc_buf %[ BUF_SIZE ] ⊢ b
       to_s8_i { V e { b %[ 0r ] } } ⊢ { V { b l } }
-      _arr.of_nr b ⊢ b 
 			_s8.rsz { b l } ⊢ { b _ } 
+      _arr.of_nr b ⊢ b 
       ∎ { V b }
 		§ ini_buf # {} 
 			mlc_buf %[ BUF_SIZE ] ⊢ b 
 			∎ { b %[ 0r ] }
 		§ blt_buf # { V B e }
 			to_s8_i { V e B } ⊢| 
-		§ of_buf # B 
-			_s8.rsz B ⊢ { b _ }
-			∎ of_s8◂b 			
 		
     ∎∎
 	§§ SCM
