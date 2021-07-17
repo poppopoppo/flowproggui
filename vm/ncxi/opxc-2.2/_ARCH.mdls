@@ -259,9 +259,11 @@
 § _cnc_sto_ctr = _[ 17r ] 
 § _cnc_lod = _cnc_lod_ctr◂◂(\a . { a {} }) 
 § _cnc_sto = _cnc_sto_ctr◂◂(\a . { a {} }) 
-§ A _ 
-  ∎ {} 
-
+§ _cnc_rpc = _[ 30r ]
+§ _cnc_rpc # r 
+	$ r ⊢ r,rt 
+	_cnc_rpc rt ⊢ q 
+	∎ { r q }
 -- non-atomic
 §§ _swp 
 	§ L = \x . x  
@@ -275,6 +277,10 @@
 § _cnc_lod_hp # { r h } 
   _cnc_lod r ⊢ { r k }  
   _eq_hp { k h } ⊢ { k h }
+  ∎ { r h k }
+§ _cnc_rpc_hp # { r h }
+	_cnc_rpc r ⊢ { r k }
+	_eq_hp { k h } ⊢ { k h }
   ∎ { r h k }
 § _cnc_siz◂◂F = _cnc_siz0◂◂{ F _ct.hp }
 
@@ -954,9 +960,7 @@
 			∎ {}
     § @.rpc_i { { r0 h r1 } i } 
       ∐ i'<>0r
-        _cnc_lod_hp { r0 h } ⊢ { r0 h q0 }
-        $ q0 ⊢ q0,q1 
-        _cnc_sto { r0 q0 } ⊢ r0
+        _cnc_rpc_hp { r0 h } ⊢ { r0 h q1 }
         _cnc_sto { r1 q1 } ⊢ r1
         _cnc_add { r0 h } ⊢ { r0 h }
         _cnc_add { r1 h } ⊢ { r1 h }
@@ -1096,6 +1100,15 @@
   		` jge err_alc_o 
 			// 
 		∎ { { r h } i }
+	§ chk_bc # { a i }
+		_hp.of a ⊢ { r h } 
+		!^ r,i ⊢ *r,*i 
+			`	mov esi,DWORD [rax]
+			` cmp rdi,rsi 
+  		` jge err_alc_o 
+			// 
+		_hp.to { r h } ⊢ a
+		∎ { a i }
   § o # { a i } 
     chk { a i } ⊢ { { ra ha } i }
 		_hp.to { ra ha } ⊢ a 
@@ -1174,11 +1187,17 @@
       ∎ { a i k1 }
     § dlt = '[ _[] : a',b',k',t' . (lc◂{ a' b' }◂k'◂t')→{} ]
     ∎∎
-	§ l # { a i }
-    o { a i } ⊢ { a k }
-    $ k ⊢ k,k0 
-    i { a k } ⊢ { a i } 
-    ∎ { a i k0 }
+	§ l { a i }
+		chk_bc { a i } ⊢ { a i }
+		_hp.ini {} ⊢ h 
+    $.[ k',t' . { _hp◂k' _arr0◂t'◂k' } ] { h a } ⊢ { h a } 
+    $ i ⊢ i,b 
+    $ h ⊢ h,h0 
+    ofs_arr { h0 b } ⊢ b 
+    _hp.rpc a ⊢ { a ra } 
+    _add { ra b } ⊢ { ra _ } 
+    _cnc_rpc_hp { ra h } ⊢ { ra _ k }
+    ∎ { a i k }
   § u # { a i k }
     o { a i } ⊢ { a _ }
     i { a k } ⊢ { a i } 
@@ -1209,7 +1228,7 @@
     nr_of v ⊢ v 
 		map_r_i◂◂F { k v l } ⊢|
 	§ @.map_r_e_i◂◂F { { v r0 h0 r1 h1 l } i }
-    ∐ i'<>l' .
+    ∐ i'<>l'
 			_cnc_lod r0 ⊢ { r0 q0 } 
 			_cnc_add { r0 h0 } ⊢ { r0 h0 }
 			F { v q0 } ⊢ { v q1 } 
@@ -1222,9 +1241,7 @@
       ∎ v
 		§ @.map_r_e_ir◂◂F { { v r0 h0 r1 h1 l } i } 
     ∐ i'<>l' .
-			_cnc_lod r0 ⊢ { r0 q0 } 
-			$ q0 ⊢ q0,q1 
-			_cnc_sto { r0 q0 } ⊢ r0 
+			_cnc_rpc r0 ⊢ { r0 q1 }
 			_cnc_add { r0 h0 } ⊢ { r0 h0 }
 			F { v q1 } ⊢ { v q1 } 
       _eq_hp { q1 h1 } ⊢ { q1 h1 }
@@ -1744,7 +1761,6 @@
   _hp.of b ⊢ { r h }
   !^ r ⊢ *r 
     ` mov rdi,rax 
-    --` mov esi,DWORD [rax-8]
 		` mov esi,DWORD [rax]
     ` lea rdi,[rax+8] 
     (C_CALL◂◂"fw") 
@@ -1759,7 +1775,6 @@
   !^ r0,r1 ⊢ *m0,*m1
     ` mov rdx,QWORD [rdi]
     ` lea rsi,[rdi+8]
-    --` mov rdi,rax
     ` lea rdi,[rax+8]
     (C_CALL_SF◂◂"emt_s8_to") 
     ` cmp rax,-1
