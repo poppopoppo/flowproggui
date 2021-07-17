@@ -1732,7 +1732,7 @@
   _id.st_s8 s ⊢ s 
   _hp.of s ⊢ { r h } 
   !^ r ⊢ *r,l 
-    ` mov edi,DWORD [rax-8]
+		` mov edi,DWORD [rax]
     //
   _hp.to { r h } ⊢ s 
   ∎ { s l }
@@ -1744,7 +1744,9 @@
   _hp.of b ⊢ { r h }
   !^ r ⊢ *r 
     ` mov rdi,rax 
-    ` mov esi,DWORD [rax-8]
+    --` mov esi,DWORD [rax-8]
+		` mov esi,DWORD [rax]
+    ` lea rdi,[rax+8] 
     (C_CALL◂◂"fw") 
     //
   _hp.to { r h } ⊢ _ 
@@ -1757,7 +1759,8 @@
   !^ r0,r1 ⊢ *m0,*m1
     ` mov rdx,QWORD [rdi]
     ` lea rsi,[rdi+8]
-    ` mov rdi,rax
+    --` mov rdi,rax
+    ` lea rdi,[rax+8]
     (C_CALL_SF◂◂"emt_s8_to") 
     ` cmp rax,-1
 		`	jz err_cls
@@ -1921,7 +1924,9 @@
   _hp.rpc s ⊢ { s rs }
   !^ i,rs,b,l ⊢ i,x 
     ` lea rdi,[rdi+8+rax]
-    ` mov ecx,DWORD [rsi-8] 
+    --` mov ecx,DWORD [rsi-8]
+		` mov ecx,DWORD [rsi] 
+    `	add rsi,8  
     ` mov rbx,rax
     ` add rax,rcx 
     ` cmp rax,rdx
