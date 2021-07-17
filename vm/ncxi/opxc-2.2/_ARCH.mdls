@@ -1070,7 +1070,7 @@
 	¶§ nr_of = s8.nr_of
 	¶§ nr_of = std.nr_of
 	§ of_nr a 
-		_hp.of a ⊢ { r h0 } 
+		_hp.of a ⊢ { r h0 }
 		_hp.ini {} ⊢ h
 		$.[ k' . { _hp◂(_arr◂k') _hp◂( _arr_nr◂k')} ] { h h0 } ⊢ { h _ }
     _hp.to { r h } ⊢ a
@@ -1823,11 +1823,8 @@
     //
   $ d ⊢ _ 
   ∎ r
-§ _lod_q # { a i } 
-  _alc_o { a i } ⊢ { a k }
-  $ k ⊢ k,k0 
-  _alc_i { a k } ⊢ { a i } 
-  ∎ { a i k0 }
+§ _lod_q = _arr.l 
+
 § _ila1◂◂S # x 
   !^ x ⊢ x 
     S // 
