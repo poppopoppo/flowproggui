@@ -2356,3 +2356,6 @@
 		∐. _none◂{}
 	∎∎
 -/
+§ _cmp_s8 = _arr.s8.cmp
+§ _s8_len = _arr.s8.len
+§ _mlc_s8 = _arr.s8.mlc

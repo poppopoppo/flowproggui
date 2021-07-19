@@ -663,6 +663,11 @@ err_dyn_rpc:
 	mov rax,0xffef_bbbc
 	mov QWORD [err_n],rax
 	jmp err
+err_st_lb:
+ 	sub rdi,rax 
+	or rdi,0xdddd
+	mov QWORD [err_n],rdi
+	jmp err
 err: 
 	mov rdi,fmt_err_line
 	mov rsi,QWORD [err_n]
