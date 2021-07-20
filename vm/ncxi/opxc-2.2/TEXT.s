@@ -625,7 +625,8 @@ err_clc_o:
 	mov QWORD [err_n],rax
 	jmp err 
 err_ref_o:
-	mov rbx,0xe0cd_0000_0000_0000
+	;mov rax,QWORD [rax]
+	mov rbx,0x0000_0000_0000_e0cd
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 

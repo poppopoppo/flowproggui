@@ -1209,6 +1209,18 @@
   § itr_r◂◂F # { k v }
     len v ⊢ { v l }
     itr_r_i◂◂F { k v l } ⊢|
+	§ @.itr_r_i_i◂◂F { k v i }
+    ∐ i'<>0r .
+      _dec i ⊢ i 
+      l { v i } ⊢ { v i s }
+      $ i ⊢ i,i0 
+			F { k i0 s } ⊢ k 
+      itr_r_i_i◂◂F { k v i } ⊢| 
+    ∐. .
+      ∎ { k v }
+  § itr_r_i◂◂F # { k v }
+    len v ⊢ { v l }
+    itr_r_i_i◂◂F { k v l } ⊢|
 	§ @.map_r_i◂◂F { k v i }
     ∐ i'<>0r .
       _dec i ⊢ i 
