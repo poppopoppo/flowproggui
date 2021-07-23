@@ -8341,18 +8341,17 @@
 					∐ ast.mtc_id◂{ p sp } 
 						ip_m.f { pd p sp } ⊢ { pd c0 c1 } 
 						mtc { pd lm } ⊢ lm 
-						∎ mcp_k◂{ mop_k◂{ c0 c1 pc_id◂{} } lm mcn_k◂{} } 
+						∎ mcs_k◂{ mop_k◂{ c0 c1 pc_id◂{} } lm } 
 					∐. ast.mtc_test◂{ mt v0 v1 } . 
 						ip_m.f_t { pd v0 v1 } ⊢ { pd c } 
 						mtc { pd lm } ⊢ lm0 
-						$ mcn_k◂{} ⊢ lm1
 						$ mt ⊢ 
 						∐ ast.test_eq◂{} . 
-							∎ mcp_k◂{ mt_e_k◂c lm0 lm1 }
+							∎ mcs_k◂{ mt_e_k◂c lm0 }
 						∐ ast.test_neq◂{} . 
-							∎ mcp_k◂{ mt_ne_k◂c lm0 lm1 }
+							∎ mcs_k◂{ mt_ne_k◂c lm0 }
 						∐. ast.test_cmp◂{} . 
-							∎ mcp_k◂{ mt_le_k◂c lm0 lm1 }
+							∎ mcs_k◂{ mt_le_k◂c lm0 }
 				∐. ast.na_p◂{ t lm0 lm1 } . 
 					$ t ⊢ 
 					∐ ast.mtc_id◂{ p sp } . 
