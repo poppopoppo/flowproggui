@@ -4395,6 +4395,7 @@
 		§ mcs = 0x0001002dr
 		§ moi = 0x0001002er 
 		§ mcb = 0x0001002fr 
+		§ mcr = 0x00010030r 
 	§ slv { lv i }
 		$ i ⊢ i,i0 
 		_shr_im◂◂16r i0 ⊢ t 
@@ -4815,19 +4816,24 @@
 					∎ y
 				-- moi 
 				∐ 
-					T.nvl4 lv ⊢ { lv { yi0 yi1 yi2 yi3 } }
+					T.nvl2 lv ⊢ { lv { yi2 yi3 } }
 					T.nvl2 lv ⊢ { lv { ys ys0 } }
 					T.nvl2 lv ⊢ { lv { yd yd0 } }
 					T.nvl lv ⊢ { lv yt }
-					TX.lv.ct_imp { lv { TX.t_ctr◂{ TX.cns2◂{ yi1 yd } TX.cns2◂{ yi0 ys } yt } TX.t_mop◂{ TX.cns2◂{ yi2 ys0 } TX.cns2◂{ yi3 yd0 } } } } ⊢ { _ y }
+					TX.lv.ct_imp { lv { TX.t_ctr◂{ yd ys yt } TX.t_mop◂{ TX.cns2◂{ yi2 ys0 } TX.cns2◂{ yi3 yd0 } } } } ⊢ { _ y }
 					∎ y
-			-- mcb 
-			∐ 
-				T.nvl3 lv ⊢ { lv { y0 y0t y0s } }
-				T.nvl3 lv ⊢ { lv { y2 y2t y2s } }
-				TX.lv.ct_imp { lv { TX.cns2◂{ TX.t_mtc◂{ y0 y2 } TX.t_mtc◂{ y0t y2t } } TX.t_mtc◂{ y0s y2s } } } ⊢ { _ y }
-				∎ y
-			
+				-- mcb 
+				∐ 
+					T.nvl3 lv ⊢ { lv { y0 y0t y0s } }
+					T.nvl3 lv ⊢ { lv { y2 y2t y2s } }
+					TX.lv.ct_imp { lv { TX.cns2◂{ TX.t_mtc◂{ y0 y2 } TX.t_mtc◂{ y0t y2t } } TX.t_mtc◂{ y0s y2s } } } ⊢ { _ y }
+					∎ y
+					-- mcr
+				∐ 
+					T.nvl2 lv ⊢ { lv { ys ys0 } }
+					T.nvl2 lv ⊢ { lv { yd yd0 } }
+					TX.lv.ct_imp { lv { TX.t_ctr_rev◂{ ys yd } TX.t_mop◂{ ys0 yd0 } } } ⊢ { _ y }
+					∎ y
 				∐.
 					∎|
 			∐. 
@@ -6081,12 +6087,13 @@
 		§ dlt_ap_id◂{} = seq_k◂{ pr0◂{} seq_k◂{ id_par◂RP.atm◂ast.k_unv◂%[ UNV.id.dlt ] pr1◂{} } } 
 		§ sqc_k◂{ c0 c1 } = app_ax_pp◂{ %[ EX.sqc ] RP.cns2◂{ c0 c1 } }
 		§ mcn_k◂{} = app_ax_pp◂{ %[ EX.mcn ] RP.unt◂{} }
-		§ mcp_k◂{ c mt mf } = app_ax_pp◂{ %[ EX.mcp ] RP.cns3◂{ c mt mf } }
 		§ mcb_k◂{ mt mf } = app_ax_pp◂{ %[ EX.mcb ] RP.cns2◂{ mt mf } }
+		§ mcp_k◂{ c mt mf } = app_ax_pp◂{ %[ EX.mcp ] RP.cns3◂{ c mt mf } }
 		§ mcs_k◂{ c mt } = app_ax_pp◂{ %[ EX.mcs ] RP.cns2◂{ c mt } }
 		§ moo_k◂o = app_ax_pp◂{ %[ EX.moo ] o }
 		§ oom_k◂m = app_ax_ap◂{ %[ EX.oom ] m }
 		§ mop_k◂{ c0 c1 c2 } = app_ax_pp◂{ %[ EX.mop ] RP.cns3◂{ c0 c1 c2 } }
+		§ mcr_k◂c = app_ax_pp◂{ %[ EX.mcr ] c }
 		§ moi_k◂c = app_ax_pp◂{ %[ EX.moi ] c }
 		§ mt_e_unv_k◂{} = k_unv◂%[ UNV.id.mt_e ]
 		§ mt_ne_unv_k◂{} = k_unv◂%[ UNV.id.mt_ne ]
@@ -8341,7 +8348,7 @@
 					∐ ast.mtc_id◂{ p sp } 
 						ip_m.f { pd p sp } ⊢ { pd c0 c1 } 
 						mtc { pd lm } ⊢ lm 
-						∎ mcs_k◂{ mop_k◂{ c0 c1 pc_id◂{} } lm } 
+						∎ mcs_k◂{ mcr_k◂c0 mcs_k◂{ moi_k◂c1 lm } } 
 					∐. ast.mtc_test◂{ mt v0 v1 } . 
 						ip_m.f_t { pd v0 v1 } ⊢ { pd c } 
 						mtc { pd lm } ⊢ lm0 
@@ -8359,7 +8366,7 @@
 						ip_m.f { pd p sp } ⊢ { pd c0 c1 } 
 						mtc { pd lm0 } ⊢ lm0 
 						mtc { pd0 lm1 } ⊢ lm1
-						∎ mcp_k◂{ mop_k◂{ c0 c1 pc_id◂{} } lm0 lm1 }
+						∎ mcb_k◂{ mcs_k◂{ mcr_k◂c0 mcs_k◂{ moi_k◂c1 lm0 } } lm1 }
 					∐. ast.mtc_test◂{ mt v0 v1 } . 
 						ip_m.f_t { pd v0 v1 } ⊢ { pd c } 
 						$ pd ⊢ pd,pd0 
@@ -8409,6 +8416,9 @@
 						∐ a'=EX.moi 
 							ctr_of mc ⊢ c
 							∎ nm_m◂{ mop◂c p1 }
+						∐ a'=EX.mcr
+							ctr_of mc ⊢ c
+							∎ nm_m◂{ mcr◂c p1 }
 						∐. a'=EX.mt; 
 							∐ mc ⊢ RP.rcd◂_cns◂{ t _cns◂{ mc _nil◂{} } }; t ⊢ RP.atm◂ast.k_op_axm◂{ i _nil◂{} _ }
 								ctr_of mc ⊢ mc
@@ -9100,7 +9110,7 @@
 					$ RP.atm◂ast.k_ctr◂{ i v } ⊢ c
 					$ RP.atm◂ast.k_ctr◂{ i0 v0 } ⊢ c0
 					$ app_k◂{ unv_k◂%[ UNV.id.emt_mo ] RP.cns2◂{ RP.atm◂ast.k_s8◂rp8.of_s8◂w c0 } } ⊢ m 
-					$ mcp_k◂{ mop_k◂{ pc_u0◂{} c pc_u1◂{} } m mf } ⊢ m 
+					$ mcb_k◂{ mcs_k◂{ mcr_k◂pc_u0◂{} mcs_k◂{ moi_k◂c mcs_k◂{ mcr_k◂pc_u1◂{} m } } } mf } ⊢ m
 					∎ m
 				∐. _nil◂{} .
 					∎ mcn_k◂{}
