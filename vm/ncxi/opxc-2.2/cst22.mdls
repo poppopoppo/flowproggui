@@ -224,10 +224,12 @@
 § f14 { { v0 v1 } i }
   _dec i ⊢ i 
   ∎ { { v0 v1 } i }
+-\
 § f15 { v w } 
   _oom◂◂(_mcp◂◂{ _mt_le◂◂ic _moo◂◂f13 _moo◂◂f14 }) { { v w } %[ 2r ] } ⊢ r 
   _emt r ⊢ _
   ∎ {}
+-/
 § f16 { x y } 
   ∐ x ⊢ _cns◂{ a b } . 
     ∎|  
@@ -467,6 +469,9 @@
 § N = 100000r
 § test◂◂F # v 
   loop◂◂F { %[ N ] v } ⊢|
+§ test_n◂◂F # { v n } 
+  loop◂◂F { n v } ⊢|
+
 § l0 # x 
   _emt.f x ⊢|
 § m11 _ 
@@ -476,6 +481,9 @@
   test◂◂_emt %[ 10r ] ⊢ _ 
   --test◂◂_emt.f %[ 10r ] ⊢ _ 
   ∎ {} 
+§ m13_n _ 
+	test_n◂◂_emt { %[ 10r ] %[ 100000r ] } ⊢ _ 
+	∎ {}
 § m14 _ 
   test◂◂_emt %[ "HELLO WORLD!!" ] ⊢ _ 
   ∎ {} 
@@ -830,4 +838,27 @@
 	---_emt v ⊢ v 
 	f0 ‹ v › ⊢ v 
 	_emt v ⊢ v 
+	∎ {} 
+§ f1 # { v a }
+	_inc a ⊢ a 
+	∎ { v %[ "jjf" ] }
+§ m54 _ 
+	_mk_arr { %[ 2r ] %[ 99r ] } ⊢ { _ _ a }
+	--_emt a ⊢ a 
+	$ a ⊢ a,a0
+	_arr.map_r_e◂◂f1 { {} a } ⊢ { {} a }
+	_arr.len a ⊢ { a l }
+	_emt l ⊢ _
+	_emt a ⊢ _ 
+	∎ {} 
+§ @.f2 { { d l } i }
+	∐ i'=0x1000r 
+		∎ l 
+	∐.
+		_inc i ⊢ i 
+		$ d ⊢ d,d0 
+		f2 { { d ⟦ d0 < l ⟧ } i } ⊢|
+§ m55 _ 
+	f2 { { ⟦ %[ 3r ] %[ 44r ] ⟧ ⟦⟧ } %[ 0r ] } ⊢ l 
+	$ l ⊢ _ 
 	∎ {} 

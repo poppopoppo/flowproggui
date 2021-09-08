@@ -485,4 +485,5 @@ t_var
 		∐ iv : { _r64 t◂_r64 } 
 		∐ var : v'
 		id = iv◂{ %[ 1r ] imp◂{ var◂%[ 0r ] var◂%[ 0r ] } }
+		$ %[ {+ "ff" "fg" "000" } ] ⊢ a
 		

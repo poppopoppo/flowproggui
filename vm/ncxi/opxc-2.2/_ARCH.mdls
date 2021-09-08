@@ -1236,7 +1236,7 @@
       map_r_e_i◂◂F { { v r0 h0 r1 h1 l } i } ⊢|
     ∐. .
       ∎ v
-		§ @.map_r_e_ir◂◂F { { v r0 h0 r1 h1 l } i } 
+	§ @.map_r_e_ir◂◂F { { v r0 h0 r1 h1 l } i } 
     ∐ i'<>l' .
 			_cnc_rpc r0 ⊢ { r0 q1 }
 			_cnc_add { r0 h0 } ⊢ { r0 h0 }
@@ -1245,7 +1245,7 @@
 			_cnc_sto { r1 q1 } ⊢ r1
       _cnc_add { r1 h1 } ⊢ { r1 h1 }
       _inc i ⊢ i 
-      map_r_e_i◂◂F { { v r0 h0 r1 h1 l } i } ⊢|
+      map_r_e_ir◂◂F { { v r0 h0 r1 h1 l } i } ⊢|
     ∐. .
       ∎ v
     § map_r_e◂◂F { v a } 
@@ -1265,11 +1265,12 @@
   	 	 	`	mov rdi,QWORD [rax]
 				`	shr rdi,32
 				`	sub rdi,0x1_0000
-			//
-			∐ 1r=<c' 
+				//
+			∐ 0r<>c' 
 				$ c ⊢ _ 
 				$ r0 ⊢ r0,r0t 
 				_add_im◂◂8r r0 ⊢ r0
+				_add_im◂◂8r r1 ⊢ r1
 				map_r_e_ir◂◂F { { v r0 h0 r1 h1 l } %[ 0r ] } ⊢ v
 				!^ r0t ⊢ *r0t 
 					`	mov rdi,0x0001_0000_0000_0000 
@@ -1278,9 +1279,9 @@
 				∎ { v a1 }
 			∐.
 				$ c ⊢ _
-				_add_im◂◂8r r1 ⊢ r1
   	    $ r0 ⊢ r0,r0t 
 				_add_im◂◂8r r0 ⊢ r0
+				_add_im◂◂8r r1 ⊢ r1
 				map_r_e_i◂◂F { { v r0 h0 r1 h1 l } %[ 0r ] } ⊢ v
   	    free r0t ⊢ {} 
 				∎ { v a1 }
@@ -2069,22 +2070,30 @@
   § ref ## p
     $.[ k' . _ref.t◂k' ] p ⊢ p
     emt_cst◂◂"*[ " {} ⊢ {} 
-    _ref.lod_hd p ⊢ { p h } 
-    !^ h ⊢ *h,b 
+    --_ref.lod_hd p ⊢ { p h } 
+    _ref.t_o p ⊢ { hp rp } 
+		!^ rp ⊢ *rp,b 
       ` xor rdi,rdi 
-      ` bt rax,31 
+      ` bt QWORD [rax],31 
       ` setc dil
       //
-    r640 h ⊢ h
-    ∐ b'<>0r .
+    r640 rp ⊢ rp
+    --∐ b'<>0r 
+			_ref.t_i { hp rp } ⊢ p
       emt_cst◂◂" | @ ]" {} ⊢ {} 
       ∎ p
-    ∐. .
+    -\
+		∐. .
       emt_cst◂◂" | " {} ⊢ {} 
-      _ref.f◂◂ref_i { {} p } ⊢ { {} p } 
+      --_ref.f◂◂ref_i { {} p } ⊢ { {} p } 
+			!^ rp ⊢ *rp 
+      	` btr QWORD [rax],31
+      	//
+			_ref.t_i { hp rp } ⊢ p
       emt_cst◂◂" ]" {} ⊢ {} 
       ∎ p
-  ¶§ f0 = ref
+  -/
+	¶§ f0 = ref
   ¶§ f0 = _arr.emt_lc
   § lst l 
     $ l ⊢ 

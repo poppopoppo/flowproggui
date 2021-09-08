@@ -328,11 +328,12 @@ rpc_dyn_adt: ; rax=i rdi=d
 	and rax,0xffff 
 	ret
 .L1: 
-	mov rsi,0x0001_ffff_0000_0000
+	mov rsi,0x0000_3fff_0000_0000
 	add QWORD [rdi],rsi
 	jc err_dyn_rpc
 	mov rsi,0x1_0000_ffff 
 	and rax,rsi
+	add rax,0x3_0000
 	ret
 mm32: ; rdi=s  
 	mov esi,DWORD [rdi]
