@@ -862,3 +862,23 @@
 	f2 { { ⟦ %[ 3r ] %[ 44r ] ⟧ ⟦⟧ } %[ 0r ] } ⊢ l 
 	$ l ⊢ _ 
 	∎ {} 
+§ m56 _ 
+	$ %[ 0r ] ⊢ r 
+	!^ r ⊢ *r 
+		`	mov rax,0 
+		`	mov rdi,0xffff_ffff
+		`.L0:
+		`	add rdx,1 
+		`	add rcx,1 
+		`	add rsi,1 
+		`	add rcx,rsp 
+		`	add rdx,r12 
+		`	add rcx,r13 
+		`	sub rsi,r14 
+		`	mov rsi,QWORD [rsp]
+		`	add rax,1 
+		--`	cmp rax,0xffff_ffff
+		`	cmp rax,rdi
+		`	jl .L0
+		//
+	∎ {} 

@@ -170,8 +170,11 @@ mlc_s8_sf:
 	xor rax,rax 
 	C_CALL_SF calloc
 	cmp rax,0 
-	jz err
+	jz .L0
 	ret
+.L0:
+	mov QWORD [err_n],0xbfff
+	jmp err
 alc_rcd_n: ; rdi=n ⊢ rax
 	mov rbx,QWORD [SS_RCD_TOP+8*rdi]
 	cmp rbx,0 
@@ -188,6 +191,15 @@ alc_rcd_n: ; rdi=n ⊢ rax
 	call alc_rcd_h 
 	jmp .L1
 
+calloc_sf: 
+	C_CALL_SF calloc 
+	cmp rax,0 
+	jz .L0 
+	ret
+.L0:
+	mov rax,0xffff_eeee_eeff_eeff
+	mov QWORD [err_n],rax
+	jmp err
 alc_rcd_h: 
 	mov rbx,rax 
 	C_PUSH_REGS 
@@ -201,7 +213,7 @@ alc_rcd_h:
 	mov rsi,rdi 
 	xor rdi,rdi 
 	mov rdi,8
-	CALLOC_SF
+	call calloc_sf
 	mov rdx,rbx 
 	mov rbx,rax 
 	mov rdi,1000 
@@ -224,7 +236,7 @@ sig_alc_rcd: ; rbx=n
 	mov rsi,rdi 
 	xor rdi,rdi 
 	mov rdi,8
-	CALLOC_SF
+	call calloc_sf
 	mov rdx,rbx 
 	mov rbx,rax 
 	mov rdi,1000 
@@ -244,7 +256,6 @@ ss_lp:
 	mov rax,rsi 
 	jmp ss_lp
 ss_end:
-	;mov rsi,0xffff_ffff_ffff_0000 
 	mov rsi,0 
 	;add rsi,rdx
 	mov [rax],rsi 
@@ -548,7 +559,7 @@ mlc_s8: ; rdi=len
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 
-	CALLOC_SF
+	call calloc_sf
 	mov rdi,0x0001_0000_0000_0000
 	;mov rdi,0x0000_0001_0000_0000
 	pop rsi 
@@ -602,60 +613,60 @@ in_fn:
 	ret 
 					
 exn_grm: 
-  mov rax,0xff01_0000_0000_0000
+  mov rax,0xff01_0000_0000_ffff
 	mov QWORD [err_n],rax
 	jmp err 
 exn_dft: 
-	mov rax,0xeeee_0000_0000_0000
+	mov rax,0xeeee_0000_0000_ffff
 	or rax,rsi 
 	mov QWORD [err_n],rax				
 	jmp err 
 err_lod_q:
-	mov rbx,0xe0fe_0000_0000_0000
+	mov rbx,0xe0fe_0000_0000_ffff
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_exc_q: 
-	mov rbx,0xe0ff_0000_0000_0000
+	mov rbx,0xe0ff_0000_0000_ffff
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_clc_o: 
-	mov rbx,0xe0e2_0000_0000_0000
+	mov rbx,0xe0e2_0000_0000_ffff
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_ref_o:
 	;mov rax,QWORD [rax]
-	mov rbx,0x0000_0000_0000_e0cd
+	mov rbx,0xffff_efef_0000_e0cd
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_ref_f:
-	mov rbx,0xefcd_0000_0000_0000
+	mov rbx,0xefcd_0000_0000_ffff
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_alc_o: 
-	mov rbx,0xe0e1_0000_0000_0000
+	mov rbx,0xe0e1_0000_0000_ffff
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_cls: 
-	mov rbx,0xe0e0_0000_0000_0000
+	mov rbx,0xe0e0_0000_0000_ffff
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_NULL: 
-	mov rax,0xffff_ffff_0000_0000
+	mov rax,0xffff_bdbd_0000_ffff
 	mov QWORD [err_n],rax				
 	jmp err
 err_mk_stk: 
-	mov rax,0xffff_ffff_0000_eefb
+	mov rax,0xffff_bcbc_0000_eefb
 	mov QWORD [err_n],rax				
 	jmp err
 err_mk_stk_F: 
-	mov rax,0xffff_ffff_0000_eefc
+	mov rax,0xffff_bbcc_0000_eefc
 	mov QWORD [err_n],rax				
 	jmp err
 err_bc: 
@@ -664,11 +675,6 @@ err_bc:
 err_dyn_rpc: 
 	mov rax,0xffef_bbbc
 	mov QWORD [err_n],rax
-	jmp err
-err_st_lb:
- 	sub rdi,rax 
-	or rdi,0xdddd
-	mov QWORD [err_n],rdi
 	jmp err
 err: 
 	mov rdi,fmt_err_line
