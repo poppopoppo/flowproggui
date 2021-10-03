@@ -175,6 +175,13 @@ mlc_s8_sf:
 .L0:
 	mov QWORD [err_n],0xbfff
 	jmp err
+
+free_rcd_n: ; rdi=p, rax=n
+	mov rbx,QWORD [SS_RCD_TOP+8*rax]	 
+	mov QWORD [rdi],rbx
+	mov QWORD [SS_RCD_TOP+8*rax],rdi
+	ret
+
 alc_rcd_n: ; rdi=n ⊢ rax
 	mov rbx,QWORD [SS_RCD_TOP+8*rdi]
 	cmp rbx,0 
@@ -191,15 +198,6 @@ alc_rcd_n: ; rdi=n ⊢ rax
 	call alc_rcd_h 
 	jmp .L1
 
-calloc_sf: 
-	C_CALL_SF calloc 
-	cmp rax,0 
-	jz .L0 
-	ret
-.L0:
-	mov rax,0xffff_eeee_eeff_eeff
-	mov QWORD [err_n],rax
-	jmp err
 alc_rcd_h: 
 	mov rbx,rax 
 	C_PUSH_REGS 
@@ -223,6 +221,16 @@ alc_rcd_h:
 	pop rdi 
 	C_POP_REGS 
 	ret
+
+calloc_sf: 
+	C_CALL_SF calloc 
+	cmp rax,0 
+	jz .L0 
+	ret
+.L0:
+	mov rax,0xffff_eeee_eeff_eeff
+	mov QWORD [err_n],rax
+	jmp err
 
 sig_alc_rcd: ; rbx=n 
 	C_PUSH_REGS 
@@ -327,6 +335,16 @@ sig_dft:
 %define SEED 0x9848_3cbf  
 
 
+lod_1:
+	mov eax,eax 
+	shr rax,16 
+	mov rcx,rax 
+	mov rax,0x0001_0000_0000_0000 
+	shr rax,cl 
+	mov rdi,0x0001_0000_0000_0000
+	sub rdi,rax 
+	add QWORD [rsi],rdi
+	ret
 rpc_dyn_adt: ; rax=i rdi=d 
 	mov esi,eax 
 	cmp rsi,0x10_0000 

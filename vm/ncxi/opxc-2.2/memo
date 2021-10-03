@@ -487,3 +487,21 @@ t_var
 		id = iv◂{ %[ 1r ] imp◂{ var◂%[ 0r ] var◂%[ 0r ] } }
 		$ %[ {+ "ff" "fg" "000" } ] ⊢ a
 		
+		S = page-size
+		N-block-pointer = type-id | (offset-index:(S/N))
+
+
+	no virtual memory 
+	size =< PAGE_SIZE | physical address 
+	size >> PAGE_SIZE | page-number
+
+
+ {+ 
+ 	‹ { 0x2r : _r64 atm◂dyn_adt◂{ *[ 0x1f4837e8r | @ ] 0xffffffffr : _r64 0x0r : _r64 0x1r : _r64 } t_lv◂{ dta◂{ 0x17r : _r64 _cns◂{ t_lv◂{ dta◂{ 0x1000000000000r : _r64 _cns◂{ t_lv◂{ dta◂{ 0x17r : _r64 _cns◂{ t_lv◂{ dta◂{ 0x1000000000010r : _r64 _cns◂{ t_lv◂{ var◂p◂*[ 0x1f483050r | @ ] 0x1r : _r64 } _nil◂{ } } } 0x1r : _r64 } _nil◂{ } } } 0x1r : _r64 } _nil◂{ } } } 0x1r : _r64 } _nil◂{ } } } 0x1r : _r64 } } › 
+	‹ { 0x2r : _r64 atm◂dyn_adt◂{ *[ 0x1f4837a0r | @ ] 0xffffffffr : _r64 0x0r : _r64 0x1r : _r64 } t_lv◂{ var◂p◂*[ 0x1f483050r | @ ] 0x1r : _r64 } } › 
+	} 
+{+ 
+	{ 0x0r : _r64 0x2r : _r64 atm◂dyn_adt◂{ *[ 0x1f4837e8r | @ ] 0xffffffffr : _r64 0x0r : _r64 0x1r : _r64 } } 
+	{ 0x1r : _r64 0x2r : _r64 atm◂dyn_adt◂{ *[ 0x1f4837a0r | @ ] 0xffffffffr : _r64 0x0r : _r64 0x1r : _r64 } } 
+	} 
+
