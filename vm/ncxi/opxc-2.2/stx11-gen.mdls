@@ -11407,12 +11407,12 @@
 							∎| 
 						∐.
 							T.iug_axm { { v k } l0 } ⊢ { { v k } pl } 
-						_alc_i { tav { B n v k } } ⊢ { tav _ }
-						TAV.i { TAVl tav } ⊢ TAV 
-						mk_L { { L TAV %[ 0r ] %[ 1r ] %[ 0r ] } pl } ⊢ { L TAV bL vL }
-					_base {} ⊢ Lx 
-						_ref.i { LL { bL vL L Lx } } ⊢ L 
-						∎ { TAV L }
+							_alc_i { tav { B n v k } } ⊢ { tav _ }
+							TAV.i { TAVl tav } ⊢ TAV 
+							_base {} ⊢ Lx 
+							mk_L { { L TAV %[ 0r ] %[ 1r ] %[ 0r ] Lx } pl } ⊢ { L TAV bL vL Lx }
+							_ref.i { LL { bL vL L Lx } } ⊢ L 
+							∎ { TAV L }
 				@.rcd { V T.t◂{ t0 _ } }
 					∐ t0 ⊢ dta◂{ a l } 
 						∐ a'=TX.id.prd 
@@ -11437,21 +11437,25 @@
 							∎| 
 					∐. . 
 						∎| 
-				@.mk_L { { L tav i b v } l }
+				@.mk_L { { L tav i b v X } l }
 					$ l ⊢
 					∐ _cns◂{ t l }
 						$ t ⊢ t,t0
 						f_T { { tav %[ 0r ] b } t } ⊢ { { tav c b } p }
 						∐ c'=<0xfffr
 							_bts { v i } ⊢ { v i } 
+							$ i ⊢ i,i0 
+							$ p ⊢ p,p0 
+							$ c ⊢ c,c0 
+							_push { { i0 c0 p0 } X } ⊢ X 
 							set_tv { L i { c p t0 } } ⊢ { L i }
 							_inc i ⊢ i 
-							mk_L { { L tav i b v } l } ⊢|
+							mk_L { { L tav i b v X } l } ⊢|
 						∐. 
 							_inc i ⊢ i 
-							mk_L { { L tav i b v } l } ⊢|
+							mk_L { { L tav i b v X } l } ⊢|
 					∐. _nil◂{}
-						∎ { L tav b v }
+						∎ { L tav b v X }
 				@.f_x { { tav b } t } 
 					f_T { { tav %[ 0r ] b } t } ⊢ { { tav c b } p }
 					∐ c'=<0xfffr
