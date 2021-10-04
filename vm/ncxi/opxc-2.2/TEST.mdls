@@ -1,0 +1,14 @@
+§ T2 {} 
+		∎ _some◂_some◂{}
+	§ T1 # {} 
+		T2 {} ⊢ xx 
+		$ xx ⊢ 
+		∐ _some◂xx 
+			--_emt_im◂◂0xff03r {} ⊢ {} 
+			$ xx ⊢ _ 
+			∎|
+		∐. _none◂{}
+			∎|
+	§ main # _ 
+		T1 {} ⊢ _ 
+		∎ {} 

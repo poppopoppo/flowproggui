@@ -6879,6 +6879,29 @@
 			∐.# _byt line_nl ⊢ { b nn } 
 				$ _some◂{} ⊢ a 
 				∎ a 
+	§	@.cmt_in ^= 
+			∐# "-\\" !| ; ⊢ { {} },p
+				$ _some◂p ⊢ a 
+				∎ a 
+				∐# "\n" cmt_in cmt_in ⊢ { {} p0 p1 }
+					prs_cct { p0 p1 } ⊢ pr 
+					$ pr ⊢ 
+					∐ prs_vld◂{ p0 p1 } . 
+						∎ ret_vld◂{}
+					∐. prs_err◂e . 
+						pnt_prs_err e ⊢ s 
+						_emt.f s ⊢ _ 
+						∎| 		
+					
+					∐.# ⊢ { } 
+						∎ _some◂prs_err◂_cns◂{ { %_n %_r %[ "blk_cmt 0" ] } _nil◂{} }
+			∐ "-/" nl_eof ⊢ { {} _ } 
+				∎ _some◂prs_vld◂{} 
+			∐# line_nl cmt_in ⊢ { nn c }
+				$ _some◂c ⊢ a 
+				∎ a
+			∐.# ⊢ { } 
+				∎ _some◂prs_err◂_cns◂{ { %_n %_r %[ "blk_cmt 1" ] } _nil◂{} }
 	§ 
 		@.nls ^= 
 			∐# "\n" !| nls ⊢ { {} xx }
@@ -6903,30 +6926,35 @@
 					∎|   
 			∐.# ⊢ { } 
 				∎ ret_vld◂{}
-		@.cmt_in ^= 
-			∐# "-\\" !| ; ⊢ { {} },p
-				$ _some◂p ⊢ a 
-				∎ a 
-				∐# "\n" cmt_in cmt_in ⊢ { {} p0 p1 }
-					prs_cct { p0 p1 } ⊢ pr 
-					$ pr ⊢ 
-					∐ prs_vld◂{ p0 p1 } . 
-						∎ ret_vld◂{}
-					∐. prs_err◂e . 
-						pnt_prs_err e ⊢ s 
-						_emt.f s ⊢ _ 
-						∎| 		
-					
-					∐.# ⊢ { } 
-						∎ _some◂prs_err◂_cns◂{ { %_n %_r %[ "blk_cmt 0" ] } _nil◂{} }
-			∐ "-/" nl_eof ⊢ { {} _ } 
-				∎ _some◂prs_vld◂{} 
-			∐# line_nl cmt_in ⊢ { nn c }
-				$ _some◂c ⊢ a 
-				∎ a
+	§ T0 {} 
+		∎ ret_vld◂{}
+	§ T2 {} 
+		∎ _some◂_some◂{}
+	§ T1 {} 
+		T2 {} ⊢ xx 
+		$ xx ⊢ 
+		∐ _some◂xx 
+			_emt_im◂◂0xff03r {} ⊢ {} 
+			$ xx ⊢ _ 
+			∎|
+		∐. _none◂{}
+			∎|
+	§ 
+		@.T ^= 
+			∐# "\n" ⊢ { {} }
+				T0 {} ⊢ xx 
+				$ xx ⊢ 
+				∐ _some◂xx 
+					_emt_im◂◂0xff03r {} ⊢ {} 
+					$ xx ⊢ _ 
+					∎|
+				∐. _none◂{}
+					∎|
 			∐.# ⊢ { } 
-				∎ _some◂prs_err◂_cns◂{ { %_n %_r %[ "blk_cmt 1" ] } _nil◂{} }
-
+				∎ ret_vld◂{}
+	§ main_nls _ 
+		T1 {} ⊢ _
+		∎ {}
 	§§ grm 
 		§ @.fld_line◂◂{ G H F T } ^=
 			∐# H G fld_line◂◂{ G H F T } ⊢ { _ a l } 
@@ -8121,24 +8149,24 @@
 			§ 
 				@.cst { %env0 %c } 
 		    $ c ⊢ 
-				∐ ast.k_btm◂t . 
+				∐ ast.k_btm◂t 
 					∎ { env0 ast.k_btm◂t }
-				∐ ast.k_name◂%cn . 
+				∐ ast.k_name◂%cn
 					$ %env0 ⊢ { V { SCM NS } } 
 			  	slv { V cn NS } ⊢ { V NS k }
 			  	$ { V { SCM NS } } ⊢ env0 	
 		    	∎ { env0 k }
-				∐ ast.k_unv◂x . 
+				∐ ast.k_unv◂x 
 					$ %env0 ⊢ { V { SCM NS } } 
 					UNV.f { V x } ⊢ { V k } 
 			  	$ { V { SCM NS } } ⊢ env0 	
 					RP.atm_a k ⊢ k 
 					∎ { env0 k }
-				∐ ast.k_r64◂x . 
+				∐ ast.k_r64◂x 
 		    	∎ { env0 ast.k_r64◂x }
-		    ∐ ast.k_s8◂s . 
+		    ∐ ast.k_s8◂s  
 			    ∎ { env0 ast.k_s8◂s }
-				∐ ast.k_app◂{ c0 c1 } . 
+				∐ ast.k_app◂{ c0 c1 } 
 					ct_ptn { env0 c0 } ⊢ { env0 c0 }
 					ct_ptn { env0 c1 } ⊢ { env0 c1 }
 					∎ { env0 ast.k_app◂{ c0 c1 } }
@@ -14327,7 +14355,7 @@
 								∎ EE
 					@.stt_i_hp { ri rd { c_n pa0 } pa1 } 
 						∐ c_n'=0r 
-						  ∎ { asm.e◂{} asm.e◂{} pa1 }  
+						  ∎ { asm.e◂{} asm.e◂{} pa0 }  
 					  ∐ c_n'=1r 
 							rpc.m.ptn_1 { { asm.e◂{} asm.e◂{} %[ 0r ] ri rd } pa0 pa1 } ⊢ { { e er c ri rd } pa1 } 
 							∐ c'=<1r 
@@ -14629,8 +14657,8 @@
 						asm.add_st_s8 { e s } ⊢ e
 						jnz_lb { LBN e } ⊢ { LBN e }
 						asm.add_st_s8_im◂◂"\tlea SRC_REG,[rdi+8]\n" e ⊢ e
-						_emt_im◂◂0xabcdr {} ⊢ {} 
-						_emt { i c_n } ⊢ { i c_n }
+						--_emt_im◂◂0xabcdr {} ⊢ {} 
+						--_emt { i c_n } ⊢ { i c_n }
 						mov_ptn2.sgm_to.f { { SC LB } { pa0 pa1 } } ⊢ { SC LB et }
 						asm.cct { e et } ⊢ e 
 						asm.add_st_s8_im◂◂"\tlea rdi,[SRC_REG-8]\n" e ⊢ e 							
@@ -14647,7 +14675,7 @@
 						lb_i_etr { lbj i e } ⊢ { lbj i e }
 						$ LBN ⊢ LBN,LBN0 
 						$ r ⊢ r,r0
-						stt_d_hp { LBN0 LB SC A e r0 { j c_n pa0 } }  ⊢ { LB SC A e }
+						stt_d_hp { LBN0 LB SC A e r0 { j c_n pa0 } } ⊢ { LB SC A e }
 						_inc i ⊢ i 
 						stt_d_i { { LB SC } LBN r lbj D A l e i } ⊢|
 				§ stt_d # { { LB SC F G } { D A LBN ri rd } } 
@@ -14669,15 +14697,17 @@
 						^ lb0,sj,n ⊢ _,_,_,sc0  
 							`	mov eax,edi 
 							`	movzx rdi,di
+							`	mov rsi,0 
 							"\tcmp rdi,0x" 2x' "\n" 
-							`	jge err_bc
+							`	cmovl rsi,rsp 
+							`	mov rsi,QWORD [rsi]
 							"\tjmp QWORD [LB_" 0d' "+8*rdi]\n"
 							"LB_" 0d' ": dq " 1' "\n" //
 						asm.add_s8 { e sc0 } ⊢ e  
 						stt_d_i { { LB SC } LBN rd lb D A l e %[ 0r ] } ⊢ { { LB SC } e }
 						--$ asm.e◂{} ⊢ e
-						_emt_im◂◂0xddddfffer {} ⊢ {} 
-						∎ { { LB SC F G } e } 
+						--_emt_im◂◂0xddddfffer {} ⊢ {} 
+						∎ { { LB SC F G } e }
 					--∎|
 				§ gnr = asm.to_s8◂◂{ stt_m stt_d }
 				§ 
@@ -14776,7 +14806,7 @@
 						∐ ast.cn_da◂da  
 							_emt_im◂◂"stt_ir:D0" {} ⊢ {} 
 							_arr.len da ⊢ { da n }
-							∐ is ⊢ RP.atm◂ast.stt_adt◂{ ia pa };
+							∐ is ⊢ RP.atm◂ast.stt_adt◂{ ia pa }
 								∐ n'=<1r
 									$ ia ⊢ _
 									_lod_q { da %[ 0r ] } ⊢ { _ _ o }
@@ -14922,7 +14952,8 @@
 								∐ la ⊢ cns1◂k0 
 									∐ k0 ⊢ RP.atm◂a0
 										∐ a0 ⊢ ast.k_pf◂lf
-											∐ is ⊢ RP.cns2◂{ RP.cns2◂{ m0 x0 } RP.rcd◂sl } . 
+											∐ is ⊢ RP.cns2◂{ p0 p1 }
+												∐ p0 ⊢ RP.cns2◂{ m0 x0 }; p1 ⊢ RP.rcd◂sl 
 												exp_s8.ip0 { eds lf } ⊢ { eds pl } 
 												s8_to_hp { GV m0 ec0 } ⊢ { GV rm0 ec0 } 
 												r64_to_hp { GV x0 ec0 } ⊢ { GV rx0 ec0 }
@@ -14935,6 +14966,8 @@
 												$ RP.cns2◂{ RP.cns2◂{ stt_v.s8_reg◂rm0 stt_v.r64_reg◂rx0 } RP.rcd◂sl } ⊢ iy 
 												exp_s8.lp1 { GV { eds ec0 } %[ 0r ] lb_n ar in1◂{ rm00 rx00 } pl } ⊢ { GV { eds ec0 } ld lb_n _ }
 												stt_jmp_axm { { RFV GXV GV lb_n tav ec0 } { APV  eg0 eds } iy f_c } ⊢|
+												∐.
+													∎|
 											∐.	
 												∎|
 										∐.	
@@ -14959,12 +14992,15 @@
 										∎ { FE EE ‹› }
 									∐. . 
 										∎|
+							-\
+							-/
 								-- 5 ctr 
 								∐ 
 									∎|
 								-- 6 ila 
 								∐ 
-									∐ is ⊢ RP.rcd◂l0; la ⊢ _cns◂{ RP.rcd◂_cns◂{ t_s _cns◂{ t_d  _cns◂{ c0 _nil◂{} } } } _nil◂{} } . 
+									∐ is ⊢ RP.rcd◂l0
+										∐ la ⊢ cns1◂RP.cns3◂{ t_s t_d c0 } 
 										ila.n { t_s %[ 0r ] } ⊢ n_s
 										ila.sd { { GV l0 ⟦⟧ n_s t_d ec0 asm.e◂{} } %[ 0r ] } ⊢ { GV iy ec0 ec1 }
 										ast.s8_of_k c0 ⊢ s0
@@ -14976,6 +15012,8 @@
 										lb_etr { lb ec0 } ⊢ { _ ec0 } 
 										asm.cct { ec0 ec1 } ⊢ ec0 
 										stt_jmp_axm { { RFV GXV GV lb_n tav ec0 } { APV eg0 eds } iy f_c } ⊢|										 	
+										∐.
+											∎|
 									∐. . 
 										∎|	
 								-- 7 nop 
@@ -15007,7 +15045,7 @@
 										∎| 
 								-- 11 hp_to 
 								∐ 
-									∐ is ⊢ RP.rcd◂_cns◂{ RP.atm◂ast.hp◂{ r _ } _cns◂{ RP.rcd◂_nil◂{} _nil◂{} } } .
+									∐ is ⊢ RP.cns2◂{ RP.atm◂ast.hp◂{ r _ } RP.unt◂{} }
 										ast.smt_ap ya ⊢ ya 
 										T.nvl_lv◂◂1r {} ⊢ v0 
 										$ v0 ⊢ v0,v0_0,v1
@@ -15085,7 +15123,8 @@
 										∎|
 								-- cnc_sto 
 								∐ 
-									∐ la ⊢ _cns◂{ c _nil◂{} }; is ⊢ RP.rcd◂_cns◂{ r0  _cns◂{ pk _nil◂{} } } .
+									∐ la ⊢ _cns◂{ c _nil◂{} }
+										∐ is ⊢ RP.rcd◂_cns◂{ r0  _cns◂{ pk _nil◂{} } } .
 										ast.smt_ap_err◂◂45r ya ⊢ t
 										T.nvl_lv◂◂1r {} ⊢ v 
 										T.nvl_lv◂◂1r {} ⊢ w 
@@ -15108,6 +15147,8 @@
 											GV.free.lst { GV fl } ⊢ GV 
 											stt_jmp_axm { { RFV GXV GV lb_n tav ec0 } { APV  eg0 eds } iy f_c } ⊢|
 										∐. .
+											∎|
+										∐.
 											∎|
 									∐. . 
 										_emt_im◂◂0xaaff2r {} ⊢ {} 
@@ -15208,7 +15249,8 @@
 										∎| 
 								-- lc_o 
 								∐ 
-									∐ la ⊢ _cns◂{ l _nil◂{} }; is ⊢ RP.cns2◂{ _ is } . 
+									∐ la ⊢ cns1◂l 
+										∐ is ⊢ RP.cns2◂{ _ is } . 
 										ast.smt_ap_err◂◂0xccddr ya ⊢ ya 
 										T.nvl5_lv◂◂1r {} ⊢ { a a0 a1 a2 at }
 										T.nvl3_lv◂◂1r {} ⊢ { s s0 st }
@@ -15228,11 +15270,14 @@
 											stt_jmp_axm { { RFV GXV GV lb_n tav ec0 } { APV eg0 eds } iy f_c } ⊢|
 										∐. .
 											∎|
+										∐.
+											∎|
 									∐. .
 										∎|
 								-- lc_i 
 								∐ 
-									∐ la ⊢ _cns◂{ l _nil◂{} }; is ⊢ RP.cns4◂{ _ ir0 _ is } . 
+									∐ la ⊢ _cns◂{ l _nil◂{} }
+										∐ is ⊢ RP.cns4◂{ _ ir0 _ is } . 
 										ast.smt_ap_err◂◂0xccdr ya ⊢ ya 
 										T.nvl5_lv◂◂1r {} ⊢ { a a0 a1 a2 at }
 										T.nvl3_lv◂◂1r {} ⊢ { s s0 st }
@@ -15252,6 +15297,8 @@
 											$ RP.cns2◂{ RP.unt◂{} stt_v.r64_reg◂r0 } ⊢ iy 
 											stt_jmp_axm { { RFV GXV GV lb_n tav ec0 } { APV eg0 eds } iy f_c } ⊢|
 										∐. .
+											∎|
+										∐.	
 											∎|
 									∐. .
 										∎|

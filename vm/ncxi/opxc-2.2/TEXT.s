@@ -688,7 +688,9 @@ err_mk_stk_F:
 	mov QWORD [err_n],rax				
 	jmp err
 err_bc: 
-	mov QWORD [err_n],0xff
+	mov rax,0x0000_bb00_0000_0000
+	add rdi,rax 
+	mov QWORD [err_n],rdi
 	jmp err
 err_dyn_rpc: 
 	mov rax,0xffef_bbbc
