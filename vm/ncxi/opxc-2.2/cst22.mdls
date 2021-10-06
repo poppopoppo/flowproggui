@@ -900,3 +900,23 @@
 		`	jl .L0
 		//
 	∎ {} 
+
+¶ @.t
+	∐ rcd : _lst◂t
+	∐ atm : {}
+§ f0 a 
+	∐ a ⊢ rcd◂l 
+		$ l ⊢ 
+		∐ _cns◂l
+			∎| 
+		∐. _nil◂{} 
+			∎|
+	∐. a ⊢ atm◂a 
+		∎|
+§ m57 _ 
+	--_emt rcd◂_nil◂{} ⊢ _ 
+	--_emt _cns◂{ rcd◂_nil◂{} _nil◂{} } ⊢ _
+	$ rcd◂_cns◂{ rcd◂_nil◂{} _nil◂{} } ⊢ m 		
+	_emt m ⊢ m
+	--f0 m ⊢ _ 
+	∎ {} 
