@@ -7,9 +7,9 @@
 	FTX0: resq 1
 	NULL: resq 1 
 	BUF0: resq 8
-	SS_RCD_TOP: resq 64 
-	SS_RCD_BTM: resq 64 
-	SS_RCD_N: resq 64 
+	SS_RCD_TOP: resq RCD_N
+	SS_RCD_BTM: resq RCD_N 
+	SS_RCD_N: resq RCD_N 
 	PAGE_SIZE: resq 1
 	
 	SS_RCD_C: resq (RCD_N+1)

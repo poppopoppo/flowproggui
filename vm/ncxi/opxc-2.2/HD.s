@@ -63,8 +63,8 @@
 %define SRC_REG rbp 
 %define DST_REG rbp
 
-bits 64 
-; macros 
+bits 64
+; macros
 
 %macro RT_ERR 1 
 	mov rdi,rt_err0 
