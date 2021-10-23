@@ -1418,16 +1418,20 @@
     ∎ { t s }
   § o # t
     t_o t ⊢ { h r }
-    !^ r ⊢ *r 
+    !^ r ⊢ *r,c 
+      `	xor rdi,rdi 
       ` bts QWORD [rax],31 
-      ` jc err_ref_o
+			`	setc dil 
       //
-    $ r ⊢ r,r0 
-    _add_im◂◂8r r0 ⊢ r0 
-    _cnc_lod_hp { r0 h } ⊢ { _ h k }
-    '[ _hp.ini : . {} → _hp◂{} ] {} ⊢ ht 
-    ∎ { lc◂{ ht h r } k } 
-  
+    ∐ c'=0r 
+			$ r ⊢ r,r0 
+	    _add_im◂◂8r r0 ⊢ r0 
+	    _cnc_lod_hp { r0 h } ⊢ { _ h k }
+	    '[ _hp.ini : . {} → _hp◂{} ] {} ⊢ ht 
+	    ∎ { lc◂{ ht h r } k } 
+		∐.
+			_ap.emt h ⊢ h 
+			∎|
   § i # { lc◂{ ht h r } k }
     $.[ . _hp◂{} ] ht ⊢ ht 
     _eq_hp { k h } ⊢ { k h } 

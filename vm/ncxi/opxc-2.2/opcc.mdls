@@ -1792,6 +1792,7 @@
 	
 		§§ type 
 			¶ lv = _r64 
+			§ GEN = 0xffffffffr 
 			§§ ax 
 				¶ @.t 
 					∐ dta : { _r64 _lst◂t }

@@ -1,0 +1,49 @@
+-\
+§§ RP
+	¶ @.t◂a'
+		∐ rcd : _lst◂(t◂a')
+		∐ atm : a'
+	∎∎ 
+¶	
+	@.ir_m r',c'
+		∐ stt_a : { _r64 ir_mp◂r'◂c' }
+		∐ stt_v : c'
+		∐ stt_r : r' 
+	@.ir_mp r',c' = RP.t◂(ir_m◂r'◂c')
+§ @.f k 
+	∐ k ⊢ stt_r◂k 
+§ 
+	@.f1_atm { v a }
+		$ a ⊢ 
+		∐ stt_r◂i 
+			_arr.o { v i } ⊢ { V o }
+			$ o ⊢ 
+			∐ _some◂p . 
+				_arr.i { V ‹› } ⊢ { v i }
+				∎ { v p }
+			∐. _none◂{}
+				∎|
+		∐ stt_v◂c 
+			∎ { v RP.atm◂stt_v◂c } 
+			--∎|
+		∐. stt_a◂{ ia p } 
+			f1 { v p } ⊢|
+	@.f1 # { v p } 
+		∎|
+-/
+¶ @.t a'
+	∐ a : t◂a'
+	∐ b : {} 
+§ q { i { ql } } 
+	∎| 
+§ 			
+	@.f { ql k } 
+		$ k ⊢ 
+		∐ a◂k 
+			f { ql k } ⊢|
+		∐. b◂i 
+			q { i ql } ⊢|		
+	@.f_lst { v l } 
+		∐. l ⊢ _cns◂{ a l } 
+			f { v a } ⊢|
+	
