@@ -176,13 +176,23 @@ mlc_s8_sf:
 	mov QWORD [err_n],0xbfff
 	jmp err
 
-free_rcd_n: ; rdi=p, rax=n
+alc_rcd_n: 
+	add rdi,1 
+	shl rdi,3 
+	call malloc 
+	mov rdi,0x0001_0000_0000_0000
+	mov QWORD [rax],rdi
+	ret
+free_rcd_n:
+	call free 
+	ret
+;free_rcd_n: ; rdi=p, rax=n
 	mov rbx,QWORD [SS_RCD_TOP+8*rax]	 
 	mov QWORD [rdi],rbx
 	mov QWORD [SS_RCD_TOP+8*rax],rdi
 	ret
 
-alc_rcd_n: ; rdi=n ⊢ rax
+;alc_rcd_n: ; rdi=n ⊢ rax
 	mov rbx,QWORD [SS_RCD_TOP+8*rdi]
 	cmp rbx,0 
 	jz .L0 

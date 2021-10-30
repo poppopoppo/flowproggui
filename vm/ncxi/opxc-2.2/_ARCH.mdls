@@ -351,7 +351,8 @@
     //
   ∎ { r i c }
 § _btx # { r i c } 
-  !^ r,i,c ⊢ r,*i,c 
+  ∐ i'=<63r 
+	!^ r,i,c ⊢ r,*i,c 
     ` cmp rsi,0 
     ` jz .L0 
     ` bts rax,rdi
@@ -363,6 +364,8 @@
     ` and rsi,1
     //
   ∎ { r i c }
+	∐.
+		∎|
 §§ _imul 
   § im_0 ##  _
     ∎ %[ 0r ]
@@ -1945,7 +1948,6 @@
   _hp.rpc s ⊢ { s rs }
   !^ i,rs,b,l ⊢ i,x 
     ` lea rdi,[rdi+8+rax]
-    --` mov ecx,DWORD [rsi-8]
 		` mov ecx,DWORD [rsi] 
     `	add rsi,8  
     ` mov rbx,rax
