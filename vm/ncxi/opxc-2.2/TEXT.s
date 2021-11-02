@@ -157,14 +157,16 @@ pf_d_rv_lp0:
 pf_x_bc: 
 	mov ebx,DWORD [rax] 
 	sub rbx,rdi 
-	jl err_bc
+	jl .L0
 	sub rbx,rsi 
-	jl err_bc 
+	jl .L0
 	add rsi,rdi  
 	lea rdi,[rax+7+rsi] 
 	std
 	ret
-
+.L0:
+	mov QWORD [err_n],0x0fcca
+	jmp err
 mlc_s8_sf:
 	mov rsi,1
 	xor rax,rax 
@@ -348,7 +350,19 @@ sig_dft:
 %define N 0xe654_6b64 
 %define SEED 0x9848_3cbf  
 
-
+stt_hp_1:
+	mov eax,eax 
+	shr rax,16 
+	mov rcx,48 
+	sub rcx,rax 
+	xor rax,rax 
+	bts rax,rcx
+	mov rsi,QWORD [rdi]
+	sub rsi,rax 
+	lea SRC_REG,[rdi+8]
+	mov QWORD [rdi],rsi
+	ret
+								
 lod_1:
 	mov eax,eax 
 	shr rax,16 
@@ -379,6 +393,8 @@ lod_1:
 	add rax,0x3_0000
 	ret
 rpc_dyn_adt: ; rax=i rdi=d 
+	bt rax,33 
+	jc err_dyn_rpc 
 	bt rax,32 
 	jc .L1 
 	ret

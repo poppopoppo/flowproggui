@@ -609,30 +609,44 @@
 	    //
 	  _hp.to { r h } ⊢ s 
 	  ∎ { s i c }
-	§ l64 # { s i }
+	§ l64 { s i }
 		$.[ t' . _arr0◂t'◂_r8 ] s ⊢ s
 	  _hp.of s ⊢ { r h } 
-	  !^ r,i ⊢ *r,*i,c 
-	    `	mov esi,DWORD [rax]
+	  !^ r,i ⊢ r,*i,c 
+			`	mov esi,DWORD [rax]
 			`	and rsi,~7
 	    `	cmp rdi,rsi 
-			`	ja err_bc 
+			`	ja .L0
 		  `	mov rsi,QWORD [rax+8+rdi]
+			`	jmp .L1 
+			`.L0:
+			`	mov rax,0 
+			`.L1: 
 			//
-	  _hp.to { r h } ⊢ s 
-	  ∎ { s i c }		
-	§ s_C◂◂C # { s i }
+	  ∐ r'=0r 
+			∎| 
+		∐.
+			_hp.to { r h } ⊢ s 
+		  ∎ { s i c }		
+	§ s_C◂◂C { s i }
 		$.[ . _arr_nr◂_r8 ] s ⊢ s
 	  _hp.of s ⊢ { r h } 
-	  !^ r,i ⊢ *r,*i 
+	  !^ r,i ⊢ r,*i 
 	    `	mov esi,DWORD [rax]
 	    ` cmp rdi,rsi 
-		  ` jae err_bc 
+		  ` jae .L0: 
 			"\tmov BYTE [rax+8+rdi],0x" (_ct.pf_x◂◂C) "\n"
-	    //
-	  _hp.to { r h } ⊢ s 
-	  ∎ { s i }
-	§ s # { s i c }
+			`	jmp .L1 
+			`.L0:
+			`	mov rax,0 
+			`.L1:
+			//
+	  ∐ r'=0r 
+			∎|
+		∐.
+			_hp.to { r h } ⊢ s 
+		  ∎ { s i }
+	§ s { s i c }
 		$.[ . _arr_nr◂_r8 ] s ⊢ s
   	_hp.of s ⊢ { r h } 
   	!^ r,i,c ⊢ *r,*i,*c 
@@ -650,8 +664,7 @@
   	!^ r,l0 ⊢ r,*m  
   	  `	mov rsi,QWORD [rax]
 			`	cmp rax,rsp 
-			`	jae err_bc 
-			--`	jc err_bc 
+			`	jae err_mk_stk 
 			`	mov rdx,0xffff_ffff_0000_0000
 			`	and rsi,rdx
 			`	add rsi,rdi
@@ -689,7 +702,7 @@
     //
   ∎ { s h }
 
-§ mlc0 # l 
+§ mlc0 l 
   $ l ⊢ l,l0 
   !^ l0 ⊢ m 
     ` mov rdi,rax 
@@ -916,7 +929,14 @@
 		_hp.of a ⊢ { r ha } 
     _hp.ini {} ⊢ h 
     $.[ k' . { _hp◂(_arr_nr◂k') _hp◂k' } ] { ha h } ⊢ { _ h } 
-    $ r ⊢ r,r0 
+    !^ r ⊢ *r 
+			`	mov rdi,QWORD [rax]
+			`	shr rdi,32
+			`	sub rdi,0x1_0000
+			`	jne err_dyn_rpc 
+			`	mov QWORD [rax],0
+			// 
+		$ r ⊢ r,r0 
     _add_im◂◂8r r0 ⊢ r0 
     dlt_i { { h r0 } l } ⊢ {}
     free_arr r ⊢| 
@@ -1472,7 +1492,7 @@
    _cnc_siz◂◂alc_T { h {} } ⊢|
   § free = _cnc_siz◂◂free_T
   
-  § dec0 # { h r }
+  § dec0 { h r }
     !^ r ⊢ *r,c,b 
       ` mov rdi,QWORD [rax] 
 			`	mov rsi,0x0001_0000_0000_0000
@@ -1512,7 +1532,7 @@
       //
     t_i { h r } ⊢ t 
     ∎ { t s }
-  § o # t
+  § o t
     t_o t ⊢ { h r }
     !^ r ⊢ *r,c 
       `	xor rdi,rdi 
@@ -1528,7 +1548,7 @@
 		∐.
 			_ap.emt h ⊢ h 
 			∎|
-  § i # { lc◂{ ht h r } k }
+  § i { lc◂{ ht h r } k }
     $.[ . _hp◂{} ] ht ⊢ ht 
     _eq_hp { k h } ⊢ { k h } 
     $ r ⊢ r,r0 
@@ -1548,7 +1568,7 @@
       //
     t_i { h r } ⊢ t 
     ∎ { t c } 
-  § f◂◂F # { v p }
+  § f◂◂F { v p }
     $ p ⊢ t
     t_o t ⊢ { h r }
     !^ r ⊢ *r 
@@ -2327,7 +2347,6 @@
 		!^ n,b ⊢ *n,*b,r 
     	` sub rsp,rdi 
 			`	mov rsi,0x0001_0000_0000_0000 
-			--`	mov rsi,0x0001_0001_0000_0000 
 			`	add rax,rsi
 			` mov QWORD [rsp],rax
 			` mov rsi,rsp 
@@ -2339,17 +2358,15 @@
 			`	shr rsi,32
 			`	cmp rsi,0
 			`	jne err_mk_stk
-			--`	cmp rsi,0x1_0000
-			--`	jae err_mk_stk
-    	` add rsp,rax 
+			` add rsp,rax 
     	//
   	$ b ⊢ _ 
   	∎ d  
+	-\
 	§ alc◂◂F # { n b v } 
 		!^ n,b ⊢ *n,*b,r 
     	`	push rax
 			`	xor rax,rax 
-			--`	mov rdi,10000
 			`	C_CALL malloc 
 			`	mov rsi,0x0001_0000_0000_0000 
 			`	pop rdi 
@@ -2361,6 +2378,7 @@
   	
   	$ b ⊢ _ 
   	∎ d  
+	-/
 	§ f0◂◂F # { n { k p h } r }
 		$ r ⊢ r,r0 
 		_add_im◂◂8r r0 ⊢ r0 
