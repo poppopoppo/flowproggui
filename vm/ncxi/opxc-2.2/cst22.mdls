@@ -672,13 +672,13 @@
   ∎ %[ F0 ]
   
 § m35 _ 
-  _ref.mk { %[ "33" ] %[ 545r ] } ⊢ p 
-  $ p ⊢ p,p0 
-  _emt p0 ⊢ _ 
-  _ref.o p ⊢ { pl k } 
-  _emt k ⊢ k 
-  _ref.i { pl k } ⊢ p 
-  _emt p ⊢ _
+  _ref.new { %[ "33" ] %[ 0x545r ] } ⊢ p 
+  ---$ p ⊢ p,p0 
+  --_emt p0 ⊢ _ 
+  --_ref.o p ⊢ { pl k } 
+  --_emt k ⊢ k 
+  --_ref.i { pl k } ⊢ p 
+  --_emt p ⊢ _
   ∎ {} 
 
 § m36 { _ I } 

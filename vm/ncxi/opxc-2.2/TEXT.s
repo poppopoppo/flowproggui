@@ -176,23 +176,25 @@ mlc_s8_sf:
 	mov QWORD [err_n],0xbfff
 	jmp err
 
-alc_rcd_n: 
+;alc_rcd_n: 
 	add rdi,1 
-	shl rdi,3 
-	call malloc 
+	shl rdi,3
+	xor rax,rax 
+	C_CALL malloc 
 	mov rdi,0x0001_0000_0000_0000
 	mov QWORD [rax],rdi
 	ret
-free_rcd_n:
-	call free 
+;free_rcd_n:
+	xor rax,rax
+	C_CALL free 
 	ret
-;free_rcd_n: ; rdi=p, rax=n
+free_rcd_n: ; rdi=p, rax=n
 	mov rbx,QWORD [SS_RCD_TOP+8*rax]	 
 	mov QWORD [rdi],rbx
 	mov QWORD [SS_RCD_TOP+8*rax],rdi
 	ret
 
-;alc_rcd_n: ; rdi=n ⊢ rax
+alc_rcd_n: ; rdi=n ⊢ rax
 	mov rbx,QWORD [SS_RCD_TOP+8*rdi]
 	cmp rbx,0 
 	jz .L0 
@@ -233,6 +235,7 @@ alc_rcd_h:
 	ret
 
 calloc_sf: 
+	xor rax,rax 
 	C_CALL_SF calloc 
 	cmp rax,0 
 	jz .L0 
@@ -321,6 +324,7 @@ sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void* context
 	C_CALL set_usr_hdl 
 	mov QWORD [SIG_RIP],rax
 	ret 
+
 sig_dft_alc_rcd: 
 	mov rbx,QWORD [SIG_FLG]
 	and rbx,0xffff 
@@ -355,7 +359,7 @@ lod_1:
 	sub rdi,rax 
 	add QWORD [rsi],rdi
 	ret
-rpc_dyn_adt: ; rax=i rdi=d 
+;rpc_dyn_adt: ; rax=i rdi=d 
 	mov esi,eax 
 	cmp rsi,0x10_0000 
 	jge .L0 
@@ -374,6 +378,16 @@ rpc_dyn_adt: ; rax=i rdi=d
 	and rax,rsi
 	add rax,0x3_0000
 	ret
+rpc_dyn_adt: ; rax=i rdi=d 
+	bt rax,32 
+	jc .L1 
+	ret
+.L1: 
+	mov rsi,0x0001_0000_0000_0000
+	add QWORD [rdi],rsi
+	jc err_dyn_rpc
+	ret
+
 mm32: ; rdi=s  
 	mov esi,DWORD [rdi]
 	add rdi,8	
@@ -587,9 +601,8 @@ mlc_s8: ; rdi=len
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 
-	call calloc_sf
+	C_CALL_SF calloc 
 	mov rdi,0x0001_0000_0000_0000
-	;mov rdi,0x0000_0001_0000_0000
 	pop rsi 
 	add rsi,rdi 
 	mov QWORD [rax],rsi
