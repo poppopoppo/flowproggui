@@ -588,3 +588,21 @@ emt:0x2r : _r64
 emt:var◂p◂*[ 0x39f3af0r | @ ]
 emt:"l(0x2)" : _s8
 exn:100289
+
+
+¶ @.d_lst 
+	∐ cns : { d_lst k' d_lst }
+	∐ nil : {} 
+
+§ apnd { l0 l1 }
+	$ l0 ⊢ 
+	∐ cns◂{ _ _ l0 }
+		apnd { l0 l1 } ⊢|
+	∐. nil◂{} 
+		$ l1 ⊢ 
+		∐ cns◂{ l1 _ _ }
+			apnd { l0 l1 } ⊢| 
+		∐. nil◂{} 
+			∎ nil◂{} 
+
+			

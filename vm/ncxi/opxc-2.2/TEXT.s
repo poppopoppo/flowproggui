@@ -167,10 +167,20 @@ pf_x_bc:
 .L0:
 	mov QWORD [err_n],0x0fcca
 	jmp err
-mlc_s8_sf:
+_mlc_s8_sf:
 	mov rsi,1
 	xor rax,rax 
 	C_CALL_SF calloc
+	cmp rax,0 
+	jz .L0
+	ret
+.L0:
+	mov QWORD [err_n],0xbfff
+	jmp err
+mlc_s8_sf:
+	mov rsi,1
+	xor rax,rax 
+	C_CALL calloc
 	cmp rax,0 
 	jz .L0
 	ret
@@ -362,7 +372,7 @@ stt_hp_1:
 	lea SRC_REG,[rdi+8]
 	mov QWORD [rdi],rsi
 	ret
-								
+
 lod_1:
 	mov eax,eax 
 	shr rax,16 
@@ -373,25 +383,31 @@ lod_1:
 	sub rdi,rax 
 	add QWORD [rsi],rdi
 	ret
-;rpc_dyn_adt: ; rax=i rdi=d 
+
+_rpc_dyn_adt: ; rax=i rdi=d 
+	bt rax,33 
+	jc .Le
+	bt rax,32 
+	jc .Lp 
+	ret
+.Lp:
 	mov esi,eax 
 	cmp rsi,0x10_0000 
-	jge .L0 
+	jae .L0 
 	add rax,0x1_0000 
 	ret 
 .L0:
-	bt rax,32 
-	jc .L1 
-	and rax,0xffff 
-	ret
-.L1: 
-	mov rsi,0x0000_3fff_0000_0000
+	mov rsi,0x0000_ffff_0000_0000
 	add QWORD [rdi],rsi
-	jc err_dyn_rpc
+	jc .Le
 	mov rsi,0x1_0000_ffff 
 	and rax,rsi
-	add rax,0x3_0000
+	;add rax,0x3_0000
 	ret
+.Le:
+	mov QWORD [err_n],0xbbdd 
+	jmp err
+
 rpc_dyn_adt: ; rax=i rdi=d 
 	bt rax,33 
 	jc err_dyn_rpc 
@@ -617,7 +633,7 @@ mlc_s8: ; rdi=len
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 
-	C_CALL_SF calloc 
+	C_CALL calloc 
 	mov rdi,0x0001_0000_0000_0000
 	pop rsi 
 	add rsi,rdi 
@@ -731,6 +747,7 @@ err_bc:
 	add rdi,rax 
 	mov QWORD [err_n],rdi
 	jmp err
+err_dyn_dyn:
 err_dyn_rpc: 
 	mov rax,0xffef_bbbc
 	mov QWORD [err_n],rax

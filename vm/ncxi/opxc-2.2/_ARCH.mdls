@@ -749,7 +749,7 @@
 				`	cmp rax,rsp
 				`	jae .L0
 				` mov rdi,rax
-				(C_CALL_SF◂◂"free")
+				(C_CALL◂◂"free")
 				`.L0:
   	    // 
   	  $ r ⊢ _ 
@@ -763,7 +763,7 @@
   	    `	cmp rax,rsp
 				`	jae .L0
   	    ` mov rdi,rax
-				(C_CALL_SF◂◂"free") 
+				(C_CALL◂◂"free") 
 				`.L0:
   	    // 
   	  $ r ⊢ _ 
@@ -919,7 +919,7 @@
       `	cmp rax,rsp
 			`	jae .L0
       ` mov rdi,rax
-			(C_CALL_SF◂◂"free")
+			(C_CALL◂◂"free")
 			`.L0:
 			// 
 		∎ {}
@@ -1112,7 +1112,7 @@
         dlt_i { { h r0 } l } ⊢ {}
        !^ r ⊢ *r 
       	` mov rdi,rax
-				(C_CALL_SF◂◂"free") 
+				(C_CALL◂◂"free") 
         // 
        $ r ⊢ _ 
        ∎ {}
@@ -1131,7 +1131,7 @@
         dlt_lc_i { { h r0 j } l } ⊢ {}
        !^ r ⊢ *r 
          ` mov rdi,rax
-				(C_CALL_SF◂◂"free") 
+				(C_CALL◂◂"free") 
         // 
        $ r ⊢ _ 
        ∎ {}
@@ -1701,7 +1701,8 @@
   § lod # p 
     f◂◂lod_F { {} p } ⊢ { k p }
     ∎ { p k }
-  § lod_ctr◂◂C # p 
+  § l = lod 
+	§ lod_ctr◂◂C # p 
     f_ctr◂◂{ C lod_F } { {} p } ⊢ { k p }
     ∎ { p k }
   § l_ctr = lod_ctr 
@@ -2472,7 +2473,7 @@
     ofs_arr { h b } ⊢ b
     !^ b,r ⊢ r,*z 
       ` mov rsi,rax 
-		  (C_CALL_SF◂◂"realloc")		
+		  (C_CALL◂◂"realloc")		
       `	mov rsi,QWORD [rax] 
 	  	//
     $ z ⊢ _ 
