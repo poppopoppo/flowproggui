@@ -1,17 +1,17 @@
 	SGN: dq 0
-	ARR_X_UNT: dq 0	
+	ARR_X_UNT: dq 0x0001_0000_0000_0000	
 	tmp: dq 0 
 	BC_PT: dq 0x00ff0f0f
 	SIG_FLG: dq 0 
 	SIG_ETR: dq 0 
 	SIG_RIP: dq 0
-	GD_BUF_N: dq 0 
-	EMT_FLG: dq 0 
+	;GD_BUF_N: dq 0 
+	;EMT_FLG: dq 0 
 	err_n: dq 0
-	 SS_LN_C: dq 0
-	S8_N: dq 0 
-	CLR_N: dq 2 
-	CLR_NULL: dq 0,0,1
+	;SS_LN_C: dq 0
+	;S8_N: dq 0 
+	;CLR_N: dq 2 
+	;CLR_NULL: dq 0,0,1
 
 	fmt_exn: db "exn:%lld",10,0 
 	fmt_err_line: db "err:%llx",10,0
@@ -23,7 +23,7 @@
 	fmt_nl: db 10,0
 	fmt_spc: db " ",0
 	fmt_emt: db "_emt:",0
-	fmt_test0: db "sig segv handled!!:",0
+	;fmt_test0: db "sig segv handled!!:",0
 	rt_err0: db "rt_err:",10,0 
 s8_e: dq 0,0
 

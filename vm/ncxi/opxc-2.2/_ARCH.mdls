@@ -528,7 +528,7 @@
     ` lea rdi,[8+8*rdi]
     ` mov rsi,1
     ` xor rax,rax 
-    ` CALLOC_SF
+    (C_CALL◂◂"calloc")
     ` pop QWORD [rax]
     ` mov rdi,rax
     //
@@ -545,7 +545,7 @@
     `	push rdi 
 		` mov rsi,1
     ` xor rax,rax 
-    ` CALLOC_SF
+    (C_CALL◂◂"calloc")
     `	pop rsi 
     ` pop QWORD [rax]
 		` mov rdi,rax
@@ -701,7 +701,6 @@
     ` mov rdi,rax 
     //
   ∎ { s h }
-
 § mlc0 l 
   $ l ⊢ l,l0 
   !^ l0 ⊢ m 
@@ -712,7 +711,7 @@
 		`	lea rdi,[rdi+16] 
 		`	mov rsi,1 
 		`	xor rax,rax 
-		`	CALLOC_SF
+		(C_CALL◂◂"calloc")
 		`	pop rdi
 		`	mov rsi,0x0001_0000_0000_0000
 		`	add rdi,rsi
@@ -822,7 +821,7 @@
 	  		` push rdi 
         `	lea rsi,[8+8*rax]
 	  		`	mov rdi,1 
-	  		`	CALLOC_SF
+	  		(C_CALL◂◂"calloc")
         `	pop rdi 
 				`	mov QWORD [rax],rdi 		
 	  		//
@@ -2026,10 +2025,10 @@
     `.L1:						
 	  ` cmp rax,rsi
 	  ` jge .L2
-	  ` movzx MCR_REG,BYTE [rdi+8+rax]
-	  ` cmp MCR_REG,9 
+	  ` movzx rbx,BYTE [rdi+8+rax]
+	  ` cmp rbx,9 
 	  ` jz .L0
-	  ` cmp MCR_REG,32 
+	  ` cmp rbx,32 
 	  ` jz .L0
     `.L2:
     //
@@ -2049,12 +2048,12 @@
     `.L1:						
 	  ` cmp rax,rsi
 	  ` jge .L2
-	  ` movzx MCR_REG,BYTE [rdi+8+rax]
-	  ` cmp MCR_REG,9 
+	  ` movzx rbx,BYTE [rdi+8+rax]
+	  ` cmp rbx,9 
 	  ` jz .L0
-    ` cmp MCR_REG,10
+    ` cmp rbx,10
     ` jz .L0
-	  ` cmp MCR_REG,32 
+	  ` cmp rbx,32 
 	  ` jz .L0
     `.L2:
     //
@@ -2368,7 +2367,7 @@
 		!^ n,b ⊢ *n,*b,r 
     	`	push rax
 			`	xor rax,rax 
-			`	C_CALL malloc 
+			(C_CALL◂◂"malloc ")
 			`	mov rsi,0x0001_0000_0000_0000 
 			`	pop rdi 
 			`	add rdi,rsi
@@ -2506,7 +2505,7 @@
     !^ c ⊢ r 
 	  	` mov rsi,rax 
       `	mov rdi,1 
-	  	`	CALLOC_SF
+			(C_CALL◂◂"calloc")
       ` mov QWORD [rax],1
 	  	//
     $ r ⊢ r,b 

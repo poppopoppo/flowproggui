@@ -1,21 +1,6 @@
-
-%define SS_NULL 0xffff_ffff_ffff_0000
-%define EMT_BUF_MAX (KB<<1)	
+bits 64 ;64bitモードのプログラムであることを指定
 
 ;; futex 
-%define FUTEX_WAIT		0
-%define FUTEX_WAKE		1
-%define FUTEX_FD		2
-%define FUTEX_REQUEUE		3
-%define FUTEX_CMP_REQUEUE	4
-%define FUTEX_WAKE_OP		5
-%define FUTEX_LOCK_PI		6
-%define FUTEX_UNLOCK_PI		7
-%define FUTEX_TRYLOCK_PI	8
-%define FUTEX_WAIT_BITSET	9
-%define FUTEX_WAKE_BITSET	10
-%define FUTEX_WAIT_REQUEUE_PI	11
-%define FUTEX_CMP_REQUEUE_PI	12
 
 ;; sys/syscall.h
 %define SYS_write	1
@@ -58,21 +43,11 @@
 %define GB MB*MB
 %define SIG_INT 2
 %define SIG_SEGV 11
-%define SS_MAX 4000
-%define MCR_REG rbx
 %define SRC_REG rbp 
 %define DST_REG rbp
 
 bits 64
 ; macros
-
-%macro RT_ERR 1 
-	mov rdi,rt_err0 
-	mov rsi,8
-	C_CALL fw
-	mov QWORD [err_n],%1 
-	jmp err 
-%endmacro
 
 %macro C_PUSH_REGS 0 
 	push rdx
@@ -117,12 +92,6 @@ bits 64
 	mov rsp,rbx
 	pop rbx
 %endmacro 
-
-%macro CALLOC_SF 0
-	C_CALL_SF calloc 
-	cmp rax,0 
-	jz err
-%endmacro
 
 %define SEED 0x_f7f7_65d7_9dab_bace
 

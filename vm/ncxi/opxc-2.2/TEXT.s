@@ -2,61 +2,6 @@
 	unt: dq 0x0
 
 	unt_0: dq 0x0 
-thread_create: ; rdi=fn
-	push rdi
-	call stack_create
-	lea rsi, [rax + STACK_SIZE - 8]
-	pop qword [rsi]
-	mov rdi, THREAD_FLAGS
-	mov rax, SYS_clone
-	syscall
-	cmp rax,-1 
-	jz err 
-	ret
-
-;; void *stack_create(void)
-stack_create:
-	mov rdi, 0
-	mov rsi, STACK_SIZE
-	mov rdx, PROT_WRITE | PROT_READ
-	mov r10, MAP_ANONYMOUS | MAP_PRIVATE | MAP_GROWSDOWN
-	mov r8, -1
-	mov r9, 0
-	mov rax, SYS_mmap
-	syscall
-	cmp rax,-1 
-	jz err 
-	ret
-
-th0:
-	mov QWORD [FLG1],0 
-	mov rax,SYS_futex 
-	mov rdi,FTX0 
-	mov rsi,FUTEX_WAIT 
-	mov rdx,0
-	mov r10,0 
-	syscall  
-	cmp rax,-1 
-	jz err_th0
-th0_0:
-	mov rdi,0
-	lock xchg QWORD [BUF0],rdi
-	cmp rdi,0 
-	jnz th0_1 
-	nop  
-	nop 
-	nop  
-	nop 
-	jmp th0_0
-th0_1: 
-	mov rsi,0
-	lock xchg QWORD [FTX0],rsi
-	mov QWORD [FLG1],1
-	cmp rsi,0 
-	jz err_th0 
-	mov rax,QWORD [rdi] 
-	xor rax,rax 
-	jmp th0
 
 pf_x_tb: db "0123456789abcdef"
 pf_x: ; rdi=buf rax=num ⊢ rdi=buf rax=add-n
@@ -167,6 +112,29 @@ pf_x_bc:
 .L0:
 	mov QWORD [err_n],0x0fcca
 	jmp err
+
+
+inc_p: ; rax 
+	btr rax,63 
+	jc .L0 
+	mov rdi,0x0001_0000_0000_0000
+	add QWORD [rax],rdi 
+	jc err_dyn_rpc 
+	ret
+.L0:
+	mov QWORD [0],0
+	jmp err
+
+dec_p: ; rdi ⊢ rdi,rsi 
+	mov rsi,QWORD [rdi] 
+	mov rax,0x0001_0000_0000_0000
+	sub rsi,rax
+	jc .L0 
+	mov QWORD [rdi],rsi
+	ret
+.L0:
+	jmp err_dyn_rpc
+
 _mlc_s8_sf:
 	mov rsi,1
 	xor rax,rax 
@@ -369,9 +337,30 @@ stt_hp_1:
 	bts rax,rcx
 	mov rsi,QWORD [rdi]
 	sub rsi,rax 
-	lea SRC_REG,[rdi+8]
 	mov QWORD [rdi],rsi
+	lea SRC_REG,[rdi+8]
 	ret
+
+add_w_adt: ; rax=w:dyn , rsi=p
+	shr rax,16 
+	mov rcx,rax 
+	mov rax,0x0001_0000_0000_0000 
+	shr rax,cl 
+	mov rdi,0x0001_0000_0000_0000
+	sub rdi,rax 
+	add QWORD [rsi],rdi
+	jc err_dyn_rpc
+	ret
+
+dec_w_adt: ; rax=w:dyn , rsi=p
+	shr rax,16 
+	mov rcx,rax 
+	mov rax,0x0001_0000_0000_0000 
+	shr rax,cl 
+	mov rdi,QWORD [rsi]
+	sub rdi,rax 
+	mov QWORD [rsi],rdi
+	ret 
 
 lod_1:
 	mov eax,eax 
@@ -382,8 +371,8 @@ lod_1:
 	mov rdi,0x0001_0000_0000_0000
 	sub rdi,rax 
 	add QWORD [rsi],rdi
+	jc err_dyn_rpc
 	ret
-
 _rpc_dyn_adt: ; rax=i rdi=d 
 	bt rax,33 
 	jc .Le
@@ -397,7 +386,7 @@ _rpc_dyn_adt: ; rax=i rdi=d
 	add rax,0x1_0000 
 	ret 
 .L0:
-	mov rsi,0x0000_ffff_0000_0000
+	mov rsi,0x0001_ffff_0000_0000
 	add QWORD [rdi],rsi
 	jc .Le
 	mov rsi,0x1_0000_ffff 
@@ -759,9 +748,7 @@ err:
 	C_CALL printf
 	mov rax,SYS_exit
 	syscall
-err_th0: 
-	mov rax,SYS_exit 
-	syscall 
+
 exn:
 	mov rdi,fmt_exn
 	;mov rsi,QWORD [err_n]
