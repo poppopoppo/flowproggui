@@ -269,7 +269,7 @@
   _hp.ini_ct◂◂H {} ⊢ hH 
   $.[ t' . { _hp◂(_hp◂t') _hp◂t' } ] { hH h } ⊢ { hH h }
   F◂◂(_ct.cnc_siz◂◂H) a ⊢|
-§ _cnc_lod_hp # { r h } 
+§ _cnc_lod_hp # { r h }  
   _cnc_lod r ⊢ { r k }  
   _eq_hp { k h } ⊢ { k h }
   ∎ { r h k }
@@ -2209,8 +2209,18 @@
     r640 rp ⊢ rp
     --∐ b'<>0r 
 			_ref.t_i { hp rp } ⊢ p
-      emt_cst◂◂" | @ ]" {} ⊢ {} 
-      ∎ p
+      _ref.chk p ⊢ { p c }
+			-\
+			∐ c'=0r 
+				_ref.o p ⊢ { p k } 
+				_emt0 k ⊢ k 
+				_ref.i { p k } ⊢ p 
+				emt_cst◂◂" .. ]" {} ⊢ {} 
+  	    ∎ p
+			∐.
+			-/
+				emt_cst◂◂" | @ ]" {} ⊢ {} 
+  	    ∎ p
     -\
 		∐. .
       emt_cst◂◂" | " {} ⊢ {} 
