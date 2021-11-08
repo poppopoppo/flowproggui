@@ -117,11 +117,22 @@ pf_x_bc:
 inc_p: ; rax 
 	btr rax,63 
 	jc .L0 
-	mov rdi,0x0001_0000_0000_0000
-	add QWORD [rax],rdi 
-	jc err_dyn_rpc 
+	mov rsi,0x0001_0000_0000_0000
+	add QWORD [rax],rsi 
+	jc .L1 
 	ret
 .L0:
+	mov rsi,QWORD [rax]
+	mov QWORD [0],0
+	jmp err
+.L1:
+	bt QWORD [rax],47 
+	jnc .L2 
+	mov rsi,0x0800_0000_0000_0000
+	add QWORD [rax],rsi
+	ret
+.L2:
+	mov rsi,QWORD [rax]
 	mov QWORD [0],0
 	jmp err
 
@@ -133,6 +144,14 @@ dec_p: ; rdi ⊢ rdi,rsi
 	mov QWORD [rdi],rsi
 	ret
 .L0:
+	bt QWORD [rdi],47 
+	jnc .L2 
+	mov rax,0x0800_0000_0000_0000
+	add rsi,rax 
+	mov QWORD [rdi],rsi
+	ret
+.L2:
+	mov QWORD [0],0
 	jmp err_dyn_rpc
 
 _mlc_s8_sf:
@@ -331,48 +350,71 @@ sig_dft:
 stt_hp_1:
 	mov eax,eax 
 	shr rax,16 
-	mov rcx,48 
-	sub rcx,rax 
-	xor rax,rax 
-	bts rax,rcx
+	cmp rax,0 
+	jnz .L0
+	;mov rcx,48 
+	;sub rcx,rax 
+	;xor rax,rax 
+	;bts rax,rcx
+	mov rbp,0x0001_0000_0000_0000 
 	mov rsi,QWORD [rdi]
-	sub rsi,rax 
+	;sub rsi,rax 
+	sub rsi,rbp
+	jc .L0
 	mov QWORD [rdi],rsi
 	lea SRC_REG,[rdi+8]
 	ret
-
+.L0:
+	mov QWORD [0],0
+	jmp err
 add_w_adt: ; rax=w:dyn , rsi=p
 	shr rax,16 
-	mov rcx,rax 
-	mov rax,0x0001_0000_0000_0000 
-	shr rax,cl 
-	mov rdi,0x0001_0000_0000_0000
-	sub rdi,rax 
-	add QWORD [rsi],rdi
-	jc err_dyn_rpc
+	cmp rax,0 
+	jnz .L0 
+	;mov rcx,rax 
+	;mov rax,0x0001_0000_0000_0000 
+	;shr rax,cl 
+	;mov rdi,0x0001_0000_0000_0000
+	;sub rdi,rax 
+	;add QWORD [rsi],rdi
+	;jc .L0
 	ret
-
+.L0:
+	mov QWORD [0],0
+	jmp err
 dec_w_adt: ; rax=w:dyn , rsi=p
 	shr rax,16 
-	mov rcx,rax 
+	cmp rax,0 
+	jnz .L0 
+	;jc .L0 
+	;mov rcx,rax 
 	mov rax,0x0001_0000_0000_0000 
-	shr rax,cl 
+	;shr rax,cl 
 	mov rdi,QWORD [rsi]
 	sub rdi,rax 
+	jc .L0 
 	mov QWORD [rsi],rdi
 	ret 
+.L0:
+	jmp err
 
 lod_1:
 	mov eax,eax 
 	shr rax,16 
-	mov rcx,rax 
-	mov rax,0x0001_0000_0000_0000 
-	shr rax,cl 
-	mov rdi,0x0001_0000_0000_0000
-	sub rdi,rax 
-	add QWORD [rsi],rdi
-	jc err_dyn_rpc
+	cmp rax,0 
+	jnz .L0 
+	;mov rcx,rax 
+	;mov rax,0x0001_0000_0000_0000 
+	;shr rax,cl 
+	;mov rdi,0x0001_0000_0000_0000
+	;sub rdi,rax 
+	;add QWORD [rsi],rdi
+	;jc .L0
 	ret
+.L0:
+	mov QWORD [0],0
+	jmp err
+
 _rpc_dyn_adt: ; rax=i rdi=d 
 	bt rax,33 
 	jc .Le
@@ -399,15 +441,22 @@ _rpc_dyn_adt: ; rax=i rdi=d
 
 rpc_dyn_adt: ; rax=i rdi=d 
 	bt rax,33 
-	jc err_dyn_rpc 
+	jc .L2
 	bt rax,32 
 	jc .L1 
 	ret
 .L1: 
-	mov rsi,0x0001_0000_0000_0000
-	add QWORD [rdi],rsi
-	jc err_dyn_rpc
+	mov rsi,rdi 
+	mov rdi,rax 
+	mov rax,rsi 
+	call inc_p 
+	mov rsi,rdi 
+	mov rdi,rax 
+	mov rax,rsi 
 	ret
+.L2:
+	mov QWORD [0],0
+	jmp err_dyn_rpc
 
 mm32: ; rdi=s  
 	mov esi,DWORD [rdi]

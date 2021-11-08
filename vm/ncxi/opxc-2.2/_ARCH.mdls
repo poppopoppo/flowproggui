@@ -791,16 +791,14 @@
     		`	mov rdi,QWORD [rax]
 				`	shr rdi,32 
 				`	sub rdi,0x1_0000
-				`	jc err_dyn_rpc 
 				//
 			∐ c'=0r
 				_hp.to { r hx } ⊢|
 			∐.
 				$ c ⊢ _ 
 				!^ r ⊢ rx
-					`	mov rsi,0x0001_0000_0000_0000
-					`	sub QWORD [rax],rsi 
 					`	mov rdi,rax 
+					`	call dec_p 
 					`	call rpc_s8 
 					// 
 				_hp.to { rx hx } ⊢|
@@ -1384,7 +1382,6 @@
   	 	 	`	mov rdi,QWORD [rax]
 				`	shr rdi,32
 				`	sub rdi,0x1_0000
-				`	jc err_dyn_rpc 
 				//
 			∐ 0r<>c' 
 				$ c ⊢ _ 
@@ -1393,8 +1390,8 @@
 				_add_im◂◂8r r1 ⊢ r1
 				map_r_e_ir◂◂F { { v r0 h0 r1 h1 l } %[ 0r ] } ⊢ v
 				!^ r0t ⊢ *r0t 
-					`	mov rdi,0x0001_0000_0000_0000 
-					`	sub QWORD [rax],rdi 
+					`	mov rdi,rax 
+					`	call dec_p 
 					//
 				∎ { v a1 }
 			∐.
@@ -1511,9 +1508,7 @@
   § inc # t
     t_o t ⊢ { h r }
     !^ r ⊢ *r 
-			`	mov rsi,0x0001_0000_0000_0000
-      `	add QWORD [rax],rsi 
-      `	jc err_dyn_rpc 
+			`	call inc_p 
 			//
     t_i { h r } ⊢ t 
     ∎ t
@@ -1670,7 +1665,6 @@
       ` btr rdi,31
 			`	mov rsi,0x0001_0000_0000_0000
 			`	sub rdi,rsi
-      `	jc err_dyn_rpc 
       //
     ∐ c'=0r 
       $ c ⊢ _ 
@@ -1684,9 +1678,9 @@
       _add_im◂◂8r r0 ⊢ r0 
       _cnc_sto { r0 k0 } ⊢ _
       !^ r ⊢ *r 
-				`	mov rsi,0x0001_0000_0000_0000
-        ` sub QWORD [rax],rsi
-        ` btr QWORD [rax],31
+				`	mov rdi,rax 
+				`	call dec_p 
+				` btr QWORD [rdi],31
         //
       ∎ k
   § to_i_F # k 
