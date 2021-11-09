@@ -1403,29 +1403,39 @@
   	    free_arr r0t ⊢ {} 
 				∎ { v a1 }
 				
-	§§ of_lst 
-		§ @.i { { h i } l }
-  		$ l ⊢ 
-			∐ _cns◂{ x l } . 
-				_eq_hp { x h } ⊢ { x h } 
-				_inc i ⊢ i
-  	    i { { h i } l } ⊢ { h r }
-  	    _cnc_sub { r h } ⊢ { r h }
-				_cnc_sto { r x } ⊢ r
-				∎ { h r }
-  	  ∐. _nil◂{} .
-  	    $ h ⊢ h,h0 
-				alc_l { h0 i } ⊢  { _ r S }  
-  	    _add { r S } ⊢ { r _ }
-				∎ { h r }
-   	§ f l
-			_hp.ini {} ⊢ h
-			i { { h %[ 0r ] } l } ⊢ { h r }
-			_sub_im◂◂8r r ⊢ r 
-			_hp.ini {} ⊢ ha 
-			$.[ k' . { _hp◂k' _hp◂(_arr◂k') } ] { h ha } ⊢ { _ ha }
-			_hp.to { r ha } ⊢ a 
-			∎ a
+	§§ of_lst 	
+		§ F # { {} x } 
+			∎ { {} x } 
+		§§ rev 
+			§§ map_l 
+				§ @.i◂◂F { { h v i } l }
+	  			$ l ⊢ 
+					∐ _cns◂{ x l } . 
+						F { v x } ⊢ { v x }
+						_eq_hp { x h } ⊢ { x h } 
+						_inc i ⊢ i
+	  		    i◂◂F { { h v i } l } ⊢ { { h v } r o }
+						_cnc_sto { o x } ⊢ o 
+				    _cnc_add { o h } ⊢ { o h }
+						∎ { { h v } r o }
+	  		  ∐. _nil◂{}
+	  		    $ h ⊢ h,h0 
+						alc { h0 i } ⊢  { _ r }  
+	  		    $ r ⊢ r,o
+						_add_im◂◂8r o ⊢ o
+						∎ { { h v } r o }
+	  		§ f◂◂F { v l }
+					_hp.ini {} ⊢ h
+					i◂◂F { { h v %[ 0r ] } l } ⊢ { { h v } r _ }
+					_hp.ini {} ⊢ ha 
+					$.[ k' . { _hp◂k' _hp◂(_arr◂k') } ] { h ha } ⊢ { _ ha }
+					_hp.to { r ha } ⊢ a 
+					∎ { v a }
+				∎∎
+			§ f # l 
+				map_l.f◂◂F { {} l } ⊢ { {} a }
+				∎ a
+			∎∎ 
 		§§ map_l
 			§ @.i◂◂F { { h v i } l }
   			$ l ⊢ 
@@ -1451,6 +1461,9 @@
 				_hp.to { r ha } ⊢ a 
 				∎ { v a }
 			∎∎
+		§ f # l 
+			map_l.f◂◂F { {} l } ⊢ { {} a }
+			∎ a
 		∎∎
 	§ of_lst = of_lst.f
   § sum_i # { m i }
