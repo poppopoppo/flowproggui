@@ -1226,7 +1226,7 @@
   § i_0 { lc◂{ hb i a } k } 
 		--_emt0 %[ "asc0:2:1" ] ⊢ _ 
     $.[ . _hp◂{} ] hb ⊢ hb
-    _hp.ini {} ⊢ h 
+    _hp.ini {} ⊢ h  
     $.[ k',t' . { _hp◂k' _arr0◂t'◂k' k' } ] { h a k } ⊢ { h a k } 
     $ i ⊢ i,b 
     ofs_arr { h b } ⊢ b 

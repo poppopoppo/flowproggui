@@ -785,7 +785,6 @@ err_bc:
 	add rdi,rax 
 	mov QWORD [err_n],rdi
 	jmp err
-err_dyn_dyn:
 err_dyn_rpc: 
 	mov rax,0xffef_bbbc
 	mov QWORD [err_n],rax
