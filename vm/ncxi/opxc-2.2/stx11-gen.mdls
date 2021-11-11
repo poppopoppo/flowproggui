@@ -12765,7 +12765,7 @@
 					∐. .
 						∎| 
 			@.asc_2_lst { V { l0 l1 } }
-				∐ l0 ⊢ _cns◂{ xp l0 }; l1 ⊢ _cns◂{ sp l1 } . 
+				∐ l0 ⊢ _cns◂{ xp l0 }; l1 ⊢ _cns◂{ sp l1 }
 					asc_2 { V { xp sp } } ⊢ { V sp }
 					asc_2_lst { V { l0 l1 } } ⊢ { V l1 }
 					∎ { V ⟦ sp < l1 ⟧ } 
