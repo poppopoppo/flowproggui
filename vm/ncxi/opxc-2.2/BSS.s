@@ -7,11 +7,21 @@
 	FTX0: resq 1
 	NULL: resq 1 
 	BUF0: resq 8
+<<<<<<< HEAD
 	SS_RCD_TOP: resq RCD_N
 	SS_RCD_BTM: resq RCD_N 
 	SS_RCD_N: resq RCD_N 
 	PAGE_SIZE: resq 1
 	
+=======
+	SS_RCD_TOP: resq 64 
+	SS_RCD_BTM: resq 64 
+	SS_RCD_N: resq 64 
+	;GLV: resq GLV_N
+	PAGE_SIZE: resq 1
+	
+; emt buffer 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	SS_RCD_C: resq (RCD_N+1)
 
 ;stat: resb 144
