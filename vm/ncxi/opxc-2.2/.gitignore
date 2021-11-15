@@ -10,7 +10,5 @@ perf.data.old
 *.7z
 *.zip
 *.deb
-
-
-
+core
 

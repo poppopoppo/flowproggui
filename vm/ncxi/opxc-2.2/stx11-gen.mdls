@@ -3197,6 +3197,10 @@
 				f { ⟦⟧ %[ GEN ] xl yl } ⊢ { ll b } 
 				fl ll ⊢ {} 
 				∎ b
+			§ f_lst_ll_b # { xl yl } 
+				f_lst { ⟦⟧ %[ GEN ] xl yl } ⊢ { ll b } 
+				fl ll ⊢ {} 
+				∎ b
 			§ f_lst_a { ll slv xl yl }
 				f_lst_slv { ll slv xl yl } ⊢ { ll b }
 				∐ b'=1r 
@@ -3870,7 +3874,7 @@
 			∐ k_i_axm : { _r64 T.t_p }
 			∐ k_i_op : { bl.t k_op_p◂c' { T.t_p T.t_p } }
 			∐ k_i_op_gnr : { TP bl.t _opn◂c' k_op_gnr_p◂c' { T.t_p { T.t_p T.t_p } } }
-			∐ k_i_ap : { _ref◂(ap◂c') { _lst◂T.t_p T.t_p } }
+			∐ k_i_ap : { _ref◂(ap◂c') _lst◂T.t_p }
 			∐ k_i_tc : { T.t_p tl_k_i◂c' c' }
 		§ smt_ap o 
 				∐ o ⊢ ap_some◂t . 
@@ -3960,6 +3964,7 @@
 					∎ k
 				∐. k_v◂v . 
 					∎|
+			-\
 			§ set_evv { i k0 } 
 				_ref.o i ⊢ { I p } 
 				$ p ⊢ 
@@ -3967,7 +3972,7 @@
 					_ref.to_i { I k_p◂{ k0 t } } ⊢|
 				∐. k_v◂v .	
 					∎|
-			
+			-/
 			∎∎
 		
 		§§ is_btm 
@@ -5616,10 +5621,9 @@
 				∐ ast.k_i_axm◂{ a t }
 					T.inst.f { { N lv } t } ⊢ { { N lv } t }
 					∎ { { N lv } ast.k_i_axm◂{ a t } }
-				∐ ast.k_i_ap◂{ p { vl t } }
-					T.inst.f { { N lv } t } ⊢ { { N lv } t }
+				∐ ast.k_i_ap◂{ p vl }
 					T.inst.f_lst { { N lv } vl } ⊢ { { N lv } vl }
-					∎ { { N lv } ast.k_i_ap◂{ p { vl t } } }
+					∎ { { N lv } ast.k_i_ap◂{ p vl } }
 				∐ ast.k_i_op◂{ ib lc { ql v } }
 					T.inst.f { { N lv } v } ⊢ { { N lv } y }
 					T.inst.f { { N lv } ql } ⊢ { { N lv } ql }
@@ -5635,6 +5639,7 @@
 					_arr.map_r◂◂tc_i { { N lv } A } ⊢ { { N lv } A }
 					∎ { { N lv } ast.k_i_tc◂{ T { tl A } c } }
 			@.tc = _arr.map_r◂◂tc_i 
+			@.tc_stk◂◂F = _mk_stk.arr.f◂◂{ tc_i F }
 			@.cst { E c } 
 				$ c ⊢ 
 				∐ ast.k_name◂i
@@ -5725,12 +5730,12 @@
 				∐ ast.k_ap◂{ p { vl t } }
 					$ E ⊢ { al lv APV I L }
 					_sgn.new {} ⊢ N 
-					T.inst.i_rpc.f { { N lv } t } ⊢ { { N lv } t t0 }
+					T.inst.f { { N lv } t } ⊢ { { N lv } t }
 					T.inst.f_lst { { N lv } vl } ⊢ { { _ lv } vl }
 					inc_x I ⊢ { j I }
-					$ ⟦ ast.k_i_ap◂{ p { vl t } } < L ⟧ ⊢ L 
+					$ ⟦ ast.k_i_ap◂{ p vl } < L ⟧ ⊢ L 
 					$ { al lv APV I L } ⊢ E 
-					∎ { E RP.atm◂ast.k_i◂j t0 }
+					∎ { E RP.atm◂ast.k_i◂j t }
 				∐ ast.k_arr◂v .
 					$ E ⊢ { al lv APV I L }
 					T.nvl lv ⊢ { lv y }
@@ -6099,6 +6104,10 @@
 				ct_ptn { { { %[ vt.lc_gl ] ⟦⟧ } lv V } ct } ⊢ { { { _ ll } lv V } y }
 				T.unify.fl ll ⊢ {} 
 				∎ { { lv V } c y }
+			§ f_d # { { lv V } ct }
+				ct_ptn { { { %[ vt.lc_gl ] ⟦⟧ } lv V } ct } ⊢ { { { _ ll } lv V } y }
+				T.unify.fl ll ⊢ {} 
+				∎ { { lv V } y }
 			∎∎
 		§ cst =| 
 		§ lc = lc.f
@@ -6107,7 +6116,7 @@
 				$ k ⊢ 
 				∐ ast.k_i_axm◂{ _ t }
 					T.gen.f_ql_lv◂◂L { N t } ⊢|
-				∐ ast.k_i_ap◂{ _ { vl _ } }
+				∐ ast.k_i_ap◂{ _ vl }
 					T.gen.f_lst_ql_lv◂◂L { N vl } ⊢| 
 				∐ ast.k_i_op◂{ _ _ { ql _ } }
 					T.gen.f_ql_lv◂◂L { N ql } ⊢| 
@@ -6165,50 +6174,50 @@
 				∐. .
 					_emt a ⊢ _ 
 					∎|
-			§ @.slv_i { APV V l i { vl y } } 
+			§ @.slv_i { APV V l i vl } 
 				∐ l'<>i' .
-					_arr.o { V i } ⊢ { V { vlt yc A ct } }
-					T.iug.N.lst { vlt vl } ⊢ { vlt vl b0 }
-					∐ b0'=1r . 
-						$ b0 ⊢ _ 
-						$ ct ⊢ ct,c 
-						$ yc ⊢ yc,yct 
-						$ A ⊢ { tl A },At
-						_alc_i { V { vlt yct At ct } } ⊢ { V _ } 
-						_sgn.new {} ⊢ N 
-						T.inst.f { { N %[ 1r ] } yc } ⊢ { { N _ } yc } 
-						T.inst.f_lst { { N %[ 1r ] } tl } ⊢ { { N _ } tl } 
-						slv.tc { { N %[ 1r ] } A } ⊢ { { _ _ } A }
-						T.unify.f_ll_b { { yc %[ 1r ] } { y %[ 0r ] } } ⊢ b
-						gen_lv_dlt_lst◂◂0r tl ⊢ {} 
-						--_sgn.new {} ⊢ N 
-						--slv.tc_gen◂◂0r { { N ⟦⟧ } A } ⊢ { _ A } 
-						∐ b'=1r . 
+					_arr.o { V i } ⊢ { V { vlt yc { tl A } ct } }
+					--T.iug.N.lst { vlt vl } ⊢ { vlt vl b0 }
+					$ { vl vlt } ⊢ { vl vlt },{ vl0 vlt0 } 
+					_sgn.new {} ⊢ M
+					T.inst.f_lst { { M %[ 1r ] } vl0 } ⊢ { { _ _ } vl0 } 
+					_sgn.new {} ⊢ N 
+					--T.inst.f { { N %[ 1r ] } yc0 } ⊢ { { N _ } yc0 } 
+					T.inst.f_lst { { N %[ 1r ] } vlt0 } ⊢ { { N _ } vlt0 } 
+					$ vlt0 ⊢ vlt0,vlu 
+					T.unify.f_lst_ll_b { { vl0 %[ 1r ] } { vlt0 %[ 1r ] } } ⊢ b0
+					∐ b0'=1r 
+					
+						$ b0 ⊢ _
+						$ vl ⊢ vl,vl0 
+						T.unify.f_lst_ll_b { { vl0 %[ 0r ] } { vlu %[ 1r ] } } ⊢ b
+						∐ b'=1r 
 							$ b ⊢ _ 
 							$ vl ⊢ _ 
-							∎ { APV V ‹ { c A } › } 
+							$ ct ⊢ ct,c 
+							$ { tl A } ⊢ { tl A },At
+							_alc_i { V { vlt yc At ct } } ⊢ { V _ } 
+							
+							∎ { APV V ‹ { N tl A c } › } 
 						∐. .
-							$ c ⊢ _ 
-							--\
+							_alc_i { V { vlt yc { tl A } ct } } ⊢ { V _ } 
 							_emt_im◂◂"AP.slv 0:" {} ⊢ {}
 							T.pnt_type_k_lst vl ⊢ s  
 							_emt.f s ⊢ _ 
-							--/
 							∎ { APV V ‹› }
-						
 					∐. .
-						_alc_i { V { vlt yc A ct } } ⊢ { V i } 
+						_alc_i { V { vlt yc { tl A } ct } } ⊢ { V i } 
 						_inc i ⊢ i 
-						slv_i { APV V l i { vl y } } ⊢| 
+						slv_i { APV V l i vl } ⊢| 
 				∐. .
 					_emt_im◂◂"AP.slv 1:" {} ⊢ {}
 					T.pnt_type_k_lst vl ⊢ s 
 					_emt.f s ⊢ _ 
 					∎ { APV V ‹› }
-			§ slv { APV p { yl y } } 
+			§ slv { APV p yl } 
 				_ref.o p ⊢ { P { { vl s } V } }
 				_arr.len V ⊢ { V l } 
-				slv_i { APV V l %[ 0r ] { yl y } } ⊢ { APV V c }
+				slv_i { APV V l %[ 0r ] yl } ⊢ { APV V c }
 				_ref.to_i { P { { vl s } V } } ⊢ {}
 				∎ { APV c }
 			∎∎ 
@@ -8187,7 +8196,6 @@
 				∐ ast.k_name◂%cn
 					$ %env0 ⊢ { V { SCM NS } } 
 			  	slv { V cn NS } ⊢ { V NS k }
-			  	--RP.atm_a k ⊢ k 
 					$ { V { SCM NS } } ⊢ env0 	
 		    	∎ { env0 k }
 				∐ ast.k_unv◂x 
@@ -9188,29 +9196,21 @@
 					∎ ast.ap_some◂t 
 				∐.
 					∎ ya
-			@.cst_ap_gl { E { p { tl t } } }
+			@.cst_ap_gl_F { A { N _ } { SC APV tav tl c0 } }
+				T.inst.f_lst { { N %[ 1r ] } tl } ⊢ { { _ _ } tl } 
+				gen_lv_dlt_lst◂◂0r tl ⊢ {} 
+				ct_ptn { { %[ vt.gl ] SC APV tav ‹ A › } c0 } ⊢ { { m SC APV tav _ } c0 } 
+				$ { SC APV tav } ⊢ E
+				∎ { E c0 }
+			@.cst_ap_gl { E { p tl } }
 				$ E ⊢ { SC APV tav } 
-				--gen_lst_lv◂◂0r tl ⊢ tl 
-				AP.slv { APV p { tl t } } ⊢ { APV c0 } 
+				AP.slv { APV p tl } ⊢ { APV c0 } 
 				$ c0 ⊢
-				∐ _some◂{ c0 A0 }
-						ct_ptn { { %[ vt.gl ] SC APV tav ‹ A0 › } c0 } ⊢ { { m SC APV tav _ } c0 } 
-						$ { SC APV tav } ⊢ E
-						∎ { E c0 }
-					∐. _none◂{}
-						$ { SC APV tav } ⊢ E
-						∎ { E RP.atm◂ast.k_btm◂{} }
-			@.cst_ap { E { p { tl t } } }
-				$ E ⊢ { m SC APV tav A } 
-				AP.slv { APV p { tl t } } ⊢ { APV c0 } 
-					$ c0 ⊢
-					∐ _some◂{ c0 A0 }
-						ct_ptn { { m SC APV tav ‹ A0 › } c0 } ⊢ { { m SC APV tav _ } c0 } 
-						$ { m SC APV tav A } ⊢ E
-						∎ { E c0 }
-					∐. _none◂{}
-						$ { m SC APV tav A } ⊢ E
-						∎ { E RP.atm◂ast.k_btm◂{} }
+				∐ _some◂{ N tl A0 c0 }
+					slv.tc_stk◂◂cst_ap_gl_F { A0 { N %[ 1r ] } { SC APV tav tl c0 } } ⊢|
+				∐. _none◂{}
+					$ { SC APV tav } ⊢ E
+					∎ { E RP.atm◂ast.k_btm◂{} }
 			@.op # { E { b o { v0 v1 } } }
 				∎ { E RP.atm◂ast.k_op◂{ b o { v0 v1 } } }
 			@.op_gnr # { E { tp b o p { tl { t0 t1 } } } }
@@ -9221,7 +9221,6 @@
 				ct_ptn { { m SC APV tav ‹ At › } c } ⊢ { { m SC APV tav _ } c }
 				∎ { { m SC APV tav A } c } 
 			@.cst { E c }
-				--_emt_im◂◂0xffr {} ⊢ {} 
 				$ c ⊢ 
 				∐ ast.k_tc◂K
 					--tc { E K } ⊢|
@@ -9232,14 +9231,13 @@
 						_arr.l { A i } ⊢ { A _ k }
 						$ ‹ A › ⊢ A 
 						$ { m SC APV tav A } ⊢ E 
-						--_emt_im◂◂0xdddd0r {} ⊢ {} 
-						--_emt k ⊢ k 
 						$ k ⊢ 
 						∐ ast.k_i_axm◂{ a t }
-							--gen_lv◂◂0r t ⊢ t 
 							∎ { E RP.atm◂ast.k_op_axm◂{ a ⟦⟧ ast.ap_some◂t } }
 						∐ ast.k_i_ap◂K
-							cst_ap { E K } ⊢|
+							$ E ⊢ { m SC APV tav A }
+							cst_ap_gl { { SC APV tav } K } ⊢ { { SC APV tav } k }
+							∎ { { m SC APV tav A } k }
 						∐ ast.k_i_op◂K 
 							op { E K } ⊢|
 						∐ ast.k_i_op_gnr◂{ g ib o lc { ql { v0 v1 } } }
@@ -9348,15 +9346,10 @@
 									∎| 									
 							∐ ax'=EX.ccs . 
 								∐ la ⊢ _nil◂{}; c1 ⊢ RP.cns2◂{ s0 s1 }
-									--_emt_im◂◂0xcc0r {} ⊢ {} 
 									$ E ⊢ { m SC APV tav A }
-									--_emt m ⊢ m	
 									ast.s8_of_k s0 ⊢ s0 
-					--_emt_im◂◂0xcc1r {} ⊢ {} 
 									ast.s8_of_k s1 ⊢ s1
-					--_emt_im◂◂0xcc2r {} ⊢ {} 
 									rp8.cct { s0 s1 } ⊢ s 
-					--_emt_im◂◂0xcc3r {} ⊢ {} 
 									$ { m SC APV tav A } ⊢ E
 									∎ { E k_s8◂s }
 								∐. .
@@ -9654,6 +9647,14 @@
 								f_K { K x } ⊢ x
 								--_emt_im◂◂0xbbcc01r {} ⊢ {} 
 								∎ { { SC APV RFV tav } x }
+					@.gl_op_gnr_tc # { A { N _ } { SC APV tav pg T v0 v1 yT yf tl c } }
+						T.unify.f_ll { { v0 %[ 0r ] } { yT %[ 1r ] } } ⊢ {}
+						T.unify.f_ll { { v1 %[ 0r ] } { yf %[ 1r ] } } ⊢ {}
+						gen_lv_dlt_lst◂◂0r tl ⊢ {} 
+						exc_tpl { ⟦⟧ pg T } ⊢ el
+						inl.ct_ptn { { %[ vt.gl ] SC APV tav ‹ A › } c } ⊢ { { _ SC APV tav _ } o } 
+						pop_tpl el ⊢ {} 
+						∎ { { SC APV tav } o }
 					@.gl_op_gnr { { SC APV tav } pg T { yT yf { tl A } c } v0 v1 }
 						_arr.len A ⊢ { A l }
 						∐ l'<>0r
@@ -9661,20 +9662,17 @@
 							T.inst.f { { N %[ 1r ] } yT } ⊢ { { N _ } yT }
 							T.inst.f { { N %[ 1r ] } yf } ⊢ { { N _ } yf }
 							T.inst.f_lst { { N %[ 1r ] } tl } ⊢ { { N _ } tl } 
-							slv.tc { { N %[ 1r ] } A } ⊢ { { _ _ } A }
-							T.unify.f_ll { { v0 %[ 0r ] } { yT %[ 1r ] } } ⊢ {}
-							T.unify.f_ll { { v1 %[ 0r ] } { yf %[ 1r ] } } ⊢ {}
-							--slv.tc_gen { %[ 0r ] A } ⊢ { _ A } 
-							gen_lv_dlt_lst◂◂0r tl ⊢ {} 
-							exc_tpl { ⟦⟧ pg T } ⊢ el
-							inl.ct_ptn { { %[ vt.gl ] SC APV tav ‹ A › } c } ⊢ { { _ SC APV tav _ } o } 
-							pop_tpl el ⊢ {} 
-							∎ { { SC APV tav } o }
+							slv.tc_stk◂◂gl_op_gnr_tc { A { N %[ 1r ] } { SC APV tav pg T v0 v1 yT yf tl c } } ⊢| 
 						∐.
 							exc_tpl { ⟦⟧ pg T } ⊢ el
 							inl.ct_ptn { { %[ vt.gl ] SC APV tav ‹› } c } ⊢ { { _ SC APV tav _ } o } 
 							pop_tpl el ⊢ {} 
 							∎ { { SC APV tav } o }
+				@.gl_op_tc # { A { N _ } { SC APV tav v yf tl c } }
+					T.unify.f_ll { { v %[ 0r ] } { yf %[ 1r ] } } ⊢ {}
+					gen_lv_dlt_lst◂◂0r tl ⊢ {} 
+					inl.ct_ptn { { %[ vt.gl ] SC APV tav ‹ A › } c } ⊢ { { _ SC APV tav _ } o } 
+					∎ { { SC APV tav } o }
 				@.gl_op { { SC APV tav } { yf { tl A } c } v }
 					_arr.len A ⊢ { A l }
 					∐ l'=0r 
@@ -9684,13 +9682,7 @@
 						_sgn.new {} ⊢ N 
 						T.inst.f { { N %[ 1r ] } yf } ⊢ { { N _ } yf }
 						T.inst.f_lst { { N %[ 1r ] } tl } ⊢ { { N _ } tl } 
-						slv.tc { { N %[ 1r ] } A } ⊢ { { _ _ } A }
-						T.unify.f_ll { { v %[ 0r ] } { yf %[ 1r ] } } ⊢ {}
-						--slv.tc_gen { %[ 0r ] A } ⊢ { _ A } 
-						gen_lv_dlt_lst◂◂0r tl ⊢ {} 
-
-						inl.ct_ptn { { %[ vt.gl ] SC APV tav ‹ A › } c } ⊢ { { _ SC APV tav _ } o } 
-						∎ { { SC APV tav } o }
+						slv.tc_stk◂◂gl_op_tc { A { N %[ 1r ] } { SC APV tav v yf tl c } } ⊢| 
 				@.f_k_op_gnr { E { pg ibg o ie { ql { v0 v1 } } } }
 						smt_err◂◂0xacr o ⊢ T 
 						$ E ⊢ { { SC APV RFV tav } K }
@@ -9825,8 +9817,7 @@
 				@.dlt_adt_i { { E0 p } y }
 					$ E0 ⊢ { SC APV RFV tav }
 					$ p ⊢ p,p0
-					$ y ⊢ y0,y1
-					inl.cst_ap_gl { { SC APV tav } { p0 { ⟦ y0 ⟧ T.imp◂{ y1 TX.cns0◂{} } } } } ⊢ { { SC APV tav } o } 
+					inl.cst_ap_gl { { SC APV tav } { p0 ⟦ y ⟧ } } ⊢ { { SC APV tav } o } 
 					f_r { { SC APV RFV tav } o } ⊢ { E0 r }
 					∎ { { E0 p } r }
 				@.mtc { E m }
@@ -10178,20 +10169,20 @@
 					$ yx ⊢ yx,yx0 
 					EVV.set { en { c0 yx0 } } ⊢ en 
 					f_l1_q { { APV env0 } ql } ⊢ { { APV env0 } ql }
-					slv.lc { { %[ 1r ] APV } c } ⊢ { { _ APV } c y0 }
+					slv.lc.f_d { { %[ 1r ] APV } c } ⊢ { { _ APV } y0 }
 					--slv.gl { { %[ 1r ] APV } c } ⊢ { { _ APV } c y0 }
 					$ yx ⊢ yx,yx0 
 					T.unify.f_ll { { yx0 %[ 1r ] } { y0 %[ 1r ] } } ⊢ {} 
-					∎ { { APV env0 } ⟦ { w en c yx } < ql ⟧ }
+					∎ { { APV env0 } ⟦ { w en yx } < ql ⟧ }
 				∐. _nil◂{} .
 					∎ { { APV env0 } ⟦⟧ } 
-			§ f_l2_q_i # { { dd ep0 } { w en c y } } 
+			§ f_l2_q_i # { { dd ep0 } { w en y } } 
 					gen_lv◂◂0r y ⊢ y 
 					T.pnt_type_k y ⊢ sy
 					^ dd,w,sy ⊢ dd,_,_,ep1 
 						0'*"\t" "§ " 1' " : " 2' "\n" // 
 					rp8.add_s8 { ep0 ep1 } ⊢ ep0 
-					EVV.set_evv { en c } ⊢ {} 
+					--EVV.set_evv { en c } ⊢ {} 
 					∎ { dd ep0 }
 			§ f_l2_q = lst.fld_l◂◂f_l2_q_i 
 			§ f_l1_i { { APV env0 } { lcp w { ql yx } d lc } } 
@@ -13942,10 +13933,10 @@
 								∐ a'=EX.ila_n . 
 									_inc i ⊢ i 
 									s { { GV l0 l1 n_s e0 e1 } i } ⊢|  
-								∐ a'=EX.ila_c; al ⊢ _cns◂{ d _nil◂{} } . 
+								∐ a'=EX.ila_c; al ⊢ _cns◂{ d _nil◂{} }
 									_inc i ⊢ i 
 									sd { { GV l0 ⟦ stt_v.r_reg◂r < l1 ⟧ n_s d e0 e1 } i } ⊢| 
-								∐ a'=EX.ila_i; al ⊢ _cns◂{ d _nil◂{} } . 
+								∐ a'=EX.ila_i; al ⊢ _cns◂{ d _nil◂{} } 
 									$ j ⊢ j,j0
 									$ i ⊢ i,i0
 									rx i0 ⊢ i0 
