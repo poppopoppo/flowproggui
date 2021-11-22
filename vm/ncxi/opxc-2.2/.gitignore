@@ -11,4 +11,4 @@ perf.data.old
 *.zip
 *.deb
 core
-
+*.gz

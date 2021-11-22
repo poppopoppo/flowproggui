@@ -3,6 +3,66 @@
 
 	unt_0: dq 0x0 
 
+<<<<<<< HEAD
+=======
+thread_create: ; rdi=fn
+	push rdi
+	call stack_create
+	lea rsi, [rax + STACK_SIZE - 8]
+	pop qword [rsi]
+	mov rdi, THREAD_FLAGS
+	mov rax, SYS_clone
+	syscall
+	cmp rax,-1 
+	jz err 
+	ret
+
+;; void *stack_create(void)
+stack_create:
+	mov rdi, 0
+	mov rsi, STACK_SIZE
+	mov rdx, PROT_WRITE | PROT_READ
+	mov r10, MAP_ANONYMOUS | MAP_PRIVATE | MAP_GROWSDOWN
+	mov r8, -1
+	mov r9, 0
+	mov rax, SYS_mmap
+	syscall
+	cmp rax,-1 
+	jz err 
+	ret
+
+th0:
+	mov QWORD [FLG1],0 
+	mov rax,SYS_futex 
+	mov rdi,FTX0 
+	mov rsi,FUTEX_WAIT 
+	mov rdx,0
+	mov r10,0 
+	syscall  
+	cmp rax,-1 
+	jz err_th0
+th0_0:
+	mov rdi,0
+	lock xchg QWORD [BUF0],rdi
+	cmp rdi,0 
+	jnz th0_1 
+	nop  
+	nop 
+	nop  
+	nop 
+	jmp th0_0
+th0_1: 
+	mov rsi,0
+	lock xchg QWORD [FTX0],rsi
+	mov QWORD [FLG1],1
+	cmp rsi,0 
+	jz err_th0 
+	mov rax,QWORD [rdi] 
+	xor rax,rax 
+	;C_CALL_SF free 
+	jmp th0
+
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 pf_x_tb: db "0123456789abcdef"
 pf_x: ; rdi=buf rax=num ⊢ rdi=buf rax=add-n
 	;lzcnt rcx,rax 
@@ -50,6 +110,7 @@ pf_x_rv_lp:
 	jnz pf_x_rv_lp 
 	ret  
 
+<<<<<<< HEAD
 div_mod_10: ; rax ⊢ rax,rdi
 	mov rdi,rax 
 	mov rdx,0xcccc_cccc_cccc_cccd 
@@ -60,12 +121,18 @@ div_mod_10: ; rax ⊢ rax,rdi
 	lea rdx,[rax+8*rax] 
 	sub rdi,rdx ; -9
 	ret
+=======
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 pf_d: ; rdi=buf rax=num 
 	mov r10,rdi
 	sub rsp,128 
 	mov r9,127
 pf_d_lp0:
+<<<<<<< HEAD
 	call div_mod_10
+=======
+	DIV_MOD10 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	lea rsi,[rdi+48] 
 	mov BYTE [rsp+r9],sil 
 	sub r9,1 
@@ -89,7 +156,11 @@ pf_d_rv: ; rdi=buf rax=num
 	mov r10,rdi
 	mov r9,rdi
 pf_d_rv_lp0:
+<<<<<<< HEAD
 	call div_mod_10
+=======
+	DIV_MOD10 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	lea rsi,[rdi+48] 
 	mov BYTE [r9],sil 
 	sub r9,1 
@@ -100,15 +171,25 @@ pf_d_rv_lp0:
 	ret 
 
 pf_x_bc: 
+<<<<<<< HEAD
 	mov ebx,DWORD [rax] 
 	sub rbx,rdi 
 	jl .L0
 	sub rbx,rsi 
 	jl .L0
+=======
+	mov rbx,0x0000_ffff_ffff_ffff
+	and rbx,QWORD [rax] 
+	sub rbx,rdi 
+	jl err_bc
+	sub rbx,rsi 
+	jl err_bc 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	add rsi,rdi  
 	lea rdi,[rax+7+rsi] 
 	std
 	ret
+<<<<<<< HEAD
 .L0:
 	mov QWORD [err_n],0x0fcca
 	jmp err
@@ -209,6 +290,15 @@ alc_rcd_n: ; rdi=n ⊢ rax
 	call alc_rcd_h 
 	jmp .L1
 
+=======
+
+alc_rcd_n: 
+	cmp MCR_REG,0
+	jz alc_rcd_h
+	cmp MCR_REG,~0
+	jz alc_rcd_h 
+	ret
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 alc_rcd_h: 
 	mov rbx,rax 
 	C_PUSH_REGS 
@@ -222,7 +312,11 @@ alc_rcd_h:
 	mov rsi,rdi 
 	xor rdi,rdi 
 	mov rdi,8
+<<<<<<< HEAD
 	call calloc_sf
+=======
+	CALLOC_SF
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	mov rdx,rbx 
 	mov rbx,rax 
 	mov rdi,1000 
@@ -233,6 +327,7 @@ alc_rcd_h:
 	C_POP_REGS 
 	ret
 
+<<<<<<< HEAD
 calloc_sf: 
 	xor rax,rax 
 	C_CALL_SF calloc 
@@ -244,6 +339,8 @@ calloc_sf:
 	mov QWORD [err_n],rax
 	jmp err
 
+=======
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 sig_alc_rcd: ; rbx=n 
 	C_PUSH_REGS 
 	push rdi 
@@ -256,7 +353,11 @@ sig_alc_rcd: ; rbx=n
 	mov rsi,rdi 
 	xor rdi,rdi 
 	mov rdi,8
+<<<<<<< HEAD
 	call calloc_sf
+=======
+	CALLOC_SF
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	mov rdx,rbx 
 	mov rbx,rax 
 	mov rdi,1000 
@@ -276,6 +377,10 @@ ss_lp:
 	mov rax,rsi 
 	jmp ss_lp
 ss_end:
+<<<<<<< HEAD
+=======
+	;mov rsi,0xffff_ffff_ffff_0000 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	mov rsi,0 
 	;add rsi,rdx
 	mov [rax],rsi 
@@ -299,6 +404,15 @@ init_ss_end:
 
 info:
 	C_PUSH_REGS
+<<<<<<< HEAD
+=======
+	;mov rdi,fmt_info 
+	;mov rsi,QWORD [S8_N]
+	;mov rdx,QWORD [SS_LN_C]
+	;mov rcx,SS_LN_N 
+	;xor rax,rax 
+	;C_CALL printf
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	mov rax,0
 info_rcd:
 	push rax 
@@ -323,7 +437,10 @@ sig_hdl: ; rdi=sig_n rsi=siginfo_t* rdx=void* context
 	C_CALL set_usr_hdl 
 	mov QWORD [SIG_RIP],rax
 	ret 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 sig_dft_alc_rcd: 
 	mov rbx,QWORD [SIG_FLG]
 	and rbx,0xffff 
@@ -347,6 +464,7 @@ sig_dft:
 %define N 0xe654_6b64 
 %define SEED 0x9848_3cbf  
 
+<<<<<<< HEAD
 stt_hp_1:
 	mov eax,eax 
 	shr rax,16 
@@ -460,6 +578,20 @@ rpc_dyn_adt: ; rax=i rdi=d
 
 mm32: ; rdi=s  
 	mov esi,DWORD [rdi]
+=======
+free_opq: 
+	bt QWORD [rdi],63 
+	jc free_opq_stk
+	C_CALL_SF free 
+	ret
+free_opq_stk:
+	mov QWORD [rdi],rdi
+	ret
+
+mm32: ; rdi=s  
+	mov rsi,0x0000_ffff_ffff_ffff 
+	and rsi,QWORD [rdi]
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	add rdi,8	
 	mov r8,rsi 
 	shr r8,2 
@@ -507,12 +639,20 @@ mm32_i:
 	ret
 
 cmp_s8: ; rdi,rsi
+<<<<<<< HEAD
 	mov eax,DWORD [rdi]
 	mov edx,DWORD [rsi]
+=======
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,QWORD [rdi]
+	mov rdx,0x0000_ffff_ffff_ffff
+	and rdx,QWORD [rsi]
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	add rdi,8
 	add rsi,8
 cmp_stg: ;s0=rdi l0=rax s1=rsi l1=rdx
 	cmp rax,rdx
+<<<<<<< HEAD
 	jg .g 
 	jl .l 
 	shr rax,3 
@@ -533,12 +673,41 @@ cmp_stg: ;s0=rdi l0=rax s1=rsi l1=rdx
 	mov rax,1 
 	ret
 .g: 
+=======
+	jg cmp_s8_g 
+	jl cmp_s8_l 
+	shr rax,3 
+	xor rbx,rbx
+cmp_s8_lp:
+	mov rdx,QWORD [rsi+8*rbx]
+	cmp QWORD [rdi+8*rbx],rdx 
+	jg cmp_s8_g 
+	jl cmp_s8_l  
+	cmp rbx,rax
+	jz cmp_s8_e
+	add rbx,1 
+	jmp cmp_s8_lp 
+cmp_s8_l:
+	mov rax,0 
+	ret 
+cmp_s8_e:
+	mov rax,1 
+	ret
+cmp_s8_g: 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	mov rax,2
 	ret
 
 eq_s8_q: ; rdi,rsi
+<<<<<<< HEAD
 	mov eax,DWORD [rdi]
 	mov edx,DWORD [rsi]
+=======
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,QWORD [rdi]
+	mov rdx,0x0000_ffff_ffff_ffff
+	and rdx,QWORD [rsi]
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	cmp rax,rdx
 	jnz eq_s8_q_f
 	;mov rcx,rax 
@@ -562,8 +731,15 @@ eq_s8_q_t:
 	ret
 eq_s8: ;rdi,rsi
 	push rdx
+<<<<<<< HEAD
 	mov eax,DWORD [rdi]
 	mov edx,DWORD [rsi]
+=======
+	mov rax,0x0000_ffff_ffff_ffff 
+	and rax,QWORD [rdi]
+	mov rdx,0x0000_ffff_ffff_ffff
+	and rdx,QWORD [rsi]
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	cmp rax,rdx
 	jnz eq_s8_f 
 eq_s8_lp:
@@ -577,7 +753,11 @@ eq_s8_lp:
 eq_s8_f:
 	pop rdx 
 	mov rax,0 
+<<<<<<< HEAD
 	;stz
+=======
+	stz
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	ret 
 eq_s8_t:
 	pop rdx 
@@ -586,7 +766,12 @@ eq_s8_t:
 
 rpc_s8: ; rdi ⊢ rax
 	push rdi 
+<<<<<<< HEAD
 	mov esi,DWORD [rdi]
+=======
+	mov rsi,0x0000_ffff_ffff_ffff
+	and rsi,QWORD [rdi]  
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	push rsi
 	mov rdi,rsi 
 	call mlc_s8
@@ -599,12 +784,43 @@ rpc_s8: ; rdi ⊢ rax
 	ret
      
 esc_s8: ; rdi ⊢ rax 
+<<<<<<< HEAD
 	mov esi,DWORD [rdi]
+=======
+	mov rsi,0x0000_ffff_ffff_ffff
+	and rsi,QWORD [rdi] 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	mov rax,rsi 
 	shl rax,1 
 	sub rsp,rax 
 esc_s8_lp0: 
 
+<<<<<<< HEAD
+=======
+arr_of_lst: 
+	mov rsi,0 
+arr_of_lst_r:
+	cmp BYTE [rdi+6],1
+	jz arr_of_lst_end 
+	push QWORD [rdi+8]
+	mov rax,rdi
+	FREE_RCD 2,rax 
+	mov rdi,QWORD [rdi+16]
+	add rsi,1 
+	call arr_of_lst_r
+	sub rsi,1 
+	pop QWORD [rax+8+8*rsi]
+	ret 
+arr_of_lst_end: 
+	push rsi 
+	xor rax,rax
+	mov rdi,8
+	add rsi,1 
+	CALLOC_SF
+	pop rsi 
+	mov QWORD [rax],rsi
+	ret 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 
 
 is_spc: 
@@ -620,6 +836,29 @@ is_spc_1:
 	mov rax,1 
 	ret  
 
+<<<<<<< HEAD
+=======
+scf_d_F: 
+	lea rsi,[rdi+8]
+  mov rdi,QWORD [rdi]
+  mov rdx,0x0000_ffff_ffff_ffff 
+  and rdi,rdx 
+  mov r8,10 
+  call scf_F
+  mov rdi,r10
+	ret
+
+scf_x_F:  
+	lea rsi,[rdi+8]
+  mov rdi,QWORD [rdi]
+  mov rdx,0x0000_ffff_ffff_ffff 
+  and rdi,rdx 
+  mov r8,16 
+  call scf_F
+  mov rdi,r10
+	ret
+
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 scf_F:
 	cmp rax,rdi
 	jge scf_F_0
@@ -671,11 +910,16 @@ mlc_s8: ; rdi=len
 	lea rdi,[rdi+16] 
 	mov rsi,1 
 	xor rax,rax 
+<<<<<<< HEAD
 	C_CALL calloc 
 	mov rdi,0x0001_0000_0000_0000
 	pop rsi 
 	add rsi,rdi 
 	mov QWORD [rax],rsi
+=======
+	CALLOC_SF
+	pop QWORD [rax] 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	ret
 
 s8_of_c_stg: 
@@ -724,51 +968,88 @@ in_fn:
 	ret 
 					
 exn_grm: 
+<<<<<<< HEAD
   mov rax,0xff01_0000_0000_ffff
 	mov QWORD [err_n],rax
 	jmp err 
 exn_dft: 
 	mov rax,0xeeee_0000_0000_ffff
+=======
+  mov rax,0xff01_0000_0000_0000
+	mov QWORD [err_n],rax
+	jmp err 
+exn_dft: 
+	mov rax,0xeeee_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rsi 
 	mov QWORD [err_n],rax				
 	jmp err 
 err_lod_q:
+<<<<<<< HEAD
 	mov rbx,0xe0fe_0000_0000_ffff
+=======
+	mov rbx,0xe0fe_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_exc_q: 
+<<<<<<< HEAD
 	mov rbx,0xe0ff_0000_0000_ffff
+=======
+	mov rbx,0xe0ff_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_clc_o: 
+<<<<<<< HEAD
 	mov rbx,0xe0e2_0000_0000_ffff
+=======
+	mov rbx,0xe0e2_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_ref_o:
+<<<<<<< HEAD
 	;mov rax,QWORD [rax]
 	mov rbx,0xffff_efef_0000_e0cd
+=======
+	mov rbx,0xe0cd_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_ref_f:
+<<<<<<< HEAD
 	mov rbx,0xefcd_0000_0000_ffff
+=======
+	mov rbx,0xefcd_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_alc_o: 
+<<<<<<< HEAD
 	mov rbx,0xe0e1_0000_0000_ffff
+=======
+	mov rbx,0xe0e1_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_cls: 
+<<<<<<< HEAD
 	mov rbx,0xe0e0_0000_0000_ffff
+=======
+	mov rbx,0xe0e0_0000_0000_0000
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	or rax,rbx 
 	mov QWORD [err_n],rax
 	jmp err 
 err_NULL: 
+<<<<<<< HEAD
 	mov rax,0xffff_bdbd_0000_ffff
 	mov QWORD [err_n],rax				
 	jmp err
@@ -789,6 +1070,13 @@ err_dyn_rpc:
 	mov rax,0xffef_bbbc
 	mov QWORD [err_n],rax
 	jmp err
+=======
+	mov rax,0xffff_ffff_0000_0000
+	mov QWORD [err_n],rax				
+	jmp err
+err_bc: 
+	mov QWORD [err_n],0xff
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 err: 
 	mov rdi,fmt_err_line
 	mov rsi,QWORD [err_n]
@@ -796,7 +1084,13 @@ err:
 	C_CALL printf
 	mov rax,SYS_exit
 	syscall
+<<<<<<< HEAD
 
+=======
+err_th0: 
+	mov rax,SYS_exit 
+	syscall 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 exn:
 	mov rdi,fmt_exn
 	;mov rsi,QWORD [err_n]

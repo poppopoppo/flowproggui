@@ -1,6 +1,27 @@
+<<<<<<< HEAD
 bits 64 ;64bitモードのプログラムであることを指定
 
 ;; futex 
+=======
+
+%define SS_NULL 0xffff_ffff_ffff_0000
+%define EMT_BUF_MAX (KB<<1)	
+
+;; futex 
+%define FUTEX_WAIT		0
+%define FUTEX_WAKE		1
+%define FUTEX_FD		2
+%define FUTEX_REQUEUE		3
+%define FUTEX_CMP_REQUEUE	4
+%define FUTEX_WAKE_OP		5
+%define FUTEX_LOCK_PI		6
+%define FUTEX_UNLOCK_PI		7
+%define FUTEX_TRYLOCK_PI	8
+%define FUTEX_WAIT_BITSET	9
+%define FUTEX_WAKE_BITSET	10
+%define FUTEX_WAIT_REQUEUE_PI	11
+%define FUTEX_CMP_REQUEUE_PI	12
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 
 ;; sys/syscall.h
 %define SYS_write	1
@@ -43,11 +64,85 @@ bits 64 ;64bitモードのプログラムであることを指定
 %define GB MB*MB
 %define SIG_INT 2
 %define SIG_SEGV 11
+<<<<<<< HEAD
 %define SRC_REG rbp 
 %define DST_REG rbp
 
 bits 64
 ; macros
+=======
+%define SS_MAX 4000
+%define MCR_REG rbx
+%define SRC_REG r13 
+%define DST_REG r14
+
+%define GLX(n) QWORD [(GLV+8*n)] 
+%define SX(n) QWORD [SRC_REG+(8*n)]
+%define DX(n) QWORD [DST_REG+(8*n)]
+
+bits 64 
+; macros 
+
+%macro DIV10 0 ; rax ⊢ rax
+	mov MCR_REG,0xcccc_cccc_cccc_cccd 
+  mul MCR_REG 
+  mov rax,rdx 
+  shr rax,3
+%endmacro
+%macro DIV_MOD10 0 ; rax ⊢ rax,rdi 
+	mov rdi,rax 
+	mov MCR_REG,0xcccc_cccc_cccc_cccd 
+	mul MCR_REG 
+	mov rax,rdx 
+	shr rax,3
+	mov rsi,rax  
+	add rsi,rsi ; *2
+	lea rsi,[rsi+4*rsi] 
+	sub rdi,rsi 
+%endmacro
+
+%macro RT_ERR 1 
+	mov rdi,rt_err0 
+	mov rsi,8
+	C_CALL fw
+	mov QWORD [err_n],%1 
+	jmp err 
+%endmacro
+%macro FREE_S8 1
+	mov rdi,%1 
+	C_CALL_SF free 
+%endmacro
+%macro FREE_OPQ 1
+	;jmp LB_%1_0 
+	;mov rax,0 
+	;mov rsi,1 
+	;lock cmpxchg QWORD [FTX0],rsi
+	;jnz LB_%1_0 
+	;mov QWORD [BUF0],rdi
+	;cmp QWORD [FLG1],0 
+	;jnz LB_%1_1 
+	;mov rax,SYS_futex 
+	;mov rdi,FTX0 
+	;mov rsi,FUTEX_WAKE 
+	;mov rdx,1 
+	;mov r10,0
+	;syscall
+	;cmp rax,-1  
+	;jz err
+	;jmp LB_%1_1
+;LB_%1_0:
+	;cmp rax,0 
+	;mov QWORD [err_n],0xffac
+	;jz err
+	bt QWORD [rdi],63 
+	jc LB_%1_1
+	C_CALL_SF free 
+	jmp LB_%1_2
+LB_%1_1:
+	mov QWORD [rdi],rdi
+LB_%1_2:
+%endmacro
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 
 %macro C_PUSH_REGS 0 
 	push rdx
@@ -75,12 +170,20 @@ bits 64
 
 %macro C_CALL_SF 1 
 	C_PUSH_REGS
+<<<<<<< HEAD
+=======
+	;mov QWORD [rsp_tmp],rsp 
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	push rbx
 	mov rbx,rsp 
 	and rsp,~0xf 
 	call %1 
 	mov rsp,rbx 
 	pop rbx
+<<<<<<< HEAD
+=======
+	;mov rsp,QWORD [rsp_tmp]
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 	C_POP_REGS
 %endmacro 
 
@@ -93,12 +196,111 @@ bits 64
 	pop rbx
 %endmacro 
 
+<<<<<<< HEAD
+=======
+%macro CALLOC_SF 0
+	C_CALL_SF calloc 
+	cmp rax,0 
+	jz err
+%endmacro
+%macro JZ_SPC 2
+	movzx MCR_REG,%1
+	cmp MCR_REG,9 
+	jz %2
+	cmp MCR_REG,10 
+	jz %2
+	cmp MCR_REG,32 
+	jz %2
+%endmacro
+ 
+%macro JZ_LINE_SPC 2
+	movzx MCR_REG,%1 
+	cmp MCR_REG,9 
+	jz %2
+	cmp MCR_REG,32 
+	jz %2
+%endmacro
+ 
+%macro ALC_RCD 2 ; n,reg-name!=rbx 
+	mov MCR_REG,QWORD [(SS_RCD_TOP+8*%1)]
+	mov rax,%1 
+	call alc_rcd_n 
+	mov %2,QWORD [MCR_REG]
+	mov QWORD [(SS_RCD_TOP+8*%1)],%2
+	mov %2,MCR_REG
+%endmacro 
+
+%macro ALC_N 1 ; n,reg-name!=rbx 
+	mov rbx,QWORD [(SS_RCD_TOP+8*%1)]
+	cmp rbx,0 
+	jz .L0 
+	jmp .L1
+.L0:	
+	mov rax,%1 
+	call alc_rcd_h 
+.L1:
+	mov rax,QWORD [rbx]
+	mov QWORD [(SS_RCD_TOP+8*%1)],rax
+	mov rax,rbx
+%endmacro 
+
+%macro FREE_RCD 2 ; n,reg-name!=rbx 
+	mov rbx,QWORD [(SS_RCD_TOP+8*%1)] 
+	mov QWORD [%2],rbx
+	mov QWORD [(SS_RCD_TOP+8*%1)],%2
+%endmacro
+
+%macro EMT_CST 2 ; %1=label,%2=len
+	mov rdi,%1 
+	mov rax,%2 
+	call emt_cst 
+%endmacro
+
+%macro GET_LEN 2 
+	mov %1,0x0000_ffff_ffff_ffff
+	and %1,QWORD [%2]
+%endmacro
+
+%macro MOV_RAX 2 
+	mov rax,%2 
+	mov %1,rax
+	%endmacro
+
+%macro MOV_RDI 2 
+	mov rdi,%2 
+	mov %1,rdi
+%endmacro
+
+%macro MOV_RBX 2 
+	mov rbx,%2
+	mov %1,rbx
+%endmacro
+
+
+%macro BSS_SS_RCD 2 
+	SS_RCD_%1_VCT: resq (%1+1)*(%2+4)
+%endmacro 
+
+%define RX0 r13
+%define RX1 r14
+%define RX2 r8
+%define RX3 r9 
+%define RX4 r10 
+%define RX5 r11 
+%define RX6 rcx 
+%define RX7 rdx
+
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 %define SEED 0x_f7f7_65d7_9dab_bace
 
 extern stdout 
 extern stdin
 extern futex
 extern ini_prc 
+<<<<<<< HEAD
+=======
+;extern MurmurHash64A
+>>>>>>> 1f3642be1c762b5911ea0a8b44ce1984b782c06c
 extern exit 
 extern printf 
 extern fwrite

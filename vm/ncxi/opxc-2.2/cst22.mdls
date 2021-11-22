@@ -636,6 +636,7 @@
   $ a ⊢ a,a0,a1,a2 
   _emt { a a0 } ⊢ _ 
   ∎ {} 
+<<<<<<< HEAD
 
 § m32 _ 
   $ %[ "OIJfjie" ] ⊢ S 
@@ -927,3 +928,5 @@
 	_emt l ⊢ _ 
 	∎ {}
 	
+=======
+>>>>>>> e99538e0eafc51efb79e811cb3fb8eaca8f20be8
