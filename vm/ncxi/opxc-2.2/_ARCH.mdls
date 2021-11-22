@@ -738,7 +738,7 @@
   	  $ h ⊢ _
   	  !^ r ⊢ *r 
   	    `	mov rdi,QWORD [rax]
-				`	mov rsi,0x0001_0000_0000_0000 
+				`	mov rsi,0x0d001_0000_0000_0000 
 				`	sub rdi,rsi 
 				`	jc err_dyn_rpc 
 				`	mov QWORD [rax],rdi 
@@ -2596,3 +2596,19 @@
 § _cmp_s8 = _arr.s8.cmp
 § _s8_len = _arr.s8.len
 § _mlc_s8 = _arr.s8.mlc
+
+§§ _grm 
+	§ seq◂◂{ F G } # { B i }
+		F { B i } ⊢ { B i o }
+		$ o ⊢ 
+		∐ _some◂a 
+			G { B i } ⊢ { B i o }
+			$ o ⊢ 
+			∐ _some◂b 
+				--∎ ‹ { a < b } ›
+				∎|
+			∐. _none◂{} 
+				∎ ‹›
+		∐. _none◂{}
+			 ∎|
+	∎∎
